@@ -128,16 +128,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//GEP::This is where I am creating the test objects
 
-
-	//geometric shape renderer test
-	for (int i = 1; i < GP_COUNT; i++)
-	{
-		GPGO3D* test3d2 = new GPGO3D((GPGO3D_Type)i);
-		test3d2->SetPos(12.0f*Vector3::Forward + 10.0f*(i - 1)*Vector3::Left);
-		test3d2->SetScale(5.0f);
-		m_3DObjects.push_back(test3d2);
-	}
-
 	//test for obj loader / renderer
 	SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "cup");
 	test3->SetPos(12.0f*Vector3::Forward + 5.0f*Vector3::Right + Vector3::Down);
@@ -149,9 +139,29 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(test4);
 
 	//point a camera at the player that follows
-	m_cam = new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
+	//m_cam = new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test3, Vector3(0.0f, 3.0f, 10.0f));
+	//m_RD->m_cam = m_cam;
+	//m_3DObjects.push_back(m_cam);
+
+	//m_cam1 = new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
+	//m_3DObjects.push_back(m_cam1);
+
+
+	m_cam = new Camera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	m_RD->m_cam = m_cam;
 	m_3DObjects.push_back(m_cam);
+
+	m_cam1 = new Camera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
+	m_3DObjects.push_back(m_cam1);
+
+	//geometric shape renderer test
+	for (int i = 1; i < GP_COUNT; i++)
+	{
+		GPGO3D* test3d2 = new GPGO3D((GPGO3D_Type)i);
+		test3d2->SetPos(12.0f*Vector3::Forward + 10.0f*(i - 1)*Vector3::Left);
+		test3d2->SetScale(5.0f);
+		m_3DObjects.push_back(test3d2);
+	}
 
 	//test text
 	Text2D * test2 = new Text2D("testing text");
@@ -219,6 +229,34 @@ void Game::Update(DX::StepTimer const& _timer)
 	m_GSD->m_prevKeyboardState = m_GSD->m_keyboardState; // keep previous state for just pressed logic
 	m_GSD->m_keyboardState = m_keyboard->GetState();
 	m_GSD->m_mouseState = m_mouse->GetState();
+
+
+	if (m_GSD->m_keyboardState.Right)
+	{
+		m_RD->m_cam = m_cam;
+	}
+	else if (m_GSD->m_keyboardState.Left)
+	{
+		m_RD->m_cam = m_cam1;
+	}
+
+	float x = m_RD->m_cam->getDeltaPos().x;
+	float y = m_RD->m_cam->getDeltaPos().y;
+	float z = m_RD->m_cam->getDeltaPos().z;
+
+
+	if (m_GSD->m_keyboardState.Up)
+	{
+		y -= 3.0f;
+		z -= 9.0f;
+	}
+	if (m_GSD->m_keyboardState.Down)
+	{
+		y += 3.0f;
+		z += 9.0f;
+	}
+
+	m_RD->m_cam->setDeltaPos(Vector3(x, y, z));
 
 	//Quit Properly on press ESC
 	if (m_GSD->m_keyboardState.Escape)
