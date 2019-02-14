@@ -31,7 +31,7 @@ namespace EditorTool
 
         private void importModel_Click(object sender, EventArgs e)
         {
-            if (File.Exists("DDS/" + Path.GetFileNameWithoutExtension(imagePath.Text) + ".dds"))
+            if (File.Exists("DDS/" + Path.GetFileNameWithoutExtension(imagePath.Text) + ".dds") || imagePath.Text == "")
             {
                 MessageBox.Show("Couldn't import image, an image with the same name already exists.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
