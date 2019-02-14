@@ -12,9 +12,9 @@ using System.Diagnostics;
 
 namespace EditorTool
 {
-    public partial class Form1 : Form
+    public partial class Model_Importer : Form
     {
-        public Form1()
+        public Model_Importer()
         {
             InitializeComponent();
         }
