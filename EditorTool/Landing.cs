@@ -34,5 +34,10 @@ namespace EditorTool
             Image_Importer imageimporter = new Image_Importer();
             imageimporter.Show();
         }
+
+        private void importFont_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Coming soon!", "Coming soon!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 }
