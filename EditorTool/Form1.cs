@@ -78,10 +78,16 @@ namespace EditorTool
                 string pathWithoutExtension = modelPath.Text.Substring(0, modelPath.Text.Length - Path.GetExtension(modelPath.Text).Length);
 
                 File.Copy(pathWithoutExtension + ".obj", "Models/" + Path.GetFileName(modelPath.Text));
-                copyToOutputDirectory(pathWithoutExtension + ".mtl");
+                if (File.Exists(pathWithoutExtension + ".mtl"))
+                {
+                    File.Copy(pathWithoutExtension + ".mtl", "Models/" + Path.GetFileName(pathWithoutExtension + ".mtl"));
+                }
                 foreach (string texture in textureList.Items)
                 {
-                    copyToOutputDirectory(texture);
+                    if (!File.Exists("Models/" + Path.GetFileName(texture)))
+                    {
+                        File.Copy(texture, "Models/" + Path.GetFileName(texture));
+                    }
                 }
 
                 ProcessStartInfo meshConverter = new ProcessStartInfo();
@@ -96,14 +102,6 @@ namespace EditorTool
                 textureList.Items.Clear();
 
                 MessageBox.Show("Model Import Complete", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        void copyToOutputDirectory(string filePath)
-        {
-            if (!File.Exists("Models/" + Path.GetFileName(filePath)))
-            {
-                File.Copy(filePath, "Models/" + Path.GetFileName(filePath));
             }
         }
     }
