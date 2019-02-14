@@ -334,3 +334,4 @@ DDS/
 *.sdkmesh
 
 !EditorTool.exe
+EditorTool.exe.config
