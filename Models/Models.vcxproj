@@ -122,31 +122,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="cup._obj">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">meshconvert.exe %(Filename)%(Extension) -sdkmesh -nodds -y </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building SDK Mesh from %(Filename)%(Extension)</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\SDKMesh\%(Filename).sdkmesh</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <TreatOutputAsContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</TreatOutputAsContent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">meshconvert.exe %(Filename)%(Extension) -sdkmesh -nodds -y </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building SDK Mesh from %(Filename)%(Extension)</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\SDKMesh\%(Filename).sdkmesh</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <TreatOutputAsContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</TreatOutputAsContent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">meshconvert.exe %(Filename)%(Extension) -sdkmesh -nodds -y </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building SDK Mesh from %(Filename)%(Extension)</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\SDKMesh\%(Filename).sdkmesh</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <TreatOutputAsContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatOutputAsContent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">meshconvert.exe %(Filename)%(Extension) -sdkmesh -nodds -y </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building SDK Mesh from %(Filename)%(Extension)</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\SDKMesh\%(Filename).sdkmesh</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <TreatOutputAsContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</TreatOutputAsContent>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="READ_ME.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

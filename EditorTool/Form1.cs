@@ -98,6 +98,12 @@ namespace EditorTool
                 Process converterProcess = Process.Start(meshConverter);
                 converterProcess.WaitForExit();
 
+                File.Delete("Models/" + Path.GetFileName(modelPath.Text));
+                if (File.Exists("Models/" + Path.GetFileName(pathWithoutExtension + ".mtl")))
+                {
+                    File.Delete("Models/" + Path.GetFileName(pathWithoutExtension + ".mtl"));
+                }
+
                 modelPath.Text = "";
                 textureList.Items.Clear();
 
