@@ -31,7 +31,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.imagePath = new System.Windows.Forms.TextBox();
             this.browseToImage = new System.Windows.Forms.Button();
-            this.importModel = new System.Windows.Forms.Button();
+            this.importImage = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -61,22 +61,22 @@
             this.browseToImage.UseVisualStyleBackColor = true;
             this.browseToImage.Click += new System.EventHandler(this.browseToImage_Click);
             // 
-            // importModel
+            // importImage
             // 
-            this.importModel.Location = new System.Drawing.Point(12, 51);
-            this.importModel.Name = "importModel";
-            this.importModel.Size = new System.Drawing.Size(264, 28);
-            this.importModel.TabIndex = 7;
-            this.importModel.Text = "Import";
-            this.importModel.UseVisualStyleBackColor = true;
-            this.importModel.Click += new System.EventHandler(this.importModel_Click);
+            this.importImage.Location = new System.Drawing.Point(12, 51);
+            this.importImage.Name = "importImage";
+            this.importImage.Size = new System.Drawing.Size(264, 28);
+            this.importImage.TabIndex = 7;
+            this.importImage.Text = "Import";
+            this.importImage.UseVisualStyleBackColor = true;
+            this.importImage.Click += new System.EventHandler(this.importModel_Click);
             // 
             // Image_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(286, 89);
-            this.Controls.Add(this.importModel);
+            this.Controls.Add(this.importImage);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.imagePath);
             this.Controls.Add(this.browseToImage);
@@ -94,6 +94,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox imagePath;
         private System.Windows.Forms.Button browseToImage;
-        private System.Windows.Forms.Button importModel;
+        private System.Windows.Forms.Button importImage;
     }
 }

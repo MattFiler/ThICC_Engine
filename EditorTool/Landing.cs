@@ -25,7 +25,8 @@ namespace EditorTool
 
         private void importSound_Click(object sender, EventArgs e)
         {
-
+            Sound_Importer soundimporter = new Sound_Importer();
+            soundimporter.Show();
         }
 
         private void importImage_Click(object sender, EventArgs e)
