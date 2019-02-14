@@ -29,11 +29,49 @@ namespace EditorTool
             }
         }
 
+        private void addTexture_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog filePicker = new OpenFileDialog();
+            filePicker.Filter = "Model Texture (JPG/PNG)|*.JPG;*.PNG";
+            if (filePicker.ShowDialog() == DialogResult.OK)
+            {
+                bool canCopyWithoutConflict = true;
+                foreach (string texture in textureList.Items)
+                {
+                    if (texture == filePicker.FileName || Path.GetFileName(texture) == Path.GetFileName(filePicker.FileName))
+                    {
+                        canCopyWithoutConflict = false;
+                        break;
+                    }
+                }
+                if (canCopyWithoutConflict)
+                {
+                    textureList.Items.Add(filePicker.FileName);
+                }
+                else
+                {
+                    MessageBox.Show("This texture's filename conflicts with another.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void removeTexture_Click(object sender, EventArgs e)
+        {
+            if (textureList.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a texture from the list.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                textureList.Items.Remove(textureList.Items[textureList.SelectedIndex]);
+            }
+        }
+
         private void importModel_Click(object sender, EventArgs e)
         {
             if (File.Exists("Models/" + Path.GetFileName(modelPath.Text)))
             {
-                MessageBox.Show("Import Failed!", "Couldn't import model, a model with the same name already exists.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Couldn't import model, a model with the same name already exists.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -42,7 +80,14 @@ namespace EditorTool
                 File.Copy(pathWithoutExtension + ".obj", "Models/" + Path.GetFileName(modelPath.Text));
                 if (File.Exists(pathWithoutExtension + ".mtl"))
                 {
-                    File.Copy(pathWithoutExtension + ".mtl", "Models/" + Path.GetFileNameWithoutExtension(modelPath.Text) + ".mtl");
+                    File.Copy(pathWithoutExtension + ".mtl", "Models/" + Path.GetFileName(pathWithoutExtension + ".mtl"));
+                }
+                foreach (string texture in textureList.Items)
+                {
+                    if (!File.Exists("Models/" + Path.GetFileName(texture)))
+                    {
+                        File.Copy(texture, "Models/" + Path.GetFileName(texture));
+                    }
                 }
 
                 ProcessStartInfo meshConverter = new ProcessStartInfo();
@@ -52,9 +97,17 @@ namespace EditorTool
                 meshConverter.CreateNoWindow = true;
                 Process converterProcess = Process.Start(meshConverter);
                 converterProcess.WaitForExit();
-                modelPath.Text = "";
 
-                MessageBox.Show("Imported!", "Model Import Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                File.Delete("Models/" + Path.GetFileName(modelPath.Text));
+                if (File.Exists("Models/" + Path.GetFileName(pathWithoutExtension + ".mtl")))
+                {
+                    File.Delete("Models/" + Path.GetFileName(pathWithoutExtension + ".mtl"));
+                }
+
+                modelPath.Text = "";
+                textureList.Items.Clear();
+
+                MessageBox.Show("Model Import Complete", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

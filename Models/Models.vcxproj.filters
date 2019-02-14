@@ -3,7 +3,4 @@
   <ItemGroup>
     <Text Include="READ_ME.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="cup._obj" />
-  </ItemGroup>
 </Project>
