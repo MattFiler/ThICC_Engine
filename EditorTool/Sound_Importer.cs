@@ -31,7 +31,7 @@ namespace EditorTool
 
         private void importSound_Click(object sender, EventArgs e)
         {
-            if (File.Exists("Sounds/" + Path.GetFileName(soundPath.Text)))
+            if (File.Exists("Sounds/" + Path.GetFileName(soundPath.Text)) || soundPath.Text == "")
             {
                 MessageBox.Show("Couldn't import sound, a sound with the same name already exists.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
