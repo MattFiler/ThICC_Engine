@@ -1,6 +1,6 @@
 ﻿namespace EditorTool
 {
-    partial class Form1
+    partial class Model_Importer
     {
         /// <summary>
         /// Required designer variable.
