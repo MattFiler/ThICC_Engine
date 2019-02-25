@@ -24,23 +24,45 @@ void Player::Tick(GameStateData* _GSD)
 	Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
 	rightMove = Vector3::Transform(rightMove, rotMove);
-	if (_GSD->m_keyboardState.W)
-	{
-		m_acc += forwardMove;
-	}
-	if (_GSD->m_keyboardState.S)
-	{
-		m_acc -= forwardMove;
-	}
-	if (_GSD->m_keyboardState.A)
-	{
-		m_acc -= rightMove;
-	}
-	if (_GSD->m_keyboardState.D)
-	{
-		m_acc += rightMove;
-	}
 
+	if (player_num == 1)
+	{
+		if (_GSD->m_keyboardState.W)
+		{
+			m_acc += forwardMove;
+		}
+		if (_GSD->m_keyboardState.S)
+		{
+			m_acc -= forwardMove;
+		}
+		if (_GSD->m_keyboardState.A)
+		{
+			m_acc -= rightMove;
+		}
+		if (_GSD->m_keyboardState.D)
+		{
+			m_acc += rightMove;
+		}
+	}
+	else if (player_num == 2)
+	{
+		if (_GSD->m_keyboardState.I)
+		{
+			m_acc += forwardMove;
+		}
+		if (_GSD->m_keyboardState.K)
+		{
+			m_acc -= forwardMove;
+		}
+		if (_GSD->m_keyboardState.J)
+		{
+			m_acc -= rightMove;
+		}
+		if (_GSD->m_keyboardState.L)
+		{
+			m_acc += rightMove;
+		}
+	}
 	//change orinetation of player
 	float rotSpeed = 0.02f;
 	m_yaw -= rotSpeed * _GSD->m_mouseState.x;
@@ -68,4 +90,9 @@ void Player::Tick(GameStateData* _GSD)
 
 	//apply my base behaviour
 	PhysModel::Tick(_GSD);
+}
+
+void Player::playerNum(int val)
+{
+	player_num = val;
 }

@@ -26,11 +26,15 @@ public:
 
 	Vector3 getDeltaPos() { return m_dpos; };
 
+	void Enable(bool val);
+
 protected:
 	GameObject3D* m_targetObject = NULL;
 	Vector3 m_targetPos = Vector3::Zero;
 	Matrix m_proj = Matrix::Identity;
 	Matrix m_view = Matrix::Identity;
 	Vector3	m_dpos; //I'll lurk this far behind and away from it
+
+	bool enabled = false;
 };
 

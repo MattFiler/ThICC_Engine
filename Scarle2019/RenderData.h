@@ -25,6 +25,7 @@ struct RenderData
 	std::unique_ptr<DirectX::BasicEffect> m_GPeffect = NULL;
 
 	Camera* m_cam = NULL;
+	Camera* m_cam1 = NULL;
 
 	~RenderData()
 	{

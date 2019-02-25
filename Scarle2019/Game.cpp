@@ -137,8 +137,16 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 
 	//create a "player"
+	int player_num = 1;
 	Player* test4 = new Player(m_RD, "cup");
+	test4->playerNum(player_num);
+	player_num++;
 	m_3DObjects.push_back(test4);
+
+	Player* test5 = new Player(m_RD, "cup");
+	test5->playerNum(player_num);
+	player_num++;
+	m_3DObjects.push_back(test5);
 
 	//point a camera at the player that follows
 	//m_cam = new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test3, Vector3(0.0f, 3.0f, 10.0f));
@@ -149,11 +157,13 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//m_3DObjects.push_back(m_cam1);
 
 
-	m_cam = new Camera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam = new Camera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
 	m_RD->m_cam = m_cam;
+	m_cam->Enable(true);
 	m_3DObjects.push_back(m_cam);
 
-	m_cam1 = new Camera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam1 = new Camera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test5, Vector3(0.0f, 3.0f, 10.0f));
+	m_RD->m_cam1 = m_cam1;
 	m_3DObjects.push_back(m_cam1);
 
 	//geometric shape renderer test
@@ -240,14 +250,14 @@ void Game::Update(DX::StepTimer const& _timer)
 	}
 
 
-	if (m_GSD->m_keyboardState.Right)
-	{
-		m_RD->m_cam = m_cam;
-	}
-	else if (m_GSD->m_keyboardState.Left)
-	{
-		m_RD->m_cam = m_cam1;
-	}
+	//if (m_GSD->m_keyboardState.Right)
+	//{
+	//	m_RD->m_cam = m_cam;
+	//}
+	//else if (m_GSD->m_keyboardState.Left)
+	//{
+	//	m_RD->m_cam = m_cam1;
+	//}
 
 	float x = m_RD->m_cam->getDeltaPos().x;
 	float y = m_RD->m_cam->getDeltaPos().y;

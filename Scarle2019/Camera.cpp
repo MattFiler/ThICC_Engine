@@ -17,16 +17,18 @@ Camera::~Camera()
 
 void Camera::Tick(GameStateData* _GSD)
 {
-
-	if (m_targetObject)
+	if (enabled)
 	{
-		m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
-		Matrix rotCam = Matrix::CreateFromYawPitchRoll(m_targetObject->GetYaw(), 0.0f, 0.0f);
-		m_pos = m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam);
-	}
-	else
-	{
-		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+		if (m_targetObject)
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
+			Matrix rotCam = Matrix::CreateFromYawPitchRoll(m_targetObject->GetYaw(), 0.0f, 0.0f);
+			m_pos = m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam);
+		}
+		else
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+		}
 	}
 
 	GameObject3D::Tick(_GSD);
@@ -35,4 +37,9 @@ void Camera::Tick(GameStateData* _GSD)
 void Camera::setDeltaPos(Vector3 _dpos)
 {
 	m_dpos = _dpos;
+}
+
+void Camera::Enable(bool val)
+{
+	enabled = val;
 }
