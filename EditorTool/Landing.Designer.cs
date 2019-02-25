@@ -28,77 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.importModel = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.importFont = new System.Windows.Forms.Button();
-            this.importImage = new System.Windows.Forms.Button();
-            this.importSound = new System.Windows.Forms.Button();
             this.loadAssetType = new System.Windows.Forms.ComboBox();
             this.assetList = new System.Windows.Forms.ListBox();
             this.deleteAsset = new System.Windows.Forms.Button();
-            this.refreshList = new System.Windows.Forms.Button();
+            this.importAsset = new System.Windows.Forms.Button();
             this.editSelected = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox1.SuspendLayout();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // importModel
-            // 
-            this.importModel.Location = new System.Drawing.Point(6, 19);
-            this.importModel.Name = "importModel";
-            this.importModel.Size = new System.Drawing.Size(150, 29);
-            this.importModel.TabIndex = 0;
-            this.importModel.Text = "New Model";
-            this.importModel.UseVisualStyleBackColor = true;
-            this.importModel.Click += new System.EventHandler(this.importModel_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.importFont);
-            this.groupBox1.Controls.Add(this.importImage);
-            this.groupBox1.Controls.Add(this.importSound);
-            this.groupBox1.Controls.Add(this.importModel);
-            this.groupBox1.Location = new System.Drawing.Point(12, 382);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(630, 54);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Import Assets";
-            // 
-            // importFont
-            // 
-            this.importFont.Location = new System.Drawing.Point(474, 19);
-            this.importFont.Name = "importFont";
-            this.importFont.Size = new System.Drawing.Size(150, 29);
-            this.importFont.TabIndex = 3;
-            this.importFont.Text = "New Font";
-            this.importFont.UseVisualStyleBackColor = true;
-            this.importFont.Click += new System.EventHandler(this.importFont_Click);
-            // 
-            // importImage
-            // 
-            this.importImage.Location = new System.Drawing.Point(318, 19);
-            this.importImage.Name = "importImage";
-            this.importImage.Size = new System.Drawing.Size(150, 29);
-            this.importImage.TabIndex = 2;
-            this.importImage.Text = "New Images";
-            this.importImage.UseVisualStyleBackColor = true;
-            this.importImage.Click += new System.EventHandler(this.importImage_Click);
-            // 
-            // importSound
-            // 
-            this.importSound.Location = new System.Drawing.Point(162, 19);
-            this.importSound.Name = "importSound";
-            this.importSound.Size = new System.Drawing.Size(150, 29);
-            this.importSound.TabIndex = 1;
-            this.importSound.Text = "New Sounds";
-            this.importSound.UseVisualStyleBackColor = true;
-            this.importSound.Click += new System.EventHandler(this.importSound_Click);
             // 
             // loadAssetType
             // 
@@ -125,7 +67,7 @@
             // 
             // deleteAsset
             // 
-            this.deleteAsset.Location = new System.Drawing.Point(6, 329);
+            this.deleteAsset.Location = new System.Drawing.Point(145, 329);
             this.deleteAsset.Name = "deleteAsset";
             this.deleteAsset.Size = new System.Drawing.Size(63, 23);
             this.deleteAsset.TabIndex = 4;
@@ -133,19 +75,19 @@
             this.deleteAsset.UseVisualStyleBackColor = true;
             this.deleteAsset.Click += new System.EventHandler(this.deleteAsset_Click);
             // 
-            // refreshList
+            // importAsset
             // 
-            this.refreshList.Location = new System.Drawing.Point(145, 329);
-            this.refreshList.Name = "refreshList";
-            this.refreshList.Size = new System.Drawing.Size(63, 23);
-            this.refreshList.TabIndex = 5;
-            this.refreshList.Text = "Refresh";
-            this.refreshList.UseVisualStyleBackColor = true;
-            this.refreshList.Click += new System.EventHandler(this.refreshList_Click);
+            this.importAsset.Location = new System.Drawing.Point(6, 329);
+            this.importAsset.Name = "importAsset";
+            this.importAsset.Size = new System.Drawing.Size(63, 23);
+            this.importAsset.TabIndex = 5;
+            this.importAsset.Text = "New";
+            this.importAsset.UseVisualStyleBackColor = true;
+            this.importAsset.Click += new System.EventHandler(this.refreshList_Click);
             // 
             // editSelected
             // 
-            this.editSelected.Location = new System.Drawing.Point(75, 329);
+            this.editSelected.Location = new System.Drawing.Point(76, 329);
             this.editSelected.Name = "editSelected";
             this.editSelected.Size = new System.Drawing.Size(63, 23);
             this.editSelected.TabIndex = 6;
@@ -157,9 +99,9 @@
             // 
             this.groupBox2.Controls.Add(this.loadAssetType);
             this.groupBox2.Controls.Add(this.editSelected);
-            this.groupBox2.Controls.Add(this.assetList);
-            this.groupBox2.Controls.Add(this.refreshList);
             this.groupBox2.Controls.Add(this.deleteAsset);
+            this.groupBox2.Controls.Add(this.assetList);
+            this.groupBox2.Controls.Add(this.importAsset);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(215, 364);
@@ -186,6 +128,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.domainUpDown1);
             this.groupBox3.Location = new System.Drawing.Point(233, 12);
@@ -195,20 +138,27 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Asset Configuration";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(165, 180);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(84, 13);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "COMING SOON";
+            // 
             // Landing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(653, 445);
+            this.ClientSize = new System.Drawing.Size(653, 384);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Landing";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mario Kart Asset Manager";
             this.Load += new System.EventHandler(this.Landing_Load);
-            this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -217,20 +167,15 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button importModel;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button importImage;
-        private System.Windows.Forms.Button importSound;
-        private System.Windows.Forms.Button importFont;
         private System.Windows.Forms.ComboBox loadAssetType;
         private System.Windows.Forms.ListBox assetList;
         private System.Windows.Forms.Button deleteAsset;
-        private System.Windows.Forms.Button refreshList;
+        private System.Windows.Forms.Button importAsset;
         private System.Windows.Forms.Button editSelected;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DomainUpDown domainUpDown1;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label2;
     }
 }
