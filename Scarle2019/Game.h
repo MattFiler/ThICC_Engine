@@ -96,6 +96,7 @@ private:
 	//Input
 	std::unique_ptr<DirectX::Keyboard> m_keyboard;
 	std::unique_ptr<DirectX::Mouse> m_mouse;
+	std::unique_ptr<GamePad> m_gamepad;
 
 	//audio system
 	//This uses a simple system, but a better pipeline can be used using Wave Banks

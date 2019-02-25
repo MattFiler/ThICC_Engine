@@ -76,6 +76,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_mouse = std::make_unique<Mouse>();
 	m_mouse->SetWindow(_window);// mouse device needs to linked to this program's window
 	m_mouse->SetMode(Mouse::Mode::MODE_RELATIVE); // gives a delta postion as opposed to a MODE_ABSOLUTE position in 2-D space
+	m_gamepad = std::make_unique<GamePad>();
 
 	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
 #ifdef _DEBUG
@@ -133,6 +134,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	test3->SetPos(12.0f*Vector3::Forward + 5.0f*Vector3::Right + Vector3::Down);
 	test3->SetScale(5.0f);
 	m_3DObjects.push_back(test3);
+
 
 	//create a "player"
 	Player* test4 = new Player(m_RD, "cup");
@@ -230,6 +232,13 @@ void Game::Update(DX::StepTimer const& _timer)
 	m_GSD->m_keyboardState = m_keyboard->GetState();
 	m_GSD->m_mouseState = m_mouse->GetState();
 
+	auto state = m_gamepad->GetState(0);
+
+	if (state.IsConnected())
+	{
+		// TODO: Read controller 0 here
+	}
+
 
 	if (m_GSD->m_keyboardState.Right)
 	{
@@ -243,7 +252,6 @@ void Game::Update(DX::StepTimer const& _timer)
 	float x = m_RD->m_cam->getDeltaPos().x;
 	float y = m_RD->m_cam->getDeltaPos().y;
 	float z = m_RD->m_cam->getDeltaPos().z;
-
 
 	if (m_GSD->m_keyboardState.Up)
 	{
@@ -376,17 +384,20 @@ void Game::Present()
 void Game::OnActivated()
 {
 	// TODO: Game is becoming active window.
+	m_gamepad->Resume();
 }
 
 void Game::OnDeactivated()
 {
 	// TODO: Game is becoming background window.
+	m_gamepad->Suspend();
 }
 
 void Game::OnSuspending()
 {
 	// TODO: Game is being power-suspended (or minimized).
 	m_audEngine->Suspend();
+	m_gamepad->Suspend();
 }
 
 void Game::OnResuming()
@@ -394,6 +405,7 @@ void Game::OnResuming()
 	// TODO: Game is being power-resumed (or returning from minimize).
 	m_timer.ResetElapsedTime();
 	m_audEngine->Resume();
+	m_gamepad->Resume();
 }
 
 void Game::OnWindowSizeChanged(int _width, int _height)
