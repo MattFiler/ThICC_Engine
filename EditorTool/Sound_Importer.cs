@@ -43,10 +43,12 @@ namespace EditorTool
                 {
                     ProcessStartInfo soundConverter = new ProcessStartInfo();
                     soundConverter.WorkingDirectory = "Sounds";
-                    soundConverter.FileName = "ffmpeg.exe";
+                    soundConverter.FileName = "Sounds/ffmpeg.exe";
                     soundConverter.Arguments = "-i " + Path.GetFileName(soundPath.Text) + " " + Path.GetFileNameWithoutExtension(soundPath.Text) + ".wav";
-                    soundConverter.CreateNoWindow = true;
+                    soundConverter.UseShellExecute = false;
+                    soundConverter.RedirectStandardOutput = true;
                     Process converterProcess = Process.Start(soundConverter);
+                    StreamReader reader = converterProcess.StandardOutput;
                     converterProcess.WaitForExit();
 
                     File.Delete("Sounds/" + Path.GetFileName(soundPath.Text));

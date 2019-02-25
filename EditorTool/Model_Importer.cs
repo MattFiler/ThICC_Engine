@@ -73,13 +73,15 @@ namespace EditorTool
 
         private void importModel_Click(object sender, EventArgs e)
         {
-            if (File.Exists("Models/" + Path.GetFileName(modelPath.Text)) || modelPath.Text == "")
+            if (File.Exists("Models/" + Path.GetFileName(modelPath.Text)) || modelPath.Text == "" || File.Exists("Models/" + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
             {
                 MessageBox.Show("Couldn't import model, a model with the same name already exists.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
                 string pathWithoutExtension = modelPath.Text.Substring(0, modelPath.Text.Length - Path.GetExtension(modelPath.Text).Length);
+                string importedMTL = "";
+
                 bool didHaveUglyPath = false;
                 bool didFindMTL = false;
 
@@ -115,6 +117,7 @@ namespace EditorTool
                     {
                         File.Copy(Path.GetDirectoryName(modelPath.Text) + @"\" + mtl_suggestedname, "Models/" + mtl_suggestedname);
                         didFindMTL = true;
+                        importedMTL = mtl_suggestedname;
                     }
 
                     //If we couldn't find our original MTL, attempt to match with our OBJ name
@@ -136,18 +139,40 @@ namespace EditorTool
                         File.WriteAllLines("Models/" + Path.GetFileName(pathWithoutExtension + ".obj"), obj_file);
 
                         didFindMTL = true;
+                        importedMTL = Path.GetFileName(pathWithoutExtension + ".mtl");
                     }
 
                     //Still can't find our MTL file - ask the user to locate it
                     if (!didFindMTL)
                     {
                         MessageBox.Show("Could not find the MTL file for this model.\nPlease locate it.", "Could not auto-locate MTL!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        //TO BE IMPLEMENTED LATER ;)
+                        OpenFileDialog filePicker = new OpenFileDialog();
+                        filePicker.Filter = "Model Material Info (MTL)|*.MTL";
+                        if (filePicker.ShowDialog() == DialogResult.OK)
+                        {
+                            File.Copy(filePicker.FileName, "Models/" + Path.GetFileName(filePicker.FileName));
+
+                            //Re-do first fix for crappy DXTK converter now we have our MTL - rewrite OBJ to have the correct MTL path
+                            int obj_index = 0;
+                            foreach (string line in obj_file)
+                            {
+                                if (line.Contains("mtllib"))
+                                {
+                                    obj_file[obj_index] = "mtllib " + Path.GetFileName(filePicker.FileName);
+                                    break;
+                                }
+                                obj_index++;
+                            }
+                            File.WriteAllLines("Models/" + Path.GetFileName(pathWithoutExtension + ".obj"), obj_file);
+
+                            didFindMTL = true;
+                            importedMTL = Path.GetFileName(filePicker.FileName);
+                        }
                     }
 
-                    //Second fix for crappy DXTK converter - rewrite the MTL with proper paths
                     if (didFindMTL)
                     {
+                        //Second fix for crappy DXTK converter - rewrite the MTL with proper paths
                         int mtl_index = 0;
                         string[] mtl_file = File.ReadAllLines("Models/" + Path.GetFileName(pathWithoutExtension + ".mtl"));
                         foreach (string line in mtl_file)
@@ -163,15 +188,15 @@ namespace EditorTool
                             mtl_index++;
                         }
                         File.WriteAllLines("Models/" + Path.GetFileName(pathWithoutExtension + ".mtl"), mtl_file);
-                    }
 
-                    //Copy over any referenced textures - this should really be handled by trawling the MTL similar to the OBJ trawl earlier
-                    foreach (string texture in textureList.Items)
-                    {
-                        if (!File.Exists("Models/" + Path.GetFileName(texture)))
+                        //Copy over any referenced textures - this should really be handled by trawling the MTL similar to the OBJ trawl earlier
+                        foreach (string texture in textureList.Items)
                         {
-                            File.Copy(texture, "Models/" + Path.GetFileName(texture));
-                            copied_material_count++;
+                            if (!File.Exists("Models/" + Path.GetFileName(texture)))
+                            {
+                                File.Copy(texture, "Models/" + Path.GetFileName(texture));
+                                copied_material_count++;
+                            }
                         }
                     }
                 }
@@ -187,21 +212,36 @@ namespace EditorTool
                     //Run the model converter to swap our OBJ into an SDKMESH
                     ProcessStartInfo meshConverter = new ProcessStartInfo();
                     meshConverter.WorkingDirectory = "Models";
-                    meshConverter.FileName = "meshconvert.exe";
+                    meshConverter.FileName = "Models/meshconvert.exe";
                     meshConverter.Arguments = Path.GetFileName(modelPath.Text) + " -sdkmesh -nodds -y";
-                    meshConverter.CreateNoWindow = true;
+                    meshConverter.UseShellExecute = false;
+                    meshConverter.RedirectStandardOutput = true;
                     Process converterProcess = Process.Start(meshConverter);
+                    StreamReader reader = converterProcess.StandardOutput;
                     converterProcess.WaitForExit();
+
+                    //Capture write info from converter
+                    string output = reader.ReadToEnd();
+                    string[] outputArray = output.Split('\n');
+                    string writeInfo = "";
+                    foreach (string line in outputArray)
+                    {
+                        if (line.Contains("written"))
+                        {
+                            writeInfo = line.Substring(0,line.Length - 2);
+                            break;
+                        }
+                    }
 
                     if (File.Exists("Models/" + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
                     {
                         //Conversion complete - delete the OBJ and MTL
                         File.Delete("Models/" + Path.GetFileName(modelPath.Text));
-                        if (File.Exists("Models/" + Path.GetFileName(pathWithoutExtension + ".mtl")))
+                        if (importedMTL != "")
                         {
-                            File.Delete("Models/" + Path.GetFileName(pathWithoutExtension + ".mtl"));
+                            File.Delete("Models/" + importedMTL);
                         }
-                        MessageBox.Show("Model Import Complete", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Model imported with " + writeInfo + ".", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
@@ -219,8 +259,12 @@ namespace EditorTool
                         }
                         else
                         {
-                            //Failed for unknown reason
-                            MessageBox.Show("Model Import Failed", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            //Failed! Show full output from DXTK converter if requested.
+                            DialogResult showErrorInfo = MessageBox.Show("Model import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                            if (showErrorInfo == DialogResult.Yes)
+                            {
+                                MessageBox.Show(output, "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                     }
 
