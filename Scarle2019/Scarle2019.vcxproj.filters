@@ -47,6 +47,15 @@
     <Filter Include="GameObjects\Sound\Source">
       <UniqueIdentifier>{cf7c9487-ac49-48f8-877a-b2aaab84a6b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObjects\VBGO">
+      <UniqueIdentifier>{ee7ad5ac-6b72-4f7c-ba66-2cc5494db2ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\VBGO\Headers">
+      <UniqueIdentifier>{c6439af2-85df-4bd9-9664-334e62aa0640}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\VBGO\Source">
+      <UniqueIdentifier>{5d4e5a53-3698-4d23-84a6-575677e63aae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StepTimer.h">
@@ -109,6 +118,39 @@
     <ClInclude Include="PhysModel.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="VBGO3D.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="vertex.h">
+      <Filter>GameObjects\VBGO</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>GameObjects\VBGO</Filter>
+    </ClInclude>
+    <ClInclude Include="VBCube.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="VBspiral.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="VBSpiked.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MarchCubes.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="fileVBGO.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="VBSnail.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TransFileVBGO.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -158,6 +200,27 @@
     </ClCompile>
     <ClCompile Include="PhysModel.cpp">
       <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="VBGO3D.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="VBCube.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="light.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MarchCubes.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="fileVBGO.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="VBSnail.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TransFileVBGO.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

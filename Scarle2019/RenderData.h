@@ -13,6 +13,12 @@ struct RenderData
 	Microsoft::WRL::ComPtr<ID3D12Device> m_d3dDevice = NULL;
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> m_commandQueue = NULL;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>   m_commandList = NULL;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> m_commandAllocators[2] = { NULL,NULL };
+
+	//memory fence access
+	Microsoft::WRL::ComPtr<ID3D12Fence>                 m_fence = NULL;
+	UINT64*                                              m_fenceValues = NULL;
+	UINT*                                                m_backBufferIndex;
 
 	std::unique_ptr<DirectX::SpriteFont> m_font = NULL;
 	int m_fontResNum;
@@ -25,6 +31,7 @@ struct RenderData
 	std::unique_ptr<DirectX::BasicEffect> m_GPeffect = NULL;
 
 	Camera* m_cam = NULL;
+	Light* m_light=NULL;
 
 	~RenderData()
 	{

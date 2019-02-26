@@ -15,6 +15,7 @@ using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
+
 Game::Game() :
 	m_window(nullptr),
 	m_outputWidth(800),
@@ -58,6 +59,8 @@ Game::~Game()
 
 	delete m_RD;
 	delete m_GSD;
+
+	VBGO3D::CleanUp();
 }
 
 // Initialize the Direct3D resources required to run.
@@ -90,6 +93,13 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_RD->m_d3dDevice = m_d3dDevice;
 	m_RD->m_commandQueue = m_commandQueue;
 	m_RD->m_commandList = m_commandList;
+	for (int i = 0; i < c_swapBufferCount; i++)
+	{
+		m_RD->m_commandAllocators[i] = m_commandAllocators[i];
+	}	
+	m_RD->m_fenceValues = m_fenceValues;
+	m_RD->m_fence = m_fence;
+	m_RD->m_backBufferIndex = &m_backBufferIndex;
 
 	m_RD->m_resourceDescriptors = std::make_unique<DescriptorHeap>(m_d3dDevice.Get(),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
@@ -114,10 +124,13 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	auto uploadResourcesFinished = resourceUpload.End(m_commandQueue.Get());
 
-	D3D12_VIEWPORT viewport = { 0.0f, 0.0f,
-		static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight),
-		D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	m_RD->m_spriteBatch->SetViewport(viewport);
+	SetViewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
+
+	//Set Up VBGO render system
+	if (!VBGO3D::SetUpVBGOs(m_RD))
+	{
+		ExitGame();//if anything fails in setting up QUIT!
+	}
 
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
@@ -149,9 +162,64 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(test4);
 
 	//point a camera at the player that follows
-	m_cam = new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam =  new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
 	m_RD->m_cam = m_cam;
 	m_3DObjects.push_back(m_cam);
+
+	//create a base light
+	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
+	m_3DObjects.push_back(m_light);
+	m_RD->m_light = m_light;
+
+	//test VBGO3Ds
+	VBCube* VB = new VBCube(m_RD);
+	VB->Init(11, m_RD);
+	VB->SetScale(4.0f);
+	m_3DObjects.push_back(VB);
+	VBSpiral* VB2 = new VBSpiral(m_RD);
+	VB2->Init(11, m_RD);
+	VB2->SetPos(100.0f*Vector3::Forward);
+	VB2->SetScale(4.0f);
+	m_3DObjects.push_back(VB2);
+	VBSpike* VB3 = new VBSpike(m_RD);
+	VB3->Init(11, m_RD);
+	VB3->SetPos(100.0f*Vector3::Backward);
+	VB3->SetScale(4.0f);
+	m_3DObjects.push_back(VB3);
+
+	//Marching Cubes
+	VBMarchCubes* VBMC = new VBMarchCubes(m_RD);
+	VBMC->init(Vector3(-8.0f, -8.0f, -17.0f), Vector3(8.0f, 8.0f, 23.0f), 60.0f*Vector3::One, 0.01, m_RD);
+	VBMC->SetPos(Vector3(100, 0, -100));
+	VBMC->SetPitch(-XM_PIDIV2);
+	VBMC->SetScale(Vector3(3, 3, 1.5));
+	m_3DObjects.push_back(VBMC);
+
+	FileVBGO* terrainBox = new FileVBGO("terrainTex", m_RD);
+	terrainBox->SetPos(Vector3(100.0f, 000.0f, 100.0f));
+	m_3DObjects.push_back(terrainBox);
+
+	FileVBGO* Box = new FileVBGO("cube", m_RD);
+	m_3DObjects.push_back(Box);
+	Box->SetPos(Vector3(200.0f, 0.0f, 200.0f));
+	Box->SetPitch(XM_PIDIV4);
+	Box->SetScale(20.0f);
+
+	VBSnail* snail = new VBSnail(m_RD, "baseline", 150, 0.98f, 0.09f * XM_PI, 0.4f, Color(1.0f, 0.0f, 0.0f, 1.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
+	snail->SetPos(Vector3(100.0f, 0.0f, 0.0f));
+	snail->SetScale(2.0f);
+	m_3DObjects.push_back(snail);
+
+	//this only draws correctly as its at the end
+	//see the file for what's needed to do this properly
+	TransFileVBGO* Box2 = new TransFileVBGO("cube_trans", m_RD);
+	m_3DObjects.push_back(Box2);
+	Box2->SetPos(Vector3(0.0f, 50.0f, 0.0f));
+	Box2->SetPitch(0.5f*XM_PIDIV4);
+	Box2->SetScale(20.0f);
+
+	//Once I.ve set up all the VBs and IBs push them to the GPU
+	VBGO3D::PushIBVB(m_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
 	//test text
 	Text2D * test2 = new Text2D("testing text");
@@ -247,25 +315,19 @@ void Game::Render()
 	}
 
 	// Prepare the command list to render a new frame.
+
 	Clear();
 
-	//draw each type of 3D objects
-
-	//Render Geometric Primitives
+	//draw 3D objects
 	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
-		if ((*it)->GetType() == GO3D_RT_GEOP)(*it)->Render(m_RD);
-	}
-
-	//Render SDKMesh Models	
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-	{
-		if ((*it)->GetType() == GO3D_RT_SDK)(*it)->Render(m_RD);
+		(*it)->Render(m_RD);
 	}
 
 	//finally draw all 2D objects
 	ID3D12DescriptorHeap* heaps[] = { m_RD->m_resourceDescriptors->Heap() };
 	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+	m_RD->m_spriteBatch->SetViewport(m_viewport);
 	m_RD->m_spriteBatch->Begin(m_commandList.Get());
 
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
@@ -299,10 +361,8 @@ void Game::Clear()
 	m_commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	// Set the viewport and scissor rect.
-	D3D12_VIEWPORT viewport = { 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	D3D12_RECT scissorRect = { 0, 0, m_outputWidth, m_outputHeight };
-	m_commandList->RSSetViewports(1, &viewport);
-	m_commandList->RSSetScissorRects(1, &scissorRect);
+	m_commandList->RSSetViewports(1, &m_viewport);
+	m_commandList->RSSetScissorRects(1, &m_scissorRect);
 }
 
 // Submits the command list to the GPU and presents the back buffer contents to the screen.
@@ -374,6 +434,12 @@ void Game::GetDefaultSize(int& _width, int& _height) const
 	// TODO: Change to desired default window size (note minimum size is 320x200).
 	_width = 800;
 	_height = 600;
+}
+
+void Game::SetViewport(float _TopLeftX, float _TopLeftY, float _Width, float _Height)
+{
+	m_viewport = { _TopLeftX,_TopLeftY,_Width,_Height, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	m_scissorRect = {(int)_TopLeftX,(int)_TopLeftY,(int)_Width,(int)_Height };
 }
 
 // These are the resources that depend on the device.
@@ -465,7 +531,7 @@ void Game::CreateDevice()
 
 	// Create a command list for recording graphics commands.
 	DX::ThrowIfFailed(m_d3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocators[0].Get(), nullptr, IID_PPV_ARGS(m_commandList.ReleaseAndGetAddressOf())));
-	DX::ThrowIfFailed(m_commandList->Close());
+	//DX::ThrowIfFailed(m_commandList->Close());
 
 	// Create a fence for tracking GPU execution progress.
 	DX::ThrowIfFailed(m_d3dDevice->CreateFence(m_fenceValues[m_backBufferIndex], D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(m_fence.ReleaseAndGetAddressOf())));
@@ -503,6 +569,9 @@ void Game::CreateDevice()
 		rtState);
 	m_RD->m_GPeffect = std::make_unique<BasicEffect>(m_d3dDevice.Get(), EffectFlags::Lighting, pd3);
 	m_RD->m_GPeffect->EnableDefaultLighting();
+
+	//set up the viewport and scissor RECT
+	SetViewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.

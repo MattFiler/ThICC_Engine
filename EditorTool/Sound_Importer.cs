@@ -37,24 +37,45 @@ namespace EditorTool
             }
             else
             {
+                //Copy file to working directory
                 File.Copy(soundPath.Text, "Sounds/" + Path.GetFileName(soundPath.Text));
 
+                string output = "";
                 if (Path.GetExtension(soundPath.Text).ToUpper() != ".WAV")
                 {
+                    //Convert file to WAV if it isn't already
                     ProcessStartInfo soundConverter = new ProcessStartInfo();
                     soundConverter.WorkingDirectory = "Sounds";
-                    soundConverter.FileName = "ffmpeg.exe";
-                    soundConverter.Arguments = "-i " + Path.GetFileName(soundPath.Text) + " " + Path.GetFileNameWithoutExtension(soundPath.Text) + ".wav";
-                    soundConverter.CreateNoWindow = true;
+                    soundConverter.FileName = "Sounds/ffmpeg.exe";
+                    soundConverter.Arguments = "-i \"" + Path.GetFileName(soundPath.Text) + "\" \"" + Path.GetFileNameWithoutExtension(soundPath.Text) + ".wav\"";
+                    soundConverter.UseShellExecute = false;
+                    soundConverter.RedirectStandardOutput = true;
                     Process converterProcess = Process.Start(soundConverter);
+                    StreamReader reader = converterProcess.StandardOutput;
                     converterProcess.WaitForExit();
+
+                    //Capture DDS convert output incase we errored
+                    output = reader.ReadToEnd();
 
                     File.Delete("Sounds/" + Path.GetFileName(soundPath.Text));
                 }
 
-                soundPath.Text = "";
+                if (!File.Exists("Sounds/" + Path.GetFileNameWithoutExtension(soundPath.Text) + ".wav"))
+                {
+                    //Conversion failed, show reason if requested
+                    DialogResult showErrorInfo = MessageBox.Show("Sound import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (showErrorInfo == DialogResult.Yes)
+                    {
+                        MessageBox.Show(output, "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                { 
+                    //Import success
+                    MessageBox.Show("Sound successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 
-                MessageBox.Show("Sound Import Complete", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                soundPath.Text = "";
             }
         }
     }

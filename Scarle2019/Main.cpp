@@ -25,14 +25,14 @@ extern "C"
 int WINAPI wWinMain(_In_ HINSTANCE _hInstance, _In_opt_ HINSTANCE _hPrevInstance, _In_ LPWSTR _lpCmdLine, _In_ int _nCmdShow)
 {
 
-	//#ifdef _DEBUG
+#ifdef _DEBUG
 		//add a Debug Console to which cout is directed whilst in DEBUG
 	if (AllocConsole()) {
 		freopen("CONOUT$", "w", stdout);
 		SetConsoleTitle(L"Debug Console");
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED);
 	}
-	//#endif
+#endif
 
 	UNREFERENCED_PARAMETER(_hPrevInstance);
 	UNREFERENCED_PARAMETER(_lpCmdLine);

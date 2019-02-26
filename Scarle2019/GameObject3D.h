@@ -33,6 +33,9 @@ public:
 	void SetScale(Vector3 _scale) { m_scale = _scale; }
 	void SetOri(float _pitch, float _yaw, float _roll) { m_pitch = _pitch; m_yaw = _yaw, m_roll = _roll; }
 	void SetOri(Vector3 _ori) { m_pitch = _ori.x; m_yaw = _ori.y; m_roll = _ori.z; }
+	void SetPitch(float _pitch) { m_pitch = _pitch; }
+	void SetYaw(float _yaw) { m_yaw = _yaw; }
+	void SetRoll(float _roll) { m_roll = _roll; }
 
 	Vector3 GetPos() { return m_pos; }
 	Vector3 GetScale() { return m_scale; }

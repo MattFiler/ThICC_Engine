@@ -22,7 +22,7 @@ namespace EditorTool
         private void browseToImage_Click(object sender, EventArgs e)
         {
             OpenFileDialog filePicker = new OpenFileDialog();
-            filePicker.Filter = "Image (PNG)|*.PNG";
+            filePicker.Filter = "Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG";
             if (filePicker.ShowDialog() == DialogResult.OK)
             {
                 imagePath.Text = filePicker.FileName;
@@ -37,25 +37,46 @@ namespace EditorTool
             }
             else
             {
+                //Copy file to "working directory"
                 File.Copy(imagePath.Text, "DDS/" + Path.GetFileName(imagePath.Text));
 
+                //Convert copied image to DDS
                 ProcessStartInfo imageConverter = new ProcessStartInfo();
                 imageConverter.WorkingDirectory = "DDS";
-                imageConverter.FileName = "texconv.exe";
+                imageConverter.FileName = "DDS/texconv.exe";
                 imageConverter.Arguments = "\""+Path.GetFileName(imagePath.Text)+ "\"";
-                imageConverter.CreateNoWindow = true;
+                imageConverter.UseShellExecute = false;
+                imageConverter.RedirectStandardOutput = true;
                 Process converterProcess = Process.Start(imageConverter);
+                StreamReader reader = converterProcess.StandardOutput;
                 converterProcess.WaitForExit();
 
+                //Capture DDS convert output incase we errored
+                string output = reader.ReadToEnd();
+
+                //Lowercase extension pls
                 File.Delete("DDS/" + Path.GetFileName(imagePath.Text));
                 if (File.Exists("DDS/" + Path.GetFileNameWithoutExtension(imagePath.Text) + ".DDS"))
                 {
                     File.Move("DDS/" + Path.GetFileNameWithoutExtension(imagePath.Text) + ".DDS", "DDS/" + Path.GetFileNameWithoutExtension(imagePath.Text) + ".dds");
                 }
 
-                imagePath.Text = "";
+                if (!File.Exists("DDS/" + Path.GetFileNameWithoutExtension(imagePath.Text) + ".dds"))
+                {
+                    //Import failed, show reason if requested
+                    DialogResult showErrorInfo = MessageBox.Show("Image import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (showErrorInfo == DialogResult.Yes)
+                    {
+                        MessageBox.Show(output, "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    //Import success
+                    MessageBox.Show("Image successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 
-                MessageBox.Show("Image Import Complete", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                imagePath.Text = "";
             }
         }
     }
