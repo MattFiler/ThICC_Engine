@@ -10,7 +10,7 @@ class Camera :
 	public GameObject3D
 {
 public:
-	Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos);
+	Camera(float _width, float _height, float _near, float _far);
 	virtual ~Camera();
 
 	void SetTarget(GameObject3D* _target) { m_targetObject = _target; }
@@ -22,19 +22,10 @@ public:
 	virtual void Tick(GameStateData* _GSD);
 	virtual void Render(RenderData* _RD) {};
 
-	void setDeltaPos(Vector3 _dpos);
-
-	Vector3 getDeltaPos() { return m_dpos; };
-
-	void Enable(bool val);
-
 protected:
 	GameObject3D* m_targetObject = NULL;
 	Vector3 m_targetPos = Vector3::Zero;
 	Matrix m_proj = Matrix::Identity;
 	Matrix m_view = Matrix::Identity;
-	Vector3	m_dpos; //I'll lurk this far behind and away from it
-
-	bool enabled = false;
 };
 

@@ -22,7 +22,7 @@
     <RootNamespace>Scarle2019</RootNamespace>
     <ProjectGuid>{beb5860e-fef9-4f22-baeb-f76c22cf75d6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -92,7 +92,6 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -168,7 +167,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="fileVBGO.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
@@ -176,7 +177,9 @@
     <ClInclude Include="GameStateData.h" />
     <ClInclude Include="GPGO3D.h" />
     <ClInclude Include="ImageGO2D.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Loop.h" />
+    <ClInclude Include="MarchCubes.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
@@ -187,16 +190,26 @@
     <ClInclude Include="TestSound.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="TPSCamera.h" />
+    <ClInclude Include="TransFileVBGO.h" />
+    <ClInclude Include="VBCube.h" />
+    <ClInclude Include="VBGO3D.h" />
+    <ClInclude Include="VBSnail.h" />
+    <ClInclude Include="VBSpiked.h" />
+    <ClInclude Include="VBspiral.h" />
+    <ClInclude Include="vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="fileVBGO.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject2D.cpp" />
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GPGO3D.cpp" />
     <ClCompile Include="ImageGO2D.cpp" />
+    <ClCompile Include="light.cpp" />
     <ClCompile Include="Loop.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MarchCubes.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -210,6 +223,10 @@
     <ClCompile Include="TestSound.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="TPSCamera.cpp" />
+    <ClCompile Include="TransFileVBGO.cpp" />
+    <ClCompile Include="VBCube.cpp" />
+    <ClCompile Include="VBGO3D.cpp" />
+    <ClCompile Include="VBSnail.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

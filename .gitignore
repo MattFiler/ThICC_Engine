@@ -329,7 +329,6 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 
-*.sdkmesh
+DDS/
 
-!EditorTool.exe
-EditorTool.exe.config
+*.sdkmesh

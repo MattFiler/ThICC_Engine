@@ -14,10 +14,6 @@ public:
 
 	virtual void Tick(GameStateData* _GSD) override;
 
-	void playerNum(int val);
 protected:
 
-private:
-
-	int player_num = 0;
 };
