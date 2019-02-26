@@ -82,13 +82,18 @@ namespace EditorTool
         /* EDIT ASSET CONFIG */
         private void editSelected_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Coming soon!", "Coming soon!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //MessageBox.Show("Coming soon!", "Coming soon!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /* DELETE ASSET */
         private void deleteAsset_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Coming soon!", "Coming soon!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void assetList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
 

@@ -38,8 +38,12 @@
             this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.modelViewer1 = new EditorTool.ModelViewer();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // loadAssetType
@@ -62,12 +66,13 @@
             this.assetList.FormattingEnabled = true;
             this.assetList.Location = new System.Drawing.Point(6, 46);
             this.assetList.Name = "assetList";
-            this.assetList.Size = new System.Drawing.Size(202, 277);
+            this.assetList.Size = new System.Drawing.Size(202, 433);
             this.assetList.TabIndex = 3;
+            this.assetList.SelectedIndexChanged += new System.EventHandler(this.assetList_SelectedIndexChanged);
             // 
             // deleteAsset
             // 
-            this.deleteAsset.Location = new System.Drawing.Point(145, 329);
+            this.deleteAsset.Location = new System.Drawing.Point(145, 485);
             this.deleteAsset.Name = "deleteAsset";
             this.deleteAsset.Size = new System.Drawing.Size(63, 23);
             this.deleteAsset.TabIndex = 4;
@@ -77,7 +82,7 @@
             // 
             // importAsset
             // 
-            this.importAsset.Location = new System.Drawing.Point(6, 329);
+            this.importAsset.Location = new System.Drawing.Point(6, 485);
             this.importAsset.Name = "importAsset";
             this.importAsset.Size = new System.Drawing.Size(63, 23);
             this.importAsset.TabIndex = 5;
@@ -87,7 +92,7 @@
             // 
             // editSelected
             // 
-            this.editSelected.Location = new System.Drawing.Point(76, 329);
+            this.editSelected.Location = new System.Drawing.Point(76, 485);
             this.editSelected.Name = "editSelected";
             this.editSelected.Size = new System.Drawing.Size(63, 23);
             this.editSelected.TabIndex = 6;
@@ -104,7 +109,7 @@
             this.groupBox2.Controls.Add(this.importAsset);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(215, 364);
+            this.groupBox2.Size = new System.Drawing.Size(215, 515);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Asset Browser";
@@ -131,9 +136,9 @@
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.domainUpDown1);
-            this.groupBox3.Location = new System.Drawing.Point(233, 12);
+            this.groupBox3.Location = new System.Drawing.Point(233, 292);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(409, 364);
+            this.groupBox3.Size = new System.Drawing.Size(409, 235);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Asset Configuration";
@@ -141,17 +146,37 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(165, 180);
+            this.label2.Location = new System.Drawing.Point(216, 30);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 11;
             this.label2.Text = "COMING SOON";
             // 
+            // elementHost1
+            // 
+            this.elementHost1.Location = new System.Drawing.Point(6, 19);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(397, 249);
+            this.elementHost1.TabIndex = 12;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = this.modelViewer1;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.elementHost1);
+            this.groupBox1.Location = new System.Drawing.Point(233, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(409, 274);
+            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Asset Preview";
+            // 
             // Landing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(653, 384);
+            this.ClientSize = new System.Drawing.Size(653, 538);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -162,6 +187,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -177,5 +203,8 @@
         private System.Windows.Forms.DomainUpDown domainUpDown1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private ModelViewer modelViewer1;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
