@@ -152,9 +152,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	}
 
 	//test for obj loader / renderer
-	SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "cup");
-	test3->SetPos(12.0f*Vector3::Forward + 5.0f*Vector3::Right + Vector3::Down);
-	test3->SetScale(5.0f);
+	SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "luigicircuit2");
+	test3->SetPos(25.0f*Vector3::Forward + 5.0f*Vector3::Right + Vector3::Down);
+	test3->SetScale(0.3f);
 	m_3DObjects.push_back(test3);
 
 	//create a "player"
