@@ -152,13 +152,14 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	}
 
 	//test for obj loader / renderer
-	SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "cup");
-	test3->SetPos(12.0f*Vector3::Forward + 5.0f*Vector3::Right + Vector3::Down);
-	test3->SetScale(5.0f);
+	SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "Luigi Circuit");
+	test3->SetPos(Vector3(0, -30, 0));
+	test3->SetScale(10.0f);
+	test3->SetRotation(Vector3(-90, 0, 0));
 	m_3DObjects.push_back(test3);
 
 	//create a "player"
-	Player* test4 = new Player(m_RD, "cup");
+	Player* test4 = new Player(m_RD, "Standard Kart");
 	m_3DObjects.push_back(test4);
 
 	//point a camera at the player that follows

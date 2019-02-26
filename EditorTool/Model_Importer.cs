@@ -19,6 +19,7 @@ namespace EditorTool
             InitializeComponent();
         }
 
+        /* Browse to model file */
         private void browseToModel_Click(object sender, EventArgs e)
         {
             OpenFileDialog filePicker = new OpenFileDialog();
@@ -28,80 +29,58 @@ namespace EditorTool
                 modelPath.Text = filePicker.FileName;
             }
         }
-
-        private void addTexture_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog filePicker = new OpenFileDialog();
-            filePicker.Filter = "Model Texture (JPG/PNG)|*.JPG;*.PNG";
-            filePicker.Multiselect = true;
-            if (filePicker.ShowDialog() == DialogResult.OK)
-            {
-                foreach (string file in filePicker.FileNames)
-                {
-                    bool canCopyWithoutConflict = true;
-                    foreach (string texture in textureList.Items)
-                    {
-                        if (texture == file || Path.GetFileName(texture) == Path.GetFileName(file))
-                        {
-                            canCopyWithoutConflict = false;
-                            break;
-                        }
-                    }
-                    if (canCopyWithoutConflict)
-                    {
-                        textureList.Items.Add(file);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Texture name conflict:\n" + file, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-        }
-
-        private void removeTexture_Click(object sender, EventArgs e)
-        {
-            if (textureList.SelectedIndex == -1)
-            {
-                MessageBox.Show("Please select a texture from the list.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                textureList.Items.Remove(textureList.Items[textureList.SelectedIndex]);
-            }
-        }
-
+        
+        /* Import model and textures */
         private void importModel_Click(object sender, EventArgs e)
         {
-            if (File.Exists("Models/" + Path.GetFileName(modelPath.Text)) || modelPath.Text == "" || File.Exists("Models/" + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
+            string import_directory = "Models/" + Path.GetFileNameWithoutExtension(modelPath.Text) + "/";
+
+            if (Directory.Exists(import_directory) || modelPath.Text == "")
             {
+                if (modelPath.Text == "")
+                {
+                    MessageBox.Show("Please select a model to import.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 MessageBox.Show("Couldn't import model, a model with the same name already exists.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
                 string pathWithoutExtension = modelPath.Text.Substring(0, modelPath.Text.Length - Path.GetExtension(modelPath.Text).Length);
                 string importedMTL = "";
+                string original_mtl_path = "";
 
                 bool didHaveUglyPath = false;
                 bool didFindMTL = false;
-
-                int copied_material_count = 0;
+                
                 int material_count = 0;
+                List<string> referenced_materials = new List<string>();
+                int found_count = 0;
+                int lost_count = 0;
 
                 //Copy model into our output directory - basically our working directory
-                File.Copy(pathWithoutExtension + ".obj", "Models/" + Path.GetFileName(modelPath.Text));
+                Directory.CreateDirectory(import_directory);
+                File.Copy(pathWithoutExtension + ".obj", import_directory + Path.GetFileName(modelPath.Text));
 
                 //Trawl through our model to find the original MTL name
-                string[] obj_file = File.ReadAllLines("Models/" + Path.GetFileName(pathWithoutExtension + ".obj"));
+                //Fix the name for the crappy DXTK converter if necessary
+                string[] obj_file = File.ReadAllLines(import_directory + Path.GetFileName(pathWithoutExtension + ".obj"));
                 string mtl_suggestedname = "";
+                int obj_index = 0;
                 foreach (string line in obj_file)
                 {
                     if (line.Contains("mtllib"))
                     {
                         mtl_suggestedname = line.Substring(7);
+                        if (mtl_suggestedname.Contains(" "))
+                        {
+                            obj_file[obj_index] = line.Substring(0, 7) + line.Substring(7).Replace(' ', '_'); //SHODDY TOOLKIT!
+                        }
                         break;
                     }
+                    obj_index++;
                 }
+                File.WriteAllLines(import_directory + Path.GetFileName(pathWithoutExtension + ".obj"), obj_file);
                 
                 //Find and fix MTL if one is required
                 if (mtl_suggestedname != "")
@@ -110,36 +89,41 @@ namespace EditorTool
                     if (mtl_suggestedname.Split('/').Length > 1 || mtl_suggestedname.Split('\\').Length > 1)
                     {
                         didHaveUglyPath = true;
+                        //We can still succeed from here - but if we fail, this is most likely why.
+                        //Really a fix should be implemented, but I'll wait and see if it becomes an issue first.
+                        //Downloading models from the internet will be the cause of the this occuring.
                     }
 
                     //If original MTL exists, copy it over
                     if (File.Exists(Path.GetDirectoryName(modelPath.Text) + @"\" + mtl_suggestedname))
                     {
-                        File.Copy(Path.GetDirectoryName(modelPath.Text) + @"\" + mtl_suggestedname, "Models/" + mtl_suggestedname);
+                        //Must replace spaces here b/c TK is TRASH - you'll see this continuing further down... EEK!
+                        importedMTL = mtl_suggestedname.Replace(' ', '_');
+                        original_mtl_path = Path.GetDirectoryName(modelPath.Text) + @"\" + mtl_suggestedname;
                         didFindMTL = true;
-                        importedMTL = mtl_suggestedname;
+                        File.Copy(original_mtl_path, import_directory + importedMTL);
                     }
 
                     //If we couldn't find our original MTL, attempt to match with our OBJ name
                     if (!didFindMTL && File.Exists(pathWithoutExtension + ".mtl"))
                     {
-                        File.Copy(pathWithoutExtension + ".mtl", "Models/" + Path.GetFileName(pathWithoutExtension + ".mtl"));
+                        importedMTL = Path.GetFileName(pathWithoutExtension.Replace(' ', '_') + ".mtl");
+                        original_mtl_path = pathWithoutExtension + ".mtl";
+                        didFindMTL = true;
+                        File.Copy(original_mtl_path, import_directory + importedMTL); 
 
-                        //First fix for crappy DXTK converter - rewrite OBJ to have the correct MTL path
-                        int obj_index = 0;
+                        //Second fix for crappy DXTK converter - rewrite OBJ to have the correct MTL path
+                        obj_index = 0;
                         foreach (string line in obj_file)
                         {
                             if (line.Contains("mtllib"))
                             {
-                                obj_file[obj_index] = "mtllib " + Path.GetFileName(pathWithoutExtension + ".mtl");
+                                obj_file[obj_index] = "mtllib " + importedMTL;
                                 break;
                             }
                             obj_index++;
                         }
-                        File.WriteAllLines("Models/" + Path.GetFileName(pathWithoutExtension + ".obj"), obj_file);
-
-                        didFindMTL = true;
-                        importedMTL = Path.GetFileName(pathWithoutExtension + ".mtl");
+                        File.WriteAllLines(import_directory + Path.GetFileName(pathWithoutExtension + ".obj"), obj_file);
                     }
 
                     //Still can't find our MTL file - ask the user to locate it
@@ -150,31 +134,32 @@ namespace EditorTool
                         filePicker.Filter = "Model Material Info (MTL)|*.MTL";
                         if (filePicker.ShowDialog() == DialogResult.OK)
                         {
-                            File.Copy(filePicker.FileName, "Models/" + Path.GetFileName(filePicker.FileName));
+                            importedMTL = Path.GetFileName(filePicker.FileName).Replace(' ', '_');
+                            original_mtl_path = filePicker.FileName;
+                            didFindMTL = true;
+                            File.Copy(original_mtl_path, import_directory + importedMTL);
 
-                            //Re-do first fix for crappy DXTK converter now we have our MTL - rewrite OBJ to have the correct MTL path
-                            int obj_index = 0;
+                            //Re-do second fix for crappy DXTK converter now we have our MTL - rewrite OBJ to have the correct MTL path
+                            obj_index = 0;
                             foreach (string line in obj_file)
                             {
                                 if (line.Contains("mtllib"))
                                 {
-                                    obj_file[obj_index] = "mtllib " + Path.GetFileName(filePicker.FileName);
+                                    obj_file[obj_index] = "mtllib " + importedMTL;
                                     break;
                                 }
                                 obj_index++;
                             }
-                            File.WriteAllLines("Models/" + Path.GetFileName(pathWithoutExtension + ".obj"), obj_file);
-
-                            didFindMTL = true;
-                            importedMTL = Path.GetFileName(filePicker.FileName);
+                            File.WriteAllLines(import_directory + Path.GetFileName(pathWithoutExtension + ".obj"), obj_file);
                         }
                     }
 
                     if (didFindMTL)
                     {
-                        //Second fix for crappy DXTK converter - rewrite the MTL with proper paths
+                        //THIRD fix for crappy DXTK converter - rewrite the MTL with proper paths
                         int mtl_index = 0;
-                        string[] mtl_file = File.ReadAllLines("Models/" + Path.GetFileName(pathWithoutExtension + ".mtl"));
+                        string[] mtl_file = File.ReadAllLines(import_directory + importedMTL);
+                        referenced_materials.Clear();
                         foreach (string line in mtl_file)
                         {
                             if (line.Contains("map"))
@@ -182,20 +167,27 @@ namespace EditorTool
                                 string[] map_split = new string[2];
                                 map_split = line.Split(' ');
                                 map_split[1] = Path.GetFileName(map_split[1]);
-                                mtl_file[mtl_index] = map_split[0] + " " + map_split[1];
+                                referenced_materials.Add(Path.GetFileName(map_split[1]));
+                                mtl_file[mtl_index] = map_split[0] + " " + map_split[1].Replace(' ', '_'); //Will apply this to copied materials next
                                 material_count++;
                             }
                             mtl_index++;
                         }
-                        File.WriteAllLines("Models/" + Path.GetFileName(pathWithoutExtension + ".mtl"), mtl_file);
+                        File.WriteAllLines(import_directory + importedMTL, mtl_file);
 
-                        //Copy over any referenced textures - this should really be handled by trawling the MTL similar to the OBJ trawl earlier
-                        foreach (string texture in textureList.Items)
+                        //Go through all referenced materials in our MTL and try to import them
+                        foreach (string material_file in referenced_materials)
                         {
-                            if (!File.Exists("Models/" + Path.GetFileName(texture)))
+                            string this_material = Path.GetDirectoryName(original_mtl_path) + "\\" + material_file;
+                            string output_file = import_directory + material_file.Replace(' ', '_');
+                            if (File.Exists(this_material) && !File.Exists(output_file)) {
+                                found_count++;
+                                File.Copy(this_material, output_file);
+                                continue;
+                            }
+                            else if (!File.Exists(output_file))
                             {
-                                File.Copy(texture, "Models/" + Path.GetFileName(texture));
-                                copied_material_count++;
+                                lost_count++; //couldn't find material file
                             }
                         }
                     }
@@ -211,9 +203,9 @@ namespace EditorTool
                 {
                     //Run the model converter to swap our OBJ into an SDKMESH
                     ProcessStartInfo meshConverter = new ProcessStartInfo();
-                    meshConverter.WorkingDirectory = "Models";
+                    meshConverter.WorkingDirectory = import_directory;
                     meshConverter.FileName = "Models/meshconvert.exe";
-                    meshConverter.Arguments = Path.GetFileName(modelPath.Text) + " -sdkmesh -nodds -y";
+                    meshConverter.Arguments = "\"" + Path.GetFileName(modelPath.Text) + "\" -sdkmesh -nodds -y";
                     meshConverter.UseShellExecute = false;
                     meshConverter.RedirectStandardOutput = true;
                     Process converterProcess = Process.Start(meshConverter);
@@ -233,15 +225,15 @@ namespace EditorTool
                         }
                     }
 
-                    if (File.Exists("Models/" + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
+                    if (File.Exists(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
                     {
                         //Conversion complete - delete the OBJ and MTL
-                        File.Delete("Models/" + Path.GetFileName(modelPath.Text));
+                        File.Delete(import_directory + Path.GetFileName(modelPath.Text));
                         if (importedMTL != "")
                         {
-                            File.Delete("Models/" + importedMTL);
+                            File.Delete(import_directory + importedMTL);
                         }
-                        MessageBox.Show("Model imported with " + writeInfo + ".", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Model imported with" + writeInfo + ".\nAlso found " + found_count + " materials, " + lost_count + " expected materials missing.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
@@ -251,12 +243,14 @@ namespace EditorTool
                             //Failed because I haven't implemented a handler for ugly MTL paths
                             MessageBox.Show("Model import failed because the original MTL path is UGLY!\nDrop this message to Matt.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
+                        /*
                         else if (copied_material_count != material_count)
                         {
                             //Failed because some dumbo copied the wrong number of materials
                             //Should never explicitly fail BECAUSE of this, but it's worth a mention
                             MessageBox.Show("Model import failed, and you also copied the wrong number of materials.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
+                        */
                         else
                         {
                             //Failed! Show full output from DXTK converter if requested.
@@ -270,15 +264,24 @@ namespace EditorTool
 
                     //Reset our form
                     modelPath.Text = "";
-                    textureList.Items.Clear();
                 }
                 else
                 {
                     //Couldn't locate MTL - FAIL!
-                    File.Delete("Models/" + Path.GetFileName(modelPath.Text));
+                    File.Delete(import_directory + Path.GetFileName(modelPath.Text));
                     MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+
+        private void addTexture_Click(object sender, EventArgs e)
+        {
+            //depreciated
+        }
+        private void removeTexture_Click(object sender, EventArgs e)
+        {
+            //depreciated
         }
     }
 }
