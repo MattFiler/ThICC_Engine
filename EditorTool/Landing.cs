@@ -13,6 +13,7 @@ namespace EditorTool
 {
     public partial class Landing : Form
     {
+        List<string> fullLoadedFileNames = new List<string>(); //Used for saving full list item file paths
         public Landing()
         {
             InitializeComponent();
@@ -48,11 +49,13 @@ namespace EditorTool
                     break;
             }
 
-            string[] files = Directory.GetFiles(path, extension);
+            string[] files = Directory.GetFiles(path, extension, SearchOption.AllDirectories);
+            fullLoadedFileNames.Clear();
             assetList.Items.Clear();
             foreach (string file in files)
             {
-                assetList.Items.Add(file);
+                fullLoadedFileNames.Add(file);
+                assetList.Items.Add(Path.GetFileNameWithoutExtension(file));
             }
         }
         

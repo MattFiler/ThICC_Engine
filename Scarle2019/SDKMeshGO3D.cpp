@@ -9,15 +9,24 @@ SDKMeshGO3D::SDKMeshGO3D(RenderData* _RD, string _filename)
 	m_type = GO3D_RT_SDK;
 
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	string fullpath = "../Models/" + _filename + ".sdkmesh";
+	string fullpath = "../Models/" + _filename + "/" + _filename + ".sdkmesh";
 	std::wstring wFilename = converter.from_bytes(fullpath.c_str());
 
+	//A crash here means that the model file wasn't loaded properly.
+	//Have you got the correct file name?
 	m_model = Model::CreateFromSDKMESH(wFilename.c_str());
 
 	ResourceUploadBatch resourceUpload(_RD->m_d3dDevice.Get());
 
 	resourceUpload.Begin();
-	m_modelResources = m_model->LoadTextures(_RD->m_d3dDevice.Get(), resourceUpload, L"../Models/");
+
+	string dirpath = "../Models/" + _filename + "/";
+	std::wstring dirpath_wstring = std::wstring(dirpath.begin(), dirpath.end());
+	const wchar_t* dirpath_wchar = dirpath_wstring.c_str();
+
+	//A crash here means that the material texture file wasn't loaded properly.
+	//Did you utilise my brilliant toolkit properly?
+	m_modelResources = m_model->LoadTextures(_RD->m_d3dDevice.Get(), resourceUpload, dirpath_wchar);
 
 	_RD->m_fxFactory = std::make_unique<EffectFactory>(m_modelResources->Heap(), _RD->m_states->Heap());
 

@@ -152,7 +152,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	}
 
 	//test for obj loader / renderer
-	SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "luigicircuit2");
+	SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "Luigi Circuit");
 	test3->SetPos(25.0f*Vector3::Forward + 5.0f*Vector3::Right + Vector3::Down);
 	test3->SetScale(0.3f);
 	m_3DObjects.push_back(test3);
