@@ -30,6 +30,10 @@ namespace EditorTool
             if (filePicker.ShowDialog() == DialogResult.OK)
             {
                 imagePath.Text = filePicker.FileName;
+                if (assetName.Text == "")
+                {
+                    assetName.Text = Path.GetFileNameWithoutExtension(imagePath.Text);
+                }
             }
         }
 
@@ -107,8 +111,7 @@ namespace EditorTool
                     MessageBox.Show("Image successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                imagePath.Text = "";
-                assetName.Text = "";
+                this.Close();
             }
         }
     }

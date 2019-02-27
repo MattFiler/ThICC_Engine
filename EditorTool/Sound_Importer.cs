@@ -30,6 +30,10 @@ namespace EditorTool
             if (filePicker.ShowDialog() == DialogResult.OK)
             {
                 soundPath.Text = filePicker.FileName;
+                if (assetName.Text == "")
+                {
+                    assetName.Text = Path.GetFileNameWithoutExtension(soundPath.Text);
+                }
             }
         }
 
@@ -97,8 +101,7 @@ namespace EditorTool
                     MessageBox.Show("Sound successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                soundPath.Text = "";
-                assetName.Text = "";
+                this.Close();
             }
         }
     }

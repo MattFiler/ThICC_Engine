@@ -30,6 +30,10 @@ namespace EditorTool
             if (filePicker.ShowDialog() == DialogResult.OK)
             {
                 modelPath.Text = filePicker.FileName;
+                if (assetName.Text == "")
+                {
+                    assetName.Text = Path.GetFileNameWithoutExtension(modelPath.Text);
+                }
             }
         }
         
@@ -282,9 +286,7 @@ namespace EditorTool
                         }
                     }
 
-                    //Reset our form
-                    modelPath.Text = "";
-                    assetName.Text = "";
+                    this.Close();
                 }
                 else
                 {
