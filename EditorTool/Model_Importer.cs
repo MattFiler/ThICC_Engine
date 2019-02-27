@@ -235,6 +235,18 @@ namespace EditorTool
 
                     if (File.Exists(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
                     {
+                        //Output vertex data for generating our collmap
+                        string[] final_obj_file = File.ReadAllLines(import_directory + Path.GetFileName(modelPath.Text));
+                        List<string> collmap_file = new List<string>();
+                        foreach (string line in final_obj_file)
+                        {
+                            if (line.Length > 2 && line.Substring(0, 2) == "v ")
+                            {
+                                collmap_file.Add(line.Substring(2)); 
+                            }
+                        }
+                        File.WriteAllLines(import_directory + Path.GetFileName(pathWithoutExtension + ".vertices"), collmap_file);
+
                         //Conversion complete - delete the OBJ and MTL
                         File.Delete(import_directory + Path.GetFileName(modelPath.Text));
                         if (importedMTL != "")
@@ -278,6 +290,7 @@ namespace EditorTool
                 {
                     //Couldn't locate MTL - FAIL!
                     File.Delete(import_directory + Path.GetFileName(modelPath.Text));
+                    Directory.Delete(import_directory);
                     MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
