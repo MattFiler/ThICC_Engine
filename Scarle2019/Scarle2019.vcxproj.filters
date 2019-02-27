@@ -56,6 +56,12 @@
     <Filter Include="GameObjects\VBGO\Source">
       <UniqueIdentifier>{5d4e5a53-3698-4d23-84a6-575677e63aae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Base\Managers">
+      <UniqueIdentifier>{388885d0-afc8-4c3a-ab03-35156d9a78f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\Scenes">
+      <UniqueIdentifier>{5c2c0b26-8bd2-408e-b999-55ea6162001f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StepTimer.h">
@@ -151,6 +157,21 @@
     <ClInclude Include="TransFileVBGO.h">
       <Filter>GameObjects\VBGO\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Game Base\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Game Base\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Game Base</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Game Base\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -221,6 +242,15 @@
     </ClCompile>
     <ClCompile Include="TransFileVBGO.cpp">
       <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Game Base\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Game Base\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Game Base\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
