@@ -19,7 +19,7 @@ using Microsoft::WRL::ComPtr;
 Game::Game() :
 	m_window(nullptr),
 	m_outputWidth(800),
-	m_outputHeight(600),
+	m_outputHeight(800),
 	m_featureLevel(D3D_FEATURE_LEVEL_11_0),
 	m_backBufferIndex(0),
 	m_fenceValues{}
@@ -163,9 +163,13 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(test4);
 
 	//point a camera at the player that follows
-	m_cam =  new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam =  new Camera(static_cast<float>(200), static_cast<float>(200), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
 	m_RD->m_cam = m_cam;
 	m_3DObjects.push_back(m_cam);
+
+	m_cam1 = new Camera(static_cast<float>(600), static_cast<float>(600), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_RD->m_cam1 = m_cam1;
+	m_3DObjects.push_back(m_cam1);
 
 	//create a base light
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
@@ -294,6 +298,15 @@ void Game::Update(DX::StepTimer const& _timer)
 	{
 		ExitGame();
 	}
+
+	//if (m_GSD->m_keyboardState.Left)
+	//{
+	//	m_RD->m_cam = m_cam;
+	//}
+	//if (m_GSD->m_keyboardState.Right)
+	//{
+	//	m_RD->m_cam = m_cam1;
+	//}
 
 	//Add your game logic here.
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
@@ -440,7 +453,7 @@ void Game::GetDefaultSize(int& _width, int& _height) const
 void Game::SetViewport(float _TopLeftX, float _TopLeftY, float _Width, float _Height)
 {
 	m_viewport = { _TopLeftX,_TopLeftY,_Width,_Height, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	m_scissorRect = {(int)_TopLeftX,(int)_TopLeftY,(int)_Width,(int)_Height };
+	m_scissorRect = {(int)_TopLeftX,(int)_TopLeftY,(int)(_Width),(int)(_Height) };
 }
 
 // These are the resources that depend on the device.
@@ -572,7 +585,8 @@ void Game::CreateDevice()
 	m_RD->m_GPeffect->EnableDefaultLighting();
 
 	//set up the viewport and scissor RECT
-	SetViewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
+//	SetViewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
+	SetViewport(0.0f, 0.0f, static_cast<float>(100), static_cast<float>(100));
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
