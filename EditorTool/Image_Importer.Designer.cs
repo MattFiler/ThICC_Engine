@@ -32,12 +32,14 @@
             this.imagePath = new System.Windows.Forms.TextBox();
             this.browseToImage = new System.Windows.Forms.Button();
             this.importImage = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.assetName = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 9);
+            this.label1.Location = new System.Drawing.Point(12, 48);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(144, 13);
             this.label1.TabIndex = 6;
@@ -45,7 +47,7 @@
             // 
             // imagePath
             // 
-            this.imagePath.Location = new System.Drawing.Point(12, 25);
+            this.imagePath.Location = new System.Drawing.Point(15, 64);
             this.imagePath.Name = "imagePath";
             this.imagePath.ReadOnly = true;
             this.imagePath.Size = new System.Drawing.Size(183, 20);
@@ -53,7 +55,7 @@
             // 
             // browseToImage
             // 
-            this.browseToImage.Location = new System.Drawing.Point(201, 24);
+            this.browseToImage.Location = new System.Drawing.Point(204, 63);
             this.browseToImage.Name = "browseToImage";
             this.browseToImage.Size = new System.Drawing.Size(75, 22);
             this.browseToImage.TabIndex = 4;
@@ -63,7 +65,7 @@
             // 
             // importImage
             // 
-            this.importImage.Location = new System.Drawing.Point(12, 51);
+            this.importImage.Location = new System.Drawing.Point(15, 91);
             this.importImage.Name = "importImage";
             this.importImage.Size = new System.Drawing.Size(264, 28);
             this.importImage.TabIndex = 7;
@@ -71,11 +73,29 @@
             this.importImage.UseVisualStyleBackColor = true;
             this.importImage.Click += new System.EventHandler(this.importModel_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(64, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Asset Name";
+            // 
+            // assetName
+            // 
+            this.assetName.Location = new System.Drawing.Point(15, 25);
+            this.assetName.Name = "assetName";
+            this.assetName.Size = new System.Drawing.Size(264, 20);
+            this.assetName.TabIndex = 8;
+            // 
             // Image_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(286, 89);
+            this.ClientSize = new System.Drawing.Size(294, 130);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.assetName);
             this.Controls.Add(this.importImage);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.imagePath);
@@ -95,5 +115,7 @@
         private System.Windows.Forms.TextBox imagePath;
         private System.Windows.Forms.Button browseToImage;
         private System.Windows.Forms.Button importImage;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox assetName;
     }
 }

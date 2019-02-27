@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace EditorTool
 {
@@ -19,6 +21,7 @@ namespace EditorTool
             InitializeComponent();
         }
 
+        /* Browse to asset */
         private void browseToSound_Click(object sender, EventArgs e)
         {
             OpenFileDialog filePicker = new OpenFileDialog();
@@ -29,8 +32,12 @@ namespace EditorTool
             }
         }
 
+        /* Import sound */
         private void importSound_Click(object sender, EventArgs e)
         {
+            string asset_path = "Sounds/" + assetName.Text + ".wav";
+            string asset_path_orig_ext = "Sounds/" + assetName.Text + Path.GetExtension(soundPath.Text);
+
             if (File.Exists("Sounds/" + Path.GetFileName(soundPath.Text)) || soundPath.Text == "")
             {
                 MessageBox.Show("Couldn't import sound, a sound with the same name already exists.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -38,7 +45,7 @@ namespace EditorTool
             else
             {
                 //Copy file to working directory
-                File.Copy(soundPath.Text, "Sounds/" + Path.GetFileName(soundPath.Text));
+                File.Copy(soundPath.Text, asset_path_orig_ext);
 
                 string output = "";
                 if (Path.GetExtension(soundPath.Text).ToUpper() != ".WAV")
@@ -47,7 +54,7 @@ namespace EditorTool
                     ProcessStartInfo soundConverter = new ProcessStartInfo();
                     soundConverter.WorkingDirectory = "Sounds";
                     soundConverter.FileName = "Sounds/ffmpeg.exe";
-                    soundConverter.Arguments = "-i \"" + Path.GetFileName(soundPath.Text) + "\" \"" + Path.GetFileNameWithoutExtension(soundPath.Text) + ".wav\"";
+                    soundConverter.Arguments = "-i \"" + asset_path_orig_ext.Substring(7) + "\" \"" + asset_path.Substring(7) + "\"";
                     soundConverter.UseShellExecute = false;
                     soundConverter.RedirectStandardOutput = true;
                     Process converterProcess = Process.Start(soundConverter);
@@ -57,10 +64,10 @@ namespace EditorTool
                     //Capture DDS convert output incase we errored
                     output = reader.ReadToEnd();
 
-                    File.Delete("Sounds/" + Path.GetFileName(soundPath.Text));
+                    File.Delete(asset_path_orig_ext);
                 }
 
-                if (!File.Exists("Sounds/" + Path.GetFileNameWithoutExtension(soundPath.Text) + ".wav"))
+                if (!File.Exists(asset_path))
                 {
                     //Conversion failed, show reason if requested
                     DialogResult showErrorInfo = MessageBox.Show("Sound import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
@@ -70,12 +77,17 @@ namespace EditorTool
                     }
                 }
                 else
-                { 
+                {
+                    //Create JSON data
+                    JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Sounds\", \"is_looping\": false, \"volume\": 1.0, \"pitch\": 0.0, \"pan\": 0.0}");
+                    File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "json", asset_json.ToString(Formatting.Indented));
+
                     //Import success
                     MessageBox.Show("Sound successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 soundPath.Text = "";
+                assetName.Text = "";
             }
         }
     }

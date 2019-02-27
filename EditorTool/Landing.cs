@@ -85,7 +85,13 @@ namespace EditorTool
         /* EDIT ASSET CONFIG */
         private void editSelected_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("Coming soon!", "Coming soon!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (assetList.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select an asset to edit!", "No asset selected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            MessageBox.Show(fullLoadedFileNames.ElementAt(assetList.SelectedIndex));
         }
 
         /* DELETE ASSET */
