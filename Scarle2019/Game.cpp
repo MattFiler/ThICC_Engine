@@ -159,7 +159,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(test3);
 
 	//create a "player"
-	Player* test4 = new Player(m_RD, "Standard Kart");
+	Player* test4 = new Player(m_RD, "Test Ramp");
 	m_3DObjects.push_back(test4);
 
 	//point a camera at the player that follows
