@@ -100,9 +100,6 @@
     <ClInclude Include="SDKMeshGO3D.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Loop.h">
-      <Filter>GameObjects\Sound\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>GameObjects\Sound\Headers</Filter>
     </ClInclude>
@@ -151,6 +148,9 @@
     <ClInclude Include="TransFileVBGO.h">
       <Filter>GameObjects\VBGO\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Loop.h">
+      <Filter>GameObjects\Sound\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -182,9 +182,6 @@
     </ClCompile>
     <ClCompile Include="SDKMeshGO3D.cpp">
       <Filter>GameObjects\3D\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Loop.cpp">
-      <Filter>GameObjects\Sound\Source</Filter>
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>GameObjects\Sound\Source</Filter>
@@ -221,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="TransFileVBGO.cpp">
       <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Loop.cpp">
+      <Filter>GameObjects\Sound\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
