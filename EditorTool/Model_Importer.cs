@@ -99,7 +99,7 @@ namespace EditorTool
                         didHaveUglyPath = true;
                         //We can still succeed from here - but if we fail, this is most likely why.
                         //Really a fix should be implemented, but I'll wait and see if it becomes an issue first.
-                        //Downloading models from the internet will be the cause of the this occuring.
+                        //Downloading models from the internet will be the cause of this occuring.
                     }
 
                     //If original MTL exists, copy it over
