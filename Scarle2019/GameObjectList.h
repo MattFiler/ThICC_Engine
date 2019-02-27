@@ -22,6 +22,7 @@
 #include "fileVBGO.h"
 #include "VBSnail.h"
 #include "TransFileVBGO.h"
+#include "Track.h"
 
 //Sound Objects
 #include "Sound.h"

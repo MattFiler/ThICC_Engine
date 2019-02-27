@@ -162,6 +162,12 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	Player* test4 = new Player(m_RD, "Standard Kart");
 	m_3DObjects.push_back(test4);
 
+	// Test track
+	//Track* track = new Track(m_RD, "Test Track", "Test Track\Test Track.vertices");
+	//m_3DObjects.push_back(track);
+	SDKMeshGO3D* track = new SDKMeshGO3D(m_RD, "Test Track");
+	m_3DObjects.push_back(track);
+
 	//point a camera at the player that follows
 	m_cam =  new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
 	m_RD->m_cam = m_cam;
