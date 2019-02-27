@@ -38,14 +38,14 @@ namespace EditorTool
         {
             string import_directory = "Models/" + assetName.Text + "/";
             
-            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[a-zA-Z0-9\x20]+$"))
+            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
             {
                 if (modelPath.Text == "" || assetName.Text == "")
                 {
                     MessageBox.Show("Please fill out all required inputs.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                else if (!Regex.IsMatch(assetName.Text, "^[a-zA-Z0-9\x20]+$"))
+                else if (!Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
                 {
                     MessageBox.Show("Your asset name cannot contain any special characters.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
