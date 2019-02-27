@@ -30,6 +30,10 @@ namespace EditorTool
             if (filePicker.ShowDialog() == DialogResult.OK)
             {
                 modelPath.Text = filePicker.FileName;
+                if (assetName.Text == "")
+                {
+                    assetName.Text = Path.GetFileNameWithoutExtension(modelPath.Text);
+                }
             }
         }
         
@@ -38,14 +42,14 @@ namespace EditorTool
         {
             string import_directory = "Models/" + assetName.Text + "/";
             
-            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[a-zA-Z0-9\x20]+$"))
+            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
             {
                 if (modelPath.Text == "" || assetName.Text == "")
                 {
                     MessageBox.Show("Please fill out all required inputs.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                else if (!Regex.IsMatch(assetName.Text, "^[a-zA-Z0-9\x20]+$"))
+                else if (!Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
                 {
                     MessageBox.Show("Your asset name cannot contain any special characters.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -99,7 +103,7 @@ namespace EditorTool
                         didHaveUglyPath = true;
                         //We can still succeed from here - but if we fail, this is most likely why.
                         //Really a fix should be implemented, but I'll wait and see if it becomes an issue first.
-                        //Downloading models from the internet will be the cause of the this occuring.
+                        //Downloading models from the internet will be the cause of this occuring.
                     }
 
                     //If original MTL exists, copy it over
@@ -282,9 +286,7 @@ namespace EditorTool
                         }
                     }
 
-                    //Reset our form
-                    modelPath.Text = "";
-                    assetName.Text = "";
+                    this.Close();
                 }
                 else
                 {

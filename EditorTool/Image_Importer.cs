@@ -30,6 +30,10 @@ namespace EditorTool
             if (filePicker.ShowDialog() == DialogResult.OK)
             {
                 imagePath.Text = filePicker.FileName;
+                if (assetName.Text == "")
+                {
+                    assetName.Text = Path.GetFileNameWithoutExtension(imagePath.Text);
+                }
             }
         }
 
@@ -39,14 +43,14 @@ namespace EditorTool
             string asset_path = "DDS/" + assetName.Text + ".dds";
             string asset_path_orig_ext = "DDS/" + assetName.Text + Path.GetExtension(imagePath.Text);
 
-            if (File.Exists(asset_path) || imagePath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[a-zA-Z0-9\x20]+$"))
+            if (File.Exists(asset_path) || imagePath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
             {
                 if (imagePath.Text == "" || assetName.Text == "")
                 {
                     MessageBox.Show("Please fill out all required inputs.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                else if (!Regex.IsMatch(assetName.Text, "^[a-zA-Z0-9\x20]+$"))
+                else if (!Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
                 {
                     MessageBox.Show("Your asset name cannot contain any special characters.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -107,8 +111,7 @@ namespace EditorTool
                     MessageBox.Show("Image successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                imagePath.Text = "";
-                assetName.Text = "";
+                this.Close();
             }
         }
     }
