@@ -240,7 +240,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_2DObjects.push_back(test);
 
 	//Test Sounds
-	Loop *loop = new Loop(m_audEngine.get(), "NightAmbienceSimple_02");
+	Loop *loop = new Loop(m_audEngine.get(), "Course Intro Soundtrack");
 	loop->SetVolume(0.1f);
 	loop->Play();
 	m_sounds.push_back(loop);

@@ -9,6 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace EditorTool
 {
@@ -27,22 +30,31 @@ namespace EditorTool
             if (filePicker.ShowDialog() == DialogResult.OK)
             {
                 modelPath.Text = filePicker.FileName;
+                if (assetName.Text == "")
+                {
+                    assetName.Text = Path.GetFileNameWithoutExtension(modelPath.Text);
+                }
             }
         }
         
         /* Import model and textures */
         private void importModel_Click(object sender, EventArgs e)
         {
-            string import_directory = "Models/" + Path.GetFileNameWithoutExtension(modelPath.Text) + "/";
-
-            if (Directory.Exists(import_directory) || modelPath.Text == "")
+            string import_directory = "Models/" + assetName.Text + "/";
+            
+            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
             {
-                if (modelPath.Text == "")
+                if (modelPath.Text == "" || assetName.Text == "")
                 {
-                    MessageBox.Show("Please select a model to import.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Please fill out all required inputs.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                MessageBox.Show("Couldn't import model, a model with the same name already exists.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else if (!Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
+                {
+                    MessageBox.Show("Your asset name cannot contain any special characters.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                MessageBox.Show("Couldn't import model, a model with the same name already exists.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -91,7 +103,7 @@ namespace EditorTool
                         didHaveUglyPath = true;
                         //We can still succeed from here - but if we fail, this is most likely why.
                         //Really a fix should be implemented, but I'll wait and see if it becomes an issue first.
-                        //Downloading models from the internet will be the cause of the this occuring.
+                        //Downloading models from the internet will be the cause of this occuring.
                     }
 
                     //If original MTL exists, copy it over
@@ -227,12 +239,32 @@ namespace EditorTool
 
                     if (File.Exists(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
                     {
+                        //Output vertex data for generating our collmap
+                        string[] final_obj_file = File.ReadAllLines(import_directory + Path.GetFileName(modelPath.Text));
+                        List<string> collmap_file = new List<string>();
+                        foreach (string line in final_obj_file)
+                        {
+                            if (line.Length > 2 && line.Substring(0, 2) == "v ")
+                            {
+                                collmap_file.Add(line.Substring(2)); 
+                            }
+                        }
+                        File.WriteAllLines(import_directory + Path.GetFileName(pathWithoutExtension + ".vertices"), collmap_file);
+
                         //Conversion complete - delete the OBJ and MTL
                         File.Delete(import_directory + Path.GetFileName(modelPath.Text));
                         if (importedMTL != "")
                         {
                             File.Delete(import_directory + importedMTL);
                         }
+
+                        //Create JSON data
+                        string final_asset_path = import_directory + assetName.Text + ".sdkmesh";
+                        JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0}");
+                        File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "json", asset_json.ToString(Formatting.Indented));
+
+                        //Move new SDKMESH to the correct requested filename
+                        File.Move(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh", final_asset_path);
                         MessageBox.Show("Model imported with" + writeInfo + ".\nAlso found " + found_count + " materials, " + lost_count + " expected materials missing.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
@@ -243,14 +275,6 @@ namespace EditorTool
                             //Failed because I haven't implemented a handler for ugly MTL paths
                             MessageBox.Show("Model import failed because the original MTL path is UGLY!\nDrop this message to Matt.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                        /*
-                        else if (copied_material_count != material_count)
-                        {
-                            //Failed because some dumbo copied the wrong number of materials
-                            //Should never explicitly fail BECAUSE of this, but it's worth a mention
-                            MessageBox.Show("Model import failed, and you also copied the wrong number of materials.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        */
                         else
                         {
                             //Failed! Show full output from DXTK converter if requested.
@@ -262,13 +286,13 @@ namespace EditorTool
                         }
                     }
 
-                    //Reset our form
-                    modelPath.Text = "";
+                    this.Close();
                 }
                 else
                 {
                     //Couldn't locate MTL - FAIL!
                     File.Delete(import_directory + Path.GetFileName(modelPath.Text));
+                    Directory.Delete(import_directory);
                     MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
