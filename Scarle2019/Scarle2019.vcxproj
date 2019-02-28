@@ -183,9 +183,12 @@
     <ClInclude Include="Loop.h" />
     <ClInclude Include="MarchCubes.h" />
     <ClInclude Include="MenuScene.h" />
+    <ClInclude Include="Observable.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerData.h" />
     <ClInclude Include="RenderData.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
@@ -196,6 +199,8 @@
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="TPSCamera.h" />
     <ClInclude Include="TransFileVBGO.h" />
+    <ClInclude Include="RaceUI.h" />
+    <ClInclude Include="UIMangager.h" />
     <ClInclude Include="VBCube.h" />
     <ClInclude Include="VBGO3D.h" />
     <ClInclude Include="VBSnail.h" />
@@ -232,6 +237,8 @@
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="TPSCamera.cpp" />
     <ClCompile Include="TransFileVBGO.cpp" />
+    <ClCompile Include="RaceUI.cpp" />
+    <ClCompile Include="UIMangager.cpp" />
     <ClCompile Include="VBCube.cpp" />
     <ClCompile Include="VBGO3D.cpp" />
     <ClCompile Include="VBSnail.cpp" />

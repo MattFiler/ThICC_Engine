@@ -13,7 +13,6 @@
 #define SAFE_RELEASE(p) { if ( (p) ) { (p)->Release(); (p) = 0; } }
 
 struct myVertex;
-
 class VBGO3D :
 	public GameObject3D
 {

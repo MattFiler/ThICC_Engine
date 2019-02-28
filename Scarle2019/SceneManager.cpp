@@ -5,6 +5,7 @@
 
 SceneManager::SceneManager()
 {
+
 }
 
 int SceneManager::Update(double _timer)

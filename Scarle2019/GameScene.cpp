@@ -13,11 +13,12 @@ GameScene::~GameScene()
 
 Scenes GameScene::Update(double _timer)
 {
-	return Scenes();
+	return nextScene;
 }
 
 void GameScene::Render()
 {
+
 }
 
 bool GameScene::Load()

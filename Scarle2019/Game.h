@@ -5,6 +5,7 @@
 #pragma once
 
 #include "StepTimer.h"
+#include "RaceUI.h"
 #include <vector>
 using std::vector;
 
@@ -112,6 +113,7 @@ private:
 	// Game State
 	DX::StepTimer                                       m_timer;
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
+	//vector<UI*>											m_UIObjects;
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
 	Camera*												m_cam;
 	Light*												m_light; 

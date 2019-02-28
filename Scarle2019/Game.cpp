@@ -93,6 +93,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_RD->m_d3dDevice = m_d3dDevice;
 	m_RD->m_commandQueue = m_commandQueue;
 	m_RD->m_commandList = m_commandList;
+	m_RD->m_commandList = m_commandList;
 	for (int i = 0; i < c_swapBufferCount; i++)
 	{
 		m_RD->m_commandAllocators[i] = m_commandAllocators[i];
@@ -140,7 +141,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	*/
 
 	//GEP::This is where I am creating the test objects
-
 
 	//geometric shape renderer test
 	for (int i = 1; i < GP_COUNT; i++)
@@ -222,21 +222,33 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	VBGO3D::PushIBVB(m_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
 	//test text
-	Text2D * test2 = new Text2D("testing text");
-	m_2DObjects.push_back(test2);
+	//Text2D *test2 = new Text2D("testing text");
+	//m_2DObjects.push_back(test2);
+
+
 
 	//text example 2D objects
-	ImageGO2D *test = new ImageGO2D(m_RD, "twist");
-	test->SetOri(45);
-	test->SetPos(Vector2(200, 300));
-	test->CentreOrigin();
-	test->SetScale(0.5f*Vector2::One);
-	m_2DObjects.push_back(test);
-	test = new ImageGO2D(m_RD, "guides_logo");
-	test->SetPos(Vector2(100, 100));
-	test->SetScale(Vector2(1.0f, 0.5f));
-	test->SetColour(Color(1, 0, 0, 1));
-	m_2DObjects.push_back(test);
+
+	//ImageGO2D *test = new ImageGO2D(m_RD, "twist");
+	//test->SetOri(45);
+	//test->SetPos(Vector2(200, 300));
+	//test->CentreOrigin();
+	//test->SetScale(0.5f*Vector2::One);
+	//m_2DObjects.push_back(test);
+	//test = new ImageGO2D(m_RD, "guides_logo");
+	//test->SetPos(Vector2(100, 100));
+	//test->SetScale(Vector2(1.0f, 0.5f));
+	//test->SetColour(Color(1, 0, 0, 1));
+	//m_2DObjects.push_back(test);
+
+	//GUI TEST
+
+	//Enter in order: LapPos / RacePos / BoxPos / ItemPos
+	Vector2 uiPositions[4] = {Vector2(32.f,300.f), Vector2(32.f,350.f), 
+		Vector2(32.f,32.f), Vector2(32.f,32.f)};
+	RaceUI * player1Test = new RaceUI(m_RD, uiPositions);
+	player1Test->SetPos(Vector2(0, 0));
+	m_2DObjects.push_back(player1Test);
 
 	//Test Sounds
 	Loop *loop = new Loop(m_audEngine.get(), "NightAmbienceSimple_02");

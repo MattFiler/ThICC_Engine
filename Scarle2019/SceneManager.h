@@ -18,6 +18,5 @@ public:
 
 private:
 	void ChangeScene(Scene* _newScene);
-
 };
 

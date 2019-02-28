@@ -62,6 +62,18 @@
     <Filter Include="Game Base\Scenes">
       <UniqueIdentifier>{5c2c0b26-8bd2-408e-b999-55ea6162001f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Base\UI">
+      <UniqueIdentifier>{3993abc3-dff0-43b4-8ddc-ee65b1090c8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\Observe">
+      <UniqueIdentifier>{34c99cbe-fe88-4dbb-9a68-1d681b7be93f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\UI\Game">
+      <UniqueIdentifier>{227f7ca3-9a6c-43e5-aab9-f90550f079bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\UI\Menu">
+      <UniqueIdentifier>{aaa860b3-6dd2-408e-a5a0-db4d6681af41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StepTimer.h">
@@ -172,6 +184,21 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="UIMangager.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Game Base\Observe</Filter>
+    </ClInclude>
+    <ClInclude Include="Observable.h">
+      <Filter>Game Base\Observe</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>Game Base\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="RaceUI.h">
+      <Filter>Game Base\UI\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -251,6 +278,12 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="UIMangager.cpp">
+      <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="RaceUI.cpp">
+      <Filter>Game Base\UI\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
