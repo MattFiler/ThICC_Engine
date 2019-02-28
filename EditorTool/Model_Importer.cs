@@ -270,67 +270,108 @@ namespace EditorTool
                     {
                         string final_asset_path = import_directory + assetName.Text + ".sdkmesh";
 
-                        //Output face vertex data for generating our collmap
-                        string[] final_obj_file = File.ReadAllLines(import_directory + Path.GetFileName(modelPath.Text));
-                        List<string> model_vertices = new List<string>();
-                        List<List<int>> model_face_vert_index = new List<List<int>>();
-                        List<string> final_collmap_data = new List<string>();
-                        bool was_all_triangles = true;
-                        //Grab all vertices and face vert indexes from our OBJ
-                        foreach (string line in final_obj_file)
+                        bool model_supports_collision = true;
+                        int collision_fix_count = 0;
+                        if (shouldGenerateCollmap.Checked)
                         {
-                            //Vertices
-                            if (line.Length > 2 && line.Substring(0, 2) == "v ")
+                            //Output face vertex data for generating our collmap
+                            string[] final_obj_file = File.ReadAllLines(import_directory + Path.GetFileName(modelPath.Text));
+                            List<List<double>> model_vertices_raw = new List<List<double>>();
+                            List<List<int>> model_face_vert_index = new List<List<int>>();
+                            List<string> final_collmap_data = new List<string>();
+                            //Grab all vertices and face vert indexes from our OBJ
+                            foreach (string line in final_obj_file)
                             {
-                                string[] vert_array = line.Substring(2).Split(' ');
-                                string this_final_vert_data = "(";
-                                foreach (string vert in vert_array)
+                                //Vertices
+                                if (line.Length > 2 && line.Substring(0, 2) == "v ")
                                 {
-                                    this_final_vert_data += vert + ", ";
-                                }
-                                this_final_vert_data = this_final_vert_data.Substring(0, this_final_vert_data.Length - 2); //crash potential here if OBJ is messy
-                                this_final_vert_data += "), "; //", " will have to be trimmed for file writing
-                                model_vertices.Add(this_final_vert_data);
-                            }
-                            //Faces
-                            if (line.Length > 2 && line.Substring(0, 2) == "f ")
-                            {
-                                string[] face_array = line.Substring(2).Split(' ');
-                                List<int> face_array_parsed = new List<int>();
-                                foreach (string face in face_array)
-                                {
-                                    if (face != "")
+                                    string[] vert_array = line.Substring(2).Split(' ');
+                                    List<double> this_vertex = new List<double>();
+                                    foreach (string vert in vert_array)
                                     {
-                                        string this_face = face;
-                                        if (face.Contains('/'))
-                                        {
-                                            this_face = face.Split('/')[0]; //only want positional vertex data, not normals or other crap
-                                        }
-                                        face_array_parsed.Add(Convert.ToInt32(this_face)); //we now know this is an int, so can convert confidently
+                                        this_vertex.Add(Convert.ToDouble(vert));
                                     }
+                                    model_vertices_raw.Add(this_vertex);
                                 }
-                                model_face_vert_index.Add(face_array_parsed);
-                            }
-                        }
-                        //Build up total model verts for collmap reader from parsed data
-                        foreach (List<int> vert_index_list in model_face_vert_index)
-                        {
-                            string this_face_complete = "";
-                            int this_face_vert_count = 0;
-                            foreach (int vert_index in vert_index_list)
-                            {
-                                this_face_complete += model_vertices.ElementAt(vert_index-1); //crash potential here if OBJ is messy
-                                this_face_vert_count++;
-                                if (this_face_vert_count > 3)
+                                //Faces
+                                if (line.Length > 2 && line.Substring(0, 2) == "f ")
                                 {
-                                    was_all_triangles = false;
+                                    string[] face_array = line.Substring(2).Split(' ');
+                                    List<int> face_array_parsed = new List<int>();
+                                    foreach (string face in face_array)
+                                    {
+                                        if (face != "")
+                                        {
+                                            string this_face = face;
+                                            if (face.Contains('/'))
+                                            {
+                                                this_face = face.Split('/')[0]; //only want positional vertex data, not normals or other crap
+                                            }
+                                            face_array_parsed.Add(Convert.ToInt32(this_face)); //we now know this is an int, so can convert confidently
+                                        }
+                                    }
+                                    model_face_vert_index.Add(face_array_parsed);
                                 }
                             }
-                            this_face_complete = this_face_complete.Substring(0, this_face_complete.Length - 2);
+                            //Build up total model verts for collmap reader from parsed data
+                            foreach (List<int> vert_index_list in model_face_vert_index)
+                            {
+                                string this_face_complete = "";
+                                int this_face_vert_count = 0;
+                                List<double> vert_x_list = new List<double>();
+                                List<double> vert_y_list = new List<double>();
+                                List<double> vert_z_list = new List<double>();
+                                foreach (int vert_index in vert_index_list)
+                                {
+                                    vert_x_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(0));
+                                    vert_y_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(1));
+                                    vert_z_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(2));
+                                    this_face_vert_count++;
+                                }
+                                if (this_face_vert_count != 3)
+                                {
+                                    //Model must be triangulated to generate collision map
+                                    model_supports_collision = false;
+                                    break;
+                                }
 
-                            final_collmap_data.Add(this_face_complete);
+                                //Fix conflicts if any are present
+                                if (checkVertConflict(vert_x_list, vert_y_list))
+                                {
+                                    //X&Y conflict, needs fixing
+                                    vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
+                                    vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
+                                    collision_fix_count++;
+                                }
+                                if (checkVertConflict(vert_y_list, vert_z_list))
+                                {
+                                    //Y&Z conflict, needs fixing
+                                    vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
+                                    vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                                    collision_fix_count++;
+                                }
+                                if (checkVertConflict(vert_x_list, vert_z_list))
+                                {
+                                    //X&Z conflict, needs fixing
+                                    vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
+                                    vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                                    collision_fix_count++;
+                                }
+                                
+                                //Compile this data now we know it is correct
+                                for (int i = 0; i < this_face_vert_count; i++) // this_face_vert_count = 3
+                                {
+                                    this_face_complete += "(" + vert_x_list.ElementAt(i) + ", " + vert_y_list.ElementAt(i) + ", " + vert_z_list.ElementAt(i) + "), ";
+                                }
+                                this_face_complete = this_face_complete.Substring(0, this_face_complete.Length - 2);
+
+                                final_collmap_data.Add(this_face_complete);
+                            }
+                            if (model_supports_collision)
+                            {
+                                File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".collmap", final_collmap_data);
+                            }
                         }
-                        File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".collmap", final_collmap_data);
 
                         //Conversion complete - delete the OBJ and MTL
                         File.Delete(import_directory + Path.GetFileName(modelPath.Text));
@@ -350,13 +391,21 @@ namespace EditorTool
                         {
                             final_confirmation += "\nFound " + found_count + " material(s).";
                         }
+                        if (shouldGenerateCollmap.Checked && !model_supports_collision)
+                        {
+                            final_confirmation += "\nERROR: Collision map was not generated as this model is not triangulated.";
+                        }
+                        else if (shouldGenerateCollmap.Checked)
+                        {
+                            final_confirmation += "\nSuccessfully generated collision map for model.";
+                            if (collision_fix_count > 0)
+                            {
+                                final_confirmation += "\nWARNING: Automatically fixed " + collision_fix_count + " collision map issues.";
+                            }
+                        }
                         if (lost_count > 0)
                         {
                             final_confirmation += "\nWARNING: Failed to find " + lost_count + " materials.";
-                        }
-                        if (!was_all_triangles)
-                        {
-                            final_confirmation += "\nWARNING: Not all faces are triangulated, model may experience collision issues.";
                         }
                         MessageBox.Show(final_confirmation, "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -389,6 +438,21 @@ namespace EditorTool
                     MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+        
+        //Check to see if all vertices in this axis are conflicting
+        bool checkVertConflict(List<double> vertex_pos_list1, List<double> vertex_pos_list2)
+        {
+            int conflict_count = 0;
+            if (vertex_pos_list1.ElementAt(0) == vertex_pos_list1.ElementAt(1) && vertex_pos_list1.ElementAt(1) == vertex_pos_list1.ElementAt(2))
+            {
+                conflict_count++;
+            }
+            if (vertex_pos_list2.ElementAt(0) == vertex_pos_list2.ElementAt(1) && vertex_pos_list2.ElementAt(1) == vertex_pos_list2.ElementAt(2))
+            {
+                conflict_count++;
+            }
+            return (conflict_count == 2);
         }
 
 

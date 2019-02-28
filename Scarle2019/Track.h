@@ -7,8 +7,8 @@
 class Track : public PhysModel
 {
 public:
-	Track(RenderData* _RD, string _filename, string _vertex_list);
-	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, Vector& _colNormal);
+	Track(RenderData* _RD, string _filename);
+	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri);
 private:
 	void LoadVertexList(string _vertex_list);
 	void CreateAndAddTriangle(string _line);
