@@ -160,6 +160,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//create a "player"
 	player = new Player(m_RD, "Kart");
+	player->SetPos(Vector(-345, 555.0f, 350));
 	//player->SetRotationInDegrees(Vector3(180, 180, 180));
 	m_3DObjects.push_back(player);
 
