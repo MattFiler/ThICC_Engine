@@ -1,11 +1,11 @@
 #pragma once
-#include "PhysModel.h"
+#include "TrackMagnet.h"
 
 //=================================================================
 //Base Player Class (i.e. a model GO3D the player controls)
 //=================================================================
 
-class Player : public PhysModel
+class Player : public TrackMagnet
 {
 
 public:
