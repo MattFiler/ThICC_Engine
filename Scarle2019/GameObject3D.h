@@ -64,5 +64,6 @@ protected:
 	bool m_useMagnetMatrix = false;
 
 	GO3D_Render_Type m_type = GO3D_RT_NONE;
+	int num_of_cam = 2;
 };
 
