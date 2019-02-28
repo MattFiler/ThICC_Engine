@@ -2,7 +2,7 @@
 #include "TrackMagnet.h"
 
 
-TrackMagnet::TrackMagnet(RenderData* _RD, string _filename, string _vertex_list) : PhysModel(_RD, _filename)
+TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 {
 
 }

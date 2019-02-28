@@ -4,7 +4,7 @@
 class TrackMagnet : public PhysModel
 {
 public:
-	TrackMagnet(RenderData* _RD, string _filename, string _vertex_list);
+	TrackMagnet(RenderData* _RD, string _filename);
 	bool ShouldStickToTrack(Track& track);
 
 private:
