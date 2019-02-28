@@ -48,7 +48,7 @@ public:
 	// Properties
 	void GetDefaultSize(int& _width, int& _height) const;
 
-	void SetViewport(float _TopLeftX,float _TopLeftY, float _Width, float _Height);
+	void SetViewport(int i_, float _TopLeftX,float _TopLeftY, float _Width, float _Height);
 
 private:
 
@@ -92,8 +92,8 @@ private:
 	UINT64                                              m_fenceValues[c_swapBufferCount];
 	Microsoft::WRL::Wrappers::Event                     m_fenceEvent;
 
-	D3D12_VIEWPORT										m_viewport; 
-	D3D12_RECT											m_scissorRect;
+	D3D12_VIEWPORT										m_viewport[4];
+	D3D12_RECT											m_scissorRect[4];
 
 	// Rendering resources
 	Microsoft::WRL::ComPtr<IDXGISwapChain3>             m_swapChain;
@@ -117,8 +117,9 @@ private:
 	DX::StepTimer                                       m_timer;
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
-	Camera*												m_cam;
+	Camera*												m_cam[4];
 	Light*												m_light; 
 	RenderData*											m_RD;	//dumping ground for things required to do rendering
 	GameStateData*										m_GSD;  //base game state to pass to all GameObjects
+	int num_of_cam = 1;
 };

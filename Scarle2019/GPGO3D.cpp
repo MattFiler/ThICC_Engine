@@ -62,6 +62,11 @@ void GPGO3D::Render(RenderData * _RD)
 
 	if (m_GPType != GP_NONE)
 	{
+		//for (int i = 0; i < num_of_cam; i++)
+		//{
+		//	_RD->m_GPeffect->SetMatrices(m_world, _RD->m_cam[i]->GetView(), _RD->m_cam[i]->GetProj());
+		//}
+		int uj = 0;
 		_RD->m_GPeffect->SetMatrices(m_world, _RD->m_cam->GetView(), _RD->m_cam->GetProj());
 		_RD->m_GPeffect->Apply(_RD->m_commandList.Get());
 		m_shape->Draw(_RD->m_commandList.Get());

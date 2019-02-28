@@ -18,8 +18,8 @@ using Microsoft::WRL::ComPtr;
 
 Game::Game() :
 	m_window(nullptr),
-	m_outputWidth(800),
-	m_outputHeight(600),
+	m_outputWidth(1000),
+	m_outputHeight(1000),
 	m_featureLevel(D3D_FEATURE_LEVEL_11_0),
 	m_backBufferIndex(0),
 	m_fenceValues{}
@@ -124,7 +124,19 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	auto uploadResourcesFinished = resourceUpload.End(m_commandQueue.Get());
 
-	SetViewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
+	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
+	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
+	m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	m_scissorRect[0] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
+	//m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	//m_scissorRect[0] = { 0,0,(int)(m_outputWidth * 0.5f),(int)(m_outputHeight * 0.5f) };
+	//m_viewport[1] = { static_cast<float>(m_outputWidth) * 0.5f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	//m_scissorRect[1] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight * 0.5f) };
+	//m_viewport[2] = { 0.0f, static_cast<float>(m_outputHeight) * 0.5f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	//m_scissorRect[2] = { 0,0,(int)(m_outputWidth * 0.5f),(int)(m_outputHeight) };
+	//m_viewport[3] = { static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	//m_scissorRect[3] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
+
 
 	//Set Up VBGO render system
 	if (!VBGO3D::SetUpVBGOs(m_RD))
@@ -160,6 +172,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//create a "player"
 	player = new Player(m_RD, "Kart");
+	player->SetPos(Vector(-345, 555.0f, 350));
 	//player->SetRotationInDegrees(Vector3(180, 180, 180));
 	m_3DObjects.push_back(player);
 
@@ -170,9 +183,24 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(track);
 
 	//point a camera at the player that follows
-	m_cam =  new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
-	m_RD->m_cam = m_cam;
-	m_3DObjects.push_back(m_cam);
+	m_cam[0] =  new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
+	//m_RD->m_cam = m_cam[0];
+	m_3DObjects.push_back(m_cam[0]);
+
+	m_cam[1] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
+	//m_RD->m_cam = m_cam[1];
+	m_3DObjects.push_back(m_cam[1]);
+
+	m_cam[2] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
+	//m_RD->m_cam = m_cam[1];
+	m_3DObjects.push_back(m_cam[2]);
+
+	m_cam[3] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
+	//m_RD->m_cam = m_cam[1];
+	m_3DObjects.push_back(m_cam[3]);
 
 	//create a base light
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
@@ -304,6 +332,15 @@ void Game::Update(DX::StepTimer const& _timer)
 		ExitGame();
 	}
 
+	//if (m_GSD->m_keyboardState.Left)
+	//{
+	//	m_RD->m_cam = m_cam;
+	//}
+	//if (m_GSD->m_keyboardState.Right)
+	//{
+	//	m_RD->m_cam = m_cam1;
+	//}
+
 	//Add your game logic here.
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
@@ -325,19 +362,25 @@ void Game::Render()
 	}
 
 	// Prepare the command list to render a new frame.
+		Clear();
 
-	Clear();
-
-	//draw 3D objects
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	for (int i = 0; i < num_of_cam; i++)
 	{
-		(*it)->Render(m_RD);
+		m_commandList->RSSetViewports(1, &m_viewport[i]);
+		m_commandList->RSSetScissorRects(1, &m_scissorRect[i]);
+		m_RD->m_cam = m_cam[i];
+		//draw 3D objects
+		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+		{
+			(*it)->Render(m_RD);
+		}
 	}
 
 	//finally draw all 2D objects
 	ID3D12DescriptorHeap* heaps[] = { m_RD->m_resourceDescriptors->Heap() };
 	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-	m_RD->m_spriteBatch->SetViewport(m_viewport);
+	m_RD->m_spriteBatch->SetViewport(m_viewport[0]);
+	//m_RD->m_spriteBatch->SetViewport(m_viewport[1]);
 	m_RD->m_spriteBatch->Begin(m_commandList.Get());
 
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
@@ -371,8 +414,6 @@ void Game::Clear()
 	m_commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	// Set the viewport and scissor rect.
-	m_commandList->RSSetViewports(1, &m_viewport);
-	m_commandList->RSSetScissorRects(1, &m_scissorRect);
 }
 
 // Submits the command list to the GPU and presents the back buffer contents to the screen.
@@ -443,13 +484,13 @@ void Game::GetDefaultSize(int& _width, int& _height) const
 {
 	// TODO: Change to desired default window size (note minimum size is 320x200).
 	_width = 800;
-	_height = 600;
+	_height = 800;
 }
 
-void Game::SetViewport(float _TopLeftX, float _TopLeftY, float _Width, float _Height)
+void Game::SetViewport(int i_, float _TopLeftX, float _TopLeftY, float _Width, float _Height)
 {
-	m_viewport = { _TopLeftX,_TopLeftY,_Width,_Height, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	m_scissorRect = {(int)_TopLeftX,(int)_TopLeftY,(int)_Width,(int)_Height };
+	m_viewport[i_] = { _TopLeftX,_TopLeftY,_Width,_Height, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	m_scissorRect[i_] = { (int)_TopLeftX,(int)_TopLeftY,(int)(_Width),(int)(_Height) };
 }
 
 // These are the resources that depend on the device.
@@ -579,9 +620,6 @@ void Game::CreateDevice()
 		rtState);
 	m_RD->m_GPeffect = std::make_unique<BasicEffect>(m_d3dDevice.Get(), EffectFlags::Lighting, pd3);
 	m_RD->m_GPeffect->EnableDefaultLighting();
-
-	//set up the viewport and scissor RECT
-	SetViewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.

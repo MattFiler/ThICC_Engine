@@ -27,12 +27,25 @@ namespace EditorTool
         {
             OpenFileDialog filePicker = new OpenFileDialog();
             filePicker.Filter = "OBJ Model (OBJ)|*.OBJ";
-            if (filePicker.ShowDialog() == DialogResult.OK)
+            if (filePicker.ShowDialog() != DialogResult.OK)
             {
-                modelPath.Text = filePicker.FileName;
-                if (assetName.Text == "")
+                return;
+            }
+
+            //Update form with file path
+            modelPath.Text = filePicker.FileName;
+            if (assetName.Text == "")
+            {
+                assetName.Text = Path.GetFileNameWithoutExtension(modelPath.Text);
+            }
+
+            string[] obj_file = File.ReadAllLines(filePicker.FileName);
+            itemMaterialCategories.Items.Clear();
+            foreach (string line in obj_file)
+            {
+                if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
                 {
-                    assetName.Text = Path.GetFileNameWithoutExtension(modelPath.Text);
+                    itemMaterialCategories.Items.Add(line.Substring(7));
                 }
             }
         }
@@ -41,8 +54,16 @@ namespace EditorTool
         private void importModel_Click(object sender, EventArgs e)
         {
             string import_directory = "Models/" + assetName.Text + "/";
-            
-            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
+            int mat_check_count = 0;
+            for (int i = 0; i < itemMaterialCategories.Items.Count; i++)
+            {
+                if (itemMaterialCategories.GetItemChecked(i))
+                {
+                    mat_check_count++;
+                }
+            }
+
+            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$") || (mat_check_count == 0 && shouldGenerateCollmap.Checked))
             {
                 if (modelPath.Text == "" || assetName.Text == "")
                 {
@@ -54,6 +75,11 @@ namespace EditorTool
                     MessageBox.Show("Your asset name cannot contain any special characters.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                else if (itemMaterialCategories.SelectedItems.Count == 0 && shouldGenerateCollmap.Checked)
+                {
+                    MessageBox.Show("You must select at least one model section to generate the collision map from.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 MessageBox.Show("Couldn't import model, a model with the same name already exists.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
@@ -62,8 +88,9 @@ namespace EditorTool
                 string importedMTL = "";
                 string original_mtl_path = "";
 
-                bool didHaveUglyPath = false;
+                bool didHaveUglyPath = false; //Local paths to MTL files are somewhat unhandled, so worth keeping track of that.
                 bool didFindMTL = false;
+                bool vertexOrderIsBusted = false; //Some model files will invert the vertex index, which is totally unhandled and will cause an error.
                 
                 int material_count = 0;
                 List<string> referenced_materials = new List<string>();
@@ -266,6 +293,19 @@ namespace EditorTool
                         }
                     }
 
+                    //See if our vertex order is busted (unhandled issue, but helpful error message)
+                    string[] final_obj_file = File.ReadAllLines(import_directory + Path.GetFileName(modelPath.Text));
+                    foreach (string line in final_obj_file)
+                    {
+                        if(line.Length > 2 && line.Substring(0, 2) == "f ") {
+                            if (line.Substring(2, 1) == "-")
+                            {
+                                vertexOrderIsBusted = true;
+                                break;
+                            }
+                        }
+                    }
+
                     if (File.Exists(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
                     {
                         string final_asset_path = import_directory + assetName.Text + ".sdkmesh";
@@ -275,10 +315,10 @@ namespace EditorTool
                         if (shouldGenerateCollmap.Checked)
                         {
                             //Output face vertex data for generating our collmap
-                            string[] final_obj_file = File.ReadAllLines(import_directory + Path.GetFileName(modelPath.Text));
                             List<List<double>> model_vertices_raw = new List<List<double>>();
                             List<List<int>> model_face_vert_index = new List<List<int>>();
                             List<string> final_collmap_data = new List<string>();
+                            bool should_listen_for_faces = false;
                             //Grab all vertices and face vert indexes from our OBJ
                             foreach (string line in final_obj_file)
                             {
@@ -292,9 +332,25 @@ namespace EditorTool
                                         this_vertex.Add(Convert.ToDouble(vert));
                                     }
                                     model_vertices_raw.Add(this_vertex);
+                                    continue;
+                                }
+                                //Check to see if we should start listening for faces
+                                //This may seem odd, but as the OBJ is always written/read in a logical order, this should work 100% of the time
+                                if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
+                                {
+                                    should_listen_for_faces = false;
+                                    for (int i = 0; i < itemMaterialCategories.Items.Count; i++)
+                                    {
+                                        if (itemMaterialCategories.GetItemChecked(i) && (line.Substring(7) == itemMaterialCategories.Items[i].ToString()))
+                                        {
+                                            should_listen_for_faces = true;
+                                            break;
+                                        }
+                                    }
+                                    continue;
                                 }
                                 //Faces
-                                if (line.Length > 2 && line.Substring(0, 2) == "f ")
+                                if (line.Length > 2 && line.Substring(0, 2) == "f " && should_listen_for_faces)
                                 {
                                     string[] face_array = line.Substring(2).Split(' ');
                                     List<int> face_array_parsed = new List<int>();
@@ -311,6 +367,7 @@ namespace EditorTool
                                         }
                                     }
                                     model_face_vert_index.Add(face_array_parsed);
+                                    continue;
                                 }
                             }
                             //Build up total model verts for collmap reader from parsed data
@@ -397,7 +454,7 @@ namespace EditorTool
                         }
                         else if (shouldGenerateCollmap.Checked)
                         {
-                            final_confirmation += "\nSuccessfully generated collision map for model.";
+                            final_confirmation += "\nSuccessfully generated collision map for " + mat_check_count + " model sections.";
                             if (collision_fix_count > 0)
                             {
                                 final_confirmation += "\nWARNING: Automatically fixed " + collision_fix_count + " collision map issues.";
@@ -412,10 +469,16 @@ namespace EditorTool
                     else
                     {
                         //Conversion must've failed - GAH!
+                        Directory.Delete(import_directory, true);
                         if (didHaveUglyPath)
                         {
                             //Failed because I haven't implemented a handler for ugly MTL paths
-                            MessageBox.Show("Model import failed because the original MTL path is UGLY!\nDrop this message to Matt.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Model import failed due to an incorrect local path to the MTL file.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (vertexOrderIsBusted)
+                        {
+                            //Failed because the vertex order is busted and I haven't added a fix for this
+                            MessageBox.Show("Model import failed due to an inverted vertex index list.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         else
                         {
@@ -433,8 +496,7 @@ namespace EditorTool
                 else
                 {
                     //Couldn't locate MTL - FAIL!
-                    File.Delete(import_directory + Path.GetFileName(modelPath.Text));
-                    Directory.Delete(import_directory);
+                    Directory.Delete(import_directory, true);
                     MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -455,12 +517,41 @@ namespace EditorTool
             return (conflict_count == 2);
         }
 
+        //Restyle form based on if we should generate a collmap or not
+        private void shouldGenerateCollmap_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (shouldGenerateCollmap.Checked)
+            {
+                importModel.Location = new Point(19, 234);
+                itemMaterialCategories.Visible = true;
+                this.Size = new Size(310, 311);
+            }
+            else
+            {
+                importModel.Location = new Point(19, 115);
+                itemMaterialCategories.Visible = false;
+                this.Size = new Size(310, 191);
+            }
+        }
+
+        //On first load, resize form to non-collmap view
+        private void Model_Importer_Load(object sender, EventArgs e)
+        {
+            importModel.Location = new Point(19, 113);
+            itemMaterialCategories.Visible = false;
+            this.Size = new Size(310, 191);
+        }
+
 
         private void addTexture_Click(object sender, EventArgs e)
         {
             //depreciated
         }
         private void removeTexture_Click(object sender, EventArgs e)
+        {
+            //depreciated
+        }
+        private void shouldGenerateCollmap_CheckedChanged(object sender, EventArgs e)
         {
             //depreciated
         }
