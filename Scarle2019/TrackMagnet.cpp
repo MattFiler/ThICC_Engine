@@ -14,7 +14,16 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	bool shouldStick = track.DoesLineIntersect(Vector(0, 10, 0), m_pos, intersect, rotation);
 	if (shouldStick)
 	{
-		SetPos(intersect);
+		SetPos(intersect); 
+		rotation.Normalize();
+		m_worldMagnet = m_world.CreateWorld(m_pos,m_world.Forward(), rotation);
+		m_useMagnetMatrix = true;
+		Vector brealy = m_world.Forward();
+		brealy = brealy;
+	}
+	else
+	{
+		m_useMagnetMatrix = false;
 	}
 
 	return shouldStick;

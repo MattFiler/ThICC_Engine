@@ -17,5 +17,12 @@ void GameObject3D::Tick(GameStateData* _GSD)
 	m_rot = Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
 	Matrix scale = Matrix::CreateScale(m_scale);
 
-	m_world = scale * m_rot * trans;
+	if (m_useMagnetMatrix)
+	{
+		m_world = scale * m_worldMagnet;
+	}
+	else
+	{
+		m_world = scale * m_rot * trans;
+	}
 }

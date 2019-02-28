@@ -159,7 +159,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(test3);
 
 	//create a "player"
-	player = new Player(m_RD, "Standard Kart");
+	player = new Player(m_RD, "Kart");
 	m_3DObjects.push_back(player);
 
 	// Test track
