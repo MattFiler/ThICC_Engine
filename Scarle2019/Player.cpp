@@ -48,6 +48,7 @@ void Player::Tick(GameStateData* _GSD)
 	//change orinetation of player
 	float rotSpeed = 0.02f;
 	m_yaw -= rotSpeed * _GSD->m_mouseState.x;
+	m_pitch -= rotSpeed * _GSD->m_mouseState.y;
 
 	//move player up and down
 	if (_GSD->m_keyboardState.R)

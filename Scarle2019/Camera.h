@@ -22,9 +22,8 @@ public:
 	virtual void Tick(GameStateData* _GSD);
 	virtual void Render(RenderData* _RD) {};
 
-	void setDeltaPos(Vector3 _dpos);
-
 	Vector3 getDeltaPos() { return m_dpos; };
+
 
 protected:
 	GameObject3D* m_targetObject = NULL;

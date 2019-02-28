@@ -121,5 +121,5 @@ private:
 	Light*												m_light; 
 	RenderData*											m_RD;	//dumping ground for things required to do rendering
 	GameStateData*										m_GSD;  //base game state to pass to all GameObjects
-	int num_of_cam = 1;
+	int num_of_cam = 4;
 };
