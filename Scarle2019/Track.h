@@ -8,10 +8,12 @@ class Track : public PhysModel
 {
 public:
 	Track(RenderData* _RD, string _filename, string _vertex_list);
-	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect);
+	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, Vector& _colNormal);
 private:
 	void LoadVertexList(string _vertex_list);
-	Vector CreateVector(string _line);
+	void CreateAndAddTriangle(string _line);
+	Vector CreateVector(string _vector);
+
 
 	std::vector<MeshTri> triangles;
 };

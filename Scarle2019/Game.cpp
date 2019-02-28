@@ -155,7 +155,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "Luigi Circuit");
 	test3->SetPos(Vector3(0, -30, 0));
 	test3->SetScale(10.0f);
-	test3->SetRotation(Vector3(-90, 0, 0));
+	test3->SetRotationInDegrees(Vector3(-90, 0, 0));
 	m_3DObjects.push_back(test3);
 
 	//create a "player"
@@ -163,7 +163,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(player);
 
 	// Test track
-	track = new Track(m_RD, "TestRamp", "../Models/TestRamp/TestRamp.vertices");
+	track = new Track(m_RD, "Test Track", "../Models/Test Track/Test Track.collmap");
 	//m_3DObjects.push_back(track);
 	//SDKMeshGO3D* track = new SDKMeshGO3D(m_RD, "Test Track");
 	m_3DObjects.push_back(track);

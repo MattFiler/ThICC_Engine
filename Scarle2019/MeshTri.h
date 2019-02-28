@@ -7,7 +7,7 @@ using Plane = DirectX::SimpleMath::Plane;
 struct MeshTri
 {
 	MeshTri(Vector _a, Vector _b, Vector _c);
-	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect);
+	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, Vector& _colNormal);
 
 	Vector m_pointA;
 	Vector m_pointB;
