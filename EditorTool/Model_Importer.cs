@@ -177,9 +177,9 @@ namespace EditorTool
                             if (line.Contains("map"))
                             {
                                 string[] map_split = new string[2];
-                                map_split = line.Split(' ');
+                                map_split = line.Split(new[] {' '}, 2);
+                                referenced_materials.Add(map_split[1]);
                                 map_split[1] = Path.GetFileName(map_split[1]);
-                                referenced_materials.Add(Path.GetFileName(map_split[1]));
                                 mtl_file[mtl_index] = map_split[0] + " " + map_split[1].Replace(' ', '_'); //Will apply this to copied materials next
                                 material_count++;
                             }
@@ -190,17 +190,46 @@ namespace EditorTool
                         //Go through all referenced materials in our MTL and try to import them
                         foreach (string material_file in referenced_materials)
                         {
-                            string this_material = Path.GetDirectoryName(original_mtl_path) + "\\" + material_file;
-                            string output_file = import_directory + material_file.Replace(' ', '_');
-                            if (File.Exists(this_material) && !File.Exists(output_file)) {
-                                found_count++;
-                                File.Copy(this_material, output_file);
+                            string root_path_to_material_file = "";
+                            string local_path_to_material_file = Path.GetDirectoryName(original_mtl_path) + "\\" + Path.GetFileName(material_file);
+                            if (Path.IsPathRooted(material_file))
+                            {
+                                if (File.Exists(material_file))
+                                {
+                                    //Material exists and we already have the root path for it
+                                    root_path_to_material_file = material_file;
+                                }
+                                else
+                                {
+                                    if (File.Exists(local_path_to_material_file))
+                                    {
+                                        //Material doesn't exist at its original path, but is in our folder, grab the new root path for it
+                                        root_path_to_material_file = local_path_to_material_file;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (File.Exists(local_path_to_material_file))
+                                {
+                                    //Path suggests material resides in our folder, and it does, grab the root path for it
+                                    root_path_to_material_file = local_path_to_material_file;
+                                }
+                            }
+
+                            if (root_path_to_material_file == "")
+                            {
+                                //Couldn't find file
+                                lost_count++;
                                 continue;
                             }
-                            else if (!File.Exists(output_file))
-                            {
-                                lost_count++; //couldn't find material file
+                            string output_file = import_directory + Path.GetFileName(material_file).Replace(' ', '_');
+                            if (File.Exists(output_file)) {
+                                continue;
                             }
+
+                            found_count++;
+                            File.Copy(root_path_to_material_file, output_file);
                         }
                     }
                 }
@@ -239,17 +268,110 @@ namespace EditorTool
 
                     if (File.Exists(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
                     {
-                        //Output vertex data for generating our collmap
-                        string[] final_obj_file = File.ReadAllLines(import_directory + Path.GetFileName(modelPath.Text));
-                        List<string> collmap_file = new List<string>();
-                        foreach (string line in final_obj_file)
+                        string final_asset_path = import_directory + assetName.Text + ".sdkmesh";
+
+                        bool model_supports_collision = true;
+                        int collision_fix_count = 0;
+                        if (shouldGenerateCollmap.Checked)
                         {
-                            if (line.Length > 2 && line.Substring(0, 2) == "v ")
+                            //Output face vertex data for generating our collmap
+                            string[] final_obj_file = File.ReadAllLines(import_directory + Path.GetFileName(modelPath.Text));
+                            List<List<double>> model_vertices_raw = new List<List<double>>();
+                            List<List<int>> model_face_vert_index = new List<List<int>>();
+                            List<string> final_collmap_data = new List<string>();
+                            //Grab all vertices and face vert indexes from our OBJ
+                            foreach (string line in final_obj_file)
                             {
-                                collmap_file.Add(line.Substring(2)); 
+                                //Vertices
+                                if (line.Length > 2 && line.Substring(0, 2) == "v ")
+                                {
+                                    string[] vert_array = line.Substring(2).Split(' ');
+                                    List<double> this_vertex = new List<double>();
+                                    foreach (string vert in vert_array)
+                                    {
+                                        this_vertex.Add(Convert.ToDouble(vert));
+                                    }
+                                    model_vertices_raw.Add(this_vertex);
+                                }
+                                //Faces
+                                if (line.Length > 2 && line.Substring(0, 2) == "f ")
+                                {
+                                    string[] face_array = line.Substring(2).Split(' ');
+                                    List<int> face_array_parsed = new List<int>();
+                                    foreach (string face in face_array)
+                                    {
+                                        if (face != "")
+                                        {
+                                            string this_face = face;
+                                            if (face.Contains('/'))
+                                            {
+                                                this_face = face.Split('/')[0]; //only want positional vertex data, not normals or other crap
+                                            }
+                                            face_array_parsed.Add(Convert.ToInt32(this_face)); //we now know this is an int, so can convert confidently
+                                        }
+                                    }
+                                    model_face_vert_index.Add(face_array_parsed);
+                                }
+                            }
+                            //Build up total model verts for collmap reader from parsed data
+                            foreach (List<int> vert_index_list in model_face_vert_index)
+                            {
+                                string this_face_complete = "";
+                                int this_face_vert_count = 0;
+                                List<double> vert_x_list = new List<double>();
+                                List<double> vert_y_list = new List<double>();
+                                List<double> vert_z_list = new List<double>();
+                                foreach (int vert_index in vert_index_list)
+                                {
+                                    vert_x_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(0));
+                                    vert_y_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(1));
+                                    vert_z_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(2));
+                                    this_face_vert_count++;
+                                }
+                                if (this_face_vert_count != 3)
+                                {
+                                    //Model must be triangulated to generate collision map
+                                    model_supports_collision = false;
+                                    break;
+                                }
+
+                                //Fix conflicts if any are present
+                                if (checkVertConflict(vert_x_list, vert_y_list))
+                                {
+                                    //X&Y conflict, needs fixing
+                                    vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
+                                    vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
+                                    collision_fix_count++;
+                                }
+                                if (checkVertConflict(vert_y_list, vert_z_list))
+                                {
+                                    //Y&Z conflict, needs fixing
+                                    vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
+                                    vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                                    collision_fix_count++;
+                                }
+                                if (checkVertConflict(vert_x_list, vert_z_list))
+                                {
+                                    //X&Z conflict, needs fixing
+                                    vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
+                                    vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                                    collision_fix_count++;
+                                }
+                                
+                                //Compile this data now we know it is correct
+                                for (int i = 0; i < this_face_vert_count; i++) // this_face_vert_count = 3
+                                {
+                                    this_face_complete += "(" + vert_x_list.ElementAt(i) + ", " + vert_y_list.ElementAt(i) + ", " + vert_z_list.ElementAt(i) + "), ";
+                                }
+                                this_face_complete = this_face_complete.Substring(0, this_face_complete.Length - 2);
+
+                                final_collmap_data.Add(this_face_complete);
+                            }
+                            if (model_supports_collision)
+                            {
+                                File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".collmap", final_collmap_data);
                             }
                         }
-                        File.WriteAllLines(import_directory + Path.GetFileName(pathWithoutExtension + ".vertices"), collmap_file);
 
                         //Conversion complete - delete the OBJ and MTL
                         File.Delete(import_directory + Path.GetFileName(modelPath.Text));
@@ -259,13 +381,33 @@ namespace EditorTool
                         }
 
                         //Create JSON data
-                        string final_asset_path = import_directory + assetName.Text + ".sdkmesh";
                         JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0}");
                         File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "json", asset_json.ToString(Formatting.Indented));
 
                         //Move new SDKMESH to the correct requested filename
                         File.Move(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh", final_asset_path);
-                        MessageBox.Show("Model imported with" + writeInfo + ".\nAlso found " + found_count + " materials, " + lost_count + " expected materials missing.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        string final_confirmation = "Model imported with" + writeInfo + ".";
+                        if (found_count > 0)
+                        {
+                            final_confirmation += "\nFound " + found_count + " material(s).";
+                        }
+                        if (shouldGenerateCollmap.Checked && !model_supports_collision)
+                        {
+                            final_confirmation += "\nERROR: Collision map was not generated as this model is not triangulated.";
+                        }
+                        else if (shouldGenerateCollmap.Checked)
+                        {
+                            final_confirmation += "\nSuccessfully generated collision map for model.";
+                            if (collision_fix_count > 0)
+                            {
+                                final_confirmation += "\nWARNING: Automatically fixed " + collision_fix_count + " collision map issues.";
+                            }
+                        }
+                        if (lost_count > 0)
+                        {
+                            final_confirmation += "\nWARNING: Failed to find " + lost_count + " materials.";
+                        }
+                        MessageBox.Show(final_confirmation, "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
@@ -296,6 +438,21 @@ namespace EditorTool
                     MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+        
+        //Check to see if all vertices in this axis are conflicting
+        bool checkVertConflict(List<double> vertex_pos_list1, List<double> vertex_pos_list2)
+        {
+            int conflict_count = 0;
+            if (vertex_pos_list1.ElementAt(0) == vertex_pos_list1.ElementAt(1) && vertex_pos_list1.ElementAt(1) == vertex_pos_list1.ElementAt(2))
+            {
+                conflict_count++;
+            }
+            if (vertex_pos_list2.ElementAt(0) == vertex_pos_list2.ElementAt(1) && vertex_pos_list2.ElementAt(1) == vertex_pos_list2.ElementAt(2))
+            {
+                conflict_count++;
+            }
+            return (conflict_count == 2);
         }
 
 

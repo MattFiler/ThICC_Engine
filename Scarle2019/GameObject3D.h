@@ -37,7 +37,8 @@ public:
 	void SetYaw(float _yaw) { m_yaw = _yaw; }
 	void SetRoll(float _roll) { m_roll = _roll; }
 
-	void SetRotation(Vector3 _rotation) { m_pitch = _rotation.x / 57.2958; m_yaw = _rotation.y / 57.2958; m_roll = _rotation.z / 57.2958; }
+	void SetRotation(Vector3 _rotation) { m_pitch = _rotation.x; m_yaw = _rotation.y; m_roll = _rotation.z; }
+	void SetRotationInDegrees(Vector3 _rotation) { m_pitch = _rotation.x / 57.2958; m_yaw = _rotation.y / 57.2958; m_roll = _rotation.z / 57.2958; }
 
 	Vector3 GetPos() { return m_pos; }
 	Vector3 GetScale() { return m_scale; }
@@ -58,6 +59,9 @@ protected:
 
 	Matrix m_world = Matrix::Identity;
 	Matrix m_rot = Matrix::Identity;
+
+	Matrix m_worldMagnet = Matrix::Identity;
+	bool m_useMagnetMatrix = false;
 
 	GO3D_Render_Type m_type = GO3D_RT_NONE;
 	int num_of_cam = 2;

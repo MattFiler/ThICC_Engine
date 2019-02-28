@@ -34,11 +34,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.assetName = new System.Windows.Forms.TextBox();
+            this.shouldGenerateCollmap = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // importModel
             // 
-            this.importModel.Location = new System.Drawing.Point(15, 91);
+            this.importModel.Location = new System.Drawing.Point(15, 113);
             this.importModel.Name = "importModel";
             this.importModel.Size = new System.Drawing.Size(264, 28);
             this.importModel.TabIndex = 0;
@@ -89,11 +90,22 @@
             this.assetName.Size = new System.Drawing.Size(264, 20);
             this.assetName.TabIndex = 4;
             // 
+            // shouldGenerateCollmap
+            // 
+            this.shouldGenerateCollmap.AutoSize = true;
+            this.shouldGenerateCollmap.Location = new System.Drawing.Point(15, 90);
+            this.shouldGenerateCollmap.Name = "shouldGenerateCollmap";
+            this.shouldGenerateCollmap.Size = new System.Drawing.Size(135, 17);
+            this.shouldGenerateCollmap.TabIndex = 6;
+            this.shouldGenerateCollmap.Text = "Generate Collision Map";
+            this.shouldGenerateCollmap.UseVisualStyleBackColor = true;
+            // 
             // Model_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 130);
+            this.ClientSize = new System.Drawing.Size(294, 155);
+            this.Controls.Add(this.shouldGenerateCollmap);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.assetName);
             this.Controls.Add(this.label1);
@@ -117,6 +129,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox assetName;
+        private System.Windows.Forms.CheckBox shouldGenerateCollmap;
     }
 }
 

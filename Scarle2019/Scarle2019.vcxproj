@@ -180,6 +180,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Loop.h" />
     <ClInclude Include="MarchCubes.h" />
+    <ClInclude Include="MeshTri.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
@@ -190,6 +191,8 @@
     <ClInclude Include="TestSound.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="TPSCamera.h" />
+    <ClInclude Include="Track.h" />
+    <ClInclude Include="TrackMagnet.h" />
     <ClInclude Include="TransFileVBGO.h" />
     <ClInclude Include="VBCube.h" />
     <ClInclude Include="VBGO3D.h" />
@@ -210,6 +213,7 @@
     <ClCompile Include="Loop.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MarchCubes.cpp" />
+    <ClCompile Include="MeshTri.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -223,6 +227,8 @@
     <ClCompile Include="TestSound.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="TPSCamera.cpp" />
+    <ClCompile Include="Track.cpp" />
+    <ClCompile Include="TrackMagnet.cpp" />
     <ClCompile Include="TransFileVBGO.cpp" />
     <ClCompile Include="VBCube.cpp" />
     <ClCompile Include="VBGO3D.cpp" />
