@@ -35,11 +35,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.assetName = new System.Windows.Forms.TextBox();
             this.shouldGenerateCollmap = new System.Windows.Forms.CheckBox();
+            this.itemMaterialCategories = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // importModel
             // 
-            this.importModel.Location = new System.Drawing.Point(15, 113);
+            this.importModel.Location = new System.Drawing.Point(19, 234);
             this.importModel.Name = "importModel";
             this.importModel.Size = new System.Drawing.Size(264, 28);
             this.importModel.TabIndex = 0;
@@ -49,7 +50,7 @@
             // 
             // browseToModel
             // 
-            this.browseToModel.Location = new System.Drawing.Point(204, 63);
+            this.browseToModel.Location = new System.Drawing.Point(208, 65);
             this.browseToModel.Name = "browseToModel";
             this.browseToModel.Size = new System.Drawing.Size(75, 22);
             this.browseToModel.TabIndex = 1;
@@ -59,7 +60,7 @@
             // 
             // modelPath
             // 
-            this.modelPath.Location = new System.Drawing.Point(15, 64);
+            this.modelPath.Location = new System.Drawing.Point(19, 66);
             this.modelPath.Name = "modelPath";
             this.modelPath.ReadOnly = true;
             this.modelPath.Size = new System.Drawing.Size(183, 20);
@@ -68,7 +69,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 48);
+            this.label1.Location = new System.Drawing.Point(16, 50);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 3;
@@ -77,7 +78,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 9);
+            this.label2.Location = new System.Drawing.Point(16, 11);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 5;
@@ -85,7 +86,7 @@
             // 
             // assetName
             // 
-            this.assetName.Location = new System.Drawing.Point(15, 25);
+            this.assetName.Location = new System.Drawing.Point(19, 27);
             this.assetName.Name = "assetName";
             this.assetName.Size = new System.Drawing.Size(264, 20);
             this.assetName.TabIndex = 4;
@@ -93,18 +94,28 @@
             // shouldGenerateCollmap
             // 
             this.shouldGenerateCollmap.AutoSize = true;
-            this.shouldGenerateCollmap.Location = new System.Drawing.Point(15, 90);
+            this.shouldGenerateCollmap.Location = new System.Drawing.Point(19, 92);
             this.shouldGenerateCollmap.Name = "shouldGenerateCollmap";
             this.shouldGenerateCollmap.Size = new System.Drawing.Size(135, 17);
             this.shouldGenerateCollmap.TabIndex = 6;
             this.shouldGenerateCollmap.Text = "Generate Collision Map";
             this.shouldGenerateCollmap.UseVisualStyleBackColor = true;
+            this.shouldGenerateCollmap.CheckedChanged += new System.EventHandler(this.shouldGenerateCollmap_CheckedChanged_1);
+            // 
+            // itemMaterialCategories
+            // 
+            this.itemMaterialCategories.FormattingEnabled = true;
+            this.itemMaterialCategories.Location = new System.Drawing.Point(19, 115);
+            this.itemMaterialCategories.Name = "itemMaterialCategories";
+            this.itemMaterialCategories.Size = new System.Drawing.Size(264, 109);
+            this.itemMaterialCategories.TabIndex = 7;
             // 
             // Model_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 155);
+            this.ClientSize = new System.Drawing.Size(294, 272);
+            this.Controls.Add(this.itemMaterialCategories);
             this.Controls.Add(this.shouldGenerateCollmap);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.assetName);
@@ -116,6 +127,7 @@
             this.Name = "Model_Importer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Import Model";
+            this.Load += new System.EventHandler(this.Model_Importer_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -130,6 +142,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox assetName;
         private System.Windows.Forms.CheckBox shouldGenerateCollmap;
+        private System.Windows.Forms.CheckedListBox itemMaterialCategories;
     }
 }
 
