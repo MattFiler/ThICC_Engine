@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "GameStateData.h"
 
-Player::Player(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
+Player::Player(RenderData* _RD, string _filename) : TrackMagnet(_RD, _filename)
 {
 
 
