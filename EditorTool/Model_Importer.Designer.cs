@@ -32,15 +32,14 @@
             this.browseToModel = new System.Windows.Forms.Button();
             this.modelPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.textureList = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.addTexture = new System.Windows.Forms.Button();
-            this.removeTexture = new System.Windows.Forms.Button();
+            this.assetName = new System.Windows.Forms.TextBox();
+            this.shouldGenerateCollmap = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // importModel
             // 
-            this.importModel.Location = new System.Drawing.Point(11, 165);
+            this.importModel.Location = new System.Drawing.Point(15, 113);
             this.importModel.Name = "importModel";
             this.importModel.Size = new System.Drawing.Size(264, 28);
             this.importModel.TabIndex = 0;
@@ -50,7 +49,7 @@
             // 
             // browseToModel
             // 
-            this.browseToModel.Location = new System.Drawing.Point(200, 24);
+            this.browseToModel.Location = new System.Drawing.Point(204, 63);
             this.browseToModel.Name = "browseToModel";
             this.browseToModel.Size = new System.Drawing.Size(75, 22);
             this.browseToModel.TabIndex = 1;
@@ -60,7 +59,7 @@
             // 
             // modelPath
             // 
-            this.modelPath.Location = new System.Drawing.Point(11, 25);
+            this.modelPath.Location = new System.Drawing.Point(15, 64);
             this.modelPath.Name = "modelPath";
             this.modelPath.ReadOnly = true;
             this.modelPath.Size = new System.Drawing.Size(183, 20);
@@ -69,64 +68,52 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 9);
+            this.label1.Location = new System.Drawing.Point(12, 48);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Model File (OBJ)";
             // 
-            // textureList
-            // 
-            this.textureList.FormattingEnabled = true;
-            this.textureList.Location = new System.Drawing.Point(11, 64);
-            this.textureList.Name = "textureList";
-            this.textureList.Size = new System.Drawing.Size(183, 95);
-            this.textureList.TabIndex = 4;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 48);
+            this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(137, 13);
+            this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 5;
-            this.label2.Text = "Model Textures (PNG/JPG)";
+            this.label2.Text = "Asset Name";
             // 
-            // addTexture
+            // assetName
             // 
-            this.addTexture.Location = new System.Drawing.Point(200, 64);
-            this.addTexture.Name = "addTexture";
-            this.addTexture.Size = new System.Drawing.Size(75, 22);
-            this.addTexture.TabIndex = 6;
-            this.addTexture.Text = "Add";
-            this.addTexture.UseVisualStyleBackColor = true;
-            this.addTexture.Click += new System.EventHandler(this.addTexture_Click);
+            this.assetName.Location = new System.Drawing.Point(15, 25);
+            this.assetName.Name = "assetName";
+            this.assetName.Size = new System.Drawing.Size(264, 20);
+            this.assetName.TabIndex = 4;
             // 
-            // removeTexture
+            // shouldGenerateCollmap
             // 
-            this.removeTexture.Location = new System.Drawing.Point(200, 92);
-            this.removeTexture.Name = "removeTexture";
-            this.removeTexture.Size = new System.Drawing.Size(75, 22);
-            this.removeTexture.TabIndex = 7;
-            this.removeTexture.Text = "Remove";
-            this.removeTexture.UseVisualStyleBackColor = true;
-            this.removeTexture.Click += new System.EventHandler(this.removeTexture_Click);
+            this.shouldGenerateCollmap.AutoSize = true;
+            this.shouldGenerateCollmap.Location = new System.Drawing.Point(15, 90);
+            this.shouldGenerateCollmap.Name = "shouldGenerateCollmap";
+            this.shouldGenerateCollmap.Size = new System.Drawing.Size(135, 17);
+            this.shouldGenerateCollmap.TabIndex = 6;
+            this.shouldGenerateCollmap.Text = "Generate Collision Map";
+            this.shouldGenerateCollmap.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // Model_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 203);
-            this.Controls.Add(this.removeTexture);
-            this.Controls.Add(this.addTexture);
+            this.ClientSize = new System.Drawing.Size(294, 155);
+            this.Controls.Add(this.shouldGenerateCollmap);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textureList);
+            this.Controls.Add(this.assetName);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.modelPath);
             this.Controls.Add(this.browseToModel);
             this.Controls.Add(this.importModel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Form1";
+            this.Name = "Model_Importer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Import Model";
             this.ResumeLayout(false);
@@ -140,10 +127,9 @@
         private System.Windows.Forms.Button browseToModel;
         private System.Windows.Forms.TextBox modelPath;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListBox textureList;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button addTexture;
-        private System.Windows.Forms.Button removeTexture;
+        private System.Windows.Forms.TextBox assetName;
+        private System.Windows.Forms.CheckBox shouldGenerateCollmap;
     }
 }
 

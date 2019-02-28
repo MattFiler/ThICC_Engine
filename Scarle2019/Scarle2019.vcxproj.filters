@@ -56,6 +56,9 @@
     <Filter Include="GameObjects\VBGO\Source">
       <UniqueIdentifier>{5d4e5a53-3698-4d23-84a6-575677e63aae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Maths">
+      <UniqueIdentifier>{0366f0ca-5c85-4d75-a8ef-964c05ed0d27}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game Base\Managers">
       <UniqueIdentifier>{388885d0-afc8-4c3a-ab03-35156d9a78f8}</UniqueIdentifier>
     </Filter>
@@ -168,6 +171,15 @@
     </ClInclude>
     <ClInclude Include="TransFileVBGO.h">
       <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Track.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshTri.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackMagnet.h">
+      <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>Game Base\Scenes</Filter>
@@ -284,6 +296,15 @@
     </ClCompile>
     <ClCompile Include="RaceUI.cpp">
       <Filter>Game Base\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Track.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshTri.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackMagnet.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

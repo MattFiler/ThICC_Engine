@@ -145,24 +145,32 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//geometric shape renderer test
 	for (int i = 1; i < GP_COUNT; i++)
 	{
-		GPGO3D* test3d2 = new GPGO3D((GPGO3D_Type)i);
-		test3d2->SetPos(12.0f*Vector3::Forward + 10.0f*(i - 1)*Vector3::Left);
-		test3d2->SetScale(5.0f);
-		m_3DObjects.push_back(test3d2);
+		//GPGO3D* test3d2 = new GPGO3D((GPGO3D_Type)i);
+		//test3d2->SetPos(12.0f*Vector3::Forward + 10.0f*(i - 1)*Vector3::Left);
+		//test3d2->SetScale(5.0f);
+		//m_3DObjects.push_back(test3d2);
 	}
 
 	//test for obj loader / renderer
-	SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "luigicircuit2");
-	test3->SetPos(25.0f*Vector3::Forward + 5.0f*Vector3::Right + Vector3::Down);
-	test3->SetScale(0.3f);
-	m_3DObjects.push_back(test3);
+	//SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "Luigi Circuit");
+	//test3->SetPos(Vector3(0, -30, 0));
+	//test3->SetScale(10.0f);
+	//test3->SetRotationInDegrees(Vector3(0, 0, 0));
+	//m_3DObjects.push_back(test3);
 
 	//create a "player"
-	Player* test4 = new Player(m_RD, "cup");
-	m_3DObjects.push_back(test4);
+	player = new Player(m_RD, "Kart");
+	//player->SetRotationInDegrees(Vector3(180, 180, 180));
+	m_3DObjects.push_back(player);
+
+	// Test track
+	track = new Track(m_RD, "Rainbow Road");
+	//m_3DObjects.push_back(track);
+	//SDKMeshGO3D* track = new SDKMeshGO3D(m_RD, "Test Track");
+	m_3DObjects.push_back(track);
 
 	//point a camera at the player that follows
-	m_cam =  new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, test4, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam =  new TPSCamera(static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
 	m_RD->m_cam = m_cam;
 	m_3DObjects.push_back(m_cam);
 
@@ -171,7 +179,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(m_light);
 	m_RD->m_light = m_light;
 
-	//test VBGO3Ds
+	/*/test VBGO3Ds
 	VBCube* VB = new VBCube(m_RD);
 	VB->Init(11, m_RD);
 	VB->SetScale(4.0f);
@@ -185,9 +193,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	VB3->Init(11, m_RD);
 	VB3->SetPos(100.0f*Vector3::Backward);
 	VB3->SetScale(4.0f);
-	m_3DObjects.push_back(VB3);
+	m_3DObjects.push_back(VB3); */
 
-	//Marching Cubes
+	/*/Marching Cubes
 	VBMarchCubes* VBMC = new VBMarchCubes(m_RD);
 	VBMC->init(Vector3(-8.0f, -8.0f, -17.0f), Vector3(8.0f, 8.0f, 23.0f), 60.0f*Vector3::One, 0.01, m_RD);
 	VBMC->SetPos(Vector3(100, 0, -100));
@@ -208,15 +216,15 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	VBSnail* snail = new VBSnail(m_RD, "baseline", 150, 0.98f, 0.09f * XM_PI, 0.4f, Color(1.0f, 0.0f, 0.0f, 1.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
 	snail->SetPos(Vector3(100.0f, 0.0f, 0.0f));
 	snail->SetScale(2.0f);
-	m_3DObjects.push_back(snail);
+	m_3DObjects.push_back(snail); */
 
 	//this only draws correctly as its at the end
 	//see the file for what's needed to do this properly
-	TransFileVBGO* Box2 = new TransFileVBGO("cube_trans", m_RD);
-	m_3DObjects.push_back(Box2);
-	Box2->SetPos(Vector3(0.0f, 50.0f, 0.0f));
-	Box2->SetPitch(0.5f*XM_PIDIV4);
-	Box2->SetScale(20.0f);
+	//TransFileVBGO* Box2 = new TransFileVBGO("cube_trans", m_RD);
+	//m_3DObjects.push_back(Box2);
+	//Box2->SetPos(Vector3(0.0f, 50.0f, 0.0f));
+	//Box2->SetPitch(0.5f*XM_PIDIV4);
+	//Box2->SetScale(20.0f);
 
 	//Once I.ve set up all the VBs and IBs push them to the GPU
 	VBGO3D::PushIBVB(m_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
@@ -251,13 +259,13 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_2DObjects.push_back(player1Test);
 
 	//Test Sounds
-	Loop *loop = new Loop(m_audEngine.get(), "NightAmbienceSimple_02");
-	loop->SetVolume(0.1f);
-	loop->Play();
-	m_sounds.push_back(loop);
+	//Loop *loop = new Loop(m_audEngine.get(), "Course Intro Soundtrack");
+	//loop->SetVolume(0.1f);
+	//loop->Play();
+	//m_sounds.push_back(loop);
 
-	TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
-	m_sounds.push_back(TS);
+	//TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
+	//m_sounds.push_back(TS);
 }
 
 // Executes the basic game loop.
@@ -274,6 +282,8 @@ void Game::Tick()
 // Updates the world.
 void Game::Update(DX::StepTimer const& _timer)
 {
+	// Test code
+	player->ShouldStickToTrack(*track);
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 
 	//this will update the audio engine but give us chance to do somehting else if that isn't working
