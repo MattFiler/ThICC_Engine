@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Player.h"
 #include "GameStateData.h"
+#include <iostream>
+
 
 Player::Player(RenderData* _RD, string _filename) : TrackMagnet(_RD, _filename)
 {
@@ -18,6 +20,8 @@ Player::~Player()
 
 void Player::Tick(GameStateData* _GSD)
 {
+	Vector forward = m_world.Forward();
+	std::cout << std::to_string(forward.x) + ", " + std::to_string(forward.y) + ", " + std::to_string(forward.z) << std::endl;
 	//FORWARD BACK & STRAFE CONTROL HERE
 	Vector3 forwardMove = 40.0f * Vector3::Forward;
 	Vector3 rightMove = 40.0f * Vector3::Right;

@@ -84,12 +84,12 @@ Vector Track::CreateVector(string _vector)
 
 /* Checks through all triangles to see if this line intersects any of them. 
    The point of intersecion is stored in _intersect */
-bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, Vector& _colNormal)
+bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri)
 {
 	int index = 0;
 	for (MeshTri& tri : triangles)
 	{
-		if (tri.DoesLineIntersect(_direction, _startPos, _intersect, _colNormal))
+		if (tri.DoesLineIntersect(_direction, _startPos, _intersect, _tri))
 		{
 			return true;
 		}

@@ -10,16 +10,18 @@ TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _fi
 bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
 	Vector intersect;
-	Vector rotation;
-	bool shouldStick = track.DoesLineIntersect(Vector(0, 10, 0), m_pos, intersect, rotation);
+	MeshTri* tri = nullptr;
+	bool shouldStick = track.DoesLineIntersect(m_world.Down(), m_pos, intersect, tri);
 	if (shouldStick)
 	{
 		SetPos(intersect); 
-		rotation.Normalize();
-		m_worldMagnet = m_world.CreateWorld(m_pos,m_world.Forward(), rotation);
+		Vector secondIntersect;
+		MeshTri* tri2 = nullptr;
+		tri->DoesLineIntersect(m_world.Down(), m_pos + m_vel, secondIntersect, tri2);
+
+		m_worldMagnet = m_world.CreateWorld(m_pos,secondIntersect - intersect, tri->m_plane.Normal());
 		m_useMagnetMatrix = true;
-		Vector brealy = m_world.Forward();
-		brealy = brealy;
+
 	}
 	else
 	{
