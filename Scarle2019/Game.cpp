@@ -163,7 +163,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(player);
 
 	// Test track
-	track = new Track(m_RD, "TestRamp", "Models\\TestRamp\\TestRamp.vertices");
+	track = new Track(m_RD, "TestRamp", "../Models/TestRamp/TestRamp.vertices");
 	//m_3DObjects.push_back(track);
 	//SDKMeshGO3D* track = new SDKMeshGO3D(m_RD, "Test Track");
 	m_3DObjects.push_back(track);
