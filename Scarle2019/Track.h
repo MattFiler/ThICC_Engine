@@ -7,7 +7,7 @@
 class Track : public PhysModel
 {
 public:
-	Track(RenderData* _RD, string _filename, string _vertex_list);
+	Track(RenderData* _RD, string _filename);
 	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, Vector& _colNormal);
 private:
 	void LoadVertexList(string _vertex_list);

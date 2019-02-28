@@ -57,6 +57,7 @@ void Player::Tick(GameStateData* _GSD)
 	}
 
 	//limit motion of the player
+	/*
 	float length = m_pos.Length();
 	float maxLength = 100.0f;
 	if (length > maxLength)
@@ -65,6 +66,7 @@ void Player::Tick(GameStateData* _GSD)
 		m_pos *= maxLength;
 		m_vel *= -0.9; //VERY simple bounce back
 	}
+	*/
 
 	//apply my base behaviour
 	PhysModel::Tick(_GSD);
