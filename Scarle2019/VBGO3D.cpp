@@ -303,8 +303,14 @@ void VBGO3D::UpdateConstBuff(RenderData * _RD)
 {
 	//update Constant buffer
 	m_ConstBuff.world = m_world.Transpose();
+	int uj = 1;
 	m_ConstBuff.view = _RD->m_cam->GetView().Transpose();
 	m_ConstBuff.projection = _RD->m_cam->GetProj().Transpose();
+	//for (int i = 0; i < num_of_cam; i++)
+	//{
+	//	m_ConstBuff.view = _RD->m_cam[i]->GetView().Transpose();
+	//	m_ConstBuff.projection = _RD->m_cam[i]->GetProj().Transpose();
+	//}
 	m_ConstBuff.rot = m_rot.Transpose();
 	if (_RD->m_light)
 	{

@@ -65,9 +65,12 @@ void SDKMeshGO3D::Render(RenderData * _RD)
 {
 	ID3D12DescriptorHeap* heaps[] = { m_modelResources->Heap(), _RD->m_states->Heap() };
 	_RD->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-
+	int uj = 0;
 	Model::UpdateEffectMatrices(m_modelNormal, m_world, _RD->m_cam->GetView(), _RD->m_cam->GetProj());
-
+	//for (int i = 0; i < num_of_cam; i++)
+	//{
+	//	Model::UpdateEffectMatrices(m_modelNormal, m_world, _RD->m_cam[i]->GetView(), _RD->m_cam[i]->GetProj());
+	//}
 	m_model->Draw(_RD->m_commandList.Get(), m_modelNormal.cbegin());
 }
 
