@@ -144,11 +144,104 @@ namespace EditorTool
             MessageBox.Show("Asset successfully deleted.", "Asset deleted!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        /* COMPILE ASSETS TO BUILD FOLDER */
+        private void compileAssets_Click(object sender, EventArgs e)
+        {
+            DialogResult showErrorInfo = MessageBox.Show("Is the game running?", "About to compile assets...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (showErrorInfo != DialogResult.No)
+            {
+                MessageBox.Show("The game must not be running when compiling assets.", "Please close game.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            //Copy to debug folder
+            if (Directory.Exists("Debug"))
+            {
+                copyAssets("Debug/DATA/");
+            }
+
+            //Copy to release folder
+            if (Directory.Exists("Release"))
+            {
+                copyAssets("Release/DATA/");
+            }
+
+            MessageBox.Show("Assets successfully compiled.", "Compiled assets.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /* COPY ALL ASSETS TO FOLDER */
+        void copyAssets(string output_directory)
+        {
+            if (Directory.Exists(output_directory))
+            {
+                Directory.Delete(output_directory, true);
+            }
+            List<string> ignored_extensions = new List<string>();
+            ignored_extensions.Add(".vcxproj");
+            ignored_extensions.Add(".filters");
+            ignored_extensions.Add(".exe");
+            ignored_extensions.Add(".obj");
+            DirectoryCopy("DATA/", output_directory, true, ignored_extensions);
+        }
+
+
         private void assetList_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
 
+
+
+        //Modified from: https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
+        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, List<string> ignoreExtensions)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                bool should_copy = true;
+                foreach (string ignored_extension in ignoreExtensions)
+                {
+                    if (file.Extension == ignored_extension)
+                    {
+                        should_copy = false;
+                        break;
+                    }
+                }
+                if (should_copy)
+                {
+                    string temppath = Path.Combine(destDirName, file.Name);
+                    file.CopyTo(temppath, false);
+                }
+            }
+
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string temppath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryCopy(subdir.FullName, temppath, copySubDirs, ignoreExtensions);
+                }
+            }
+        }
 
         private void importModel_Click(object sender, EventArgs e)
         {

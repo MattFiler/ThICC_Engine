@@ -33,12 +33,12 @@ public:
 private:
 	enum m_path_data { FOLDER, EXTENSION };
 
-	std::string shader_path[2] = { "../DATA/SHADERS/", ".HLSL" };
-	std::string model_path[2] = { "../DATA/MODELS/", ".SDKMESH" };
-	std::string model_custom_path[2] = { "../DATA/MODELS/", ".TXT" };
-	std::string model_collmap_path[2] = { "../DATA/MODELS/", ".COLLMAP" };
-	std::string image_path[2] = { "../DATA/IMAGES/", ".DDS" };
-	std::string sound_path[2] = { "../DATA/SOUNDS/", ".WAV" };
+	std::string shader_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/SHADERS/", ".HLSL" };
+	std::string model_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/MODELS/", ".SDKMESH" };
+	std::string model_custom_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/MODELS/", ".TXT" };
+	std::string model_collmap_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/MODELS/", ".COLLMAP" };
+	std::string image_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/IMAGES/", ".DDS" };
+	std::string sound_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/SOUNDS/", ".WAV" };
 
 	std::string getPathSection(m_asset_type _asset_type, m_path_data _path_section) {
 		switch (_asset_type) {

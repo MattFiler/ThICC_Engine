@@ -6,6 +6,8 @@
 #include "Game.h"
 #include "RenderData.h"
 #include "GameStateData.h"
+#include <iostream>
+#include <experimental/filesystem>
 
 
 extern void ExitGame();
@@ -117,7 +119,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	pd.blendDesc = m_RD->m_states->NonPremultiplied;
 	m_RD->m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dDevice.Get(), resourceUpload, pd);
 	m_RD->m_font = std::make_unique<SpriteFont>(m_d3dDevice.Get(), resourceUpload,
-		L"courier.spritefont",
+		L"DATA/FONTS/COURIER.SPRITEFONT",
 		m_RD->m_resourceDescriptors->GetCpuHandle(m_RD->m_resourceCount),
 		m_RD->m_resourceDescriptors->GetGpuHandle(m_RD->m_resourceCount));
 	m_RD->m_resourceCount++;
@@ -257,6 +259,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//Once I.ve set up all the VBs and IBs push them to the GPU
 	VBGO3D::PushIBVB(m_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
+
+	//debug: output our current directory
+	std::cout << std::experimental::filesystem::current_path();
 
 	//test text
 	Text2D * test2 = new Text2D("testing text");
