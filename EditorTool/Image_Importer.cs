@@ -66,7 +66,7 @@ namespace EditorTool
                 ProcessStartInfo imageConverter = new ProcessStartInfo();
                 imageConverter.WorkingDirectory = "DATA/IMAGES";
                 imageConverter.FileName = "DATA/IMAGES/texconv.exe";
-                imageConverter.Arguments = "\"" + asset_path_orig_ext.Substring(4) + "\"";
+                imageConverter.Arguments = "\"" + Path.GetFileName(asset_path_orig_ext) + "\"";
                 imageConverter.UseShellExecute = false;
                 imageConverter.RedirectStandardOutput = true;
                 Process converterProcess = Process.Start(imageConverter);
@@ -95,6 +95,9 @@ namespace EditorTool
                 if (!File.Exists(asset_path))
                 {
                     //Import failed, show reason if requested
+                    if (File.Exists(asset_path_orig_ext)) {
+                        File.Delete(asset_path_orig_ext);
+                    }
                     DialogResult showErrorInfo = MessageBox.Show("Image import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                     if (showErrorInfo == DialogResult.Yes)
                     {
@@ -105,7 +108,7 @@ namespace EditorTool
                 {
                     //Create JSON data
                     JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Images\", \"visible\": true, \"is_2d\": true, \"res_x\": " + image_width + ", \"res_y\": " + image_height + ", \"x_pos\": 0, \"y_pos\": 0}");
-                    File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "json", asset_json.ToString(Formatting.Indented));
+                    File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "JSON", asset_json.ToString(Formatting.Indented));
 
                     //Import success
                     MessageBox.Show("Image successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);

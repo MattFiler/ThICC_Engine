@@ -69,7 +69,7 @@ namespace EditorTool
                     ProcessStartInfo soundConverter = new ProcessStartInfo();
                     soundConverter.WorkingDirectory = "DATA/SOUNDS";
                     soundConverter.FileName = "DATA/SOUNDS/ffmpeg.exe";
-                    soundConverter.Arguments = "-i \"" + asset_path_orig_ext.Substring(7) + "\" \"" + asset_path.Substring(7) + "\"";
+                    soundConverter.Arguments = "-i \"" + Path.GetFileName(asset_path_orig_ext) + "\" \"" + Path.GetFileName(asset_path) + "\"";
                     soundConverter.UseShellExecute = false;
                     soundConverter.RedirectStandardOutput = true;
                     Process converterProcess = Process.Start(soundConverter);
@@ -85,6 +85,10 @@ namespace EditorTool
                 if (!File.Exists(asset_path))
                 {
                     //Conversion failed, show reason if requested
+                    if (File.Exists(asset_path_orig_ext))
+                    {
+                        File.Delete(asset_path_orig_ext);
+                    }
                     DialogResult showErrorInfo = MessageBox.Show("Sound import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                     if (showErrorInfo == DialogResult.Yes)
                     {
