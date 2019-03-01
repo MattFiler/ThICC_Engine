@@ -439,11 +439,11 @@ namespace EditorTool
                             }
                         }
 
-                        //Conversion complete - delete the OBJ and MTL
-                        File.Delete(import_directory + Path.GetFileName(modelPath.Text));
+                        //Conversion complete - rename OBJ and MTL
+                        File.Move(import_directory + Path.GetFileName(modelPath.Text), import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".OBJ");
                         if (importedMTL != "")
                         {
-                            File.Delete(import_directory + importedMTL);
+                            File.Move(import_directory + importedMTL, import_directory + "/MTL_DUMP/" + importedMTL.ToUpper()); //Keep MTLs for now, but not in main folder.
                         }
 
                         //Create JSON data

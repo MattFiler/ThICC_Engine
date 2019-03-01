@@ -335,3 +335,5 @@ Costura.dll
 Costura.xml
 Newtonsoft.Json.dll
 Newtonsoft.Json.pdb
+!DATA/*.OBJ
+!DATA/*.MTL

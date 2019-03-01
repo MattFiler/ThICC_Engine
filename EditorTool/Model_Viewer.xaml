@@ -4,80 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EditorTool"
+             xmlns:HelixToolkit="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="249" d:DesignWidth="397">
+             d:DesignHeight="133" d:DesignWidth="214">
 
-    <!-- Thanks, https://docs.microsoft.com/en-us/dotnet/framework/wpf/graphics-multimedia/how-to-create-a-3-d-scene -->   
-    
-    <Grid>
-        <Canvas Width="397" Height="249">
+    <HelixToolkit:HelixViewport3D x:Name="myView" ZoomExtentsWhenLoaded="True" ShowViewCube="False">
+        <HelixToolkit:SunLight/>
+        <ModelVisual3D x:Name="modelPreview"/>
+        <HelixToolkit:GridLinesVisual3D Width="8" Length="8" MinorDistance="1" MajorDistance="1" Thickness="0.01"/>
+    </HelixToolkit:HelixViewport3D>
 
-            <!-- The Viewport3D provides a rendering surface for 3-D visual content. -->
-            <Viewport3D ClipToBounds="True" Width="397" Height="249" Canvas.Left="0" Canvas.Top="0">
-
-                <!-- Defines the camera used to view the 3D object. -->
-                <Viewport3D.Camera>
-                    <PerspectiveCamera Position="0,0,3" LookDirection="0,0,-1" FieldOfView="60" />
-                </Viewport3D.Camera>
-
-                <!-- The ModelVisual3D children contain the 3D models -->
-                <Viewport3D.Children>
-
-                    <!-- This ModelVisual3D defines the light cast in the scene. Without light, the 3D 
-                 object cannot be seen. Also, the direction of the lights affect shadowing. If desired,
-                 you can create multiple lights with different colors that shine from different directions. -->
-                    <ModelVisual3D>
-                        <ModelVisual3D.Content>
-                            <DirectionalLight Color="#FFFFFF" Direction="-0.612372,-0.5,-0.612372" />
-                        </ModelVisual3D.Content>
-                    </ModelVisual3D>
-                    <ModelVisual3D>
-                        <ModelVisual3D.Content>
-                            <GeometryModel3D>
-
-                                <!-- The geometry specifies the shape of the 3D plane. In this sample, a flat sheet is created. -->
-                                <GeometryModel3D.Geometry>
-                                    <MeshGeometry3D
-                     TriangleIndices="0,1,2 3,4,5 "
-                     Normals="0,0,1 0,0,1 0,0,1 0,0,1 0,0,1 0,0,1 "
-                     TextureCoordinates="0,0 1,0 1,1 1,1 0,1 0,0 "
-                     Positions="-0.5,-0.5,0.5 0.5,-0.5,0.5 0.5,0.5,0.5 0.5,0.5,0.5 -0.5,0.5,0.5 -0.5,-0.5,0.5 " />
-                                </GeometryModel3D.Geometry>
-
-                                <!-- The material specifies the material applied to the 3D object. In this sample a linear gradient 
-                       covers the surface of the 3D object.-->
-                                <GeometryModel3D.Material>
-                                    <MaterialGroup>
-                                        <DiffuseMaterial>
-                                            <DiffuseMaterial.Brush>
-                                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                                    <LinearGradientBrush.GradientStops>
-                                                        <GradientStop Color="Yellow" Offset="0" />
-                                                        <GradientStop Color="Red" Offset="0.25" />
-                                                        <GradientStop Color="Blue" Offset="0.75" />
-                                                        <GradientStop Color="LimeGreen" Offset="1" />
-                                                    </LinearGradientBrush.GradientStops>
-                                                </LinearGradientBrush>
-                                            </DiffuseMaterial.Brush>
-                                        </DiffuseMaterial>
-                                    </MaterialGroup>
-                                </GeometryModel3D.Material>
-
-                                <!-- Apply a transform to the object. In this sample, a rotation transform is applied, rendering the 
-                       3D object rotated. -->
-                                <GeometryModel3D.Transform>
-                                    <RotateTransform3D>
-                                        <RotateTransform3D.Rotation>
-                                            <AxisAngleRotation3D Axis="0,3,0" Angle="40" />
-                                        </RotateTransform3D.Rotation>
-                                    </RotateTransform3D>
-                                </GeometryModel3D.Transform>
-                            </GeometryModel3D>
-                        </ModelVisual3D.Content>
-                    </ModelVisual3D>
-                </Viewport3D.Children>
-
-            </Viewport3D>
-        </Canvas>
-    </Grid>
 </UserControl>

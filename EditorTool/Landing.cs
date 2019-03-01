@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 namespace EditorTool
 {
@@ -128,6 +129,7 @@ namespace EditorTool
 
             //Delete selected asset
             string selected_file_name = fullLoadedFileNames.ElementAt(assetList.SelectedIndex);
+            assetList.SelectedIndex = -1; //Clear any item preview so we can delete it
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
@@ -193,14 +195,44 @@ namespace EditorTool
             ignored_extensions.Add(".filters");
             ignored_extensions.Add(".exe");
             ignored_extensions.Add(".obj");
+            ignored_extensions.Add(".mtl");
             ignored_extensions.Add(".bmp");
             DirectoryCopy("DATA/", output_directory, true, ignored_extensions);
         }
 
-
+        /* LOAD ASSET PREVIEW ON CLICK */
         private void assetList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //Hide all possible previewers
+            modelPreview.Visible = false;
+            imagePreview.Visible = false;
 
+            //Act appropriately for selected asset type
+            switch (loadAssetType.SelectedItem)
+            {
+                case "Models":
+                    modelPreview.Visible = true;
+                    if (assetList.SelectedIndex == -1)
+                    {
+                        modelPreview.Child = new ModelViewer("");
+                        return;
+                    }
+                    modelPreview.Child = new ModelViewer("DATA/MODELS/" + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
+                    return;
+                case "Images":
+                    return;
+                case "Sounds":
+                    return;
+                case "Fonts":
+                    imagePreview.Visible = true;
+                    if (assetList.SelectedIndex == -1)
+                    {
+                        imagePreview.Image = null;
+                        return;
+                    }
+                    imagePreview.Image = new Bitmap("DATA/FONTS/" + assetList.SelectedItem.ToString() + ".BMP");
+                    return;
+            }
         }
 
 

@@ -52,16 +52,18 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.modelPreview = new System.Windows.Forms.Integration.ElementHost();
             this.modelViewer1 = new EditorTool.ModelViewer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.imagePreview = new System.Windows.Forms.PictureBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.compileAssets = new System.Windows.Forms.Button();
-            this.openUiEditor = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.openUiEditor = new System.Windows.Forms.Button();
+            this.compileAssets = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).BeginInit();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -302,24 +304,34 @@
             this.label9.TabIndex = 24;
             this.label9.Text = "X:";
             // 
-            // elementHost1
+            // modelPreview
             // 
-            this.elementHost1.Location = new System.Drawing.Point(6, 19);
-            this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(214, 133);
-            this.elementHost1.TabIndex = 12;
-            this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.modelViewer1;
+            this.modelPreview.Location = new System.Drawing.Point(6, 19);
+            this.modelPreview.Name = "modelPreview";
+            this.modelPreview.Size = new System.Drawing.Size(214, 133);
+            this.modelPreview.TabIndex = 12;
+            this.modelPreview.Text = "elementHost1";
+            this.modelPreview.Child = this.modelViewer1;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.elementHost1);
+            this.groupBox1.Controls.Add(this.imagePreview);
+            this.groupBox1.Controls.Add(this.modelPreview);
             this.groupBox1.Location = new System.Drawing.Point(233, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(226, 159);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Asset Preview";
+            // 
+            // imagePreview
+            // 
+            this.imagePreview.Location = new System.Drawing.Point(6, 19);
+            this.imagePreview.Name = "imagePreview";
+            this.imagePreview.Size = new System.Drawing.Size(215, 133);
+            this.imagePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.imagePreview.TabIndex = 15;
+            this.imagePreview.TabStop = false;
             // 
             // groupBox4
             // 
@@ -333,15 +345,15 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Other Tools";
             // 
-            // compileAssets
+            // button4
             // 
-            this.compileAssets.Location = new System.Drawing.Point(6, 19);
-            this.compileAssets.Name = "compileAssets";
-            this.compileAssets.Size = new System.Drawing.Size(137, 30);
-            this.compileAssets.TabIndex = 0;
-            this.compileAssets.Text = "Compile Assets";
-            this.compileAssets.UseVisualStyleBackColor = true;
-            this.compileAssets.Click += new System.EventHandler(this.compileAssets_Click);
+            this.button4.Enabled = false;
+            this.button4.Location = new System.Drawing.Point(305, 19);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(137, 30);
+            this.button4.TabIndex = 2;
+            this.button4.Text = "Game Config Editor";
+            this.button4.UseVisualStyleBackColor = true;
             // 
             // openUiEditor
             // 
@@ -353,15 +365,15 @@
             this.openUiEditor.Text = "UI Editor";
             this.openUiEditor.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // compileAssets
             // 
-            this.button4.Enabled = false;
-            this.button4.Location = new System.Drawing.Point(305, 19);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(137, 30);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "Game Config Editor";
-            this.button4.UseVisualStyleBackColor = true;
+            this.compileAssets.Location = new System.Drawing.Point(6, 19);
+            this.compileAssets.Name = "compileAssets";
+            this.compileAssets.Size = new System.Drawing.Size(137, 30);
+            this.compileAssets.TabIndex = 0;
+            this.compileAssets.Text = "Compile Assets";
+            this.compileAssets.UseVisualStyleBackColor = true;
+            this.compileAssets.Click += new System.EventHandler(this.compileAssets_Click);
             // 
             // Landing
             // 
@@ -381,6 +393,8 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -396,7 +410,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DomainUpDown domainUpDown1;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private System.Windows.Forms.Integration.ElementHost modelPreview;
         private ModelViewer modelViewer1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button1;
@@ -418,5 +432,6 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button openUiEditor;
         private System.Windows.Forms.Button compileAssets;
+        private System.Windows.Forms.PictureBox imagePreview;
     }
 }
