@@ -141,12 +141,8 @@ namespace EditorTool
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
-                    string[] files = Directory.GetFiles(Path.GetDirectoryName(selected_file_name), "*");
-                    foreach (string file in files)
-                    {
-                        File.Delete(file);
-                    }
-                    Directory.Delete(Path.GetDirectoryName(selected_file_name));
+                    //Directory.Delete(Path.GetDirectoryName(selected_file_name), true);
+                    MessageBox.Show("DELETING MODELS HAS BEEN DISABLED IN THE LATEST UPDATE - FUNCTIONALITY WILL RETURN SOON.", "FAILED", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 case "Fonts":
                     File.Delete(selected_file_name);

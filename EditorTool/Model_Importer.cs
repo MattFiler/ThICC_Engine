@@ -439,12 +439,8 @@ namespace EditorTool
                             }
                         }
 
-                        //Conversion complete - rename OBJ and MTL
+                        //Conversion complete - rename OBJ
                         File.Move(import_directory + Path.GetFileName(modelPath.Text), import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".OBJ");
-                        if (importedMTL != "")
-                        {
-                            File.Move(import_directory + importedMTL, import_directory + "/MTL_DUMP/" + importedMTL.ToUpper()); //Keep MTLs for now, but not in main folder.
-                        }
 
                         //Create JSON data
                         JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0}");
