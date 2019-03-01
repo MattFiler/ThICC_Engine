@@ -40,7 +40,7 @@ namespace EditorTool
         //Import font button
         private void importFont_Click(object sender, EventArgs e)
         {
-            string asset_path = "DATA/FONTS/" + installedFonts.SelectedItem.ToString().Replace(' ', '_').ToUpper() + ".SPRITEFONT";
+            string asset_path = "DATA/FONTS/" + installedFonts.SelectedItem.ToString().ToUpper() + ".SPRITEFONT";
 
             if (File.Exists(asset_path) || installedFonts.SelectedItem.ToString() == "" || installedFonts.SelectedIndex == -1 || !(fontSize.Value > 0))
             {
@@ -57,7 +57,7 @@ namespace EditorTool
                 ProcessStartInfo imageConverter = new ProcessStartInfo();
                 imageConverter.WorkingDirectory = "DATA/FONTS";
                 imageConverter.FileName = "DATA/FONTS/MakeSpriteFont.exe";
-                imageConverter.Arguments = "\"" + installedFonts.SelectedItem.ToString() + "\" \"" + installedFonts.SelectedItem.ToString().Replace(' ', '_').ToUpper() + ".SPRITEFONT\" /FontSize:" + fontSize.Value + " /DebugOutputSpriteSheet:\"" + installedFonts.SelectedItem.ToString().Replace(' ', '_').ToUpper() + ".BMP\"";
+                imageConverter.Arguments = "\"" + installedFonts.SelectedItem.ToString() + "\" \"" + installedFonts.SelectedItem.ToString().ToUpper() + ".SPRITEFONT\" /FontSize:" + fontSize.Value + " /DebugOutputSpriteSheet:\"" + installedFonts.SelectedItem.ToString().ToUpper() + ".BMP\"";
                 imageConverter.UseShellExecute = false;
                 imageConverter.RedirectStandardOutput = true;
                 Process converterProcess = Process.Start(imageConverter);

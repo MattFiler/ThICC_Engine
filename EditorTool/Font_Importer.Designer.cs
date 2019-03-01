@@ -70,6 +70,11 @@
             this.fontSize.Name = "fontSize";
             this.fontSize.Size = new System.Drawing.Size(264, 20);
             this.fontSize.TabIndex = 16;
+            this.fontSize.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
             // 
             // label4
             // 

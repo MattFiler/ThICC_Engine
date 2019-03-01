@@ -117,10 +117,11 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	SpriteBatchPipelineStateDescription pd(rtState);
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	string font_path = m_filepath.generateFilepath("Courier", m_filepath.FONT);
+	string font_path = m_filepath.generateFilepath("Isolation", m_filepath.FONT);
 	std::wstring w_font_path = converter.from_bytes(font_path.c_str());
 	pd.blendDesc = m_RD->m_states->NonPremultiplied;
 	m_RD->m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dDevice.Get(), resourceUpload, pd);
+	//This will throw an exception in <memory> if we try to load a non-existant font.
 	m_RD->m_font = std::make_unique<SpriteFont>(m_d3dDevice.Get(), resourceUpload,
 		w_font_path.c_str(),
 		m_RD->m_resourceDescriptors->GetCpuHandle(m_RD->m_resourceCount),

@@ -138,9 +138,18 @@ namespace EditorTool
                     }
                     Directory.Delete(Path.GetDirectoryName(selected_file_name));
                     break;
+                case "Fonts":
+                    File.Delete(selected_file_name);
+                    try
+                    {
+                        File.Delete(selected_file_name.Substring(0, selected_file_name.Length - 10) + "JSON");
+                        File.Delete(selected_file_name.Substring(0, selected_file_name.Length - 10) + "BMP");
+                    }
+                    catch { }
+                    break;
                 default:
                     File.Delete(selected_file_name);
-                    File.Delete(selected_file_name.Substring(0, selected_file_name.Length - 3) + "json");
+                    File.Delete(selected_file_name.Substring(0, selected_file_name.Length - 3) + "JSON");
                     break;
             }
             refreshList();
@@ -184,6 +193,7 @@ namespace EditorTool
             ignored_extensions.Add(".filters");
             ignored_extensions.Add(".exe");
             ignored_extensions.Add(".obj");
+            ignored_extensions.Add(".bmp");
             DirectoryCopy("DATA/", output_directory, true, ignored_extensions);
         }
 
