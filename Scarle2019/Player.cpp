@@ -3,13 +3,13 @@
 #include "GameStateData.h"
 #include <iostream>
 
+extern void ExitGame();
 
-Player::Player(RenderData* _RD, string _filename) : TrackMagnet(_RD, _filename)
+Player::Player(RenderData* _RD, string _filename, int _playerID) : TrackMagnet(_RD, _filename)
 {
-
-
 	SetDrag(0.7);
 	SetPhysicsOn(true);
+	m_playerID = _playerID;
 }
 
 Player::~Player()
@@ -43,6 +43,39 @@ void Player::Tick(GameStateData* _GSD)
 	if (_GSD->m_keyboardState.D)
 	{
 		m_acc += rightMove;
+	}
+
+	//GameController Movement
+	if (_GSD->m_gamePadState[m_playerID].IsConnected())
+	{
+		if (_GSD->m_gamePadState[m_playerID].IsViewPressed())
+		{
+			ExitGame();
+		}
+		else
+		{
+			//float left = (_GSD->m_gamePadState[m_playerID].IsAPressed()) ? 1.f : 0;
+			//float right = (_GSD->m_gamePadState[m_playerID].IsBPressed()) ? 1.f : 0;
+
+			//m_gamePad->SetVibration(m_playerID, left, right);
+
+			if (_GSD->m_gamePadState[m_playerID].IsRightTriggerPressed())
+			{
+				m_acc += forwardMove;
+			}
+			if (_GSD->m_gamePadState[m_playerID].IsLeftTriggerPressed())
+			{
+				m_acc -= forwardMove;
+			}
+			if (_GSD->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
+			{
+				m_acc -= rightMove;
+			}
+			if (_GSD->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+			{
+				m_acc += rightMove;
+			}
+		}
 	}
 
 	//change orinetation of player

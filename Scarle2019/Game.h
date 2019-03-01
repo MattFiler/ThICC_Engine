@@ -107,6 +107,7 @@ private:
 	//Input
 	std::unique_ptr<DirectX::Keyboard> m_keyboard;
 	std::unique_ptr<DirectX::Mouse> m_mouse;
+	std::unique_ptr<DirectX::GamePad> m_gamePad;
 
 	//audio system
 	//This uses a simple system, but a better pipeline can be used using Wave Banks
@@ -124,4 +125,5 @@ private:
 	RenderData*											m_RD;	//dumping ground for things required to do rendering
 	GameStateData*										m_GSD;  //base game state to pass to all GameObjects
 	int num_of_cam = 1;
+	int num_of_players = 2;
 };

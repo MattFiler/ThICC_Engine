@@ -12,7 +12,6 @@ class RaceUI : public GameObject2D
 public:
 	RaceUI() = default;
 	RaceUI(RenderData* _RD, Vector2 _uiPositions[4]);
-	//UI(string _text);
 	virtual ~RaceUI();
 
 	void CentreOrigin();

@@ -127,8 +127,10 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
 	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
-	m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+
+	m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH }; //uncommented
 	m_scissorRect[0] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
+
 	//m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	//m_scissorRect[0] = { 0,0,(int)(m_outputWidth * 0.5f),(int)(m_outputHeight * 0.5f) };
 	//m_viewport[1] = { static_cast<float>(m_outputWidth) * 0.5f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
@@ -171,10 +173,18 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//m_3DObjects.push_back(test3);
 
 	//create a "player"
-	player = new Player(m_RD, "Kart");
+	player = new Player(m_RD, "Kart", 0);
 	player->SetPos(Vector(-345, 555.0f, 350));
 	//player->SetRotationInDegrees(Vector3(180, 180, 180));
 	m_3DObjects.push_back(player);
+
+	//create a "player" no.2
+	player = new Player(m_RD, "Kart", 1);
+	player->SetPos(Vector(-345, 555.0f, 350));
+	//player->SetRotationInDegrees(Vector3(180, 180, 180));
+	m_3DObjects.push_back(player);
+
+
 
 	// Test track
 	track = new Track(m_RD, "Rainbow Road");
@@ -294,6 +304,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
 	//m_sounds.push_back(TS);
+
+	//Controller
+	m_gamePad = std::make_unique<GamePad>();
 }
 
 // Executes the basic game loop.
@@ -338,6 +351,13 @@ void Game::Update(DX::StepTimer const& _timer)
 	m_GSD->m_keyboardState = m_keyboard->GetState();
 	m_GSD->m_mouseState = m_mouse->GetState();
 
+	for (int i = 0; i < num_of_players; ++i)
+	{
+		m_GSD->m_gamePadState[i] = m_gamePad->GetState(i); //set game controllers state[s]
+	}
+	
+
+
 	//Quit Properly on press ESC
 	if (m_GSD->m_keyboardState.Escape)
 	{
@@ -352,6 +372,30 @@ void Game::Update(DX::StepTimer const& _timer)
 	//{
 	//	m_RD->m_cam = m_cam1;
 	//}
+
+	//for (int i = 0; i < num_of_players; ++i)
+	//{
+	//	auto state = m_gamePad->GetState(i);
+	//	if (state.IsConnected())
+	//	{
+	//		// TODO: Read controller 0 here
+	//		if (state.IsViewPressed())
+	//		{
+	//			ExitGame();
+	//		}
+	//		else
+	//		{
+	//			float left = (state.IsAPressed()) ? 1.f : 0;
+	//			float right = (state.IsBPressed()) ? 1.f : 0;
+
+	//			m_gamePad->SetVibration(i, left, right);
+	//		}
+
+	//	}
+	//}
+	
+
+
 
 	//Add your game logic here.
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
@@ -461,6 +505,7 @@ void Game::Present()
 void Game::OnActivated()
 {
 	// TODO: Game is becoming active window.
+	m_gamePad->Resume();
 }
 
 void Game::OnDeactivated()

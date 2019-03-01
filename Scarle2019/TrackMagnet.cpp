@@ -11,7 +11,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
 	Vector intersect;
 	MeshTri* tri = nullptr;
-	bool shouldStick = track.DoesLineIntersect(m_world.Down()*5, m_pos + m_world.Up() * 2, intersect, tri);
+	bool shouldStick = track.DoesLineIntersect(m_world.Down() * 5, m_pos + m_world.Up() * 2, intersect, tri);
 	if (shouldStick)
 	{
 		Vector offset = m_world.Up() / 4;
