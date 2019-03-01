@@ -113,6 +113,7 @@ void VBGO3D::Render(RenderData * _RD)
 bool VBGO3D::SetUpVBGOs(RenderData * _RD)
 {
 	// create root signature
+	GameFilepaths m_filepath; //WHY?!
 
 	// create a root descriptor, which explains where to find the data for this root parameter
 	D3D12_ROOT_DESCRIPTOR rootCBVDescriptor;
@@ -188,7 +189,10 @@ bool VBGO3D::SetUpVBGOs(RenderData * _RD)
 	// compile vertex shader
 	ID3DBlob* vertexShader; // d3d blob for holding vertex shader bytecode
 	ID3DBlob* errorBuff; // a buffer holding the error data if any
-	hr = D3DCompileFromFile(L"../shaders/VertexShader.hlsl",
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	string shader_path = m_filepath.generateFilepath("VertexShader", m_filepath.SHADER);
+	std::wstring w_shader_path = converter.from_bytes(shader_path.c_str());
+	hr = D3DCompileFromFile(w_shader_path.c_str(),
 		nullptr,
 		nullptr,
 		"main",
@@ -211,7 +215,9 @@ bool VBGO3D::SetUpVBGOs(RenderData * _RD)
 
 	// compile pixel shader
 	ID3DBlob* pixelShader;
-	hr = D3DCompileFromFile(L"../shaders/PixelShader.hlsl",
+	shader_path = m_filepath.generateFilepath("PixelShader", m_filepath.SHADER);
+	w_shader_path = converter.from_bytes(shader_path.c_str());
+	hr = D3DCompileFromFile(w_shader_path.c_str(),
 		nullptr,
 		nullptr,
 		"main",
@@ -288,8 +294,10 @@ bool VBGO3D::SetUpVBGOs(RenderData * _RD)
 
 	resourceUpload.Begin();
 
+	std::string image_path = m_filepath.generateFilepath("white", m_filepath.IMAGE);
+	std::wstring w_image_path = converter.from_bytes(image_path.c_str());
 	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(_RD->m_d3dDevice.Get(), resourceUpload, L"../DDS/white.dds", &s_texture));
+		CreateDDSTextureFromFile(_RD->m_d3dDevice.Get(), resourceUpload, w_image_path.c_str(), &s_texture));
 
 	auto uploadResourcesFinished = resourceUpload.End(_RD->m_commandQueue.Get());
 

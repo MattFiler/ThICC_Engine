@@ -1,6 +1,7 @@
 #pragma once
 #include "PhysModel.h"
 #include "MeshTri.h"
+#include "GameFilepaths.h"
 
 /* A type of PhysModel that stores a reference to their triangles, used so that TrackMagnet objects
    can calculate the exact point of collision with this mesh. */
@@ -16,4 +17,6 @@ private:
 
 
 	std::vector<MeshTri> triangles;
+
+	GameFilepaths m_filepath;
 };

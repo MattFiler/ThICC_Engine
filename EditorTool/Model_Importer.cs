@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace EditorTool
 {
@@ -39,21 +40,28 @@ namespace EditorTool
                 assetName.Text = Path.GetFileNameWithoutExtension(modelPath.Text);
             }
 
+            //Find all materials in model to group collmap by - sort alphabetically
             string[] obj_file = File.ReadAllLines(filePicker.FileName);
-            itemMaterialCategories.Items.Clear();
+            ArrayList material_array = new ArrayList();
             foreach (string line in obj_file)
             {
                 if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
                 {
-                    itemMaterialCategories.Items.Add(line.Substring(7));
+                    material_array.Add(line.Substring(7));
                 }
+            }
+            material_array.Sort();
+            itemMaterialCategories.Items.Clear();
+            foreach (string material in material_array)
+            {
+                itemMaterialCategories.Items.Add(material);
             }
         }
         
         /* Import model and textures */
         private void importModel_Click(object sender, EventArgs e)
         {
-            string import_directory = "Models/" + assetName.Text + "/";
+            string import_directory = "DATA/MODELS/" + assetName.Text.ToUpper() + "/";
             int mat_check_count = 0;
             for (int i = 0; i < itemMaterialCategories.Items.Count; i++)
             {
@@ -272,7 +280,7 @@ namespace EditorTool
                     //Run the model converter to swap our OBJ into an SDKMESH
                     ProcessStartInfo meshConverter = new ProcessStartInfo();
                     meshConverter.WorkingDirectory = import_directory;
-                    meshConverter.FileName = "Models/meshconvert.exe";
+                    meshConverter.FileName = "DATA/MODELS/meshconvert.exe";
                     meshConverter.Arguments = "\"" + Path.GetFileName(modelPath.Text) + "\" -sdkmesh -nodds -y";
                     meshConverter.UseShellExecute = false;
                     meshConverter.RedirectStandardOutput = true;
@@ -309,6 +317,7 @@ namespace EditorTool
                     if (File.Exists(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
                     {
                         string final_asset_path = import_directory + assetName.Text + ".sdkmesh";
+                        final_asset_path = final_asset_path.ToUpper();
 
                         bool model_supports_collision = true;
                         int collision_fix_count = 0;
@@ -426,7 +435,7 @@ namespace EditorTool
                             }
                             if (model_supports_collision)
                             {
-                                File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".collmap", final_collmap_data);
+                                File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".COLLMAP", final_collmap_data);
                             }
                         }
 
@@ -439,7 +448,7 @@ namespace EditorTool
 
                         //Create JSON data
                         JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0}");
-                        File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "json", asset_json.ToString(Formatting.Indented));
+                        File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "JSON", asset_json.ToString(Formatting.Indented));
 
                         //Move new SDKMESH to the correct requested filename
                         File.Move(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh", final_asset_path);

@@ -172,12 +172,13 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//create a "player"
 	player = new Player(m_RD, "Kart");
-	player->SetPos(Vector(-345, 555.0f, 350));
+	//player->SetPos(Vector(-345, 555.0f, 350)); - wii rainbow road
+	player->SetPos(Vector(-125, 175, 0));
 	//player->SetRotationInDegrees(Vector3(180, 180, 180));
 	m_3DObjects.push_back(player);
 
 	// Test track
-	track = new Track(m_RD, "Rainbow Road");
+	track = new Track(m_RD, "Rainbow Road MK8");
 	//m_3DObjects.push_back(track);
 	//SDKMeshGO3D* track = new SDKMeshGO3D(m_RD, "Test Track");
 	m_3DObjects.push_back(track);
@@ -483,8 +484,8 @@ void Game::OnWindowSizeChanged(int _width, int _height)
 void Game::GetDefaultSize(int& _width, int& _height) const
 {
 	// TODO: Change to desired default window size (note minimum size is 320x200).
-	_width = 800;
-	_height = 800;
+	_width = 1280;
+	_height = 720;
 }
 
 void Game::SetViewport(int i_, float _TopLeftX, float _TopLeftY, float _Width, float _Height)

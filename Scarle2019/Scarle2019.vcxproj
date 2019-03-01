@@ -171,6 +171,7 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="fileVBGO.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameFilepaths.h" />
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="GameObjectList.h" />
