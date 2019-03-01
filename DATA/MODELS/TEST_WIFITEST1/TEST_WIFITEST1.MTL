@@ -1,7 +1,7 @@
 # Blender MTL File: 'None'
 # Material Count: 7
 
-newmtl Distance_1Material.003
+newmtl Distance_1Material
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -13,7 +13,7 @@ illum 2
 map_Kd Distance.png
 map_d Distance.png
 
-newmtl ROAD.003
+newmtl ROAD
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -25,7 +25,7 @@ illum 2
 map_Kd nasi_06_02.png
 map_d nasi_06_02.png
 
-newmtl ROAD_SJ.003
+newmtl ROAD_SJ
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -37,7 +37,7 @@ illum 2
 map_Kd katachi_g_02.png
 map_d katachi_g_02.png
 
-newmtl ROAD_asphaft.003
+newmtl ROAD_asphaft
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -49,7 +49,7 @@ illum 2
 map_Kd grid_ROAD_asphalt.png
 map_d grid_ROAD_asphalt.png
 
-newmtl StartLine.003
+newmtl StartLine
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -61,7 +61,7 @@ illum 2
 map_Kd di_StartLine_Alb.png
 map_d di_StartLine_Alb.png
 
-newmtl colortex_1Material.003
+newmtl colortex_1Material
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -73,7 +73,7 @@ illum 2
 map_Kd colortex.png
 map_d colortex.png
 
-newmtl rc_comb_both01.003
+newmtl rc_comb_both01
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000

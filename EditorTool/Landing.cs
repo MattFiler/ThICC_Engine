@@ -9,12 +9,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using System.Media;
+using NAudio.Wave;
 
 namespace EditorTool
 {
     public partial class Landing : Form
     {
-        List<string> fullLoadedFileNames = new List<string>(); //Used for saving full list item file paths
+        List<string> full_loaded_filenames = new List<string>(); //Used for saving full list item file paths
+        SoundPlayer sound_player = new SoundPlayer(); //for previewing sounds
         public Landing()
         {
             InitializeComponent();
@@ -63,6 +66,8 @@ namespace EditorTool
         /* REFRESH CURRENT LIST */
         void refreshList()
         {
+            assetList.SelectedIndex = -1;
+
             string path = "";
             string extension = "";
             switch (loadAssetType.SelectedItem)
@@ -86,11 +91,11 @@ namespace EditorTool
             }
 
             string[] files = Directory.GetFiles(path, extension, SearchOption.AllDirectories);
-            fullLoadedFileNames.Clear();
+            full_loaded_filenames.Clear();
             assetList.Items.Clear();
             foreach (string file in files)
             {
-                fullLoadedFileNames.Add(file);
+                full_loaded_filenames.Add(file);
                 assetList.Items.Add(Path.GetFileNameWithoutExtension(file));
             }
         }
@@ -110,7 +115,7 @@ namespace EditorTool
                 return;
             }
 
-            MessageBox.Show(fullLoadedFileNames.ElementAt(assetList.SelectedIndex));
+            MessageBox.Show(full_loaded_filenames.ElementAt(assetList.SelectedIndex));
         }
 
         /* DELETE ASSET */
@@ -121,6 +126,10 @@ namespace EditorTool
                 MessageBox.Show("Please select an asset to delete!", "No asset selected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            string selected_file_name = full_loaded_filenames.ElementAt(assetList.SelectedIndex);
+            assetList.SelectedIndex = -1; //Clear any item preview so we can delete it
+
             DialogResult showErrorInfo = MessageBox.Show("Are you sure you want to delete this asset?", "About to delete selected asset...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (showErrorInfo != DialogResult.Yes)
             {
@@ -128,8 +137,6 @@ namespace EditorTool
             }
 
             //Delete selected asset
-            string selected_file_name = fullLoadedFileNames.ElementAt(assetList.SelectedIndex);
-            assetList.SelectedIndex = -1; //Clear any item preview so we can delete it
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
@@ -148,6 +155,9 @@ namespace EditorTool
                         File.Delete(selected_file_name.Substring(0, selected_file_name.Length - 10) + "BMP");
                     }
                     catch { }
+                    break;
+                case "Sounds":
+                    MessageBox.Show("DELETING SOUNDS HAS BEEN DISABLED IN THE LATEST UPDATE - FUNCTIONALITY WILL RETURN SOON.", "FAILED", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 default:
                     File.Delete(selected_file_name);
@@ -193,6 +203,7 @@ namespace EditorTool
             List<string> ignored_extensions = new List<string>();
             ignored_extensions.Add(".vcxproj");
             ignored_extensions.Add(".filters");
+            ignored_extensions.Add(".user");
             ignored_extensions.Add(".exe");
             ignored_extensions.Add(".obj");
             ignored_extensions.Add(".mtl");
@@ -206,6 +217,9 @@ namespace EditorTool
             //Hide all possible previewers
             modelPreview.Visible = false;
             imagePreview.Visible = false;
+            soundPreview.Visible = false;
+            playSoundPreview.Visible = false;
+            sound_player.Stop();
 
             //Act appropriately for selected asset type
             switch (loadAssetType.SelectedItem)
@@ -220,22 +234,59 @@ namespace EditorTool
                     modelPreview.Child = new ModelViewer("DATA/MODELS/" + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
                     return;
                 case "Images":
-                    return;
-                case "Sounds":
-                    return;
-                case "Fonts":
-                    imagePreview.Visible = true;
                     if (assetList.SelectedIndex == -1)
                     {
-                        imagePreview.Image = null;
+                        imagePreview.Dispose();
                         return;
                     }
+                    imagePreview.Visible = true;
+                    string file_path_without_extension = "DATA/IMAGES/" + assetList.SelectedItem.ToString() + ".";
+                    if (File.Exists(file_path_without_extension + "PNG"))
+                    {
+                        imagePreview.Image = new Bitmap(file_path_without_extension + "PNG");
+                        return;
+                    }
+                    else if (File.Exists(file_path_without_extension + "JPG"))
+                    {
+                        imagePreview.Image = new Bitmap(file_path_without_extension + "JPG");
+                        return;
+                    }
+                    else if (File.Exists(file_path_without_extension + "JPEG"))
+                    {
+                        imagePreview.Image = new Bitmap(file_path_without_extension + "JPEG");
+                        return;
+                    }
+                    return;
+                case "Sounds":
+                    if (assetList.SelectedIndex == -1)
+                    {
+                        sound_player.Dispose();
+                        soundPreview.Dispose();
+                        return;
+                    }
+                    playSoundPreview.Visible = true;
+                    soundPreview.Visible = true;
+                    soundPreview.WaveStream = new WaveFileReader("DATA/SOUNDS/" + assetList.SelectedItem.ToString() + ".WAV");
+                    soundPreview.SamplesPerPixel = 150;
+                    return;
+                case "Fonts":
+                    if (assetList.SelectedIndex == -1)
+                    {
+                        imagePreview.Dispose();
+                        return;
+                    }
+                    imagePreview.Visible = true;
                     imagePreview.Image = new Bitmap("DATA/FONTS/" + assetList.SelectedItem.ToString() + ".BMP");
                     return;
             }
         }
 
-
+        //Play sound when requested
+        private void playSoundPreview_Click(object sender, EventArgs e)
+        {
+            sound_player.SoundLocation = "DATA/SOUNDS/" + assetList.SelectedItem.ToString() + ".WAV";
+            sound_player.Play();
+        }
 
         //Modified from: https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, List<string> ignoreExtensions)
@@ -264,7 +315,7 @@ namespace EditorTool
                 bool should_copy = true;
                 foreach (string ignored_extension in ignoreExtensions)
                 {
-                    if (file.Extension == ignored_extension)
+                    if (file.Extension.ToUpper() == ignored_extension.ToUpper())
                     {
                         should_copy = false;
                         break;
@@ -273,6 +324,14 @@ namespace EditorTool
                 if (should_copy)
                 {
                     string temppath = Path.Combine(destDirName, file.Name);
+                    if (Path.GetFileName(Path.GetDirectoryName(temppath)).ToUpper() == "IMAGES" && (
+                        Path.GetExtension(temppath).ToUpper() == ".JPG" || 
+                        Path.GetExtension(temppath).ToUpper() == ".JPEG" || 
+                        Path.GetExtension(temppath).ToUpper() == ".PNG"))
+                    {
+                        //A little manual override to stop original images in the IMAGES folder
+                        continue;
+                    }
                     file.CopyTo(temppath, false);
                 }
             }

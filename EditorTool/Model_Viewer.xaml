@@ -11,7 +11,7 @@
     <HelixToolkit:HelixViewport3D x:Name="myView" ZoomExtentsWhenLoaded="True" ShowViewCube="False">
         <HelixToolkit:SunLight/>
         <ModelVisual3D x:Name="modelPreview"/>
-        <HelixToolkit:GridLinesVisual3D Width="8" Length="8" MinorDistance="1" MajorDistance="1" Thickness="0.01"/>
+        <!--<HelixToolkit:GridLinesVisual3D Width="8" Length="8" MinorDistance="1" MajorDistance="1" Thickness="0.01"/>-->
     </HelixToolkit:HelixViewport3D>
 
 </UserControl>

@@ -53,13 +53,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.modelPreview = new System.Windows.Forms.Integration.ElementHost();
-            this.modelViewer1 = new EditorTool.ModelViewer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.imagePreview = new System.Windows.Forms.PictureBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button4 = new System.Windows.Forms.Button();
             this.openUiEditor = new System.Windows.Forms.Button();
             this.compileAssets = new System.Windows.Forms.Button();
+            this.soundPreview = new NAudio.Gui.WaveViewer();
+            this.playSoundPreview = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -311,12 +312,14 @@
             this.modelPreview.Size = new System.Drawing.Size(214, 133);
             this.modelPreview.TabIndex = 12;
             this.modelPreview.Text = "elementHost1";
-            this.modelPreview.Child = this.modelViewer1;
+            this.modelPreview.Child = null;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.playSoundPreview);
             this.groupBox1.Controls.Add(this.imagePreview);
             this.groupBox1.Controls.Add(this.modelPreview);
+            this.groupBox1.Controls.Add(this.soundPreview);
             this.groupBox1.Location = new System.Drawing.Point(233, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(226, 159);
@@ -329,9 +332,10 @@
             this.imagePreview.Location = new System.Drawing.Point(6, 19);
             this.imagePreview.Name = "imagePreview";
             this.imagePreview.Size = new System.Drawing.Size(215, 133);
-            this.imagePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.imagePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imagePreview.TabIndex = 15;
             this.imagePreview.TabStop = false;
+            this.imagePreview.Visible = false;
             // 
             // groupBox4
             // 
@@ -375,6 +379,28 @@
             this.compileAssets.UseVisualStyleBackColor = true;
             this.compileAssets.Click += new System.EventHandler(this.compileAssets_Click);
             // 
+            // soundPreview
+            // 
+            this.soundPreview.Location = new System.Drawing.Point(6, 19);
+            this.soundPreview.Name = "soundPreview";
+            this.soundPreview.SamplesPerPixel = 128;
+            this.soundPreview.Size = new System.Drawing.Size(215, 133);
+            this.soundPreview.StartPosition = ((long)(0));
+            this.soundPreview.TabIndex = 16;
+            this.soundPreview.Visible = false;
+            this.soundPreview.WaveStream = null;
+            // 
+            // playSoundPreview
+            // 
+            this.playSoundPreview.Location = new System.Drawing.Point(167, 129);
+            this.playSoundPreview.Name = "playSoundPreview";
+            this.playSoundPreview.Size = new System.Drawing.Size(54, 23);
+            this.playSoundPreview.TabIndex = 17;
+            this.playSoundPreview.Text = "Play";
+            this.playSoundPreview.UseVisualStyleBackColor = true;
+            this.playSoundPreview.Visible = false;
+            this.playSoundPreview.Click += new System.EventHandler(this.playSoundPreview_Click);
+            // 
             // Landing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -393,7 +419,6 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -411,7 +436,6 @@
         private System.Windows.Forms.DomainUpDown domainUpDown1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Integration.ElementHost modelPreview;
-        private ModelViewer modelViewer1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox4;
@@ -433,5 +457,7 @@
         private System.Windows.Forms.Button openUiEditor;
         private System.Windows.Forms.Button compileAssets;
         private System.Windows.Forms.PictureBox imagePreview;
+        private NAudio.Gui.WaveViewer soundPreview;
+        private System.Windows.Forms.Button playSoundPreview;
     }
 }
