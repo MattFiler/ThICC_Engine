@@ -40,8 +40,8 @@ namespace EditorTool
         /* Import sound */
         private void importSound_Click(object sender, EventArgs e)
         {
-            string asset_path = "Sounds/" + assetName.Text + ".wav";
-            string asset_path_orig_ext = "Sounds/" + assetName.Text + Path.GetExtension(soundPath.Text);
+            string asset_path = "DATA/SOUNDS/" + assetName.Text + ".wav";
+            string asset_path_orig_ext = "DATA/SOUNDS/" + assetName.Text + Path.GetExtension(soundPath.Text);
 
             if (File.Exists(asset_path) || soundPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
             {
@@ -67,8 +67,8 @@ namespace EditorTool
                 {
                     //Convert file to WAV if it isn't already
                     ProcessStartInfo soundConverter = new ProcessStartInfo();
-                    soundConverter.WorkingDirectory = "Sounds";
-                    soundConverter.FileName = "Sounds/ffmpeg.exe";
+                    soundConverter.WorkingDirectory = "DATA/SOUNDS";
+                    soundConverter.FileName = "DATA/SOUNDS/ffmpeg.exe";
                     soundConverter.Arguments = "-i \"" + asset_path_orig_ext.Substring(7) + "\" \"" + asset_path.Substring(7) + "\"";
                     soundConverter.UseShellExecute = false;
                     soundConverter.RedirectStandardOutput = true;

@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject2D.h"
+#include "GameFilepaths.h"
 #include <string>
 
 using std::string;
@@ -29,6 +30,9 @@ public:
 protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
 	int m_resourceNum = -1;
+
+	GameFilepaths m_filepath;
+
 
 };
 

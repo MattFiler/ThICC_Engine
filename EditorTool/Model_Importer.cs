@@ -53,7 +53,7 @@ namespace EditorTool
         /* Import model and textures */
         private void importModel_Click(object sender, EventArgs e)
         {
-            string import_directory = "Models/" + assetName.Text + "/";
+            string import_directory = "DATA/MODELS/" + assetName.Text + "/";
             int mat_check_count = 0;
             for (int i = 0; i < itemMaterialCategories.Items.Count; i++)
             {
@@ -272,7 +272,7 @@ namespace EditorTool
                     //Run the model converter to swap our OBJ into an SDKMESH
                     ProcessStartInfo meshConverter = new ProcessStartInfo();
                     meshConverter.WorkingDirectory = import_directory;
-                    meshConverter.FileName = "Models/meshconvert.exe";
+                    meshConverter.FileName = "DATA/MODELS/meshconvert.exe";
                     meshConverter.Arguments = "\"" + Path.GetFileName(modelPath.Text) + "\" -sdkmesh -nodds -y";
                     meshConverter.UseShellExecute = false;
                     meshConverter.RedirectStandardOutput = true;

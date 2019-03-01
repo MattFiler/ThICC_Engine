@@ -40,8 +40,8 @@ namespace EditorTool
         /* Import image */
         private void importModel_Click(object sender, EventArgs e)
         {
-            string asset_path = "DDS/" + assetName.Text + ".dds";
-            string asset_path_orig_ext = "DDS/" + assetName.Text + Path.GetExtension(imagePath.Text);
+            string asset_path = "DATA/IMAGES/" + assetName.Text + ".dds";
+            string asset_path_orig_ext = "DATA/IMAGES/" + assetName.Text + Path.GetExtension(imagePath.Text);
 
             if (File.Exists(asset_path) || imagePath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
             {
@@ -64,8 +64,8 @@ namespace EditorTool
 
                 //Convert copied image to DDS
                 ProcessStartInfo imageConverter = new ProcessStartInfo();
-                imageConverter.WorkingDirectory = "DDS";
-                imageConverter.FileName = "DDS/texconv.exe";
+                imageConverter.WorkingDirectory = "DATA/IMAGES";
+                imageConverter.FileName = "DATA/IMAGES/texconv.exe";
                 imageConverter.Arguments = "\"" + asset_path_orig_ext.Substring(4) + "\"";
                 imageConverter.UseShellExecute = false;
                 imageConverter.RedirectStandardOutput = true;

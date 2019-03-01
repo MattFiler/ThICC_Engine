@@ -9,7 +9,7 @@ SDKMeshGO3D::SDKMeshGO3D(RenderData* _RD, string _filename)
 	m_type = GO3D_RT_SDK;
 
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	string fullpath = "../Models/" + _filename + "/" + _filename + ".sdkmesh";
+	string fullpath = m_filepath.generateFilepath(_filename, m_filepath.MODEL);
 	std::wstring wFilename = converter.from_bytes(fullpath.c_str());
 
 	//A crash here means that the model file wasn't loaded properly.
@@ -20,7 +20,7 @@ SDKMeshGO3D::SDKMeshGO3D(RenderData* _RD, string _filename)
 
 	resourceUpload.Begin();
 
-	string dirpath = "../Models/" + _filename + "/";
+	string dirpath = m_filepath.getFolder(m_filepath.MODEL) + _filename + "/";
 	std::wstring dirpath_wstring = std::wstring(dirpath.begin(), dirpath.end());
 	const wchar_t* dirpath_wchar = dirpath_wstring.c_str();
 

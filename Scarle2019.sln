@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{55C950B6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeSpriteFont", "MakeSpriteFont\MakeSpriteFont.csproj", "{7329B02D-C504-482A-A156-181D48CE493C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shaders", "shaders\shaders.vcxproj", "{D7CA3F00-8DA5-43EA-8B75-A2C1BE34B86B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shaders", "DATA\SHADERS\shaders.vcxproj", "{D7CA3F00-8DA5-43EA-8B75-A2C1BE34B86B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorTool", "EditorTool\EditorTool.csproj", "{DBBA8CF1-FD88-4E14-8BD2-97331F29416A}"
 EndProject

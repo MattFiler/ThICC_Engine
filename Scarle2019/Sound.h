@@ -1,5 +1,6 @@
 #pragma once
 #include "Audio.h"
+#include "GameFilepaths.h"
 #include <string>
 #include <codecvt>
 struct GameStateData;
@@ -33,5 +34,7 @@ protected:
 	float m_volume = 1.0f;
 	float m_pitch = 0.0f;
 	float m_pan = 0.0f;
+
+	GameFilepaths m_filepath;
 };
 
