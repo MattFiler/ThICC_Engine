@@ -55,7 +55,7 @@ private:
 
 	// Test objects
 	Track* track = nullptr;
-	Player* player = nullptr;
+	Player* player[2] = {nullptr};
 
 	void Update(DX::StepTimer const& _timer);
 	void Render();

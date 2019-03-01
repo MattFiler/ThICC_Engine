@@ -173,16 +173,16 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//m_3DObjects.push_back(test3);
 
 	//create a "player"
-	player = new Player(m_RD, "Kart", 0);
-	player->SetPos(Vector(-345, 555.0f, 350));
+	player[0] = new Player(m_RD, "Kart", 0);
+	player[0]->SetPos(Vector(-345, 555.0f, 350));
 	//player->SetRotationInDegrees(Vector3(180, 180, 180));
-	m_3DObjects.push_back(player);
+	m_3DObjects.push_back(player[0]);
 
 	//create a "player" no.2
-	player = new Player(m_RD, "Kart", 1);
-	player->SetPos(Vector(-345, 555.0f, 350));
+	player[1] = new Player(m_RD, "Kart", 1);
+	player[1]->SetPos(Vector(-345, 555.0f, 350));
 	//player->SetRotationInDegrees(Vector3(180, 180, 180));
-	m_3DObjects.push_back(player);
+	m_3DObjects.push_back(player[1]);
 
 
 
@@ -193,7 +193,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(track);
 
 	//point a camera at the player that follows
-	m_cam[0] =  new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[0] =  new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_RD->m_cam = m_cam[0];
 	m_3DObjects.push_back(m_cam[0]);
 
@@ -324,7 +324,7 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& _timer)
 {
 	// Test code
-	player->ShouldStickToTrack(*track);
+	player[0]->ShouldStickToTrack(*track);
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 
 	//this will update the audio engine but give us chance to do somehting else if that isn't working
@@ -363,40 +363,7 @@ void Game::Update(DX::StepTimer const& _timer)
 	{
 		ExitGame();
 	}
-
-	//if (m_GSD->m_keyboardState.Left)
-	//{
-	//	m_RD->m_cam = m_cam;
-	//}
-	//if (m_GSD->m_keyboardState.Right)
-	//{
-	//	m_RD->m_cam = m_cam1;
-	//}
-
-	//for (int i = 0; i < num_of_players; ++i)
-	//{
-	//	auto state = m_gamePad->GetState(i);
-	//	if (state.IsConnected())
-	//	{
-	//		// TODO: Read controller 0 here
-	//		if (state.IsViewPressed())
-	//		{
-	//			ExitGame();
-	//		}
-	//		else
-	//		{
-	//			float left = (state.IsAPressed()) ? 1.f : 0;
-	//			float right = (state.IsBPressed()) ? 1.f : 0;
-
-	//			m_gamePad->SetVibration(i, left, right);
-	//		}
-
-	//	}
-	//}
 	
-
-
-
 	//Add your game logic here.
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
