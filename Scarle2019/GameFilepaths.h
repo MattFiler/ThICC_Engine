@@ -25,6 +25,11 @@ public:
 		case FONT:
 			return font_path[FOLDER] + _asset_name + font_path[EXTENSION];
 		}
+		return "";
+	}
+	std::string generateConfigFilepath(std::string _asset_name, m_asset_type _asset_type) {
+		std::string config_filepath = generateFilepath(_asset_name, _asset_type);
+		return config_filepath.substr(0, config_filepath.length() - getExtension(_asset_type).length()) + ".JSON";
 	}
 	std::string getFolder(m_asset_type _asset_type) {
 		return getPathSection(_asset_type, FOLDER);
