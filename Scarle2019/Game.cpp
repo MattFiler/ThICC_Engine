@@ -354,9 +354,16 @@ void Game::Update(DX::StepTimer const& _timer)
 	for (int i = 0; i < num_of_players; ++i)
 	{
 		m_GSD->m_gamePadState[i] = m_gamePad->GetState(i); //set game controllers state[s]
-	}
-	
 
+		if (m_GSD->m_gamePadState[i].triggers.right > 0.1)
+		{
+			m_gamePad->SetVibration(i, m_GSD->m_gamePadState[i].triggers.right, m_GSD->m_gamePadState[i].triggers.right);
+		}
+		else
+		{
+			m_gamePad->SetVibration(i, 0, 0);
+		}
+	}
 
 	//Quit Properly on press ESC
 	if (m_GSD->m_keyboardState.Escape)
@@ -472,7 +479,7 @@ void Game::Present()
 void Game::OnActivated()
 {
 	// TODO: Game is becoming active window.
-	m_gamePad->Resume();
+	//m_gamePad->Resume();
 }
 
 void Game::OnDeactivated()
