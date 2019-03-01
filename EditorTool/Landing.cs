@@ -51,8 +51,10 @@ namespace EditorTool
                     soundimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
                     soundimporter.Show();
                     break;
-                default:
-                    MessageBox.Show("Coming soon!", "Coming soon!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                case "Fonts":
+                    Font_Importer fontimporter = new Font_Importer();
+                    fontimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    fontimporter.Show();
                     break;
             }
         }
@@ -76,8 +78,9 @@ namespace EditorTool
                     path = "DATA/SOUNDS/";
                     extension = "*.WAV";
                     break;
-                default:
-                    MessageBox.Show("Coming soon!", "Coming soon!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                case "Fonts":
+                    path = "DATA/FONTS/";
+                    extension = "*.SPRITEFONT";
                     break;
             }
 
