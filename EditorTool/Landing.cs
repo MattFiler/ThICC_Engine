@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Media;
 using NAudio.Wave;
+using System.Xml.Linq;
 
 namespace EditorTool
 {
@@ -178,6 +179,9 @@ namespace EditorTool
                 return;
             }
 
+            //Fix VS debugging directory config
+            File.WriteAllText("Scarle2019/Scarle2019.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup></Project>");
+            
             //Copy to debug folder
             if (Directory.Exists("Debug"))
             {
