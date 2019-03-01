@@ -40,8 +40,8 @@ namespace EditorTool
         /* Import image */
         private void importModel_Click(object sender, EventArgs e)
         {
-            string asset_path = "DATA/IMAGES/" + assetName.Text + ".dds";
-            string asset_path_orig_ext = "DATA/IMAGES/" + assetName.Text + Path.GetExtension(imagePath.Text);
+            string asset_path = "DATA/IMAGES/" + assetName.Text.ToUpper() + ".DDS";
+            string asset_path_orig_ext = "DATA/IMAGES/" + assetName.Text.ToUpper() + Path.GetExtension(imagePath.Text);
 
             if (File.Exists(asset_path) || imagePath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
             {
@@ -86,10 +86,10 @@ namespace EditorTool
                 }
                 File.Delete(asset_path_orig_ext);
 
-                //Lowercase extension pls
-                if (File.Exists(asset_path.Substring(0, asset_path.Length - 3) + "DDS"))
+                //Uppercase extension pls
+                if (File.Exists(asset_path.Substring(0, asset_path.Length - 3) + "dds"))
                 {
-                    File.Move(asset_path.Substring(0, asset_path.Length - 3) + "DDS", asset_path);
+                    File.Move(asset_path.Substring(0, asset_path.Length - 3) + "dds", asset_path);
                 }
 
                 if (!File.Exists(asset_path))

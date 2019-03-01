@@ -40,8 +40,8 @@ namespace EditorTool
         /* Import sound */
         private void importSound_Click(object sender, EventArgs e)
         {
-            string asset_path = "DATA/SOUNDS/" + assetName.Text + ".wav";
-            string asset_path_orig_ext = "DATA/SOUNDS/" + assetName.Text + Path.GetExtension(soundPath.Text);
+            string asset_path = "DATA/SOUNDS/" + assetName.Text.ToUpper() + ".WAV";
+            string asset_path_orig_ext = "DATA/SOUNDS/" + assetName.Text.ToUpper() + Path.GetExtension(soundPath.Text);
 
             if (File.Exists(asset_path) || soundPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
             {
@@ -95,7 +95,7 @@ namespace EditorTool
                 {
                     //Create JSON data
                     JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Sounds\", \"is_looping\": false, \"volume\": 1.0, \"pitch\": 0.0, \"pan\": 0.0}");
-                    File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "json", asset_json.ToString(Formatting.Indented));
+                    File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "JSON", asset_json.ToString(Formatting.Indented));
 
                     //Import success
                     MessageBox.Show("Sound successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);

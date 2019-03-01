@@ -65,16 +65,16 @@ namespace EditorTool
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
-                    path = "Models/";
-                    extension = "*.sdkmesh";
+                    path = "DATA/MODELS/";
+                    extension = "*.SDKMESH";
                     break;
                 case "Images":
-                    path = "DDS/";
-                    extension = "*.dds";
+                    path = "DATA/IMAGES/";
+                    extension = "*.DDS";
                     break;
                 case "Sounds":
-                    path = "Sounds/";
-                    extension = "*.wav";
+                    path = "DATA/SOUNDS/";
+                    extension = "*.WAV";
                     break;
                 default:
                     MessageBox.Show("Coming soon!", "Coming soon!", MessageBoxButtons.OK, MessageBoxIcon.Error);
