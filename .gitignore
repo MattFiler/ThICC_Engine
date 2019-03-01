@@ -63,7 +63,7 @@ StyleCopReport.xml
 *_i.h
 *.ilk
 *.meta
-*.obj
+#*.obj
 *.iobj
 *.pch
 *.pdb
@@ -335,5 +335,3 @@ Costura.dll
 Costura.xml
 Newtonsoft.Json.dll
 Newtonsoft.Json.pdb
-!DATA/*.OBJ
-!DATA/*.MTL
