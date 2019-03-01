@@ -40,8 +40,8 @@ namespace EditorTool
         /* Import image */
         private void importModel_Click(object sender, EventArgs e)
         {
-            string asset_path = "DDS/" + assetName.Text + ".dds";
-            string asset_path_orig_ext = "DDS/" + assetName.Text + Path.GetExtension(imagePath.Text);
+            string asset_path = "DATA/IMAGES/" + assetName.Text.ToUpper() + ".DDS";
+            string asset_path_orig_ext = "DATA/IMAGES/" + assetName.Text.ToUpper() + Path.GetExtension(imagePath.Text);
 
             if (File.Exists(asset_path) || imagePath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
             {
@@ -64,9 +64,9 @@ namespace EditorTool
 
                 //Convert copied image to DDS
                 ProcessStartInfo imageConverter = new ProcessStartInfo();
-                imageConverter.WorkingDirectory = "DDS";
-                imageConverter.FileName = "DDS/texconv.exe";
-                imageConverter.Arguments = "\"" + asset_path_orig_ext.Substring(4) + "\"";
+                imageConverter.WorkingDirectory = "DATA/IMAGES";
+                imageConverter.FileName = "DATA/IMAGES/texconv.exe";
+                imageConverter.Arguments = "\"" + Path.GetFileName(asset_path_orig_ext) + "\"";
                 imageConverter.UseShellExecute = false;
                 imageConverter.RedirectStandardOutput = true;
                 Process converterProcess = Process.Start(imageConverter);
@@ -86,15 +86,18 @@ namespace EditorTool
                 }
                 File.Delete(asset_path_orig_ext);
 
-                //Lowercase extension pls
-                if (File.Exists(asset_path.Substring(0, asset_path.Length - 3) + "DDS"))
+                //Uppercase extension pls
+                if (File.Exists(asset_path.Substring(0, asset_path.Length - 3) + "dds"))
                 {
-                    File.Move(asset_path.Substring(0, asset_path.Length - 3) + "DDS", asset_path);
+                    File.Move(asset_path.Substring(0, asset_path.Length - 3) + "dds", asset_path);
                 }
 
                 if (!File.Exists(asset_path))
                 {
                     //Import failed, show reason if requested
+                    if (File.Exists(asset_path_orig_ext)) {
+                        File.Delete(asset_path_orig_ext);
+                    }
                     DialogResult showErrorInfo = MessageBox.Show("Image import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                     if (showErrorInfo == DialogResult.Yes)
                     {
@@ -105,7 +108,7 @@ namespace EditorTool
                 {
                     //Create JSON data
                     JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Images\", \"visible\": true, \"is_2d\": true, \"res_x\": " + image_width + ", \"res_y\": " + image_height + ", \"x_pos\": 0, \"y_pos\": 0}");
-                    File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "json", asset_json.ToString(Formatting.Indented));
+                    File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "JSON", asset_json.ToString(Formatting.Indented));
 
                     //Import success
                     MessageBox.Show("Image successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);

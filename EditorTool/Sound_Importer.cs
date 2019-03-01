@@ -40,8 +40,8 @@ namespace EditorTool
         /* Import sound */
         private void importSound_Click(object sender, EventArgs e)
         {
-            string asset_path = "Sounds/" + assetName.Text + ".wav";
-            string asset_path_orig_ext = "Sounds/" + assetName.Text + Path.GetExtension(soundPath.Text);
+            string asset_path = "DATA/SOUNDS/" + assetName.Text.ToUpper() + ".WAV";
+            string asset_path_orig_ext = "DATA/SOUNDS/" + assetName.Text.ToUpper() + Path.GetExtension(soundPath.Text);
 
             if (File.Exists(asset_path) || soundPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$"))
             {
@@ -67,9 +67,9 @@ namespace EditorTool
                 {
                     //Convert file to WAV if it isn't already
                     ProcessStartInfo soundConverter = new ProcessStartInfo();
-                    soundConverter.WorkingDirectory = "Sounds";
-                    soundConverter.FileName = "Sounds/ffmpeg.exe";
-                    soundConverter.Arguments = "-i \"" + asset_path_orig_ext.Substring(7) + "\" \"" + asset_path.Substring(7) + "\"";
+                    soundConverter.WorkingDirectory = "DATA/SOUNDS";
+                    soundConverter.FileName = "DATA/SOUNDS/ffmpeg.exe";
+                    soundConverter.Arguments = "-i \"" + Path.GetFileName(asset_path_orig_ext) + "\" \"" + Path.GetFileName(asset_path) + "\"";
                     soundConverter.UseShellExecute = false;
                     soundConverter.RedirectStandardOutput = true;
                     Process converterProcess = Process.Start(soundConverter);
@@ -85,6 +85,10 @@ namespace EditorTool
                 if (!File.Exists(asset_path))
                 {
                     //Conversion failed, show reason if requested
+                    if (File.Exists(asset_path_orig_ext))
+                    {
+                        File.Delete(asset_path_orig_ext);
+                    }
                     DialogResult showErrorInfo = MessageBox.Show("Sound import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                     if (showErrorInfo == DialogResult.Yes)
                     {
@@ -95,7 +99,7 @@ namespace EditorTool
                 {
                     //Create JSON data
                     JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Sounds\", \"is_looping\": false, \"volume\": 1.0, \"pitch\": 0.0, \"pan\": 0.0}");
-                    File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "json", asset_json.ToString(Formatting.Indented));
+                    File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "JSON", asset_json.ToString(Formatting.Indented));
 
                     //Import success
                     MessageBox.Show("Sound successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);

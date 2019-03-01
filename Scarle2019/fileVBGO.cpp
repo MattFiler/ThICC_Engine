@@ -15,7 +15,7 @@ FileVBGO::FileVBGO(string _fileName, RenderData * _RD):VBGO3D(_RD)
 {
 	//open file
 	ifstream meshFile;
-	string fullpath = "../Models/" + _fileName + ".txt";
+	string fullpath = m_filepath.generateFilepath(_fileName, m_filepath.MODEL_CUSTOM);
 	meshFile.open(fullpath);
 
 	//what data does this file give
@@ -33,7 +33,7 @@ FileVBGO::FileVBGO(string _fileName, RenderData * _RD):VBGO3D(_RD)
 		meshFile >> texFileName;
 
 		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-		string fullpath = "../DDS/" + texFileName + ".dds";
+		string fullpath = m_filepath.generateFilepath(texFileName, m_filepath.IMAGE);
 		std::wstring wFilename = converter.from_bytes(fullpath.c_str());
 
 		ResourceUploadBatch resourceUpload(_RD->m_d3dDevice.Get());
