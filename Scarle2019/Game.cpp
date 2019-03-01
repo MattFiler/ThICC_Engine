@@ -189,21 +189,21 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(track);
 
 	//point a camera at the player that follows
-	m_cam[0] =  new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
 	//m_RD->m_cam = m_cam[0];
 	m_3DObjects.push_back(m_cam[0]);
 
-	m_cam[1] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
 	//m_RD->m_cam = m_cam[1];
 	m_3DObjects.push_back(m_cam[1]);
 
-	m_cam[2] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
 	//m_RD->m_cam = m_cam[1];
 	m_3DObjects.push_back(m_cam[2]);
 
-	m_cam[3] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
 	//m_RD->m_cam = m_cam[1];
 	m_3DObjects.push_back(m_cam[3]);
@@ -491,7 +491,6 @@ void Game::OnWindowSizeChanged(int _width, int _height)
 // Properties
 void Game::GetDefaultSize(int& _width, int& _height) const
 {
-	// TODO: Change to desired default window size (note minimum size is 320x200).
 	_width = 1280;
 	_height = 720;
 }
