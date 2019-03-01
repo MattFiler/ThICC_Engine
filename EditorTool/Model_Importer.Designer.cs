@@ -86,6 +86,7 @@
             // 
             // assetName
             // 
+            this.assetName.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.assetName.Location = new System.Drawing.Point(19, 27);
             this.assetName.Name = "assetName";
             this.assetName.Size = new System.Drawing.Size(264, 20);
