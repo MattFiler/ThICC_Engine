@@ -17,5 +17,4 @@ public:
 protected:
 	std::unique_ptr<DirectX::GamePad> m_gamePad;
 	int m_playerID = 0;
-
 };

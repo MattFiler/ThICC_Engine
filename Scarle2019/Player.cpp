@@ -10,6 +10,7 @@ Player::Player(RenderData* _RD, string _filename, int _playerID) : TrackMagnet(_
 	SetDrag(0.7);
 	SetPhysicsOn(true);
 	m_playerID = _playerID;
+	//m_gamePad = std::make_unique<GamePad>();
 }
 
 Player::~Player()
@@ -54,33 +55,33 @@ void Player::Tick(GameStateData* _GSD)
 		}
 		else
 		{
-			//float left = (_GSD->m_gamePadState[m_playerID].IsAPressed()) ? 1.f : 0;
-			//float right = (_GSD->m_gamePadState[m_playerID].IsBPressed()) ? 1.f : 0;
-
-			//m_gamePad->SetVibration(m_playerID, left, right);
-
 			if (_GSD->m_gamePadState[m_playerID].IsRightTriggerPressed())
 			{
-				m_acc += forwardMove;
+				m_acc += forwardMove * _GSD->m_gamePadState[m_playerID].triggers.right;
+				//m_gamePad->SetVibration(m_playerID, 1, 1);
 			}
+
 			if (_GSD->m_gamePadState[m_playerID].IsLeftTriggerPressed())
 			{
-				m_acc -= forwardMove;
+				m_acc -= forwardMove; //* _GSD->m_gamePadState->triggers.left;
 			}
+
 			if (_GSD->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
 			{
-				m_acc -= rightMove;
+				m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 			}
+
 			if (_GSD->m_gamePadState[m_playerID].IsLeftThumbStickRight())
 			{
-				m_acc += rightMove;
+				m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 			}
 		}
 	}
 
 	//change orinetation of player
-	float rotSpeed = 0.02f;
-	m_yaw -= rotSpeed * _GSD->m_mouseState.x;
+	float rotSpeed = 0.06f;
+	m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX; //_GSD->m_mouseState.x; 
+
 
 	//move player up and down
 	if (_GSD->m_keyboardState.R)
