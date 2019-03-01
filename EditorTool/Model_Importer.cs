@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace EditorTool
 {
@@ -39,14 +40,21 @@ namespace EditorTool
                 assetName.Text = Path.GetFileNameWithoutExtension(modelPath.Text);
             }
 
+            //Find all materials in model to group collmap by - sort alphabetically
             string[] obj_file = File.ReadAllLines(filePicker.FileName);
-            itemMaterialCategories.Items.Clear();
+            ArrayList material_array = new ArrayList();
             foreach (string line in obj_file)
             {
                 if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
                 {
-                    itemMaterialCategories.Items.Add(line.Substring(7));
+                    material_array.Add(line.Substring(7));
                 }
+            }
+            material_array.Sort();
+            itemMaterialCategories.Items.Clear();
+            foreach (string material in material_array)
+            {
+                itemMaterialCategories.Items.Add(material);
             }
         }
         
