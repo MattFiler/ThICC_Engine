@@ -6,7 +6,7 @@
 // so nicer to reference from somewhere easier to modify.
 struct GameFilepaths {
 public:
-	enum m_asset_type { SHADER, MODEL, MODEL_CUSTOM, MODEL_COLLMAP, IMAGE, SOUND };
+	enum m_asset_type { SHADER, MODEL, MODEL_CUSTOM, MODEL_COLLMAP, IMAGE, SOUND, FONT };
 	std::string generateFilepath(std::string _asset_name, m_asset_type _asset_type) {
 		std::transform(_asset_name.begin(), _asset_name.end(), _asset_name.begin(), ::toupper);
 		switch (_asset_type) {
@@ -22,6 +22,8 @@ public:
 			return image_path[FOLDER] + _asset_name + image_path[EXTENSION];
 		case SOUND:
 			return sound_path[FOLDER] + _asset_name + sound_path[EXTENSION];
+		case FONT:
+			return font_path[FOLDER] + _asset_name + font_path[EXTENSION];
 		}
 	}
 	std::string getFolder(m_asset_type _asset_type) {
@@ -33,12 +35,13 @@ public:
 private:
 	enum m_path_data { FOLDER, EXTENSION };
 
-	std::string shader_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/SHADERS/", ".HLSL" };
-	std::string model_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/MODELS/", ".SDKMESH" };
-	std::string model_custom_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/MODELS/", ".TXT" };
-	std::string model_collmap_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/MODELS/", ".COLLMAP" };
-	std::string image_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/IMAGES/", ".DDS" };
-	std::string sound_path[2] = { "F:/Github Repos/GEP-2019-WorkingAI/Debug/DATA/SOUNDS/", ".WAV" };
+	std::string shader_path[2] = { "DATA/SHADERS/", ".HLSL" };
+	std::string model_path[2] = { "DATA/MODELS/", ".SDKMESH" };
+	std::string model_custom_path[2] = { "DATA/MODELS/", ".TXT" };
+	std::string model_collmap_path[2] = { "DATA/MODELS/", ".COLLMAP" };
+	std::string image_path[2] = { "DATA/IMAGES/", ".DDS" };
+	std::string sound_path[2] = { "DATA/SOUNDS/", ".WAV" };
+	std::string font_path[2] = { "DATA/FONTS/", ".SPRITEFONT" };
 
 	std::string getPathSection(m_asset_type _asset_type, m_path_data _path_section) {
 		switch (_asset_type) {
@@ -54,6 +57,8 @@ private:
 			return image_path[_path_section];
 		case SOUND:
 			return sound_path[_path_section];
+		case FONT:
+			return font_path[_path_section];
 		}
 	}
 };

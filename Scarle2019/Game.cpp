@@ -116,10 +116,13 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
 
 	SpriteBatchPipelineStateDescription pd(rtState);
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	string font_path = m_filepath.generateFilepath("Courier", m_filepath.FONT);
+	std::wstring w_font_path = converter.from_bytes(font_path.c_str());
 	pd.blendDesc = m_RD->m_states->NonPremultiplied;
 	m_RD->m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dDevice.Get(), resourceUpload, pd);
 	m_RD->m_font = std::make_unique<SpriteFont>(m_d3dDevice.Get(), resourceUpload,
-		L"DATA/FONTS/COURIER.SPRITEFONT",
+		w_font_path.c_str(),
 		m_RD->m_resourceDescriptors->GetCpuHandle(m_RD->m_resourceCount),
 		m_RD->m_resourceDescriptors->GetGpuHandle(m_RD->m_resourceCount));
 	m_RD->m_resourceCount++;
