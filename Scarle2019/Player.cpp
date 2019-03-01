@@ -5,12 +5,12 @@
 
 extern void ExitGame();
 
-Player::Player(RenderData* _RD, string _filename, int _playerID) : TrackMagnet(_RD, _filename)
+Player::Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gamePad) : TrackMagnet(_RD, _filename)
 {
 	SetDrag(0.7);
 	SetPhysicsOn(true);
 	m_playerID = _playerID;
-	//m_gamePad = std::make_unique<GamePad>();
+	m_gamePad = &_gamePad;
 }
 
 Player::~Player()
@@ -58,7 +58,6 @@ void Player::Tick(GameStateData* _GSD)
 			if (_GSD->m_gamePadState[m_playerID].IsRightTriggerPressed())
 			{
 				m_acc += forwardMove * _GSD->m_gamePadState[m_playerID].triggers.right;
-				//m_gamePad->SetVibration(m_playerID, 1, 1);
 			}
 
 			if (_GSD->m_gamePadState[m_playerID].IsLeftTriggerPressed())
@@ -76,6 +75,7 @@ void Player::Tick(GameStateData* _GSD)
 				m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 			}
 		}
+		m_gamePad->SetVibration(m_playerID, _GSD->m_gamePadState[m_playerID].triggers.right, _GSD->m_gamePadState[m_playerID].triggers.right);
 	}
 
 	//change orinetation of player

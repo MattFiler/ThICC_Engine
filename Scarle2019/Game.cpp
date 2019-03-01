@@ -172,14 +172,17 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//test3->SetRotationInDegrees(Vector3(0, 0, 0));
 	//m_3DObjects.push_back(test3);
 
+		//Controller
+	m_gamePad = std::make_unique<GamePad>();
+
 	//create a "player"
-	player[0] = new Player(m_RD, "Kart", 0);
+	player[0] = new Player(m_RD, "Kart", 0, *m_gamePad.get());
 	player[0]->SetPos(Vector(-345, 555.0f, 350));
 	//player->SetRotationInDegrees(Vector3(180, 180, 180));
 	m_3DObjects.push_back(player[0]);
 
 	//create a "player" no.2
-	player[1] = new Player(m_RD, "Kart", 1);
+	player[1] = new Player(m_RD, "Kart", 1, *m_gamePad.get());
 	player[1]->SetPos(Vector(-345, 555.0f, 350));
 	//player->SetRotationInDegrees(Vector3(180, 180, 180));
 	m_3DObjects.push_back(player[1]);
@@ -304,9 +307,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
 	//m_sounds.push_back(TS);
-
-	//Controller
-	m_gamePad = std::make_unique<GamePad>();
 }
 
 // Executes the basic game loop.
@@ -354,15 +354,6 @@ void Game::Update(DX::StepTimer const& _timer)
 	for (int i = 0; i < num_of_players; ++i)
 	{
 		m_GSD->m_gamePadState[i] = m_gamePad->GetState(i); //set game controllers state[s]
-
-		if (m_GSD->m_gamePadState[i].triggers.right > 0.1)
-		{
-			m_gamePad->SetVibration(i, m_GSD->m_gamePadState[i].triggers.right, m_GSD->m_gamePadState[i].triggers.right);
-		}
-		else
-		{
-			m_gamePad->SetVibration(i, 0, 0);
-		}
 	}
 
 	//Quit Properly on press ESC
