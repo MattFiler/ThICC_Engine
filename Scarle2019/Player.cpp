@@ -73,13 +73,16 @@ void Player::Tick(GameStateData* _GSD)
 				m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 			}
 		}
-		m_gamePad->SetVibration(m_playerID, _GSD->m_gamePadState[m_playerID].triggers.right, _GSD->m_gamePadState[m_playerID].triggers.right);
+		m_gamePad->SetVibration(m_playerID, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1);
 	}
 
 	//change orinetation of player
-	float rotSpeed = 0.02f;
+	float rotSpeed = 0.06f;
 	m_yaw -= rotSpeed * _GSD->m_mouseState.x;
 	m_pitch -= rotSpeed * _GSD->m_mouseState.y;
+
+	m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX;
+	m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;
 
 
 	//move player up and down

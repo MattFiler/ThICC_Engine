@@ -109,16 +109,15 @@ void Game::Initialize(HWND _window, int _width, int _height)
 		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
 		100);
 
-	//GEP: Set up Sprite batch for drawing textures also loads the font for text
+	////GEP: Set up Sprite batch for drawing textures also loads the font for text
 	m_RD->m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 	ResourceUploadBatch resourceUpload(m_d3dDevice.Get());
 
 	resourceUpload.Begin();
 	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
-
 	SpriteBatchPipelineStateDescription pd(rtState);
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	string font_path = m_filepath.generateFilepath("Isolation", m_filepath.FONT);
+	string font_path = m_filepath.generateFilepath("Perpetua", m_filepath.FONT);
 	std::wstring w_font_path = converter.from_bytes(font_path.c_str());
 	pd.blendDesc = m_RD->m_states->NonPremultiplied;
 	m_RD->m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dDevice.Get(), resourceUpload, pd);
@@ -128,11 +127,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 		m_RD->m_resourceDescriptors->GetCpuHandle(m_RD->m_resourceCount),
 		m_RD->m_resourceDescriptors->GetGpuHandle(m_RD->m_resourceCount));
 	m_RD->m_resourceCount++;
-
 	auto uploadResourcesFinished = resourceUpload.End(m_commandQueue.Get());
-
-	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
-	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
+	SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
+	SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
 
 	m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH }; //uncommented
 	m_scissorRect[0] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
@@ -145,7 +142,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//m_scissorRect[2] = { 0,0,(int)(m_outputWidth * 0.5f),(int)(m_outputHeight) };
 	//m_viewport[3] = { static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	//m_scissorRect[3] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
-
 
 	//Set Up VBGO render system
 	if (!VBGO3D::SetUpVBGOs(m_RD))
@@ -178,18 +174,21 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//test3->SetRotationInDegrees(Vector3(0, 0, 0));
 	//m_3DObjects.push_back(test3);
 
+	//Controller 
+	m_gamePad = std::make_unique<GamePad>();
+
 	//Load in a track
 	//track = new Track(m_RD, "GBA Mario Circuit");
 	track = new Track(m_RD, "Mario Kart Stadium");
 	m_3DObjects.push_back(track);
 
 	//Create a player and position on track
-	player = new Player(m_RD, "Standard Kart");
-	player->SetPos(track->getSuitableSpawnSpot());
-	m_3DObjects.push_back(player);
+	player[0] = new Player(m_RD, "Standard Kart", 0, *m_gamePad.get());
+	player[0]->SetPos(track->getSuitableSpawnSpot());
+	m_3DObjects.push_back(player[0]);
 
 	//point a camera at the player that follows
-	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_RD->m_cam = m_cam[0];
 	m_3DObjects.push_back(m_cam[0]);
 
@@ -270,8 +269,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//Text2D *test2 = new Text2D("testing text");
 	//m_2DObjects.push_back(test2);
 
-
-
 	//text example 2D objects
 
 	//ImageGO2D *test = new ImageGO2D(m_RD, "twist");
@@ -287,13 +284,12 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//m_2DObjects.push_back(test);
 
 	//GUI TEST
-
 	//Enter in order: LapPos / RacePos / BoxPos / ItemPos
-	Vector2 uiPositions[4] = {Vector2(32.f,300.f), Vector2(32.f,350.f), 
-		Vector2(32.f,32.f), Vector2(32.f,32.f)};
-	RaceUI * player1Test = new RaceUI(m_RD, uiPositions);
-	player1Test->SetPos(Vector2(0, 0));
-	m_2DObjects.push_back(player1Test);
+	//Vector2 uiPositions[4] = {Vector2(32.f,300.f), Vector2(32.f,350.f), 
+		//Vector2(32.f,32.f), Vector2(32.f,32.f)};
+	//RaceUI * player1Test = new RaceUI(m_RD, uiPositions);
+	//player1Test->SetPos(Vector2(0, 0));
+	//m_2DObjects.push_back(player1Test);
 
 	//Test Sounds
 	//Loop *loop = new Loop(m_audEngine.get(), "Course Intro Soundtrack");
