@@ -130,6 +130,7 @@ namespace EditorTool
 
             string selected_file_name = full_loaded_filenames.ElementAt(assetList.SelectedIndex);
             assetList.SelectedIndex = -1; //Clear any item preview so we can delete it
+            closeSoundStream();
 
             DialogResult showErrorInfo = MessageBox.Show("Are you sure you want to delete this asset?", "About to delete selected asset...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (showErrorInfo != DialogResult.Yes)
@@ -152,16 +153,13 @@ namespace EditorTool
                     }
                     catch { }
                     break;
-                case "Sounds":
-                    MessageBox.Show("DELETING SOUNDS HAS BEEN DISABLED IN THE LATEST UPDATE - FUNCTIONALITY WILL RETURN SOON.", "FAILED", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    break;
                 case "Images":
                     string[] files = Directory.GetFiles("DATA/IMAGES/", "*", SearchOption.AllDirectories);
                     foreach (string file in files)
                     {
                         if (Path.GetFileNameWithoutExtension(file) == Path.GetFileNameWithoutExtension(selected_file_name))
                         {
-                            File.Delete(file);
+                            try { File.Delete(file); } catch { }
                         }
                     }
                     break;
@@ -288,12 +286,15 @@ namespace EditorTool
                 case "Sounds":
                     if (assetList.SelectedIndex == -1)
                     {
+                        closeSoundStream();
                         soundPreview.WaveStream = null;
+                        sound_player.Stream = null;
                         return;
                     }
                     playSoundPreview.Visible = true;
                     soundPreview.Visible = true;
-                    soundPreview.WaveStream = new WaveFileReader("DATA/SOUNDS/" + assetList.SelectedItem.ToString() + ".WAV");
+                    openSoundStream();
+                    soundPreview.WaveStream = new WaveFileReader(sound_stream);
                     soundPreview.SamplesPerPixel = 150;
                     return;
                 case "Fonts":
@@ -315,8 +316,26 @@ namespace EditorTool
         //Play sound when requested
         private void playSoundPreview_Click(object sender, EventArgs e)
         {
-            sound_player.SoundLocation = "DATA/SOUNDS/" + assetList.SelectedItem.ToString() + ".WAV";
-            sound_player.Play();
+            openSoundStream();
+            sound_player.Stream = sound_stream;
+            try { sound_player.Play(); }
+            catch { MessageBox.Show("An error ocurred while trying to play this sound - it may have imported incorrectly.", "Error.", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+        }
+
+        //Update sound stream to use for any previews
+        Stream sound_stream;
+        void openSoundStream()
+        {
+            closeSoundStream();
+            sound_stream = File.Open("DATA/SOUNDS/" + assetList.SelectedItem.ToString() + ".WAV", FileMode.Open, FileAccess.Read);
+        }
+        void closeSoundStream()
+        {
+            if(sound_stream != null)
+            {
+                sound_stream.Close();
+            }
+            sound_stream = null;
         }
 
         //Modified from: https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
