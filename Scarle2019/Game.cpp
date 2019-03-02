@@ -117,12 +117,12 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	pd.blendDesc = m_RD->m_states->NonPremultiplied;
 	m_RD->m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dDevice.Get(), resourceUpload, pd);
 	m_RD->m_font = std::make_unique<SpriteFont>(m_d3dDevice.Get(), resourceUpload,
-		L"courier.spritefont",
+		L"DATA/FONTS/ISOLATION.SPRITEFONT",
 		m_RD->m_resourceDescriptors->GetCpuHandle(m_RD->m_resourceCount),
 		m_RD->m_resourceDescriptors->GetGpuHandle(m_RD->m_resourceCount));
 	m_RD->m_resourceCount++;
 
-	auto uploadResourcesFinished = resourceUpload.End(m_commandQueue.Get());
+	//auto uploadResourcesFinished = resourceUpload.End(m_commandQueue.Get());
 
 	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
 	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
@@ -183,7 +183,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_3DObjects.push_back(track);
 
 	//point a camera at the player that follows
-	m_cam[0] =  new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[0] =  new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, player, Vector3(10.0f, 3.0f, 10.0f));
 	//m_RD->m_cam = m_cam[0];
 	m_3DObjects.push_back(m_cam[0]);
 
