@@ -175,29 +175,29 @@ namespace EditorTool
         /* COMPILE ASSETS TO BUILD FOLDER */
         private void compileAssets_Click(object sender, EventArgs e)
         {
-            DialogResult showErrorInfo = MessageBox.Show("Is the game running?", "About to compile assets...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (showErrorInfo != DialogResult.No)
+            try
             {
-                MessageBox.Show("The game must not be running when compiling assets.", "Please close game.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+                //Fix VS debugging directory config
+                File.WriteAllText("Scarle2019/Scarle2019.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup></Project>");
 
-            //Fix VS debugging directory config
-            File.WriteAllText("Scarle2019/Scarle2019.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup></Project>");
-            
-            //Copy to debug folder
-            if (Directory.Exists("Debug"))
+                //Copy to debug folder
+                if (Directory.Exists("Debug"))
+                {
+                    copyAssets("Debug/DATA/");
+                }
+
+                //Copy to release folder
+                if (Directory.Exists("Release"))
+                {
+                    copyAssets("Release/DATA/");
+                }
+
+                MessageBox.Show("Assets successfully compiled.", "Compiled assets.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch
             {
-                copyAssets("Debug/DATA/");
+                MessageBox.Show("An error occured while compiling assets.\nMake sure that the game is closed and no files are open.", "Asset compile failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            //Copy to release folder
-            if (Directory.Exists("Release"))
-            {
-                copyAssets("Release/DATA/");
-            }
-
-            MessageBox.Show("Assets successfully compiled.", "Compiled assets.", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         /* COPY ALL ASSETS TO FOLDER */

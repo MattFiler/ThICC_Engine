@@ -176,18 +176,14 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//test3->SetRotationInDegrees(Vector3(0, 0, 0));
 	//m_3DObjects.push_back(test3);
 
-	//create a "player"
-	player = new Player(m_RD, "Kart");
-	//player->SetPos(Vector(-345, 555.0f, 350)); - wii rainbow road
-	//player->SetPos(Vector(-125, 175, 0)); - mk8 rainbow road
-	player->SetPos(Vector(-802.40613, 598.9353, -422.5433));
-	m_3DObjects.push_back(player);
-
-	// Test track
-	track = new Track(m_RD, "Test_WiFiTest1");
-	//m_3DObjects.push_back(track);
-	//SDKMeshGO3D* track = new SDKMeshGO3D(m_RD, "Test Track");
+	//Load in a track
+	track = new Track(m_RD, "N64 Rainbow Road");
 	m_3DObjects.push_back(track);
+
+	//Create a player within the track at the recommended location
+	player = new Player(m_RD, "Standard Kart");
+	player->SetPos(track->getSuitableSpawnSpot());
+	m_3DObjects.push_back(player);
 
 	//point a camera at the player that follows
 	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
