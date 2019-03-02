@@ -176,15 +176,16 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//test3->SetRotationInDegrees(Vector3(0, 0, 0));
 	//m_3DObjects.push_back(test3);
 
+	//Create a player and position on track
+	player = new Player(m_RD, "Standard Kart");
+	//player->SetPos(track->getSuitableSpawnSpot());
+	player->SetPos(Vector3(0, 100, 0));
+	m_3DObjects.push_back(player);
+
 	//Load in a track
 	//track = new Track(m_RD, "GBA Mario Circuit");
 	track = new Track(m_RD, "Mario Kart Stadium");
 	m_3DObjects.push_back(track);
-
-	//Create a player and position on track
-	player = new Player(m_RD, "Standard Kart");
-	player->SetPos(track->getSuitableSpawnSpot());
-	m_3DObjects.push_back(player);
 
 	//point a camera at the player that follows
 	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));

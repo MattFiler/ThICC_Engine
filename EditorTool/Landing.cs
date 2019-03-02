@@ -198,7 +198,7 @@ namespace EditorTool
                 {
                     copyAssets("Release/DATA/");
                 }
-
+                
                 MessageBox.Show("Assets successfully compiled.", "Compiled assets.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch
@@ -245,7 +245,7 @@ namespace EditorTool
                     if (assetList.SelectedIndex == -1)
                     {
                         modelPreview.Child = new ModelViewer("");
-                        return;
+                        break;
                     }
                     modelConfigs.Visible = true;
 
@@ -261,12 +261,12 @@ namespace EditorTool
 
                     modelPreview.Visible = true;
                     modelPreview.Child = new ModelViewer("DATA/MODELS/" + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
-                    return;
+                    break;
                 case "Images":
                     if (assetList.SelectedIndex == -1)
                     {
                         imagePreview.Image = null;
-                        return;
+                        break;
                     }
                     imagePreview.Visible = true;
 
@@ -286,33 +286,33 @@ namespace EditorTool
                     }
                     else
                     {
-                        return;
+                        break;
                     }
 
                     using (var tempPreviewImg = new Bitmap(file_path_with_extension))
                     {
                         imagePreview.Image = new Bitmap(tempPreviewImg);
                     }
-                    return;
+                    break;
                 case "Sounds":
                     if (assetList.SelectedIndex == -1)
                     {
                         closeSoundStream();
                         soundPreview.WaveStream = null;
                         sound_player.Stream = null;
-                        return;
+                        break;
                     }
                     playSoundPreview.Visible = true;
                     soundPreview.Visible = true;
                     openSoundStream();
                     soundPreview.WaveStream = new WaveFileReader(sound_stream);
                     soundPreview.SamplesPerPixel = 150;
-                    return;
+                    break;
                 case "Fonts":
                     if (assetList.SelectedIndex == -1)
                     {
                         imagePreview.Image = null;
-                        return;
+                        break;
                     }
                     imagePreview.Visible = true;
 
@@ -320,7 +320,7 @@ namespace EditorTool
                     {
                         imagePreview.Image = new Bitmap(tempPreviewImg);
                     }
-                    return;
+                    break;
             }
         }
 
