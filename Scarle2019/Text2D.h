@@ -24,7 +24,6 @@ public:
 protected:
 	string m_text;
 	std::wstring m_wText;
-
 	bool m_dirtyOrigin = false;
 
 };

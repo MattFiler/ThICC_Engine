@@ -59,6 +59,24 @@
     <Filter Include="Maths">
       <UniqueIdentifier>{0366f0ca-5c85-4d75-a8ef-964c05ed0d27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Base\Managers">
+      <UniqueIdentifier>{388885d0-afc8-4c3a-ab03-35156d9a78f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\Scenes">
+      <UniqueIdentifier>{5c2c0b26-8bd2-408e-b999-55ea6162001f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\UI">
+      <UniqueIdentifier>{3993abc3-dff0-43b4-8ddc-ee65b1090c8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\Observe">
+      <UniqueIdentifier>{34c99cbe-fe88-4dbb-9a68-1d681b7be93f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\UI\Game">
+      <UniqueIdentifier>{227f7ca3-9a6c-43e5-aab9-f90550f079bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\UI\Menu">
+      <UniqueIdentifier>{aaa860b3-6dd2-408e-a5a0-db4d6681af41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StepTimer.h">
@@ -166,6 +184,27 @@
     <ClInclude Include="GameFilepaths.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Game Base\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Game Base\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Game Base</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Game Base\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="UIMangager.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="RaceUI.h">
+      <Filter>Game Base\UI\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -236,6 +275,21 @@
     </ClCompile>
     <ClCompile Include="TransFileVBGO.cpp">
       <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Game Base\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Game Base\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="UIMangager.cpp">
+      <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="RaceUI.cpp">
+      <Filter>Game Base\UI\Game</Filter>
     </ClCompile>
     <ClCompile Include="Track.cpp">
       <Filter>GameObjects\3D\Source</Filter>
