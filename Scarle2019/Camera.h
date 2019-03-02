@@ -24,6 +24,14 @@ public:
 
 	Vector3 getDeltaPos() { return m_dpos; };
 
+	enum class CAMERA_TYPE : int
+	{
+		BEHIND = 0,
+		SPIN = 1,
+		CINEMATIC = 2,
+		
+	};
+
 
 protected:
 	GameObject3D* m_targetObject = NULL;
