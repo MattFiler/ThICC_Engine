@@ -24,14 +24,18 @@ public:
 
 	Vector3 getDeltaPos() { return m_dpos; };
 
-	enum class CAMERA_TYPE : int
+	enum class PERSPECTIVE : int
 	{
-		BEHIND = 0,
-		SPIN = 1,
-		CINEMATIC = 2,
-		
+		FIRST = 0,
+		THIRD = 1
 	};
 
+	enum class BEHAVIOUR : int
+	{
+		NORMAL = 0,
+		ORBIT = 1,
+		CINEMATIC = 2,
+	};
 
 protected:
 	GameObject3D* m_targetObject = NULL;
@@ -39,5 +43,10 @@ protected:
 	Matrix m_proj = Matrix::Identity;
 	Matrix m_view = Matrix::Identity;
 	Vector3	m_dpos; //I'll lurk this far behind and away from it
+
+	PERSPECTIVE perp = PERSPECTIVE::THIRD;
+	BEHAVIOUR behav = BEHAVIOUR::ORBIT;
+
+	float angle = 0.0f;
 };
 
