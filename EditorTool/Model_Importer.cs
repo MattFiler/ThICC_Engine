@@ -407,25 +407,25 @@ namespace EditorTool
                                 }
 
                                 //Fix conflicts if any are present
-                                if (checkVertConflict(vert_x_list, vert_y_list))
+                                if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(1) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(1) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(1))
                                 {
-                                    //X&Y conflict, needs fixing
                                     vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
-                                    vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
-                                    collision_fix_count++;
-                                }
-                                if (checkVertConflict(vert_y_list, vert_z_list))
-                                {
-                                    //Y&Z conflict, needs fixing
                                     vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
+                                    vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1;
+                                    collision_fix_count++;
+                                }
+                                if (vert_x_list.ElementAt(1) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(1) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(1) == vert_z_list.ElementAt(2))
+                                {
+                                    vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1;
+                                    vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
                                     vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
                                     collision_fix_count++;
                                 }
-                                if (checkVertConflict(vert_x_list, vert_z_list))
+                                if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(2))
                                 {
-                                    //X&Z conflict, needs fixing
-                                    vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
-                                    vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                                    vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1;
+                                    vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1;
+                                    vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1;
                                     collision_fix_count++;
                                 }
                                 
@@ -525,21 +525,6 @@ namespace EditorTool
                     MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }
-        
-        //Check to see if all vertices in this axis are conflicting
-        bool checkVertConflict(List<double> vertex_pos_list1, List<double> vertex_pos_list2)
-        {
-            int conflict_count = 0;
-            if (vertex_pos_list1.ElementAt(0) == vertex_pos_list1.ElementAt(1) && vertex_pos_list1.ElementAt(1) == vertex_pos_list1.ElementAt(2))
-            {
-                conflict_count++;
-            }
-            if (vertex_pos_list2.ElementAt(0) == vertex_pos_list2.ElementAt(1) && vertex_pos_list2.ElementAt(1) == vertex_pos_list2.ElementAt(2))
-            {
-                conflict_count++;
-            }
-            return (conflict_count == 2);
         }
 
         //Restyle form based on if we should generate a collmap or not
