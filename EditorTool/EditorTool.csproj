@@ -8,7 +8,7 @@
     <ProjectGuid>{DBBA8CF1-FD88-4E14-8BD2-97331F29416A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>EditorTool</RootNamespace>
-    <AssemblyName>EditorTool</AssemblyName>
+    <AssemblyName>Mario Kart Asset Manager</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
