@@ -296,6 +296,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//m_sounds.push_back(TS);
 }
 
+//Thanks, https://stackoverflow.com/a/8233867/3798962
 bool Game::dirExists(const std::string& dirName_in)
 {
 	DWORD ftyp = GetFileAttributesA(dirName_in.c_str());

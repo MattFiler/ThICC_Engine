@@ -36,8 +36,6 @@ public:
 	// Initialization and management
 	void Initialize(HWND _window, int _width, int _height);
 
-	bool dirExists(const std::string& dirName_in);
-
 	// Basic game loop
 	void Tick();
 
@@ -71,6 +69,8 @@ private:
 	void WaitForGpu() noexcept;
 	void MoveToNextFrame();
 	void GetAdapter(IDXGIAdapter1** _ppAdapter);
+
+	bool dirExists(const std::string& dirName_in);
 
 	void OnDeviceLost();
 
