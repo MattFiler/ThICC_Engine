@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Observer.h"
 #include "PlayerData.h"
 #include "GameObject2D.h"
 #include <vector>
