@@ -278,10 +278,15 @@ namespace EditorTool
                 if (didFindMTL)
                 {
                     //Run the model converter to swap our OBJ into an SDKMESH
+                    string conv_args = "\"" + Path.GetFileName(modelPath.Text) + "\" -sdkmesh -nodds -y";
+                    if (shouldFlipUV.Checked)
+                    {
+                        conv_args += " -flipv";
+                    }
                     ProcessStartInfo meshConverter = new ProcessStartInfo();
                     meshConverter.WorkingDirectory = import_directory;
                     meshConverter.FileName = "DATA/MODELS/meshconvert.exe";
-                    meshConverter.Arguments = "\"" + Path.GetFileName(modelPath.Text) + "\" -sdkmesh -nodds -y";
+                    meshConverter.Arguments = conv_args;
                     meshConverter.UseShellExecute = false;
                     meshConverter.RedirectStandardOutput = true;
                     Process converterProcess = Process.Start(meshConverter);

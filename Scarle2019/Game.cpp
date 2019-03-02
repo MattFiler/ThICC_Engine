@@ -177,7 +177,8 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//m_3DObjects.push_back(test3);
 
 	//Load in a track
-	track = new Track(m_RD, "GBA Mario Circuit");
+	//track = new Track(m_RD, "GBA Mario Circuit");
+	track = new Track(m_RD, "Mario Kart Stadium");
 	m_3DObjects.push_back(track);
 
 	//Create a player and position on track
