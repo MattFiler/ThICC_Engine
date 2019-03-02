@@ -278,10 +278,15 @@ namespace EditorTool
                 if (didFindMTL)
                 {
                     //Run the model converter to swap our OBJ into an SDKMESH
+                    string conv_args = "\"" + Path.GetFileName(modelPath.Text) + "\" -sdkmesh -nodds -y";
+                    if (shouldFlipUV.Checked)
+                    {
+                        conv_args += " -flipv";
+                    }
                     ProcessStartInfo meshConverter = new ProcessStartInfo();
                     meshConverter.WorkingDirectory = import_directory;
                     meshConverter.FileName = "DATA/MODELS/meshconvert.exe";
-                    meshConverter.Arguments = "\"" + Path.GetFileName(modelPath.Text) + "\" -sdkmesh -nodds -y";
+                    meshConverter.Arguments = conv_args;
                     meshConverter.UseShellExecute = false;
                     meshConverter.RedirectStandardOutput = true;
                     Process converterProcess = Process.Start(meshConverter);
@@ -402,25 +407,25 @@ namespace EditorTool
                                 }
 
                                 //Fix conflicts if any are present
-                                if (checkVertConflict(vert_x_list, vert_y_list))
+                                if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(1) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(1) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(1))
                                 {
-                                    //X&Y conflict, needs fixing
                                     vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
-                                    vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
-                                    collision_fix_count++;
-                                }
-                                if (checkVertConflict(vert_y_list, vert_z_list))
-                                {
-                                    //Y&Z conflict, needs fixing
                                     vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
+                                    vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1;
+                                    collision_fix_count++;
+                                }
+                                if (vert_x_list.ElementAt(1) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(1) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(1) == vert_z_list.ElementAt(2))
+                                {
+                                    vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1;
+                                    vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
                                     vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
                                     collision_fix_count++;
                                 }
-                                if (checkVertConflict(vert_x_list, vert_z_list))
+                                if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(2))
                                 {
-                                    //X&Z conflict, needs fixing
-                                    vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
-                                    vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                                    vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1;
+                                    vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1;
+                                    vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1;
                                     collision_fix_count++;
                                 }
                                 
@@ -439,8 +444,19 @@ namespace EditorTool
                             }
                         }
 
-                        //Conversion complete - delete the OBJ and MTL
+                        //Conversion complete, delete MTL and fix up OBJ for model previewer
+                        obj_index = 0;
+                        foreach (string line in final_obj_file)
+                        {
+                            if (line.Contains("mtllib"))
+                            {
+                                final_obj_file[obj_index] = "# MTLLIB REMOVED FOR MARIO KART ASSET MANAGER";
+                                break;
+                            }
+                            obj_index++;
+                        }
                         File.Delete(import_directory + Path.GetFileName(modelPath.Text));
+                        File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".OBJ", final_obj_file);
                         if (importedMTL != "")
                         {
                             File.Delete(import_directory + importedMTL);
@@ -509,21 +525,6 @@ namespace EditorTool
                     MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }
-        
-        //Check to see if all vertices in this axis are conflicting
-        bool checkVertConflict(List<double> vertex_pos_list1, List<double> vertex_pos_list2)
-        {
-            int conflict_count = 0;
-            if (vertex_pos_list1.ElementAt(0) == vertex_pos_list1.ElementAt(1) && vertex_pos_list1.ElementAt(1) == vertex_pos_list1.ElementAt(2))
-            {
-                conflict_count++;
-            }
-            if (vertex_pos_list2.ElementAt(0) == vertex_pos_list2.ElementAt(1) && vertex_pos_list2.ElementAt(1) == vertex_pos_list2.ElementAt(2))
-            {
-                conflict_count++;
-            }
-            return (conflict_count == 2);
         }
 
         //Restyle form based on if we should generate a collmap or not

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "StepTimer.h"
+#include "GameFilepaths.h"
 #include <vector>
 using std::vector;
 
@@ -122,4 +123,6 @@ private:
 	RenderData*											m_RD;	//dumping ground for things required to do rendering
 	GameStateData*										m_GSD;  //base game state to pass to all GameObjects
 	int num_of_cam = 1;
+
+	GameFilepaths m_filepath;
 };

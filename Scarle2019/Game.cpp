@@ -6,6 +6,8 @@
 #include "Game.h"
 #include "RenderData.h"
 #include "GameStateData.h"
+#include <iostream>
+#include <experimental/filesystem>
 
 
 extern void ExitGame();
@@ -114,10 +116,14 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
 
 	SpriteBatchPipelineStateDescription pd(rtState);
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	string font_path = m_filepath.generateFilepath("Isolation", m_filepath.FONT);
+	std::wstring w_font_path = converter.from_bytes(font_path.c_str());
 	pd.blendDesc = m_RD->m_states->NonPremultiplied;
 	m_RD->m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dDevice.Get(), resourceUpload, pd);
+	//This will throw an exception in <memory> if we try to load a non-existant font.
 	m_RD->m_font = std::make_unique<SpriteFont>(m_d3dDevice.Get(), resourceUpload,
-		L"courier.spritefont",
+		w_font_path.c_str(),
 		m_RD->m_resourceDescriptors->GetCpuHandle(m_RD->m_resourceCount),
 		m_RD->m_resourceDescriptors->GetGpuHandle(m_RD->m_resourceCount));
 	m_RD->m_resourceCount++;
@@ -170,35 +176,32 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//test3->SetRotationInDegrees(Vector3(0, 0, 0));
 	//m_3DObjects.push_back(test3);
 
-	//create a "player"
-	player = new Player(m_RD, "Kart");
-	//player->SetPos(Vector(-345, 555.0f, 350)); - wii rainbow road
-	player->SetPos(Vector(-125, 175, 0));
-	//player->SetRotationInDegrees(Vector3(180, 180, 180));
-	m_3DObjects.push_back(player);
-
-	// Test track
-	track = new Track(m_RD, "Rainbow Road MK8");
-	//m_3DObjects.push_back(track);
-	//SDKMeshGO3D* track = new SDKMeshGO3D(m_RD, "Test Track");
+	//Load in a track
+	//track = new Track(m_RD, "GBA Mario Circuit");
+	track = new Track(m_RD, "Mario Kart Stadium");
 	m_3DObjects.push_back(track);
 
+	//Create a player and position on track
+	player = new Player(m_RD, "Standard Kart");
+	player->SetPos(track->getSuitableSpawnSpot());
+	m_3DObjects.push_back(player);
+
 	//point a camera at the player that follows
-	m_cam[0] =  new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player, Vector3(0.0f, 3.0f, 10.0f));
 	//m_RD->m_cam = m_cam[0];
 	m_3DObjects.push_back(m_cam[0]);
 
-	m_cam[1] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
 	//m_RD->m_cam = m_cam[1];
 	m_3DObjects.push_back(m_cam[1]);
 
-	m_cam[2] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
 	//m_RD->m_cam = m_cam[1];
 	m_3DObjects.push_back(m_cam[2]);
 
-	m_cam[3] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
 	//m_RD->m_cam = m_cam[1];
 	m_3DObjects.push_back(m_cam[3]);
@@ -257,6 +260,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//Once I.ve set up all the VBs and IBs push them to the GPU
 	VBGO3D::PushIBVB(m_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
+
+	//debug: output our current directory
+	std::cout << std::experimental::filesystem::current_path();
 
 	//test text
 	Text2D * test2 = new Text2D("testing text");
@@ -483,7 +489,6 @@ void Game::OnWindowSizeChanged(int _width, int _height)
 // Properties
 void Game::GetDefaultSize(int& _width, int& _height) const
 {
-	// TODO: Change to desired default window size (note minimum size is 320x200).
 	_width = 1280;
 	_height = 720;
 }

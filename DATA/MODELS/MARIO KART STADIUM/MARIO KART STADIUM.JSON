@@ -1,0 +1,12 @@
+{
+  "asset_name": "MARIO KART STADIUM",
+  "asset_type": "Models",
+  "visible": true,
+  "start_x": 10.0,
+  "start_y": -10.0,
+  "start_z": 100.0,
+  "modelscale": 2.0,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0
+}
