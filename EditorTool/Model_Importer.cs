@@ -439,8 +439,23 @@ namespace EditorTool
                             }
                         }
 
-                        //Conversion complete - rename OBJ
-                        File.Move(import_directory + Path.GetFileName(modelPath.Text), import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".OBJ");
+                        //Conversion complete, delete MTL and fix up OBJ for model previewer
+                        obj_index = 0;
+                        foreach (string line in final_obj_file)
+                        {
+                            if (line.Contains("mtllib"))
+                            {
+                                final_obj_file[obj_index] = "# MTLLIB REMOVED FOR MARIO KART ASSET MANAGER";
+                                break;
+                            }
+                            obj_index++;
+                        }
+                        File.Delete(import_directory + Path.GetFileName(modelPath.Text));
+                        File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".OBJ", final_obj_file);
+                        if (importedMTL != "")
+                        {
+                            File.Delete(import_directory + importedMTL);
+                        }
 
                         //Create JSON data
                         JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0}");

@@ -1,6 +1,6 @@
 # Blender v2.77 (sub 0) OBJ File: 'untitled.blend'
 # www.blender.org
-mtllib Test Track.mtl
+#mtllib Test Track.mtl
 o Cube
 v 3.090464 1.787207 0.832130
 v 3.090460 1.787207 10.211309

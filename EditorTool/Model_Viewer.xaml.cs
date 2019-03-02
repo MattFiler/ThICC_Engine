@@ -30,9 +30,16 @@ namespace EditorTool
             //Load and display model
             if (File.Exists(path_to_model))
             {
-                ObjReader CurrentHelixObjReader = new ObjReader();
-                Model3DGroup MyModel = CurrentHelixObjReader.Read(path_to_model);
-                modelPreview.Content = MyModel;
+                using (Stream model_loader = File.Open(path_to_model, FileMode.Open, FileAccess.Read))
+                {
+                    try
+                    {
+                        ObjReader CurrentHelixObjReader = new ObjReader();
+                        Model3DGroup MyModel = CurrentHelixObjReader.Read(model_loader);
+                        modelPreview.Content = MyModel;
+                    }
+                    catch { } //Will fail if model has MTL linked
+                }
             }
         }
     }

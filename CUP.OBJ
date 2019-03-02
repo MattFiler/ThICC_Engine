@@ -4,7 +4,7 @@
 # Right Hemisphere, LTD
 # http://www.righthemisphere.com/
 # 
-# MTLLIB REMOVED FOR MARIO KART ASSET MANAGER
+mtllib cup.mtl
 # object insideShape
 g insideShape
 v -0.395825 0.436485 9.94025e-009

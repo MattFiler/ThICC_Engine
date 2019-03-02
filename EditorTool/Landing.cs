@@ -141,8 +141,7 @@ namespace EditorTool
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
-                    //Directory.Delete(Path.GetDirectoryName(selected_file_name), true);
-                    MessageBox.Show("DELETING MODELS HAS BEEN DISABLED IN THE LATEST UPDATE - FUNCTIONALITY WILL RETURN SOON.", "FAILED", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Directory.Delete(Path.GetDirectoryName(selected_file_name), true);
                     break;
                 case "Fonts":
                     File.Delete(selected_file_name);
@@ -211,7 +210,7 @@ namespace EditorTool
             DirectoryCopy("DATA/", output_directory, true, ignored_extensions);
         }
 
-        /* LOAD ASSET PREVIEW ON CLICK */
+        /* LOAD ASSET PREVIEW & CONFIG ON CLICK */
         private void assetList_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Hide all possible previewers
@@ -221,22 +220,33 @@ namespace EditorTool
             playSoundPreview.Visible = false;
             sound_player.Stop();
 
+            //Hide all configs
+            modelConfigs.Visible = false;
+
             //Act appropriately for selected asset type
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
-                    modelPreview.Visible = true;
                     if (assetList.SelectedIndex == -1)
                     {
                         modelPreview.Child = new ModelViewer("");
                         return;
                     }
+                    modelConfigs.Visible = true;
+                    model_world_x.Text = "0";
+                    model_world_y.Text = "0";
+                    model_world_z.Text = "0";
+                    model_rot_x.Text = "0";
+                    model_rot_y.Text = "0";
+                    model_rot_z.Text = "0";
+
+                    modelPreview.Visible = true;
                     modelPreview.Child = new ModelViewer("DATA/MODELS/" + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
                     return;
                 case "Images":
                     if (assetList.SelectedIndex == -1)
                     {
-                        imagePreview.Dispose();
+                        imagePreview.Image = null;
                         return;
                     }
                     imagePreview.Visible = true;
@@ -260,8 +270,7 @@ namespace EditorTool
                 case "Sounds":
                     if (assetList.SelectedIndex == -1)
                     {
-                        sound_player.Dispose();
-                        soundPreview.Dispose();
+                        soundPreview.WaveStream = null;
                         return;
                     }
                     playSoundPreview.Visible = true;
@@ -272,7 +281,7 @@ namespace EditorTool
                 case "Fonts":
                     if (assetList.SelectedIndex == -1)
                     {
-                        imagePreview.Dispose();
+                        imagePreview.Image = null;
                         return;
                     }
                     imagePreview.Visible = true;

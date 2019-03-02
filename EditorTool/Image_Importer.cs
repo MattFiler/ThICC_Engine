@@ -76,7 +76,7 @@ namespace EditorTool
                 //Capture DDS convert output incase we errored
                 string output = reader.ReadToEnd();
 
-                //Get dimensions then delete original file
+                //Get dimensions
                 int image_width = 0;
                 int image_height = 0;
                 using (Image img = Image.FromFile(asset_path_orig_ext))
@@ -84,7 +84,7 @@ namespace EditorTool
                     image_width = img.Width;
                     image_height = img.Height;
                 }
-                File.Delete(asset_path_orig_ext);
+                File.Move(asset_path_orig_ext, asset_path_orig_ext.ToUpper());
 
                 //Uppercase extension pls
                 if (File.Exists(asset_path.Substring(0, asset_path.Length - 3) + "dds"))
