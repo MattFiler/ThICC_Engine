@@ -205,9 +205,6 @@
     <ClInclude Include="RaceUI.h">
       <Filter>Game Base\UI\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Observable.h" />
-    <ClInclude Include="Observer.h" />
-    <ClInclude Include="PlayerData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

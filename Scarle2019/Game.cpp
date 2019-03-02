@@ -95,7 +95,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_RD->m_d3dDevice = m_d3dDevice;
 	m_RD->m_commandQueue = m_commandQueue;
 	m_RD->m_commandList = m_commandList;
-	m_RD->m_commandList = m_commandList;
 	for (int i = 0; i < c_swapBufferCount; i++)
 	{
 		m_RD->m_commandAllocators[i] = m_commandAllocators[i];

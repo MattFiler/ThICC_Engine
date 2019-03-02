@@ -186,13 +186,10 @@
     <ClInclude Include="Loop.h" />
     <ClInclude Include="MarchCubes.h" />
     <ClInclude Include="MenuScene.h" />
-    <ClInclude Include="Observable.h" />
-    <ClInclude Include="Observer.h" />
     <ClInclude Include="MeshTri.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerData.h" />
     <ClInclude Include="RenderData.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
