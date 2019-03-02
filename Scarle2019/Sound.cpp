@@ -4,7 +4,7 @@
 Sound::Sound(AudioEngine* _audEngine, string _filename)
 {
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	string fullpath = "../sounds/" + _filename + ".wav";
+	string fullpath = m_filepath.generateFilepath(_filename, m_filepath.SOUND);
 	std::wstring wFilename = converter.from_bytes(fullpath.c_str());
 
 	m_sfx = std::make_unique<SoundEffect>(_audEngine, wFilename.c_str());

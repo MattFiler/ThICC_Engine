@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace EditorTool
 {
@@ -39,21 +40,28 @@ namespace EditorTool
                 assetName.Text = Path.GetFileNameWithoutExtension(modelPath.Text);
             }
 
+            //Find all materials in model to group collmap by - sort alphabetically
             string[] obj_file = File.ReadAllLines(filePicker.FileName);
-            itemMaterialCategories.Items.Clear();
+            ArrayList material_array = new ArrayList();
             foreach (string line in obj_file)
             {
                 if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
                 {
-                    itemMaterialCategories.Items.Add(line.Substring(7));
+                    material_array.Add(line.Substring(7));
                 }
+            }
+            material_array.Sort();
+            itemMaterialCategories.Items.Clear();
+            foreach (string material in material_array)
+            {
+                itemMaterialCategories.Items.Add(material);
             }
         }
         
         /* Import model and textures */
         private void importModel_Click(object sender, EventArgs e)
         {
-            string import_directory = "Models/" + assetName.Text + "/";
+            string import_directory = "DATA/MODELS/" + assetName.Text.ToUpper() + "/";
             int mat_check_count = 0;
             for (int i = 0; i < itemMaterialCategories.Items.Count; i++)
             {
@@ -270,10 +278,15 @@ namespace EditorTool
                 if (didFindMTL)
                 {
                     //Run the model converter to swap our OBJ into an SDKMESH
+                    string conv_args = "\"" + Path.GetFileName(modelPath.Text) + "\" -sdkmesh -nodds -y";
+                    if (shouldFlipUV.Checked)
+                    {
+                        conv_args += " -flipv";
+                    }
                     ProcessStartInfo meshConverter = new ProcessStartInfo();
                     meshConverter.WorkingDirectory = import_directory;
-                    meshConverter.FileName = "Models/meshconvert.exe";
-                    meshConverter.Arguments = "\"" + Path.GetFileName(modelPath.Text) + "\" -sdkmesh -nodds -y";
+                    meshConverter.FileName = "DATA/MODELS/meshconvert.exe";
+                    meshConverter.Arguments = conv_args;
                     meshConverter.UseShellExecute = false;
                     meshConverter.RedirectStandardOutput = true;
                     Process converterProcess = Process.Start(meshConverter);
@@ -309,6 +322,7 @@ namespace EditorTool
                     if (File.Exists(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
                     {
                         string final_asset_path = import_directory + assetName.Text + ".sdkmesh";
+                        final_asset_path = final_asset_path.ToUpper();
 
                         bool model_supports_collision = true;
                         int collision_fix_count = 0;
@@ -393,25 +407,25 @@ namespace EditorTool
                                 }
 
                                 //Fix conflicts if any are present
-                                if (checkVertConflict(vert_x_list, vert_y_list))
+                                if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(1) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(1) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(1))
                                 {
-                                    //X&Y conflict, needs fixing
                                     vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
-                                    vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
-                                    collision_fix_count++;
-                                }
-                                if (checkVertConflict(vert_y_list, vert_z_list))
-                                {
-                                    //Y&Z conflict, needs fixing
                                     vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
+                                    vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1;
+                                    collision_fix_count++;
+                                }
+                                if (vert_x_list.ElementAt(1) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(1) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(1) == vert_z_list.ElementAt(2))
+                                {
+                                    vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1;
+                                    vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
                                     vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
                                     collision_fix_count++;
                                 }
-                                if (checkVertConflict(vert_x_list, vert_z_list))
+                                if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(2))
                                 {
-                                    //X&Z conflict, needs fixing
-                                    vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
-                                    vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                                    vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1;
+                                    vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1;
+                                    vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1;
                                     collision_fix_count++;
                                 }
                                 
@@ -426,12 +440,23 @@ namespace EditorTool
                             }
                             if (model_supports_collision)
                             {
-                                File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".collmap", final_collmap_data);
+                                File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".COLLMAP", final_collmap_data);
                             }
                         }
 
-                        //Conversion complete - delete the OBJ and MTL
+                        //Conversion complete, delete MTL and fix up OBJ for model previewer
+                        obj_index = 0;
+                        foreach (string line in final_obj_file)
+                        {
+                            if (line.Contains("mtllib"))
+                            {
+                                final_obj_file[obj_index] = "# MTLLIB REMOVED FOR MARIO KART ASSET MANAGER";
+                                break;
+                            }
+                            obj_index++;
+                        }
                         File.Delete(import_directory + Path.GetFileName(modelPath.Text));
+                        File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".OBJ", final_obj_file);
                         if (importedMTL != "")
                         {
                             File.Delete(import_directory + importedMTL);
@@ -439,7 +464,7 @@ namespace EditorTool
 
                         //Create JSON data
                         JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0}");
-                        File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "json", asset_json.ToString(Formatting.Indented));
+                        File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "JSON", asset_json.ToString(Formatting.Indented));
 
                         //Move new SDKMESH to the correct requested filename
                         File.Move(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh", final_asset_path);
@@ -500,21 +525,6 @@ namespace EditorTool
                     MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }
-        
-        //Check to see if all vertices in this axis are conflicting
-        bool checkVertConflict(List<double> vertex_pos_list1, List<double> vertex_pos_list2)
-        {
-            int conflict_count = 0;
-            if (vertex_pos_list1.ElementAt(0) == vertex_pos_list1.ElementAt(1) && vertex_pos_list1.ElementAt(1) == vertex_pos_list1.ElementAt(2))
-            {
-                conflict_count++;
-            }
-            if (vertex_pos_list2.ElementAt(0) == vertex_pos_list2.ElementAt(1) && vertex_pos_list2.ElementAt(1) == vertex_pos_list2.ElementAt(2))
-            {
-                conflict_count++;
-            }
-            return (conflict_count == 2);
         }
 
         //Restyle form based on if we should generate a collmap or not

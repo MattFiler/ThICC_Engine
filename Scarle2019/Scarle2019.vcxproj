@@ -73,12 +73,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)nlohmann;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)nlohmann;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -172,6 +174,7 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="fileVBGO.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameFilepaths.h" />
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="GameObjectList.h" />

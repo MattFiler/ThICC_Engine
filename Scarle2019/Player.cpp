@@ -21,8 +21,6 @@ Player::~Player()
 
 void Player::Tick(GameStateData* _GSD)
 {
-	Vector forward = m_world.Forward();
-	std::cout << std::to_string(forward.x) + ", " + std::to_string(forward.y) + ", " + std::to_string(forward.z) << std::endl;
 	//FORWARD BACK & STRAFE CONTROL HERE
 	Vector3 forwardMove = 40.0f * Vector3::Forward;
 	Vector3 rightMove = 40.0f * Vector3::Right;
@@ -79,8 +77,9 @@ void Player::Tick(GameStateData* _GSD)
 	}
 
 	//change orinetation of player
-	float rotSpeed = 0.06f;
-	m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX; //_GSD->m_mouseState.x; 
+	float rotSpeed = 0.02f;
+	m_yaw -= rotSpeed * _GSD->m_mouseState.x;
+	m_pitch -= rotSpeed * _GSD->m_mouseState.y;
 
 
 	//move player up and down

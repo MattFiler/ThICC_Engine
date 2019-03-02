@@ -15,7 +15,7 @@ VBSnail::VBSnail(RenderData * _RD, std::string _filename, int _sections, float _
 
 	//load line
 	ifstream lineFile;
-	string fullpath = "../Models/" + _filename + ".txt";
+	string fullpath = m_filepath.generateFilepath(_filename, m_filepath.MODEL_CUSTOM);
 	lineFile.open(fullpath);
 	lineFile >> width;
 
@@ -109,7 +109,10 @@ VBSnail::VBSnail(RenderData * _RD, std::string _filename, int _sections, float _
 	// compile pixel shader
 	ID3DBlob* pixelShader;
 	ID3DBlob* errorBuff;
-	HRESULT hr = D3DCompileFromFile(L"../shaders/PixelShader2sided.hlsl",
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	string shader_path = m_filepath.generateFilepath("PixelShader2sided", m_filepath.SHADER);
+	std::wstring w_shader_path = converter.from_bytes(shader_path.c_str());
+	HRESULT hr = D3DCompileFromFile(w_shader_path.c_str(),
 		nullptr,
 		nullptr,
 		"main",

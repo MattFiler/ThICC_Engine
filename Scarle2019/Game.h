@@ -5,7 +5,7 @@
 #pragma once
 
 #include "StepTimer.h"
-#include "RaceUI.h"
+#include "GameFilepaths.h"
 #include <vector>
 using std::vector;
 
@@ -126,4 +126,6 @@ private:
 	GameStateData*										m_GSD;  //base game state to pass to all GameObjects
 	int num_of_cam = 1;
 	int num_of_players = 2;
+
+	GameFilepaths m_filepath;
 };

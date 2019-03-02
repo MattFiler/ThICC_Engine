@@ -181,6 +181,9 @@
     <ClInclude Include="TrackMagnet.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="GameFilepaths.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>Game Base\Scenes</Filter>
     </ClInclude>
@@ -198,15 +201,6 @@
     </ClInclude>
     <ClInclude Include="UIMangager.h">
       <Filter>Game Base\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Observer.h">
-      <Filter>Game Base\Observe</Filter>
-    </ClInclude>
-    <ClInclude Include="Observable.h">
-      <Filter>Game Base\Observe</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerData.h">
-      <Filter>Game Base\Source</Filter>
     </ClInclude>
     <ClInclude Include="RaceUI.h">
       <Filter>Game Base\UI\Game</Filter>

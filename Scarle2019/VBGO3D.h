@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject3D.h"
 #include "ConstantBuffer.h"
+#include "GameFilepaths.h"
 //A basic DirectX12 renderer for drawing from a Vertex and Index Buffer
 //all things DX12 stuff required have two versions
 // s_  static version shared by all VBGO3D objects
@@ -70,5 +71,7 @@ protected:
 	//textures
 	static ID3D12Resource* s_texture;
 	ID3D12Resource* m_texture = NULL;
+
+	GameFilepaths m_filepath;
 };
 
