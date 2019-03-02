@@ -177,10 +177,10 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//m_3DObjects.push_back(test3);
 
 	//Load in a track
-	track = new Track(m_RD, "N64 Rainbow Road");
+	track = new Track(m_RD, "GBA Mario Circuit");
 	m_3DObjects.push_back(track);
 
-	//Create a player within the track at the recommended location
+	//Create a player and position on track
 	player = new Player(m_RD, "Standard Kart");
 	player->SetPos(track->getSuitableSpawnSpot());
 	m_3DObjects.push_back(player);
