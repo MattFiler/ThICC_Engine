@@ -12,5 +12,6 @@ struct GameStateData
 	DirectX::Keyboard::State m_prevKeyboardState;
 	DirectX::Keyboard::State m_keyboardState;
 	DirectX::Mouse::State m_mouseState;
+	DirectX::GamePad::State m_gamePadState[2];
 };
 

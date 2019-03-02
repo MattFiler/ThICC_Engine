@@ -55,7 +55,7 @@ private:
 
 	// Test objects
 	Track* track = nullptr;
-	Player* player = nullptr;
+	Player* player[2] = {nullptr};
 
 	void Update(DX::StepTimer const& _timer);
 	void Render();
@@ -107,6 +107,7 @@ private:
 	//Input
 	std::unique_ptr<DirectX::Keyboard> m_keyboard;
 	std::unique_ptr<DirectX::Mouse> m_mouse;
+	std::unique_ptr<DirectX::GamePad> m_gamePad;
 
 	//audio system
 	//This uses a simple system, but a better pipeline can be used using Wave Banks
@@ -117,12 +118,14 @@ private:
 	// Game State
 	DX::StepTimer                                       m_timer;
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
+	//vector<UI*>											m_UIObjects;
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
 	Camera*												m_cam[4];
 	Light*												m_light; 
 	RenderData*											m_RD;	//dumping ground for things required to do rendering
 	GameStateData*										m_GSD;  //base game state to pass to all GameObjects
 	int num_of_cam = 1;
+	int num_of_players = 2;
 
 	GameFilepaths m_filepath;
 };
