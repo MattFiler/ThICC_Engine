@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Media;
 using NAudio.Wave;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
 
 namespace EditorTool
@@ -19,6 +21,7 @@ namespace EditorTool
     {
         List<string> full_loaded_filenames = new List<string>(); //Used for saving full list item file paths
         SoundPlayer sound_player = new SoundPlayer(); //for previewing sounds
+        string path_to_current_config = "";
         public Landing()
         {
             InitializeComponent();
@@ -107,16 +110,20 @@ namespace EditorTool
             refreshList();
         }
 
-        /* EDIT ASSET CONFIG */
-        private void editSelected_Click(object sender, EventArgs e)
+        //Try generate a config path for our selected asset - stored in global path_to_current_config (eek)
+        void getConfigPathForSelectedAsset()
         {
-            if (assetList.SelectedIndex == -1)
+            try
             {
-                MessageBox.Show("Please select an asset to edit!", "No asset selected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                string asset_config_path = full_loaded_filenames.ElementAt(assetList.SelectedIndex);
+                asset_config_path = asset_config_path.Substring(0, asset_config_path.Length - Path.GetExtension(asset_config_path).Length);
+                asset_config_path += ".JSON";
+                path_to_current_config = asset_config_path;
             }
-
-            MessageBox.Show(full_loaded_filenames.ElementAt(assetList.SelectedIndex));
+            catch
+            {
+                path_to_current_config = "";
+            }
         }
 
         /* DELETE ASSET */
@@ -241,12 +248,16 @@ namespace EditorTool
                         return;
                     }
                     modelConfigs.Visible = true;
-                    model_world_x.Text = "0";
-                    model_world_y.Text = "0";
-                    model_world_z.Text = "0";
-                    model_rot_x.Text = "0";
-                    model_rot_y.Text = "0";
-                    model_rot_z.Text = "0";
+
+                    getConfigPathForSelectedAsset();
+                    JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
+                    model_world_x.Text = asset_json["start_x"].Value<string>();
+                    model_world_y.Text = asset_json["start_y"].Value<string>();
+                    model_world_z.Text = asset_json["start_z"].Value<string>();
+                    model_rot_x.Text = asset_json["rot_x"].Value<string>();
+                    model_rot_y.Text = asset_json["rot_y"].Value<string>();
+                    model_rot_z.Text = asset_json["rot_z"].Value<string>();
+                    model_scale.Text = asset_json["modelscale"].Value<string>();
 
                     modelPreview.Visible = true;
                     modelPreview.Child = new ModelViewer("DATA/MODELS/" + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
@@ -338,6 +349,70 @@ namespace EditorTool
             sound_stream = null;
         }
 
+        /* SAVE CONFIG FOR ASSET */
+        private void saveAssetConfig_Click(object sender, EventArgs e)
+        {
+            if (path_to_current_config == "")
+            {
+                //Should never get here
+                MessageBox.Show("Asset config could not be read!\nHave you selected another asset?", "No asset selected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            switch (loadAssetType.SelectedItem)
+            {
+                case "Models":
+                    JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
+                    asset_json["start_x"] = Convert.ToDouble(model_world_x.Text);
+                    asset_json["start_y"] = Convert.ToDouble(model_world_y.Text);
+                    asset_json["start_z"] = Convert.ToDouble(model_world_z.Text);
+                    asset_json["rot_x"] = Convert.ToDouble(model_rot_x.Text);
+                    asset_json["rot_y"] = Convert.ToDouble(model_rot_y.Text);
+                    asset_json["rot_z"] = Convert.ToDouble(model_rot_z.Text);
+                    asset_json["modelscale"] = Convert.ToDouble(model_scale.Text);
+                    File.WriteAllText(path_to_current_config, asset_json.ToString(Formatting.Indented));
+                    MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                default:
+                    //Should never get here
+                    MessageBox.Show("There are no properties to edit for the selected asset.", "Nothing to edit.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+            }
+        }
+
+        //Force numeric in config inputs
+        private void model_world_x_TextChanged(object sender, KeyPressEventArgs e)
+        {
+            forceNumeric(e);
+        }
+        private void model_world_y_TextChanged(object sender, KeyPressEventArgs e)
+        {
+            forceNumeric(e);
+        }
+        private void model_world_z_TextChanged(object sender, KeyPressEventArgs e)
+        {
+            forceNumeric(e);
+        }
+        private void model_rot_x_TextChanged(object sender, KeyPressEventArgs e)
+        {
+            forceNumeric(e);
+        }
+        private void model_rot_y_TextChanged(object sender, KeyPressEventArgs e)
+        {
+            forceNumeric(e);
+        }
+        private void model_rot_z_TextChanged(object sender, KeyPressEventArgs e)
+        {
+            forceNumeric(e);
+        }
+        void forceNumeric(KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.' && e.KeyChar != '-')
+            {
+                e.Handled = true;
+            }
+        }
+
         //Modified from: https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, List<string> ignoreExtensions)
         {
@@ -410,6 +485,10 @@ namespace EditorTool
             //depreciated
         }
         private void importFont_Click(object sender, EventArgs e)
+        {
+            //depreciated
+        }
+        private void editSelected_Click(object sender, EventArgs e)
         {
             //depreciated
         }
