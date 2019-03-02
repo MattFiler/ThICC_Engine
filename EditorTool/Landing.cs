@@ -155,6 +155,16 @@ namespace EditorTool
                 case "Sounds":
                     MessageBox.Show("DELETING SOUNDS HAS BEEN DISABLED IN THE LATEST UPDATE - FUNCTIONALITY WILL RETURN SOON.", "FAILED", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
+                case "Images":
+                    string[] files = Directory.GetFiles("DATA/IMAGES/", "*", SearchOption.AllDirectories);
+                    foreach (string file in files)
+                    {
+                        if (Path.GetFileNameWithoutExtension(file) == Path.GetFileNameWithoutExtension(selected_file_name))
+                        {
+                            File.Delete(file);
+                        }
+                    }
+                    break;
                 default:
                     File.Delete(selected_file_name);
                     File.Delete(selected_file_name.Substring(0, selected_file_name.Length - 3) + "JSON");
@@ -250,21 +260,29 @@ namespace EditorTool
                         return;
                     }
                     imagePreview.Visible = true;
+
                     string file_path_without_extension = "DATA/IMAGES/" + assetList.SelectedItem.ToString() + ".";
+                    string file_path_with_extension = "";
                     if (File.Exists(file_path_without_extension + "PNG"))
                     {
-                        imagePreview.Image = new Bitmap(file_path_without_extension + "PNG");
-                        return;
+                        file_path_with_extension = file_path_without_extension + "PNG";
                     }
                     else if (File.Exists(file_path_without_extension + "JPG"))
                     {
-                        imagePreview.Image = new Bitmap(file_path_without_extension + "JPG");
-                        return;
+                        file_path_with_extension = file_path_without_extension + "JPG";
                     }
                     else if (File.Exists(file_path_without_extension + "JPEG"))
                     {
-                        imagePreview.Image = new Bitmap(file_path_without_extension + "JPEG");
+                        file_path_with_extension = file_path_without_extension + "JPEG";
+                    }
+                    else
+                    {
                         return;
+                    }
+
+                    using (var tempPreviewImg = new Bitmap(file_path_with_extension))
+                    {
+                        imagePreview.Image = new Bitmap(tempPreviewImg);
                     }
                     return;
                 case "Sounds":
@@ -285,7 +303,11 @@ namespace EditorTool
                         return;
                     }
                     imagePreview.Visible = true;
-                    imagePreview.Image = new Bitmap("DATA/FONTS/" + assetList.SelectedItem.ToString() + ".BMP");
+
+                    using (var tempPreviewImg = new Bitmap("DATA/FONTS/" + assetList.SelectedItem.ToString() + ".BMP"))
+                    {
+                        imagePreview.Image = new Bitmap(tempPreviewImg);
+                    }
                     return;
             }
         }
