@@ -20,14 +20,27 @@ void Camera::Tick(GameStateData* _GSD)
 	if (m_targetObject)
 	{
 		m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
-		//Matrix rotCam = Matrix::CreateFromYawPitchRoll(m_targetObject->GetYaw(), 0.0f, 0.0f);
-		Matrix rotCam = Matrix::CreateFromYawPitchRoll(m_targetObject->GetYaw(), m_targetObject->GetPitch(), m_targetObject->GetRoll());
-		//rotCam = Matrix::CreateFromYawPitchRoll(m_targetObject->GetYaw(), m_targetObject->GetPitch(), m_targetObject->GetRoll());
-		m_pos = m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam);
+
+
+		if (m_targetObject->GetUseMagnetMatrix())
+		{
+			//Matrix rotCam = Matrix::CreateFromYawPitchRoll(m_targetObject->GetYaw(), m_targetObject->GetPitch(), m_targetObject->GetRoll());
+			Matrix rotCam = Matrix::CreateFromYawPitchRoll(m_targetObject->GetYaw(), m_targetObject->GetPitch(), m_targetObject->GetRoll());
+			Matrix w = m_targetObject->GetWorldMagnet() * m_targetObject->GetWorldMagnet();
+			m_pos = m_targetObject->GetPos() * w.Forward(); +Vector3::Transform(m_dpos * w.Forward(), rotCam * w);
+		}
+		else if (!m_targetObject->GetUseMagnetMatrix())
+		{
+			Matrix rotCam = Matrix::CreateFromYawPitchRoll(m_targetObject->GetYaw(), m_targetObject->GetPitch(), m_targetObject->GetRoll());
+			m_pos = m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam);
+		}
+
+
 		//m_pos = m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam);
 		//if (m_pos != m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam))
 		//{
 		//	m_pos = m_pos + 0.1 * (m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam) - m_pos);
+		//	m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam), 0.1);
 		//}
 	}
 	else

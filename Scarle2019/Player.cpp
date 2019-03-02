@@ -28,6 +28,7 @@ void Player::Tick(GameStateData* _GSD)
 	Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
 	rightMove = Vector3::Transform(rightMove, rotMove);
+	float rotSpeed = 0.05f;
 	if (_GSD->m_keyboardState.W)
 	{
 		m_acc += forwardMove;
@@ -46,9 +47,10 @@ void Player::Tick(GameStateData* _GSD)
 	}
 
 	//change orinetation of player
-	float rotSpeed = 0.02f;
+	//float rotSpeed = 0.02f;
 	m_yaw -= rotSpeed * _GSD->m_mouseState.x;
 	m_pitch -= rotSpeed * _GSD->m_mouseState.y;
+
 
 	//move player up and down
 	if (_GSD->m_keyboardState.R)
