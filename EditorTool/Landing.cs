@@ -49,6 +49,11 @@ namespace EditorTool
                     modelimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
                     modelimporter.Show();
                     break;
+                case "Meshes":
+                    Mesh_Creator meshcreator = new Mesh_Creator();
+                    meshcreator.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    meshcreator.Show();
+                    break;
                 case "Images":
                     Image_Importer imageimporter = new Image_Importer();
                     imageimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
@@ -79,6 +84,10 @@ namespace EditorTool
                 case "Models":
                     path = "DATA/MODELS/";
                     extension = "*.SDKMESH";
+                    break;
+                case "Meshes":
+                    path = "DATA/MODELS/";
+                    extension = "*.TXTMESH";
                     break;
                 case "Images":
                     path = "DATA/IMAGES/";
@@ -149,6 +158,7 @@ namespace EditorTool
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
+                case "Meshes":
                     Directory.Delete(Path.GetDirectoryName(selected_file_name), true);
                     break;
                 case "Fonts":
@@ -261,6 +271,9 @@ namespace EditorTool
 
                     modelPreview.Visible = true;
                     modelPreview.Child = new ModelViewer("DATA/MODELS/" + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
+                    break;
+                case "Meshes":
+                    //WIP
                     break;
                 case "Images":
                     if (assetList.SelectedIndex == -1)

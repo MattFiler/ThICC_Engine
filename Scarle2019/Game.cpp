@@ -68,6 +68,11 @@ Game::~Game()
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND _window, int _width, int _height)
 {
+	if (!dirExists("DATA")) {
+		throw "ASSETS MUST BE COMPILED BEFORE RUNNING THE GAME";
+	}
+	//CRASHES HERE RESULT IN THE ERROR ABOVE
+	//RUN THE ASSET COMPILER IN THE TOOLS BEFORE PLAYING THE GAME!
 	m_window = _window;
 	m_outputWidth = std::max(_width, 1);
 	m_outputHeight = std::max(_height, 1);
@@ -289,6 +294,18 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
 	//m_sounds.push_back(TS);
+}
+
+bool Game::dirExists(const std::string& dirName_in)
+{
+	DWORD ftyp = GetFileAttributesA(dirName_in.c_str());
+	if (ftyp == INVALID_FILE_ATTRIBUTES)
+		return false;  //something is wrong with your path!
+
+	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+		return true;   // this is a directory!
+
+	return false;    // this is not a directory!
 }
 
 // Executes the basic game loop.
