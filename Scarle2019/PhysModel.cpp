@@ -15,11 +15,19 @@ void PhysModel::Tick(GameStateData * _GSD)
 
 	if (m_physicsOn)
 	{
-		Vector3 newVel = m_vel + _GSD->m_dt * (m_acc - m_drag*m_vel);
-		Vector3 newPos = m_pos + _GSD->m_dt * m_vel;
 
-		m_vel = newVel;
-		m_pos = newPos;
+		m_vel = m_vel + _GSD->m_dt * (m_acc - m_drag*m_vel);
+
+		m_gravVel = m_gravVel + _GSD->m_dt * (m_gravDirection);
+		if (m_gravVel.Length() > m_maxGrav)
+		{
+			m_gravVel.Normalize();
+			m_gravVel *= m_maxGrav;
+		}
+
+		m_velTotal = m_vel + m_gravVel;
+
+		m_pos = m_pos + (_GSD->m_dt * m_velTotal);
 	}
 
 	SDKMeshGO3D::Tick(_GSD);

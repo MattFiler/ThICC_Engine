@@ -20,7 +20,8 @@ void Camera::Tick(GameStateData* _GSD)
 	if (m_targetObject)
 	{
 		m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
-		Matrix rotCam = Matrix::CreateFromYawPitchRoll(m_targetObject->GetYaw(), m_targetObject->GetPitch(), m_targetObject->GetRoll());
+		//Matrix rotCam = Matrix::CreateFromYawPitchRoll(m_targetObject->GetYaw(), m_targetObject->GetPitch(), m_targetObject->GetRoll());
+		Matrix rotCam = m_targetObject->GetOri();
 		m_pos = m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam);
 	}
 	else
