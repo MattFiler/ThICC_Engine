@@ -10,6 +10,7 @@ MeshTri::MeshTri(Vector _a, Vector _b, Vector _c) : m_pointA(_a), m_pointB(_b), 
 /* Returns true if the given vector, starting at the given position intersects this triangle*/
 bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri)
 {
+	// If the normal is pointing away from the _starPos, ignore this tri
 	if (_direction.Distance(Vector(0, 0, 0), m_plane.Normal() + _direction) > _direction.Distance(Vector(0, 0, 0), _direction))
 	{
 		return false;

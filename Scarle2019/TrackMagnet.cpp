@@ -5,7 +5,7 @@
 
 TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 {
-
+	m_autoCalculateWolrd = false;
 }
 
 bool TrackMagnet::ShouldStickToTrack(Track& track)
@@ -15,21 +15,38 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	bool shouldStick = track.DoesLineIntersect(m_world.Down()*5, m_pos + m_world.Up() * 2, intersect, tri);
 	if (shouldStick)
 	{
-		Vector adjustVel = m_vel;
+		Vector adjustVel = m_velTotal;
 		// If velocity is opposite to direction, then the kart is reversing
-		if ((m_vel + m_world.Forward()).Length() < m_vel.Length())
+		if ((m_velTotal + m_world.Forward()).Length() < m_velTotal.Length())
 		{
 			adjustVel *= -1;
 		}
 		// TODO: This offset is hard coded, change if the kart ever has bounds?
 		Vector offset = m_world.Up() / 4;
-		// If the position of the kart outside of acceptable distance, and within acceptable snapping distance
-
-		SetPos(intersect + offset);
+		// If the position of the kart is outside of acceptable distance, and within acceptable snapping distance
+		float dist = Vector::Distance(m_pos + offset, intersect);
+		if (dist > minSnapDist && dist < maxSnapDist)
+		{
+			// Turn gravity off when within the snapping zone, this smooths out movment
+			m_gravVel = Vector3::Zero;
+			m_gravDirection = Vector3::Zero;
+			Vector3 moveVector = (intersect + offset) - m_pos;
+			if (moveVector.Length() > maxSnapSnep)
+			{
+				moveVector.Normalize();
+				moveVector *= maxSnapSnep;
+			}
+			SetPos(m_pos + moveVector);
+		}
+		else if(dist > maxSnapDist)
+		{
+			m_gravDirection = m_world.Down() * 5;
+		}
 		// If the karts speed is very low, then don't calculate a new rotation
-		if (adjustVel.Distance(Vector(0, 0, 0), adjustVel) < 0.9f)
+		if (adjustVel.Distance(Vector3::Zero, adjustVel) < 0.1f)
 		{
 			m_world = m_world.CreateWorld(m_pos, m_world.Forward(), tri->m_plane.Normal());
+			m_world = Matrix::CreateScale(m_scale) * m_world;
 		}
 		else
 		{
@@ -39,19 +56,19 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 			tri->DoesLineIntersect(m_world.Down() * 5, m_pos + adjustVel + m_world.Up() * 2, secondIntersect, tri2);
 			m_world = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
 			m_world = Matrix::CreateScale(m_scale) * m_world;
-			Vector3 scale = Vector3(0, 0, 0);
-			Quaternion rot = Quaternion::Identity;
-			m_world.Decompose(scale, rot, m_pos);
-			m_rot = Matrix::CreateFromQuaternion(rot);
 		}
-		m_autoCalculateWolrd = false;
 	}
 	else
 	{
-		m_autoCalculateWolrd = true;
-		// TODO: Make this change with delta_time
-		m_vel += m_world.Down();
+		m_world = m_world.CreateWorld(m_pos, m_world.Forward(), m_world.Up());
+		m_world = Matrix::CreateScale(m_scale) * m_world;
+		m_gravDirection = m_world.Down() * 5;
 	}
+	// Update the position and rotation by breaking apart m_world
+	Vector3 scale = Vector3::Zero;
+	Quaternion rot = Quaternion::Identity;
+	m_world.Decompose(scale, rot, m_pos);
+	m_rot = Matrix::CreateFromQuaternion(rot);
 
 	return shouldStick;
 }
