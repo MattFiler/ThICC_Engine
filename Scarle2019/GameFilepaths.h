@@ -42,7 +42,7 @@ private:
 
 	std::string shader_path[2] = { "DATA/SHADERS/", ".HLSL" };
 	std::string model_path[2] = { "DATA/MODELS/", ".SDKMESH" };
-	std::string model_custom_path[2] = { "DATA/MODELS/", ".TXT" };
+	std::string model_custom_path[2] = { "DATA/MODELS/", ".TXTMESH" };
 	std::string model_collmap_path[2] = { "DATA/MODELS/", ".COLLMAP" };
 	std::string image_path[2] = { "DATA/IMAGES/", ".DDS" };
 	std::string sound_path[2] = { "DATA/SOUNDS/", ".WAV" };

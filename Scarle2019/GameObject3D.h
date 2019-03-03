@@ -60,8 +60,7 @@ protected:
 	Matrix m_world = Matrix::Identity;
 	Matrix m_rot = Matrix::Identity;
 
-	Matrix m_worldMagnet = Matrix::Identity;
-	bool m_useMagnetMatrix = false;
+	bool m_autoCalculateWolrd = true;
 
 	GO3D_Render_Type m_type = GO3D_RT_NONE;
 	int num_of_cam = 2;

@@ -70,6 +70,8 @@ private:
 	void MoveToNextFrame();
 	void GetAdapter(IDXGIAdapter1** _ppAdapter);
 
+	bool dirExists(const std::string& dirName_in);
+
 	void OnDeviceLost();
 
 	// Application state
