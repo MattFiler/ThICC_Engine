@@ -12,7 +12,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
 	Vector intersect;
 	MeshTri* tri = nullptr;
-	bool shouldStick = track.DoesLineIntersect(m_world.Down()*5, m_pos + m_world.Up() * 2, intersect, tri);
+	bool shouldStick = track.DoesLineIntersect(m_world.Down()*5, m_pos + m_world.Up() * 4, intersect, tri);
 	if (shouldStick)
 	{
 		Vector adjustVel = m_velTotal;
@@ -38,25 +38,18 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 			}
 			SetPos(m_pos + moveVector);
 		}
-		else if(dist > maxSnapDist)
+		else if (dist > maxSnapDist)
 		{
 			m_gravDirection = m_world.Down() * 5;
 		}
-		// If the karts speed is very low, then don't calculate a new rotation
-		if (adjustVel.Distance(Vector3::Zero, adjustVel) < 0.1f)
-		{
-			m_world = m_world.CreateWorld(m_pos, m_world.Forward(), tri->m_plane.Normal());
-			m_world = Matrix::CreateScale(m_scale) * m_world;
-		}
-		else
-		{
-			// Calculate a new rotation using 2 points on the plane that is found
-			Vector secondIntersect;
-			MeshTri* tri2 = nullptr;
-			tri->DoesLineIntersect(m_world.Down() * 5, m_pos + adjustVel + m_world.Up() * 2, secondIntersect, tri2);
-			m_world = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
-			m_world = Matrix::CreateScale(m_scale) * m_world;
-		}
+
+		// Calculate a new rotation using 2 points on the plane that is found
+		Vector secondIntersect;
+		MeshTri* tri2 = nullptr;
+		tri->DoesLineIntersect(m_world.Down() * 5, m_pos + adjustVel + m_world.Forward() + (m_world.Up() * 4), secondIntersect, tri2);
+		m_world = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
+		m_world = Matrix::CreateScale(m_scale) * m_world;
+
 	}
 	else
 	{
