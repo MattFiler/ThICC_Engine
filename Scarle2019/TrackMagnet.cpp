@@ -1,17 +1,21 @@
 #include "pch.h"
 #include "TrackMagnet.h"
 #include "directxmath.h"
+#include "GameStateData.h"
 
 
 TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 {
 	m_autoCalculateWolrd = false;
+	Vector3 scale = Vector3::Zero;
+	m_world.Decompose(scale, m_quatRot, m_pos);
 }
 
-bool TrackMagnet::ShouldStickToTrack(Track& track)
+bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 {
 	Vector intersect;
 	MeshTri* tri = nullptr;
+	Matrix targetWorld = Matrix::Identity;
 	bool shouldStick = track.DoesLineIntersect(m_world.Down()*5, m_pos + m_world.Up() * 4, intersect, tri);
 	if (shouldStick)
 	{
@@ -25,20 +29,20 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		Vector offset = m_world.Up() / 4;
 		// If the position of the kart is outside of acceptable distance, and within acceptable snapping distance
 		float dist = Vector::Distance(m_pos + offset, intersect);
-		if (dist > minSnapDist && dist < maxSnapDist)
+		if (dist > m_minSnapDist && dist < m_maxSnapDist)
 		{
 			// Turn gravity off when within the snapping zone, this smooths out movment
 			m_gravVel = Vector3::Zero;
 			m_gravDirection = Vector3::Zero;
 			Vector3 moveVector = (intersect + offset) - m_pos;
-			if (moveVector.Length() > maxSnapSnep)
+			if (moveVector.Length() > m_maxSnapSnep* _GSD->m_dt)
 			{
 				moveVector.Normalize();
-				moveVector *= maxSnapSnep;
+				moveVector *= m_maxSnapSnep* _GSD->m_dt;
 			}
 			SetPos(m_pos + moveVector);
 		}
-		else if (dist > maxSnapDist)
+		else if (dist > m_maxSnapDist)
 		{
 			m_gravDirection = m_world.Down() * 5;
 		}
@@ -47,21 +51,34 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		Vector secondIntersect;
 		MeshTri* tri2 = nullptr;
 		tri->DoesLineIntersect(m_world.Down() * 5, m_pos + adjustVel + m_world.Forward() + (m_world.Up() * 4), secondIntersect, tri2);
-		m_world = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
-		m_world = Matrix::CreateScale(m_scale) * m_world;
-
+		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
+		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 	}
 	else
 	{
-		m_world = m_world.CreateWorld(m_pos, m_world.Forward(), m_world.Up());
-		m_world = Matrix::CreateScale(m_scale) * m_world;
+		targetWorld = m_world.CreateWorld(m_pos, m_world.Forward(), m_world.Up());
+		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 		m_gravDirection = m_world.Down() * 5;
 	}
 	// Update the position and rotation by breaking apart m_world
 	Vector3 scale = Vector3::Zero;
 	Quaternion rot = Quaternion::Identity;
-	m_world.Decompose(scale, rot, m_pos);
-	m_rot = Matrix::CreateFromQuaternion(rot);
+	targetWorld.Decompose(scale, rot, m_pos);
+
+	// Calculate the distance between the current and target rotation
+	Quaternion inverseRot = Quaternion::Identity;
+	m_quatRot.Inverse(inverseRot);
+	float lerpDelta = (m_maxRotation * _GSD->m_dt) / (inverseRot*rot).Length();
+	if (lerpDelta > 1)
+	{
+		lerpDelta = 1;
+	}
+	// Lerp the rotation by the calculated amount
+	m_quatRot = Quaternion::Lerp(m_quatRot, rot, lerpDelta);
+
+	// Rebuild m_world
+	m_rot = Matrix::CreateFromQuaternion(m_quatRot);
+	m_world = Matrix::CreateScale(m_scale) * m_rot * Matrix::CreateTranslation(m_pos);
 
 	return shouldStick;
 }
