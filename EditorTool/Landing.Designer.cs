@@ -79,6 +79,7 @@ namespace EditorTool
             this.loadAssetType.FormattingEnabled = true;
             this.loadAssetType.Items.AddRange(new object[] {
             "Models",
+            "Meshes",
             "Sounds",
             "Images",
             "Fonts"});
