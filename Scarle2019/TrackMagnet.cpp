@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "TrackMagnet.h"
+#include "directxmath.h"
 
 
 TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
@@ -26,6 +27,10 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 			MeshTri* tri2 = nullptr;
 			tri->DoesLineIntersect(m_world.Down() * 5, m_pos + m_vel + m_world.Up() * 2, secondIntersect, tri2);
 			m_worldMagnet = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
+			Vector3 scale = Vector3(0, 0, 0);
+			Quaternion rot = Quaternion::Identity;
+			m_world.Decompose(scale, rot, m_pos);
+			m_rot = Matrix::CreateFromQuaternion(rot);
 		}
 		m_useMagnetMatrix = true;
 	}

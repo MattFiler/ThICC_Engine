@@ -6,8 +6,6 @@
 
 Player::Player(RenderData* _RD, string _filename) : TrackMagnet(_RD, _filename)
 {
-
-
 	SetDrag(0.7);
 	SetPhysicsOn(true);
 }
@@ -21,8 +19,8 @@ Player::~Player()
 void Player::Tick(GameStateData* _GSD)
 {
 	//FORWARD BACK & STRAFE CONTROL HERE
-	Vector3 forwardMove = 40.0f * Vector3::Forward;
-	Vector3 rightMove = 40.0f * Vector3::Right;
+	Vector3 forwardMove = 40.0f * m_world.Forward();
+	Vector3 rightMove = 40.0f * m_world.Right();
 	Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
 	rightMove = Vector3::Transform(rightMove, rotMove);
@@ -43,6 +41,7 @@ void Player::Tick(GameStateData* _GSD)
 		m_acc += rightMove;
 	}
 
+	/*
 	//change orinetation of player
 	float rotSpeed = 0.02f;
 	m_yaw -= rotSpeed * _GSD->m_mouseState.x;
@@ -58,7 +57,7 @@ void Player::Tick(GameStateData* _GSD)
 	{
 		m_acc.y -= 40.0f;
 	}
-
+	*/
 	//limit motion of the player
 	/*
 	float length = m_pos.Length();
