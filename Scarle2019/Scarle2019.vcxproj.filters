@@ -205,6 +205,12 @@
     <ClInclude Include="RaceUI.h">
       <Filter>Game Base\UI\Game</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -298,6 +304,9 @@
       <Filter>Maths</Filter>
     </ClCompile>
     <ClCompile Include="TrackMagnet.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
   </ItemGroup>

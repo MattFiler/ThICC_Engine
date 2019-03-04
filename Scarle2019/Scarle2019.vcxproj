@@ -22,7 +22,7 @@
     <RootNamespace>Scarle2019</RootNamespace>
     <ProjectGuid>{beb5860e-fef9-4f22-baeb-f76c22cf75d6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -169,6 +169,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="d3dx12.h" />
@@ -213,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="fileVBGO.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject2D.cpp" />

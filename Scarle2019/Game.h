@@ -130,4 +130,6 @@ private:
 	int num_of_players = 2;
 
 	GameFilepaths m_filepath;
+
+	std::vector<PhysModel*> m_physModels;
 };

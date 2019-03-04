@@ -37,6 +37,7 @@
             this.shouldGenerateCollmap = new System.Windows.Forms.CheckBox();
             this.itemMaterialCategories = new System.Windows.Forms.CheckedListBox();
             this.shouldFlipUV = new System.Windows.Forms.CheckBox();
+            this.shouldCreateBoxCollider = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // importModel
@@ -98,9 +99,9 @@
             this.shouldGenerateCollmap.AutoSize = true;
             this.shouldGenerateCollmap.Location = new System.Drawing.Point(19, 92);
             this.shouldGenerateCollmap.Name = "shouldGenerateCollmap";
-            this.shouldGenerateCollmap.Size = new System.Drawing.Size(135, 17);
+            this.shouldGenerateCollmap.Size = new System.Drawing.Size(89, 17);
             this.shouldGenerateCollmap.TabIndex = 6;
-            this.shouldGenerateCollmap.Text = "Generate Collision Map";
+            this.shouldGenerateCollmap.Text = "Mesh Collider";
             this.shouldGenerateCollmap.UseVisualStyleBackColor = true;
             this.shouldGenerateCollmap.CheckedChanged += new System.EventHandler(this.shouldGenerateCollmap_CheckedChanged_1);
             // 
@@ -117,18 +118,29 @@
             this.shouldFlipUV.AutoSize = true;
             this.shouldFlipUV.Checked = true;
             this.shouldFlipUV.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.shouldFlipUV.Location = new System.Drawing.Point(160, 92);
+            this.shouldFlipUV.Location = new System.Drawing.Point(201, 92);
             this.shouldFlipUV.Name = "shouldFlipUV";
             this.shouldFlipUV.Size = new System.Drawing.Size(65, 17);
             this.shouldFlipUV.TabIndex = 8;
             this.shouldFlipUV.Text = "Flip UVs";
             this.shouldFlipUV.UseVisualStyleBackColor = true;
             // 
+            // shouldCreateBoxCollider
+            // 
+            this.shouldCreateBoxCollider.AutoSize = true;
+            this.shouldCreateBoxCollider.Location = new System.Drawing.Point(114, 92);
+            this.shouldCreateBoxCollider.Name = "shouldCreateBoxCollider";
+            this.shouldCreateBoxCollider.Size = new System.Drawing.Size(81, 17);
+            this.shouldCreateBoxCollider.TabIndex = 9;
+            this.shouldCreateBoxCollider.Text = "Box Collider";
+            this.shouldCreateBoxCollider.UseVisualStyleBackColor = true;
+            // 
             // Model_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 272);
+            this.ClientSize = new System.Drawing.Size(294, 270);
+            this.Controls.Add(this.shouldCreateBoxCollider);
             this.Controls.Add(this.shouldFlipUV);
             this.Controls.Add(this.itemMaterialCategories);
             this.Controls.Add(this.shouldGenerateCollmap);
@@ -159,6 +171,7 @@
         private System.Windows.Forms.CheckBox shouldGenerateCollmap;
         private System.Windows.Forms.CheckedListBox itemMaterialCategories;
         private System.Windows.Forms.CheckBox shouldFlipUV;
+        private System.Windows.Forms.CheckBox shouldCreateBoxCollider;
     }
 }
 

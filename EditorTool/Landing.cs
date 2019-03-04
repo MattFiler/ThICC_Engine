@@ -50,9 +50,12 @@ namespace EditorTool
                     modelimporter.Show();
                     break;
                 case "Meshes":
+                    MessageBox.Show("This functionality is coming soon.");
+                    /*
                     Mesh_Creator meshcreator = new Mesh_Creator();
                     meshcreator.FormClosed += new FormClosedEventHandler(refreshOnClose);
                     meshcreator.Show();
+                    */
                     break;
                 case "Images":
                     Image_Importer imageimporter = new Image_Importer();

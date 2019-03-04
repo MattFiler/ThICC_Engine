@@ -105,6 +105,8 @@ namespace EditorTool
                 int found_count = 0;
                 int lost_count = 0;
 
+                string json_extras = ", \"has_box_collider\": false";
+
                 //Copy model into our output directory - basically our working directory
                 Directory.CreateDirectory(import_directory);
                 File.Copy(pathWithoutExtension + ".obj", import_directory + Path.GetFileName(modelPath.Text));
@@ -326,13 +328,15 @@ namespace EditorTool
 
                         bool model_supports_collision = true;
                         int collision_fix_count = 0;
-                        if (shouldGenerateCollmap.Checked)
+                        if (shouldGenerateCollmap.Checked || shouldCreateBoxCollider.Checked)
                         {
                             //Output face vertex data for generating our collmap
                             List<List<double>> model_vertices_raw = new List<List<double>>();
                             List<List<int>> model_face_vert_index = new List<List<int>>();
                             List<string> final_collmap_data = new List<string>();
                             bool should_listen_for_faces = false;
+                            double[] centre_of_model = { 0, 0, 0 };
+                            double[] extents_of_model = { 0, 0, 0 };
                             //Grab all vertices and face vert indexes from our OBJ
                             foreach (string line in final_obj_file)
                             {
@@ -384,63 +388,111 @@ namespace EditorTool
                                     continue;
                                 }
                             }
-                            //Build up total model verts for collmap reader from parsed data
-                            foreach (List<int> vert_index_list in model_face_vert_index)
+
+                            //Calculate center of mesh for our box collider script
+                            double[] biggest_vert = { 0, 0, 0 };
+                            double[] smallest_vert = { 0, 0, 0 };
+                            if (shouldCreateBoxCollider.Checked)
                             {
-                                string this_face_complete = "";
-                                int this_face_vert_count = 0;
-                                List<double> vert_x_list = new List<double>();
-                                List<double> vert_y_list = new List<double>();
-                                List<double> vert_z_list = new List<double>();
-                                foreach (int vert_index in vert_index_list)
+                                foreach (List<double> vertex in model_vertices_raw)
                                 {
-                                    vert_x_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(0));
-                                    vert_y_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(1));
-                                    vert_z_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(2));
-                                    this_face_vert_count++;
+                                    for (int i = 0; i < 3; i++)
+                                    {
+                                        if (biggest_vert[i] < vertex.ElementAt(i))
+                                        {
+                                            biggest_vert[i] = vertex.ElementAt(i);
+                                        }
+                                        if (smallest_vert[i] > vertex.ElementAt(i))
+                                        {
+                                            smallest_vert[i] = vertex.ElementAt(i);
+                                        }
+                                    }
                                 }
-                                if (this_face_vert_count != 3)
-                                {
-                                    //Model must be triangulated to generate collision map
-                                    model_supports_collision = false;
-                                    break;
-                                }
-
-                                //Fix conflicts if any are present
-                                if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(1) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(1) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(1))
-                                {
-                                    vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
-                                    vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
-                                    vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1;
-                                    collision_fix_count++;
-                                }
-                                if (vert_x_list.ElementAt(1) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(1) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(1) == vert_z_list.ElementAt(2))
-                                {
-                                    vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1;
-                                    vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
-                                    vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
-                                    collision_fix_count++;
-                                }
-                                if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(2))
-                                {
-                                    vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1;
-                                    vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1;
-                                    vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1;
-                                    collision_fix_count++;
-                                }
-                                
-                                //Compile this data now we know it is correct
-                                for (int i = 0; i < this_face_vert_count; i++) // this_face_vert_count = 3
-                                {
-                                    this_face_complete += "(" + vert_x_list.ElementAt(i) + ", " + vert_y_list.ElementAt(i) + ", " + vert_z_list.ElementAt(i) + "), ";
-                                }
-                                this_face_complete = this_face_complete.Substring(0, this_face_complete.Length - 2);
-
-                                final_collmap_data.Add(this_face_complete);
                             }
-                            if (model_supports_collision)
+
+                            //Build up total model verts for collmap reader from parsed data
+                            if (shouldGenerateCollmap.Checked)
                             {
+                                foreach (List<int> vert_index_list in model_face_vert_index)
+                                {
+                                    string this_face_complete = "";
+                                    int this_face_vert_count = 0;
+                                    List<double> vert_x_list = new List<double>();
+                                    List<double> vert_y_list = new List<double>();
+                                    List<double> vert_z_list = new List<double>();
+                                    foreach (int vert_index in vert_index_list)
+                                    {
+                                        vert_x_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(0));
+                                        vert_y_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(1));
+                                        vert_z_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(2));
+
+                                        this_face_vert_count++;
+                                    }
+                                    if (this_face_vert_count != 3)
+                                    {
+                                        //Model must be triangulated to generate collision map
+                                        model_supports_collision = false;
+                                        break;
+                                    }
+
+                                    //Fix conflicts if any are present
+                                    if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(1) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(1) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(1))
+                                    {
+                                        vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
+                                        vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
+                                        vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1;
+                                        collision_fix_count++;
+                                    }
+                                    if (vert_x_list.ElementAt(1) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(1) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(1) == vert_z_list.ElementAt(2))
+                                    {
+                                        vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1;
+                                        vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
+                                        vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                                        collision_fix_count++;
+                                    }
+                                    if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(2))
+                                    {
+                                        vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1;
+                                        vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1;
+                                        vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1;
+                                        collision_fix_count++;
+                                    }
+
+                                    //Compile this data now we know it is correct
+                                    for (int i = 0; i < this_face_vert_count; i++) // this_face_vert_count = 3
+                                    {
+                                        this_face_complete += "(" + vert_x_list.ElementAt(i) + ", " + vert_y_list.ElementAt(i) + ", " + vert_z_list.ElementAt(i) + "), ";
+                                    }
+                                    this_face_complete = this_face_complete.Substring(0, this_face_complete.Length - 2);
+
+                                    final_collmap_data.Add(this_face_complete);
+                                }
+                            }
+                            if (shouldGenerateCollmap.Checked && model_supports_collision)
+                            {
+                                //Output full collision map
                                 File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".COLLMAP", final_collmap_data);
+                            }
+                            if (shouldCreateBoxCollider.Checked)
+                            {
+                                //Work out centre and extents of model
+                                centre_of_model[0] = (biggest_vert[0] + smallest_vert[0]) / 2;
+                                centre_of_model[1] = (biggest_vert[1] + smallest_vert[1]) / 2;
+                                centre_of_model[2] = (biggest_vert[2] + smallest_vert[2]) / 2;
+                                extents_of_model[0] = biggest_vert[0] - centre_of_model[0];
+                                extents_of_model[1] = biggest_vert[1] - centre_of_model[1];
+                                extents_of_model[2] = biggest_vert[2] - centre_of_model[2];
+
+                                //Save to add to json file
+                                json_extras = ",\"has_box_collider\": true,\"collision_box\": { " +
+                                    "\"front_top_left\": [" + biggest_vert[0] + "," + biggest_vert[1] + "," + biggest_vert[2] + "], " +
+                                    "\"front_top_right\": [" + smallest_vert[0] + "," + biggest_vert[1] + "," + biggest_vert[2] + "], " +
+                                    "\"front_bottom_right\": [" + smallest_vert[0] + "," + smallest_vert[1] + "," + biggest_vert[2] + "], " +
+                                    "\"front_bottom_left\": [" + biggest_vert[0] + "," + smallest_vert[1] + "," + biggest_vert[2] + "], " +
+                                    "\"back_top_left\": [" + biggest_vert[0] + "," + biggest_vert[1] + "," + smallest_vert[2] + "], " +
+                                    "\"back_top_right\": [" + smallest_vert[0] + "," + biggest_vert[1] + "," + smallest_vert[2] + "], " +
+                                    "\"back_bottom_right\": [" + smallest_vert[0] + "," + smallest_vert[1] + "," + smallest_vert[2] + "], " +
+                                    "\"back_bottom_left\": [" + biggest_vert[0] + "," + smallest_vert[1] + "," + smallest_vert[2] + "] }";
                             }
                         }
 
@@ -463,7 +515,7 @@ namespace EditorTool
                         }
 
                         //Create JSON data
-                        JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0}");
+                        JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\"" + json_extras + ", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0}");
                         File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "JSON", asset_json.ToString(Formatting.Indented));
 
                         //Move new SDKMESH to the correct requested filename
@@ -473,16 +525,20 @@ namespace EditorTool
                         {
                             final_confirmation += "\nFound " + found_count + " material(s).";
                         }
+                        if (shouldCreateBoxCollider.Checked)
+                        {
+                            final_confirmation += "\nSuccessfully generated data for box collider.";
+                        }
                         if (shouldGenerateCollmap.Checked && !model_supports_collision)
                         {
-                            final_confirmation += "\nERROR: Collision map was not generated as this model is not triangulated.";
+                            final_confirmation += "\nERROR: Mesh collider was not generated as this model is not triangulated.";
                         }
                         else if (shouldGenerateCollmap.Checked)
                         {
-                            final_confirmation += "\nSuccessfully generated collision map for " + mat_check_count + " model sections.";
+                            final_confirmation += "\nSuccessfully generated mesh collider for " + mat_check_count + " model sections.";
                             if (collision_fix_count > 0)
                             {
-                                final_confirmation += "\nWARNING: Automatically fixed " + collision_fix_count + " collision map issues.";
+                                final_confirmation += "\nWARNING: Automatically fixed " + collision_fix_count + " mesh collision issues.";
                             }
                         }
                         if (lost_count > 0)
