@@ -6,6 +6,8 @@
 #include "Game.h"
 #include "RenderData.h"
 #include "GameStateData.h"
+#include <iostream>
+#include <experimental/filesystem>
 
 
 extern void ExitGame();
@@ -66,6 +68,11 @@ Game::~Game()
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND _window, int _width, int _height)
 {
+	if (!dirExists("DATA")) {
+		throw "ASSETS MUST BE COMPILED BEFORE RUNNING THE GAME";
+	}
+	//CRASHES HERE RESULT IN THE ERROR ABOVE
+	//RUN THE ASSET COMPILER IN THE TOOLS BEFORE PLAYING THE GAME!
 	m_window = _window;
 	m_outputWidth = std::max(_width, 1);
 	m_outputHeight = std::max(_height, 1);
@@ -106,28 +113,31 @@ void Game::Initialize(HWND _window, int _width, int _height)
 		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
 		100);
 
-	//GEP: Set up Sprite batch for drawing textures also loads the font for text
+	////GEP: Set up Sprite batch for drawing textures also loads the font for text
 	m_RD->m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 	ResourceUploadBatch resourceUpload(m_d3dDevice.Get());
 
 	resourceUpload.Begin();
 	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
-
 	SpriteBatchPipelineStateDescription pd(rtState);
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	string font_path = m_filepath.generateFilepath("Perpetua", m_filepath.FONT);
+	std::wstring w_font_path = converter.from_bytes(font_path.c_str());
 	pd.blendDesc = m_RD->m_states->NonPremultiplied;
 	m_RD->m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dDevice.Get(), resourceUpload, pd);
+	//This will throw an exception in <memory> if we try to load a non-existant font.
 	m_RD->m_font = std::make_unique<SpriteFont>(m_d3dDevice.Get(), resourceUpload,
-		L"DATA/FONTS/ISOLATION.SPRITEFONT",
+		w_font_path.c_str(),
 		m_RD->m_resourceDescriptors->GetCpuHandle(m_RD->m_resourceCount),
 		m_RD->m_resourceDescriptors->GetGpuHandle(m_RD->m_resourceCount));
 	m_RD->m_resourceCount++;
+	auto uploadResourcesFinished = resourceUpload.End(m_commandQueue.Get());
+	SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
+	SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
 
-	//auto uploadResourcesFinished = resourceUpload.End(m_commandQueue.Get());
-
-	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
-	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
-	m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH }; //uncommented
 	m_scissorRect[0] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
+
 	//m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	//m_scissorRect[0] = { 0,0,(int)(m_outputWidth * 0.5f),(int)(m_outputHeight * 0.5f) };
 	//m_viewport[1] = { static_cast<float>(m_outputWidth) * 0.5f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
@@ -136,7 +146,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//m_scissorRect[2] = { 0,0,(int)(m_outputWidth * 0.5f),(int)(m_outputHeight) };
 	//m_viewport[3] = { static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	//m_scissorRect[3] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
-
 
 	//Set Up VBGO render system
 	if (!VBGO3D::SetUpVBGOs(m_RD))
@@ -152,7 +161,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	*/
 
 	//GEP::This is where I am creating the test objects
-
 
 	//geometric shape renderer test
 	for (int i = 1; i < GP_COUNT; i++)
@@ -170,37 +178,38 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//test3->SetRotationInDegrees(Vector3(0, 0, 0));
 	//m_3DObjects.push_back(test3);
 
-	//create a "player"
-	player = new Player(m_RD, "Kart");
-	player->SetPos(Vector(-345, 555.0f, 350));
-	//player->SetRotationInDegrees(Vector3(180, 180, 180));
-	m_3DObjects.push_back(player);
+	//Controller 
+	m_gamePad = std::make_unique<GamePad>();
 
-	// Test track
-	track = new Track(m_RD, "Rainbow Road");
-	//m_3DObjects.push_back(track);
-	//SDKMeshGO3D* track = new SDKMeshGO3D(m_RD, "Test Track");
+	//Load in a track
+	//track = new Track(m_RD, "GBA Mario Circuit");
+	track = new Track(m_RD, "Mario Kart Stadium");
 	m_3DObjects.push_back(track);
 
+	//Create a player and position on track
+	player[0] = new Player(m_RD, "Standard Kart", 0, *m_gamePad.get());
+	player[0]->SetPos(track->getSuitableSpawnSpot());
+	m_3DObjects.push_back(player[0]);
+
 	//point a camera at the player that follows
-	m_cam[0] =  new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, player, Vector3(10.0f, 3.0f, 10.0f));
+	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_RD->m_cam = m_cam[0];
 	m_3DObjects.push_back(m_cam[0]);
 
-	//m_cam[1] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	////m_RD->m_cam = m_cam[1];
-	//m_3DObjects.push_back(m_cam[1]);
+	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
+	//m_RD->m_cam = m_cam[1];
+	m_3DObjects.push_back(m_cam[1]);
 
-	//m_cam[2] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	////m_RD->m_cam = m_cam[1];
-	//m_3DObjects.push_back(m_cam[2]);
+	m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
+	//m_RD->m_cam = m_cam[1];
+	m_3DObjects.push_back(m_cam[2]);
 
-	//m_cam[3] = new Camera(static_cast<float>(100), static_cast<float>(90), 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
-	////m_RD->m_cam = m_cam[1];
-	//m_3DObjects.push_back(m_cam[3]);
+	m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
+	//m_RD->m_cam = m_cam[1];
+	m_3DObjects.push_back(m_cam[3]);
 
 	//create a base light
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
@@ -257,22 +266,34 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//Once I.ve set up all the VBs and IBs push them to the GPU
 	VBGO3D::PushIBVB(m_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
+	//debug: output our current directory
+	std::cout << std::experimental::filesystem::current_path();
+
 	//test text
-	Text2D * test2 = new Text2D("testing text");
-	m_2DObjects.push_back(test2);
+	//Text2D *test2 = new Text2D("testing text");
+	//m_2DObjects.push_back(test2);
 
 	//text example 2D objects
-	ImageGO2D *test = new ImageGO2D(m_RD, "twist");
-	test->SetOri(45);
-	test->SetPos(Vector2(200, 300));
-	test->CentreOrigin();
-	test->SetScale(0.5f*Vector2::One);
-	m_2DObjects.push_back(test);
-	test = new ImageGO2D(m_RD, "guides_logo");
-	test->SetPos(Vector2(100, 100));
-	test->SetScale(Vector2(1.0f, 0.5f));
-	test->SetColour(Color(1, 0, 0, 1));
-	m_2DObjects.push_back(test);
+
+	//ImageGO2D *test = new ImageGO2D(m_RD, "twist");
+	//test->SetOri(45);
+	//test->SetPos(Vector2(200, 300));
+	//test->CentreOrigin();
+	//test->SetScale(0.5f*Vector2::One);
+	//m_2DObjects.push_back(test);
+	//test = new ImageGO2D(m_RD, "guides_logo");
+	//test->SetPos(Vector2(100, 100));
+	//test->SetScale(Vector2(1.0f, 0.5f));
+	//test->SetColour(Color(1, 0, 0, 1));
+	//m_2DObjects.push_back(test);
+
+	//GUI TEST
+	//Enter in order: LapPos / RacePos / BoxPos / ItemPos
+	//Vector2 uiPositions[4] = {Vector2(32.f,300.f), Vector2(32.f,350.f), 
+		//Vector2(32.f,32.f), Vector2(32.f,32.f)};
+	//RaceUI * player1Test = new RaceUI(m_RD, uiPositions);
+	//player1Test->SetPos(Vector2(0, 0));
+	//m_2DObjects.push_back(player1Test);
 
 	//Test Sounds
 	//Loop *loop = new Loop(m_audEngine.get(), "Course Intro Soundtrack");
@@ -282,6 +303,19 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
 	//m_sounds.push_back(TS);
+}
+
+//Thanks, https://stackoverflow.com/a/8233867/3798962
+bool Game::dirExists(const std::string& dirName_in)
+{
+	DWORD ftyp = GetFileAttributesA(dirName_in.c_str());
+	if (ftyp == INVALID_FILE_ATTRIBUTES)
+		return false;  //something is wrong with your path!
+
+	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+		return true;   // this is a directory!
+
+	return false;    // this is not a directory!
 }
 
 // Executes the basic game loop.
@@ -299,7 +333,7 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& _timer)
 {
 	// Test code
-	//player->ShouldStickToTrack(*track);
+	player[0]->ShouldStickToTrack(*track, m_GSD);
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 
 	//this will update the audio engine but give us chance to do somehting else if that isn't working
@@ -326,21 +360,17 @@ void Game::Update(DX::StepTimer const& _timer)
 	m_GSD->m_keyboardState = m_keyboard->GetState();
 	m_GSD->m_mouseState = m_mouse->GetState();
 
+	for (int i = 0; i < num_of_players; ++i)
+	{
+		m_GSD->m_gamePadState[i] = m_gamePad->GetState(i); //set game controllers state[s]
+	}
+
 	//Quit Properly on press ESC
 	if (m_GSD->m_keyboardState.Escape)
 	{
 		ExitGame();
 	}
-
-	//if (m_GSD->m_keyboardState.Left)
-	//{
-	//	m_RD->m_cam = m_cam;
-	//}
-	//if (m_GSD->m_keyboardState.Right)
-	//{
-	//	m_RD->m_cam = m_cam1;
-	//}
-
+	
 	//Add your game logic here.
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
@@ -449,6 +479,7 @@ void Game::Present()
 void Game::OnActivated()
 {
 	// TODO: Game is becoming active window.
+	//m_gamePad->Resume();
 }
 
 void Game::OnDeactivated()
@@ -482,9 +513,8 @@ void Game::OnWindowSizeChanged(int _width, int _height)
 // Properties
 void Game::GetDefaultSize(int& _width, int& _height) const
 {
-	// TODO: Change to desired default window size (note minimum size is 320x200).
-	_width = 800;
-	_height = 800;
+	_width = 1280;
+	_height = 720;
 }
 
 void Game::SetViewport(int i_, float _TopLeftX, float _TopLeftY, float _Width, float _Height)

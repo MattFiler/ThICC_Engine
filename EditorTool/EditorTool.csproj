@@ -8,7 +8,7 @@
     <ProjectGuid>{DBBA8CF1-FD88-4E14-8BD2-97331F29416A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>EditorTool</RootNamespace>
-    <AssemblyName>EditorTool</AssemblyName>
+    <AssemblyName>Mario Kart Asset Manager</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,6 +39,15 @@
     <Reference Include="Costura, Version=3.3.2.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.3.3.2\lib\net40\Costura.dll</HintPath>
     </Reference>
+    <Reference Include="HelixToolkit">
+      <HintPath>.\HelixToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="HelixToolkit.Wpf">
+      <HintPath>.\HelixToolkit.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio">
+      <HintPath>.\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -61,6 +70,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Font_Importer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Font_Importer.Designer.cs">
+      <DependentUpon>Font_Importer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Image_Importer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +87,12 @@
     </Compile>
     <Compile Include="Landing.Designer.cs">
       <DependentUpon>Landing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Mesh_Creator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Mesh_Creator.Designer.cs">
+      <DependentUpon>Mesh_Creator.cs</DependentUpon>
     </Compile>
     <Compile Include="Model_Viewer.xaml.cs">
       <DependentUpon>Model_Viewer.xaml</DependentUpon>
@@ -90,11 +111,17 @@
     <Compile Include="Sound_Importer.Designer.cs">
       <DependentUpon>Sound_Importer.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Font_Importer.resx">
+      <DependentUpon>Font_Importer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Image_Importer.resx">
       <DependentUpon>Image_Importer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Landing.resx">
       <DependentUpon>Landing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mesh_Creator.resx">
+      <DependentUpon>Mesh_Creator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Model_Importer.resx">
       <DependentUpon>Model_Importer.cs</DependentUpon>

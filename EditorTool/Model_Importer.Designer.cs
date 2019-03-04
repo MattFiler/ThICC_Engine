@@ -36,6 +36,7 @@
             this.assetName = new System.Windows.Forms.TextBox();
             this.shouldGenerateCollmap = new System.Windows.Forms.CheckBox();
             this.itemMaterialCategories = new System.Windows.Forms.CheckedListBox();
+            this.shouldFlipUV = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // importModel
@@ -86,6 +87,7 @@
             // 
             // assetName
             // 
+            this.assetName.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.assetName.Location = new System.Drawing.Point(19, 27);
             this.assetName.Name = "assetName";
             this.assetName.Size = new System.Drawing.Size(264, 20);
@@ -110,11 +112,24 @@
             this.itemMaterialCategories.Size = new System.Drawing.Size(264, 109);
             this.itemMaterialCategories.TabIndex = 7;
             // 
+            // shouldFlipUV
+            // 
+            this.shouldFlipUV.AutoSize = true;
+            this.shouldFlipUV.Checked = true;
+            this.shouldFlipUV.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.shouldFlipUV.Location = new System.Drawing.Point(160, 92);
+            this.shouldFlipUV.Name = "shouldFlipUV";
+            this.shouldFlipUV.Size = new System.Drawing.Size(65, 17);
+            this.shouldFlipUV.TabIndex = 8;
+            this.shouldFlipUV.Text = "Flip UVs";
+            this.shouldFlipUV.UseVisualStyleBackColor = true;
+            // 
             // Model_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(294, 272);
+            this.Controls.Add(this.shouldFlipUV);
             this.Controls.Add(this.itemMaterialCategories);
             this.Controls.Add(this.shouldGenerateCollmap);
             this.Controls.Add(this.label2);
@@ -143,6 +158,7 @@
         private System.Windows.Forms.TextBox assetName;
         private System.Windows.Forms.CheckBox shouldGenerateCollmap;
         private System.Windows.Forms.CheckedListBox itemMaterialCategories;
+        private System.Windows.Forms.CheckBox shouldFlipUV;
     }
 }
 

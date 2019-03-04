@@ -63,7 +63,7 @@ StyleCopReport.xml
 *_i.h
 *.ilk
 *.meta
-*.obj
+#*.obj
 *.iobj
 *.pch
 *.pdb
@@ -329,9 +329,11 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 
-!EditorTool.exe
-EditorTool.exe.config
+!Mario Kart Asset Manager.exe
+Mario Kart Asset Manager.exe.config
+Mario Kart Asset Manager.pdb
 Costura.dll
 Costura.xml
 Newtonsoft.Json.dll
 Newtonsoft.Json.pdb
+Newtonsoft.Json.xml
