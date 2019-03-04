@@ -8,13 +8,15 @@ class PhysModel : public SDKMeshGO3D
 public:
 
 	PhysModel(RenderData* _RD, string _filename);
+	virtual ~PhysModel() = default;
+
 	void initCollider(json &model_data);
-	virtual ~PhysModel();
-
-	virtual void Tick(GameStateData* _GSD) override;
-
+	bool hasCollider() {
+		return has_collider;
+	};
 	void updateCollider();
 
+	virtual void Tick(GameStateData* _GSD) override;
 
 	bool		IsPhysicsOn() { return m_physicsOn; }
 	float		GetDrag() { return m_drag; }
@@ -45,4 +47,5 @@ protected:
 	BoundingOrientedBox m_collider; //Bounding box of the model
 	bool m_collided = false; //True if bounding box is inside another
 
+	bool has_collider = false;
 };

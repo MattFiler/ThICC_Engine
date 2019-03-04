@@ -23,6 +23,8 @@ PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _file
 
 void PhysModel::initCollider(json &model_data)
 {
+	has_collider = true;
+
 	XMFLOAT3 top_left = XMFLOAT3(model_data["collision_box"]["front_top_left"][0],
 		model_data["collision_box"]["front_top_left"][1],
 		model_data["collision_box"]["front_top_left"][2]);
@@ -37,16 +39,20 @@ void PhysModel::initCollider(json &model_data)
 	m_collider = BoundingOrientedBox(m_world_centre, top_left, XMFLOAT4(Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll)));
 }
 
-PhysModel::~PhysModel()
+void PhysModel::updateCollider()
 {
+	if (m_has_collider)
+	{
+		m_world_centre = Vector3::Transform(m_local_centre, m_world);
+		m_collider.Center = m_world_centre;
+		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll));
+	}
 }
 
 void PhysModel::Tick(GameStateData * _GSD)
 {
-
 	if (m_physicsOn)
 	{
-
 		m_vel = m_vel + _GSD->m_dt * (m_acc - m_drag*m_vel);
 
 		m_gravVel = m_gravVel + _GSD->m_dt * (m_gravDirection);
@@ -75,14 +81,4 @@ void PhysModel::Tick(GameStateData * _GSD)
 	m_acc = Vector3::Zero;
 
 	updateCollider();
-}
-
-void PhysModel::updateCollider()
-{
-	if (m_has_collider)
-	{
-		m_world_centre = Vector3::Transform(m_local_centre, m_world);
-		m_collider.Center = m_world_centre;
-		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll));
-	}
 }

@@ -309,6 +309,9 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Game_backend.cpp">
+      <Filter>Game Base\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">
