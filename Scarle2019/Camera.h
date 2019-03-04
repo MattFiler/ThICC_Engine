@@ -10,11 +10,19 @@ class Camera :
 	public GameObject3D
 {
 public:
+	enum class BEHAVIOUR : int
+	{
+		NORMAL = 0,
+		ORBIT = 1,
+		CINEMATIC = 2,
+	};
+
 	Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos);
 	virtual ~Camera();
 
 	void SetTarget(GameObject3D* _target) { m_targetObject = _target; }
 	void SetTarget(Vector3 _target) { m_targetObject = NULL; m_targetPos = _target; }
+	void SetBehav(BEHAVIOUR _behav) { behav = _behav; }
 
 	Matrix GetProj() { return m_proj; }
 	Matrix GetView() { return m_view; }
@@ -24,13 +32,6 @@ public:
 
 	Vector3 getDeltaPos() { return m_dpos; };
 
-	enum class BEHAVIOUR : int
-	{
-		NORMAL = 0,
-		ORBIT = 1,
-		CINEMATIC = 2,
-	};
-
 protected:
 
 	GameObject3D* m_targetObject = NULL;
@@ -39,6 +40,7 @@ protected:
 	Matrix m_view = Matrix::Identity;
 	Vector3	m_dpos; //I'll lurk this far behind and away from it
 	std::vector<Vector3> points;
+	std::vector<Vector3> rotations;
 	BEHAVIOUR behav = BEHAVIOUR::NORMAL;
 
 	float angle = 0.0f;

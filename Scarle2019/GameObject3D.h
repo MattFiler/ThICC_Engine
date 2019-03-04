@@ -46,10 +46,8 @@ public:
 	float GetYaw() { return m_yaw; }
 	float GetRoll() { return m_roll; }
 	Matrix GetOri() { return m_rot; }
-	//Matrix GetWorldMagnet() { return m_worldMagnet; }
 	Matrix GetWorld() { return m_world; }
 	GO3D_Render_Type GetType() { return m_type; }
-	//bool GetUseMagnetMatrix() { return m_useMagnetMatrix; };
 
 	virtual void Reset() {};
 

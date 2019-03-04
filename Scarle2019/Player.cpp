@@ -9,6 +9,7 @@ Player::Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gameP
 {
 	SetDrag(0.7);
 	SetPhysicsOn(true);
+	//SetPhysicsOn(false);
 	m_playerID = _playerID;
 	m_gamePad = &_gamePad;
 }
@@ -77,9 +78,9 @@ void Player::Tick(GameStateData* _GSD)
 		m_gamePad->SetVibration(m_playerID, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1);
 	}
 
-	/*
+	
 	//change orinetation of player
-	float rotSpeed = 0.06f;
+	float rotSpeed = 0.001f;
 	m_yaw -= rotSpeed * _GSD->m_mouseState.x;
 	m_pitch -= rotSpeed * _GSD->m_mouseState.y;
 
@@ -97,7 +98,7 @@ void Player::Tick(GameStateData* _GSD)
 	{
 		m_acc.y -= 40.0f;
 	}
-	*/
+	
 	//limit motion of the player
 	/*
 	float length = m_pos.Length();
