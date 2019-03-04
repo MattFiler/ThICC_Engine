@@ -88,15 +88,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	}
 	//CRASHES HERE RESULT IN THE ERROR ABOVE
 	//RUN THE ASSET COMPILER IN THE TOOLS BEFORE PLAYING THE GAME!
-	m_window = _window;
-	m_outputWidth = std::max(_width, 1);
-	m_outputHeight = std::max(_height, 1);
-	m_RD = new RenderData;
-
 	m_RD						= new RenderData;
 	m_ID						= new InputData;
 	m_GSD						= new GameStateData;
-
 	m_sceneManager				= new SceneManager;
 
 	CreateDevice();
@@ -250,7 +244,6 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& _timer)
 {
 	// Test code
-	player[0]->ShouldStickToTrack(*track, m_GSD);
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 	m_sceneManager->Update(m_GSD, m_ID);
 	

@@ -19,7 +19,7 @@ GameScene::~GameScene()
 
 Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 {
-	player[0]->ShouldStickToTrack(*track);
+	player[0]->ShouldStickToTrack(*track, _GSD);
 
 	//Poll Keyboard and Mouse
 //More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input

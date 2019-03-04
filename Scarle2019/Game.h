@@ -118,8 +118,6 @@ private:
 	GameStateData*										m_GSD;  //base game state to pass to all GameObjects
 	int num_of_cam = 1;
 	int num_of_players = 4;
-
 	GameFilepaths m_filepath;
-
 	SceneManager* m_sceneManager;
 };
