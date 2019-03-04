@@ -111,6 +111,10 @@ namespace EditorTool
             assetList.Items.Clear();
             foreach (string file in files)
             {
+                if (Path.GetFileName(file).Length > 14 && Path.GetFileName(file).Substring(Path.GetFileName(file).Length - 13).ToUpper() == "DEBUG.SDKMESH")
+                {
+                    continue; //Skip over collision debug meshes
+                }
                 full_loaded_filenames.Add(file);
                 assetList.Items.Add(Path.GetFileNameWithoutExtension(file));
             }
