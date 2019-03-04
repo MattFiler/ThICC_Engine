@@ -8,20 +8,20 @@ GameObject3D::GameObject3D()
 
 GameObject3D::~GameObject3D()
 {
+	Matrix trans = Matrix::CreateTranslation(m_pos);
+	Matrix scale = Matrix::CreateScale(m_scale);
+	m_rot = Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
+	m_world = scale * m_rot * trans;
 }
 
 void GameObject3D::Tick(GameStateData* _GSD)
 {
 	Matrix trans = Matrix::CreateTranslation(m_pos);
-	m_rot = Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
 	Matrix scale = Matrix::CreateScale(m_scale);
 
-	if (m_useMagnetMatrix)
+	if (m_autoCalculateWolrd)
 	{
-		m_world = scale * m_worldMagnet;
-	}
-	else
-	{
+		m_rot = Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
 		m_world = scale * m_rot * trans;
 	}
 }

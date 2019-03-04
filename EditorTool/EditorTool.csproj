@@ -88,6 +88,12 @@
     <Compile Include="Landing.Designer.cs">
       <DependentUpon>Landing.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mesh_Creator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Mesh_Creator.Designer.cs">
+      <DependentUpon>Mesh_Creator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model_Viewer.xaml.cs">
       <DependentUpon>Model_Viewer.xaml</DependentUpon>
     </Compile>
@@ -113,6 +119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Landing.resx">
       <DependentUpon>Landing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mesh_Creator.resx">
+      <DependentUpon>Mesh_Creator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Model_Importer.resx">
       <DependentUpon>Model_Importer.cs</DependentUpon>
