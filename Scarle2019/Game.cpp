@@ -6,6 +6,11 @@
 #include "Game.h"
 #include "RenderData.h"
 #include "GameStateData.h"
+#include "InputData.h"
+#include "WindowData.h"
+#include "SceneManager.h"
+#include "GameScene.h"
+
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -19,13 +24,14 @@ using Microsoft::WRL::ComPtr;
 
 
 Game::Game() :
-	m_window(nullptr),
-	m_outputWidth(1000),
-	m_outputHeight(1000),
+	m_WD(new WindowData),
 	m_featureLevel(D3D_FEATURE_LEVEL_11_0),
 	m_backBufferIndex(0),
 	m_fenceValues{}
 {
+	m_WD->m_window = nullptr;
+	m_WD->m_outputHeight = 1000;
+	m_WD->m_outputWidth = 1000;
 }
 
 Game::~Game()
@@ -38,19 +44,20 @@ Game::~Game()
 	// Ensure that the GPU is no longer referencing resources that are about to be destroyed.
 	WaitForGpu();
 
-	//delete the GO2Ds
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		delete (*it);
-	}
-	m_2DObjects.clear();
+	////delete the GO2Ds
+	//for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	//{
+	//	delete (*it);
+	//}
 
-	//delete the GO3Ds
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-	{
-		delete (*it);
-	}
-	m_3DObjects.clear();
+	//m_2DObjects.clear();
+
+	////delete the GO3Ds
+	//for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	//{
+	//	delete (*it);
+	//}
+	//m_3DObjects.clear();
 
 	//delete the sounds
 	for (vector<Sound *>::iterator it = m_sounds.begin(); it != m_sounds.end(); it++)
@@ -61,6 +68,9 @@ Game::~Game()
 
 	delete m_RD;
 	delete m_GSD;
+	delete m_ID;
+	delete m_WD;
+	delete m_sceneManager;
 
 	VBGO3D::CleanUp();
 }
@@ -68,28 +78,33 @@ Game::~Game()
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND _window, int _width, int _height)
 {
-	m_window = _window;
-	m_outputWidth = std::max(_width, 1);
-	m_outputHeight = std::max(_height, 1);
-	m_RD = new RenderData;
+	m_WD->m_window				= _window;
+	m_WD->m_outputWidth			= std::max(_width, 1);
+	m_WD->m_outputHeight		= std::max(_height, 1);
+	m_WD->m_width				= _width;
+	m_WD->m_height				= _height;
+
+	m_RD						= new RenderData;
+	m_ID						= new InputData;
+	m_GSD						= new GameStateData;
+
+	m_sceneManager				= new SceneManager;
 
 	CreateDevice();
 	CreateResources();
 
 	//set up input stuff
-	m_keyboard = std::make_unique<Keyboard>();
-	m_mouse = std::make_unique<Mouse>();
-	m_mouse->SetWindow(_window);// mouse device needs to linked to this program's window
-	m_mouse->SetMode(Mouse::Mode::MODE_RELATIVE); // gives a delta postion as opposed to a MODE_ABSOLUTE position in 2-D space
+	m_ID->m_keyboard			= std::make_unique<Keyboard>();
+	m_ID->m_mouse				= std::make_unique<Mouse>();
+	m_ID->m_mouse->SetWindow(_window);// mouse device needs to linked to this program's window
+	m_ID->m_mouse->SetMode(Mouse::Mode::MODE_RELATIVE); // gives a delta postion as opposed to a MODE_ABSOLUTE position in 2-D space
+	m_ID->m_gamePad				= std::make_unique<GamePad>();
 
 	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
 #ifdef _DEBUG
 	eflags = eflags | AudioEngine_Debug;
 #endif
 	m_audEngine = std::make_unique<AudioEngine>(eflags);
-
-	//Create the Game State Data object
-	m_GSD = new GameStateData;
 
 	//GEP: Set up RenderData Object
 	m_RD->m_d3dDevice = m_d3dDevice;
@@ -127,11 +142,10 @@ void Game::Initialize(HWND _window, int _width, int _height)
 		m_RD->m_resourceDescriptors->GetGpuHandle(m_RD->m_resourceCount));
 	m_RD->m_resourceCount++;
 	auto uploadResourcesFinished = resourceUpload.End(m_commandQueue.Get());
-	SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
-	SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
 
-	m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH }; //uncommented
-	m_scissorRect[0] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
+	SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth) * 0.5f, static_cast<float>(m_WD->m_outputHeight) * 0.5f);
+	SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight) * 0.5);
+	m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
 
 	//m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	//m_scissorRect[0] = { 0,0,(int)(m_outputWidth * 0.5f),(int)(m_outputHeight * 0.5f) };
@@ -165,122 +179,17 @@ void Game::Initialize(HWND _window, int _width, int _height)
 		//test3d2->SetScale(5.0f);
 		//m_3DObjects.push_back(test3d2);
 	}
-
-	//test for obj loader / renderer
-	//SDKMeshGO3D *test3 = new SDKMeshGO3D(m_RD, "Luigi Circuit");
-	//test3->SetPos(Vector3(0, -30, 0));
-	//test3->SetScale(10.0f);
-	//test3->SetRotationInDegrees(Vector3(0, 0, 0));
-	//m_3DObjects.push_back(test3);
-
 	//Controller 
-	m_gamePad = std::make_unique<GamePad>();
+
 
 	//Load in a track
 	//track = new Track(m_RD, "GBA Mario Circuit");
-	track = new Track(m_RD, "Mario Kart Stadium");
-	m_3DObjects.push_back(track);
-
-	//Create a player and position on track
-	player[0] = new Player(m_RD, "Standard Kart", 0, *m_gamePad.get());
-	player[0]->SetPos(track->getSuitableSpawnSpot());
-	m_3DObjects.push_back(player[0]);
-
-	//point a camera at the player that follows
-	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_RD->m_cam = m_cam[0];
-	m_3DObjects.push_back(m_cam[0]);
-
-	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[1]);
-
-	m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[2]);
-
-	m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[3]);
 
 	//create a base light
-	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
-	m_3DObjects.push_back(m_light);
-	m_RD->m_light = m_light;
 
-	/*/test VBGO3Ds
-	VBCube* VB = new VBCube(m_RD);
-	VB->Init(11, m_RD);
-	VB->SetScale(4.0f);
-	m_3DObjects.push_back(VB);
-	VBSpiral* VB2 = new VBSpiral(m_RD);
-	VB2->Init(11, m_RD);
-	VB2->SetPos(100.0f*Vector3::Forward);
-	VB2->SetScale(4.0f);
-	m_3DObjects.push_back(VB2);
-	VBSpike* VB3 = new VBSpike(m_RD);
-	VB3->Init(11, m_RD);
-	VB3->SetPos(100.0f*Vector3::Backward);
-	VB3->SetScale(4.0f);
-	m_3DObjects.push_back(VB3); */
-
-	/*/Marching Cubes
-	VBMarchCubes* VBMC = new VBMarchCubes(m_RD);
-	VBMC->init(Vector3(-8.0f, -8.0f, -17.0f), Vector3(8.0f, 8.0f, 23.0f), 60.0f*Vector3::One, 0.01, m_RD);
-	VBMC->SetPos(Vector3(100, 0, -100));
-	VBMC->SetPitch(-XM_PIDIV2);
-	VBMC->SetScale(Vector3(3, 3, 1.5));
-	m_3DObjects.push_back(VBMC);
-
-	FileVBGO* terrainBox = new FileVBGO("terrainTex", m_RD);
-	terrainBox->SetPos(Vector3(100.0f, 000.0f, 100.0f));
-	m_3DObjects.push_back(terrainBox);
-
-	FileVBGO* Box = new FileVBGO("cube", m_RD);
-	m_3DObjects.push_back(Box);
-	Box->SetPos(Vector3(200.0f, 0.0f, 200.0f));
-	Box->SetPitch(XM_PIDIV4);
-	Box->SetScale(20.0f);
-
-	VBSnail* snail = new VBSnail(m_RD, "baseline", 150, 0.98f, 0.09f * XM_PI, 0.4f, Color(1.0f, 0.0f, 0.0f, 1.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
-	snail->SetPos(Vector3(100.0f, 0.0f, 0.0f));
-	snail->SetScale(2.0f);
-	m_3DObjects.push_back(snail); */
-
-	//this only draws correctly as its at the end
-	//see the file for what's needed to do this properly
-	//TransFileVBGO* Box2 = new TransFileVBGO("cube_trans", m_RD);
-	//m_3DObjects.push_back(Box2);
-	//Box2->SetPos(Vector3(0.0f, 50.0f, 0.0f));
-	//Box2->SetPitch(0.5f*XM_PIDIV4);
-	//Box2->SetScale(20.0f);
 
 	//Once I.ve set up all the VBs and IBs push them to the GPU
-	VBGO3D::PushIBVB(m_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
-	//debug: output our current directory
-	std::cout << std::experimental::filesystem::current_path();
-
-	//test text
-	//Text2D *test2 = new Text2D("testing text");
-	//m_2DObjects.push_back(test2);
-
-	//text example 2D objects
-
-	//ImageGO2D *test = new ImageGO2D(m_RD, "twist");
-	//test->SetOri(45);
-	//test->SetPos(Vector2(200, 300));
-	//test->CentreOrigin();
-	//test->SetScale(0.5f*Vector2::One);
-	//m_2DObjects.push_back(test);
-	//test = new ImageGO2D(m_RD, "guides_logo");
-	//test->SetPos(Vector2(100, 100));
-	//test->SetScale(Vector2(1.0f, 0.5f));
-	//test->SetColour(Color(1, 0, 0, 1));
-	//m_2DObjects.push_back(test);
 
 	//GUI TEST
 	//Enter in order: LapPos / RacePos / BoxPos / ItemPos
@@ -298,6 +207,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
 	//m_sounds.push_back(TS);
+
+	m_sceneManager->currScene = new GameScene();
+	m_sceneManager->Load(m_GSD, m_RD, m_ID, m_WD);
 }
 
 // Executes the basic game loop.
@@ -314,95 +226,70 @@ void Game::Tick()
 // Updates the world.
 void Game::Update(DX::StepTimer const& _timer)
 {
-	// Test code
-	player[0]->ShouldStickToTrack(*track);
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
-
-	//this will update the audio engine but give us chance to do somehting else if that isn't working
-	if (!m_audEngine->Update())
-	{
-		if (m_audEngine->IsCriticalError())
-		{
-			// We lost the audio device!
-		}
-	}
-	else
-	{
-		//update sounds playing
-		for (vector<Sound *>::iterator it = m_sounds.begin(); it != m_sounds.end(); it++)
-		{
-			(*it)->Tick(m_GSD);
-		}
-	}
-
-	//Poll Keyboard and Mouse
-	//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
-	//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
-	m_GSD->m_prevKeyboardState = m_GSD->m_keyboardState; // keep previous state for just pressed logic
-	m_GSD->m_keyboardState = m_keyboard->GetState();
-	m_GSD->m_mouseState = m_mouse->GetState();
-
-	for (int i = 0; i < num_of_players; ++i)
-	{
-		m_GSD->m_gamePadState[i] = m_gamePad->GetState(i); //set game controllers state[s]
-	}
-
-	//Quit Properly on press ESC
-	if (m_GSD->m_keyboardState.Escape)
-	{
-		ExitGame();
-	}
+	m_sceneManager->Update(m_GSD, m_ID);
 	
-	//Add your game logic here.
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		(*it)->Tick(m_GSD);
-	}
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-	{
-		(*it)->Tick(m_GSD);
-	}
+	//this will update the audio engine but give us chance to do somehting else if that isn't working
+	//if (!m_audEngine->Update())
+	//{
+	//	if (m_audEngine->IsCriticalError())
+	//	{
+	//		// We lost the audio device!
+	//	}
+	//}
+	//else
+	//{
+	//	//update sounds playing
+	//	for (vector<Sound *>::iterator it = m_sounds.begin(); it != m_sounds.end(); it++)
+	//	{
+	//		(*it)->Tick(m_GSD);
+	//	}
+	//}
+
 }
 
 // Draws the scene.
 void Game::Render()
 {
-	// Don't try to render anything before the first Update.
+	//// Don't try to render anything before the first Update.
 	if (m_timer.GetFrameCount() == 0)
 	{
 		return;
 	}
 
-	// Prepare the command list to render a new frame.
-		Clear();
+	//// Prepare the command list to render a new frame.
+	Clear();
 
 	for (int i = 0; i < num_of_cam; i++)
 	{
-		m_commandList->RSSetViewports(1, &m_viewport[i]);
-		m_commandList->RSSetScissorRects(1, &m_scissorRect[i]);
-		m_RD->m_cam = m_cam[i];
+		m_commandList->RSSetViewports(1, &m_WD->m_viewport[i]);
+		m_commandList->RSSetScissorRects(1, &m_WD->m_scissorRect[i]);
+		//m_RD->m_cam = m_cam[i];
 		//draw 3D objects
-		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-		{
-			(*it)->Render(m_RD);
-		}
+		//for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+		//{
+		//	(*it)->Render(m_RD);
+		//}
 	}
 
-	//finally draw all 2D objects
-	ID3D12DescriptorHeap* heaps[] = { m_RD->m_resourceDescriptors->Heap() };
+	m_sceneManager->Render(m_RD);
+
+	////finally draw all 2D objects
+	ID3D12DescriptorHeap* heaps[] = {m_RD->m_resourceDescriptors->Heap()};
 	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-	m_RD->m_spriteBatch->SetViewport(m_viewport[0]);
+	m_RD->m_spriteBatch->SetViewport(m_WD->m_viewport[0]);
 	//m_RD->m_spriteBatch->SetViewport(m_viewport[1]);
 	m_RD->m_spriteBatch->Begin(m_commandList.Get());
+	m_sceneManager->Render(m_RD);
 
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		(*it)->Render(m_RD);
-	}
+	//for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	//{
+	//	(*it)->Render(m_RD);
+	//}
 
 	m_RD->m_spriteBatch->End();
 
-	// Show the new frame.
+	//// Show the new frame.
 	Present();
 	m_graphicsMemory->Commit(m_commandQueue.Get());
 }
@@ -484,8 +371,8 @@ void Game::OnResuming()
 
 void Game::OnWindowSizeChanged(int _width, int _height)
 {
-	m_outputWidth = std::max(_width, 1);
-	m_outputHeight = std::max(_height, 1);
+	m_WD->m_outputWidth = std::max(_width, 1);
+	m_WD->m_outputHeight = std::max(_height, 1);
 
 	CreateResources();
 
@@ -501,8 +388,8 @@ void Game::GetDefaultSize(int& _width, int& _height) const
 
 void Game::SetViewport(int i_, float _TopLeftX, float _TopLeftY, float _Width, float _Height)
 {
-	m_viewport[i_] = { _TopLeftX,_TopLeftY,_Width,_Height, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	m_scissorRect[i_] = { (int)_TopLeftX,(int)_TopLeftY,(int)(_Width),(int)(_Height) };
+	m_WD->m_viewport[i_] = { _TopLeftX,_TopLeftY,_Width,_Height, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	m_WD->m_scissorRect[i_] = { (int)_TopLeftX,(int)_TopLeftY,(int)(_Width),(int)(_Height) };
 }
 
 // These are the resources that depend on the device.
@@ -649,8 +536,8 @@ void Game::CreateResources()
 
 	DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 	DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT;
-	UINT backBufferWidth = static_cast<UINT>(m_outputWidth);
-	UINT backBufferHeight = static_cast<UINT>(m_outputHeight);
+	UINT backBufferWidth = static_cast<UINT>(m_WD->m_outputWidth);
+	UINT backBufferHeight = static_cast<UINT>(m_WD->m_outputHeight);
 
 	// If the swap chain already exists, resize it, otherwise create one.
 	if (m_swapChain)
@@ -693,7 +580,7 @@ void Game::CreateResources()
 		ComPtr<IDXGISwapChain1> swapChain;
 		DX::ThrowIfFailed(m_dxgiFactory->CreateSwapChainForHwnd(
 			m_commandQueue.Get(),
-			m_window,
+			m_WD->m_window,
 			&swapChainDesc,
 			&fsSwapChainDesc,
 			nullptr,
@@ -846,20 +733,20 @@ void Game::OnDeviceLost()
 {
 	//reset DKTK stuff
 	m_RD->m_font.reset();
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		(*it)->Reset();
-	}
+	//for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	//{
+	//	(*it)->Reset();
+	//}
 
-	//Geometric renderer
+	////Geometric renderer
 
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-	{
-		if ((*it)->GetType() == GO3D_RT_GEOP || (*it)->GetType() == GO3D_RT_SDK)
-		{
-			(*it)->Reset();
-		}
-	}
+	//for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	//{
+	//	if ((*it)->GetType() == GO3D_RT_GEOP || (*it)->GetType() == GO3D_RT_SDK)
+	//	{
+	//		(*it)->Reset();
+	//	}
+	//}
 	m_RD->m_GPeffect.reset();
 
 	//SDK Mesh loader / renderer

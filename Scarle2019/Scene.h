@@ -1,6 +1,8 @@
 #pragma once
 #include "StepTimer.h"
 #include "Constants.h"
+#include "InputData.h"
+#include "WindowData.h"
 
 #include <vector>
 
@@ -11,11 +13,11 @@ public:
 	Scene() {};
 	~Scene() {};
 
-	virtual Scenes Update(double _timer) = 0;
-	virtual void Render() = 0;
+	virtual Scenes Update(GameStateData* _GSD, InputData* _ID) = 0;
+	virtual void Render(RenderData* _RD) = 0;
 
 	//Loads all the data needed for the current scene.
-	virtual bool Load() = 0;
+	virtual bool Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD) = 0;
 
 protected:
 	Scenes nextScene = Scenes::NONE;

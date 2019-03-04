@@ -8,11 +8,11 @@ SceneManager::SceneManager()
 
 }
 
-int SceneManager::Update(double _timer)
+int SceneManager::Update(GameStateData* _GSD, InputData* _ID)
 {
 	if (currScene != nullptr)
 	{
-		switch (currScene->Update(_timer))
+		switch (currScene->Update(_GSD, _ID))
 		{
 		case Scenes::NONE:
 			return 0;
@@ -27,18 +27,17 @@ int SceneManager::Update(double _timer)
 			break;
 		}
 	}
-
 	return 1;
 }
 
-void SceneManager::Render()
+void SceneManager::Render(RenderData* _RD)
 {
-	currScene->Render();
+	currScene->Render(_RD);
 }
 
-bool SceneManager::Load()
+bool SceneManager::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
 {
-	return true;
+	return currScene->Load(_GSD, _RD, _ID, _WD);
 }
 
 void SceneManager::ChangeScene(Scene* _newScene)

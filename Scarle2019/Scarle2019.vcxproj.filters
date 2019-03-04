@@ -68,9 +68,6 @@
     <Filter Include="Game Base\UI">
       <UniqueIdentifier>{3993abc3-dff0-43b4-8ddc-ee65b1090c8c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game Base\Observe">
-      <UniqueIdentifier>{34c99cbe-fe88-4dbb-9a68-1d681b7be93f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game Base\UI\Game">
       <UniqueIdentifier>{227f7ca3-9a6c-43e5-aab9-f90550f079bc}</UniqueIdentifier>
     </Filter>
@@ -204,6 +201,12 @@
     </ClInclude>
     <ClInclude Include="RaceUI.h">
       <Filter>Game Base\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="InputData.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowData.h">
+      <Filter>Game Base\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
