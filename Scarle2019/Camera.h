@@ -24,12 +24,6 @@ public:
 
 	Vector3 getDeltaPos() { return m_dpos; };
 
-	enum class PERSPECTIVE : int
-	{
-		FIRST = 0,
-		THIRD = 1
-	};
-
 	enum class BEHAVIOUR : int
 	{
 		NORMAL = 0,
@@ -38,15 +32,18 @@ public:
 	};
 
 protected:
+
 	GameObject3D* m_targetObject = NULL;
 	Vector3 m_targetPos = Vector3::Zero;
 	Matrix m_proj = Matrix::Identity;
 	Matrix m_view = Matrix::Identity;
 	Vector3	m_dpos; //I'll lurk this far behind and away from it
-
-	PERSPECTIVE perp = PERSPECTIVE::THIRD;
-	BEHAVIOUR behav = BEHAVIOUR::ORBIT;
+	std::vector<Vector3> points;
+	BEHAVIOUR behav = BEHAVIOUR::NORMAL;
 
 	float angle = 0.0f;
+	int at = 1;
+	float time_out = 5.0f;
+	float timer = 0.0f;
 };
 

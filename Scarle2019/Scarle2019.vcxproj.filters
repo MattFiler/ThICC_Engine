@@ -130,9 +130,6 @@
     <ClInclude Include="TestSound.h">
       <Filter>GameObjects\Sound\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TPSCamera.h">
-      <Filter>GameObjects\3D\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
@@ -245,9 +242,6 @@
     </ClCompile>
     <ClCompile Include="TestSound.cpp">
       <Filter>GameObjects\Sound\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="TPSCamera.cpp">
-      <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>GameObjects\3D\Source</Filter>
