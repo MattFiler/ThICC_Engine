@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "RenderData.h"
 #include "GameStateData.h"
+#include "CollisionManager.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -190,6 +191,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	player[0] = new Player(m_RD, "Standard Kart", 0, *m_gamePad.get());
 	player[0]->SetPos(track->getSuitableSpawnSpot());
 	m_3DObjects.push_back(player[0]);
+	m_physModels.push_back(player[0]);
 
 	//point a camera at the player that follows
 	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
@@ -380,6 +382,8 @@ void Game::Update(DX::StepTimer const& _timer)
 	{
 		(*it)->Tick(m_GSD);
 	}
+
+	CollisionManager::checkPhysModelCollisions(m_physModels);
 }
 
 // Draws the scene.
