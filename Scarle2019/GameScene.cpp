@@ -85,7 +85,7 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 	m_3DObjects.push_back(player[0]);
 
 	//point a camera at the player that follows
-	m_cam[0] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[0] = new Camera(_WD->m_width, _WD->m_height, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_RD->m_cam = m_cam[0];
 	m_3DObjects.push_back(m_cam[0]);
 

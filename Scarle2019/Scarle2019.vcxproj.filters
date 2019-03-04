@@ -196,17 +196,17 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="UIMangager.h">
-      <Filter>Game Base\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="RaceUI.h">
-      <Filter>Game Base\UI\Game</Filter>
-    </ClInclude>
     <ClInclude Include="InputData.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
     <ClInclude Include="WindowData.h">
       <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerHUD.h">
+      <Filter>Game Base\UI\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -288,12 +288,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Game Base\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="UIMangager.cpp">
-      <Filter>Game Base\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="RaceUI.cpp">
-      <Filter>Game Base\UI\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Track.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
@@ -302,6 +296,12 @@
     </ClCompile>
     <ClCompile Include="TrackMagnet.cpp">
       <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerHUD.cpp">
+      <Filter>Game Base\UI\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,13 +315,11 @@
     </Manifest>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <Filter>Base Application</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="resource.rc">
       <Filter>Windows Assets</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

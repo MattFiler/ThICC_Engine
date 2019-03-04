@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "RaceUI.h"
+#include "PlayerHUD.h"
 
-RaceUI::RaceUI(RenderData* _RD, Vector2 _uiPositions[4])
+PlayerHUD::PlayerHUD(RenderData* _RD, Vector2 _uiPositions[4])
 {
 	//Initialize all the values for player race UI: Position, Lap and SpriteBox
 	m_lapCounter =			new Text2D("Lap: " + std::to_string(1));
@@ -16,17 +16,17 @@ RaceUI::RaceUI(RenderData* _RD, Vector2 _uiPositions[4])
 	m_currentItemSprite->SetPos(_uiPositions[3]);
 }
 
-RaceUI::~RaceUI()
+PlayerHUD::~PlayerHUD()
 {
 
 }
 
-void RaceUI::CentreOrigin()
+void PlayerHUD::CentreOrigin()
 {
 
 }
 
-void RaceUI::Render(RenderData * _RD)
+void PlayerHUD::Render(RenderData * _RD)
 {
 	m_lapCounter->Render(_RD);
 	m_racePosition->Render(_RD);

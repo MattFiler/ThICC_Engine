@@ -22,7 +22,7 @@
     <RootNamespace>Scarle2019</RootNamespace>
     <ProjectGuid>{beb5860e-fef9-4f22-baeb-f76c22cf75d6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -203,8 +203,8 @@
     <ClInclude Include="Track.h" />
     <ClInclude Include="TrackMagnet.h" />
     <ClInclude Include="TransFileVBGO.h" />
-    <ClInclude Include="RaceUI.h" />
-    <ClInclude Include="UIMangager.h" />
+    <ClInclude Include="PlayerHUD.h" />
+    <ClInclude Include="UIManager.h" />
     <ClInclude Include="VBCube.h" />
     <ClInclude Include="VBGO3D.h" />
     <ClInclude Include="VBSnail.h" />
@@ -245,8 +245,8 @@
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="TrackMagnet.cpp" />
     <ClCompile Include="TransFileVBGO.cpp" />
-    <ClCompile Include="RaceUI.cpp" />
-    <ClCompile Include="UIMangager.cpp" />
+    <ClCompile Include="PlayerHUD.cpp" />
+    <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="VBCube.cpp" />
     <ClCompile Include="VBGO3D.cpp" />
     <ClCompile Include="VBSnail.cpp" />
@@ -265,12 +265,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\directxtk12_desktop_2015.2018.11.20.1\build\native\directxtk12_desktop_2015.targets" Condition="Exists('..\packages\directxtk12_desktop_2015.2018.11.20.1\build\native\directxtk12_desktop_2015.targets')" />
+    <Import Project="..\packages\directxtk12_desktop_2015.2019.2.7.1\build\native\directxtk12_desktop_2015.targets" Condition="Exists('..\packages\directxtk12_desktop_2015.2019.2.7.1\build\native\directxtk12_desktop_2015.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\directxtk12_desktop_2015.2018.11.20.1\build\native\directxtk12_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk12_desktop_2015.2018.11.20.1\build\native\directxtk12_desktop_2015.targets'))" />
+    <Error Condition="!Exists('..\packages\directxtk12_desktop_2015.2019.2.7.1\build\native\directxtk12_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk12_desktop_2015.2019.2.7.1\build\native\directxtk12_desktop_2015.targets'))" />
   </Target>
 </Project>

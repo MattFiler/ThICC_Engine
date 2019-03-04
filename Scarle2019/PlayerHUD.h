@@ -6,12 +6,12 @@
 
 struct RenderData;
 
-class RaceUI : public GameObject2D
+class PlayerHUD : public GameObject2D
 {
 public:
-	RaceUI() = default;
-	RaceUI(RenderData* _RD, Vector2 _uiPositions[4]);
-	virtual ~RaceUI();
+	PlayerHUD() = default;
+	PlayerHUD(RenderData* _RD, Vector2 _uiPositions[4]);
+	virtual ~PlayerHUD();
 
 	void CentreOrigin();
 

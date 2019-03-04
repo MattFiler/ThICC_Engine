@@ -143,12 +143,13 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	m_RD->m_resourceCount++;
 	auto uploadResourcesFinished = resourceUpload.End(m_commandQueue.Get());
 
-	SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth) * 0.5f, static_cast<float>(m_WD->m_outputHeight) * 0.5f);
-	SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight) * 0.5);
+	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight));
+	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight) * 0.5);
+	//m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
+
+	m_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
 
-	//m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	//m_scissorRect[0] = { 0,0,(int)(m_outputWidth * 0.5f),(int)(m_outputHeight * 0.5f) };
 	//m_viewport[1] = { static_cast<float>(m_outputWidth) * 0.5f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	//m_scissorRect[1] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight * 0.5f) };
 	//m_viewport[2] = { 0.0f, static_cast<float>(m_outputHeight) * 0.5f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
@@ -271,8 +272,6 @@ void Game::Render()
 		//	(*it)->Render(m_RD);
 		//}
 	}
-
-	m_sceneManager->Render(m_RD);
 
 	////finally draw all 2D objects
 	ID3D12DescriptorHeap* heaps[] = {m_RD->m_resourceDescriptors->Heap()};
