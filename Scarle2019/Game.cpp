@@ -14,7 +14,7 @@ using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
-bool GameDebugToggles::show_debug_meshes = false;
+bool GameDebugToggles::show_debug_meshes = true;
 
 Game::Game() :
 	m_window(nullptr),
