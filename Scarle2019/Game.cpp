@@ -66,7 +66,7 @@ Game::~Game()
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND _window, int _width, int _height)
 {
-	//Make sure our assets are compiled!
+	//Make sure our assets are compiled at least to some degree!
 	if (!dirExists("DATA")) {
 		throw "ASSETS MUST BE COMPILED BEFORE RUNNING THE GAME";
 	}
@@ -88,6 +88,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//Configure localisation
 	m_localiser.configure("ENGLISH"); //todo: read in from a launcher
+
+	//Setup keybinds
+	m_keybinds.setup(m_GSD);
 
 	//Create all GameObjects
 	createAllObjects2D();
@@ -326,7 +329,7 @@ void Game::Update(DX::StepTimer const& _timer)
 	}
 
 	//Quit Properly on press ESC
-	if (m_GSD->m_keyboardState.Escape)
+	if (m_keybinds.keyPressed("Quit"))
 	{
 		ExitGame();
 	}
@@ -342,7 +345,7 @@ void Game::Update(DX::StepTimer const& _timer)
 	}
 
 	//Toggle debug mesh renders
-	if (m_GSD->m_keyboardState.P && !m_GSD->m_prevKeyboardState.P)
+	if (m_keybinds.keyPressed("Debug Toggle"))
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 	}

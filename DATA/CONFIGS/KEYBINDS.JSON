@@ -1,4 +1,5 @@
 {
-  "Activate": "RightWindows",
-  "test": "Tab"
+  "Activate": "Enter",
+  "Quit": "Escape",
+  "Debug Toggle": "P"
 }

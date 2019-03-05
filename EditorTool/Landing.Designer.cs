@@ -35,6 +35,7 @@ namespace EditorTool
             this.deleteAsset = new System.Windows.Forms.Button();
             this.importAsset = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.compileAssets = new System.Windows.Forms.Button();
             this.modelConfigs = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
             this.model_scale = new System.Windows.Forms.NumericUpDown();
@@ -62,10 +63,9 @@ namespace EditorTool
             this.playSoundPreview = new System.Windows.Forms.Button();
             this.soundPreview = new NAudio.Gui.WaveViewer();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.openKeybindEditor = new System.Windows.Forms.Button();
             this.openLocalisationEditor = new System.Windows.Forms.Button();
             this.openUiEditor = new System.Windows.Forms.Button();
-            this.compileAssets = new System.Windows.Forms.Button();
-            this.openKeybindEditor = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_scale)).BeginInit();
@@ -132,6 +132,16 @@ namespace EditorTool
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Asset Browser";
+            // 
+            // compileAssets
+            // 
+            this.compileAssets.Location = new System.Drawing.Point(6, 379);
+            this.compileAssets.Name = "compileAssets";
+            this.compileAssets.Size = new System.Drawing.Size(202, 30);
+            this.compileAssets.TabIndex = 0;
+            this.compileAssets.Text = "Compile Assets and Configs";
+            this.compileAssets.UseVisualStyleBackColor = true;
+            this.compileAssets.Click += new System.EventHandler(this.compileAssets_Click);
             // 
             // modelConfigs
             // 
@@ -416,6 +426,16 @@ namespace EditorTool
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Other Tools";
             // 
+            // openKeybindEditor
+            // 
+            this.openKeybindEditor.Location = new System.Drawing.Point(6, 19);
+            this.openKeybindEditor.Name = "openKeybindEditor";
+            this.openKeybindEditor.Size = new System.Drawing.Size(137, 30);
+            this.openKeybindEditor.TabIndex = 3;
+            this.openKeybindEditor.Text = "Keybind Editor";
+            this.openKeybindEditor.UseVisualStyleBackColor = true;
+            this.openKeybindEditor.Click += new System.EventHandler(this.openKeybindEditor_Click);
+            // 
             // openLocalisationEditor
             // 
             this.openLocalisationEditor.Enabled = false;
@@ -435,26 +455,6 @@ namespace EditorTool
             this.openUiEditor.TabIndex = 1;
             this.openUiEditor.Text = "UI Editor";
             this.openUiEditor.UseVisualStyleBackColor = true;
-            // 
-            // compileAssets
-            // 
-            this.compileAssets.Location = new System.Drawing.Point(6, 379);
-            this.compileAssets.Name = "compileAssets";
-            this.compileAssets.Size = new System.Drawing.Size(202, 30);
-            this.compileAssets.TabIndex = 0;
-            this.compileAssets.Text = "Compile All Assets";
-            this.compileAssets.UseVisualStyleBackColor = true;
-            this.compileAssets.Click += new System.EventHandler(this.compileAssets_Click);
-            // 
-            // openKeybindEditor
-            // 
-            this.openKeybindEditor.Location = new System.Drawing.Point(6, 19);
-            this.openKeybindEditor.Name = "openKeybindEditor";
-            this.openKeybindEditor.Size = new System.Drawing.Size(137, 30);
-            this.openKeybindEditor.TabIndex = 3;
-            this.openKeybindEditor.Text = "Keybind Editor";
-            this.openKeybindEditor.UseVisualStyleBackColor = true;
-            this.openKeybindEditor.Click += new System.EventHandler(this.openKeybindEditor_Click);
             // 
             // Landing
             // 

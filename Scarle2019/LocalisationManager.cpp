@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "LocalisationManager.h"
 
 json LocalisationManager::language_config;

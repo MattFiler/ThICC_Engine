@@ -133,7 +133,7 @@ namespace EditorTool
             newDropdown.Location = new Point(264, y_offset);
             newDropdown.DropDownStyle = ComboBoxStyle.DropDownList;
             newDropdown.Items.AddRange(new object[] {
-                "None", "Back", "Tab", "Enter", "Pause", "CapsLock", "Kana", "Kanji", "Escape", "ImeConvert", "ImeNoConvert",
+                "Back", "Tab", "Enter", "Pause", "CapsLock", "Kana", "Kanji", "Escape", "ImeConvert", "ImeNoConvert",
                 "Space", "PageUp", "PageDown", "End", "Home", "Left", "Up", "Right", "Down", "Select", "Print", "Execute",
                 "PrintScreen", "Insert", "Delete", "Help", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "A",
                 "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W",
