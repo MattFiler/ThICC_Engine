@@ -9,7 +9,7 @@ Player::Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gameP
 {
 	SetDrag(0.7);
 	SetPhysicsOn(true);
-	//SetPhysicsOn(false);
+	// SetPhysicsOn(false);
 	m_playerID = _playerID;
 	m_gamePad = &_gamePad;
 }

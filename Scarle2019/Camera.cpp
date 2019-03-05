@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Camera.h"
 #include "GameStateData.h"
+#include "Player.h"
 #include <math.h>
 
 Camera::Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos)
@@ -39,19 +40,30 @@ void Camera::Tick(GameStateData * _GSD)
 {
 	switch (behav)
 	{
-	case BEHAVIOUR::NORMAL:
-
+	case BEHAVIOUR::BEHIND:
+	{
 		if (m_targetObject)
 		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
-
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
 			Matrix rotCam = m_targetObject->GetOri();
-			SetOri(m_targetObject->GetYaw(), m_targetObject->GetPitch(), m_targetObject->GetRoll());
-			//m_pos = m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam); 
-			if (m_pos != m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam))
+			m_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
+		}
+		else
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+		}
+
+		break;
+	}
+	case BEHAVIOUR::LERP:
+	{
+		if (m_targetObject)
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+			Matrix rotCam = m_targetObject->GetOri();
+			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam))
 			{
-				//m_pos = m_pos + 0.1 * (m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam) - m_pos);
-				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam), 0.1);
+				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.2);
 			}
 		}
 		else
@@ -60,44 +72,48 @@ void Camera::Tick(GameStateData * _GSD)
 		}
 
 		break;
+	}
 	case BEHAVIOUR::ORBIT:
+	{
 		if (m_targetObject)
 		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
 
-			SetOri(m_targetObject->GetYaw(), m_targetObject->GetPitch(), m_targetObject->GetRoll());
+			m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+
 			Matrix rotCam = m_targetObject->GetOri();
-			Vector3 base_pos = m_targetObject->GetPos() + Vector3::Transform(m_dpos, rotCam);
+			Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
 			angle += 1.0f;
 			Vector3 orbit_pos;
 			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
 
 			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
 
-			m_pos = m_targetObject->GetPos() + Vector3::Transform({orbit_pos.x, m_dpos.y, orbit_pos.z}, rotCam);
+			m_pos = (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam));
 		}
 		else
 		{
 			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
 		}
 		break;
+	}
 	case BEHAVIOUR::CINEMATIC:
+	{
 		if (m_targetObject)
 		{
 			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
 		}
 		else
 		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_targetObject->GetWorld().Up());
 		}
 
 		Matrix rotCam = Matrix::Identity;
 
-		if(at != points.size() - 1)
+		if (at != points.size() - 1)
 		{
 			m_pos = Vector3::Lerp(points[at], points[at + 1], timer / time_out);
-			//SetOri(rotations[at]);
-			//m_view = GetOri();
+
 			timer += _GSD->m_dt;
 			if (timer >= time_out)
 			{
@@ -105,8 +121,23 @@ void Camera::Tick(GameStateData * _GSD)
 				at++;
 			}
 		}
-		
+
 		break;
+	}
+	case BEHAVIOUR::FRONT:
+	{
+		if (m_targetObject)
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+			Matrix rotCam = m_targetObject->GetOri();
+
+			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam))
+			{
+				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.2);
+			}
+		}
+		break;
+	}
 	}
 
 	GameObject3D::Tick(_GSD);

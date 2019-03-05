@@ -194,7 +194,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//point a camera at the player that follows
 	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[0]->SetBehav(Camera::BEHAVIOUR::NORMAL);
+	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[0]);
 
 	//m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
@@ -334,7 +334,7 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& _timer)
 {
 	// Test code
-	//player[0]->ShouldStickToTrack(*track, m_GSD);
+	player[0]->ShouldStickToTrack(*track, m_GSD);
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 
 	//this will update the audio engine but give us chance to do somehting else if that isn't working
@@ -370,6 +370,24 @@ void Game::Update(DX::StepTimer const& _timer)
 	if (m_GSD->m_keyboardState.Escape)
 	{
 		ExitGame();
+	}
+	if (m_GSD->m_keyboardState.J)
+	{
+		m_cam[0]->SetBehav(Camera::BEHAVIOUR::FRONT);
+		Matrix rotCam = player[0]->GetOri();
+		m_cam[0]->SetDPos({0.0f, 3.0f, -10.0f});
+		m_cam[0]->SetPos(player[0]->GetPos() + player[0]->GetPos().Transform(m_cam[0]->GetDeltaPos(), rotCam));
+		//m_cam[0]->SetFlipped(false);
+		//m_cam[0]->SetChanged(true);
+	}
+	if (m_GSD->m_keyboardState.K)
+	{
+		m_cam[0]->SetBehav(Camera::BEHAVIOUR::BEHIND);
+		Matrix rotCam = player[0]->GetOri();
+		m_cam[0]->SetDPos({ 0.0f, 3.0f, 10.0f });
+		m_cam[0]->SetPos(player[0]->GetPos() + player[0]->GetPos().Transform(m_cam[0]->GetDeltaPos(), rotCam));
+		//m_cam[0]->SetFlipped(true);
+		//m_cam[0]->SetChanged(true);
 	}
 	
 	//Add your game logic here.

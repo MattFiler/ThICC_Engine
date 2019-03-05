@@ -12,9 +12,11 @@ class Camera :
 public:
 	enum class BEHAVIOUR : int
 	{
-		NORMAL = 0,
-		ORBIT = 1,
-		CINEMATIC = 2,
+		BEHIND= 0,
+		FRONT = 1,
+		LERP = 2,
+		ORBIT = 3,
+		CINEMATIC = 4,
 	};
 
 	Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos);
@@ -22,15 +24,17 @@ public:
 
 	void SetTarget(GameObject3D* _target) { m_targetObject = _target; }
 	void SetTarget(Vector3 _target) { m_targetObject = NULL; m_targetPos = _target; }
+	void SetDPos(Vector3 _m_dpos) {  m_dpos = _m_dpos; }
 	void SetBehav(BEHAVIOUR _behav) { behav = _behav; }
 
 	Matrix GetProj() { return m_proj; }
 	Matrix GetView() { return m_view; }
+	Vector3 GetDeltaPos() { return m_dpos; };
 
 	virtual void Tick(GameStateData* _GSD);
 	virtual void Render(RenderData* _RD) {};
 
-	Vector3 getDeltaPos() { return m_dpos; };
+
 
 protected:
 
@@ -41,7 +45,7 @@ protected:
 	Vector3	m_dpos; //I'll lurk this far behind and away from it
 	std::vector<Vector3> points;
 	std::vector<Vector3> rotations;
-	BEHAVIOUR behav = BEHAVIOUR::NORMAL;
+	BEHAVIOUR behav = BEHAVIOUR::LERP;
 
 	float angle = 0.0f;
 	int at = 1;
