@@ -138,6 +138,60 @@ void Camera::Tick(GameStateData * _GSD)
 		}
 		break;
 	}
+	case BEHAVIOUR::FIRST:
+	{
+		if (m_targetObject)
+		{
+			Matrix rotCam = m_targetObject->GetOri();
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 0.0f, -10.0f }, rotCam), m_targetObject->GetWorld().Up());
+			//m_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, 0.0f }, rotCam);
+
+			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam))
+			{
+				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam), 0.8);
+			}
+		}
+		else
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+		}
+		break;
+	}
+
+
+	case BEHAVIOUR::INDEPENDENT_LERP:
+	{
+		if (m_targetObject)
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+			Matrix rotCam = m_targetObject->GetOri();
+
+
+			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam))
+			{
+				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.2);
+			}
+		}
+		else
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+		}
+		break;
+	}
+	case BEHAVIOUR::INDEPENDENT_FIXED:
+	{
+		if (m_targetObject)
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+			Matrix rotCam = m_targetObject->GetOri();
+			m_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
+		}
+		else
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+		}
+		break;
+	}
 	}
 
 	GameObject3D::Tick(_GSD);

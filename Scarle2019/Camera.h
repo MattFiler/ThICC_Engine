@@ -12,11 +12,14 @@ class Camera :
 public:
 	enum class BEHAVIOUR : int
 	{
-		BEHIND= 0,
+		BEHIND = 0,
 		FRONT = 1,
 		LERP = 2,
-		ORBIT = 3,
-		CINEMATIC = 4,
+		FIRST = 3,
+		INDEPENDENT_FIXED = 4,
+		INDEPENDENT_LERP = 5,
+		ORBIT = 6,
+		CINEMATIC = 7,
 	};
 
 	Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos);
