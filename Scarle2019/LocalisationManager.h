@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pch.h"
 #include "GameFilepaths.h"
 #include <iostream>
 #include <fstream>

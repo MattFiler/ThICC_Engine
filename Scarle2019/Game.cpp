@@ -110,7 +110,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 void Game::createAllObjects2D()
 {
 	//test text
-	Text2D *test2 = new Text2D("testing text");
+	Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
 	m_2DObjects.push_back(test2);
 
 	//text example 2D objects
