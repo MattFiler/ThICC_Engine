@@ -34,6 +34,8 @@ PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _file
 
 void PhysModel::initCollider(json &model_data)
 {
+	/*Gets the the top front left and back bottom right points of the mesh from the json file - finds the average between them to get the centre of the mesh
+	and uses (currently) the top front left point to determine the extentents (size) of the collider */
 	has_collider = true;
 
 	XMFLOAT3 top_left = XMFLOAT3((float) model_data["collision_box"]["front_top_left"][0] * phys_data.scale,
@@ -48,38 +50,24 @@ void PhysModel::initCollider(json &model_data)
 	m_coll_world_centre = Vector3::Transform(m_coll_local_centre, m_world);
 
 	//Have to split the rotation matrix and reassemble because yaw and pitch are swapped
-
 	XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
-	m_collider = BoundingOrientedBox(m_coll_world_centre, top_left, XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.x, euler.y, euler.z)));
-}
-
-float PhysModel::getEulerVal(float val)
-{
-	if (val > M_PI/2)
-	{
-		return -val;
-	}
-	/*else if (val < -M_PI)
-	{
-		return val + M_PI;
-	}*/
-
-	return val;
+	m_collider = BoundingOrientedBox(m_coll_world_centre, top_left, XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z)));
 }
 
 XMFLOAT3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)
 {
+	//Breaks down a matrix into yaw, pitch, and roll. Returns them as a float3
 	XMFLOAT3 euler;
-	euler.x = asinf(-mat._32);                  // Pitch
-	if (cosf(euler.x) > 0.0001)                 // Not at poles
+	euler.x = asinf(-mat._32);                  
+	if (cosf(euler.x) > 0.0001)                 
 	{
-		euler.y = atan2f(mat._31, mat._33);     // Yaw
-		euler.z = atan2f(mat._12, mat._22);     // Roll
+		euler.y = atan2f(mat._31, mat._33);     
+		euler.z = atan2f(mat._12, mat._22);     
 	}
 	else
 	{
-		euler.y = 0.0f;                         // Yaw
-		euler.z = atan2f(-mat._21, mat._11);    // Roll
+		euler.y = 0.0f;                         
+		euler.z = atan2f(-mat._21, mat._11);    
 	}
 	return euler;
 }
@@ -88,19 +76,17 @@ void PhysModel::updateCollider()
 {
 	if (m_has_collider)
 	{
+		//Updates the centre and rotations of the collider 
 		m_coll_world_centre = Vector3::Transform(m_coll_local_centre, m_world);
 		m_collider.Center = m_coll_world_centre;
 
 		XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
 		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z));
 
-		//Update collider position
-		//This might not be entirely accurate to the actual collider position - Evan you may want to adust?
+		//Updates the debug collider position and rotation
 
 		collider_debug->SetPos(m_coll_world_centre);
 		collider_debug->SetScale(m_collider.Extents);	
-		Quaternion coll_rot = m_collider.Orientation;
-
 		collider_debug->SetYaw(euler.y);
 		collider_debug->SetPitch(euler.x);
 		collider_debug->SetRoll(euler.z);
@@ -124,6 +110,7 @@ void PhysModel::Tick(GameStateData * _GSD)
 
 		m_pos += _GSD->m_dt * m_velTotal;
 
+		//Collision Code
 		if (m_collided)
 		{
 			Vector3 normalised_vel = m_vel;

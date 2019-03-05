@@ -54,8 +54,6 @@ protected:
 	SDKMeshGO3D* collider_debug = nullptr;
 	bool has_collider = false;
 	PhysModelData phys_data;
-	bool output = false;
 	XMFLOAT3 MatrixDecomposeYawPitchRoll(Matrix  mat);
-	float getEulerVal(float val);
 
 };
