@@ -36,6 +36,18 @@ public:
 	// Initialization and management
 	void Initialize(HWND _window, int _width, int _height);
 
+	void initDX(const HWND &_window, int &_width, int &_height);
+
+	void setDefaultFont(string _default_font);
+
+	void createAllObjects2D();
+
+	void setupViewport(int _width, int _height);
+
+	void createAllObjects3D();
+
+	void pushBackObjects();
+
 	// Basic game loop
 	void Tick();
 

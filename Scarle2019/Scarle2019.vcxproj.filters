@@ -211,6 +211,9 @@
     <ClInclude Include="Collision.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="GameDebugToggles.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -308,6 +311,9 @@
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_backend.cpp">
+      <Filter>Game Base\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
