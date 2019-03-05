@@ -74,6 +74,9 @@
     <Filter Include="Game Base\UI\Menu">
       <UniqueIdentifier>{aaa860b3-6dd2-408e-a5a0-db4d6681af41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Base\States">
+      <UniqueIdentifier>{2c82c528-d2a7-446b-92ca-22bbc98d0975}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StepTimer.h">
@@ -202,11 +205,20 @@
     <ClInclude Include="WindowData.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="UIManager.h">
+    <ClInclude Include="PlayerUI.h">
+      <Filter>Game Base\UI\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="StateManager.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerHUD.h">
-      <Filter>Game Base\UI\Game</Filter>
+    <ClInclude Include="State.h">
+      <Filter>Game Base\States</Filter>
+    </ClInclude>
+    <ClInclude Include="CharecterSelectionState.h">
+      <Filter>Game Base\States</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackSelectionState.h">
+      <Filter>Game Base\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -297,11 +309,17 @@
     <ClCompile Include="TrackMagnet.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
-    <ClCompile Include="UIManager.cpp">
+    <ClCompile Include="PlayerUI.cpp">
+      <Filter>Game Base\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="StateManager.cpp">
       <Filter>Game Base\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerHUD.cpp">
-      <Filter>Game Base\UI\Game</Filter>
+    <ClCompile Include="CharecterSelectionState.cpp">
+      <Filter>Game Base\States</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackSelectionState.cpp">
+      <Filter>Game Base\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

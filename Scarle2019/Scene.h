@@ -21,5 +21,4 @@ public:
 
 protected:
 	Scenes nextScene = Scenes::NONE;
-
 };

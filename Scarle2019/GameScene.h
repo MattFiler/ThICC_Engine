@@ -23,6 +23,9 @@ public:
 	bool Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD) override;
 
 private:
+	//State Stuff
+	bool m_isPaused;
+
 	// Test objects
 	Track* track = nullptr;
 	Player* player[1] = { nullptr };

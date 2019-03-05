@@ -169,6 +169,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CharecterSelectionState.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="d3dx12.h" />
@@ -191,17 +192,21 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerUI.h" />
     <ClInclude Include="RenderData.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SDKMeshGO3D.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="StateManager.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="TestSound.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="TPSCamera.h" />
     <ClInclude Include="Track.h" />
     <ClInclude Include="TrackMagnet.h" />
+    <ClInclude Include="TRACK_SELECTIONSTATE.h" />
     <ClInclude Include="TransFileVBGO.h" />
     <ClInclude Include="VBCube.h" />
     <ClInclude Include="VBGO3D.h" />
@@ -213,6 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CharecterSelectionState.cpp" />
     <ClCompile Include="fileVBGO.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject2D.cpp" />
@@ -234,14 +240,17 @@
     </ClCompile>
     <ClCompile Include="PhysModel.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerUI.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SDKMeshGO3D.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TestSound.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="TPSCamera.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="TrackMagnet.cpp" />
+    <ClCompile Include="TRACK_SELECTIONSTATE.cpp" />
     <ClCompile Include="TransFileVBGO.cpp" />
     <ClCompile Include="VBCube.cpp" />
     <ClCompile Include="VBGO3D.cpp" />
