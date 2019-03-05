@@ -54,5 +54,6 @@ protected:
 	int at = 1;
 	float time_out = 5.0f;
 	float timer = 0.0f;
+	int m_cameraID = 0;
 };
 
