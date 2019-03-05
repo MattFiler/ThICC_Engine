@@ -129,7 +129,7 @@ void Game::createAllObjects2D()
 	//Test Sounds
 	Loop *loop = new Loop(m_audEngine.get(), "Course Intro Soundtrack");
 	loop->SetVolume(0.1f);
-	loop->Play();
+	//loop->Play();
 	m_sounds.push_back(loop);
 
 	TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
@@ -277,6 +277,7 @@ void Game::pushBackObjects()
 		if (dynamic_cast<PhysModel*>(m_3DObjects[i])) {
 			if (dynamic_cast<PhysModel*>(m_3DObjects[i])->hasCollider()) {
 				m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
+				//m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
 			}
 		}
 	}

@@ -496,13 +496,19 @@ namespace EditorTool
                                 box_collider_mesh.Add("v " + smallest_vert[0] + " " + biggest_vert[1] + " " + smallest_vert[2]);
                                 box_collider_mesh.Add("v " + smallest_vert[0] + " " + smallest_vert[1] + " " + smallest_vert[2]);
                                 box_collider_mesh.Add("v " + biggest_vert[0] + " " + smallest_vert[1] + " " + smallest_vert[2]);
+                                box_collider_mesh.Add("vt 0.0000 0.0000\nvt 1.0000 0.0000\nvt 1.0000 1.0000\nvt 0.0000 1.0000\n" +
+                                    "vt 0.0000 0.0000\nvt 1.0000 0.0000\nvt 1.0000 1.0000\nvt 0.0000 1.0000\nvt 1.0000 0.0000\n" +
+                                    "vt 1.0000 1.0000\nvt 0.0000 1.0000\nvt 0.0000 0.0000\nvt 1.0000 0.0000\nvt 1.0000 1.0000\n" +
+                                    "vt 1.0000 0.0000\nvt 0.0000 1.0000\nvt 0.0000 0.0000\nvt 1.0000 0.0000\nvt 0.0000 1.0000\n" +
+                                    "vn 0.0000 -0.0000 1.0000\nvn 0.0000 1.0000 0.0000\nvn 0.0000 -1.0000 -0.0000\nvn 1.0000 0.0000 0.0000");
                                 box_collider_mesh.Add("usemtl debug_mat");
-                                box_collider_mesh.Add("f 1 2 3 4");
-                                box_collider_mesh.Add("f 5 6 7 8");
-                                box_collider_mesh.Add("f 1 5 6 2");
-                                box_collider_mesh.Add("f 3 7 8 4");
-                                box_collider_mesh.Add("f 1 4 8 5");
-                                box_collider_mesh.Add("f 2 3 7 6");
+                                box_collider_mesh.Add("s off");
+                                box_collider_mesh.Add("f 1/1/1 2/2/1 3/3/1 4/4/1");
+                                box_collider_mesh.Add("f 5/5/1 6/6/1 7/7/1 8/8/1");
+                                box_collider_mesh.Add("f 1/1/2 5/9/2 6/10/2 2/11/2");
+                                box_collider_mesh.Add("f 3/12/3 7/13/3 8/14/3 4/4/3");
+                                box_collider_mesh.Add("f 1/1/4 4/15/4 8/14/4 5/16/4");
+                                box_collider_mesh.Add("f 2/17/4 3/18/4 7/7/4 6/19/4");
                                 File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + " DEBUG.OBJ", box_collider_mesh);
 
                                 box_collider_mesh.Clear();
@@ -515,7 +521,9 @@ namespace EditorTool
                                 box_collider_mesh.Add("Ni 1.000000");
                                 box_collider_mesh.Add("d 0.400000");
                                 box_collider_mesh.Add("illum 2");
+                                box_collider_mesh.Add("map_Kd collision_debug.png");
                                 File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path).Replace(' ', '_') + "_DEBUG.MTL", box_collider_mesh);
+                                File.Copy(import_directory + "../collision_debug.png", import_directory + "collision_debug.png");
 
                                 ProcessStartInfo meshConverter2 = new ProcessStartInfo();
                                 meshConverter2.WorkingDirectory = import_directory;

@@ -13,6 +13,9 @@ public:
 		case SHADER:
 			return shader_path[FOLDER] + _asset_name + shader_path[EXTENSION];
 		case MODEL:
+			if (_asset_name.length() > 6 && _asset_name.substr(_asset_name.length() - 5) == "DEBUG") {
+				return model_path[FOLDER] + _asset_name.substr(0, _asset_name.length() - 6) + "/" + _asset_name + model_path[EXTENSION];
+			}
 			return model_path[FOLDER] + _asset_name + "/" + _asset_name + model_path[EXTENSION];
 		case MODEL_CUSTOM:
 			return model_custom_path[FOLDER] +_asset_name + "/" + _asset_name + model_custom_path[EXTENSION];

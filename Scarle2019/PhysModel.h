@@ -3,6 +3,10 @@
 #include <json.hpp>
 using json = nlohmann::json;
 
+struct PhysModelData {
+	float scale = 0.0f;
+};
+
 class PhysModel : public SDKMeshGO3D
 {
 public:
@@ -28,6 +32,8 @@ public:
 	BoundingOrientedBox getCollider() { return m_collider; };
 	void setCollided(bool _collided) { m_collided = _collided; };
 
+	SDKMeshGO3D* getDebugCollider() { return collider_debug; }
+
 protected:
 
 	//very basic physics
@@ -47,5 +53,7 @@ protected:
 	BoundingOrientedBox m_collider; //Bounding box of the model
 	bool m_collided = false; //True if bounding box is inside another
 
+	SDKMeshGO3D* collider_debug = nullptr;
 	bool has_collider = false;
+	PhysModelData phys_data;
 };

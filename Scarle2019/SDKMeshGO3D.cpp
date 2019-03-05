@@ -21,6 +21,9 @@ SDKMeshGO3D::SDKMeshGO3D(RenderData* _RD, string _filename)
 	resourceUpload.Begin();
 
 	string dirpath = m_filepath.getFolder(m_filepath.MODEL) + _filename + "/";
+	if (dirpath.length() > 7 && dirpath.substr(dirpath.length() - 6) == "DEBUG/") {
+		dirpath = dirpath.substr(0, dirpath.length() - 7) + "/";
+	}
 	std::wstring dirpath_wstring = std::wstring(dirpath.begin(), dirpath.end());
 	const wchar_t* dirpath_wchar = dirpath_wstring.c_str();
 
@@ -50,7 +53,6 @@ SDKMeshGO3D::SDKMeshGO3D(RenderData* _RD, string _filename)
 		CommonStates::CullClockwise,
 		rtState);
 
-	//TODO: Do we actually need one of these for everyone?
 	m_modelNormal = m_model->CreateEffects(*_RD->m_fxFactory, pd, pdAlpha);
 }
 
