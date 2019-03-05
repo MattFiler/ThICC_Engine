@@ -82,11 +82,23 @@
     <Compile Include="Image_Importer.Designer.cs">
       <DependentUpon>Image_Importer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Keybind_Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Keybind_Editor.Designer.cs">
+      <DependentUpon>Keybind_Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Landing.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Landing.Designer.cs">
       <DependentUpon>Landing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Localisation_Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Localisation_Editor.Designer.cs">
+      <DependentUpon>Localisation_Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Mesh_Creator.cs">
       <SubType>Form</SubType>

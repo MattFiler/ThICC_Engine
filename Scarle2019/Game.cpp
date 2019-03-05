@@ -86,6 +86,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 		ExitGame();//if anything fails in setting up, QUIT!
 	}
 
+	//Configure localisation
+	m_localiser.configure("ENGLISH"); //todo: read in from a launcher
+
 	//Create all GameObjects
 	createAllObjects2D();
 	createAllObjects3D();

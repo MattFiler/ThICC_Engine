@@ -6,6 +6,7 @@
 
 #include "StepTimer.h"
 #include "GameFilepaths.h"
+#include "LocalisationManager.h"
 #include <vector>
 using std::vector;
 
@@ -142,6 +143,7 @@ private:
 	int num_of_players = 2;
 
 	GameFilepaths m_filepath;
+	LocalisationManager m_localiser;
 
 	std::vector<PhysModel*> m_physModels;
 };

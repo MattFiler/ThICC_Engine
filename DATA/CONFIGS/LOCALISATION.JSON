@@ -1,0 +1,14 @@
+{
+	"ENGLISH": {
+		"placeholder": "placeholder",
+		"demo2": "TESTING"
+	},
+	"SPANISH": {
+		"placeholder": "SPANISH placeholder",
+		"demo2": "TESTING SPANISH"
+	},
+	"FRENCH": {
+		"placeholder": "FRENCH placeholder",
+		"demo2": "TESTING FRENCH"
+	}
+}
