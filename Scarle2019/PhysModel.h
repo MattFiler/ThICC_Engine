@@ -15,9 +15,7 @@ public:
 	virtual ~PhysModel() = default;
 
 	void initCollider(json &model_data);
-	bool hasCollider() {
-		return has_collider;
-	};
+	bool hasCollider() {return has_collider;};
 	void updateCollider();
 
 	virtual void Tick(GameStateData* _GSD) override;
@@ -56,4 +54,8 @@ protected:
 	SDKMeshGO3D* collider_debug = nullptr;
 	bool has_collider = false;
 	PhysModelData phys_data;
+	bool output = false;
+	XMFLOAT3 MatrixDecomposeYawPitchRoll(Matrix  mat);
+	float getEulerVal(float val);
+
 };

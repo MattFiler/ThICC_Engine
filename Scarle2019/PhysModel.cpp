@@ -47,7 +47,41 @@ void PhysModel::initCollider(json &model_data)
 	m_coll_local_centre = XMFLOAT3((top_left.x + bottom_right.x) / 2, (top_left.y + bottom_right.y) / 2, (top_left.z + bottom_right.z) / 2);
 	m_coll_world_centre = Vector3::Transform(m_coll_local_centre, m_world);
 
-	m_collider = BoundingOrientedBox(m_coll_world_centre, top_left, XMFLOAT4(Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll)));
+	//Have to split the rotation matrix and reassemble because yaw and pitch are swapped
+
+	XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
+	m_collider = BoundingOrientedBox(m_coll_world_centre, top_left, XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.x, euler.y, euler.z)));
+}
+
+float PhysModel::getEulerVal(float val)
+{
+	if (val > M_PI/2)
+	{
+		return -val;
+	}
+	/*else if (val < -M_PI)
+	{
+		return val + M_PI;
+	}*/
+
+	return val;
+}
+
+XMFLOAT3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)
+{
+	XMFLOAT3 euler;
+	euler.x = asinf(-mat._32);                  // Pitch
+	if (cosf(euler.x) > 0.0001)                 // Not at poles
+	{
+		euler.y = atan2f(mat._31, mat._33);     // Yaw
+		euler.z = atan2f(mat._12, mat._22);     // Roll
+	}
+	else
+	{
+		euler.y = 0.0f;                         // Yaw
+		euler.z = atan2f(-mat._21, mat._11);    // Roll
+	}
+	return euler;
 }
 
 void PhysModel::updateCollider()
@@ -56,18 +90,20 @@ void PhysModel::updateCollider()
 	{
 		m_coll_world_centre = Vector3::Transform(m_coll_local_centre, m_world);
 		m_collider.Center = m_coll_world_centre;
-		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll));
+
+		XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
+		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z));
 
 		//Update collider position
 		//This might not be entirely accurate to the actual collider position - Evan you may want to adust?
 
 		collider_debug->SetPos(m_coll_world_centre);
 		collider_debug->SetScale(m_collider.Extents);	
-
 		Quaternion coll_rot = m_collider.Orientation;
-		collider_debug->SetYaw(m_yaw);
-		collider_debug->SetPitch(m_pitch);
-		collider_debug->SetRoll(m_roll);
+
+		collider_debug->SetYaw(euler.y);
+		collider_debug->SetPitch(euler.x);
+		collider_debug->SetRoll(euler.z);
 	}
 }
 
@@ -86,7 +122,7 @@ void PhysModel::Tick(GameStateData * _GSD)
 
 		m_velTotal = m_vel + m_gravVel;
 
-		m_pos = m_pos + (_GSD->m_dt * m_velTotal);
+		m_pos += _GSD->m_dt * m_velTotal;
 
 		if (m_collided)
 		{
