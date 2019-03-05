@@ -71,7 +71,7 @@ namespace EditorTool
                 }
             }
 
-            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$") || (mat_check_count == 0 && shouldGenerateCollmap.Checked) || assetName.Text.Substring(assetName.Text.Length - 5) == "DEBUG")
+            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$") || (mat_check_count == 0 && shouldGenerateCollmap.Checked) || (assetName.Text.Length > 5 && assetName.Text.Substring(assetName.Text.Length - 5) == "DEBUG"))
             {
                 if (modelPath.Text == "" || assetName.Text == "")
                 {
@@ -88,7 +88,7 @@ namespace EditorTool
                     MessageBox.Show("You must select at least one model section to generate the collision map from.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                else if (assetName.Text.Substring(assetName.Text.Length - 5) == "DEBUG")
+                else if (assetName.Text.Length > 5 && assetName.Text.Substring(assetName.Text.Length - 5) == "DEBUG")
                 {
                     MessageBox.Show("Your asset name conflicts with a system name, please choose another.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
