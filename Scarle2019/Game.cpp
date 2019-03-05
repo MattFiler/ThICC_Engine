@@ -3,6 +3,7 @@
 #include "RenderData.h"
 #include "GameStateData.h"
 #include "CollisionManager.h"
+#include "GameDebugToggles.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -12,6 +13,8 @@ using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
+
+bool GameDebugToggles::show_debug_meshes = false;
 
 Game::Game() :
 	m_window(nullptr),
@@ -277,7 +280,7 @@ void Game::pushBackObjects()
 		if (dynamic_cast<PhysModel*>(m_3DObjects[i])) {
 			if (dynamic_cast<PhysModel*>(m_3DObjects[i])->hasCollider()) {
 				m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
-				//m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
+				m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
 			}
 		}
 	}
@@ -333,6 +336,12 @@ void Game::Update(DX::StepTimer const& _timer)
 	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
 		(*it)->Tick(m_GSD);
+	}
+
+	//Toggle debug mesh renders
+	if (m_GSD->m_keyboardState.P && !m_GSD->m_prevKeyboardState.P)
+	{
+		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 	}
 
 	CollisionManager::checkPhysModelCollisions(m_physModels);

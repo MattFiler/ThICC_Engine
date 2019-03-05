@@ -17,14 +17,17 @@ PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _file
 
 		phys_data.scale = model_data["modelscale"];
 		SetScale(phys_data.scale);
+		/*
+		For whatever reason, setting this here will cause horrible collision errors...
 		SetPos(Vector3(model_data["start_x"], model_data["start_y"], model_data["start_z"]));
 		SetRotationInDegrees(Vector3(model_data["rot_x"], model_data["rot_y"], model_data["rot_z"]));
+		*/
 
 		if (m_has_collider)
 		{
 			initCollider(model_data);
 
-			//collider_debug = new SDKMeshGO3D(_RD, _filename + " DEBUG");
+			collider_debug = new SDKMeshGO3D(_RD, _filename + " DEBUG");
 		}
 	}
 }
@@ -55,13 +58,13 @@ void PhysModel::updateCollider()
 		m_collider.Center = m_world_centre;
 		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll));
 
-		/*
+		//Update collider position
+		//This might not be entirely accurate to the actual collider position - Evan you may want to adust?
 		collider_debug->SetPos(this->GetPos());
 		collider_debug->SetScale(this->GetScale());
 		collider_debug->SetPitch(this->GetPitch());
 		collider_debug->SetRoll(this->GetRoll());
 		collider_debug->SetYaw(this->GetYaw());
-		*/
 	}
 }
 

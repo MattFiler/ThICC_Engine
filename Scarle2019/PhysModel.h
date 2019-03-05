@@ -4,7 +4,7 @@
 using json = nlohmann::json;
 
 struct PhysModelData {
-	float scale = 0.0f;
+	float scale = 1.0f;
 };
 
 class PhysModel : public SDKMeshGO3D

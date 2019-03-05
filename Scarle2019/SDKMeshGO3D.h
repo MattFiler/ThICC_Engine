@@ -19,6 +19,8 @@ public:
 
 	virtual void Tick(GameStateData* _GSD) override;
 
+	bool isDebugMesh() { return is_debug_mesh; }
+
 	void Reset() override;
 
 protected:
@@ -27,5 +29,7 @@ protected:
 	std::vector<std::shared_ptr<DirectX::IEffect>> m_modelNormal;
 
 	GameFilepaths m_filepath;
+
+	bool is_debug_mesh = false;
 };
 
