@@ -1,0 +1,22 @@
+{
+	"MAIN_MENU": {
+		"entity01": {
+			"type": "IMAGE",
+			"source_img": "BANANA",
+			"pos_x": 100,
+			"pos_y": 100,
+			"rotation": 0,
+			"width": 60,
+			"height": 60
+		},
+		"entity02": {
+			"type": "IMAGE",
+			"source_img": "BANANA",
+			"pos_x": 500,
+			"pos_y": 100,
+			"rotation": 0,
+			"width": 60,
+			"height": 60
+		}
+	}
+}
