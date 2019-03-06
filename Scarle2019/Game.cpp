@@ -333,7 +333,7 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& _timer)
 {
 	// Test code
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		player[0]->ShouldStickToTrack(*track, m_GSD);
 	}

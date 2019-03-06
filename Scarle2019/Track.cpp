@@ -126,7 +126,7 @@ bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _inte
 	}
 	return false;*/
 
-	// First check the area that the _starPos is in
+	/*/ First check the area that the _starPos is in
 	int index = GetIndexAtPoint(_startPos);
 	for(MeshTri* tri : m_triGrid[index])
 	{
@@ -142,6 +142,36 @@ bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _inte
 		if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri))
 		{
 			return true;
+		}
+	}*/
+
+	// Find the bounding box created by _startPos and _startPos + _direction
+	Vector endPos = _startPos + _direction;
+	Vector upper = Vector(_startPos.x > endPos.x ? _startPos.x : endPos.x,
+						  _startPos.y > endPos.y ? _startPos.y : endPos.y,
+						  _startPos.z > endPos.z ? _startPos.z : endPos.z);
+	Vector lower = Vector(_startPos.x < endPos.x ? _startPos.x : endPos.x,
+					      _startPos.y < endPos.y ? _startPos.y : endPos.y,
+					      _startPos.z < endPos.z ? _startPos.z : endPos.z);
+	GetXYZIndexAtPoint(upper);
+	GetXYZIndexAtPoint(lower);
+	
+	// Then check all the grid sections covered by this area
+	for (int i = lower.z; i <= upper.z; i++)
+	{
+		for (int j = lower.y; j <= upper.y; j++)
+		{
+			int index = (i*m_triGridYX) + (j*m_triGridX);
+			for (int k = lower.x; k <= upper.x; k++)
+			{
+				for (MeshTri* tri : m_triGrid[index+k])
+				{
+					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri))
+					{
+						return true;
+					}
+				}
+			}
 		}
 	}
 
@@ -287,10 +317,10 @@ int Track::GetIndexAtPoint(Vector point)
 
 /* Similar to GetIndexAtPoint but instead returns the x,y and z indicies as if it were a 3D vector 
    (used in calculating where tri's go in the grid) */
-void Track::GetXYZIndexAtPoint(Vector& point)
+void Track::GetXYZIndexAtPoint(Vector& _point)
 {
-	point -= m_smallest;
-	point.x = floor(point.x / m_triSegSize);
-	point.y = floor(point.y / m_triSegSize);
-	point.z = floor(point.z / m_triSegSize);
+	_point -= m_smallest;
+	_point.x = floor(_point.x / m_triSegSize);
+	_point.y = floor(_point.y / m_triSegSize);
+	_point.z = floor(_point.z / m_triSegSize);
 }

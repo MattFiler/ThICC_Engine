@@ -75,11 +75,11 @@ bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _in
 Vector MeshTri::GetLowerBound()
 {
 	Vector returnVec = m_pointA;
-	returnVec.x = m_pointA.x < m_pointB.x ? m_pointA.x : m_pointB.x;
-	returnVec.x = m_pointA.x < m_pointB.x ? m_pointA.x : m_pointB.x;
+	returnVec.x = returnVec.x < m_pointB.x ? returnVec.x : m_pointB.x;
+	returnVec.x = returnVec.x < m_pointC.x ? returnVec.x : m_pointC.x;
+	returnVec.y = returnVec.y < m_pointB.y ? returnVec.y : m_pointB.y;
 	returnVec.y = returnVec.y < m_pointC.y ? returnVec.y : m_pointC.y;
-	returnVec.y = returnVec.y < m_pointC.y ? returnVec.y : m_pointC.y;
-	returnVec.z = returnVec.z < m_pointC.z ? returnVec.z : m_pointC.z;
+	returnVec.z = returnVec.z < m_pointB.z ? returnVec.z : m_pointB.z;
 	returnVec.z = returnVec.z < m_pointC.z ? returnVec.z : m_pointC.z;
 
 	return returnVec;
@@ -89,11 +89,11 @@ Vector MeshTri::GetLowerBound()
 Vector MeshTri::GetUpperBound()
 {
 	Vector returnVec = m_pointA;
-	returnVec.x = m_pointA.x > m_pointB.x ? m_pointA.x : m_pointB.x;
-	returnVec.x = m_pointA.x > m_pointB.x ? m_pointA.x : m_pointB.x;
+	returnVec.x = returnVec.x > m_pointB.x ? returnVec.x : m_pointB.x;
+	returnVec.x = returnVec.x > m_pointC.x ? returnVec.x : m_pointC.x;
+	returnVec.y = returnVec.y > m_pointB.y ? returnVec.y : m_pointB.y;
 	returnVec.y = returnVec.y > m_pointC.y ? returnVec.y : m_pointC.y;
-	returnVec.y = returnVec.y > m_pointC.y ? returnVec.y : m_pointC.y;
-	returnVec.z = returnVec.z > m_pointC.z ? returnVec.z : m_pointC.z;
+	returnVec.z = returnVec.z > m_pointB.z ? returnVec.z : m_pointB.z;
 	returnVec.z = returnVec.z > m_pointC.z ? returnVec.z : m_pointC.z;
 
 	return returnVec;
