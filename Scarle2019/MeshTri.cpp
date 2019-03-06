@@ -1,6 +1,6 @@
 ﻿#include "MeshTri.h"
 #include "pch.h"
-
+#include <iostream>
 
 MeshTri::MeshTri(Vector _a, Vector _b, Vector _c) : m_pointA(_a), m_pointB(_b), m_pointC(_c)
 {
@@ -10,6 +10,11 @@ MeshTri::MeshTri(Vector _a, Vector _b, Vector _c) : m_pointA(_a), m_pointB(_b), 
 /* Returns true if the given vector, starting at the given position intersects this triangle*/
 bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri)
 {
+	if (Vector::Distance(_direction*-1, m_plane.Normal()) > 2)
+	{
+		//std::cout << Vector::Distance(_direction*-1, m_plane.Normal());
+		//return false;
+	}
 	// If the normal is pointing away from the _starPos, ignore this tri
 	if (_direction.Distance(Vector(0, 0, 0), m_plane.Normal() + _direction) > _direction.Distance(Vector(0, 0, 0), _direction))
 	{
@@ -66,9 +71,19 @@ bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _in
 	float beta = w.Cross(v).Dot(n) / n.Dot(n);
 	float alpha = 1 - gamma - beta;
 	// The point P′ lies inside T if:
-	return ((0 <= alpha) && (alpha <= 1) &&
+	if ((0 <= alpha) && (alpha <= 1) &&
 		(0 <= beta) && (beta <= 1) &&
-		(0 <= gamma) && (gamma <= 1));
+		(0 <= gamma) && (gamma <= 1))
+	{
+		// WIP TEST STUFF
+		// https://www.youtube.com/watch?v=WDdR5s0C4cY
+		std::cout <<  acos((_direction*-1).Dot(m_plane.Normal()) /  ((_direction*-1).Length() + m_plane.Normal().Length())) << std::endl;
+		return ((0 <= alpha) && (alpha <= 1) &&
+			(0 <= beta) && (beta <= 1) &&
+			(0 <= gamma) && (gamma <= 1));
+
+	}
+	else return false;
 }
 
 // Returns a vector that represents the upper corner of an axis-alighned bounding box containing this triangles
