@@ -81,6 +81,8 @@ Vector MeshTri::GetLowerBound()
 	returnVec.y = returnVec.y < m_pointC.y ? returnVec.y : m_pointC.y;
 	returnVec.z = returnVec.z < m_pointC.z ? returnVec.z : m_pointC.z;
 	returnVec.z = returnVec.z < m_pointC.z ? returnVec.z : m_pointC.z;
+
+	return returnVec;
 }
 
 // Returns a vector that represents the lower corner of an axis-alighned bounding box containing this triangles
@@ -93,4 +95,6 @@ Vector MeshTri::GetUpperBound()
 	returnVec.y = returnVec.y > m_pointC.y ? returnVec.y : m_pointC.y;
 	returnVec.z = returnVec.z > m_pointC.z ? returnVec.z : m_pointC.z;
 	returnVec.z = returnVec.z > m_pointC.z ? returnVec.z : m_pointC.z;
+
+	return returnVec;
 }

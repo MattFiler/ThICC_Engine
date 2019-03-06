@@ -200,7 +200,7 @@ void Track::SplitTrisIntoGrid()
 		m_triGrid.push_back(vec);
 	}
 
-	// Populate the vector like a 3D array
+	/*/ Populate the vector like a 3D array
 	for (int i = 0; i < m_triGridZ; i++)
 	{
 		for (int j = 0; j < m_triGridY; j++)
@@ -209,6 +209,26 @@ void Track::SplitTrisIntoGrid()
 			for (int k = 0; k < m_triGridX; k++)
 			{
 				SetAllTrisForIndex(index + k);
+			}
+		}
+	}*/
+
+	for (MeshTri& tri : m_triangles)
+	{
+		Vector upper = tri.GetUpperBound();
+		Vector lower = tri.GetLowerBound();
+		GetXYZIndexAtPoint(upper);
+		GetXYZIndexAtPoint(lower);
+
+		for (int i = lower.z; i <= upper.z; i++)
+		{
+			for (int j = lower.y; j <= upper.y; j++)
+			{
+				int index = (i*m_triGridYX) + (j*m_triGridX);
+				for (int k = lower.x; k <= upper.x; k++)
+				{
+					m_triGrid[index + k].push_back(&tri);
+				}
 			}
 		}
 	}
@@ -263,4 +283,14 @@ int Track::GetIndexAtPoint(Vector point)
 	point.z = floor(point.z / m_triSegSize);
 
 	return static_cast<int>((point.z * m_triGridYX) + (point.y * m_triGridX) + point.x);
+}
+
+/* Similar to GetIndexAtPoint but instead returns the x,y and z indicies as if it were a 3D vector 
+   (used in calculating where tri's go in the grid) */
+void Track::GetXYZIndexAtPoint(Vector& point)
+{
+	point -= m_smallest;
+	point.x = floor(point.x / m_triSegSize);
+	point.y = floor(point.y / m_triSegSize);
+	point.z = floor(point.z / m_triSegSize);
 }

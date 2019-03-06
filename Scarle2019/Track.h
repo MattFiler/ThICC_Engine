@@ -34,6 +34,7 @@ private:
 
 	Vector GetAreaAtIndex(int _index);
 	int GetIndexAtPoint(Vector point);
+	void GetXYZIndexAtPoint(Vector& point);
 
 	// Storage for the all the triangles data. 
 	// Make sure to not reserve more on this vector past initization, else the references will all get messed up
