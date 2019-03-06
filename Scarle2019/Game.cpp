@@ -66,7 +66,7 @@ Game::~Game()
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND _window, int _width, int _height)
 {
-	//Make sure our assets are compiled!
+	//Make sure our assets are compiled at least to some degree!
 	if (!dirExists("DATA")) {
 		throw "ASSETS MUST BE COMPILED BEFORE RUNNING THE GAME";
 	}
@@ -86,6 +86,12 @@ void Game::Initialize(HWND _window, int _width, int _height)
 		ExitGame();//if anything fails in setting up, QUIT!
 	}
 
+	//Configure localisation
+	m_localiser.configure("ENGLISH"); //todo: read in from a launcher
+
+	//Setup keybinds
+	m_keybinds.setup(m_GSD);
+
 	//Create all GameObjects
 	createAllObjects2D();
 	createAllObjects3D();
@@ -104,7 +110,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 void Game::createAllObjects2D()
 {
 	//test text
-	Text2D *test2 = new Text2D("testing text");
+	Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
 	m_2DObjects.push_back(test2);
 
 	//text example 2D objects
@@ -159,23 +165,23 @@ void Game::setupViewport(int _width, int _height)
 
 	//point a camera at the player that follows
 	m_cam[0] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_RD->m_cam = m_cam[0];
+	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[0]);
 
-	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[1]);
+	//m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	//m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
+	////m_RD->m_cam = m_cam[1];
+	//m_3DObjects.push_back(m_cam[1]);
 
-	m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[2]);
+	//m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
+	////m_RD->m_cam = m_cam[1];
+	//m_3DObjects.push_back(m_cam[2]);
 
-	m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[3]);
+	//m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	//m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
+	////m_RD->m_cam = m_cam[1];
+	//m_3DObjects.push_back(m_cam[3]);
 }
 
 /* Create all 3d game objects */
@@ -214,6 +220,7 @@ void Game::createAllObjects3D()
 	//Create a player and position on track
 	player[0] = new Player(m_RD, "Standard Kart", 0, *m_gamePad.get());
 	player[0]->SetPos(track->getSuitableSpawnSpot());
+	//player[0]->SetPos({0, 0, 0});
 	m_3DObjects.push_back(player[0]);
 
 	//create a base light
@@ -323,7 +330,7 @@ void Game::Update(DX::StepTimer const& _timer)
 	}
 
 	//Quit Properly on press ESC
-	if (m_GSD->m_keyboardState.Escape)
+	if (m_keybinds.keyPressed("Quit"))
 	{
 		ExitGame();
 	}
@@ -339,7 +346,7 @@ void Game::Update(DX::StepTimer const& _timer)
 	}
 
 	//Toggle debug mesh renders
-	if (m_GSD->m_keyboardState.P && !m_GSD->m_prevKeyboardState.P)
+	if (m_keybinds.keyPressed("Debug Toggle"))
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 	}

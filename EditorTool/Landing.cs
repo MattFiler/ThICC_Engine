@@ -492,6 +492,13 @@ namespace EditorTool
             }
         }
 
+        // Open localisation editor
+        private void openKeybindEditor_Click(object sender, EventArgs e)
+        {
+            Keybind_Editor keybindeditor = new Keybind_Editor();
+            keybindeditor.Show();
+        }
+
         private void importModel_Click(object sender, EventArgs e)
         {
             //depreciated

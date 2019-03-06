@@ -48,6 +48,7 @@ public:
 	float GetYaw() { return m_yaw; }
 	float GetRoll() { return m_roll; }
 	Matrix GetOri() { return m_rot; }
+	Matrix GetWorld() { return m_world; }
 	GO3D_Render_Type GetType() { return m_type; }
 
 	virtual void Reset() {};
@@ -65,6 +66,5 @@ protected:
 	bool m_autoCalculateWolrd = true;
 
 	GO3D_Render_Type m_type = GO3D_RT_NONE;
-	int num_of_cam = 2;
 };
 

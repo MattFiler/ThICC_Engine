@@ -6,6 +6,8 @@
 
 #include "StepTimer.h"
 #include "GameFilepaths.h"
+#include "KeybindManager.h"
+#include "LocalisationManager.h"
 #include <vector>
 using std::vector;
 
@@ -142,6 +144,8 @@ private:
 	int num_of_players = 2;
 
 	GameFilepaths m_filepath;
+	LocalisationManager m_localiser;
+	KeybindManager m_keybinds;
 
 	std::vector<PhysModel*> m_physModels;
 };
