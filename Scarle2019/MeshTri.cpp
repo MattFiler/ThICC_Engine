@@ -70,3 +70,27 @@ bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _in
 		(0 <= beta) && (beta <= 1) &&
 		(0 <= gamma) && (gamma <= 1));
 }
+
+// Returns a vector that represents the upper corner of an axis-alighned bounding box containing this triangles
+Vector MeshTri::GetLowerBound()
+{
+	Vector returnVec = m_pointA;
+	returnVec.x = m_pointA.x < m_pointB.x ? m_pointA.x : m_pointB.x;
+	returnVec.x = m_pointA.x < m_pointB.x ? m_pointA.x : m_pointB.x;
+	returnVec.y = returnVec.y < m_pointC.y ? returnVec.y : m_pointC.y;
+	returnVec.y = returnVec.y < m_pointC.y ? returnVec.y : m_pointC.y;
+	returnVec.z = returnVec.z < m_pointC.z ? returnVec.z : m_pointC.z;
+	returnVec.z = returnVec.z < m_pointC.z ? returnVec.z : m_pointC.z;
+}
+
+// Returns a vector that represents the lower corner of an axis-alighned bounding box containing this triangles
+Vector MeshTri::GetUpperBound()
+{
+	Vector returnVec = m_pointA;
+	returnVec.x = m_pointA.x > m_pointB.x ? m_pointA.x : m_pointB.x;
+	returnVec.x = m_pointA.x > m_pointB.x ? m_pointA.x : m_pointB.x;
+	returnVec.y = returnVec.y > m_pointC.y ? returnVec.y : m_pointC.y;
+	returnVec.y = returnVec.y > m_pointC.y ? returnVec.y : m_pointC.y;
+	returnVec.z = returnVec.z > m_pointC.z ? returnVec.z : m_pointC.z;
+	returnVec.z = returnVec.z > m_pointC.z ? returnVec.z : m_pointC.z;
+}
