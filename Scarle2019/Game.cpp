@@ -165,23 +165,23 @@ void Game::setupViewport(int _width, int _height)
 
 	//point a camera at the player that follows
 	m_cam[0] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_RD->m_cam = m_cam[0];
+	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[0]);
 
-	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[1]);
+	//m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	//m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
+	////m_RD->m_cam = m_cam[1];
+	//m_3DObjects.push_back(m_cam[1]);
 
-	m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[2]);
+	//m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
+	////m_RD->m_cam = m_cam[1];
+	//m_3DObjects.push_back(m_cam[2]);
 
-	m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[3]);
+	//m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	//m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
+	////m_RD->m_cam = m_cam[1];
+	//m_3DObjects.push_back(m_cam[3]);
 }
 
 /* Create all 3d game objects */
@@ -222,26 +222,6 @@ void Game::createAllObjects3D()
 	player[0]->SetPos(track->getSuitableSpawnSpot());
 	//player[0]->SetPos({0, 0, 0});
 	m_3DObjects.push_back(player[0]);
-
-	//point a camera at the player that follows
-	m_cam[0] =  new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[0]->SetBehav(Camera::BEHAVIOUR::INDEPENDENT_LERP);
-	m_3DObjects.push_back(m_cam[0]);
-
-	//m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	////m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	//m_cam[1]->SetBehav(Camera::BEHAVIOUR::NORMAL);
-	//m_3DObjects.push_back(m_cam[1]);
-
-	//m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	//m_cam[2]->SetBehav(Camera::BEHAVIOUR::NORMAL);
-	//m_3DObjects.push_back(m_cam[2]);
-
-	//m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[3]->SetTarget(track->getSuitableSpawnSpot());
-	//m_cam[3]->SetBehav(Camera::BEHAVIOUR::NORMAL);
-	//m_3DObjects.push_back(m_cam[3]);
 
 	//create a base light
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
@@ -353,22 +333,6 @@ void Game::Update(DX::StepTimer const& _timer)
 	if (m_keybinds.keyPressed("Quit"))
 	{
 		ExitGame();
-	}
-	if (m_GSD->m_keyboardState.J)
-	{
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::FRONT);
-		Matrix rotCam = player[0]->GetOri();
-		m_cam[0]->SetDPos({0.0f, 3.0f, -10.0f});
-		m_cam[0]->SetPos(player[0]->GetPos() + player[0]->GetPos().Transform(m_cam[0]->GetDeltaPos(), rotCam));
-
-	}
-	if (m_GSD->m_keyboardState.K)
-	{
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::BEHIND);
-		Matrix rotCam = player[0]->GetOri();
-		m_cam[0]->SetDPos({ 0.0f, 3.0f, 10.0f });
-		m_cam[0]->SetPos(player[0]->GetPos() + player[0]->GetPos().Transform(m_cam[0]->GetDeltaPos(), rotCam));
-
 	}
 	
 	//Add your game logic here.

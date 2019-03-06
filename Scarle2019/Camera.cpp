@@ -156,8 +156,6 @@ void Camera::Tick(GameStateData * _GSD)
 		}
 		break;
 	}
-
-
 	case BEHAVIOUR::INDEPENDENT_LERP:
 	{
 		m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
