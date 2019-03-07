@@ -11,12 +11,13 @@ TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _fi
 	m_world.Decompose(scale, m_quatRot, m_pos);
 }
 
+/* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
 bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 {
 	Vector intersect;
 	MeshTri* tri = nullptr;
 	Matrix targetWorld = Matrix::Identity;
-	bool shouldStick = track.DoesLineIntersect(m_world.Down()*5, m_pos + m_world.Up() * 4, intersect, tri);
+	bool shouldStick = track.DoesLineIntersect(m_world.Down()*5, m_pos + m_world.Up() * 4, intersect, tri, m_maxAngle);
 	if (shouldStick)
 	{
 		Vector adjustVel = m_velTotal;
@@ -27,7 +28,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 		}
 		// TODO: This offset is hard coded, change if the kart ever has bounds?
 		Vector offset = m_world.Up() / 4;
-		// If the position of the kart is outside of acceptable distance, and within acceptable snapping distance
+		// If the position of the kart is within the snapping area
 		float dist = Vector::Distance(m_pos + offset, intersect);
 		if (dist > m_minSnapDist && dist < m_maxSnapDist)
 		{
@@ -44,13 +45,13 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 		}
 		else if (dist > m_maxSnapDist)
 		{
-			m_gravDirection = m_world.Down() * 5;
+			m_gravDirection = m_world.Down() * 15;
 		}
 
 		// Calculate a new rotation using 2 points on the plane that is found
 		Vector secondIntersect;
 		MeshTri* tri2 = nullptr;
-		tri->DoesLineIntersect(m_world.Down() * 5, m_pos + adjustVel + m_world.Forward() + (m_world.Up() * 4), secondIntersect, tri2);
+		tri->DoesLineIntersect(m_world.Down() * 5, m_pos + adjustVel + m_world.Forward() + (m_world.Up() * 4), secondIntersect, tri2, m_maxAngle);
 		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 	}
@@ -81,4 +82,40 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	m_world = Matrix::CreateScale(m_scale) * m_rot * Matrix::CreateTranslation(m_pos);
 
 	return shouldStick;
+}
+
+void TrackMagnet::ResolveWallCollisions(Track& walls)
+{
+	// TODO: Calculate these from the bounding box once thats pushed to master
+	
+	Vector frontLeft = m_pos + (m_world.Left() * 0.6f) + (m_world.Forward() * 0.8f);
+	Vector frontRight = m_pos + (m_world.Right() * 0.6f) + (m_world.Forward() * 0.8f);
+	Vector backLeft = m_pos + (m_world.Left() * 0.6f) + (m_world.Backward() * 0.8f);
+	Vector backRight = m_pos + (m_world.Right() * 0.6f) + (m_world.Backward() * 0.8f);
+	
+
+	Vector leftSide = frontLeft - backLeft;
+	Vector rightSide = frontRight - backRight;
+	Vector frontSide = frontLeft - frontRight;
+	Vector backSide = backLeft - backRight;
+	// End TODO
+	Vector intersect = Vector::Zero;
+	MeshTri* tri = nullptr;
+
+	if (walls.DoesLineIntersect(leftSide, frontLeft, intersect, tri, 5) ||
+		walls.DoesLineIntersect(rightSide, frontRight, intersect, tri, 5) ||
+		walls.DoesLineIntersect(frontSide, frontLeft, intersect, tri, 5) ||
+		walls.DoesLineIntersect(backSide, backLeft, intersect, tri, 5))
+	{
+		// Check if the velocity and this wall are not already diverging
+		if ((tri->m_plane.Normal() + m_vel).Length() < m_vel.Length())
+		{
+			m_vel = Vector::Reflect(m_vel, tri->m_plane.Normal());
+		}
+		else
+		{
+			int breakhere = 0;
+		}
+	}
+
 }
