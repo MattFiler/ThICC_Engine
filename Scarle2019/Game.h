@@ -6,6 +6,8 @@
 
 #include "StepTimer.h"
 #include "GameFilepaths.h"
+#include "KeybindManager.h"
+#include "LocalisationManager.h"
 #include "SceneManager.h"
 #include <vector>
 using std::vector;
@@ -38,6 +40,18 @@ public:
 	// Initialization and management
 	void Initialize(HWND _window, int _width, int _height);
 
+	void initDX(const HWND &_window, int &_width, int &_height);
+
+	void setDefaultFont(string _default_font);
+
+	void createAllObjects2D();
+
+	void setupViewport(int _width, int _height);
+
+	void createAllObjects3D();
+
+	void pushBackObjects();
+
 	// Basic game loop
 	void Tick();
 
@@ -54,6 +68,11 @@ public:
 	void SetViewport(int i_, float _TopLeftX,float _TopLeftY, float _Width, float _Height);
 
 private:
+
+	// Test objects
+	Track* track = nullptr;
+	Player* player[2] = {nullptr};
+	PhysModel* test_model = nullptr;
 
 	void Update(DX::StepTimer const& _timer);
 	void Render();
@@ -119,5 +138,9 @@ private:
 	int num_of_cam = 1;
 	int num_of_players = 4;
 	GameFilepaths m_filepath;
+	LocalisationManager m_localiser;
+	KeybindManager m_keybinds;
+
+	std::vector<PhysModel*> m_physModels;
 	SceneManager* m_sceneManager;
 };

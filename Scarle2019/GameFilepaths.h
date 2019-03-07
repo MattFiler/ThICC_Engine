@@ -6,13 +6,16 @@
 // so nicer to reference from somewhere easier to modify.
 struct GameFilepaths {
 public:
-	enum m_asset_type { SHADER, MODEL, MODEL_CUSTOM, MODEL_COLLMAP, IMAGE, SOUND, FONT };
+	enum m_asset_type { SHADER, MODEL, MODEL_CUSTOM, MODEL_COLLMAP, IMAGE, SOUND, FONT, CONFIG };
 	std::string generateFilepath(std::string _asset_name, m_asset_type _asset_type) {
 		std::transform(_asset_name.begin(), _asset_name.end(), _asset_name.begin(), ::toupper);
 		switch (_asset_type) {
 		case SHADER:
 			return shader_path[FOLDER] + _asset_name + shader_path[EXTENSION];
 		case MODEL:
+			if (_asset_name.length() > 6 && _asset_name.substr(_asset_name.length() - 5) == "DEBUG") {
+				return model_path[FOLDER] + _asset_name.substr(0, _asset_name.length() - 6) + "/" + _asset_name + model_path[EXTENSION];
+			}
 			return model_path[FOLDER] + _asset_name + "/" + _asset_name + model_path[EXTENSION];
 		case MODEL_CUSTOM:
 			return model_custom_path[FOLDER] +_asset_name + "/" + _asset_name + model_custom_path[EXTENSION];
@@ -24,6 +27,8 @@ public:
 			return sound_path[FOLDER] + _asset_name + sound_path[EXTENSION];
 		case FONT:
 			return font_path[FOLDER] + _asset_name + font_path[EXTENSION];
+		case CONFIG:
+			return config_path[FOLDER] + _asset_name + config_path[EXTENSION];
 		}
 		return "";
 	}
@@ -47,6 +52,7 @@ private:
 	std::string image_path[2] = { "DATA/IMAGES/", ".DDS" };
 	std::string sound_path[2] = { "DATA/SOUNDS/", ".WAV" };
 	std::string font_path[2] = { "DATA/FONTS/", ".SPRITEFONT" };
+	std::string config_path[2] = { "DATA/CONFIGS/", ".JSON" };
 
 	std::string getPathSection(m_asset_type _asset_type, m_path_data _path_section) {
 		switch (_asset_type) {
@@ -64,6 +70,8 @@ private:
 			return sound_path[_path_section];
 		case FONT:
 			return font_path[_path_section];
+		case CONFIG:
+			return config_path[_path_section];
 		}
 	}
 };

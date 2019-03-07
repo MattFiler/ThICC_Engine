@@ -11,12 +11,14 @@ TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _fi
 	m_world.Decompose(scale, m_quatRot, m_pos);
 }
 
+/* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
 bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 {
 	Vector intersect;
 	MeshTri* tri = nullptr;
 	Matrix targetWorld = Matrix::Identity;
-	bool shouldStick = track.DoesLineIntersect(m_world.Down()*5, m_pos + m_world.Up() * 4, intersect, tri);
+	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(m_height*7), m_pos + m_world.Up() * (m_height*2), intersect, tri, m_maxAngle);
+	float modifiedMaxRotation = m_maxRotation;
 	if (shouldStick)
 	{
 		Vector adjustVel = m_velTotal;
@@ -27,7 +29,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 		}
 		// TODO: This offset is hard coded, change if the kart ever has bounds?
 		Vector offset = m_world.Up() / 4;
-		// If the position of the kart is outside of acceptable distance, and within acceptable snapping distance
+		// If the position of the kart is within the snapping area
 		float dist = Vector::Distance(m_pos + offset, intersect);
 		if (dist > m_minSnapDist && dist < m_maxSnapDist)
 		{
@@ -44,21 +46,22 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 		}
 		else if (dist > m_maxSnapDist)
 		{
-			m_gravDirection = m_world.Down() * 5;
+			modifiedMaxRotation /= 10;
+			m_gravDirection = m_world.Down() * gravityMultiplier;
 		}
 
 		// Calculate a new rotation using 2 points on the plane that is found
 		Vector secondIntersect;
 		MeshTri* tri2 = nullptr;
-		tri->DoesLineIntersect(m_world.Down() * 5, m_pos + adjustVel + m_world.Forward() + (m_world.Up() * 4), secondIntersect, tri2);
+		tri->DoesLineIntersect(m_world.Down() * (m_height * 7), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (m_height * 2)), secondIntersect, tri2, m_maxAngle);
 		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 	}
 	else
 	{
-		targetWorld = m_world.CreateWorld(m_pos, m_world.Forward(), m_world.Up());
+		targetWorld = m_world.CreateWorld(m_pos, m_world.Forward(), Vector::Up);
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
-		m_gravDirection = m_world.Down() * 5;
+		m_gravDirection = m_world.Down() * gravityMultiplier;
 	}
 	// Update the position and rotation by breaking apart m_world
 	Vector3 scale = Vector3::Zero;
@@ -68,7 +71,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	// Calculate the distance between the current and target rotation
 	Quaternion inverseRot = Quaternion::Identity;
 	m_quatRot.Inverse(inverseRot);
-	float lerpDelta = (m_maxRotation * _GSD->m_dt) / (inverseRot*rot).Length();
+	float lerpDelta = (modifiedMaxRotation * _GSD->m_dt) / (inverseRot*rot).Length();
 	if (lerpDelta > 1)
 	{
 		lerpDelta = 1;
@@ -81,4 +84,34 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	m_world = Matrix::CreateScale(m_scale) * m_rot * Matrix::CreateTranslation(m_pos);
 
 	return shouldStick;
+}
+
+void TrackMagnet::ResolveWallCollisions(Track& walls)
+{
+	Vector leftSide = m_globalFrontLeft - m_globalBackLeft;
+	Vector rightSide = m_globalFrontRight - m_globalBackRight;
+	Vector frontSide = m_globalFrontLeft - m_globalFrontRight;
+	Vector backSide = m_globalBackLeft - m_globalBackRight;
+
+	Vector intersect = Vector::Zero;
+	MeshTri* tri = nullptr;
+
+	if (walls.DoesLineIntersect(leftSide, m_globalFrontLeft, intersect, tri, 5) ||
+		walls.DoesLineIntersect(rightSide, m_globalFrontRight, intersect, tri, 5) ||
+		walls.DoesLineIntersect(frontSide, m_globalFrontLeft, intersect, tri, 5) ||
+		walls.DoesLineIntersect(backSide, m_globalFrontLeft, intersect, tri, 5))
+	{
+		// Check if the velocity and this wall are not already diverging
+		if ((tri->m_plane.Normal() + m_vel).Length() < m_vel.Length())
+		{
+			Vector prevVel = m_vel;
+			prevVel.Normalize();
+			m_vel = Vector::Reflect(m_vel, tri->m_plane.Normal());
+			Vector velNorm = m_vel;
+			velNorm.Normalize();
+			float dist = Vector::Distance(velNorm, prevVel);
+			m_vel *= 1 - (dist / 2.4f);
+		}
+	}
+
 }

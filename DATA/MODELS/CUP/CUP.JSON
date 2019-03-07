@@ -1,6 +1,7 @@
 {
   "asset_name": "CUP",
   "asset_type": "Models",
+  "has_box_collider": false,
   "visible": true,
   "start_x": 0.0,
   "start_y": 0.0,
@@ -8,5 +9,6 @@
   "modelscale": 1.0,
   "rot_x": 0.0,
   "rot_y": 0.0,
-  "rot_z": 0.0
+  "rot_z": 0.0,
+  "segment_size": 10
 }

@@ -130,9 +130,6 @@
     <ClInclude Include="TestSound.h">
       <Filter>GameObjects\Sound\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TPSCamera.h">
-      <Filter>GameObjects\3D\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
@@ -208,6 +205,21 @@
     <ClInclude Include="PlayerUI.h">
       <Filter>Game Base\UI\Game</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDebugToggles.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="KeybindManager.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalisationManager.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
     <ClInclude Include="StateManager.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
@@ -261,9 +273,6 @@
     <ClCompile Include="TestSound.cpp">
       <Filter>GameObjects\Sound\Source</Filter>
     </ClCompile>
-    <ClCompile Include="TPSCamera.cpp">
-      <Filter>GameObjects\3D\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
@@ -308,6 +317,18 @@
     </ClCompile>
     <ClCompile Include="TrackMagnet.cpp">
       <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_backend.cpp">
+      <Filter>Game Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="KeybindManager.cpp">
+      <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalisationManager.cpp">
+      <Filter>Game Base\Managers</Filter>
     </ClCompile>
     <ClCompile Include="PlayerUI.cpp">
       <Filter>Game Base\UI\Game</Filter>

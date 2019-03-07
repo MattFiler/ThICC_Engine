@@ -50,9 +50,12 @@ namespace EditorTool
                     modelimporter.Show();
                     break;
                 case "Meshes":
+                    MessageBox.Show("This functionality is coming soon.");
+                    /*
                     Mesh_Creator meshcreator = new Mesh_Creator();
                     meshcreator.FormClosed += new FormClosedEventHandler(refreshOnClose);
                     meshcreator.Show();
+                    */
                     break;
                 case "Images":
                     Image_Importer imageimporter = new Image_Importer();
@@ -108,6 +111,10 @@ namespace EditorTool
             assetList.Items.Clear();
             foreach (string file in files)
             {
+                if (Path.GetFileName(file).Length > 14 && Path.GetFileName(file).Substring(Path.GetFileName(file).Length - 13).ToUpper() == "DEBUG.SDKMESH")
+                {
+                    continue; //Skip over collision debug meshes
+                }
                 full_loaded_filenames.Add(file);
                 assetList.Items.Add(Path.GetFileNameWithoutExtension(file));
             }
@@ -268,6 +275,7 @@ namespace EditorTool
                     model_rot_y.Text = asset_json["rot_y"].Value<string>();
                     model_rot_z.Text = asset_json["rot_z"].Value<string>();
                     model_scale.Text = asset_json["modelscale"].Value<string>();
+                    model_segmentsize.Value = asset_json["segment_size"].Value<decimal>();
 
                     modelPreview.Visible = true;
                     modelPreview.Child = new ModelViewer("DATA/MODELS/" + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
@@ -383,6 +391,7 @@ namespace EditorTool
                     asset_json["rot_y"] = Convert.ToDouble(model_rot_y.Text);
                     asset_json["rot_z"] = Convert.ToDouble(model_rot_z.Text);
                     asset_json["modelscale"] = Convert.ToDouble(model_scale.Text);
+                    asset_json["segment_size"] = Convert.ToDouble(model_segmentsize.Value);
                     File.WriteAllText(path_to_current_config, asset_json.ToString(Formatting.Indented));
                     MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
@@ -483,6 +492,13 @@ namespace EditorTool
                     DirectoryCopy(subdir.FullName, temppath, copySubDirs, ignoreExtensions);
                 }
             }
+        }
+
+        // Open localisation editor
+        private void openKeybindEditor_Click(object sender, EventArgs e)
+        {
+            Keybind_Editor keybindeditor = new Keybind_Editor();
+            keybindeditor.Show();
         }
 
         private void importModel_Click(object sender, EventArgs e)

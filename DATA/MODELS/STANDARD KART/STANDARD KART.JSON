@@ -1,6 +1,49 @@
 {
   "asset_name": "STANDARD KART",
   "asset_type": "Models",
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      0.763722,
+      0.56208,
+      1.183134
+    ],
+    "front_top_right": [
+      -0.763721,
+      0.56208,
+      1.183134
+    ],
+    "front_bottom_right": [
+      -0.763721,
+      -0.20102,
+      1.183134
+    ],
+    "front_bottom_left": [
+      0.763722,
+      -0.20102,
+      1.183134
+    ],
+    "back_top_left": [
+      0.763722,
+      0.56208,
+      -1.332471
+    ],
+    "back_top_right": [
+      -0.763721,
+      0.56208,
+      -1.332471
+    ],
+    "back_bottom_right": [
+      -0.763721,
+      -0.20102,
+      -1.332471
+    ],
+    "back_bottom_left": [
+      0.763722,
+      -0.20102,
+      -1.332471
+    ]
+  },
   "visible": true,
   "start_x": 0,
   "start_y": 0,
@@ -8,5 +51,6 @@
   "modelscale": 1.0,
   "rot_x": 0,
   "rot_y": 0,
-  "rot_z": 0
+  "rot_z": 0,
+  "segment_size": 10
 }

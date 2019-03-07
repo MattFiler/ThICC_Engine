@@ -169,12 +169,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CharecterSelectionState.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="fileVBGO.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameDebugToggles.h" />
     <ClInclude Include="GameFilepaths.h" />
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
@@ -185,6 +188,7 @@
     <ClInclude Include="ImageGO2D.h" />
     <ClInclude Include="InputData.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LocalisationManager.h" />
     <ClInclude Include="Loop.h" />
     <ClInclude Include="MarchCubes.h" />
     <ClInclude Include="MenuScene.h" />
@@ -203,7 +207,6 @@
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="TestSound.h" />
     <ClInclude Include="Text2D.h" />
-    <ClInclude Include="TPSCamera.h" />
     <ClInclude Include="Track.h" />
     <ClInclude Include="TrackMagnet.h" />
     <ClInclude Include="TrackSelectionState.h" />
@@ -218,15 +221,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CharecterSelectionState.cpp" />
     <ClCompile Include="fileVBGO.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject2D.cpp" />
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Game_backend.cpp" />
     <ClCompile Include="GPGO3D.cpp" />
     <ClCompile Include="ImageGO2D.cpp" />
+    <ClCompile Include="KeybindManager.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="LocalisationManager.cpp" />
     <ClCompile Include="Loop.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MarchCubes.cpp" />
@@ -247,7 +254,6 @@
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TestSound.cpp" />
     <ClCompile Include="Text2D.cpp" />
-    <ClCompile Include="TPSCamera.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="TrackMagnet.cpp" />
     <ClCompile Include="TrackSelectionState.cpp" />

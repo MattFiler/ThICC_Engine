@@ -35,6 +35,7 @@ namespace EditorTool
             this.deleteAsset = new System.Windows.Forms.Button();
             this.importAsset = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.compileAssets = new System.Windows.Forms.Button();
             this.modelConfigs = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
             this.model_scale = new System.Windows.Forms.NumericUpDown();
@@ -62,15 +63,18 @@ namespace EditorTool
             this.playSoundPreview = new System.Windows.Forms.Button();
             this.soundPreview = new NAudio.Gui.WaveViewer();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.button4 = new System.Windows.Forms.Button();
+            this.openKeybindEditor = new System.Windows.Forms.Button();
+            this.openLocalisationEditor = new System.Windows.Forms.Button();
             this.openUiEditor = new System.Windows.Forms.Button();
-            this.compileAssets = new System.Windows.Forms.Button();
+            this.model_segmentsize = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_scale)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).BeginInit();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
             this.SuspendLayout();
             // 
             // loadAssetType
@@ -122,17 +126,30 @@ namespace EditorTool
             // 
             this.groupBox2.Controls.Add(this.loadAssetType);
             this.groupBox2.Controls.Add(this.deleteAsset);
+            this.groupBox2.Controls.Add(this.compileAssets);
             this.groupBox2.Controls.Add(this.assetList);
             this.groupBox2.Controls.Add(this.importAsset);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(215, 384);
+            this.groupBox2.Size = new System.Drawing.Size(215, 415);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Asset Browser";
             // 
+            // compileAssets
+            // 
+            this.compileAssets.Location = new System.Drawing.Point(6, 379);
+            this.compileAssets.Name = "compileAssets";
+            this.compileAssets.Size = new System.Drawing.Size(202, 30);
+            this.compileAssets.TabIndex = 0;
+            this.compileAssets.Text = "Compile Assets and Configs";
+            this.compileAssets.UseVisualStyleBackColor = true;
+            this.compileAssets.Click += new System.EventHandler(this.compileAssets_Click);
+            // 
             // modelConfigs
             // 
+            this.modelConfigs.Controls.Add(this.label13);
+            this.modelConfigs.Controls.Add(this.model_segmentsize);
             this.modelConfigs.Controls.Add(this.label12);
             this.modelConfigs.Controls.Add(this.model_scale);
             this.modelConfigs.Controls.Add(this.label11);
@@ -155,7 +172,7 @@ namespace EditorTool
             this.modelConfigs.Controls.Add(this.label9);
             this.modelConfigs.Location = new System.Drawing.Point(233, 177);
             this.modelConfigs.Name = "modelConfigs";
-            this.modelConfigs.Size = new System.Drawing.Size(226, 219);
+            this.modelConfigs.Size = new System.Drawing.Size(226, 250);
             this.modelConfigs.TabIndex = 11;
             this.modelConfigs.TabStop = false;
             this.modelConfigs.Text = "Model Configuration";
@@ -165,7 +182,7 @@ namespace EditorTool
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(6, 148);
+            this.label12.Location = new System.Drawing.Point(6, 170);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(77, 13);
             this.label12.TabIndex = 30;
@@ -179,9 +196,9 @@ namespace EditorTool
             0,
             0,
             131072});
-            this.model_scale.Location = new System.Drawing.Point(9, 164);
+            this.model_scale.Location = new System.Drawing.Point(9, 186);
             this.model_scale.Name = "model_scale";
-            this.model_scale.Size = new System.Drawing.Size(210, 20);
+            this.model_scale.Size = new System.Drawing.Size(101, 20);
             this.model_scale.TabIndex = 29;
             this.model_scale.Value = new decimal(new int[] {
             10,
@@ -192,7 +209,7 @@ namespace EditorTool
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 107);
+            this.label11.Location = new System.Drawing.Point(6, 119);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(181, 13);
             this.label11.TabIndex = 28;
@@ -201,7 +218,7 @@ namespace EditorTool
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 49);
+            this.label10.Location = new System.Drawing.Point(6, 53);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(213, 13);
             this.label10.TabIndex = 27;
@@ -210,7 +227,7 @@ namespace EditorTool
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 35);
+            this.label1.Location = new System.Drawing.Point(6, 39);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(215, 13);
             this.label1.TabIndex = 26;
@@ -218,7 +235,7 @@ namespace EditorTool
             // 
             // saveAssetConfig
             // 
-            this.saveAssetConfig.Location = new System.Drawing.Point(145, 190);
+            this.saveAssetConfig.Location = new System.Drawing.Point(145, 221);
             this.saveAssetConfig.Name = "saveAssetConfig";
             this.saveAssetConfig.Size = new System.Drawing.Size(75, 23);
             this.saveAssetConfig.TabIndex = 25;
@@ -228,7 +245,7 @@ namespace EditorTool
             // 
             // model_rot_z
             // 
-            this.model_rot_z.Location = new System.Drawing.Point(167, 123);
+            this.model_rot_z.Location = new System.Drawing.Point(167, 135);
             this.model_rot_z.Name = "model_rot_z";
             this.model_rot_z.Size = new System.Drawing.Size(52, 20);
             this.model_rot_z.TabIndex = 22;
@@ -237,7 +254,7 @@ namespace EditorTool
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(152, 126);
+            this.label6.Location = new System.Drawing.Point(152, 138);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(17, 13);
             this.label6.TabIndex = 23;
@@ -245,7 +262,7 @@ namespace EditorTool
             // 
             // model_rot_y
             // 
-            this.model_rot_y.Location = new System.Drawing.Point(94, 123);
+            this.model_rot_y.Location = new System.Drawing.Point(94, 135);
             this.model_rot_y.Name = "model_rot_y";
             this.model_rot_y.Size = new System.Drawing.Size(52, 20);
             this.model_rot_y.TabIndex = 20;
@@ -254,7 +271,7 @@ namespace EditorTool
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(78, 126);
+            this.label7.Location = new System.Drawing.Point(78, 138);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(17, 13);
             this.label7.TabIndex = 21;
@@ -262,7 +279,7 @@ namespace EditorTool
             // 
             // model_rot_x
             // 
-            this.model_rot_x.Location = new System.Drawing.Point(20, 123);
+            this.model_rot_x.Location = new System.Drawing.Point(20, 135);
             this.model_rot_x.Name = "model_rot_x";
             this.model_rot_x.Size = new System.Drawing.Size(52, 20);
             this.model_rot_x.TabIndex = 19;
@@ -272,7 +289,7 @@ namespace EditorTool
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(6, 92);
+            this.label8.Location = new System.Drawing.Point(6, 104);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(55, 13);
             this.label8.TabIndex = 18;
@@ -280,7 +297,7 @@ namespace EditorTool
             // 
             // model_world_z
             // 
-            this.model_world_z.Location = new System.Drawing.Point(167, 65);
+            this.model_world_z.Location = new System.Drawing.Point(167, 69);
             this.model_world_z.Name = "model_world_z";
             this.model_world_z.Size = new System.Drawing.Size(52, 20);
             this.model_world_z.TabIndex = 16;
@@ -289,7 +306,7 @@ namespace EditorTool
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(152, 68);
+            this.label5.Location = new System.Drawing.Point(152, 72);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(17, 13);
             this.label5.TabIndex = 17;
@@ -297,7 +314,7 @@ namespace EditorTool
             // 
             // model_world_y
             // 
-            this.model_world_y.Location = new System.Drawing.Point(94, 65);
+            this.model_world_y.Location = new System.Drawing.Point(94, 69);
             this.model_world_y.Name = "model_world_y";
             this.model_world_y.Size = new System.Drawing.Size(52, 20);
             this.model_world_y.TabIndex = 14;
@@ -306,7 +323,7 @@ namespace EditorTool
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(79, 68);
+            this.label4.Location = new System.Drawing.Point(79, 72);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(17, 13);
             this.label4.TabIndex = 15;
@@ -314,7 +331,7 @@ namespace EditorTool
             // 
             // model_world_x
             // 
-            this.model_world_x.Location = new System.Drawing.Point(20, 65);
+            this.model_world_x.Location = new System.Drawing.Point(20, 69);
             this.model_world_x.Name = "model_world_x";
             this.model_world_x.Size = new System.Drawing.Size(52, 20);
             this.model_world_x.TabIndex = 12;
@@ -323,7 +340,7 @@ namespace EditorTool
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 68);
+            this.label3.Location = new System.Drawing.Point(6, 72);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(17, 13);
             this.label3.TabIndex = 13;
@@ -333,7 +350,7 @@ namespace EditorTool
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 20);
+            this.label2.Location = new System.Drawing.Point(6, 24);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 13);
             this.label2.TabIndex = 11;
@@ -342,7 +359,7 @@ namespace EditorTool
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 126);
+            this.label9.Location = new System.Drawing.Point(6, 138);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(17, 13);
             this.label9.TabIndex = 24;
@@ -404,25 +421,35 @@ namespace EditorTool
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.button4);
+            this.groupBox4.Controls.Add(this.openKeybindEditor);
+            this.groupBox4.Controls.Add(this.openLocalisationEditor);
             this.groupBox4.Controls.Add(this.openUiEditor);
-            this.groupBox4.Controls.Add(this.compileAssets);
-            this.groupBox4.Location = new System.Drawing.Point(12, 402);
+            this.groupBox4.Location = new System.Drawing.Point(12, 433);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(447, 55);
             this.groupBox4.TabIndex = 14;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Other Tools";
             // 
-            // button4
+            // openKeybindEditor
             // 
-            this.button4.Enabled = false;
-            this.button4.Location = new System.Drawing.Point(304, 19);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(137, 30);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "Game Config Editor";
-            this.button4.UseVisualStyleBackColor = true;
+            this.openKeybindEditor.Location = new System.Drawing.Point(6, 19);
+            this.openKeybindEditor.Name = "openKeybindEditor";
+            this.openKeybindEditor.Size = new System.Drawing.Size(137, 30);
+            this.openKeybindEditor.TabIndex = 3;
+            this.openKeybindEditor.Text = "Keybind Editor";
+            this.openKeybindEditor.UseVisualStyleBackColor = true;
+            this.openKeybindEditor.Click += new System.EventHandler(this.openKeybindEditor_Click);
+            // 
+            // openLocalisationEditor
+            // 
+            this.openLocalisationEditor.Enabled = false;
+            this.openLocalisationEditor.Location = new System.Drawing.Point(304, 19);
+            this.openLocalisationEditor.Name = "openLocalisationEditor";
+            this.openLocalisationEditor.Size = new System.Drawing.Size(137, 30);
+            this.openLocalisationEditor.TabIndex = 2;
+            this.openLocalisationEditor.Text = "Localisation Editor";
+            this.openLocalisationEditor.UseVisualStyleBackColor = true;
             // 
             // openUiEditor
             // 
@@ -434,21 +461,48 @@ namespace EditorTool
             this.openUiEditor.Text = "UI Editor";
             this.openUiEditor.UseVisualStyleBackColor = true;
             // 
-            // compileAssets
+            // model_segmentsize
             // 
-            this.compileAssets.Location = new System.Drawing.Point(6, 19);
-            this.compileAssets.Name = "compileAssets";
-            this.compileAssets.Size = new System.Drawing.Size(137, 30);
-            this.compileAssets.TabIndex = 0;
-            this.compileAssets.Text = "Compile Assets";
-            this.compileAssets.UseVisualStyleBackColor = true;
-            this.compileAssets.Click += new System.EventHandler(this.compileAssets_Click);
+            this.model_segmentsize.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.model_segmentsize.Location = new System.Drawing.Point(120, 186);
+            this.model_segmentsize.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.model_segmentsize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.model_segmentsize.Name = "model_segmentsize";
+            this.model_segmentsize.Size = new System.Drawing.Size(101, 20);
+            this.model_segmentsize.TabIndex = 31;
+            this.model_segmentsize.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            65536});
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(117, 171);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(84, 13);
+            this.label13.TabIndex = 32;
+            this.label13.Text = "Segment Size";
             // 
             // Landing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(469, 466);
+            this.ClientSize = new System.Drawing.Size(469, 496);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.modelConfigs);
             this.Controls.Add(this.groupBox2);
@@ -465,6 +519,7 @@ namespace EditorTool
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).EndInit();
             this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -494,7 +549,7 @@ namespace EditorTool
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button openLocalisationEditor;
         private System.Windows.Forms.Button openUiEditor;
         private System.Windows.Forms.Button compileAssets;
         private System.Windows.Forms.PictureBox imagePreview;
@@ -505,5 +560,8 @@ namespace EditorTool
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown model_scale;
+        private Button openKeybindEditor;
+        private Label label13;
+        private NumericUpDown model_segmentsize;
     }
 }
