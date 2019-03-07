@@ -13,5 +13,5 @@ private:
 	float m_maxSnapSnep = 40; // The max distance to snap by each second
 
 	Quaternion m_quatRot = Quaternion::Identity;
-	float m_maxRotation = 40; // The maximum amount to rotate by each second
+	float m_maxRotation = 10; // The maximum amount to rotate by each second
 };

@@ -8,6 +8,8 @@ struct MeshTri
 {
 	MeshTri(Vector _a, Vector _b, Vector _c);
 	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri);
+	Vector GetUpperBound();
+	Vector GetLowerBound();
 
 	Vector m_pointA;
 	Vector m_pointB;
