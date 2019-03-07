@@ -1,0 +1,13 @@
+{
+  "asset_name": "LUIGI CIRCUIT",
+  "asset_type": "Models",
+  "has_box_collider": false,
+  "visible": true,
+  "start_x": 24.0,
+  "start_y": -20.0,
+  "start_z": 50.0,
+  "modelscale": 6.0,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0
+}
