@@ -55,6 +55,7 @@ namespace EditorTool
             foreach (string material in material_array)
             {
                 itemMaterialCategories.Items.Add(material);
+                itemMaterialCategoriesTrans.Items.Add(material);
             }
         }
         
@@ -214,6 +215,7 @@ namespace EditorTool
                         int mtl_index = 0;
                         string[] mtl_file = File.ReadAllLines(import_directory + importedMTL);
                         referenced_materials.Clear();
+                        bool should_fix_next_dissolve = false;
                         foreach (string line in mtl_file)
                         {
                             if (line.Contains("map"))
@@ -224,6 +226,30 @@ namespace EditorTool
                                 map_split[1] = Path.GetFileName(map_split[1]);
                                 mtl_file[mtl_index] = map_split[0] + " " + map_split[1].Replace(' ', '_'); //Will apply this to copied materials next
                                 material_count++;
+                            }
+                            else if (line.Contains("newmtl "))
+                            {
+                                should_fix_next_dissolve = false;
+                                for (int i = 0; i < itemMaterialCategoriesTrans.Items.Count; i++)
+                                {
+                                    if (itemMaterialCategoriesTrans.GetItemChecked(i) && (line.Substring(7) == itemMaterialCategoriesTrans.Items[i].ToString()))
+                                    {
+                                        should_fix_next_dissolve = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            else if (line.Contains("d "))
+                            {
+                                //Fix transparency issue
+                                if (should_fix_next_dissolve)
+                                {
+                                    mtl_file[mtl_index] = "d 0.999999";
+                                }
+                                else
+                                {
+                                    mtl_file[mtl_index] = "d 0.000000";
+                                }
                             }
                             mtl_index++;
                         }
@@ -641,27 +667,47 @@ namespace EditorTool
         {
             if (shouldGenerateCollmap.Checked)
             {
-                importModel.Location = new Point(19, 234);
+                importModel.Location = new Point(19, 418);
                 itemMaterialCategories.Visible = true;
-                this.Size = new Size(310, 311);
+                this.Size = new Size(310, 493);
+                resizedCollisionGroup.Size = new Size(264, 156);
             }
             else
             {
-                importModel.Location = new Point(19, 115);
+                importModel.Location = new Point(19, 302);
                 itemMaterialCategories.Visible = false;
-                this.Size = new Size(310, 191);
+                this.Size = new Size(310, 380);
+                resizedCollisionGroup.Size = new Size(264, 40);
             }
         }
 
         //On first load, resize form to non-collmap view
         private void Model_Importer_Load(object sender, EventArgs e)
         {
-            importModel.Location = new Point(19, 113);
+            importModel.Location = new Point(19, 302);
             itemMaterialCategories.Visible = false;
-            this.Size = new Size(310, 191);
+            this.Size = new Size(310, 380);
+            resizedCollisionGroup.Size = new Size(264, 40);
         }
 
+        //Enable/disable transparency options
+        private void enableTransparency_CheckedChanged(object sender, EventArgs e)
+        {
+            itemMaterialCategoriesTrans.Enabled = enableTransparency.Checked;
+            if (!enableTransparency.Checked)
+            {
+                for (int i = 0; i < itemMaterialCategoriesTrans.Items.Count; i++)
+                {
+                    itemMaterialCategoriesTrans.SetItemChecked(i, false);
+                }
+            }
+        }
+        
 
+        private void itemMaterialCategoriesTrans_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //depreciated
+        }
         private void addTexture_Click(object sender, EventArgs e)
         {
             //depreciated
@@ -671,6 +717,10 @@ namespace EditorTool
             //depreciated
         }
         private void shouldGenerateCollmap_CheckedChanged(object sender, EventArgs e)
+        {
+            //depreciated
+        }
+        private void itemMaterialCategoriesTrans_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             //depreciated
         }
