@@ -123,7 +123,7 @@ void Game::createAllObjects2D()
 	m_2DObjects.push_back(test);
 	test = new ImageGO2D(m_RD, "guides_logo");
 	test->SetPos(Vector2(100, 100));
-	test->SetScale(Vector2(1.0f, 0.5f));
+	test->SetScale(Vector2(5.0f, 0.5f));
 	test->SetColour(Color(1, 0, 0, 1));
 	m_2DObjects.push_back(test);
 
@@ -148,8 +148,8 @@ void Game::createAllObjects2D()
 /* Setup our viewport */
 void Game::setupViewport(int _width, int _height)
 {
-	SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
-	SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
+	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
+	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
 
 	m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH }; //uncommented
 	m_scissorRect[0] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
@@ -168,20 +168,20 @@ void Game::setupViewport(int _width, int _height)
 	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[0]);
 
-	//m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	////m_RD->m_cam = m_cam[1];
-	//m_3DObjects.push_back(m_cam[1]);
+	m_cam[1]->SetBehav(Camera::BEHAVIOUR::LERP);
+	m_3DObjects.push_back(m_cam[1]);
 
-	//m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	////m_RD->m_cam = m_cam[1];
-	//m_3DObjects.push_back(m_cam[2]);
+	m_cam[2]->SetBehav(Camera::BEHAVIOUR::LERP);
+	m_3DObjects.push_back(m_cam[2]);
 
-	//m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
-	////m_RD->m_cam = m_cam[1];
-	//m_3DObjects.push_back(m_cam[3]);
+	m_cam[3]->SetBehav(Camera::BEHAVIOUR::LERP);
+	m_3DObjects.push_back(m_cam[3]);
 }
 
 /* Create all 3d game objects */
@@ -338,6 +338,18 @@ void Game::Update(DX::StepTimer const& _timer)
 	{
 		ExitGame();
 	}
+	if (m_keybinds.keyPressed("Orbit"))
+	{
+		m_cam[0]->SetBehav(Camera::BEHAVIOUR::ORBIT);
+	}
+	if (m_keybinds.keyPressed("Lerp"))
+	{
+		m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
+	}
+	if (m_keybinds.keyPressed("Matt"))
+	{
+		m_cam[0]->SetBehav(Camera::BEHAVIOUR::MATT_CAM);
+	}
 	
 	//Add your game logic here.
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
@@ -385,17 +397,18 @@ void Game::Render()
 	//finally draw all 2D objects
 	ID3D12DescriptorHeap* heaps[] = { m_RD->m_resourceDescriptors->Heap() };
 	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-	m_RD->m_spriteBatch->SetViewport(m_viewport[0]);
-	//m_RD->m_spriteBatch->SetViewport(m_viewport[1]);
-	m_RD->m_spriteBatch->Begin(m_commandList.Get());
-
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	for (int i = 0; i < num_of_cam; i++)
 	{
-		(*it)->Render(m_RD);
+		m_RD->m_spriteBatch->SetViewport(m_viewport[i]);
+		m_RD->m_spriteBatch->Begin(m_commandList.Get());
+
+		for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+		{
+			(*it)->Render(m_RD);
+		}
+
+		m_RD->m_spriteBatch->End();
 	}
-
-	m_RD->m_spriteBatch->End();
-
 	// Show the new frame.
 	Present();
 	m_graphicsMemory->Commit(m_commandQueue.Get());
