@@ -1,5 +1,6 @@
 #pragma once
 #include "SDKMeshGO3D.h"
+#include "Collision.h"
 #include <json.hpp>
 using json = nlohmann::json;
 
@@ -15,7 +16,7 @@ public:
 	virtual ~PhysModel() = default;
 
 	void initCollider(json &model_data);
-	bool hasCollider() {return has_collider;};
+	bool hasCollider() {return m_hasCollider;};
 	void updateCollider();
 
 	virtual void Tick(GameStateData* _GSD) override;
@@ -28,9 +29,9 @@ public:
 	void		SetDrag(float _drag) { m_drag = _drag; }
 
 	BoundingOrientedBox getCollider() { return m_collider; };
-	void setCollided(bool _collided) { m_collided = _collided; };
+	void addCurrentCollision(Collision _currentCollision) { m_currentCollisions.push_back(_currentCollision); };
 
-	SDKMeshGO3D* getDebugCollider() { return collider_debug; }
+	SDKMeshGO3D* getDebugCollider() { return m_colliderDebug; }
 
 protected:
 
@@ -44,16 +45,29 @@ protected:
 	Vector3 m_gravVel = Vector3::Zero; // The amount of gravity velocity to apply each frame
 	float m_maxGrav = 60; // The maximum length of m_gravVel. m_gravVel will be clamped to this
 	Vector3 m_acc = Vector3::Zero;
+	PhysModelData m_physData;
 
-	bool m_has_collider = false;
-	XMFLOAT3 m_coll_local_centre;//Local Centre of the mesh
-	XMFLOAT3 m_coll_world_centre;//World Centre of the mesh and the centre of the bounding box
+	//Collider stuff	
+	std::vector<Collision> m_currentCollisions;
+	bool m_hasCollider = false;
 	BoundingOrientedBox m_collider; //Bounding box of the model
-	bool m_collided = false; //True if bounding box is inside another
+	SDKMeshGO3D* m_colliderDebug = nullptr;
+	XMFLOAT3 m_collLocalCentre;//Local Centre of the mesh
+	XMFLOAT3 m_collWorldCentre;//World Centre of the mesh and the centre of the bounding box
+	//Corner Pos in Local Space
+	Vector3 m_frontTopLeft;
+	Vector3 m_frontTopRight;
+	Vector3 m_backBottomLeft;
+	Vector3 m_backBottomRight;
+	//Corner Pos in World Space
+	Vector3 m_globalFrontLeft;
+	Vector3 m_globalFrontRight;
+	Vector3 m_globalBackLeft;
+	Vector3 m_globalBackRight;
+	float m_width;
+	float m_length;
+	float m_height;
 
-	SDKMeshGO3D* collider_debug = nullptr;
-	bool has_collider = false;
-	PhysModelData phys_data;
 	XMFLOAT3 MatrixDecomposeYawPitchRoll(Matrix  mat);
 
 };
