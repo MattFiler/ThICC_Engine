@@ -15,6 +15,6 @@
   "DebugCamRotRight": "End",
   "Debug Save Matrix": "D1",
   "Debug Load Matrix": "D2",
-  "DebugCamLookDown": "NumLock",
+  "DebugCamLookDown": "Multiply",
   "DebugCamLookUp": "Divide"
 }

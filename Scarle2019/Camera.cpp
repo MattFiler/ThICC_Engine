@@ -340,7 +340,7 @@ void Camera::Tick(GameStateData * _GSD)
 
 		if (m_keybind.keyPressed("DebugCamLookUp"))
 		{
-			if (look_up_down == -1)
+			if (look_up_down != 0)
 			{
 				look_up_down = 0;
 			}
@@ -352,7 +352,7 @@ void Camera::Tick(GameStateData * _GSD)
 		//else if (_GSD->m_keyboardState.End && _GSD->m_prevKeyboardState.IsKeyUp(Keyboard::Keys::End))
 		else if (m_keybind.keyPressed("DebugCamLookDown"))
 		{
-			if (look_up_down == -1)
+			if (look_up_down != 1)
 			{
 				look_up_down = 1;
 			}
