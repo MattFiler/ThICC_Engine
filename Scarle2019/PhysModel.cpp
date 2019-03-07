@@ -35,7 +35,7 @@ PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _file
 void PhysModel::initCollider(json &model_data)
 {
 	/*Gets the the top front left and back bottom right points of the mesh from the json file - finds the average between them to get the centre of the mesh
-	and uses (currently) the top front left point to determine the extentents (size) of the collider */
+	and uses (currently) the top front left point to determine the extents (size) of the collider */
 	has_collider = true;
 
 	XMFLOAT3 top_left = XMFLOAT3((float) model_data["collision_box"]["front_top_left"][0] * phys_data.scale,
@@ -51,7 +51,7 @@ void PhysModel::initCollider(json &model_data)
 
 	//Have to split the rotation matrix and reassemble because yaw and pitch are swapped
 	XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
-	m_collider = BoundingOrientedBox(m_coll_world_centre, top_left, XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z)));
+	m_collider = BoundingOrientedBox(m_coll_world_centre, Vector3(m_scale.x, top_left.y, m_scale.z), XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z)));
 }
 
 XMFLOAT3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)

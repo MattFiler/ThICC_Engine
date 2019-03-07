@@ -20,15 +20,41 @@ public:
 
 	Vector3 getSuitableSpawnSpot();
 
-	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri);
+	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle);
 private:
 	void LoadVertexList(string _vertex_list);
 	void CreateAndAddTriangle(string _line);
 	Vector CreateVector(string _vector);
+	void CompareVectorToMinimum(Vector& _vect);
+	void CompareVectorToMaximum(Vector& _vect);
 
+	void SplitTrisIntoGrid();
+	void SetAllTrisForIndex(int _index);
+	bool IsPointInBounds(Vector& _point, Vector& _lowerBound, Vector& _upperBound);
 
-	std::vector<MeshTri> triangles;
+	Vector GetAreaAtIndex(int _index);
+	int GetIndexAtPoint(Vector point);
+	void GetXYZIndexAtPoint(Vector& point);
+
+	// Storage for the all the triangles data. 
+	// Make sure to not reserve more on this vector past initization, else the references will all get messed up
+	std::vector<MeshTri> m_triangles;
+
+	// References to the triangles ordered and split into segments
+	std::vector<std::vector<MeshTri*>> m_triGrid;
 
 	GameFilepaths m_filepath;
 	TrackData m_track_data;
+
+	// Keep track of the smallest and largest co-ordinates
+	Vector m_smallest = Vector3::Zero;
+	Vector m_largest = Vector3::Zero;
+
+	// Size for the tri segments (segments are cubes)
+	float m_triSegSize = 10;
+
+	// Size of each dimension of the vector
+	int m_triGridX = 0;
+	int m_triGridY = 0;
+	int m_triGridYX = 0; // Set to m_triGridY * m_triGridX as this number is used lots
 };
