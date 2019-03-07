@@ -336,6 +336,21 @@ void Camera::Tick(GameStateData * _GSD)
 				diff_num = 7;
 			}
 		}
+
+		if (m_keybind.keyPressed("DebugCamLookUp"))
+		{
+			diff_num = 9;
+		}
+		//else if (_GSD->m_keyboardState.End && _GSD->m_prevKeyboardState.IsKeyUp(Keyboard::Keys::End))
+		else if (m_keybind.keyPressed("DebugCamLookDown"))
+		{
+			diff_num = 8;
+		}
+		//else if (_GSD->m_keyboardState.End && _GSD->m_prevKeyboardState.IsKeyUp(Keyboard::Keys::End))
+		else if (m_keybind.keyPressed("DebugCamReset"))
+		{
+			diff_num = 0;
+		}
 		m_rot = Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
 		m_targetPos = m_pos + m_differnce[diff_num];
 		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
