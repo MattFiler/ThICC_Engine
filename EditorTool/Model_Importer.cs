@@ -55,6 +55,7 @@ namespace EditorTool
             foreach (string material in material_array)
             {
                 itemMaterialCategories.Items.Add(material);
+                itemMaterialCategoriesTrans.Items.Add(material);
             }
         }
         
@@ -224,6 +225,10 @@ namespace EditorTool
                                 map_split[1] = Path.GetFileName(map_split[1]);
                                 mtl_file[mtl_index] = map_split[0] + " " + map_split[1].Replace(' ', '_'); //Will apply this to copied materials next
                                 material_count++;
+                            }
+                            else if (line.Contains("d "))
+                            {
+                                mtl_file[mtl_index] = "d 0.999999"; //Fix transparency issue
                             }
                             mtl_index++;
                         }
@@ -641,24 +646,59 @@ namespace EditorTool
         {
             if (shouldGenerateCollmap.Checked)
             {
-                importModel.Location = new Point(19, 234);
+                importModel.Location = new Point(19, 418);
                 itemMaterialCategories.Visible = true;
-                this.Size = new Size(310, 311);
+                this.Size = new Size(310, 493);
+                resizedCollisionGroup.Size = new Size(264, 156);
             }
             else
             {
-                importModel.Location = new Point(19, 115);
+                importModel.Location = new Point(19, 302);
                 itemMaterialCategories.Visible = false;
-                this.Size = new Size(310, 191);
+                this.Size = new Size(310, 380);
+                resizedCollisionGroup.Size = new Size(264, 40);
             }
         }
 
         //On first load, resize form to non-collmap view
         private void Model_Importer_Load(object sender, EventArgs e)
         {
-            importModel.Location = new Point(19, 113);
+            importModel.Location = new Point(19, 302);
             itemMaterialCategories.Visible = false;
-            this.Size = new Size(310, 191);
+            this.Size = new Size(310, 380);
+            resizedCollisionGroup.Size = new Size(264, 40);
+        }
+
+        //Enable/disable transparency for ALL items
+        private void enableTransparency_CheckedChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < itemMaterialCategoriesTrans.Items.Count; i++)
+            {
+                itemMaterialCategoriesTrans.SetItemChecked(i, enableTransparency.Checked);
+            }
+        }
+        
+        //Update checkbox
+        private void itemMaterialCategoriesTrans_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int checked_count = 0;
+            for (int i = 0; i < itemMaterialCategoriesTrans.Items.Count; i++)
+            {
+                checked_count++;
+            }
+
+            if (checked_count == itemMaterialCategoriesTrans.Items.Count)
+            {
+                enableTransparency.CheckState = CheckState.Checked;
+            }
+            else if (checked_count == 0)
+            {
+                enableTransparency.CheckState = CheckState.Unchecked;
+            }
+            else
+            {
+                enableTransparency.CheckState = CheckState.Indeterminate;
+            }
         }
 
 
@@ -671,6 +711,10 @@ namespace EditorTool
             //depreciated
         }
         private void shouldGenerateCollmap_CheckedChanged(object sender, EventArgs e)
+        {
+            //depreciated
+        }
+        private void itemMaterialCategoriesTrans_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             //depreciated
         }

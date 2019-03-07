@@ -1,4 +1,6 @@
-﻿namespace EditorTool
+﻿using System.Windows.Forms;
+
+namespace EditorTool
 {
     partial class Model_Importer
     {
@@ -38,11 +40,17 @@
             this.itemMaterialCategories = new System.Windows.Forms.CheckedListBox();
             this.shouldFlipUV = new System.Windows.Forms.CheckBox();
             this.shouldCreateBoxCollider = new System.Windows.Forms.CheckBox();
+            this.enableTransparency = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.itemMaterialCategoriesTrans = new System.Windows.Forms.CheckedListBox();
+            this.resizedCollisionGroup = new System.Windows.Forms.GroupBox();
+            this.groupBox1.SuspendLayout();
+            this.resizedCollisionGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // importModel
             // 
-            this.importModel.Location = new System.Drawing.Point(19, 234);
+            this.importModel.Location = new System.Drawing.Point(19, 418);
             this.importModel.Name = "importModel";
             this.importModel.Size = new System.Drawing.Size(264, 28);
             this.importModel.TabIndex = 0;
@@ -97,7 +105,7 @@
             // shouldGenerateCollmap
             // 
             this.shouldGenerateCollmap.AutoSize = true;
-            this.shouldGenerateCollmap.Location = new System.Drawing.Point(19, 92);
+            this.shouldGenerateCollmap.Location = new System.Drawing.Point(6, 18);
             this.shouldGenerateCollmap.Name = "shouldGenerateCollmap";
             this.shouldGenerateCollmap.Size = new System.Drawing.Size(89, 17);
             this.shouldGenerateCollmap.TabIndex = 6;
@@ -108,9 +116,9 @@
             // itemMaterialCategories
             // 
             this.itemMaterialCategories.FormattingEnabled = true;
-            this.itemMaterialCategories.Location = new System.Drawing.Point(19, 115);
+            this.itemMaterialCategories.Location = new System.Drawing.Point(6, 41);
             this.itemMaterialCategories.Name = "itemMaterialCategories";
-            this.itemMaterialCategories.Size = new System.Drawing.Size(264, 109);
+            this.itemMaterialCategories.Size = new System.Drawing.Size(252, 109);
             this.itemMaterialCategories.TabIndex = 7;
             // 
             // shouldFlipUV
@@ -118,7 +126,7 @@
             this.shouldFlipUV.AutoSize = true;
             this.shouldFlipUV.Checked = true;
             this.shouldFlipUV.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.shouldFlipUV.Location = new System.Drawing.Point(201, 92);
+            this.shouldFlipUV.Location = new System.Drawing.Point(139, 19);
             this.shouldFlipUV.Name = "shouldFlipUV";
             this.shouldFlipUV.Size = new System.Drawing.Size(65, 17);
             this.shouldFlipUV.TabIndex = 8;
@@ -128,22 +136,65 @@
             // shouldCreateBoxCollider
             // 
             this.shouldCreateBoxCollider.AutoSize = true;
-            this.shouldCreateBoxCollider.Location = new System.Drawing.Point(114, 92);
+            this.shouldCreateBoxCollider.Location = new System.Drawing.Point(101, 18);
             this.shouldCreateBoxCollider.Name = "shouldCreateBoxCollider";
             this.shouldCreateBoxCollider.Size = new System.Drawing.Size(81, 17);
             this.shouldCreateBoxCollider.TabIndex = 9;
             this.shouldCreateBoxCollider.Text = "Box Collider";
             this.shouldCreateBoxCollider.UseVisualStyleBackColor = true;
             // 
+            // enableTransparency
+            // 
+            this.enableTransparency.AutoSize = true;
+            this.enableTransparency.Location = new System.Drawing.Point(6, 19);
+            this.enableTransparency.Name = "enableTransparency";
+            this.enableTransparency.Size = new System.Drawing.Size(127, 17);
+            this.enableTransparency.TabIndex = 10;
+            this.enableTransparency.Text = "Enable Transparency";
+            this.enableTransparency.UseVisualStyleBackColor = true;
+            this.enableTransparency.CheckedChanged += new System.EventHandler(this.enableTransparency_CheckedChanged);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.itemMaterialCategoriesTrans);
+            this.groupBox1.Controls.Add(this.enableTransparency);
+            this.groupBox1.Controls.Add(this.shouldFlipUV);
+            this.groupBox1.Location = new System.Drawing.Point(19, 93);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(264, 157);
+            this.groupBox1.TabIndex = 11;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Model Materials";
+            // 
+            // itemMaterialCategoriesTrans
+            // 
+            this.itemMaterialCategoriesTrans.FormattingEnabled = true;
+            this.itemMaterialCategoriesTrans.Location = new System.Drawing.Point(6, 42);
+            this.itemMaterialCategoriesTrans.Name = "itemMaterialCategoriesTrans";
+            this.itemMaterialCategoriesTrans.Size = new System.Drawing.Size(252, 109);
+            this.itemMaterialCategoriesTrans.TabIndex = 12;
+            this.itemMaterialCategoriesTrans.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.itemMaterialCategoriesTrans_SelectedIndexChanged);
+            this.itemMaterialCategoriesTrans.SelectedIndexChanged += new System.EventHandler(this.itemMaterialCategoriesTrans_SelectedIndexChanged_1);
+            // 
+            // resizedCollisionGroup
+            // 
+            this.resizedCollisionGroup.Controls.Add(this.itemMaterialCategories);
+            this.resizedCollisionGroup.Controls.Add(this.shouldGenerateCollmap);
+            this.resizedCollisionGroup.Controls.Add(this.shouldCreateBoxCollider);
+            this.resizedCollisionGroup.Location = new System.Drawing.Point(19, 256);
+            this.resizedCollisionGroup.Name = "resizedCollisionGroup";
+            this.resizedCollisionGroup.Size = new System.Drawing.Size(264, 156);
+            this.resizedCollisionGroup.TabIndex = 12;
+            this.resizedCollisionGroup.TabStop = false;
+            this.resizedCollisionGroup.Text = "Model Collision";
+            // 
             // Model_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 270);
-            this.Controls.Add(this.shouldCreateBoxCollider);
-            this.Controls.Add(this.shouldFlipUV);
-            this.Controls.Add(this.itemMaterialCategories);
-            this.Controls.Add(this.shouldGenerateCollmap);
+            this.ClientSize = new System.Drawing.Size(292, 454);
+            this.Controls.Add(this.resizedCollisionGroup);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.assetName);
             this.Controls.Add(this.label1);
@@ -155,6 +206,10 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Import Model";
             this.Load += new System.EventHandler(this.Model_Importer_Load);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.resizedCollisionGroup.ResumeLayout(false);
+            this.resizedCollisionGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,6 +227,10 @@
         private System.Windows.Forms.CheckedListBox itemMaterialCategories;
         private System.Windows.Forms.CheckBox shouldFlipUV;
         private System.Windows.Forms.CheckBox shouldCreateBoxCollider;
+        private System.Windows.Forms.CheckBox enableTransparency;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckedListBox itemMaterialCategoriesTrans;
+        private System.Windows.Forms.GroupBox resizedCollisionGroup;
     }
 }
 

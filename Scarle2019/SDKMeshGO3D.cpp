@@ -43,7 +43,7 @@ SDKMeshGO3D::SDKMeshGO3D(RenderData* _RD, string _filename)
 
 	static EffectPipelineStateDescription pd(
 		nullptr,
-		CommonStates::AlphaBlend,
+		CommonStates::Opaque,
 		CommonStates::DepthDefault,
 		CommonStates::CullClockwise,
 		rtState);

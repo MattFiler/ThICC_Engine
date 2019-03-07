@@ -214,7 +214,7 @@ void Game::createAllObjects3D()
 
 	//Load in a track
 	//track = new Track(m_RD, "GBA Mario Circuit");
-	track = new Track(m_RD, "Mario Kart Stadium");
+	track = new Track(m_RD, "Mario Kart Stadium TRANSPARENCY");
 	m_3DObjects.push_back(track);
 
 	//Create a player and position on track
