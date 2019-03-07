@@ -3,5 +3,4 @@
 struct Collision
 {
 	float x = 0;
-
 };

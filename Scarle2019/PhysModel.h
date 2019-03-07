@@ -29,9 +29,10 @@ public:
 	void		SetDrag(float _drag) { m_drag = _drag; }
 
 	BoundingOrientedBox getCollider() { return m_collider; };
-	void addCurrentCollision(Collision _currentCollision) { m_currentCollisions.push_back(_currentCollision); };
 
-	SDKMeshGO3D* getDebugCollider() { return m_colliderDebug; }
+	SDKMeshGO3D* getDebugCollider() { return m_colliderDebug; };
+
+	void addCurrentCollision(Collision _currentCollision) { m_currentCollisions.push_back(_currentCollision); };
 
 protected:
 
@@ -47,10 +48,12 @@ protected:
 	Vector3 m_acc = Vector3::Zero;
 	PhysModelData m_physData;
 
-	//Collider stuff	
 	std::vector<Collision> m_currentCollisions;
-	bool m_hasCollider = false;
+
+	XMFLOAT3 m_collLocalCentre;//Local Centre of the mesh
+	XMFLOAT3 m_collWorldCentre;//World Centre of the mesh and the centre of the bounding box
 	BoundingOrientedBox m_collider; //Bounding box of the model
+
 	SDKMeshGO3D* m_colliderDebug = nullptr;
 	XMFLOAT3 m_collLocalCentre;//Local Centre of the mesh
 	XMFLOAT3 m_collWorldCentre;//World Centre of the mesh and the centre of the bounding box

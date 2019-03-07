@@ -362,6 +362,7 @@ void Game::Update(DX::StepTimer const& _timer)
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 	}
 
+
 	CollisionManager::checkPhysModelCollisions(m_physModels);
 }
 

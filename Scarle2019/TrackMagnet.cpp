@@ -17,7 +17,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	Vector intersect;
 	MeshTri* tri = nullptr;
 	Matrix targetWorld = Matrix::Identity;
-	bool shouldStick = track.DoesLineIntersect(m_world.Down()*5, m_pos + m_world.Up() * 4, intersect, tri, m_maxAngle);
+	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(m_height*7), m_pos + m_world.Up() * (m_height*2), intersect, tri, m_maxAngle);
 	if (shouldStick)
 	{
 		Vector adjustVel = m_velTotal;
@@ -45,13 +45,13 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 		}
 		else if (dist > m_maxSnapDist)
 		{
-			m_gravDirection = m_world.Down() * 15;
+			m_gravDirection = m_world.Down() * gravityMultiplier;
 		}
 
 		// Calculate a new rotation using 2 points on the plane that is found
 		Vector secondIntersect;
 		MeshTri* tri2 = nullptr;
-		tri->DoesLineIntersect(m_world.Down() * 5, m_pos + adjustVel + m_world.Forward() + (m_world.Up() * 4), secondIntersect, tri2, m_maxAngle);
+		tri->DoesLineIntersect(m_world.Down() * (m_height * 7), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (m_height * 2)), secondIntersect, tri2, m_maxAngle);
 		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 	}
@@ -59,7 +59,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	{
 		targetWorld = m_world.CreateWorld(m_pos, m_world.Forward(), m_world.Up());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
-		m_gravDirection = m_world.Down() * 5;
+		m_gravDirection = m_world.Down() * gravityMultiplier;
 	}
 	// Update the position and rotation by breaking apart m_world
 	Vector3 scale = Vector3::Zero;
@@ -86,35 +86,29 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 
 void TrackMagnet::ResolveWallCollisions(Track& walls)
 {
-	// TODO: Calculate these from the bounding box once thats pushed to master
-	
-	Vector frontLeft = m_pos + (m_world.Left() * 0.6f) + (m_world.Forward() * 0.8f);
-	Vector frontRight = m_pos + (m_world.Right() * 0.6f) + (m_world.Forward() * 0.8f);
-	Vector backLeft = m_pos + (m_world.Left() * 0.6f) + (m_world.Backward() * 0.8f);
-	Vector backRight = m_pos + (m_world.Right() * 0.6f) + (m_world.Backward() * 0.8f);
-	
+	Vector leftSide = m_globalFrontLeft - m_globalBackLeft;
+	Vector rightSide = m_globalFrontRight - m_globalBackRight;
+	Vector frontSide = m_globalFrontLeft - m_globalFrontRight;
+	Vector backSide = m_globalBackLeft - m_globalBackRight;
 
-	Vector leftSide = frontLeft - backLeft;
-	Vector rightSide = frontRight - backRight;
-	Vector frontSide = frontLeft - frontRight;
-	Vector backSide = backLeft - backRight;
-	// End TODO
 	Vector intersect = Vector::Zero;
 	MeshTri* tri = nullptr;
 
-	if (walls.DoesLineIntersect(leftSide, frontLeft, intersect, tri, 5) ||
-		walls.DoesLineIntersect(rightSide, frontRight, intersect, tri, 5) ||
-		walls.DoesLineIntersect(frontSide, frontLeft, intersect, tri, 5) ||
-		walls.DoesLineIntersect(backSide, backLeft, intersect, tri, 5))
+	if (walls.DoesLineIntersect(leftSide, m_globalFrontLeft, intersect, tri, 5) ||
+		walls.DoesLineIntersect(rightSide, m_globalFrontRight, intersect, tri, 5) ||
+		walls.DoesLineIntersect(frontSide, m_globalFrontLeft, intersect, tri, 5) ||
+		walls.DoesLineIntersect(backSide, m_globalFrontLeft, intersect, tri, 5))
 	{
 		// Check if the velocity and this wall are not already diverging
 		if ((tri->m_plane.Normal() + m_vel).Length() < m_vel.Length())
 		{
+			Vector prevVel = m_vel;
+			prevVel.Normalize();
 			m_vel = Vector::Reflect(m_vel, tri->m_plane.Normal());
-		}
-		else
-		{
-			int breakhere = 0;
+			Vector velNorm = m_vel;
+			velNorm.Normalize();
+			float dist = Vector::Distance(velNorm, prevVel);
+			m_vel *= 1 - (dist / 2);
 		}
 	}
 
