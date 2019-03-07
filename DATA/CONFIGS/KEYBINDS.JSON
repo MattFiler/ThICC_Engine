@@ -12,5 +12,7 @@
   "DebugCamLeft": "Left",
   "DebugCamRight": "Right",
   "DebugCamRotLeft": "PageDown",
-  "DebugCamRotRight": "End"
+  "DebugCamRotRight": "End",
+  "Debug Save Matrix": "D1",
+  "Debug Load Matrix": "D2"
 }

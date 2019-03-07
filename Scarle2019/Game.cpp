@@ -226,6 +226,11 @@ void Game::createAllObjects3D()
 	//player[0]->SetPos({0, 0, 0});
 	m_3DObjects.push_back(player[0]);
 
+	player[1] = new Player(m_RD, "Standard Kart", 1, *m_gamePad.get());
+	player[1]->SetPos(Vector3(player[0]->GetPos().x, player[0]->GetPos().y, player[0]->GetPos().z - 10));
+	//player[0]->SetPos({0, 0, 0});
+	m_3DObjects.push_back(player[1]);
+
 	//create a base light
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
 	m_3DObjects.push_back(m_light);
@@ -286,12 +291,12 @@ void Game::pushBackObjects()
 	VBGO3D::PushIBVB(m_RD);
 
 	//Add all 3D game objects with a collider to the collision manager's list
-	for (int i = 0; i < m_3DObjects.size(); i++) {
-		if (dynamic_cast<PhysModel*>(m_3DObjects[i])) {
-			if (dynamic_cast<PhysModel*>(m_3DObjects[i])->hasCollider()) {
-				m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
-				m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
-			}
+	for (int i = 0; i < m_3DObjects.size(); i++) 
+{
+		if (dynamic_cast<PhysModel*>(m_3DObjects[i]) && dynamic_cast<PhysModel*>(m_3DObjects[i])->hasCollider()) 
+		{		
+			m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
+			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());		
 		}
 	}
 }
@@ -304,6 +309,8 @@ void Game::Update(DX::StepTimer const& _timer)
 	{
 		player[0]->ShouldStickToTrack(*track, m_GSD);
 		player[0]->ResolveWallCollisions(*track);
+		player[1]->ShouldStickToTrack(*track, m_GSD);
+		player[1]->ResolveWallCollisions(*track);
 	}
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 
@@ -369,6 +376,7 @@ void Game::Update(DX::StepTimer const& _timer)
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 	}
+
 
 	CollisionManager::checkPhysModelCollisions(m_physModels);
 }

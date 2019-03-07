@@ -25,10 +25,8 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 			if (physModel1 != physModel2 && physModel1->getCollider().Intersects(physModel2->getCollider()))
 			{
 				Collision collision;
-				collision.physModel1 = physModel1;
-				collision.physModel2 = physModel2;
-				physModel1->setCollided(true);
-				physModel2->setCollided(true);
+				physModel1->addCurrentCollision(collision);
+				physModel2->addCurrentCollision(collision);
 
 				collisions.push_back(collision);
 			}

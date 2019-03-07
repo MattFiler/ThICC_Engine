@@ -70,6 +70,7 @@ private:
 	// Test objects
 	Track* track = nullptr;
 	Player* player[2] = {nullptr};
+	PhysModel* test_model = nullptr;
 
 	void Update(DX::StepTimer const& _timer);
 	void Render();
