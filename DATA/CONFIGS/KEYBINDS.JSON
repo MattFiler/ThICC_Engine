@@ -1,5 +1,16 @@
 {
   "Activate": "Enter",
   "Quit": "Escape",
-  "Debug Toggle": "P"
+  "Debug Toggle": "P",
+  "Orbit": "K",
+  "Lerp": "L",
+  "Matt": "M",
+  "DebugCamUp": "Home",
+  "DebugCamDown": "PageUp",
+  "DebugCamFor": "Up",
+  "DebugCamBack": "Down",
+  "DebugCamLeft": "Left",
+  "DebugCamRight": "Right",
+  "DebugCamRotLeft": "PageDown",
+  "DebugCamRotRight": "End"
 }
