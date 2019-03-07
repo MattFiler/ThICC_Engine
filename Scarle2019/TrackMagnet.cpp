@@ -86,38 +86,29 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 
 void TrackMagnet::ResolveWallCollisions(Track& walls)
 {
-	// TODO: Calculate these from the bounding box once thats pushed to master
-	
-	/*
-	Vector frontLeft = m_pos + (m_world.Left() * 0.6f) + (m_world.Forward() * 0.8f);
-	Vector frontRight = m_pos + (m_world.Right() * 0.6f) + (m_world.Forward() * 0.8f);
-	Vector backLeft = m_pos + (m_world.Left() * 0.6f) + (m_world.Backward() * 0.8f);
-	Vector backRight = m_pos + (m_world.Right() * 0.6f) + (m_world.Backward() * 0.8f);
-	*/
+	Vector leftSide = m_globalFrontLeft - m_globalBackLeft;
+	Vector rightSide = m_globalFrontRight - m_globalBackRight;
+	Vector frontSide = m_globalFrontLeft - m_globalFrontRight;
+	Vector backSide = m_globalBackLeft - m_globalBackRight;
 
-
-
-	Vector leftSide = m_global_front_left - m_global_back_left;
-	Vector rightSide = m_global_front_right - m_global_back_right;
-	Vector frontSide = m_global_front_left - m_global_front_right;
-	Vector backSide = m_global_back_left - m_global_back_right;
-	// End TODO
 	Vector intersect = Vector::Zero;
 	MeshTri* tri = nullptr;
 
-	if (walls.DoesLineIntersect(leftSide, m_global_front_left, intersect, tri, 5) ||
-		walls.DoesLineIntersect(rightSide, m_global_front_right, intersect, tri, 5) ||
-		walls.DoesLineIntersect(frontSide, m_global_front_left, intersect, tri, 5) ||
-		walls.DoesLineIntersect(backSide, m_global_front_left, intersect, tri, 5))
+	if (walls.DoesLineIntersect(leftSide, m_globalFrontLeft, intersect, tri, 5) ||
+		walls.DoesLineIntersect(rightSide, m_globalFrontRight, intersect, tri, 5) ||
+		walls.DoesLineIntersect(frontSide, m_globalFrontLeft, intersect, tri, 5) ||
+		walls.DoesLineIntersect(backSide, m_globalFrontLeft, intersect, tri, 5))
 	{
 		// Check if the velocity and this wall are not already diverging
 		if ((tri->m_plane.Normal() + m_vel).Length() < m_vel.Length())
 		{
+			Vector prevVel = m_vel;
+			prevVel.Normalize();
 			m_vel = Vector::Reflect(m_vel, tri->m_plane.Normal());
-		}
-		else
-		{
-			int breakhere = 0;
+			Vector velNorm = m_vel;
+			velNorm.Normalize();
+			float dist = Vector::Distance(velNorm, prevVel);
+			m_vel *= 1 - (dist / 2);
 		}
 	}
 

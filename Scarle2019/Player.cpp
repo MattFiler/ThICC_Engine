@@ -83,7 +83,7 @@ void Player::Tick(GameStateData* _GSD)
 			m_gamePad->SetVibration(m_playerID, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1);
 		}
 
-		// Debug code to save/load the players world matrix
+		// Debug code to save/load the players game state
 		if (m_keymindManager.keyPressed("Debug Save Matrix"))
 		{
 			m_savedMatrix = m_world;
