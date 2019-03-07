@@ -1,5 +1,7 @@
 {
   "Activate": "Enter",
   "Quit": "Escape",
-  "Debug Toggle": "P"
+  "Debug Toggle": "P",
+  "Debug Save Matrix": "D1",
+  "Debug Load Matrix": "D2"
 }

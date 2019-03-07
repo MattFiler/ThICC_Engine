@@ -1,5 +1,6 @@
 #pragma once
 #include "TrackMagnet.h"
+#include "KeybindManager.h"
 
 //=================================================================
 //Base Player Class (i.e. a model GO3D the player controls)
@@ -17,4 +18,9 @@ public:
 protected:
 	GamePad* m_gamePad;
 	int m_playerID = 0;
+private:
+	KeybindManager m_keymindManager;
+	Matrix m_savedMatrix;
+	Vector m_savedVel;
+	Vector m_savedGravVel;
 };
