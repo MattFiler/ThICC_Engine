@@ -29,7 +29,7 @@ public:
 	void		SetDrag(float _drag) { m_drag = _drag; }
 
 	BoundingOrientedBox getCollider() { return m_collider; };
-	void setCollided(bool _collided) { m_collided = _collided; };
+	void addCurrentCollision(Collision _currentCollision) { m_currentCollisions.push_back(_currentCollision); };
 
 	SDKMeshGO3D* getDebugCollider() { return m_colliderDebug; }
 
@@ -45,28 +45,25 @@ protected:
 	Vector3 m_gravVel = Vector3::Zero; // The amount of gravity velocity to apply each frame
 	float m_maxGrav = 60; // The maximum length of m_gravVel. m_gravVel will be clamped to this
 	Vector3 m_acc = Vector3::Zero;
-
-	bool m_hasCollider = false;
-
-	XMFLOAT3 m_collLocalCentre;//Local Centre of the mesh
-	XMFLOAT3 m_collWorldCentre;//World Centre of the mesh and the centre of the bounding box
-	BoundingOrientedBox m_collider; //Bounding box of the model
-	bool m_collided = false; //True if bounding box is inside another
-
-	SDKMeshGO3D* m_colliderDebug = nullptr;
-	bool m_hasCollider = false;
 	PhysModelData m_physData;
 
+	//Collider stuff	
+	std::vector<Collision> m_currentCollisions;
+	bool m_hasCollider = false;
+	BoundingOrientedBox m_collider; //Bounding box of the model
+	SDKMeshGO3D* m_colliderDebug = nullptr;
+	XMFLOAT3 m_collLocalCentre;//Local Centre of the mesh
+	XMFLOAT3 m_collWorldCentre;//World Centre of the mesh and the centre of the bounding box
 	//Corner Pos in Local Space
-	Vector3 m_front_top_left;
-	Vector3 m_front_top_right;
-	Vector3 m_back_bottom_left;
-	Vector3 m_back_bottom_right;
+	Vector3 m_frontTopLeft;
+	Vector3 m_frontTopRight;
+	Vector3 m_backBottomLeft;
+	Vector3 m_backBottomRight;
 	//Corner Pos in World Space
-	Vector3 m_global_front_left;
-	Vector3 m_global_front_right;
-	Vector3 m_global_back_left;
-	Vector3 m_global_back_right;
+	Vector3 m_globalFrontLeft;
+	Vector3 m_globalFrontRight;
+	Vector3 m_globalBackLeft;
+	Vector3 m_globalBackRight;
 	float m_width;
 	float m_length;
 	float m_height;

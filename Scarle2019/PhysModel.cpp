@@ -135,13 +135,13 @@ void PhysModel::Tick(GameStateData * _GSD)
 		m_pos += _GSD->m_dt * m_velTotal;
 
 		//Collision Code
-		if (m_collided)
+		if (!m_currentCollisions.empty())
 		{
 			Vector3 normalised_vel = m_vel;
 			normalised_vel.Normalize();
 			m_pos -= normalised_vel * 0.05;
 			m_vel = Vector3::Zero;
-			m_collided = false;
+			m_currentCollisions.clear();
 		}
 	}
 
