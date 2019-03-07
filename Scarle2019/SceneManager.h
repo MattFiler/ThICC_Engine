@@ -11,7 +11,6 @@ public:
 
 	int Update(GameStateData* _GSD, InputData* _ID);
 	void Render(RenderData* _RD);
-	bool Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD);
 
 	Scene* currScene = nullptr;
 

@@ -9,7 +9,7 @@ enum Scenes
 enum States
 {
 	
-	NONE = -1 ,
+	NOSTATE = -1 ,
 	PAUSED = 0,
 
 	//MENU

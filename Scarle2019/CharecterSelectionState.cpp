@@ -25,7 +25,7 @@ void CharecterSelectionState::Render()
 
 bool CharecterSelectionState::Load()
 {
-
+	return true;
 }
 
 void CharecterSelectionState::Cleanup()

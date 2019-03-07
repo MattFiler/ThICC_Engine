@@ -19,7 +19,7 @@ int StateManager::Update(GameStateData * _GSD, InputData * _ID)
 	{
 		switch (m_currState->Update(_GSD, _ID))
 		{
-		case States::NONE:
+		case States::NOSTATE:
 			return 0;
 		case States::CHARECTER_SELECTION:
 			ChangeState(new CharecterSelectionState);

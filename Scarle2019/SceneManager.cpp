@@ -35,11 +35,6 @@ void SceneManager::Render(RenderData* _RD)
 	currScene->Render(_RD);
 }
 
-bool SceneManager::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
-{
-	return currScene->Load(_GSD, _RD, _ID, _WD);
-}
-
 void SceneManager::ChangeScene(Scene* _newScene)
 {
 	delete currScene;

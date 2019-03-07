@@ -16,6 +16,6 @@ public:
 	virtual void Cleanup()													= 0;
 
 protected:
-	States m_nextState = States::NONE;
+	States m_nextState = States::NOSTATE;
 };
 
