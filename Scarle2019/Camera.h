@@ -44,8 +44,10 @@ protected:
 
 	GameObject3D* m_targetObject = NULL;
 	Vector3 m_targetPos = Vector3::Zero;
-	Vector3 m_differnce[8] = { { 0, 0, -10 },{ 5, 0, -5 },{ 10, 0, 0 },{ 10, 0, 0 },{ 5, 0, 5 },{ 0, 0, 10 },{ -5, 0, 5 },{ -10, 0, 0 } };
+	Vector3 m_differnce[8] = { { 0, 0, -10 },{ 5, 0, -5 },{ 10, 0, 0 },{ 10, 0, 0 },{ 5, 0, 5 },{ 0, 0, 10 },{ -5, 0, 5 },{ -10, 0, 0 }};
 	int diff_num = 0;
+	int look_up_down = -1;
+	Vector3 m_differnce2[2]{ { 0, 10, -1 },{ 0, -10, -1 } };
 	Matrix m_proj = Matrix::Identity;
 	Matrix m_view = Matrix::Identity;
 	Matrix rotCam = Matrix::Identity;

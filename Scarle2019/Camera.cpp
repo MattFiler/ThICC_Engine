@@ -254,6 +254,7 @@ void Camera::Tick(GameStateData * _GSD)
 		// the shitty debug cam code
 		// dont judge me
 
+		float move_speed = 0.5;
 		KeybindManager m_keybind;
 		m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
 		
@@ -261,61 +262,61 @@ void Camera::Tick(GameStateData * _GSD)
 		//if (m_keybind.keyPressed("DebugCamLeft"))
 		{
 			if(diff_num == 0 || diff_num == 1)
-				m_pos.x -= 1;
-			if (diff_num == 2 || diff_num == 3)
-				m_pos.z -= 1;
-			if (diff_num == 4 || diff_num == 5)
-				m_pos.x += 1;
-			if (diff_num == 6 || diff_num == 7)
-				m_pos.z += 1;
+				m_pos.x -= move_speed;
+			else if (diff_num == 2 || diff_num == 3)
+				m_pos.z -= move_speed;
+			else if (diff_num == 4 || diff_num == 5)
+				m_pos.x += move_speed;
+			else if (diff_num == 6 || diff_num == 7)
+				m_pos.z += move_speed;
 		}
 		else if (_GSD->m_keyboardState.Right)
 		//else if (m_keybind.keyPressed("DebugCamRight"))
 		{
 			if (diff_num == 0 || diff_num == 1)
-				m_pos.x += 1;
-			if (diff_num == 2 || diff_num == 3)
-				m_pos.z += 1;
-			if (diff_num == 4 || diff_num == 5)
-				m_pos.x -= 1;
-			if (diff_num == 6 || diff_num == 7)
-				m_pos.z -= 1;
+				m_pos.x += move_speed;
+			else if (diff_num == 2 || diff_num == 3)
+				m_pos.z += move_speed;
+			else if (diff_num == 4 || diff_num == 5)
+				m_pos.x -= move_speed;
+			else if (diff_num == 6 || diff_num == 7)
+				m_pos.z -= move_speed;
 		}
 
 		if (_GSD->m_keyboardState.Up)
 		//if (m_keybind.keyPressed("DebugCamFor"))
 		{
 			if (diff_num == 0 || diff_num == 1)
-				m_pos.z -= 1;
-			if (diff_num == 2 || diff_num == 3)
-				m_pos.x += 1;
-			if (diff_num == 4 || diff_num == 5)
-				m_pos.z += 1;
-			if (diff_num == 6 || diff_num == 7)
-				m_pos.x -= 1;
+				m_pos.z -= move_speed;
+			else if (diff_num == 2 || diff_num == 3)
+				m_pos.x += move_speed;
+			else if (diff_num == 4 || diff_num == 5)
+				m_pos.z += move_speed;
+			else if (diff_num == 6 || diff_num == 7)
+				m_pos.x -= move_speed;
 		}
 		else if (_GSD->m_keyboardState.Down)
 		//else if (m_keybind.keyPressed("DebugCamBack"))
 		{
 			if (diff_num == 0 || diff_num == 1)
-				m_pos.z += 1;
-			if (diff_num == 2 || diff_num == 3)
-				m_pos.x -= 1;
-			if (diff_num == 4 || diff_num == 5)
-				m_pos.z -= 1;
-			if (diff_num == 6 || diff_num == 7)
-				m_pos.x += 1;
+				m_pos.z += move_speed;
+			else if (diff_num == 2 || diff_num == 3)
+				m_pos.x -= move_speed;
+			else if (diff_num == 4 || diff_num == 5)
+				m_pos.z -= move_speed;
+			else if (diff_num == 6 || diff_num == 7)
+				m_pos.x += move_speed;
 		}
 
 		if (_GSD->m_keyboardState.PageUp)
 		//if (m_keybind.keyPressed("DebugCamDown"))
 		{
-			m_pos.y -= 1;
+			m_pos.y -= move_speed;
 		}
 		else if (_GSD->m_keyboardState.Home)
 		//else if (m_keybind.keyPressed("DebugCamUp"))
 		{
-			m_pos.y += 1;
+			m_pos.y += move_speed;
 		}
 
 		//if (_GSD->m_keyboardState.PageDown && _GSD->m_prevKeyboardState.IsKeyUp(Keyboard::Keys::PageDown))
@@ -336,8 +337,35 @@ void Camera::Tick(GameStateData * _GSD)
 				diff_num = 7;
 			}
 		}
+
+		if (m_keybind.keyPressed("DebugCamLookUp"))
+		{
+			if (look_up_down != 0)
+			{
+				look_up_down = 0;
+			}
+			else if (look_up_down == 0)
+			{
+				look_up_down = -1;
+			}
+		}
+		//else if (_GSD->m_keyboardState.End && _GSD->m_prevKeyboardState.IsKeyUp(Keyboard::Keys::End))
+		else if (m_keybind.keyPressed("DebugCamLookDown"))
+		{
+			if (look_up_down != 1)
+			{
+				look_up_down = 1;
+			}
+			else if (look_up_down == 1)
+			{
+				look_up_down = -1;
+			}
+		}
 		m_rot = Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
-		m_targetPos = m_pos + m_differnce[diff_num];
+		if (look_up_down == -1)
+			m_targetPos = m_pos + m_differnce[diff_num];
+		else
+			m_targetPos = m_pos + m_differnce2[look_up_down];
 		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
 		break;
 	}

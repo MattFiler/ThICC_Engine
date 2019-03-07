@@ -14,5 +14,7 @@
   "DebugCamRotLeft": "PageDown",
   "DebugCamRotRight": "End",
   "Debug Save Matrix": "D1",
-  "Debug Load Matrix": "D2"
+  "Debug Load Matrix": "D2",
+  "DebugCamLookDown": "Multiply",
+  "DebugCamLookUp": "Divide"
 }
