@@ -302,6 +302,7 @@ namespace EditorTool
 
                     getConfigPathForSelectedAsset();
                     JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
+                    modelType.SelectedItem = asset_json["model_type"].Value<string>();
                     model_world_x.Text = asset_json["start_x"].Value<string>();
                     model_world_y.Text = asset_json["start_y"].Value<string>();
                     model_world_z.Text = asset_json["start_z"].Value<string>();
@@ -419,6 +420,7 @@ namespace EditorTool
             {
                 case "Models":
                     JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
+                    asset_json["model_type"] = modelType.SelectedItem.ToString();
                     asset_json["start_x"] = Convert.ToDouble(model_world_x.Text);
                     asset_json["start_y"] = Convert.ToDouble(model_world_y.Text);
                     asset_json["start_z"] = Convert.ToDouble(model_world_z.Text);

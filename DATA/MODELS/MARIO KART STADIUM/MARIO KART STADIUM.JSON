@@ -1,6 +1,7 @@
 {
   "asset_name": "MARIO KART STADIUM",
   "asset_type": "Models",
+  "model_type": "Track",
   "has_box_collider": false,
   "visible": true,
   "start_x": 5.0,

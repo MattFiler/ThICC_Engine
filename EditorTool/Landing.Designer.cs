@@ -42,8 +42,6 @@ namespace EditorTool
             this.label12 = new System.Windows.Forms.Label();
             this.model_scale = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.saveAssetConfig = new System.Windows.Forms.Button();
             this.model_rot_z = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -74,6 +72,10 @@ namespace EditorTool
             this.DEBUG_PLAYERCOUNT = new System.Windows.Forms.NumericUpDown();
             this.DEBUG_SAVE = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.modelType = new System.Windows.Forms.ComboBox();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
@@ -156,6 +158,8 @@ namespace EditorTool
             // 
             // modelConfigs
             // 
+            this.modelConfigs.Controls.Add(this.label16);
+            this.modelConfigs.Controls.Add(this.modelType);
             this.modelConfigs.Controls.Add(this.label13);
             this.modelConfigs.Controls.Add(this.model_segmentsize);
             this.modelConfigs.Controls.Add(this.label12);
@@ -190,7 +194,7 @@ namespace EditorTool
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(117, 171);
+            this.label13.Location = new System.Drawing.Point(116, 180);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(84, 13);
             this.label13.TabIndex = 32;
@@ -203,7 +207,7 @@ namespace EditorTool
             0,
             0,
             0});
-            this.model_segmentsize.Location = new System.Drawing.Point(120, 186);
+            this.model_segmentsize.Location = new System.Drawing.Point(119, 195);
             this.model_segmentsize.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -227,7 +231,7 @@ namespace EditorTool
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(6, 170);
+            this.label12.Location = new System.Drawing.Point(5, 179);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(77, 13);
             this.label12.TabIndex = 30;
@@ -241,7 +245,7 @@ namespace EditorTool
             0,
             0,
             131072});
-            this.model_scale.Location = new System.Drawing.Point(9, 186);
+            this.model_scale.Location = new System.Drawing.Point(8, 195);
             this.model_scale.Name = "model_scale";
             this.model_scale.Size = new System.Drawing.Size(101, 20);
             this.model_scale.TabIndex = 29;
@@ -254,29 +258,11 @@ namespace EditorTool
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 119);
+            this.label11.Location = new System.Drawing.Point(7, 141);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(181, 13);
             this.label11.TabIndex = 28;
             this.label11.Text = "Default starting rotation of this model.";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 53);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(213, 13);
-            this.label10.TabIndex = 27;
-            this.label10.Text = "Other models use this as their initial position.";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 39);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(215, 13);
-            this.label1.TabIndex = 26;
-            this.label1.Text = "For tracks, this specifies the spawn location.";
             // 
             // saveAssetConfig
             // 
@@ -290,7 +276,7 @@ namespace EditorTool
             // 
             // model_rot_z
             // 
-            this.model_rot_z.Location = new System.Drawing.Point(167, 135);
+            this.model_rot_z.Location = new System.Drawing.Point(168, 157);
             this.model_rot_z.Name = "model_rot_z";
             this.model_rot_z.Size = new System.Drawing.Size(52, 20);
             this.model_rot_z.TabIndex = 22;
@@ -299,7 +285,7 @@ namespace EditorTool
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(152, 138);
+            this.label6.Location = new System.Drawing.Point(153, 160);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(17, 13);
             this.label6.TabIndex = 23;
@@ -307,7 +293,7 @@ namespace EditorTool
             // 
             // model_rot_y
             // 
-            this.model_rot_y.Location = new System.Drawing.Point(94, 135);
+            this.model_rot_y.Location = new System.Drawing.Point(95, 157);
             this.model_rot_y.Name = "model_rot_y";
             this.model_rot_y.Size = new System.Drawing.Size(52, 20);
             this.model_rot_y.TabIndex = 20;
@@ -316,7 +302,7 @@ namespace EditorTool
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(78, 138);
+            this.label7.Location = new System.Drawing.Point(79, 160);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(17, 13);
             this.label7.TabIndex = 21;
@@ -324,7 +310,7 @@ namespace EditorTool
             // 
             // model_rot_x
             // 
-            this.model_rot_x.Location = new System.Drawing.Point(20, 135);
+            this.model_rot_x.Location = new System.Drawing.Point(21, 157);
             this.model_rot_x.Name = "model_rot_x";
             this.model_rot_x.Size = new System.Drawing.Size(52, 20);
             this.model_rot_x.TabIndex = 19;
@@ -334,7 +320,7 @@ namespace EditorTool
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(6, 104);
+            this.label8.Location = new System.Drawing.Point(7, 126);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(55, 13);
             this.label8.TabIndex = 18;
@@ -342,7 +328,7 @@ namespace EditorTool
             // 
             // model_world_z
             // 
-            this.model_world_z.Location = new System.Drawing.Point(167, 69);
+            this.model_world_z.Location = new System.Drawing.Point(168, 103);
             this.model_world_z.Name = "model_world_z";
             this.model_world_z.Size = new System.Drawing.Size(52, 20);
             this.model_world_z.TabIndex = 16;
@@ -351,7 +337,7 @@ namespace EditorTool
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(152, 72);
+            this.label5.Location = new System.Drawing.Point(153, 106);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(17, 13);
             this.label5.TabIndex = 17;
@@ -359,7 +345,7 @@ namespace EditorTool
             // 
             // model_world_y
             // 
-            this.model_world_y.Location = new System.Drawing.Point(94, 69);
+            this.model_world_y.Location = new System.Drawing.Point(95, 103);
             this.model_world_y.Name = "model_world_y";
             this.model_world_y.Size = new System.Drawing.Size(52, 20);
             this.model_world_y.TabIndex = 14;
@@ -368,7 +354,7 @@ namespace EditorTool
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(79, 72);
+            this.label4.Location = new System.Drawing.Point(80, 106);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(17, 13);
             this.label4.TabIndex = 15;
@@ -376,7 +362,7 @@ namespace EditorTool
             // 
             // model_world_x
             // 
-            this.model_world_x.Location = new System.Drawing.Point(20, 69);
+            this.model_world_x.Location = new System.Drawing.Point(21, 103);
             this.model_world_x.Name = "model_world_x";
             this.model_world_x.Size = new System.Drawing.Size(52, 20);
             this.model_world_x.TabIndex = 12;
@@ -385,7 +371,7 @@ namespace EditorTool
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 72);
+            this.label3.Location = new System.Drawing.Point(7, 106);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(17, 13);
             this.label3.TabIndex = 13;
@@ -395,7 +381,7 @@ namespace EditorTool
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 24);
+            this.label2.Location = new System.Drawing.Point(7, 58);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 13);
             this.label2.TabIndex = 11;
@@ -404,7 +390,7 @@ namespace EditorTool
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 138);
+            this.label9.Location = new System.Drawing.Point(7, 160);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(17, 13);
             this.label9.TabIndex = 24;
@@ -585,6 +571,47 @@ namespace EditorTool
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Debug Configurations";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(7, 87);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(213, 13);
+            this.label10.TabIndex = 27;
+            this.label10.Text = "Other models use this as their initial position.";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 73);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(215, 13);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "For tracks, this specifies the spawn location.";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(7, 18);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(73, 13);
+            this.label16.TabIndex = 34;
+            this.label16.Text = "Model Type";
+            // 
+            // modelType
+            // 
+            this.modelType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.modelType.FormattingEnabled = true;
+            this.modelType.Items.AddRange(new object[] {
+            "Track",
+            "Player",
+            "Prop"});
+            this.modelType.Location = new System.Drawing.Point(10, 34);
+            this.modelType.Name = "modelType";
+            this.modelType.Size = new System.Drawing.Size(210, 21);
+            this.modelType.TabIndex = 33;
+            // 
             // Landing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -647,8 +674,6 @@ namespace EditorTool
         private NAudio.Gui.WaveViewer soundPreview;
         private System.Windows.Forms.Button playSoundPreview;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown model_scale;
         private Button openKeybindEditor;
@@ -660,5 +685,9 @@ namespace EditorTool
         private NumericUpDown DEBUG_PLAYERCOUNT;
         private Button DEBUG_SAVE;
         private GroupBox groupBox3;
+        private Label label10;
+        private Label label1;
+        private Label label16;
+        private ComboBox modelType;
     }
 }
