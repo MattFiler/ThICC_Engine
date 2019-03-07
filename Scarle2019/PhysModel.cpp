@@ -13,21 +13,21 @@ PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _file
 	{
 		json model_data;
 		model_data << i;
-		m_has_collider = model_data["has_box_collider"];
+		m_hasCollider = model_data["has_box_collider"];
 
-		phys_data.scale = model_data["modelscale"];
-		SetScale(phys_data.scale);
+		m_physData.scale = model_data["modelscale"];
+		SetScale(m_physData.scale);
 		/*
 		For whatever reason, setting this here will cause horrible collision errors...
 		SetPos(Vector3(model_data["start_x"], model_data["start_y"], model_data["start_z"]));
 		SetRotationInDegrees(Vector3(model_data["rot_x"], model_data["rot_y"], model_data["rot_z"]));
 		*/
 
-		if (m_has_collider)
+		if (m_hasCollider)
 		{
 			initCollider(model_data);
 
-			collider_debug = new SDKMeshGO3D(_RD, _filename + " DEBUG");
+			m_colliderDebug = new SDKMeshGO3D(_RD, _filename + " DEBUG");
 		}
 	}
 }
@@ -36,40 +36,40 @@ void PhysModel::initCollider(json &model_data)
 {
 	/*Gets the the top front left and back bottom right points of the mesh from the json file - finds the average between them to get the centre of the mesh
 	and uses (currently) the top front left point to determine the extents (size) of the collider */
-	has_collider = true;
+	m_hasCollider = true;
 
-	m_front_top_left = Vector3((float)model_data["collision_box"]["front_top_left"][0] * phys_data.scale,
-		(float)model_data["collision_box"]["front_top_left"][1] * phys_data.scale,
-		(float)model_data["collision_box"]["front_top_left"][2] * phys_data.scale);
+	m_frontTopLeft = Vector3((float)model_data["collision_box"]["front_top_left"][0] * m_physData.scale,
+		(float)model_data["collision_box"]["front_top_left"][1] * m_physData.scale,
+		(float)model_data["collision_box"]["front_top_left"][2] * m_physData.scale);
 
-	m_front_top_right = Vector3((float)model_data["collision_box"]["front_top_right"][0] * phys_data.scale,
-		(float)model_data["collision_box"]["front_top_right"][1] * phys_data.scale,
-		(float)model_data["collision_box"]["front_top_right"][2] * phys_data.scale);
+	m_frontTopRight = Vector3((float)model_data["collision_box"]["front_top_right"][0] * m_physData.scale,
+		(float)model_data["collision_box"]["front_top_right"][1] * m_physData.scale,
+		(float)model_data["collision_box"]["front_top_right"][2] * m_physData.scale);
 
-	m_back_bottom_left = Vector3((float)model_data["collision_box"]["back_bottom_left"][0] * phys_data.scale,
-		(float)model_data["collision_box"]["back_bottom_left"][1] * phys_data.scale,
-		(float)model_data["collision_box"]["back_bottom_left"][2] * phys_data.scale);
+	m_backBottomLeft = Vector3((float)model_data["collision_box"]["back_bottom_left"][0] * m_physData.scale,
+		(float)model_data["collision_box"]["back_bottom_left"][1] * m_physData.scale,
+		(float)model_data["collision_box"]["back_bottom_left"][2] * m_physData.scale);
 
-	m_back_bottom_right = Vector3((float)model_data["collision_box"]["back_bottom_right"][0] * phys_data.scale,
-		(float)model_data["collision_box"]["back_bottom_right"][1] * phys_data.scale,
-		(float)model_data["collision_box"]["back_bottom_right"][2] * phys_data.scale);
+	m_backBottomRight = Vector3((float)model_data["collision_box"]["back_bottom_right"][0] * m_physData.scale,
+		(float)model_data["collision_box"]["back_bottom_right"][1] * m_physData.scale,
+		(float)model_data["collision_box"]["back_bottom_right"][2] * m_physData.scale);
 
-	m_coll_local_centre = XMFLOAT3((m_front_top_left.x + m_back_bottom_right.x) / 2, (m_front_top_left.y + m_back_bottom_right.y) / 2, (m_front_top_left.z + m_back_bottom_right.z) / 2);
+	m_collLocalCentre = XMFLOAT3((m_frontTopLeft.x + m_backBottomRight.x) / 2, (m_frontTopLeft.y + m_backBottomRight.y) / 2, (m_frontTopLeft.z + m_backBottomRight.z) / 2);
 	//Updates the centre and rotations of the collider 
-	m_coll_world_centre = Vector3::Transform(m_coll_local_centre, m_world);
-	m_collider.Center = m_coll_world_centre;
+	m_collWorldCentre = Vector3::Transform(m_collLocalCentre, m_world);
+	m_collider.Center = m_collWorldCentre;
 
 	XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
 	m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z));
 
 	//Storing the Corners of the collider for Toby
-	m_global_front_left = Vector3::Transform(Vector3(m_front_top_left.x, m_coll_local_centre.y, m_front_top_left.z), m_world);
-	m_global_front_right = Vector3::Transform(Vector3(m_front_top_right.x, m_coll_local_centre.y, m_front_top_right.z), m_world);
-	m_global_back_left = Vector3::Transform(Vector3(m_back_bottom_left.x, m_coll_local_centre.y, m_back_bottom_left.z), m_world);
-	m_global_back_right = Vector3::Transform(Vector3(m_back_bottom_right.x, m_coll_local_centre.y, m_back_bottom_right.z), m_world);
-	m_width = m_front_top_left.x - m_front_top_right.x;
-	m_height = m_front_top_left.y - m_back_bottom_left.y;
-	m_length = m_front_top_left.z - m_back_bottom_left.z;
+	m_globalFrontLeft = Vector3::Transform(Vector3(m_frontTopLeft.x, m_collLocalCentre.y, m_frontTopLeft.z), m_world);
+	m_globalFrontRight = Vector3::Transform(Vector3(m_frontTopRight.x, m_collLocalCentre.y, m_frontTopRight.z), m_world);
+	m_globalBackLeft = Vector3::Transform(Vector3(m_backBottomLeft.x, m_collLocalCentre.y, m_backBottomLeft.z), m_world);
+	m_globalBackRight = Vector3::Transform(Vector3(m_backBottomRight.x, m_collLocalCentre.y, m_backBottomRight.z), m_world);
+	m_width = m_frontTopLeft.x - m_frontTopRight.x;
+	m_height = m_frontTopLeft.y - m_backBottomLeft.y;
+	m_length = m_frontTopLeft.z - m_backBottomLeft.z;
 }
 
 XMFLOAT3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)
@@ -92,28 +92,28 @@ XMFLOAT3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)
 
 void PhysModel::updateCollider()
 {
-	if (m_has_collider)
+	if (m_hasCollider)
 	{
 		//Updates the centre and rotations of the collider 
-		m_coll_world_centre = Vector3::Transform(m_coll_local_centre, m_world);
-		m_collider.Center = m_coll_world_centre;
+		m_collWorldCentre = Vector3::Transform(m_collLocalCentre, m_world);
+		m_collider.Center = m_collWorldCentre;
 
 		XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
 		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z));
 
 		//Storing the Corners of the collider for Toby
-		m_global_front_left = Vector3::Transform(Vector3(m_front_top_left.x, m_coll_local_centre.y, m_front_top_left.z), m_world);
-		m_global_front_right = Vector3::Transform(Vector3(m_front_top_right.x, m_coll_local_centre.y, m_front_top_right.z), m_world);
-		m_global_back_left = Vector3::Transform(Vector3(m_back_bottom_left.x, m_coll_local_centre.y, m_back_bottom_left.z), m_world);
-		m_global_back_right = Vector3::Transform(Vector3(m_back_bottom_right.x, m_coll_local_centre.y, m_back_bottom_right.z), m_world);
+		m_globalFrontLeft = Vector3::Transform(Vector3(m_frontTopLeft.x, m_collLocalCentre.y, m_frontTopLeft.z), m_world);
+		m_globalFrontRight = Vector3::Transform(Vector3(m_frontTopRight.x, m_collLocalCentre.y, m_frontTopRight.z), m_world);
+		m_globalBackLeft = Vector3::Transform(Vector3(m_backBottomLeft.x, m_collLocalCentre.y, m_backBottomLeft.z), m_world);
+		m_globalBackRight = Vector3::Transform(Vector3(m_backBottomRight.x, m_collLocalCentre.y, m_backBottomRight.z), m_world);
 
 		//Updates the debug collider position and rotation
 
-		collider_debug->SetPos(m_coll_world_centre);
-		collider_debug->SetScale(m_collider.Extents);	
-		collider_debug->SetYaw(euler.y);
-		collider_debug->SetPitch(euler.x);
-		collider_debug->SetRoll(euler.z);
+		m_colliderDebug->SetPos(m_collWorldCentre);
+		m_colliderDebug->SetScale(m_collider.Extents);	
+		m_colliderDebug->SetYaw(euler.y);
+		m_colliderDebug->SetPitch(euler.x);
+		m_colliderDebug->SetRoll(euler.z);
 	}
 }
 
@@ -139,7 +139,7 @@ void PhysModel::Tick(GameStateData * _GSD)
 		{
 			Vector3 normalised_vel = m_vel;
 			normalised_vel.Normalize();
-			m_pos -= normalised_vel;
+			m_pos -= normalised_vel * 0.05;
 			m_vel = Vector3::Zero;
 			m_collided = false;
 		}
