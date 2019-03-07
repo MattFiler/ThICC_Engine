@@ -54,6 +54,21 @@ protected:
 	SDKMeshGO3D* collider_debug = nullptr;
 	bool has_collider = false;
 	PhysModelData phys_data;
+
+	//Corner Pos in Local Space
+	Vector3 m_front_top_left;
+	Vector3 m_front_top_right;
+	Vector3 m_back_bottom_left;
+	Vector3 m_back_bottom_right;
+	//Corner Pos in World Space
+	Vector3 m_global_front_left;
+	Vector3 m_global_front_right;
+	Vector3 m_global_back_left;
+	Vector3 m_global_back_right;
+	float m_width;
+	float m_length;
+	float m_height;
+
 	XMFLOAT3 MatrixDecomposeYawPitchRoll(Matrix  mat);
 
 };
