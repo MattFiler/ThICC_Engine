@@ -116,7 +116,8 @@ void Game::Tick()
 void Game::Clear()
 {
 	// Reset command list and allocator.
-	DX::ThrowIfFailed(m_commandAllocators[m_backBufferIndex]->Reset());
+	//DX::ThrowIfFailed(m_commandAllocators[m_backBufferIndex]->Reset());
+	m_commandAllocators[m_backBufferIndex]->Reset();
 	DX::ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
 
 	// Transition the render target into the correct state to allow for drawing into it.

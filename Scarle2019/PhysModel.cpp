@@ -34,37 +34,62 @@ PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _file
 
 void PhysModel::initCollider(json &model_data)
 {
+	/*Gets the the top front left and back bottom right points of the mesh from the json file - finds the average between them to get the centre of the mesh
+	and uses (currently) the top front left point to determine the extents (size) of the collider */
 	has_collider = true;
 
-	XMFLOAT3 top_left = XMFLOAT3(model_data["collision_box"]["front_top_left"][0] * phys_data.scale,
-		model_data["collision_box"]["front_top_left"][1] * phys_data.scale,
-		model_data["collision_box"]["front_top_left"][2] * phys_data.scale);
+	XMFLOAT3 top_left = XMFLOAT3((float) model_data["collision_box"]["front_top_left"][0] * phys_data.scale,
+		(float) model_data["collision_box"]["front_top_left"][1] * phys_data.scale,
+		(float) model_data["collision_box"]["front_top_left"][2] * phys_data.scale);
 
-	XMFLOAT3 bottom_right = XMFLOAT3(model_data["collision_box"]["back_bottom_right"][0] * phys_data.scale,
-		model_data["collision_box"]["back_bottom_right"][1] * phys_data.scale,
-		model_data["collision_box"]["back_bottom_right"][2] * phys_data.scale);
+	XMFLOAT3 bottom_right = XMFLOAT3((float) model_data["collision_box"]["back_bottom_right"][0] * phys_data.scale,
+		(float) model_data["collision_box"]["back_bottom_right"][1] * phys_data.scale,
+		(float) model_data["collision_box"]["back_bottom_right"][2] * phys_data.scale);
 
-	m_local_centre = XMFLOAT3((top_left.x + bottom_right.x) / 2, (top_left.y + bottom_right.y) / 2, (top_left.z + bottom_right.z) / 2);
-	m_world_centre = Vector3::Transform(m_local_centre, m_world);
+	m_coll_local_centre = XMFLOAT3((top_left.x + bottom_right.x) / 2, (top_left.y + bottom_right.y) / 2, (top_left.z + bottom_right.z) / 2);
+	m_coll_world_centre = Vector3::Transform(m_coll_local_centre, m_world);
 
-	m_collider = BoundingOrientedBox(m_world_centre, top_left, XMFLOAT4(Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll)));
+	//Have to split the rotation matrix and reassemble because yaw and pitch are swapped
+	XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
+	m_collider = BoundingOrientedBox(m_coll_world_centre, Vector3(m_scale.x, top_left.y, m_scale.z), XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z)));
+}
+
+XMFLOAT3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)
+{
+	//Breaks down a matrix into yaw, pitch, and roll. Returns them as a float3
+	XMFLOAT3 euler;
+	euler.x = asinf(-mat._32);                  
+	if (cosf(euler.x) > 0.0001)                 
+	{
+		euler.y = atan2f(mat._31, mat._33);     
+		euler.z = atan2f(mat._12, mat._22);     
+	}
+	else
+	{
+		euler.y = 0.0f;                         
+		euler.z = atan2f(-mat._21, mat._11);    
+	}
+	return euler;
 }
 
 void PhysModel::updateCollider()
 {
 	if (m_has_collider)
 	{
-		m_world_centre = Vector3::Transform(m_local_centre, m_world);
-		m_collider.Center = m_world_centre;
-		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll));
+		//Updates the centre and rotations of the collider 
+		m_coll_world_centre = Vector3::Transform(m_coll_local_centre, m_world);
+		m_collider.Center = m_coll_world_centre;
 
-		//Update collider position
-		//This might not be entirely accurate to the actual collider position - Evan you may want to adust?
-		collider_debug->SetPos(this->GetPos());
-		collider_debug->SetScale(this->GetScale());
-		collider_debug->SetPitch(this->GetPitch());
-		collider_debug->SetRoll(this->GetRoll());
-		collider_debug->SetYaw(this->GetYaw());
+		XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
+		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z));
+
+		//Updates the debug collider position and rotation
+
+		collider_debug->SetPos(m_coll_world_centre);
+		collider_debug->SetScale(m_collider.Extents);	
+		collider_debug->SetYaw(euler.y);
+		collider_debug->SetPitch(euler.x);
+		collider_debug->SetRoll(euler.z);
 	}
 }
 
@@ -83,8 +108,9 @@ void PhysModel::Tick(GameStateData * _GSD)
 
 		m_velTotal = m_vel + m_gravVel;
 
-		m_pos = m_pos + (_GSD->m_dt * m_velTotal);
+		m_pos += _GSD->m_dt * m_velTotal;
 
+		//Collision Code
 		if (m_collided)
 		{
 			Vector3 normalised_vel = m_vel;

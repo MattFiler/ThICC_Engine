@@ -14,7 +14,7 @@ using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
-bool GameDebugToggles::show_debug_meshes = false;
+bool GameDebugToggles::show_debug_meshes = true;
 
 Game::Game() :
 	m_window(nullptr),
@@ -165,23 +165,23 @@ void Game::setupViewport(int _width, int _height)
 
 	//point a camera at the player that follows
 	m_cam[0] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_RD->m_cam = m_cam[0];
+	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[0]);
 
-	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[1]);
+	//m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	//m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
+	////m_RD->m_cam = m_cam[1];
+	//m_3DObjects.push_back(m_cam[1]);
 
-	m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[2]);
+	//m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
+	////m_RD->m_cam = m_cam[1];
+	//m_3DObjects.push_back(m_cam[2]);
 
-	m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
-	//m_RD->m_cam = m_cam[1];
-	m_3DObjects.push_back(m_cam[3]);
+	//m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	//m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
+	////m_RD->m_cam = m_cam[1];
+	//m_3DObjects.push_back(m_cam[3]);
 }
 
 /* Create all 3d game objects */
@@ -220,6 +220,7 @@ void Game::createAllObjects3D()
 	//Create a player and position on track
 	player[0] = new Player(m_RD, "Standard Kart", 0, *m_gamePad.get());
 	player[0]->SetPos(track->getSuitableSpawnSpot());
+	//player[0]->SetPos({0, 0, 0});
 	m_3DObjects.push_back(player[0]);
 
 	//create a base light
@@ -299,6 +300,7 @@ void Game::Update(DX::StepTimer const& _timer)
 	for (int i = 0; i < 1; i++)
 	{
 		player[0]->ShouldStickToTrack(*track, m_GSD);
+		player[0]->ResolveWallCollisions(*track);
 	}
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 

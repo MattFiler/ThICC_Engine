@@ -15,9 +15,7 @@ public:
 	virtual ~PhysModel() = default;
 
 	void initCollider(json &model_data);
-	bool hasCollider() {
-		return has_collider;
-	};
+	bool hasCollider() {return has_collider;};
 	void updateCollider();
 
 	virtual void Tick(GameStateData* _GSD) override;
@@ -44,16 +42,18 @@ protected:
 
 	Vector3 m_gravDirection = Vector3::Down;
 	Vector3 m_gravVel = Vector3::Zero; // The amount of gravity velocity to apply each frame
-	float m_maxGrav = 20; // The maximum length of m_gravVel. m_gravVel will be clamped to this
+	float m_maxGrav = 60; // The maximum length of m_gravVel. m_gravVel will be clamped to this
 	Vector3 m_acc = Vector3::Zero;
 
 	bool m_has_collider = false;
-	XMFLOAT3 m_local_centre;//Local Centre of the mesh
-	XMFLOAT3 m_world_centre;//World Centre of the mesh and the centre of the bounding box
+	XMFLOAT3 m_coll_local_centre;//Local Centre of the mesh
+	XMFLOAT3 m_coll_world_centre;//World Centre of the mesh and the centre of the bounding box
 	BoundingOrientedBox m_collider; //Bounding box of the model
 	bool m_collided = false; //True if bounding box is inside another
 
 	SDKMeshGO3D* collider_debug = nullptr;
 	bool has_collider = false;
 	PhysModelData phys_data;
+	XMFLOAT3 MatrixDecomposeYawPitchRoll(Matrix  mat);
+
 };
