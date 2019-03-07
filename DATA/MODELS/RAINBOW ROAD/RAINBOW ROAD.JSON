@@ -1,0 +1,14 @@
+{
+  "asset_name": "RAINBOW ROAD",
+  "asset_type": "Models",
+  "has_box_collider": false,
+  "visible": true,
+  "start_x": -355.0,
+  "start_y": 333.5,
+  "start_z": 555.255,
+  "modelscale": 2.0,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 75.0
+}
