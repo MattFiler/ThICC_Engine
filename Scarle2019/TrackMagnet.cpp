@@ -18,6 +18,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	MeshTri* tri = nullptr;
 	Matrix targetWorld = Matrix::Identity;
 	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(m_height*7), m_pos + m_world.Up() * (m_height*2), intersect, tri, m_maxAngle);
+	float modifiedMaxRotation = m_maxRotation;
 	if (shouldStick)
 	{
 		Vector adjustVel = m_velTotal;
@@ -45,6 +46,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 		}
 		else if (dist > m_maxSnapDist)
 		{
+			modifiedMaxRotation /= 10;
 			m_gravDirection = m_world.Down() * gravityMultiplier;
 		}
 
@@ -69,7 +71,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	// Calculate the distance between the current and target rotation
 	Quaternion inverseRot = Quaternion::Identity;
 	m_quatRot.Inverse(inverseRot);
-	float lerpDelta = (m_maxRotation * _GSD->m_dt) / (inverseRot*rot).Length();
+	float lerpDelta = (modifiedMaxRotation * _GSD->m_dt) / (inverseRot*rot).Length();
 	if (lerpDelta > 1)
 	{
 		lerpDelta = 1;
@@ -108,7 +110,7 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 			Vector velNorm = m_vel;
 			velNorm.Normalize();
 			float dist = Vector::Distance(velNorm, prevVel);
-			m_vel *= 1 - (dist / 2);
+			m_vel *= 1 - (dist / 2.4f);
 		}
 	}
 
