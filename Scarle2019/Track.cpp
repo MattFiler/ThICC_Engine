@@ -114,37 +114,8 @@ Vector Track::CreateVector(string _vector)
 
 /* Checks through all triangles to see if this line intersects any of them. 
    The point of intersecion is stored in _intersect */
-bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri)
+bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle)
 {
-	/*
-	for (MeshTri& tri : m_triangles)
-	{
-		if (tri.DoesLineIntersect(_direction, _startPos, _intersect, _tri))
-		{
-			return true;
-		}
-	}
-	return false;*/
-
-	/*/ First check the area that the _starPos is in
-	int index = GetIndexAtPoint(_startPos);
-	for(MeshTri* tri : m_triGrid[index])
-	{
-		if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri))
-		{
-			return true;
-		}
-	}
-	// Then check the area that the _direction + _startPos is in
-	index = GetIndexAtPoint(_startPos + _direction);
-	for (MeshTri* tri : m_triGrid[index])
-	{
-		if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri))
-		{
-			return true;
-		}
-	}*/
-
 	// Find the bounding box created by _startPos and _startPos + _direction
 	Vector endPos = _startPos + _direction;
 	Vector upper = Vector(_startPos.x > endPos.x ? _startPos.x : endPos.x,
@@ -166,7 +137,7 @@ bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _inte
 			{
 				for (MeshTri* tri : m_triGrid[index+k])
 				{
-					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri))
+					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
 					{
 						return true;
 					}
@@ -229,19 +200,6 @@ void Track::SplitTrisIntoGrid()
 		std::vector<MeshTri*> vec;
 		m_triGrid.push_back(vec);
 	}
-
-	/*/ Populate the vector like a 3D array
-	for (int i = 0; i < m_triGridZ; i++)
-	{
-		for (int j = 0; j < m_triGridY; j++)
-		{
-			int index = (i*m_triGridYX) + (j*m_triGridX);
-			for (int k = 0; k < m_triGridX; k++)
-			{
-				SetAllTrisForIndex(index + k);
-			}
-		}
-	}*/
 
 	for (MeshTri& tri : m_triangles)
 	{

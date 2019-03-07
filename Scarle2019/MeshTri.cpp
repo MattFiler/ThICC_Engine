@@ -8,10 +8,10 @@ MeshTri::MeshTri(Vector _a, Vector _b, Vector _c) : m_pointA(_a), m_pointB(_b), 
 };
 
 /* Returns true if the given vector, starting at the given position intersects this triangle*/
-bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri)
+bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle)
 {
 	float angle = acos((_direction*-1).Dot(m_plane.Normal()) / ((_direction*-1).Length() * m_plane.Normal().Length()));
-	if (angle > 0.3f)
+	if (angle > _maxAngle)
 	{
 		return false;
 	}

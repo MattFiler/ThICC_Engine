@@ -20,7 +20,7 @@ public:
 
 	Vector3 getSuitableSpawnSpot();
 
-	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri);
+	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle);
 private:
 	void LoadVertexList(string _vertex_list);
 	void CreateAndAddTriangle(string _line);
