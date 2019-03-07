@@ -274,7 +274,8 @@ void Camera::Tick(GameStateData * _GSD)
 			m_pos -= _GSD->m_dt * forwardMove;
 			m_targetPos -= _GSD->m_dt * forwardMove;
 		}
-		else if (_GSD->m_keyboardState.Left)
+
+		if (_GSD->m_keyboardState.Left)
 		{
 			m_pos -= _GSD->m_dt * rightMove;
 			m_targetPos -= _GSD->m_dt * rightMove;
