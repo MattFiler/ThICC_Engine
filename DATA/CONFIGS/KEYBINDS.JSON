@@ -15,7 +15,6 @@
   "DebugCamRotRight": "End",
   "Debug Save Matrix": "D1",
   "Debug Load Matrix": "D2",
-  "DebugCamLookDown": "Enter",
-  "DebugCamLookUp": "Insert",
-  "DebugCamReset": "Delete"
+  "DebugCamLookDown": "NumLock",
+  "DebugCamLookUp": "Divide"
 }

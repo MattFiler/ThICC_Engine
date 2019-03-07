@@ -115,17 +115,17 @@ void Game::createAllObjects2D()
 
 	//text example 2D objects
 
-	ImageGO2D *test = new ImageGO2D(m_RD, "twist");
-	test->SetOri(45);
-	test->SetPos(Vector2(200, 300));
-	test->CentreOrigin();
-	test->SetScale(0.5f*Vector2::One);
-	m_2DObjects.push_back(test);
-	test = new ImageGO2D(m_RD, "guides_logo");
-	test->SetPos(Vector2(100, 100));
-	test->SetScale(Vector2(5.0f, 0.5f));
-	test->SetColour(Color(1, 0, 0, 1));
-	m_2DObjects.push_back(test);
+	//ImageGO2D *test = new ImageGO2D(m_RD, "twist");
+	//test->SetOri(45);
+	//test->SetPos(Vector2(200, 300));
+	//test->CentreOrigin();
+	//test->SetScale(0.5f*Vector2::One);
+	//m_2DObjects.push_back(test);
+	//test = new ImageGO2D(m_RD, "guides_logo");
+	//test->SetPos(Vector2(100, 100));
+	//test->SetScale(Vector2(5.0f, 0.5f));
+	//test->SetColour(Color(1, 0, 0, 1));
+	//m_2DObjects.push_back(test);
 
 	//GUI TEST
 	//Enter in order: LapPos / RacePos / BoxPos / ItemPos
