@@ -275,6 +275,7 @@ namespace EditorTool
                     model_rot_y.Text = asset_json["rot_y"].Value<string>();
                     model_rot_z.Text = asset_json["rot_z"].Value<string>();
                     model_scale.Text = asset_json["modelscale"].Value<string>();
+                    model_segmentsize.Value = asset_json["segment_size"].Value<decimal>();
 
                     modelPreview.Visible = true;
                     modelPreview.Child = new ModelViewer("DATA/MODELS/" + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
@@ -390,6 +391,7 @@ namespace EditorTool
                     asset_json["rot_y"] = Convert.ToDouble(model_rot_y.Text);
                     asset_json["rot_z"] = Convert.ToDouble(model_rot_z.Text);
                     asset_json["modelscale"] = Convert.ToDouble(model_scale.Text);
+                    asset_json["segment_size"] = Convert.ToDouble(model_segmentsize.Value);
                     File.WriteAllText(path_to_current_config, asset_json.ToString(Formatting.Indented));
                     MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;

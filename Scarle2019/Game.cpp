@@ -100,7 +100,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	setupViewport(_width, _height);
 
 	//debug: output our current directory
-	std::cout << std::experimental::filesystem::current_path();
+	std::cout << std::experimental::filesystem::current_path() << std::endl;
 
 	//Push back all our game objects to their associated arrays
 	pushBackObjects();
@@ -123,7 +123,7 @@ void Game::createAllObjects2D()
 	//test = new ImageGO2D(m_RD, "guides_logo");
 	//test->SetPos(Vector2(100, 100));
 	//test->SetScale(Vector2(5.0f, 0.5f));
-	//test->SetColour(Color(1, 0, 0, 1));
+	//test->SetColour(Color(1, 0, 0, 1));`
 	//m_2DObjects.push_back(test);
 
 	//GUI TEST
@@ -163,21 +163,21 @@ void Game::setupViewport(int _width, int _height)
 	//m_scissorRect[3] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
 
 	//point a camera at the player that follows
-	m_cam[0] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[0] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[0]);
 
-	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
 	m_cam[1]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[1]);
 
-	m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
 	m_cam[2]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[2]);
 
-	m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 1000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
 	m_cam[3]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[3]);
@@ -213,7 +213,8 @@ void Game::createAllObjects3D()
 
 	//Load in a track
 	//track = new Track(m_RD, "GBA Mario Circuit");
-	track = new Track(m_RD, "Mario Kart Stadium");
+	//track = new Track(m_RD, "Mario Kart Stadium");
+	track = new Track(m_RD, "Rainbow Road");
 	//track = new Track(m_RD, "Luigi Circuit");
 	//track = new Track(m_RD, "Driftway");
 	m_3DObjects.push_back(track);

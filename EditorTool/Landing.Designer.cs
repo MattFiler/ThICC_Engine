@@ -66,12 +66,15 @@ namespace EditorTool
             this.openKeybindEditor = new System.Windows.Forms.Button();
             this.openLocalisationEditor = new System.Windows.Forms.Button();
             this.openUiEditor = new System.Windows.Forms.Button();
+            this.model_segmentsize = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_scale)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).BeginInit();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
             this.SuspendLayout();
             // 
             // loadAssetType
@@ -145,6 +148,8 @@ namespace EditorTool
             // 
             // modelConfigs
             // 
+            this.modelConfigs.Controls.Add(this.label13);
+            this.modelConfigs.Controls.Add(this.model_segmentsize);
             this.modelConfigs.Controls.Add(this.label12);
             this.modelConfigs.Controls.Add(this.model_scale);
             this.modelConfigs.Controls.Add(this.label11);
@@ -193,7 +198,7 @@ namespace EditorTool
             131072});
             this.model_scale.Location = new System.Drawing.Point(9, 186);
             this.model_scale.Name = "model_scale";
-            this.model_scale.Size = new System.Drawing.Size(210, 20);
+            this.model_scale.Size = new System.Drawing.Size(101, 20);
             this.model_scale.TabIndex = 29;
             this.model_scale.Value = new decimal(new int[] {
             10,
@@ -456,6 +461,43 @@ namespace EditorTool
             this.openUiEditor.Text = "UI Editor";
             this.openUiEditor.UseVisualStyleBackColor = true;
             // 
+            // model_segmentsize
+            // 
+            this.model_segmentsize.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.model_segmentsize.Location = new System.Drawing.Point(120, 186);
+            this.model_segmentsize.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.model_segmentsize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.model_segmentsize.Name = "model_segmentsize";
+            this.model_segmentsize.Size = new System.Drawing.Size(101, 20);
+            this.model_segmentsize.TabIndex = 31;
+            this.model_segmentsize.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            65536});
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(117, 171);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(84, 13);
+            this.label13.TabIndex = 32;
+            this.label13.Text = "Segment Size";
+            // 
             // Landing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -477,6 +519,7 @@ namespace EditorTool
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).EndInit();
             this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -518,5 +561,7 @@ namespace EditorTool
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown model_scale;
         private Button openKeybindEditor;
+        private Label label13;
+        private NumericUpDown model_segmentsize;
     }
 }

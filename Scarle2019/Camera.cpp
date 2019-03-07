@@ -361,6 +361,12 @@ void Camera::Tick(GameStateData * _GSD)
 				look_up_down = -1;
 			}
 		}
+
+		//Debug output camera location - useful for setting up spawns
+		if (m_keybind.keyPressed("Debug Print Camera Location")) {
+			std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+		}
+
 		m_rot = Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
 		if (look_up_down == -1)
 			m_targetPos = m_pos + m_differnce[diff_num];

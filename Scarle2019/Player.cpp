@@ -33,7 +33,25 @@ void Player::Tick(GameStateData* _GSD)
 		rightMove = Vector3::Transform(rightMove, rotMove);
 		//float rotSpeed = 0.05f;
 
-
+		/*
+		To be implemented once KEY DOWN is added.
+		if (m_keymindManager.keyPressed("Forward"))
+		{
+			m_acc += forwardMove;
+		}
+		if (m_keymindManager.keyPressed("Backwards"))
+		{
+			m_acc -= forwardMove;
+		}
+		if (m_keymindManager.keyPressed("Left"))
+		{
+			m_acc -= rightMove;
+		}
+		if (m_keymindManager.keyPressed("Right"))
+		{
+			m_acc += rightMove;
+		}
+		*/
 		if (_GSD->m_keyboardState.W)
 		{
 			m_acc += forwardMove;
@@ -99,6 +117,11 @@ void Player::Tick(GameStateData* _GSD)
 			Quaternion rot = Quaternion::Identity;
 			m_world.Decompose(scale, rot, m_pos);
 			m_rot = Matrix::CreateFromQuaternion(rot);
+		}
+
+		//Debug output player location - useful for setting up spawns
+		if (m_keymindManager.keyPressed("Debug Print Player Location")) {
+			std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 		}
 
 		//change orinetation of player

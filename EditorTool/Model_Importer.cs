@@ -594,7 +594,7 @@ namespace EditorTool
                         }
 
                         //Create JSON data
-                        JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\"" + json_extras + ", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0}");
+                        JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\"" + json_extras + ", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0, \"segment_size\": 10}");
                         File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "JSON", asset_json.ToString(Formatting.Indented));
 
                         //Move new SDKMESH to the correct requested filename
@@ -669,15 +669,15 @@ namespace EditorTool
             {
                 importModel.Location = new Point(19, 418);
                 itemMaterialCategories.Visible = true;
-                this.Size = new Size(310, 493);
-                resizedCollisionGroup.Size = new Size(264, 156);
+                this.Size = new Size(371, 493);
+                resizedCollisionGroup.Size = new Size(325, 156);
             }
             else
             {
                 importModel.Location = new Point(19, 302);
                 itemMaterialCategories.Visible = false;
-                this.Size = new Size(310, 380);
-                resizedCollisionGroup.Size = new Size(264, 40);
+                this.Size = new Size(371, 380);
+                resizedCollisionGroup.Size = new Size(325, 40);
             }
         }
 
@@ -686,8 +686,8 @@ namespace EditorTool
         {
             importModel.Location = new Point(19, 302);
             itemMaterialCategories.Visible = false;
-            this.Size = new Size(310, 380);
-            resizedCollisionGroup.Size = new Size(264, 40);
+            this.Size = new Size(371, 380);
+            resizedCollisionGroup.Size = new Size(325, 40);
         }
 
         //Enable/disable transparency options
