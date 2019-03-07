@@ -215,6 +215,7 @@ namespace EditorTool
                         int mtl_index = 0;
                         string[] mtl_file = File.ReadAllLines(import_directory + importedMTL);
                         referenced_materials.Clear();
+                        bool should_fix_next_dissolve = false;
                         foreach (string line in mtl_file)
                         {
                             if (line.Contains("map"))
@@ -226,9 +227,29 @@ namespace EditorTool
                                 mtl_file[mtl_index] = map_split[0] + " " + map_split[1].Replace(' ', '_'); //Will apply this to copied materials next
                                 material_count++;
                             }
+                            else if (line.Contains("newmtl "))
+                            {
+                                should_fix_next_dissolve = false;
+                                for (int i = 0; i < itemMaterialCategoriesTrans.Items.Count; i++)
+                                {
+                                    if (itemMaterialCategoriesTrans.GetItemChecked(i) && (line.Substring(7) == itemMaterialCategoriesTrans.Items[i].ToString()))
+                                    {
+                                        should_fix_next_dissolve = true;
+                                        break;
+                                    }
+                                }
+                            }
                             else if (line.Contains("d "))
                             {
-                                mtl_file[mtl_index] = "d 0.999999"; //Fix transparency issue
+                                //Fix transparency issue
+                                if (should_fix_next_dissolve)
+                                {
+                                    mtl_file[mtl_index] = "d 0.999999";
+                                }
+                                else
+                                {
+                                    mtl_file[mtl_index] = "d 0.000000";
+                                }
                             }
                             mtl_index++;
                         }
@@ -669,39 +690,24 @@ namespace EditorTool
             resizedCollisionGroup.Size = new Size(264, 40);
         }
 
-        //Enable/disable transparency for ALL items
+        //Enable/disable transparency options
         private void enableTransparency_CheckedChanged(object sender, EventArgs e)
         {
-            for (int i = 0; i < itemMaterialCategoriesTrans.Items.Count; i++)
+            itemMaterialCategoriesTrans.Enabled = enableTransparency.Checked;
+            if (!enableTransparency.Checked)
             {
-                itemMaterialCategoriesTrans.SetItemChecked(i, enableTransparency.Checked);
+                for (int i = 0; i < itemMaterialCategoriesTrans.Items.Count; i++)
+                {
+                    itemMaterialCategoriesTrans.SetItemChecked(i, false);
+                }
             }
         }
         
-        //Update checkbox
+
         private void itemMaterialCategoriesTrans_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int checked_count = 0;
-            for (int i = 0; i < itemMaterialCategoriesTrans.Items.Count; i++)
-            {
-                checked_count++;
-            }
-
-            if (checked_count == itemMaterialCategoriesTrans.Items.Count)
-            {
-                enableTransparency.CheckState = CheckState.Checked;
-            }
-            else if (checked_count == 0)
-            {
-                enableTransparency.CheckState = CheckState.Unchecked;
-            }
-            else
-            {
-                enableTransparency.CheckState = CheckState.Indeterminate;
-            }
+            //depreciated
         }
-
-
         private void addTexture_Click(object sender, EventArgs e)
         {
             //depreciated

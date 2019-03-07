@@ -40,9 +40,9 @@ namespace EditorTool
             this.itemMaterialCategories = new System.Windows.Forms.CheckedListBox();
             this.shouldFlipUV = new System.Windows.Forms.CheckBox();
             this.shouldCreateBoxCollider = new System.Windows.Forms.CheckBox();
-            this.enableTransparency = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.itemMaterialCategoriesTrans = new System.Windows.Forms.CheckedListBox();
+            this.enableTransparency = new System.Windows.Forms.CheckBox();
             this.resizedCollisionGroup = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.resizedCollisionGroup.SuspendLayout();
@@ -143,17 +143,6 @@ namespace EditorTool
             this.shouldCreateBoxCollider.Text = "Box Collider";
             this.shouldCreateBoxCollider.UseVisualStyleBackColor = true;
             // 
-            // enableTransparency
-            // 
-            this.enableTransparency.AutoSize = true;
-            this.enableTransparency.Location = new System.Drawing.Point(6, 19);
-            this.enableTransparency.Name = "enableTransparency";
-            this.enableTransparency.Size = new System.Drawing.Size(127, 17);
-            this.enableTransparency.TabIndex = 10;
-            this.enableTransparency.Text = "Enable Transparency";
-            this.enableTransparency.UseVisualStyleBackColor = true;
-            this.enableTransparency.CheckedChanged += new System.EventHandler(this.enableTransparency_CheckedChanged);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.itemMaterialCategoriesTrans);
@@ -168,6 +157,7 @@ namespace EditorTool
             // 
             // itemMaterialCategoriesTrans
             // 
+            this.itemMaterialCategoriesTrans.Enabled = false;
             this.itemMaterialCategoriesTrans.FormattingEnabled = true;
             this.itemMaterialCategoriesTrans.Location = new System.Drawing.Point(6, 42);
             this.itemMaterialCategoriesTrans.Name = "itemMaterialCategoriesTrans";
@@ -175,6 +165,17 @@ namespace EditorTool
             this.itemMaterialCategoriesTrans.TabIndex = 12;
             this.itemMaterialCategoriesTrans.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.itemMaterialCategoriesTrans_SelectedIndexChanged);
             this.itemMaterialCategoriesTrans.SelectedIndexChanged += new System.EventHandler(this.itemMaterialCategoriesTrans_SelectedIndexChanged_1);
+            // 
+            // enableTransparency
+            // 
+            this.enableTransparency.AutoSize = true;
+            this.enableTransparency.Location = new System.Drawing.Point(6, 19);
+            this.enableTransparency.Name = "enableTransparency";
+            this.enableTransparency.Size = new System.Drawing.Size(127, 17);
+            this.enableTransparency.TabIndex = 10;
+            this.enableTransparency.Text = "Enable Transparency";
+            this.enableTransparency.UseVisualStyleBackColor = true;
+            this.enableTransparency.CheckedChanged += new System.EventHandler(this.enableTransparency_CheckedChanged);
             // 
             // resizedCollisionGroup
             // 
@@ -227,10 +228,10 @@ namespace EditorTool
         private System.Windows.Forms.CheckedListBox itemMaterialCategories;
         private System.Windows.Forms.CheckBox shouldFlipUV;
         private System.Windows.Forms.CheckBox shouldCreateBoxCollider;
-        private System.Windows.Forms.CheckBox enableTransparency;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckedListBox itemMaterialCategoriesTrans;
         private System.Windows.Forms.GroupBox resizedCollisionGroup;
+        private CheckBox enableTransparency;
     }
 }
 

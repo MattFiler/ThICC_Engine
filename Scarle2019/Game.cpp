@@ -114,7 +114,7 @@ void Game::createAllObjects2D()
 	m_2DObjects.push_back(test2);
 
 	//text example 2D objects
-
+	/*
 	ImageGO2D *test = new ImageGO2D(m_RD, "twist");
 	test->SetOri(45);
 	test->SetPos(Vector2(200, 300));
@@ -126,6 +126,7 @@ void Game::createAllObjects2D()
 	test->SetScale(Vector2(5.0f, 0.5f));
 	test->SetColour(Color(1, 0, 0, 1));
 	m_2DObjects.push_back(test);
+	*/
 
 	//GUI TEST
 	//Enter in order: LapPos / RacePos / BoxPos / ItemPos
@@ -214,7 +215,7 @@ void Game::createAllObjects3D()
 
 	//Load in a track
 	//track = new Track(m_RD, "GBA Mario Circuit");
-	track = new Track(m_RD, "Mario Kart Stadium TRANSPARENCY");
+	track = new Track(m_RD, "Mario Kart Stadium");
 	m_3DObjects.push_back(track);
 
 	//Create a player and position on track
