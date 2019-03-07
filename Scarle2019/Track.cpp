@@ -3,6 +3,7 @@
 #include "pch.h"
 #include <iostream>
 #include <fstream>
+#include "math.h"
 
 Track::Track(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 {
@@ -40,7 +41,7 @@ void Track::LoadVertexList(string _vertex_list)
 	std::ifstream file(_vertex_list);
 	string line;
 
-
+	// Read all of the vertices from file and build the triangles they make
 	if (file.is_open())
 	{
 		while (std::getline(file, line))
@@ -48,6 +49,7 @@ void Track::LoadVertexList(string _vertex_list)
 			CreateAndAddTriangle(line);
 		}
 	}
+	SplitTrisIntoGrid();
 }
 
 /* Takes a line from the file and extract a triangle out of it */
@@ -66,12 +68,15 @@ void Track::CreateAndAddTriangle(string _line)
 		else if (c == ')')
 		{
 			vectors[vectorIndex] = CreateVector(value);
+			vectors[vectorIndex] = vectors[vectorIndex] * m_track_data.scale;
+			CompareVectorToMaximum(vectors[vectorIndex]);
+			CompareVectorToMinimum(vectors[vectorIndex]);
 			vectorIndex++;
 			value = "";
 			// Once 3 vectors have been found, create a triangle
 			if (vectorIndex == 3)
 			{
-				triangles.push_back(MeshTri(vectors[0] * m_track_data.scale, vectors[1] * m_track_data.scale, vectors[2] * m_track_data.scale));
+				m_triangles.push_back(MeshTri(vectors[0], vectors[1], vectors[2]));
 				vectorIndex = 0;
 			}
 		}
@@ -109,17 +114,171 @@ Vector Track::CreateVector(string _vector)
 
 /* Checks through all triangles to see if this line intersects any of them. 
    The point of intersecion is stored in _intersect */
-bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri)
+bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle)
 {
-	int index = 0;
-	for (MeshTri& tri : triangles)
+	// Find the bounding box created by _startPos and _startPos + _direction
+	Vector endPos = _startPos + _direction;
+	Vector upper = Vector(_startPos.x > endPos.x ? _startPos.x : endPos.x,
+						  _startPos.y > endPos.y ? _startPos.y : endPos.y,
+						  _startPos.z > endPos.z ? _startPos.z : endPos.z);
+	Vector lower = Vector(_startPos.x < endPos.x ? _startPos.x : endPos.x,
+					      _startPos.y < endPos.y ? _startPos.y : endPos.y,
+					      _startPos.z < endPos.z ? _startPos.z : endPos.z);
+	GetXYZIndexAtPoint(upper);
+	GetXYZIndexAtPoint(lower);
+	
+	// Then check all the grid sections covered by this area
+	for (int i = lower.z; i <= upper.z; i++)
 	{
-		if (tri.DoesLineIntersect(_direction, _startPos, _intersect, _tri))
+		for (int j = lower.y; j <= upper.y; j++)
 		{
-			return true;
+			int index = (i*m_triGridYX) + (j*m_triGridX);
+			for (int k = lower.x; k <= upper.x; k++)
+			{
+				for (MeshTri* tri : m_triGrid[index+k])
+				{
+					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
+					{
+						return true;
+					}
+				}
+			}
 		}
-		index++;
 	}
-	index = index;
+
 	return false;
+}
+
+/* Compares the passed vector to the maximum vector member variable, then updates x, y, z if any are bigger */
+void Track::CompareVectorToMaximum(Vector& _vect)
+{
+	if (_vect.x > m_largest.x)
+	{
+		m_largest.x = _vect.x;
+	}
+	if (_vect.y > m_largest.y)
+	{
+		m_largest.y = _vect.y;
+	}
+	if (_vect.z > m_largest.z)
+	{
+		m_largest.z = _vect.z;
+	}
+}
+
+/* Compares the passed vector to the minimum vector member variable, then updates x, y, z if any are smaller */
+void Track::CompareVectorToMinimum(Vector& _vect)
+{
+	if (_vect.x < m_smallest.x)
+	{
+		m_smallest.x = _vect.x;
+	}
+	if (_vect.y < m_smallest.y)
+	{
+		m_smallest.y = _vect.y;
+	}
+	if (_vect.z < m_smallest.z)
+	{
+		m_smallest.z = _vect.z;
+	}
+}
+
+/* Takes the vector of triangles and creates a vector of vectors of references that are 
+ordered by position and grouped into a grid space (defined by m_triSegSize) */
+void Track::SplitTrisIntoGrid()
+{
+	Vector trackSize = m_largest - m_smallest;
+	// Reserve space in the references vector based on the size of the track
+	m_triGridX = static_cast<int>(ceilf(trackSize.x / m_triSegSize));
+	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
+	float m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
+	m_triGridYX = m_triGridY*m_triGridX;
+	m_triGrid.reserve(m_triGridX*m_triGridY*m_triGridZ);
+	
+	for (int i = 0; i < m_triGrid.capacity(); i++)
+	{
+		std::vector<MeshTri*> vec;
+		m_triGrid.push_back(vec);
+	}
+
+	for (MeshTri& tri : m_triangles)
+	{
+		Vector upper = tri.GetUpperBound();
+		Vector lower = tri.GetLowerBound();
+		GetXYZIndexAtPoint(upper);
+		GetXYZIndexAtPoint(lower);
+
+		for (int i = lower.z; i <= upper.z; i++)
+		{
+			for (int j = lower.y; j <= upper.y; j++)
+			{
+				int index = (i*m_triGridYX) + (j*m_triGridX);
+				for (int k = lower.x; k <= upper.x; k++)
+				{
+					m_triGrid[index + k].push_back(&tri);
+				}
+			}
+		}
+	}
+
+	std::cout << "Track tri map created with " << m_triGridX*m_triGridY*m_triGridZ << " segments";
+}
+
+/* Loops though the m_trianges vector and finds every tri that falls within the area at _index  */
+void Track::SetAllTrisForIndex(int _index)
+{
+	Vector startVec = GetAreaAtIndex(_index);
+	Vector endVec = startVec + Vector(m_triSegSize, m_triSegSize, m_triSegSize);
+
+	for (MeshTri& tri : m_triangles)
+	{
+		if (IsPointInBounds(tri.m_pointA, startVec, endVec) ||
+			IsPointInBounds(tri.m_pointB, startVec, endVec) ||
+			IsPointInBounds(tri.m_pointC, startVec, endVec))
+		{
+			m_triGrid[_index].push_back(&tri);
+		}
+	}
+}
+
+/* Returns the bottom corner for the grid section this _index represents */
+Vector Track::GetAreaAtIndex(int _index)
+{
+	Vector returnVec = Vector3::Zero;
+	returnVec.z = m_triSegSize * floorf(_index / m_triGridYX);
+	_index = _index % m_triGridYX;
+	returnVec.y = m_triSegSize * floorf(_index / m_triGridX);
+	_index = _index % m_triGridX;
+	returnVec.x = m_triSegSize * _index;
+
+	return returnVec + m_smallest;
+}
+
+/* Returns true is the passed point is inside the bounding box create by _lowerBound and _upperBound */
+bool Track::IsPointInBounds(Vector& _point, Vector& _lowerBound, Vector& _upperBound)
+{
+	return (((_point.x >= _lowerBound.x) && (_point.x <= _upperBound.x)) &&
+		((_point.y >= _lowerBound.y) && (_point.y <= _upperBound.y)) &&
+		((_point.z >= _lowerBound.z) && (_point.z <= _upperBound.z)));
+}
+
+/* Finds the index in the m_triGrid that has this point in its area */
+int Track::GetIndexAtPoint(Vector point)
+{
+	point -= m_smallest;
+	point.x = floor(point.x / m_triSegSize);
+	point.y = floor(point.y / m_triSegSize);
+	point.z = floor(point.z / m_triSegSize);
+
+	return static_cast<int>((point.z * m_triGridYX) + (point.y * m_triGridX) + point.x);
+}
+
+/* Similar to GetIndexAtPoint but instead returns the x,y and z indicies as if it were a 3D vector 
+   (used in calculating where tri's go in the grid) */
+void Track::GetXYZIndexAtPoint(Vector& _point)
+{
+	_point -= m_smallest;
+	_point.x = floor(_point.x / m_triSegSize);
+	_point.y = floor(_point.y / m_triSegSize);
+	_point.z = floor(_point.z / m_triSegSize);
 }

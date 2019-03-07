@@ -302,9 +302,13 @@ void Game::pushBackObjects()
 void Game::Update(DX::StepTimer const& _timer)
 {
 	// Test code
-	player[0]->ShouldStickToTrack(*track, m_GSD);
-	player[1]->ShouldStickToTrack(*track, m_GSD);
-
+	for (int i = 0; i < 1; i++)
+	{
+		player[0]->ShouldStickToTrack(*track, m_GSD);
+		player[0]->ResolveWallCollisions(*track);
+		player[1]->ShouldStickToTrack(*track, m_GSD);
+		player[1]->ResolveWallCollisions(*track);
+	}
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 
 	//this will update the audio engine but give us chance to do somehting else if that isn't working
