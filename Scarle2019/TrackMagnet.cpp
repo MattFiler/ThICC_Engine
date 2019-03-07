@@ -59,7 +59,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	}
 	else
 	{
-		targetWorld = m_world.CreateWorld(m_pos, m_world.Forward(), m_world.Up());
+		targetWorld = m_world.CreateWorld(m_pos, m_world.Forward(), Vector::Up);
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 		m_gravDirection = m_world.Down() * gravityMultiplier;
 	}
