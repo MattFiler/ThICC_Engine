@@ -2,6 +2,19 @@
   "Activate": "Enter",
   "Quit": "Escape",
   "Debug Toggle": "P",
+  "Orbit": "K",
+  "Lerp": "L",
+  "Matt": "M",
+  "DebugCamUp": "Home",
+  "DebugCamDown": "PageUp",
+  "DebugCamFor": "Up",
+  "DebugCamBack": "Down",
+  "DebugCamLeft": "Left",
+  "DebugCamRight": "Right",
+  "DebugCamRotLeft": "PageDown",
+  "DebugCamRotRight": "End",
   "Debug Save Matrix": "D1",
-  "Debug Load Matrix": "D2"
+  "Debug Load Matrix": "D2",
+  "DebugCamLookDown": "Multiply",
+  "DebugCamLookUp": "Divide"
 }
