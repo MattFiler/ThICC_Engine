@@ -89,14 +89,16 @@ void Camera::Tick(GameStateData * _GSD)
 			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
 
 			rotCam = m_targetObject->GetOri();
-			Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
-			angle += 1.0f;
+			angle -= 0.5f;
 			Vector3 orbit_pos;
-			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
+			orbit_pos.x = sin(angle / 57.2958f) * (m_dpos.x);
 
-			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
+			orbit_pos.z = cos(angle / 57.2958f) * (m_dpos.z);
 
-			m_pos = (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam));
+			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam))
+			{
+				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam), 0.2);
+			}
 		}
 		else
 		{
