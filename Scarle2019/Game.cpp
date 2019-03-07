@@ -300,6 +300,7 @@ void Game::Update(DX::StepTimer const& _timer)
 	for (int i = 0; i < 1; i++)
 	{
 		player[0]->ShouldStickToTrack(*track, m_GSD);
+		player[0]->ResolveWallCollisions(*track);
 	}
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 
