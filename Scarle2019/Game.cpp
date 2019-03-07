@@ -92,6 +92,10 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//Setup keybinds
 	m_keybinds.setup(m_GSD);
 
+	//Read in track config
+	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
+	game_config << i;
+
 	//Create all GameObjects
 	createAllObjects2D();
 	createAllObjects3D();
@@ -214,21 +218,19 @@ void Game::createAllObjects3D()
 	//Load in a track
 	//track = new Track(m_RD, "GBA Mario Circuit");
 	//track = new Track(m_RD, "Mario Kart Stadium");
-	track = new Track(m_RD, "Rainbow Road");
+	//track = new Track(m_RD, "Rainbow Road");
 	//track = new Track(m_RD, "Luigi Circuit");
 	//track = new Track(m_RD, "Driftway");
+	track = new Track(m_RD, game_config["default_track"]);
 	m_3DObjects.push_back(track);
 
 	//Create a player and position on track
-	player[0] = new Player(m_RD, "Standard Kart", 0, *m_gamePad.get());
-	player[0]->SetPos(track->getSuitableSpawnSpot());
-	//player[0]->SetPos({0, 0, 0});
-	m_3DObjects.push_back(player[0]);
-
-	player[1] = new Player(m_RD, "Standard Kart", 1, *m_gamePad.get());
-	player[1]->SetPos(Vector3(player[0]->GetPos().x, player[0]->GetPos().y, player[0]->GetPos().z - 10));
-	//player[0]->SetPos({0, 0, 0});
-	m_3DObjects.push_back(player[1]);
+	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		player[i] = new Player(m_RD, "Standard Kart", 0, *m_gamePad.get());
+		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		m_3DObjects.push_back(player[i]);
+	}
 
 	//create a base light
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));

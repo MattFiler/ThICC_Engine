@@ -9,6 +9,8 @@
 #include "KeybindManager.h"
 #include "LocalisationManager.h"
 #include <vector>
+#include <json.hpp>
+using json = nlohmann::json;
 using std::vector;
 
 //predefs
@@ -69,7 +71,7 @@ private:
 
 	// Test objects
 	Track* track = nullptr;
-	Player* player[2] = {nullptr};
+	Player* player[4] = {nullptr};
 	PhysModel* test_model = nullptr;
 
 	void Update(DX::StepTimer const& _timer);
@@ -147,6 +149,7 @@ private:
 	GameFilepaths m_filepath;
 	LocalisationManager m_localiser;
 	KeybindManager m_keybinds;
+	json game_config;
 
 	std::vector<PhysModel*> m_physModels;
 };

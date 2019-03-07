@@ -31,6 +31,33 @@ namespace EditorTool
         private void Landing_Load(object sender, EventArgs e)
         {
             loadAssetType.SelectedIndex = 0;
+
+            /* LOAD DEBUG CONFIGURATIONS */
+            REFRESH_DEBUG_LIST();
+            JToken game_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/GAME_CORE.JSON"));
+            DEBUG_DEFAULTTRACK.SelectedItem = game_config["default_track"].Value<string>();
+            DEBUG_PLAYERCOUNT.Value = game_config["player_count"].Value<decimal>();
+        }
+
+        /* SAVE DEBUG CONFIG */
+        private void DEBUG_SAVE_Click(object sender, EventArgs e)
+        {
+            JToken game_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/GAME_CORE.JSON"));
+            game_config["default_track"] = DEBUG_DEFAULTTRACK.SelectedItem.ToString();
+            game_config["player_count"] = DEBUG_PLAYERCOUNT.Value;
+            File.WriteAllText("DATA/CONFIGS/GAME_CORE.JSON", game_config.ToString(Formatting.Indented));
+            MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /* UPDATE DEBUG LEVEL CHOICES */
+        void REFRESH_DEBUG_LIST()
+        {
+            string[] levels = Directory.GetFiles("DATA/MODELS/", "*.SDKMESH", SearchOption.AllDirectories);
+            DEBUG_DEFAULTTRACK.Items.Clear();
+            foreach (string level in levels)
+            {
+                DEBUG_DEFAULTTRACK.Items.Add(Path.GetFileNameWithoutExtension(level));
+            }
         }
 
         /* LOAD ASSET LIST */
@@ -73,6 +100,8 @@ namespace EditorTool
                     fontimporter.Show();
                     break;
             }
+
+            REFRESH_DEBUG_LIST();
         }
 
         /* REFRESH CURRENT LIST */
@@ -199,6 +228,7 @@ namespace EditorTool
         /* COMPILE ASSETS TO BUILD FOLDER */
         private void compileAssets_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             try
             {
                 //Fix VS debugging directory config
@@ -215,11 +245,13 @@ namespace EditorTool
                 {
                     copyAssets("Release/DATA/");
                 }
-                
+
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show("Assets successfully compiled.", "Compiled assets.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch
             {
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show("An error occured while compiling assets.\nMake sure that the game is closed and no files are open.", "Asset compile failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -245,6 +277,8 @@ namespace EditorTool
         /* LOAD ASSET PREVIEW & CONFIG ON CLICK */
         private void assetList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             //Hide all possible previewers
             modelPreview.Visible = false;
             imagePreview.Visible = false;
@@ -343,6 +377,7 @@ namespace EditorTool
                     }
                     break;
             }
+            Cursor.Current = Cursors.Default;
         }
 
         //Play sound when requested

@@ -37,6 +37,8 @@ namespace EditorTool
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.compileAssets = new System.Windows.Forms.Button();
             this.modelConfigs = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.model_segmentsize = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
             this.model_scale = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
@@ -66,15 +68,21 @@ namespace EditorTool
             this.openKeybindEditor = new System.Windows.Forms.Button();
             this.openLocalisationEditor = new System.Windows.Forms.Button();
             this.openUiEditor = new System.Windows.Forms.Button();
-            this.model_segmentsize = new System.Windows.Forms.NumericUpDown();
-            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.DEBUG_DEFAULTTRACK = new System.Windows.Forms.ComboBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.DEBUG_PLAYERCOUNT = new System.Windows.Forms.NumericUpDown();
+            this.DEBUG_SAVE = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.model_scale)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).BeginInit();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DEBUG_PLAYERCOUNT)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // loadAssetType
@@ -177,6 +185,43 @@ namespace EditorTool
             this.modelConfigs.TabStop = false;
             this.modelConfigs.Text = "Model Configuration";
             this.modelConfigs.Visible = false;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(117, 171);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(84, 13);
+            this.label13.TabIndex = 32;
+            this.label13.Text = "Segment Size";
+            // 
+            // model_segmentsize
+            // 
+            this.model_segmentsize.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.model_segmentsize.Location = new System.Drawing.Point(120, 186);
+            this.model_segmentsize.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.model_segmentsize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.model_segmentsize.Name = "model_segmentsize";
+            this.model_segmentsize.Size = new System.Drawing.Size(101, 20);
+            this.model_segmentsize.TabIndex = 31;
+            this.model_segmentsize.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            65536});
             // 
             // label12
             // 
@@ -461,48 +506,91 @@ namespace EditorTool
             this.openUiEditor.Text = "UI Editor";
             this.openUiEditor.UseVisualStyleBackColor = true;
             // 
-            // model_segmentsize
+            // label14
             // 
-            this.model_segmentsize.Increment = new decimal(new int[] {
-            10,
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(4, 19);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(72, 13);
+            this.label14.TabIndex = 15;
+            this.label14.Text = "Default Track";
+            // 
+            // DEBUG_DEFAULTTRACK
+            // 
+            this.DEBUG_DEFAULTTRACK.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DEBUG_DEFAULTTRACK.FormattingEnabled = true;
+            this.DEBUG_DEFAULTTRACK.Items.AddRange(new object[] {
+            "Models",
+            "Meshes",
+            "Sounds",
+            "Images",
+            "Fonts"});
+            this.DEBUG_DEFAULTTRACK.Location = new System.Drawing.Point(7, 35);
+            this.DEBUG_DEFAULTTRACK.Name = "DEBUG_DEFAULTTRACK";
+            this.DEBUG_DEFAULTTRACK.Size = new System.Drawing.Size(202, 21);
+            this.DEBUG_DEFAULTTRACK.TabIndex = 16;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(212, 18);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(67, 13);
+            this.label15.TabIndex = 17;
+            this.label15.Text = "Player Count";
+            // 
+            // DEBUG_PLAYERCOUNT
+            // 
+            this.DEBUG_PLAYERCOUNT.Location = new System.Drawing.Point(215, 35);
+            this.DEBUG_PLAYERCOUNT.Maximum = new decimal(new int[] {
+            4,
             0,
             0,
             0});
-            this.model_segmentsize.Location = new System.Drawing.Point(120, 186);
-            this.model_segmentsize.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.model_segmentsize.Minimum = new decimal(new int[] {
+            this.DEBUG_PLAYERCOUNT.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.model_segmentsize.Name = "model_segmentsize";
-            this.model_segmentsize.Size = new System.Drawing.Size(101, 20);
-            this.model_segmentsize.TabIndex = 31;
-            this.model_segmentsize.Value = new decimal(new int[] {
-            100,
+            this.DEBUG_PLAYERCOUNT.Name = "DEBUG_PLAYERCOUNT";
+            this.DEBUG_PLAYERCOUNT.Size = new System.Drawing.Size(101, 20);
+            this.DEBUG_PLAYERCOUNT.TabIndex = 32;
+            this.DEBUG_PLAYERCOUNT.Value = new decimal(new int[] {
+            1,
             0,
             0,
-            65536});
+            0});
             // 
-            // label13
+            // DEBUG_SAVE
             // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(117, 171);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(84, 13);
-            this.label13.TabIndex = 32;
-            this.label13.Text = "Segment Size";
+            this.DEBUG_SAVE.Location = new System.Drawing.Point(322, 19);
+            this.DEBUG_SAVE.Name = "DEBUG_SAVE";
+            this.DEBUG_SAVE.Size = new System.Drawing.Size(120, 37);
+            this.DEBUG_SAVE.TabIndex = 33;
+            this.DEBUG_SAVE.Text = "Save";
+            this.DEBUG_SAVE.UseVisualStyleBackColor = true;
+            this.DEBUG_SAVE.Click += new System.EventHandler(this.DEBUG_SAVE_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label14);
+            this.groupBox3.Controls.Add(this.DEBUG_SAVE);
+            this.groupBox3.Controls.Add(this.DEBUG_DEFAULTTRACK);
+            this.groupBox3.Controls.Add(this.DEBUG_PLAYERCOUNT);
+            this.groupBox3.Controls.Add(this.label15);
+            this.groupBox3.Location = new System.Drawing.Point(12, 494);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(447, 64);
+            this.groupBox3.TabIndex = 34;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Debug Configurations";
             // 
             // Landing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(469, 496);
+            this.ClientSize = new System.Drawing.Size(469, 566);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.modelConfigs);
             this.Controls.Add(this.groupBox2);
@@ -515,11 +603,14 @@ namespace EditorTool
             this.groupBox2.ResumeLayout(false);
             this.modelConfigs.ResumeLayout(false);
             this.modelConfigs.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.model_scale)).EndInit();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).EndInit();
             this.groupBox4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DEBUG_PLAYERCOUNT)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -563,5 +654,11 @@ namespace EditorTool
         private Button openKeybindEditor;
         private Label label13;
         private NumericUpDown model_segmentsize;
+        private Label label14;
+        private ComboBox DEBUG_DEFAULTTRACK;
+        private Label label15;
+        private NumericUpDown DEBUG_PLAYERCOUNT;
+        private Button DEBUG_SAVE;
+        private GroupBox groupBox3;
     }
 }
