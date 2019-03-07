@@ -33,6 +33,8 @@ public:
 	void SetScale(Vector3 _scale) { m_scale = _scale; }
 	void SetOri(float _pitch, float _yaw, float _roll) { m_pitch = _pitch; m_yaw = _yaw, m_roll = _roll; }
 	void SetOri(Vector3 _ori) { m_pitch = _ori.x; m_yaw = _ori.y; m_roll = _ori.z; }
+	void SetOri(Matrix _rot) { m_rot = _rot; }
+
 	void SetPitch(float _pitch) { m_pitch = _pitch; }
 	void SetYaw(float _yaw) { m_yaw = _yaw; }
 	void SetRoll(float _roll) { m_roll = _roll; }
@@ -46,6 +48,7 @@ public:
 	float GetYaw() { return m_yaw; }
 	float GetRoll() { return m_roll; }
 	Matrix GetOri() { return m_rot; }
+	Matrix GetWorld() { return m_world; }
 	GO3D_Render_Type GetType() { return m_type; }
 
 	virtual void Reset() {};
@@ -63,6 +66,5 @@ protected:
 	bool m_autoCalculateWolrd = true;
 
 	GO3D_Render_Type m_type = GO3D_RT_NONE;
-	int num_of_cam = 2;
 };
 

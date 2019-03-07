@@ -203,7 +203,6 @@
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="TestSound.h" />
     <ClInclude Include="Text2D.h" />
-    <ClInclude Include="TPSCamera.h" />
     <ClInclude Include="Track.h" />
     <ClInclude Include="TrackMagnet.h" />
     <ClInclude Include="TransFileVBGO.h" />
@@ -248,7 +247,6 @@
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="TestSound.cpp" />
     <ClCompile Include="Text2D.cpp" />
-    <ClCompile Include="TPSCamera.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="TrackMagnet.cpp" />
     <ClCompile Include="TransFileVBGO.cpp" />

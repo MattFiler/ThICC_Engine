@@ -24,4 +24,7 @@ void GameObject3D::Tick(GameStateData* _GSD)
 		m_rot = Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
 		m_world = scale * m_rot * trans;
 	}
+
+	//m_rot = Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
+	//m_world = scale * m_rot * trans;
 }

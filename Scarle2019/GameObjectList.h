@@ -9,7 +9,7 @@
 //3D Game Objects
 #include "Camera.h"
 #include "light.h"
-#include "TPSCamera.h"
+//#include "TPSCamera.h"
 #include "GPGO3D.h"
 #include "SDKMeshGO3D.h"
 #include "PhysModel.h"
