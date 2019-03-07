@@ -5,9 +5,10 @@
   "visible": true,
   "start_x": 5.0,
   "start_y": -5.0,
-  "start_z": 40.0,
+  "start_z": 35.0,
   "modelscale": 6.0,
   "rot_x": 0.0,
   "rot_y": 0.0,
-  "rot_z": 0.0
+  "rot_z": 0.0,
+  "segment_size": 10
 }

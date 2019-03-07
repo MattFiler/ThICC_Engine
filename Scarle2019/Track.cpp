@@ -12,11 +12,12 @@ Track::Track(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 	json m_track_data_j;
 	m_track_data_j << i;
 
-	//Save config to our data struct
+	//Parse loaded config
 	m_track_data.scale = m_track_data_j["modelscale"];
-	m_track_data.spawn_pos = Vector3(m_track_data_j["start_x"], m_track_data_j["start_z"], m_track_data_j["start_y"]);
+	m_track_data.spawn_pos = Vector3(m_track_data_j["start_x"], m_track_data_j["start_z"], m_track_data_j["start_y"]); //SHOULD NOT BE FLIPPED
 	m_track_data.spawn_pos = m_track_data.spawn_pos * m_track_data.scale;
 	m_track_data.start_rot = Vector3(m_track_data_j["rot_x"], m_track_data_j["rot_y"], m_track_data_j["rot_z"]); //Hmm, allow this? Will mess with collision.
+	m_triSegSize = m_track_data_j["segment_size"];
 
 	//Set our config in action
 	SetScale(m_track_data.scale);
