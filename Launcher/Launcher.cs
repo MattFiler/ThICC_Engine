@@ -51,7 +51,7 @@ namespace Launcher
             }
 
             //Load previous res from config
-            resolutionSelector.SelectedItem = game_config_json["resolution"]["width"] + "x" + game_config_json["resolution"]["height"];
+            resolutionSelector.SelectedItem = game_config_json["window_width"] + "x" + game_config_json["window_height"];
 
             //Load previous language
             string loadedLanguage = game_config_json["language"].ToString();
@@ -68,8 +68,8 @@ namespace Launcher
 
             //Update internal config with new resolution
             string[] new_resolution = resolutionSelector.Items[resolutionSelector.SelectedIndex].ToString().Split('x');
-            game_config_json["resolution"]["width"] = Convert.ToInt32(new_resolution[0]);
-            game_config_json["resolution"]["height"] = Convert.ToInt32(new_resolution[1]);
+            game_config_json["window_width"] = Convert.ToInt32(new_resolution[0]);
+            game_config_json["window_height"] = Convert.ToInt32(new_resolution[1]);
 
             //Update internal config with new language
             game_config_json["language"] = po_language.SelectedItem.ToString().ToUpper();

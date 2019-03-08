@@ -144,6 +144,8 @@ private:
 	LocalisationManager m_localiser;
 	KeybindManager m_keybinds;
 
+	json game_config;
+
 	std::vector<PhysModel*> m_physModels;
 	SceneManager* m_sceneManager;
 };

@@ -27,9 +27,13 @@ Game::Game() :
 	m_backBufferIndex(0),
 	m_fenceValues{}
 {
+	//Read in track config
+	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
+	game_config << i;
+
 	m_WD->m_window = nullptr;
-	m_WD->m_outputHeight = 1000;
-	m_WD->m_outputWidth = 1000;
+	m_WD->m_outputHeight = game_config["window_height"];
+	m_WD->m_outputWidth = game_config["window_width"];
 }
 
 Game::~Game()
@@ -98,7 +102,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	}
 
 	//Configure localisation
-	m_localiser.configure("ENGLISH"); //todo: read in from a launcher
+	m_localiser.configure(game_config["language"]); 
 
 	//Setup keybinds
 	m_keybinds.setup(m_GSD);
@@ -253,8 +257,8 @@ void Game::Render()
 /* configure window size */
 void Game::GetDefaultSize(int& _width, int& _height) const
 {
-	_width = 1280;
-	_height = 720;
+	_width = game_config["window_width"];
+	_height = game_config["window_height"];
 }
 
 /* setup a viewport */
