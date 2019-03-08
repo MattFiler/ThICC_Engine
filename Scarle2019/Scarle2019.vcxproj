@@ -187,6 +187,7 @@
     <ClInclude Include="GPGO3D.h" />
     <ClInclude Include="ImageGO2D.h" />
     <ClInclude Include="InputData.h" />
+    <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LocalisationManager.h" />
     <ClInclude Include="Loop.h" />

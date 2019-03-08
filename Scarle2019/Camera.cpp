@@ -265,23 +265,23 @@ void Camera::Tick(GameStateData * _GSD)
 		m_yaw -= rotSpeed * _GSD->m_mouseState.x;
 		m_pitch -= rotSpeed * _GSD->m_mouseState.y;
 
-		if (_GSD->m_keyboardState.Up)
+		if (m_keybinds.keyHeld("DebugCamFor"))
 		{
 			m_pos += _GSD->m_dt * forwardMove;
 			m_targetPos += _GSD->m_dt * forwardMove;
 		}
-		else if (_GSD->m_keyboardState.Down)
+		else if (m_keybinds.keyHeld("DebugCamBack"))
 		{
 			m_pos -= _GSD->m_dt * forwardMove;
 			m_targetPos -= _GSD->m_dt * forwardMove;
 		}
 
-		if (_GSD->m_keyboardState.Left)
+		if (m_keybinds.keyHeld("DebugCamLeft"))
 		{
 			m_pos -= _GSD->m_dt * rightMove;
 			m_targetPos -= _GSD->m_dt * rightMove;
 		}
-		else if (_GSD->m_keyboardState.Right)
+		else if (m_keybinds.keyHeld("DebugCamRight"))
 		{
 			m_pos += _GSD->m_dt * rightMove;
 			m_targetPos += _GSD->m_dt * rightMove;
