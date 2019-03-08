@@ -42,257 +42,260 @@ void Camera::Tick(GameStateData * _GSD)
 {
 	switch (behav)
 	{
-		case BEHAVIOUR::BEHIND:
+	case BEHAVIOUR::BEHIND:
+	{
+		if (m_targetObject)
 		{
-			if (m_targetObject)
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-				rotCam = m_targetObject->GetOri();
-				m_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
-			}
-			else
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-			}
-
-			break;
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+			rotCam = m_targetObject->GetOri();
+			m_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
 		}
-		case BEHAVIOUR::LERP:
+		else
 		{
-			m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
-			if (m_targetObject)
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-				//rotCam = m_targetObject->GetOri();
-				if (rotCam != m_targetObject->GetOri())
-				{
-					rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.08);
-				}
-				if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam))
-				{
-					m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.2);
-				}
-			}
-			else
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-			}
-
-			break;
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
 		}
-		case BEHAVIOUR::ORBIT:
+
+		break;
+	}
+	case BEHAVIOUR::LERP:
+	{
+		m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
+		if (m_targetObject)
 		{
-			if (m_targetObject)
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+			//rotCam = m_targetObject->GetOri();
+			if (rotCam != m_targetObject->GetOri())
 			{
-
-				m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
-				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-
-				rotCam = m_targetObject->GetOri();
-				Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
-				angle += 1.0f;
-				Vector3 orbit_pos;
-				orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
-
-				orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
-
-				m_pos = (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam));
+				rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.08);
 			}
-			else
+			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam))
 			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.2);
 			}
-			break;
 		}
-		case BEHAVIOUR::CINEMATIC:
+		else
 		{
-			if (m_targetObject)
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
-			}
-			else
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_targetObject->GetWorld().Up());
-			}
-
-			rotCam = Matrix::Identity;
-
-			if (at != points.size() - 1)
-			{
-				m_pos = Vector3::Lerp(points[at], points[at + 1], timer / time_out);
-
-				timer += _GSD->m_dt;
-				if (timer >= time_out)
-				{
-					timer = 0.0f;
-					at++;
-				}
-			}
-
-			break;
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
 		}
-		case BEHAVIOUR::FRONT:
-		{
-			if (m_targetObject)
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-				rotCam = m_targetObject->GetOri();
 
-				if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam))
-				{
-					m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.2);
-				}
-			}
-			break;
-		}
-		case BEHAVIOUR::FIRST:
+		break;
+	}
+	case BEHAVIOUR::ORBIT:
+	{
+		if (m_targetObject)
 		{
-			if (m_targetObject)
-			{
-				rotCam = m_targetObject->GetOri();
-				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 0.0f, -10.0f }, rotCam), m_targetObject->GetWorld().Up());
 
-				if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam))
-				{
-					m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam), 0.8);
-				}
-			}
-			else
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-			}
-			break;
-		}
-		case BEHAVIOUR::INDEPENDENT_LERP:
-		{
 			m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
-			if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
-			{
-				angle -= 3.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-			}
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
 
-			if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickRight())
-			{
-				angle += 3.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-			}
+			rotCam = m_targetObject->GetOri();
+			Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
+			angle += 1.0f;
+			Vector3 orbit_pos;
+			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
 
-			if (m_targetObject)
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-				rotCam = m_targetObject->GetOri();
-				Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
-				Vector3 orbit_pos;
-				orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
+			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
 
-				orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
-
-				if (m_pos != (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam)))
-				{
-					m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam), 0.2);
-				}
-			}
-			else
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-				rotCam = m_world;
-				Vector3 base_pos = m_targetPos + Vector3::Transform(m_dpos, rotCam);
-				Vector3 orbit_pos;
-				orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetPos.x);
-
-				orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetPos.z);
-
-				m_pos = m_targetPos + Vector3::Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam);
-				if (m_pos != m_targetPos + Vector3::Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam))
-				{
-					m_pos = Vector3::Lerp(m_pos, m_targetPos + Vector3::Transform(m_dpos, rotCam), 0.2);
-				}
-			}
-			break;
+			m_pos = (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam));
 		}
-		case BEHAVIOUR::INDEPENDENT_FIXED:
+		else
 		{
-			m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
-			if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
-			{
-				angle -= 1.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-			}
-
-			if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickRight())
-			{
-				angle += 1.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-			}
-
-			if (m_targetObject)
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-				rotCam = m_targetObject->GetOri();
-				Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
-				Vector3 orbit_pos;
-				orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
-
-				orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
-
-				m_pos = (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam));
-
-			}
-			else
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-				rotCam = m_world;
-				Vector3 base_pos = m_targetPos + Vector3::Transform(m_dpos, rotCam);
-				Vector3 orbit_pos;
-				orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
-
-				orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
-
-				m_pos = m_targetPos + Vector3::Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam);
-			}
-			break;
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
 		}
-		case BEHAVIOUR::MATT_CAM:
+		break;
+	}
+	case BEHAVIOUR::CINEMATIC:
+	{
+		if (m_targetObject)
 		{
-			Vector3 forwardMove = 40.0f * m_world.Forward();
-			Vector3 rightMove = 40.0f * m_world.Right();
-			Matrix rotMove = Matrix::CreateRotationY(m_yaw);
-			forwardMove = Vector3::Transform(forwardMove, rotMove);
-			rightMove = Vector3::Transform(rightMove, rotMove);
-			m_targetPos = m_pos + forwardMove;
-
-			float rotSpeed = 0.007f;
-			m_yaw -= rotSpeed * _GSD->m_mouseState.x;
-			m_pitch -= rotSpeed * _GSD->m_mouseState.y;
-
-			if (_GSD->m_keyboardState.Up)
-			{
-				m_pos += _GSD->m_dt * forwardMove;
-				m_targetPos += _GSD->m_dt * forwardMove;
-			}
-			else if (_GSD->m_keyboardState.Down)
-			{
-				m_pos -= _GSD->m_dt * forwardMove;
-				m_targetPos -= _GSD->m_dt * forwardMove;
-			}
-
-			if (_GSD->m_keyboardState.Left)
-			{
-				m_pos -= _GSD->m_dt * rightMove;
-				m_targetPos -= _GSD->m_dt * rightMove;
-			}
-			else if (_GSD->m_keyboardState.Right)
-			{
-				m_pos += _GSD->m_dt * rightMove;
-				m_targetPos += _GSD->m_dt * rightMove;
-			}
-
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
-
-			break;
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
 		}
-	
-		//Debug output player location - useful for setting up spawns
-		if (m_keybinds.keyPressed("Debug Print Camera Location")) {
-			std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+		else
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_targetObject->GetWorld().Up());
 		}
+
+		rotCam = Matrix::Identity;
+
+		if (at != points.size() - 1)
+		{
+			m_pos = Vector3::Lerp(points[at], points[at + 1], timer / time_out);
+
+			timer += _GSD->m_dt;
+			if (timer >= time_out)
+			{
+				timer = 0.0f;
+				at++;
+			}
+		}
+
+		break;
+	}
+	case BEHAVIOUR::FRONT:
+	{
+		if (m_targetObject)
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+			rotCam = m_targetObject->GetOri();
+
+			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam))
+			{
+				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.2);
+			}
+		}
+		break;
+	}
+	case BEHAVIOUR::FIRST:
+	{
+		if (m_targetObject)
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 0.0f, -10.0f }, rotCam), m_targetObject->GetWorld().Up());
+
+			if (rotCam != m_targetObject->GetOri())
+			{
+				rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.08);
+			}
+			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam))
+			{
+				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam), 0.8);
+			}
+		}
+		else
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+		}
+		break;
+	}
+	case BEHAVIOUR::INDEPENDENT_LERP:
+	{
+		m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
+		if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
+		{
+			angle -= 3.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+		}
+
+		if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickRight())
+		{
+			angle += 3.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+		}
+
+		if (m_targetObject)
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+			rotCam = m_targetObject->GetOri();
+			Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
+			Vector3 orbit_pos;
+			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
+
+			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
+
+			if (m_pos != (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam)))
+			{
+				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam), 0.2);
+			}
+		}
+		else
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+			rotCam = m_world;
+			Vector3 base_pos = m_targetPos + Vector3::Transform(m_dpos, rotCam);
+			Vector3 orbit_pos;
+			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetPos.x);
+
+			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetPos.z);
+
+			m_pos = m_targetPos + Vector3::Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam);
+			if (m_pos != m_targetPos + Vector3::Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam))
+			{
+				m_pos = Vector3::Lerp(m_pos, m_targetPos + Vector3::Transform(m_dpos, rotCam), 0.2);
+			}
+		}
+		break;
+	}
+	case BEHAVIOUR::INDEPENDENT_FIXED:
+	{
+		m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
+		if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
+		{
+			angle -= 1.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+		}
+
+		if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickRight())
+		{
+			angle += 1.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+		}
+
+		if (m_targetObject)
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+			rotCam = m_targetObject->GetOri();
+			Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
+			Vector3 orbit_pos;
+			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
+
+			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
+
+			m_pos = (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam));
+
+		}
+		else
+		{
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+			rotCam = m_world;
+			Vector3 base_pos = m_targetPos + Vector3::Transform(m_dpos, rotCam);
+			Vector3 orbit_pos;
+			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
+
+			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
+
+			m_pos = m_targetPos + Vector3::Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam);
+		}
+		break;
+	}
+	case BEHAVIOUR::MATT_CAM:
+	{
+		Vector3 forwardMove = 40.0f * m_world.Forward();
+		Vector3 rightMove = 40.0f * m_world.Right();
+		Matrix rotMove = Matrix::CreateRotationY(m_yaw);
+		forwardMove = Vector3::Transform(forwardMove, rotMove);
+		rightMove = Vector3::Transform(rightMove, rotMove);
+		m_targetPos = m_pos + forwardMove;
+
+		float rotSpeed = 0.007f;
+		m_yaw -= rotSpeed * _GSD->m_mouseState.x;
+		m_pitch -= rotSpeed * _GSD->m_mouseState.y;
+
+		if (_GSD->m_keyboardState.Up)
+		{
+			m_pos += _GSD->m_dt * forwardMove;
+			m_targetPos += _GSD->m_dt * forwardMove;
+		}
+		else if (_GSD->m_keyboardState.Down)
+		{
+			m_pos -= _GSD->m_dt * forwardMove;
+			m_targetPos -= _GSD->m_dt * forwardMove;
+		}
+
+		if (_GSD->m_keyboardState.Left)
+		{
+			m_pos -= _GSD->m_dt * rightMove;
+			m_targetPos -= _GSD->m_dt * rightMove;
+		}
+		else if (_GSD->m_keyboardState.Right)
+		{
+			m_pos += _GSD->m_dt * rightMove;
+			m_targetPos += _GSD->m_dt * rightMove;
+		}
+
+		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
+
+		break;
+	}
+	}
+
+	//Debug output player location - useful for setting up spawns
+	if (m_keybinds.keyPressed("Debug Print Camera Location")) {
+		std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 	}
 
 	GameObject3D::Tick(_GSD);
