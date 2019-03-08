@@ -70,6 +70,7 @@ namespace Launcher
             string[] new_resolution = resolutionSelector.Items[resolutionSelector.SelectedIndex].ToString().Split('x');
             game_config_json["window_width"] = Convert.ToInt32(new_resolution[0]);
             game_config_json["window_height"] = Convert.ToInt32(new_resolution[1]);
+            game_config_json["ui_scale"] = Convert.ToDouble(new_resolution[0]) / 1280.0f;
 
             //Update internal config with new language
             game_config_json["language"] = po_language.SelectedItem.ToString().ToUpper();

@@ -19,20 +19,18 @@ GameScene::~GameScene()
 
 Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 {
-	player[0]->ShouldStickToTrack(*track, _GSD);
-	player[0]->ResolveWallCollisions(*track);
+	for (int i = 0; i < game_config["player_count"]; ++i) {
+		player[i]->ShouldStickToTrack(*track, _GSD);
+		player[i]->ResolveWallCollisions(*track);
+		_GSD->m_gamePadState[i] = _ID->m_gamePad->GetState(i); //set game controllers state[s]
+	}
 
 	//Poll Keyboard and Mouse
-//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
-//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
+	//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
+	//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
 	_GSD->m_prevKeyboardState = _GSD->m_keyboardState; // keep previous state for just pressed logic
 	_GSD->m_keyboardState = _ID->m_keyboard->GetState();
 	_GSD->m_mouseState = _ID->m_mouse->GetState();
-
-	for (int i = 0; i < 4; ++i)
-	{
-		_GSD->m_gamePadState[i] = _ID->m_gamePad->GetState(i); //set game controllers state[s]
-	}
 
 	if (_GSD->m_keyboardState.Escape)
 	{
@@ -74,7 +72,7 @@ void GameScene::Render(RenderData* _RD, WindowData* _WD)
 	//draw 3D objects
 
 	//camera setup.
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < game_config["player_count"]; ++i)
 	{
 		_WD->m_commandList->RSSetViewports(1, &_WD->m_viewport[i]);
 		_WD->m_commandList->RSSetScissorRects(1, &_WD->m_scissorRect[i]);
@@ -136,52 +134,46 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 	track = new Track(_RD, game_config["default_track"]);
 	m_3DObjects.push_back(track);
 
-	//Create a player and position on track
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
 	for (int i = 0; i < game_config["player_count"]; i++) {
-		player[i] = new Player(_RD, "Standard Kart", 0, *_ID->m_gamePad.get());
+		//Create a player and position on track
+		player[i] = new Player(_RD, "Standard Kart", i, *_ID->m_gamePad.get());
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		m_3DObjects.push_back(player[i]);
+
+		//Create a camera to follow the player
+		m_cam[i] = new Camera(*&_WD->m_outputWidth, *&_WD->m_outputHeight, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
+		m_cam[i]->SetBehav(Camera::BEHAVIOUR::LERP);
+		m_3DObjects.push_back(m_cam[i]);
+
+		//Create a viewport
+		float width_mod = 0.5f;
+		float height_mod = 0.5f;
+		switch (i) {
+		case 0: {
+			*&_WD->m_viewport[i] = { 0.0f, 0.0f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight * 0.5f) };
+			break;
+		}
+		case 1: {
+			*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(*&_WD->m_outputWidth)* 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight * 0.5f) };
+			break;
+		}
+		case 2: {
+			*&_WD->m_viewport[i] = { 0.0f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight) };
+			break;
+		}
+		case 3: {
+			*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
+			break;
+		}
+		}
 	}
 
-	//*&_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(*&_WD->m_outputWidth), static_cast<float>(*&_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	//*&_WD->m_scissorRect[0] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
-
-	//viewport 1
-	*&_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	*&_WD->m_scissorRect[0] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight* 0.5f) };
-
-	//viewport 2
-	*&_WD->m_viewport[1] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(*&_WD->m_outputWidth)* 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	*&_WD->m_scissorRect[1] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight * 0.5f) };
-
-	//viewport 3
-	*&_WD->m_viewport[2] = { 0.0f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	*&_WD->m_scissorRect[2] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight) };
-
-	//viewport 4
-	*&_WD->m_viewport[3] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	*&_WD->m_scissorRect[3] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
-
-	m_cam[0] = new Camera(*&_WD->m_outputWidth, *&_WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
-	m_3DObjects.push_back(m_cam[0]);
-
-	m_cam[1] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	m_cam[1]->SetBehav(Camera::BEHAVIOUR::LERP);
-	m_3DObjects.push_back(m_cam[1]);
-
-	m_cam[2] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	m_cam[2]->SetBehav(Camera::BEHAVIOUR::LERP);
-	m_3DObjects.push_back(m_cam[2]);
-
-	m_cam[3] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
-	m_cam[3]->SetBehav(Camera::BEHAVIOUR::LERP);
-	m_3DObjects.push_back(m_cam[3]);
-
+	//Global illumination
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
 	m_3DObjects.push_back(m_light);
 	_RD->m_light = m_light;

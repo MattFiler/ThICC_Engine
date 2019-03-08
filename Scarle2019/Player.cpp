@@ -23,7 +23,7 @@ Player::~Player()
 void Player::Tick(GameStateData* _GSD)
 {
 	//WORKAROUND TO PREVENT PLAYER MOVEMENT - NEEDS TO BE REMOVED
-	if (m_playerID != 1)
+	if (m_playerID == 0)
 	{
 		//FORWARD BACK & STRAFE CONTROL HERE
 		Vector3 forwardMove = 40.0f * m_world.Forward();
@@ -33,38 +33,19 @@ void Player::Tick(GameStateData* _GSD)
 		rightMove = Vector3::Transform(rightMove, rotMove);
 		//float rotSpeed = 0.05f;
 
-		/*
-		To be implemented once KEY DOWN is added.
-		if (m_keymindManager.keyPressed("Forward"))
+		if (m_keymindManager.keyHeld("Forward"))
 		{
 			m_acc += forwardMove;
 		}
-		if (m_keymindManager.keyPressed("Backwards"))
+		if (m_keymindManager.keyHeld("Backwards"))
 		{
 			m_acc -= forwardMove;
 		}
-		if (m_keymindManager.keyPressed("Left"))
+		if (m_keymindManager.keyHeld("Left"))
 		{
 			m_acc -= rightMove;
 		}
-		if (m_keymindManager.keyPressed("Right"))
-		{
-			m_acc += rightMove;
-		}
-		*/
-		if (_GSD->m_keyboardState.W)
-		{
-			m_acc += forwardMove;
-		}
-		if (_GSD->m_keyboardState.S)
-		{
-			m_acc -= forwardMove;
-		}
-		if (_GSD->m_keyboardState.A)
-		{
-			m_acc -= rightMove;
-		}
-		if (_GSD->m_keyboardState.D)
+		if (m_keymindManager.keyHeld("Right"))
 		{
 			m_acc += rightMove;
 		}

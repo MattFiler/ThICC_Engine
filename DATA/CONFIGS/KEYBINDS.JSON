@@ -22,5 +22,6 @@
   "Forward": "W",
   "Backwards": "S",
   "Debug Print Player Location": "O",
-  "Debug Print Camera Location": "I"
+  "Debug Print Camera Location": "I",
+  "DebugCamSpeedup": "RightShift"
 }

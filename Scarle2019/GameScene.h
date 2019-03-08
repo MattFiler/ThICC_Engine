@@ -33,15 +33,13 @@ private:
 
 	// Test objects
 	Track* track = nullptr;
-	Player* player[1] = { nullptr };
+	Player* player[4] = { nullptr };
 	PhysModel* test_model = nullptr;
 
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
 	Camera*												m_cam[4];
 	Light*												m_light;
-	int num_of_players = 4;
-	int num_of_cam = 4;
 
 	KeybindManager m_keybinds;
 
