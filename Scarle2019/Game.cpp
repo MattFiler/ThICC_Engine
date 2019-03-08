@@ -27,9 +27,13 @@ Game::Game() :
 	m_backBufferIndex(0),
 	m_fenceValues{}
 {
+	//Read in track config
+	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
+	game_config << i;
+
 	m_WD->m_window = nullptr;
-	m_WD->m_outputHeight = 1000;
-	m_WD->m_outputWidth = 1000;
+	m_WD->m_outputHeight = game_config["window_height"];
+	m_WD->m_outputWidth = game_config["window_width"];
 }
 
 Game::~Game()
@@ -88,6 +92,8 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//Set our default font
 	setDefaultFont("Perpetua");
 
+	GetDefaultSize(m_WD->m_width, m_WD->m_height);
+
 	//new scene manager.
 	m_sceneManager = new SceneManager;
 
@@ -98,7 +104,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	}
 
 	//Configure localisation
-	m_localiser.configure("ENGLISH"); //todo: read in from a launcher
+	m_localiser.configure(game_config["language"]); 
 
 	//Setup keybinds
 	m_keybinds.setup(m_GSD);
@@ -123,10 +129,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 /* Create all 2D game objects */
 void Game::createAllObjects2D()
 {
-	//test text
-	Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
-	m_2DObjects.push_back(test2);
-
 	//text example 2D objects
 	//ImageGO2D *test = new ImageGO2D(m_RD, "twist");
 	//test->SetOri(45);
@@ -156,11 +158,8 @@ void Game::setupViewport(int _width, int _height)
 	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
 	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
 
-	m_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH }; //uncommented
-	m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
-
-	m_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
+	//m_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	//m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
 
 	//m_viewport[1] = { static_cast<float>(m_outputWidth) * 0.5f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	//m_scissorRect[1] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight * 0.5f) };
@@ -193,7 +192,7 @@ void Game::setupViewport(int _width, int _height)
 /* Create all 3d game objects */
 void Game::createAllObjects3D()
 {
-	
+
 }
 
 /* Push misc objects around */
@@ -205,10 +204,8 @@ void Game::pushBackObjects()
 /* Update is called once per frame */
 void Game::Update(DX::StepTimer const& _timer)
 {
-
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 	m_sceneManager->Update(m_GSD, m_ID);
-	
 }
 
 /* render the scene */
@@ -225,32 +222,33 @@ void Game::Render()
 
 	for (int i = 0; i < num_of_cam; i++)
 	{
-		m_commandList->RSSetViewports(1, &m_WD->m_viewport[i]);
-		m_commandList->RSSetScissorRects(1, &m_WD->m_scissorRect[i]);
+		//m_commandList->RSSetViewports(1, &m_WD->m_viewport[i]);
+		//m_commandList->RSSetScissorRects(1, &m_WD->m_scissorRect[i]);
+	}
 		//m_RD->m_cam = m_cam[i];
 		//draw 3D objects
 		//for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 		//{
 		//	(*it)->Render(m_RD);
 		//}
-	}
+		//}
 
 	////finally draw all 2D objects
-	ID3D12DescriptorHeap* heaps[] = {m_RD->m_resourceDescriptors->Heap()};
-	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-	for (int i = 0; i < num_of_cam; i++)
-	{
-		m_RD->m_spriteBatch->SetViewport(m_WD->m_viewport[i]);
-		m_RD->m_spriteBatch->Begin(m_commandList.Get());
+	//ID3D12DescriptorHeap* heaps[] = {m_RD->m_resourceDescriptors->Heap()};
+	//m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+	//for (int i = 0; i < num_of_cam; i++)
+	//{
+	//	m_RD->m_spriteBatch->SetViewport(m_WD->m_viewport[i]);
+	//	m_RD->m_spriteBatch->Begin(m_commandList.Get());
 
-		for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-		{
-			(*it)->Render(m_RD);
-		}
-		m_RD->m_spriteBatch->End();
-	}
+	//	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	//	{
+	//		(*it)->Render(m_RD);
+	//	}
+	//	m_RD->m_spriteBatch->End();
+	//}
 
-	m_sceneManager->Render(m_RD);
+	m_sceneManager->Render(m_RD, m_WD);
 	// Show the new frame.
 	Present();
 	m_graphicsMemory->Commit(m_commandQueue.Get());
@@ -259,8 +257,8 @@ void Game::Render()
 /* configure window size */
 void Game::GetDefaultSize(int& _width, int& _height) const
 {
-	_width = 1280;
-	_height = 720;
+	_width = game_config["window_width"];
+	_height = game_config["window_height"];
 }
 
 /* setup a viewport */

@@ -214,9 +214,6 @@
     <ClInclude Include="GameDebugToggles.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="KeybindManager.h">
-      <Filter>Game Base\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="LocalisationManager.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
@@ -231,6 +228,9 @@
     </ClInclude>
     <ClInclude Include="TrackSelectionState.h">
       <Filter>Game Base\States</Filter>
+    </ClInclude>
+    <ClInclude Include="KeybindManager.h">
+      <Filter>Game Base\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

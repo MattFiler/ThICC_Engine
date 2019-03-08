@@ -19,20 +19,18 @@ GameScene::~GameScene()
 
 Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 {
-	player[0]->ShouldStickToTrack(*track, _GSD);
-	player[0]->ResolveWallCollisions(*track);
+	for (int i = 0; i < game_config["player_count"]; ++i) {
+		player[i]->ShouldStickToTrack(*track, _GSD);
+		player[i]->ResolveWallCollisions(*track);
+		_GSD->m_gamePadState[i] = _ID->m_gamePad->GetState(i); //set game controllers state[s]
+	}
 
 	//Poll Keyboard and Mouse
-//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
-//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
+	//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
+	//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
 	_GSD->m_prevKeyboardState = _GSD->m_keyboardState; // keep previous state for just pressed logic
 	_GSD->m_keyboardState = _ID->m_keyboard->GetState();
 	_GSD->m_mouseState = _ID->m_mouse->GetState();
-
-	for (int i = 0; i < 4; ++i)
-	{
-		_GSD->m_gamePadState[i] = _ID->m_gamePad->GetState(i); //set game controllers state[s]
-	}
 
 	if (_GSD->m_keyboardState.Escape)
 	{
@@ -69,19 +67,21 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	return nextScene;
 }
 
-void GameScene::Render(RenderData* _RD)
+void GameScene::Render(RenderData* _RD, WindowData* _WD)
 {
 	//draw 3D objects
 
 	//camera setup.
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < game_config["player_count"]; ++i)
 	{
+		_WD->m_commandList->RSSetViewports(1, &_WD->m_viewport[i]);
+		_WD->m_commandList->RSSetScissorRects(1, &_WD->m_scissorRect[i]);
 		_RD->m_cam = m_cam[i];
-	}
 
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-	{
-		(*it)->Render(_RD);
+		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+		{
+			(*it)->Render(_RD);
+		}
 	}
 
 	//draw 2d objects
@@ -93,12 +93,13 @@ void GameScene::Render(RenderData* _RD)
 
 bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
 {
+	//Read in track config
+	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
+	game_config << i;
+
 	create3DObjects(_RD ,_ID, _WD);
 
 	VBGO3D::PushIBVB(_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
-
-	//debug: output our current directory
-	std::cout << std::experimental::filesystem::current_path();
 
 	pushBackObjects(_RD);
 
@@ -107,7 +108,9 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 
 void GameScene::create2DObjects(RenderData* _RD)
 {
-
+	//test text
+	Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
+	m_2DObjects.push_back(test2);
 }
 
 void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD)
@@ -127,47 +130,50 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 		//m_3DObjects.push_back(test3d2);
 	}
 
-
-	//Create a player and position on track
-
-
 	//Load in a track
-	//track = new Track(m_RD, "GBA Mario Circuit");
-	//track = new Track(m_RD, "Mario Kart Stadium");
-	track = new Track(_RD, "Rainbow Road");
-	//track = new Track(m_RD, "Luigi Circuit");
-	//track = new Track(m_RD, "Driftway");
+	track = new Track(_RD, game_config["default_track"]);
 	m_3DObjects.push_back(track);
 
-	player[0] = new Player(_RD, "Standard Kart", 0, *_ID->m_gamePad.get());
-	player[0]->SetPos(track->getSuitableSpawnSpot());
-	//player[0]->SetPos({0, 0, 0});
-	m_3DObjects.push_back(player[0]);
+	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		//Create a player and position on track
+		player[i] = new Player(_RD, "Standard Kart", i, *_ID->m_gamePad.get());
+		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		m_3DObjects.push_back(player[i]);
 
-	player[1] = new Player(_RD, "Standard Kart", 1, *_ID->m_gamePad.get());
-	player[1]->SetPos(Vector3(player[0]->GetPos().x, player[0]->GetPos().y, player[0]->GetPos().z - 10));
-	//player[0]->SetPos({0, 0, 0});
-	m_3DObjects.push_back(player[1]);
+		//Create a camera to follow the player
+		m_cam[i] = new Camera(*&_WD->m_outputWidth, *&_WD->m_outputHeight, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
+		m_cam[i]->SetBehav(Camera::BEHAVIOUR::LERP);
+		m_3DObjects.push_back(m_cam[i]);
 
-	m_cam[0] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
-	m_3DObjects.push_back(m_cam[0]);
+		//Create a viewport
+		float width_mod = 0.5f;
+		float height_mod = 0.5f;
+		switch (i) {
+		case 0: {
+			*&_WD->m_viewport[i] = { 0.0f, 0.0f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight * 0.5f) };
+			break;
+		}
+		case 1: {
+			*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(*&_WD->m_outputWidth)* 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight * 0.5f) };
+			break;
+		}
+		case 2: {
+			*&_WD->m_viewport[i] = { 0.0f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight) };
+			break;
+		}
+		case 3: {
+			*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
+			break;
+		}
+		}
+	}
 
-	m_cam[1] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	m_cam[1]->SetBehav(Camera::BEHAVIOUR::LERP);
-	m_3DObjects.push_back(m_cam[1]);
-
-	m_cam[2] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	m_cam[2]->SetBehav(Camera::BEHAVIOUR::LERP);
-	m_3DObjects.push_back(m_cam[2]);
-
-	m_cam[3] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
-	m_cam[3]->SetBehav(Camera::BEHAVIOUR::LERP);
-	m_3DObjects.push_back(m_cam[3]);
-
+	//Global illumination
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
 	m_3DObjects.push_back(m_light);
 	_RD->m_light = m_light;

@@ -1,6 +1,7 @@
 {
   "asset_name": "STANDARD KART",
   "asset_type": "Models",
+  "model_type": "Player",
   "has_box_collider": true,
   "collision_box": {
     "front_top_left": [
@@ -45,12 +46,12 @@
     ]
   },
   "visible": true,
-  "start_x": 0,
-  "start_y": 0,
-  "start_z": 0,
+  "start_x": 0.0,
+  "start_y": 0.0,
+  "start_z": 0.0,
   "modelscale": 1.0,
-  "rot_x": 0,
-  "rot_y": 0,
-  "rot_z": 0,
-  "segment_size": 10
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 10.0
 }

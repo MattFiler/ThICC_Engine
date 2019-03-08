@@ -10,6 +10,8 @@
 #include "LocalisationManager.h"
 #include "SceneManager.h"
 #include <vector>
+#include <json.hpp>
+using json = nlohmann::json;
 using std::vector;
 
 //predefs
@@ -71,7 +73,7 @@ private:
 
 	// Test objects
 	Track* track = nullptr;
-	Player* player[2] = {nullptr};
+	Player* player[4] = {nullptr};
 	PhysModel* test_model = nullptr;
 
 	void Update(DX::StepTimer const& _timer);
@@ -105,7 +107,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>        m_dsvDescriptorHeap;
 	static const UINT									c_swapBufferCount =2;
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>      m_commandAllocators[c_swapBufferCount];
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>   m_commandList;
+	//Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>   m_commandList;
 	Microsoft::WRL::ComPtr<ID3D12Fence>                 m_fence;
 	UINT64                                              m_fenceValues[c_swapBufferCount];
 	Microsoft::WRL::Wrappers::Event                     m_fenceEvent;
@@ -135,11 +137,14 @@ private:
 	//Camera*												m_cam[4];
 	RenderData*											m_RD;	//dumping ground for things required to do rendering
 	GameStateData*										m_GSD;  //base game state to pass to all GameObjects
-	int num_of_cam = 1;
+	int num_of_cam = 4;
 	int num_of_players = 4;
+
 	GameFilepaths m_filepath;
 	LocalisationManager m_localiser;
 	KeybindManager m_keybinds;
+
+	json game_config;
 
 	std::vector<PhysModel*> m_physModels;
 	SceneManager* m_sceneManager;

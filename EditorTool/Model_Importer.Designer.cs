@@ -45,6 +45,8 @@ namespace EditorTool
             this.itemMaterialCategoriesTrans = new System.Windows.Forms.CheckedListBox();
             this.enableTransparency = new System.Windows.Forms.CheckBox();
             this.resizedCollisionGroup = new System.Windows.Forms.GroupBox();
+            this.modelType = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             this.resizedCollisionGroup.SuspendLayout();
@@ -52,7 +54,7 @@ namespace EditorTool
             // 
             // importModel
             // 
-            this.importModel.Location = new System.Drawing.Point(19, 418);
+            this.importModel.Location = new System.Drawing.Point(19, 459);
             this.importModel.Name = "importModel";
             this.importModel.Size = new System.Drawing.Size(325, 28);
             this.importModel.TabIndex = 0;
@@ -151,7 +153,7 @@ namespace EditorTool
             this.groupBox1.Controls.Add(this.itemMaterialCategoriesTrans);
             this.groupBox1.Controls.Add(this.enableTransparency);
             this.groupBox1.Controls.Add(this.shouldFlipUV);
-            this.groupBox1.Location = new System.Drawing.Point(19, 93);
+            this.groupBox1.Location = new System.Drawing.Point(19, 134);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(325, 157);
             this.groupBox1.TabIndex = 11;
@@ -193,18 +195,42 @@ namespace EditorTool
             this.resizedCollisionGroup.Controls.Add(this.itemMaterialCategories);
             this.resizedCollisionGroup.Controls.Add(this.shouldGenerateCollmap);
             this.resizedCollisionGroup.Controls.Add(this.shouldCreateBoxCollider);
-            this.resizedCollisionGroup.Location = new System.Drawing.Point(19, 256);
+            this.resizedCollisionGroup.Location = new System.Drawing.Point(19, 297);
             this.resizedCollisionGroup.Name = "resizedCollisionGroup";
             this.resizedCollisionGroup.Size = new System.Drawing.Size(325, 156);
             this.resizedCollisionGroup.TabIndex = 12;
             this.resizedCollisionGroup.TabStop = false;
             this.resizedCollisionGroup.Text = "Model Collision";
             // 
+            // modelType
+            // 
+            this.modelType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.modelType.FormattingEnabled = true;
+            this.modelType.Items.AddRange(new object[] {
+            "Track",
+            "Player",
+            "Prop"});
+            this.modelType.Location = new System.Drawing.Point(19, 107);
+            this.modelType.Name = "modelType";
+            this.modelType.Size = new System.Drawing.Size(325, 21);
+            this.modelType.TabIndex = 13;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(17, 91);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(63, 13);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Model Type";
+            // 
             // Model_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(355, 454);
+            this.ClientSize = new System.Drawing.Size(355, 497);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.modelType);
             this.Controls.Add(this.resizedCollisionGroup);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
@@ -245,6 +271,8 @@ namespace EditorTool
         private System.Windows.Forms.GroupBox resizedCollisionGroup;
         private CheckBox enableTransparency;
         private PictureBox materialPreview;
+        private ComboBox modelType;
+        private Label label3;
     }
 }
 

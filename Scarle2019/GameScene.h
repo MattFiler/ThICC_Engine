@@ -2,6 +2,7 @@
 
 #include "StepTimer.h"
 #include "Scene.h"
+#include "LocalisationManager.h"
 #include <vector>
 
 using std::vector;
@@ -19,7 +20,7 @@ public:
 	~GameScene();
 
 	Scenes Update(GameStateData* _GSD, InputData* _ID) override;
-	void Render(RenderData* _RD) override;
+	void Render(RenderData* _RD, WindowData* _WD) override;
 	bool Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD) override;
 
 private:
@@ -32,18 +33,20 @@ private:
 
 	// Test objects
 	Track* track = nullptr;
-	Player* player[1] = { nullptr };
+	Player* player[4] = { nullptr };
 	PhysModel* test_model = nullptr;
 
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
-	Camera*												m_cam[1];
+	Camera*												m_cam[4];
 	Light*												m_light;
-	int num_of_players = 1;
-	int num_of_cam = 1;
 
 	KeybindManager m_keybinds;
 
 	std::vector<PhysModel*> m_physModels;
+
+	json game_config;
+	LocalisationManager m_localiser;
+	GameFilepaths m_filepath;
 };
 
