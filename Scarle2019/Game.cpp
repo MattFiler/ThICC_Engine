@@ -127,19 +127,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 /* Create all 2D game objects */
 void Game::createAllObjects2D()
 {
-	//text example 2D objects
-	//ImageGO2D *test = new ImageGO2D(m_RD, "twist");
-	//test->SetOri(45);
-	//test->SetPos(Vector2(200, 300));
-	//test->CentreOrigin();
-	//test->SetScale(0.5f*Vector2::One);
-	//m_2DObjects.push_back(test);
-	//test = new ImageGO2D(m_RD, "guides_logo");
-	//test->SetPos(Vector2(100, 100));
-	//test->SetScale(Vector2(5.0f, 0.5f));
-	//test->SetColour(Color(1, 0, 0, 1));`
-	//m_2DObjects.push_back(test);
-
 	//Test Sounds
 	Loop *loop = new Loop(m_audEngine.get(), "Course Intro Soundtrack");
 	loop->SetVolume(0.1f);
@@ -189,6 +176,11 @@ void Game::Render()
 	//// Prepare the command list to render a new frame.
 	Clear();
 
+	for (int i = 0; i < num_of_cam; i++)
+	{
+		//m_commandList->RSSetViewports(1, &m_WD->m_viewport[i]);
+		//m_commandList->RSSetScissorRects(1, &m_WD->m_scissorRect[i]);
+	}
 
 	m_sceneManager->Render(m_RD, m_WD);
 	// Show the new frame.

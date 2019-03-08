@@ -76,7 +76,6 @@ void MenuScene::Render(RenderData* _RD, WindowData* _WD)
 
 bool MenuScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
 {
-
 	create2DObjects(_RD);
 	create3DObjects(_RD, _ID, _WD);
 	VBGO3D::PushIBVB(_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds

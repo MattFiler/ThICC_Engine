@@ -37,13 +37,13 @@ int StateManager::Update(GameStateData * _GSD, InputData * _ID)
 
 void StateManager::Render(RenderData * _RD)
 {
+
 }
 
 bool StateManager::Load(GameStateData * _GSD, RenderData * _RD, InputData * _ID, WindowData * _WD)
 {
 	return false;
 }
-
 
 void StateManager::ChangeState(State* _newState)
 {
