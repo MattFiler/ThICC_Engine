@@ -34,7 +34,7 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 
 	if (_GSD->m_keyboardState.Escape)
 	{
-		ExitGame();
+		nextScene = Scenes::MENUSCENE;
 	}
 
 	if (m_keybinds.keyPressed("Quit"))

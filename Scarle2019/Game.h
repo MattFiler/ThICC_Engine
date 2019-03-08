@@ -48,8 +48,6 @@ public:
 
 	void createAllObjects2D();
 
-	void setupViewport(int _width, int _height);
-
 	void createAllObjects3D();
 
 	void pushBackObjects();
