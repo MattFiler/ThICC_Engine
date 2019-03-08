@@ -12,6 +12,7 @@ class GameObject2D;
 class GameObject3D;
 struct RenderData;
 struct InputData;
+class SceneManager;
 
 class MenuScene : public Scene
 {
@@ -19,7 +20,7 @@ public:
 	MenuScene();
 	~MenuScene();
 
-	Scenes Update(GameStateData* _GSD, InputData* _ID) override;
+	void Update(GameStateData* _GSD, InputData* _ID) override;
 	void Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
 	bool Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD) override;
 
@@ -41,7 +42,8 @@ private:
 	json game_config;
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
-	KeybindManager m_key; 
+	KeybindManager m_key;
+	SceneManager* m_scene_manager;
 
 
 };

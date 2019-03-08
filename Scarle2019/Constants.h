@@ -1,9 +1,10 @@
 #pragma once
 enum Scenes
 {
-	NONE = 0,
-	MENUSCENE = 1,
-	GAMESCENE = 2
+	MENUSCENE,
+	GAMESCENE,
+
+	SCENE_COUNT // must always be last!
 };
 
 enum States

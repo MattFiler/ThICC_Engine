@@ -2,6 +2,7 @@
 #include "MenuScene.h"
 #include "GameStateData.h"
 #include "RenderData.h"
+#include "SceneManager.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -9,6 +10,7 @@ extern void ExitGame();
 
 MenuScene::MenuScene()
 {
+	m_scene_manager = new SceneManager();
 }
 
 MenuScene::~MenuScene()
@@ -17,24 +19,15 @@ MenuScene::~MenuScene()
 	m_3DObjects.clear();
 }
 
-Scenes MenuScene::Update(GameStateData* _GSD, InputData* _ID)
+void MenuScene::Update(GameStateData* _GSD, InputData* _ID)
 {
-	nextScene = Scenes::NONE;
-	////Poll Keyboard and Mouse
-	////More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
-	////You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
-	//_GSD->m_prevKeyboardState = _GSD->m_keyboardState; // keep previous state for just pressed logic
-	//_GSD->m_keyboardState = _ID->m_keyboard->GetState();
-	//_GSD->m_mouseState = _ID->m_mouse->GetState();
-
-
 	if (m_key.keyPressed("Quit"))
 	{
 		ExitGame();
 	}
 	else if (_GSD->m_keyboardState.Enter)
 	{
-		nextScene = Scenes::GAMESCENE;
+		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
 	}
 
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
@@ -46,8 +39,6 @@ Scenes MenuScene::Update(GameStateData* _GSD, InputData* _ID)
 	{
 		(*it)->Tick(_GSD);
 	}
-
-	return nextScene;
 }
 
 void MenuScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)

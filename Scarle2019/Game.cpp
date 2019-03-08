@@ -73,7 +73,6 @@ Game::~Game()
 	delete m_GSD;
 	delete m_ID;
 	delete m_WD;
-	delete m_sceneManager;
 
 	VBGO3D::CleanUp();
 }
@@ -94,9 +93,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	setDefaultFont("Perpetua");
 
 	GetDefaultSize(m_WD->m_width, m_WD->m_height);
-
-	//new scene manager.
-	m_sceneManager = new SceneManager(m_GSD, m_RD, m_ID, m_WD);
 
 	//Set Up VBGO render system
 	if (!VBGO3D::SetUpVBGOs(m_RD))
@@ -120,10 +116,11 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//Push back all our game objects to their associated arrays
 	//pushBackObjects();
 
-	m_sceneManager->curScene[0] = new MenuScene();
-	m_sceneManager->curScene[0]->Load(m_GSD, m_RD, m_ID, m_WD);
-	m_sceneManager->curScene[1] = new GameScene();
-	m_sceneManager->curScene[1]->Load(m_GSD, m_RD, m_ID, m_WD);
+	//Setup scene manager and all scenes
+	m_sceneManager.configure(m_GSD, m_RD, m_ID, m_WD);
+	m_sceneManager.addScene(new MenuScene(), Scenes::MENUSCENE);
+	m_sceneManager.addScene(new GameScene(), Scenes::GAMESCENE);
+	m_sceneManager.setCurrentScene(Scenes::MENUSCENE);
 }
 
 /* Create all 2D game objects */
@@ -176,7 +173,7 @@ void Game::Update(DX::StepTimer const& _timer)
 
 
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
-	m_sceneManager->Update(m_GSD, m_RD, m_ID, m_WD);
+	m_sceneManager.Update();
 }
 
 /* render the scene */
@@ -191,7 +188,7 @@ void Game::Render()
 	//// Prepare the command list to render a new frame.
 	Clear();
 
-	m_sceneManager->Render(m_RD, m_WD, m_commandList);
+	m_sceneManager.Render(m_commandList);
 	// Show the new frame.
 	Present();
 	m_graphicsMemory->Commit(m_commandQueue.Get());

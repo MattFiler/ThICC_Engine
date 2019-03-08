@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "GameStateData.h"
 #include "RenderData.h"
+#include "SceneManager.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -10,7 +11,7 @@ extern void ExitGame();
 
 GameScene::GameScene()
 {
-
+	m_scene_manager = new SceneManager();
 }
 
 
@@ -20,26 +21,17 @@ GameScene::~GameScene()
 	m_3DObjects.clear();
 }
 
-Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
+void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 {
-	nextScene = Scenes::NONE;
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track, _GSD);
 		player[i]->ResolveWallCollisions(*track);
 		_GSD->m_gamePadState[i] = _ID->m_gamePad->GetState(i); //set game controllers state[s]
 	}
 
-	////Poll Keyboard and Mouse
-	////More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
-	////You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
-	//_GSD->m_prevKeyboardState = _GSD->m_keyboardState; // keep previous state for just pressed logic
-	//_GSD->m_keyboardState = _ID->m_keyboard->GetState();
-	//_GSD->m_mouseState = _ID->m_mouse->GetState();
-
-
 	if (m_keybinds.keyPressed("Quit"))
 	{
-		nextScene = Scenes::MENUSCENE;
+		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	if (m_keybinds.keyPressed("Orbit"))
 	{
@@ -63,8 +55,6 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	{
 		(*it)->Tick(_GSD);
 	}
-
-	return nextScene;
 }
 
 void GameScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
