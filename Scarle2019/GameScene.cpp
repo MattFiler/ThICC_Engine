@@ -22,6 +22,7 @@ GameScene::~GameScene()
 
 Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 {
+	nextScene = Scenes::NONE;
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track, _GSD);
 		player[i]->ResolveWallCollisions(*track);
@@ -38,11 +39,7 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
-		ExitGame();
-	}
-	if (_GSD->m_keyboardState.I)
-	{
-		ok = false;
+		nextScene = Scenes::MENUSCENE;
 	}
 	if (m_keybinds.keyPressed("Orbit"))
 	{
@@ -73,13 +70,6 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 void GameScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
 	//draw 3D objects
-
-	if (!ok)
-	{
-		*&_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(*&_WD->m_outputWidth), static_cast<float>(*&_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-		*&_WD->m_scissorRect[0] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
-		ok = true;
-	}
 
 	//camera setup.
 	for (int i = 0; i < game_config["player_count"]; ++i)

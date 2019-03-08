@@ -19,6 +19,7 @@ MenuScene::~MenuScene()
 
 Scenes MenuScene::Update(GameStateData* _GSD, InputData* _ID)
 {
+	nextScene = Scenes::NONE;
 	////Poll Keyboard and Mouse
 	////More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
 	////You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
@@ -27,7 +28,7 @@ Scenes MenuScene::Update(GameStateData* _GSD, InputData* _ID)
 	//_GSD->m_mouseState = _ID->m_mouse->GetState();
 
 
-	if (_GSD->m_keyboardState.Escape)
+	if (m_key.keyPressed("Quit"))
 	{
 		ExitGame();
 	}
