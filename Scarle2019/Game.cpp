@@ -6,6 +6,7 @@
 #include "WindowData.h"
 #include "SceneManager.h"
 #include "GameScene.h"
+#include "MenuScene.h"
 
 #include "CollisionManager.h"
 #include "GameDebugToggles.h"
@@ -113,16 +114,13 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//createAllObjects2D();
 	//createAllObjects3D();
 
-	//Setup the viewport
-	setupViewport(_width, _height);
-
 	//debug: output our current directory
 	std::cout << std::experimental::filesystem::current_path() << std::endl;
 
 	//Push back all our game objects to their associated arrays
 	//pushBackObjects();
 
-	m_sceneManager->currScene = new GameScene();
+	m_sceneManager->currScene = new MenuScene();
 	m_sceneManager->currScene->Load(m_GSD, m_RD, m_ID, m_WD);
 }
 
@@ -150,43 +148,6 @@ void Game::createAllObjects2D()
 
 	TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
 	m_sounds.push_back(TS);
-}
-
-/* Setup our viewport */
-void Game::setupViewport(int _width, int _height)
-{
-	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
-	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
-
-	//m_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	//m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
-
-	//m_viewport[1] = { static_cast<float>(m_outputWidth) * 0.5f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	//m_scissorRect[1] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight * 0.5f) };
-	//m_viewport[2] = { 0.0f, static_cast<float>(m_outputHeight) * 0.5f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	//m_scissorRect[2] = { 0,0,(int)(m_outputWidth * 0.5f),(int)(m_outputHeight) };
-	//m_viewport[3] = { static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	//m_scissorRect[3] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
-
-	////point a camera at the player that follows
-	//m_cam[0] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
-	//m_3DObjects.push_back(m_cam[0]);
-
-	//m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	////m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	//m_cam[1]->SetBehav(Camera::BEHAVIOUR::LERP);
-	//m_3DObjects.push_back(m_cam[1]);
-
-	//m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	////m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	//m_cam[2]->SetBehav(Camera::BEHAVIOUR::LERP);
-	//m_3DObjects.push_back(m_cam[2]);
-
-	//m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	////m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
-	//m_cam[3]->SetBehav(Camera::BEHAVIOUR::LERP);
-	//m_3DObjects.push_back(m_cam[3]);
 }
 
 /* Create all 3d game objects */
