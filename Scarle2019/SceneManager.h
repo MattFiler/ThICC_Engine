@@ -3,16 +3,14 @@
 #include "Scene.h"
 #include "StepTimer.h"
 #include "Constants.h"
-#include "Constants.h"
 
 class SceneManager
 {
 public:
 	SceneManager();
 
-	int Update(double _timer);
-	void Render();
-	bool Load();
+	int Update(GameStateData* _GSD, InputData* _ID);
+	void Render(RenderData* _RD, WindowData* _WD);
 
 	Scene* currScene = nullptr;
 

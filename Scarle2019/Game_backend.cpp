@@ -23,19 +23,20 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 {
 	//CRASHES HERE RESULT IN THE ERROR ABOVE
 	//RUN THE ASSET COMPILER IN THE TOOLS BEFORE PLAYING THE GAME!
-	m_window = _window;
-	m_outputWidth = std::max(_width, 1);
-	m_outputHeight = std::max(_height, 1);
+	m_WD->m_window = _window;
+	m_WD->m_outputWidth = std::max(_width, 1);
+	m_WD->m_outputHeight = std::max(_height, 1);
 	m_RD = new RenderData;
 
 	CreateDevice();
 	CreateResources();
 
 	//set up input stuff
-	m_keyboard = std::make_unique<Keyboard>();
-	m_mouse = std::make_unique<Mouse>();
-	m_mouse->SetWindow(_window);// mouse device needs to linked to this program's window
-	m_mouse->SetMode(Mouse::Mode::MODE_RELATIVE); // gives a delta postion as opposed to a MODE_ABSOLUTE position in 2-D space
+	m_ID->m_keyboard = std::make_unique<Keyboard>();
+	m_ID->m_mouse = std::make_unique<Mouse>();
+	m_ID->m_mouse->SetWindow(_window);// mouse device needs to linked to this program's window
+	m_ID->m_mouse->SetMode(Mouse::Mode::MODE_RELATIVE); // gives a delta postion as opposed to a MODE_ABSOLUTE position in 2-D space
+	m_ID->m_gamePad = std::make_unique<GamePad>();
 
 	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
 #ifdef _DEBUG
@@ -49,7 +50,7 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 	//GEP: Set up RenderData Object
 	m_RD->m_d3dDevice = m_d3dDevice;
 	m_RD->m_commandQueue = m_commandQueue;
-	m_RD->m_commandList = m_commandList;
+	m_RD->m_commandList = m_WD->m_commandList;
 	for (int i = 0; i < c_swapBufferCount; i++)
 	{
 		m_RD->m_commandAllocators[i] = m_commandAllocators[i];
@@ -118,18 +119,18 @@ void Game::Clear()
 	// Reset command list and allocator.
 	//DX::ThrowIfFailed(m_commandAllocators[m_backBufferIndex]->Reset());
 	m_commandAllocators[m_backBufferIndex]->Reset();
-	DX::ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
+	DX::ThrowIfFailed(m_WD->m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
 
 	// Transition the render target into the correct state to allow for drawing into it.
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_backBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-	m_commandList->ResourceBarrier(1, &barrier);
+	m_WD->m_commandList->ResourceBarrier(1, &barrier);
 
 	// Clear the views.
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor(m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), m_backBufferIndex, m_rtvDescriptorSize);
 	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvDescriptor(m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
-	m_commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
-	m_commandList->ClearRenderTargetView(rtvDescriptor, Colors::CornflowerBlue, 0, nullptr);
-	m_commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	m_WD->m_commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
+	m_WD->m_commandList->ClearRenderTargetView(rtvDescriptor, Colors::CornflowerBlue, 0, nullptr);
+	m_WD->m_commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	// Set the viewport and scissor rect.
 }
@@ -139,11 +140,11 @@ void Game::Present()
 {
 	// Transition the render target to the state that allows it to be presented to the display.
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_backBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-	m_commandList->ResourceBarrier(1, &barrier);
+	m_WD->m_commandList->ResourceBarrier(1, &barrier);
 
 	// Send the command list off to the GPU for processing.
-	DX::ThrowIfFailed(m_commandList->Close());
-	m_commandQueue->ExecuteCommandLists(1, CommandListCast(m_commandList.GetAddressOf()));
+	DX::ThrowIfFailed(m_WD->m_commandList->Close());
+	m_commandQueue->ExecuteCommandLists(1, CommandListCast(m_WD->m_commandList.GetAddressOf()));
 
 	// The first argument instructs DXGI to block until VSync, putting the application
 	// to sleep until the next VSync. This ensures we don't waste any cycles rendering
@@ -190,8 +191,8 @@ void Game::OnResuming()
 
 void Game::OnWindowSizeChanged(int _width, int _height)
 {
-	m_outputWidth = std::max(_width, 1);
-	m_outputHeight = std::max(_height, 1);
+	m_WD->m_outputWidth = std::max(_width, 1);
+	m_WD->m_outputHeight = std::max(_height, 1);
 
 	CreateResources();
 
@@ -284,7 +285,7 @@ void Game::CreateDevice()
 	}
 
 	// Create a command list for recording graphics commands.
-	DX::ThrowIfFailed(m_d3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocators[0].Get(), nullptr, IID_PPV_ARGS(m_commandList.ReleaseAndGetAddressOf())));
+	DX::ThrowIfFailed(m_d3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocators[0].Get(), nullptr, IID_PPV_ARGS(m_WD->m_commandList.ReleaseAndGetAddressOf())));
 	//DX::ThrowIfFailed(m_commandList->Close());
 
 	// Create a fence for tracking GPU execution progress.
@@ -340,8 +341,8 @@ void Game::CreateResources()
 
 	DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 	DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT;
-	UINT backBufferWidth = static_cast<UINT>(m_outputWidth);
-	UINT backBufferHeight = static_cast<UINT>(m_outputHeight);
+	UINT backBufferWidth = static_cast<UINT>(m_WD->m_outputWidth);
+	UINT backBufferHeight = static_cast<UINT>(m_WD->m_outputHeight);
 
 	// If the swap chain already exists, resize it, otherwise create one.
 	if (m_swapChain)
@@ -384,7 +385,7 @@ void Game::CreateResources()
 		ComPtr<IDXGISwapChain1> swapChain;
 		DX::ThrowIfFailed(m_dxgiFactory->CreateSwapChainForHwnd(
 			m_commandQueue.Get(),
-			m_window,
+			m_WD->m_window,
 			&swapChainDesc,
 			&fsSwapChainDesc,
 			nullptr,
@@ -569,7 +570,7 @@ void Game::OnDeviceLost()
 
 	m_depthStencil.Reset();
 	m_fence.Reset();
-	m_commandList.Reset();
+	m_WD->m_commandList.Reset();
 	m_swapChain.Reset();
 	m_rtvDescriptorHeap.Reset();
 	m_dsvDescriptorHeap.Reset();

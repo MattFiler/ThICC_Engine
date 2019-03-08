@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject3D.h"
+#include "KeybindManager.h"
 struct GameStateData;
 
 //This is a basic camera class
@@ -55,6 +56,8 @@ protected:
 	std::vector<Vector3> points;
 	std::vector<Vector3> rotations;
 	BEHAVIOUR behav = BEHAVIOUR::LERP;
+
+	KeybindManager m_keybinds;
 
 	float angle = 0.0f;
 	int at = 1;
