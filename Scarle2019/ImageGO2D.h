@@ -32,7 +32,5 @@ protected:
 	int m_resourceNum = -1;
 
 	GameFilepaths m_filepath;
-
-
 };
 

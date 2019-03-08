@@ -11,17 +11,17 @@ MenuScene::~MenuScene()
 {
 }
 
-Scenes MenuScene::Update(double _timer)
+Scenes MenuScene::Update(GameStateData* _GSD, InputData* _ID)
 {
 	return nextScene;
 }
 
-void MenuScene::Render()
+void MenuScene::Render(RenderData* _RD)
 {
 
 }
 
-bool MenuScene::Load()
+bool MenuScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
 {
 	return true;
 }

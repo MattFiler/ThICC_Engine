@@ -26,5 +26,7 @@ protected:
 	std::wstring m_wText;
 	bool m_dirtyOrigin = false;
 
+	GameFilepaths m_filepath;
+
 };
 
