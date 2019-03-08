@@ -48,8 +48,6 @@ public:
 
 	void createAllObjects2D();
 
-	void setupViewport(int _width, int _height);
-
 	void createAllObjects3D();
 
 	void pushBackObjects();
@@ -96,7 +94,7 @@ private:
 	// Application state
 	WindowData* m_WD;
 
-	// Direct3D Objects
+	 //Direct3D Objects
 	D3D_FEATURE_LEVEL                                   m_featureLevel;
 	UINT                                                m_backBufferIndex;
 	UINT                                                m_rtvDescriptorSize;
@@ -107,7 +105,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>        m_dsvDescriptorHeap;
 	static const UINT									c_swapBufferCount =2;
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>      m_commandAllocators[c_swapBufferCount];
-	//Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>   m_commandList;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>   m_commandList;
 	Microsoft::WRL::ComPtr<ID3D12Fence>                 m_fence;
 	UINT64                                              m_fenceValues[c_swapBufferCount];
 	Microsoft::WRL::Wrappers::Event                     m_fenceEvent;
@@ -137,8 +135,6 @@ private:
 	//Camera*												m_cam[4];
 	RenderData*											m_RD;	//dumping ground for things required to do rendering
 	GameStateData*										m_GSD;  //base game state to pass to all GameObjects
-	int num_of_cam = 4;
-	int num_of_players = 4;
 
 	GameFilepaths m_filepath;
 	LocalisationManager m_localiser;
@@ -148,4 +144,5 @@ private:
 
 	std::vector<PhysModel*> m_physModels;
 	SceneManager* m_sceneManager;
+
 };

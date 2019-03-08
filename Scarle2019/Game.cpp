@@ -6,6 +6,7 @@
 #include "WindowData.h"
 #include "SceneManager.h"
 #include "GameScene.h"
+#include "MenuScene.h"
 
 #include "CollisionManager.h"
 #include "GameDebugToggles.h"
@@ -95,7 +96,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	GetDefaultSize(m_WD->m_width, m_WD->m_height);
 
 	//new scene manager.
-	m_sceneManager = new SceneManager;
+	m_sceneManager = new SceneManager(m_GSD, m_RD, m_ID, m_WD);
 
 	//Set Up VBGO render system
 	if (!VBGO3D::SetUpVBGOs(m_RD))
@@ -113,17 +114,16 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//createAllObjects2D();
 	//createAllObjects3D();
 
-	//Setup the viewport
-	setupViewport(_width, _height);
-
 	//debug: output our current directory
 	std::cout << std::experimental::filesystem::current_path() << std::endl;
 
 	//Push back all our game objects to their associated arrays
 	//pushBackObjects();
 
-	m_sceneManager->currScene = new GameScene();
-	m_sceneManager->currScene->Load(m_GSD, m_RD, m_ID, m_WD);
+	m_sceneManager->curScene[0] = new MenuScene();
+	m_sceneManager->curScene[0]->Load(m_GSD, m_RD, m_ID, m_WD);
+	m_sceneManager->curScene[1] = new GameScene();
+	m_sceneManager->curScene[1]->Load(m_GSD, m_RD, m_ID, m_WD);
 }
 
 /* Create all 2D game objects */
@@ -152,43 +152,6 @@ void Game::createAllObjects2D()
 	m_sounds.push_back(TS);
 }
 
-/* Setup our viewport */
-void Game::setupViewport(int _width, int _height)
-{
-	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
-	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
-
-	//m_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	//m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
-
-	//m_viewport[1] = { static_cast<float>(m_outputWidth) * 0.5f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	//m_scissorRect[1] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight * 0.5f) };
-	//m_viewport[2] = { 0.0f, static_cast<float>(m_outputHeight) * 0.5f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	//m_scissorRect[2] = { 0,0,(int)(m_outputWidth * 0.5f),(int)(m_outputHeight) };
-	//m_viewport[3] = { static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	//m_scissorRect[3] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight) };
-
-	////point a camera at the player that follows
-	//m_cam[0] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	//m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
-	//m_3DObjects.push_back(m_cam[0]);
-
-	//m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	////m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
-	//m_cam[1]->SetBehav(Camera::BEHAVIOUR::LERP);
-	//m_3DObjects.push_back(m_cam[1]);
-
-	//m_cam[2] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	////m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
-	//m_cam[2]->SetBehav(Camera::BEHAVIOUR::LERP);
-	//m_3DObjects.push_back(m_cam[2]);
-
-	//m_cam[3] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	////m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
-	//m_cam[3]->SetBehav(Camera::BEHAVIOUR::LERP);
-	//m_3DObjects.push_back(m_cam[3]);
-}
-
 /* Create all 3d game objects */
 void Game::createAllObjects3D()
 {
@@ -204,8 +167,16 @@ void Game::pushBackObjects()
 /* Update is called once per frame */
 void Game::Update(DX::StepTimer const& _timer)
 {
+	//Poll Keyboard and Mouse
+	//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
+	//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
+	m_GSD->m_prevKeyboardState = m_GSD->m_keyboardState; // keep previous state for just pressed logic
+	m_GSD->m_keyboardState = m_ID->m_keyboard->GetState();
+	m_GSD->m_mouseState = m_ID->m_mouse->GetState();
+
+
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
-	m_sceneManager->Update(m_GSD, m_ID);
+	m_sceneManager->Update(m_GSD, m_RD, m_ID, m_WD);
 }
 
 /* render the scene */
@@ -220,35 +191,7 @@ void Game::Render()
 	//// Prepare the command list to render a new frame.
 	Clear();
 
-	for (int i = 0; i < num_of_cam; i++)
-	{
-		//m_commandList->RSSetViewports(1, &m_WD->m_viewport[i]);
-		//m_commandList->RSSetScissorRects(1, &m_WD->m_scissorRect[i]);
-	}
-		//m_RD->m_cam = m_cam[i];
-		//draw 3D objects
-		//for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-		//{
-		//	(*it)->Render(m_RD);
-		//}
-		//}
-
-	////finally draw all 2D objects
-	//ID3D12DescriptorHeap* heaps[] = {m_RD->m_resourceDescriptors->Heap()};
-	//m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-	//for (int i = 0; i < num_of_cam; i++)
-	//{
-	//	m_RD->m_spriteBatch->SetViewport(m_WD->m_viewport[i]);
-	//	m_RD->m_spriteBatch->Begin(m_commandList.Get());
-
-	//	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	//	{
-	//		(*it)->Render(m_RD);
-	//	}
-	//	m_RD->m_spriteBatch->End();
-	//}
-
-	m_sceneManager->Render(m_RD, m_WD);
+	m_sceneManager->Render(m_RD, m_WD, m_commandList);
 	// Show the new frame.
 	Present();
 	m_graphicsMemory->Commit(m_commandQueue.Get());
