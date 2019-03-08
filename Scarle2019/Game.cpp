@@ -164,7 +164,7 @@ void Game::setupViewport(int _width, int _height)
 
 	//point a camera at the player that follows
 	m_cam[0] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
-	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
+	m_cam[0]->SetBehav(Camera::BEHAVIOUR::FIRST);
 	m_3DObjects.push_back(m_cam[0]);
 
 	m_cam[1] = new Camera(_width / 2, _height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));

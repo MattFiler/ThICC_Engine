@@ -149,9 +149,12 @@ void Camera::Tick(GameStateData * _GSD)
 	{
 		if (m_targetObject)
 		{
-			rotCam = m_targetObject->GetOri();
 			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 0.0f, -10.0f }, rotCam), m_targetObject->GetWorld().Up());
 
+			if (rotCam != m_targetObject->GetOri())
+			{
+				rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.08);
+			}
 			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam))
 			{
 				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam), 0.8);
