@@ -165,8 +165,16 @@ void Game::pushBackObjects()
 /* Update is called once per frame */
 void Game::Update(DX::StepTimer const& _timer)
 {
+	//Poll Keyboard and Mouse
+	//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
+	//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
+	m_GSD->m_prevKeyboardState = m_GSD->m_keyboardState; // keep previous state for just pressed logic
+	m_GSD->m_keyboardState = m_ID->m_keyboard->GetState();
+	m_GSD->m_mouseState = m_ID->m_mouse->GetState();
+
+
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
-	m_sceneManager->Update(m_GSD, m_ID);
+	m_sceneManager->Update(m_GSD,m_RD, m_ID, m_WD);
 }
 
 /* render the scene */
@@ -181,33 +189,6 @@ void Game::Render()
 	//// Prepare the command list to render a new frame.
 	Clear();
 
-	for (int i = 0; i < num_of_cam; i++)
-	{
-		//m_commandList->RSSetViewports(1, &m_WD->m_viewport[i]);
-		//m_commandList->RSSetScissorRects(1, &m_WD->m_scissorRect[i]);
-	}
-		//m_RD->m_cam = m_cam[i];
-		//draw 3D objects
-		//for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-		//{
-		//	(*it)->Render(m_RD);
-		//}
-		//}
-
-	////finally draw all 2D objects
-	//ID3D12DescriptorHeap* heaps[] = {m_RD->m_resourceDescriptors->Heap()};
-	//m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-	//for (int i = 0; i < num_of_cam; i++)
-	//{
-	//	m_RD->m_spriteBatch->SetViewport(m_WD->m_viewport[i]);
-	//	m_RD->m_spriteBatch->Begin(m_commandList.Get());
-
-	//	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	//	{
-	//		(*it)->Render(m_RD);
-	//	}
-	//	m_RD->m_spriteBatch->End();
-	//}
 
 	m_sceneManager->Render(m_RD, m_WD);
 	// Show the new frame.

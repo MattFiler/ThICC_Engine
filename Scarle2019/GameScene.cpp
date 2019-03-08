@@ -10,6 +10,7 @@ extern void ExitGame();
 
 GameScene::GameScene()
 {
+
 }
 
 
@@ -25,17 +26,13 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 		_GSD->m_gamePadState[i] = _ID->m_gamePad->GetState(i); //set game controllers state[s]
 	}
 
-	//Poll Keyboard and Mouse
-	//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
-	//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
-	_GSD->m_prevKeyboardState = _GSD->m_keyboardState; // keep previous state for just pressed logic
-	_GSD->m_keyboardState = _ID->m_keyboard->GetState();
-	_GSD->m_mouseState = _ID->m_mouse->GetState();
+	////Poll Keyboard and Mouse
+	////More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
+	////You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
+	//_GSD->m_prevKeyboardState = _GSD->m_keyboardState; // keep previous state for just pressed logic
+	//_GSD->m_keyboardState = _ID->m_keyboard->GetState();
+	//_GSD->m_mouseState = _ID->m_mouse->GetState();
 
-	if (_GSD->m_keyboardState.Escape)
-	{
-		nextScene = Scenes::MENUSCENE;
-	}
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -84,11 +81,17 @@ void GameScene::Render(RenderData* _RD, WindowData* _WD)
 		}
 	}
 
+	ID3D12DescriptorHeap* heaps[] = {_RD->m_resourceDescriptors->Heap()};
+	_WD->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+
+	_RD->m_spriteBatch->SetViewport(_WD->m_viewport[0]);
+	_RD->m_spriteBatch->Begin(_WD->m_commandList.Get());
 	//draw 2d objects
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
 		(*it)->Render(_RD);
 	}
+	_RD->m_spriteBatch->End();
 }
 
 bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
@@ -98,6 +101,7 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 	game_config << i;
 
 	create3DObjects(_RD ,_ID, _WD);
+	create2DObjects(_RD);
 
 	VBGO3D::PushIBVB(_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
