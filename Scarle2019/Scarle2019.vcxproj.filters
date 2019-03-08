@@ -229,6 +229,9 @@
     <ClInclude Include="TrackSelectionState.h">
       <Filter>Game Base\States</Filter>
     </ClInclude>
+    <ClInclude Include="KeybindManager.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

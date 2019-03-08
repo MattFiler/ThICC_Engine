@@ -2,6 +2,7 @@
 
 #include "StepTimer.h"
 #include "Scene.h"
+#include "LocalisationManager.h"
 #include <vector>
 
 using std::vector;
@@ -47,6 +48,7 @@ private:
 	std::vector<PhysModel*> m_physModels;
 
 	json game_config;
+	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 };
 
