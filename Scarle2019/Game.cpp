@@ -96,7 +96,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	GetDefaultSize(m_WD->m_width, m_WD->m_height);
 
 	//new scene manager.
-	m_sceneManager = new SceneManager;
+	m_sceneManager = new SceneManager(m_GSD, m_RD, m_ID, m_WD);
 
 	//Set Up VBGO render system
 	if (!VBGO3D::SetUpVBGOs(m_RD))
@@ -120,8 +120,10 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//Push back all our game objects to their associated arrays
 	//pushBackObjects();
 
-	m_sceneManager->currScene = new MenuScene();
-	m_sceneManager->currScene->Load(m_GSD, m_RD, m_ID, m_WD);
+	m_sceneManager->curScene[0] = new MenuScene();
+	m_sceneManager->curScene[0]->Load(m_GSD, m_RD, m_ID, m_WD);
+	m_sceneManager->curScene[1] = new GameScene();
+	m_sceneManager->curScene[1]->Load(m_GSD, m_RD, m_ID, m_WD);
 }
 
 /* Create all 2D game objects */
@@ -174,7 +176,7 @@ void Game::Update(DX::StepTimer const& _timer)
 
 
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
-	m_sceneManager->Update(m_GSD,m_RD, m_ID, m_WD);
+	m_sceneManager->Update(m_GSD, m_RD, m_ID, m_WD);
 }
 
 /* render the scene */
@@ -189,8 +191,7 @@ void Game::Render()
 	//// Prepare the command list to render a new frame.
 	Clear();
 
-
-	m_sceneManager->Render(m_RD, m_WD);
+	m_sceneManager->Render(m_RD, m_WD, m_commandList);
 	// Show the new frame.
 	Present();
 	m_graphicsMemory->Commit(m_commandQueue.Get());

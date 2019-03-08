@@ -50,7 +50,7 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 	//GEP: Set up RenderData Object
 	m_RD->m_d3dDevice = m_d3dDevice;
 	m_RD->m_commandQueue = m_commandQueue;
-	m_RD->m_commandList = m_WD->m_commandList;
+	m_RD->m_commandList = m_commandList;
 	for (int i = 0; i < c_swapBufferCount; i++)
 	{
 		m_RD->m_commandAllocators[i] = m_commandAllocators[i];
@@ -119,18 +119,18 @@ void Game::Clear()
 	// Reset command list and allocator.
 	//DX::ThrowIfFailed(m_commandAllocators[m_backBufferIndex]->Reset());
 	m_commandAllocators[m_backBufferIndex]->Reset();
-	DX::ThrowIfFailed(m_WD->m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
+	DX::ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
 
 	// Transition the render target into the correct state to allow for drawing into it.
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_backBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-	m_WD->m_commandList->ResourceBarrier(1, &barrier);
+	m_commandList->ResourceBarrier(1, &barrier);
 
 	// Clear the views.
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor(m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), m_backBufferIndex, m_rtvDescriptorSize);
 	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvDescriptor(m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
-	m_WD->m_commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
-	m_WD->m_commandList->ClearRenderTargetView(rtvDescriptor, Colors::CornflowerBlue, 0, nullptr);
-	m_WD->m_commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	m_commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
+	m_commandList->ClearRenderTargetView(rtvDescriptor, Colors::CornflowerBlue, 0, nullptr);
+	m_commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	// Set the viewport and scissor rect.
 }
@@ -140,11 +140,11 @@ void Game::Present()
 {
 	// Transition the render target to the state that allows it to be presented to the display.
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_backBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-	m_WD->m_commandList->ResourceBarrier(1, &barrier);
+	m_commandList->ResourceBarrier(1, &barrier);
 
 	// Send the command list off to the GPU for processing.
-	DX::ThrowIfFailed(m_WD->m_commandList->Close());
-	m_commandQueue->ExecuteCommandLists(1, CommandListCast(m_WD->m_commandList.GetAddressOf()));
+	DX::ThrowIfFailed(m_commandList->Close());
+	m_commandQueue->ExecuteCommandLists(1, CommandListCast(m_commandList.GetAddressOf()));
 
 	// The first argument instructs DXGI to block until VSync, putting the application
 	// to sleep until the next VSync. This ensures we don't waste any cycles rendering
@@ -285,7 +285,7 @@ void Game::CreateDevice()
 	}
 
 	// Create a command list for recording graphics commands.
-	DX::ThrowIfFailed(m_d3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocators[0].Get(), nullptr, IID_PPV_ARGS(m_WD->m_commandList.ReleaseAndGetAddressOf())));
+	DX::ThrowIfFailed(m_d3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocators[0].Get(), nullptr, IID_PPV_ARGS(m_commandList.ReleaseAndGetAddressOf())));
 	//DX::ThrowIfFailed(m_commandList->Close());
 
 	// Create a fence for tracking GPU execution progress.
@@ -570,7 +570,7 @@ void Game::OnDeviceLost()
 
 	m_depthStencil.Reset();
 	m_fence.Reset();
-	m_WD->m_commandList.Reset();
+	m_commandList.Reset();
 	m_swapChain.Reset();
 	m_rtvDescriptorHeap.Reset();
 	m_dsvDescriptorHeap.Reset();

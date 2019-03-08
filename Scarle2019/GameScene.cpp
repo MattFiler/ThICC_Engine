@@ -16,6 +16,8 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	m_2DObjects.clear();
+	m_3DObjects.clear();
 }
 
 Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
@@ -37,6 +39,10 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	if (m_keybinds.keyPressed("Quit"))
 	{
 		ExitGame();
+	}
+	if (_GSD->m_keyboardState.I)
+	{
+		ok = false;
 	}
 	if (m_keybinds.keyPressed("Orbit"))
 	{
@@ -64,15 +70,22 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	return nextScene;
 }
 
-void GameScene::Render(RenderData* _RD, WindowData* _WD)
+void GameScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
 	//draw 3D objects
+
+	if (!ok)
+	{
+		*&_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(*&_WD->m_outputWidth), static_cast<float>(*&_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+		*&_WD->m_scissorRect[0] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
+		ok = true;
+	}
 
 	//camera setup.
 	for (int i = 0; i < game_config["player_count"]; ++i)
 	{
-		_WD->m_commandList->RSSetViewports(1, &_WD->m_viewport[i]);
-		_WD->m_commandList->RSSetScissorRects(1, &_WD->m_scissorRect[i]);
+		m_commandList->RSSetViewports(1, &_WD->m_viewport[i]);
+		m_commandList->RSSetScissorRects(1, &_WD->m_scissorRect[i]);
 		_RD->m_cam = m_cam[i];
 
 		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
@@ -80,18 +93,20 @@ void GameScene::Render(RenderData* _RD, WindowData* _WD)
 			(*it)->Render(_RD);
 		}
 	}
+	//for (int i = 0; i < game_config["player_count"]; ++i)
+	//{
+	//	ID3D12DescriptorHeap* heaps[] = { _RD->m_resourceDescriptors->Heap() };
+	//	_WD->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
-	ID3D12DescriptorHeap* heaps[] = {_RD->m_resourceDescriptors->Heap()};
-	_WD->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-
-	_RD->m_spriteBatch->SetViewport(_WD->m_viewport[0]);
-	_RD->m_spriteBatch->Begin(_WD->m_commandList.Get());
-	//draw 2d objects
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		(*it)->Render(_RD);
-	}
-	_RD->m_spriteBatch->End();
+	//	_RD->m_spriteBatch->SetViewport(_WD->m_viewport[i]);
+	//	_RD->m_spriteBatch->Begin(_WD->m_commandList.Get());
+	//	//draw 2d objects
+	//	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	//	{
+	//		(*it)->Render(_RD);
+	//	}
+	//	_RD->m_spriteBatch->End();
+	//}
 }
 
 bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
@@ -99,6 +114,7 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 	//Read in track config
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
+
 
 	create3DObjects(_RD ,_ID, _WD);
 	create2DObjects(_RD);
@@ -113,8 +129,8 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 void GameScene::create2DObjects(RenderData* _RD)
 {
 	//test text
-	Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
-	m_2DObjects.push_back(test2);
+	//Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
+	//m_2DObjects.push_back(test2);
 }
 
 void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD)
@@ -181,7 +197,6 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
 	m_3DObjects.push_back(m_light);
 	_RD->m_light = m_light;
-
 }
 
 void GameScene::pushBackObjects(RenderData* _RD)
