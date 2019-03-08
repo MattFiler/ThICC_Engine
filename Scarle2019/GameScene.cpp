@@ -145,21 +145,21 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 		m_3DObjects.push_back(player[i]);
 	}
 
-	m_cam[0] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[0] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[0]);
 
-	m_cam[1] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[1] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
 	m_cam[1]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[1]);
 
-	m_cam[2] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[2] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
 	m_cam[2]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[2]);
 
-	m_cam[3] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[3] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
 	m_cam[3]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[3]);
