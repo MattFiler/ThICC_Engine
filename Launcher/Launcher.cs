@@ -47,7 +47,7 @@ namespace Launcher
             foreach (var keybind in keybind_config_json)
             {
                 tabPage2.Controls.Add(makeNewLabel(keybind.Key));
-                tabPage2.Controls.Add(makeNewDropdown(keycodeToKeyname(Convert.ToInt32(keybind.Value))));
+                tabPage2.Controls.Add(makeNewDropdown(keybind.Value.ToString()));
             }
 
             //Load previous res from config
@@ -63,7 +63,7 @@ namespace Launcher
         {
             //Update internal config with new keybinds
             for (int i = 0; i < labels.Count; i++) {
-                keybind_config_json[labels[i].Text] = keynameToKeycode(dropdowns[i].Items[dropdowns[i].SelectedIndex].ToString());
+                keybind_config_json[labels[i].Text] = dropdowns[i].Items[dropdowns[i].SelectedIndex].ToString();
             }
 
             //Update internal config with new resolution
@@ -122,65 +122,21 @@ namespace Launcher
             input_dropdown.DropDownStyle = ComboBoxStyle.DropDownList;
             input_dropdown.FormattingEnabled = true;
             input_dropdown.Size = new Size(160, 21);
-            input_dropdown.Items.Add("KEY_SPACE");
-            input_dropdown.Items.Add("KEY_APOSTROPHE");
-            input_dropdown.Items.Add("KEY_COMMA");
-            input_dropdown.Items.Add("KEY_MINUS");
-            input_dropdown.Items.Add("KEY_PERIOD");
-            input_dropdown.Items.Add("KEY_SLASH");
-            input_dropdown.Items.Add("KEY_0");
-            input_dropdown.Items.Add("KEY_1");
-            input_dropdown.Items.Add("KEY_2");
-            input_dropdown.Items.Add("KEY_3");
-            input_dropdown.Items.Add("KEY_4");
-            input_dropdown.Items.Add("KEY_5");
-            input_dropdown.Items.Add("KEY_6");
-            input_dropdown.Items.Add("KEY_7");
-            input_dropdown.Items.Add("KEY_8");
-            input_dropdown.Items.Add("KEY_9");
-            input_dropdown.Items.Add("KEY_SEMICOLON");
-            input_dropdown.Items.Add("KEY_EQUAL");
-            input_dropdown.Items.Add("KEY_A");
-            input_dropdown.Items.Add("KEY_B");
-            input_dropdown.Items.Add("KEY_C");
-            input_dropdown.Items.Add("KEY_D");
-            input_dropdown.Items.Add("KEY_E");
-            input_dropdown.Items.Add("KEY_F");
-            input_dropdown.Items.Add("KEY_G");
-            input_dropdown.Items.Add("KEY_H");
-            input_dropdown.Items.Add("KEY_I");
-            input_dropdown.Items.Add("KEY_J");
-            input_dropdown.Items.Add("KEY_K");
-            input_dropdown.Items.Add("KEY_L");
-            input_dropdown.Items.Add("KEY_M");
-            input_dropdown.Items.Add("KEY_N");
-            input_dropdown.Items.Add("KEY_O");
-            input_dropdown.Items.Add("KEY_P");
-            input_dropdown.Items.Add("KEY_Q");
-            input_dropdown.Items.Add("KEY_R");
-            input_dropdown.Items.Add("KEY_S");
-            input_dropdown.Items.Add("KEY_T");
-            input_dropdown.Items.Add("KEY_U");
-            input_dropdown.Items.Add("KEY_V");
-            input_dropdown.Items.Add("KEY_W");
-            input_dropdown.Items.Add("KEY_X");
-            input_dropdown.Items.Add("KEY_Y");
-            input_dropdown.Items.Add("KEY_Z");
-            input_dropdown.Items.Add("KEY_LEFT_BRACKET");
-            input_dropdown.Items.Add("KEY_BACKSLASH");
-            input_dropdown.Items.Add("KEY_RIGHT_BRACKET");
-            input_dropdown.Items.Add("KEY_GRAVE_ACCENT");
-            input_dropdown.Items.Add("KEY_WORLD_1");
-            input_dropdown.Items.Add("KEY_WORLD_2");
-            input_dropdown.Items.Add("KEY_ESCAPE");
-            input_dropdown.Items.Add("KEY_ENTER");
-            input_dropdown.Items.Add("KEY_TAB");
-            input_dropdown.Items.Add("KEY_BACKSPACE");
-            input_dropdown.Items.Add("KEY_DELETE");
-            input_dropdown.Items.Add("KEY_RIGHT");
-            input_dropdown.Items.Add("KEY_LEFT");
-            input_dropdown.Items.Add("KEY_DOWN");
-            input_dropdown.Items.Add("KEY_UP");
+            input_dropdown.Items.AddRange(new object[] {
+                "Back", "Tab", "Enter", "Pause", "CapsLock", "Kana", "Kanji", "Escape", "ImeConvert", "ImeNoConvert",
+                "Space", "PageUp", "PageDown", "End", "Home", "Left", "Up", "Right", "Down", "Select", "Print", "Execute",
+                "PrintScreen", "Insert", "Delete", "Help", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "A",
+                "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W",
+                "X", "Y", "Z", "LeftWindows", "RightWindows", "Apps", "Sleep", "NumPad0", "NumPad1", "NumPad2", "NumPad3",
+                "NumPad4", "NumPad5", "NumPad6", "NumPad7", "NumPad8", "NumPad9", "Multiply", "Add", "Separator", "Subtract",
+                "Decimal", "Divide", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14",
+                "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "NumLock", "Scroll", "LeftShift", "RightShift",
+                "LeftControl", "RightControl", "LeftAlt", "RightAlt", "BrowserBack", "BrowserForward", "BrowserRefresh", "BrowserStop",
+                "BrowserSearch", "BrowserFavorites", "BrowserHome", "VolumeMute", "VolumeDown", "VolumeUp", "MediaNextTrack",
+                "MediaPreviousTrack", "MediaStop", "MediaPlayPause", "LaunchMail", "SelectMedia", "LaunchApplication1",
+                "LaunchApplication2", "OemSemicolon", "OemPlus", "OemComma", "OemMinus", "OemPeriod", "OemQuestion", "OemTilde",
+                "OemOpenBrackets", "OemPipe", "OemCloseBrackets", "OemQuotes", "Oem8", "OemBackslash", "ProcessKey", "OemCopy",
+                "OemAuto", "OemEnlW", "Attn", "Crsel", "Exsel", "EraseEof", "Play", "Zoom", "Pa1", "OemClear"});
             input_dropdown.SelectedItem = selecteditem;
             int new_y = 18;
             if (dropdowns.Count - 1 >= 0)
@@ -190,142 +146,6 @@ namespace Launcher
             input_dropdown.Location = new Point(18, new_y);
             dropdowns.Add(input_dropdown);
             return input_dropdown;
-        }
-
-        /* Convert Key Name to Code */
-        int keynameToKeycode(string keyname)
-        {
-            switch (keyname)
-            {
-                case "KEY_SPACE": return 32;
-                case "KEY_APOSTROPHE": return 39;
-                case "KEY_COMMA": return 44;
-                case "KEY_MINUS": return 45;
-                case "KEY_PERIOD": return 46;
-                case "KEY_SLASH": return 47;
-                case "KEY_0": return 48;
-                case "KEY_1": return 49;
-                case "KEY_2": return 50;
-                case "KEY_3": return 51;
-                case "KEY_4": return 52;
-                case "KEY_5": return 53;
-                case "KEY_6": return 54;
-                case "KEY_7": return 55;
-                case "KEY_8": return 56;
-                case "KEY_9": return 57;
-                case "KEY_SEMICOLON": return 59;
-                case "KEY_EQUAL": return 61;
-                case "KEY_A": return 65;
-                case "KEY_B": return 66;
-                case "KEY_C": return 67;
-                case "KEY_D": return 68;
-                case "KEY_E": return 69;
-                case "KEY_F": return 70;
-                case "KEY_G": return 71;
-                case "KEY_H": return 72;
-                case "KEY_I": return 73;
-                case "KEY_J": return 74;
-                case "KEY_K": return 75;
-                case "KEY_L": return 76;
-                case "KEY_M": return 77;
-                case "KEY_N": return 78;
-                case "KEY_O": return 79;
-                case "KEY_P": return 80;
-                case "KEY_Q": return 81;
-                case "KEY_R": return 82;
-                case "KEY_S": return 83;
-                case "KEY_T": return 84;
-                case "KEY_U": return 85;
-                case "KEY_V": return 86;
-                case "KEY_W": return 87;
-                case "KEY_X": return 88;
-                case "KEY_Y": return 89;
-                case "KEY_Z": return 90;
-                case "KEY_LEFT_BRACKET": return 91;
-                case "KEY_BACKSLASH": return 92;
-                case "KEY_RIGHT_BRACKET": return 93;
-                case "KEY_GRAVE_ACCENT": return 96;
-                case "KEY_WORLD_1": return 161;
-                case "KEY_WORLD_2": return 162;
-                case "KEY_ESCAPE": return 256;
-                case "KEY_ENTER": return 257;
-                case "KEY_TAB": return 258;
-                case "KEY_BACKSPACE": return 259;
-                case "KEY_DELETE": return 261;
-                case "KEY_RIGHT": return 262;
-                case "KEY_LEFT": return 263;
-                case "KEY_DOWN": return 264;
-                case "KEY_UP": return 265;
-                default: return 0;
-            }
-        }
-
-        /* Convert Key Code to Name */
-        string keycodeToKeyname(int keycode)
-        {
-            switch (keycode)
-            {
-                case 32: return "KEY_SPACE";
-                case 39: return "KEY_APOSTROPHE";
-                case 44: return "KEY_COMMA";
-                case 45: return "KEY_MINUS";
-                case 46: return "KEY_PERIOD";
-                case 47: return "KEY_SLASH";
-                case 48: return "KEY_0";
-                case 49: return "KEY_1";
-                case 50: return "KEY_2";
-                case 51: return "KEY_3";
-                case 52: return "KEY_4";
-                case 53: return "KEY_5";
-                case 54: return "KEY_6";
-                case 55: return "KEY_7";
-                case 56: return "KEY_8";
-                case 57: return "KEY_9";
-                case 59: return "KEY_SEMICOLON";
-                case 61: return "KEY_EQUAL";
-                case 65: return "KEY_A";
-                case 66: return "KEY_B";
-                case 67: return "KEY_C";
-                case 68: return "KEY_D";
-                case 69: return "KEY_E";
-                case 70: return "KEY_F";
-                case 71: return "KEY_G";
-                case 72: return "KEY_H";
-                case 73: return "KEY_I";
-                case 74: return "KEY_J";
-                case 75: return "KEY_K";
-                case 76: return "KEY_L";
-                case 77: return "KEY_M";
-                case 78: return "KEY_N";
-                case 79: return "KEY_O";
-                case 80: return "KEY_P";
-                case 81: return "KEY_Q";
-                case 82: return "KEY_R";
-                case 83: return "KEY_S";
-                case 84: return "KEY_T";
-                case 85: return "KEY_U";
-                case 86: return "KEY_V";
-                case 87: return "KEY_W";
-                case 88: return "KEY_X";
-                case 89: return "KEY_Y";
-                case 90: return "KEY_Z";
-                case 91: return "KEY_LEFT_BRACKET";
-                case 92: return "KEY_BACKSLASH";
-                case 93: return "KEY_RIGHT_BRACKET";
-                case 96: return "KEY_GRAVE_ACCENT";
-                case 161: return "KEY_WORLD_1";
-                case 162: return "KEY_WORLD_2";
-                case 256: return "KEY_ESCAPE";
-                case 257: return "KEY_ENTER";
-                case 258: return "KEY_TAB";
-                case 259: return "KEY_BACKSPACE";
-                case 261: return "KEY_DELETE";
-                case 262: return "KEY_RIGHT";
-                case 263: return "KEY_LEFT";
-                case 264: return "KEY_DOWN";
-                case 265: return "KEY_UP";
-                default: return "";
-            }
         }
     }
 }
