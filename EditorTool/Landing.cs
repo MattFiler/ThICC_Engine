@@ -238,6 +238,10 @@ namespace EditorTool
                 if (Directory.Exists("Debug"))
                 {
                     copyAssets("Debug/DATA/");
+                    if (File.Exists("Debug/Launcher.exe"))
+                    {
+                        File.Delete("Debug/Launcher.exe");
+                    }
                     File.Copy("DATA/MarioKartLauncher.exe", "Debug/Launcher.exe");
                 }
 
@@ -245,6 +249,10 @@ namespace EditorTool
                 if (Directory.Exists("Release"))
                 {
                     copyAssets("Release/DATA/");
+                    if(File.Exists("Release/Launcher.exe"))
+                    {
+                        File.Delete("Release/Launcher.exe");
+                    }
                     File.Copy("DATA/MarioKartLauncher.exe", "Release/Launcher.exe");
                 }
 
