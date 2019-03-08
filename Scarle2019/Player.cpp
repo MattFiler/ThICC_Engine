@@ -126,8 +126,8 @@ void Player::Tick(GameStateData* _GSD)
 
 		//change orinetation of player
 		float rotSpeed = 0.001f;
-		m_yaw -= rotSpeed * _GSD->m_mouseState.x;
-		m_pitch -= rotSpeed * _GSD->m_mouseState.y;
+		//m_yaw -= rotSpeed * _GSD->m_mouseState.x;
+		//m_pitch -= rotSpeed * _GSD->m_mouseState.y;
 
 		m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX;
 		m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;

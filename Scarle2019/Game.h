@@ -8,6 +8,7 @@
 #include "GameFilepaths.h"
 #include "KeybindManager.h"
 #include "LocalisationManager.h"
+#include "SceneManager.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -17,7 +18,8 @@ using std::vector;
 class GameObject2D;
 class GameObject3D;
 struct RenderData;
-
+struct InputData;
+struct WindowData;
 
 //
 // A basic game implementation that creates a D3D12 device and
@@ -92,9 +94,7 @@ private:
 	void OnDeviceLost();
 
 	// Application state
-	HWND                                                m_window;
-	int                                                 m_outputWidth;
-	int                                                 m_outputHeight;
+	WindowData* m_WD;
 
 	// Direct3D Objects
 	D3D_FEATURE_LEVEL                                   m_featureLevel;
@@ -112,9 +112,6 @@ private:
 	UINT64                                              m_fenceValues[c_swapBufferCount];
 	Microsoft::WRL::Wrappers::Event                     m_fenceEvent;
 
-	D3D12_VIEWPORT										m_viewport[4];
-	D3D12_RECT											m_scissorRect[4];
-
 	// Rendering resources
 	Microsoft::WRL::ComPtr<IDXGISwapChain3>             m_swapChain;
 	Microsoft::WRL::ComPtr<ID3D12Resource>              m_renderTargets[c_swapBufferCount];
@@ -124,9 +121,7 @@ private:
 	std::unique_ptr<DirectX::GraphicsMemory>			m_graphicsMemory;
 
 	//Input
-	std::unique_ptr<DirectX::Keyboard> m_keyboard;
-	std::unique_ptr<DirectX::Mouse> m_mouse;
-	std::unique_ptr<DirectX::GamePad> m_gamePad;
+	InputData* m_ID;
 
 	//audio system
 	//This uses a simple system, but a better pipeline can be used using Wave Banks
@@ -139,17 +134,16 @@ private:
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
 	//vector<UI*>											m_UIObjects;
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
-	Camera*												m_cam[4];
-	Light*												m_light; 
+	//Camera*												m_cam[4];
 	RenderData*											m_RD;	//dumping ground for things required to do rendering
 	GameStateData*										m_GSD;  //base game state to pass to all GameObjects
 	int num_of_cam = 1;
-	int num_of_players = 2;
+	int num_of_players = 4;
 
 	GameFilepaths m_filepath;
 	LocalisationManager m_localiser;
 	KeybindManager m_keybinds;
-	json game_config;
 
 	std::vector<PhysModel*> m_physModels;
+	SceneManager* m_sceneManager;
 };

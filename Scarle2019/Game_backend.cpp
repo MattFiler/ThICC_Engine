@@ -23,19 +23,20 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 {
 	//CRASHES HERE RESULT IN THE ERROR ABOVE
 	//RUN THE ASSET COMPILER IN THE TOOLS BEFORE PLAYING THE GAME!
-	m_window = _window;
-	m_outputWidth = std::max(_width, 1);
-	m_outputHeight = std::max(_height, 1);
+	m_WD->m_window = _window;
+	m_WD->m_outputWidth = std::max(_width, 1);
+	m_WD->m_outputHeight = std::max(_height, 1);
 	m_RD = new RenderData;
 
 	CreateDevice();
 	CreateResources();
 
 	//set up input stuff
-	m_keyboard = std::make_unique<Keyboard>();
-	m_mouse = std::make_unique<Mouse>();
-	m_mouse->SetWindow(_window);// mouse device needs to linked to this program's window
-	m_mouse->SetMode(Mouse::Mode::MODE_RELATIVE); // gives a delta postion as opposed to a MODE_ABSOLUTE position in 2-D space
+	m_ID->m_keyboard = std::make_unique<Keyboard>();
+	m_ID->m_mouse = std::make_unique<Mouse>();
+	m_ID->m_mouse->SetWindow(_window);// mouse device needs to linked to this program's window
+	m_ID->m_mouse->SetMode(Mouse::Mode::MODE_RELATIVE); // gives a delta postion as opposed to a MODE_ABSOLUTE position in 2-D space
+	m_ID->m_gamePad = std::make_unique<GamePad>();
 
 	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
 #ifdef _DEBUG
@@ -190,8 +191,8 @@ void Game::OnResuming()
 
 void Game::OnWindowSizeChanged(int _width, int _height)
 {
-	m_outputWidth = std::max(_width, 1);
-	m_outputHeight = std::max(_height, 1);
+	m_WD->m_outputWidth = std::max(_width, 1);
+	m_WD->m_outputHeight = std::max(_height, 1);
 
 	CreateResources();
 
@@ -340,8 +341,8 @@ void Game::CreateResources()
 
 	DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 	DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT;
-	UINT backBufferWidth = static_cast<UINT>(m_outputWidth);
-	UINT backBufferHeight = static_cast<UINT>(m_outputHeight);
+	UINT backBufferWidth = static_cast<UINT>(m_WD->m_outputWidth);
+	UINT backBufferHeight = static_cast<UINT>(m_WD->m_outputHeight);
 
 	// If the swap chain already exists, resize it, otherwise create one.
 	if (m_swapChain)
@@ -384,7 +385,7 @@ void Game::CreateResources()
 		ComPtr<IDXGISwapChain1> swapChain;
 		DX::ThrowIfFailed(m_dxgiFactory->CreateSwapChainForHwnd(
 			m_commandQueue.Get(),
-			m_window,
+			m_WD->m_window,
 			&swapChainDesc,
 			&fsSwapChainDesc,
 			nullptr,

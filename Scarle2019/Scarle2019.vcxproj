@@ -22,7 +22,7 @@
     <RootNamespace>Scarle2019</RootNamespace>
     <ProjectGuid>{beb5860e-fef9-4f22-baeb-f76c22cf75d6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -171,6 +171,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="CharecterSelectionState.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="d3dx12.h" />
@@ -185,7 +186,7 @@
     <ClInclude Include="GameStateData.h" />
     <ClInclude Include="GPGO3D.h" />
     <ClInclude Include="ImageGO2D.h" />
-    <ClInclude Include="KeybindManager.h" />
+    <ClInclude Include="InputData.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LocalisationManager.h" />
     <ClInclude Include="Loop.h" />
@@ -195,29 +196,33 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerUI.h" />
     <ClInclude Include="RenderData.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SDKMeshGO3D.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="StateManager.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="TestSound.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Track.h" />
     <ClInclude Include="TrackMagnet.h" />
+    <ClInclude Include="TrackSelectionState.h" />
     <ClInclude Include="TransFileVBGO.h" />
-    <ClInclude Include="RaceUI.h" />
-    <ClInclude Include="UIMangager.h" />
     <ClInclude Include="VBCube.h" />
     <ClInclude Include="VBGO3D.h" />
     <ClInclude Include="VBSnail.h" />
     <ClInclude Include="VBSpiked.h" />
     <ClInclude Include="VBspiral.h" />
     <ClInclude Include="vertex.h" />
+    <ClInclude Include="WindowData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="CharecterSelectionState.cpp" />
     <ClCompile Include="fileVBGO.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject2D.cpp" />
@@ -242,16 +247,17 @@
     </ClCompile>
     <ClCompile Include="PhysModel.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerUI.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SDKMeshGO3D.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TestSound.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="TrackMagnet.cpp" />
+    <ClCompile Include="TrackSelectionState.cpp" />
     <ClCompile Include="TransFileVBGO.cpp" />
-    <ClCompile Include="RaceUI.cpp" />
-    <ClCompile Include="UIMangager.cpp" />
     <ClCompile Include="VBCube.cpp" />
     <ClCompile Include="VBGO3D.cpp" />
     <ClCompile Include="VBSnail.cpp" />
@@ -270,12 +276,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\directxtk12_desktop_2015.2018.11.20.1\build\native\directxtk12_desktop_2015.targets" Condition="Exists('..\packages\directxtk12_desktop_2015.2018.11.20.1\build\native\directxtk12_desktop_2015.targets')" />
+    <Import Project="..\packages\directxtk12_desktop_2015.2019.2.7.1\build\native\directxtk12_desktop_2015.targets" Condition="Exists('..\packages\directxtk12_desktop_2015.2019.2.7.1\build\native\directxtk12_desktop_2015.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\directxtk12_desktop_2015.2018.11.20.1\build\native\directxtk12_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk12_desktop_2015.2018.11.20.1\build\native\directxtk12_desktop_2015.targets'))" />
+    <Error Condition="!Exists('..\packages\directxtk12_desktop_2015.2019.2.7.1\build\native\directxtk12_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk12_desktop_2015.2019.2.7.1\build\native\directxtk12_desktop_2015.targets'))" />
   </Target>
 </Project>
