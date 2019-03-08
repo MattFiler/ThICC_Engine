@@ -254,16 +254,23 @@ void Camera::Tick(GameStateData * _GSD)
 	}
 	case BEHAVIOUR::MATT_CAM:
 	{
-		Vector3 forwardMove = 40.0f * m_world.Forward();
-		Vector3 rightMove = 40.0f * m_world.Right();
+		float cam_speed = 40.0f;
+		float cam_rot_speed = 0.007f;
+		if (m_keybinds.keyHeld("DebugCamSpeedup"))
+		{
+			cam_speed *= 2;
+			cam_rot_speed *= 2;
+		}
+
+		Vector3 forwardMove = cam_speed * m_world.Forward();
+		Vector3 rightMove = cam_speed * m_world.Right();
 		Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 		forwardMove = Vector3::Transform(forwardMove, rotMove);
 		rightMove = Vector3::Transform(rightMove, rotMove);
 		m_targetPos = m_pos + forwardMove;
 
-		float rotSpeed = 0.007f;
-		m_yaw -= rotSpeed * _GSD->m_mouseState.x;
-		m_pitch -= rotSpeed * _GSD->m_mouseState.y;
+		m_yaw -= cam_rot_speed * _GSD->m_mouseState.x;
+		m_pitch -= cam_rot_speed * _GSD->m_mouseState.y;
 
 		if (m_keybinds.keyHeld("DebugCamFor"))
 		{

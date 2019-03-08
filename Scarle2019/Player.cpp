@@ -23,7 +23,7 @@ Player::~Player()
 void Player::Tick(GameStateData* _GSD)
 {
 	//WORKAROUND TO PREVENT PLAYER MOVEMENT - NEEDS TO BE REMOVED
-	if (m_playerID != 1)
+	if (m_playerID == 0)
 	{
 		//FORWARD BACK & STRAFE CONTROL HERE
 		Vector3 forwardMove = 40.0f * m_world.Forward();

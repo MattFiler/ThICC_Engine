@@ -1,7 +1,8 @@
 {
   "default_track": "RAINBOW ROAD",
-  "player_count": 2.0,
+  "player_count": 4.0,
   "language": "English",
   "window_width": 1280,
-  "window_height": 720
+  "window_height": 720,
+  "ui_scale": 1.0
 }
