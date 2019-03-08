@@ -43,6 +43,6 @@ private:
 	GameFilepaths m_filepath;
 	KeybindManager m_key; 
 
-	Text2D* m_enterMenu = new Text2D("Lewis is not cool.");
+
 };
 
