@@ -10,7 +10,7 @@ public:
 	SceneManager();
 
 	int Update(GameStateData* _GSD, InputData* _ID);
-	void Render(RenderData* _RD);
+	void Render(RenderData* _RD, WindowData* _WD);
 
 	Scene* currScene = nullptr;
 

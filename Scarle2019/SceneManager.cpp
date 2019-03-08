@@ -30,9 +30,9 @@ int SceneManager::Update(GameStateData* _GSD, InputData* _ID)
 	return 1;
 }
 
-void SceneManager::Render(RenderData* _RD)
+void SceneManager::Render(RenderData* _RD, WindowData* _WD)
 {
-	currScene->Render(_RD);
+	currScene->Render(_RD, _WD);
 }
 
 void SceneManager::ChangeScene(Scene* _newScene)

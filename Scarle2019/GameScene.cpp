@@ -69,19 +69,21 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	return nextScene;
 }
 
-void GameScene::Render(RenderData* _RD)
+void GameScene::Render(RenderData* _RD, WindowData* _WD)
 {
 	//draw 3D objects
 
 	//camera setup.
 	for (int i = 0; i < 4; ++i)
 	{
+		_WD->m_commandList->RSSetViewports(1, &_WD->m_viewport[i]);
+		_WD->m_commandList->RSSetScissorRects(1, &_WD->m_scissorRect[i]);
 		_RD->m_cam = m_cam[i];
-	}
 
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-	{
-		(*it)->Render(_RD);
+		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+		{
+			(*it)->Render(_RD);
+		}
 	}
 
 	//draw 2d objects
@@ -148,21 +150,40 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 		m_3DObjects.push_back(player[i]);
 	}
 
-	m_cam[0] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	//*&_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(*&_WD->m_outputWidth), static_cast<float>(*&_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	//*&_WD->m_scissorRect[0] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
+
+	//viewport 1
+	*&_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	*&_WD->m_scissorRect[0] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight* 0.5f) };
+
+	//viewport 2
+	*&_WD->m_viewport[1] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(*&_WD->m_outputWidth)* 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	*&_WD->m_scissorRect[1] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight * 0.5f) };
+
+	//viewport 3
+	*&_WD->m_viewport[2] = { 0.0f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	*&_WD->m_scissorRect[2] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight) };
+
+	//viewport 4
+	*&_WD->m_viewport[3] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	*&_WD->m_scissorRect[3] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
+
+	m_cam[0] = new Camera(*&_WD->m_outputWidth, *&_WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[0]);
 
-	m_cam[1] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[1] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[1]->SetTarget(Vector3(0.0f, 3.0f, 100.0f));
 	m_cam[1]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[1]);
 
-	m_cam[2] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[2] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[2]->SetTarget(Vector3(0.0f, 10.0f, 200.0f));
 	m_cam[2]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[2]);
 
-	m_cam[3] = new Camera(_WD->m_width / 2, _WD->m_height / 2, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
+	m_cam[3] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[0], Vector3(0.0f, 3.0f, 10.0f));
 	//m_cam[3]->SetTarget(Vector3(0.0f, -10.0f, 5.0f));
 	m_cam[3]->SetBehav(Camera::BEHAVIOUR::LERP);
 	m_3DObjects.push_back(m_cam[3]);

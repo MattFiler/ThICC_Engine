@@ -16,7 +16,7 @@ Scenes MenuScene::Update(GameStateData* _GSD, InputData* _ID)
 	return nextScene;
 }
 
-void MenuScene::Render(RenderData* _RD)
+void MenuScene::Render(RenderData* _RD, WindowData* _WD)
 {
 
 }

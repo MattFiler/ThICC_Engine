@@ -88,6 +88,8 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//Set our default font
 	setDefaultFont("Perpetua");
 
+	GetDefaultSize(m_WD->m_width, m_WD->m_height);
+
 	//new scene manager.
 	m_sceneManager = new SceneManager;
 
@@ -156,11 +158,8 @@ void Game::setupViewport(int _width, int _height)
 	//SetViewport(1, 0.0f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f);
 	//SetViewport(0, 0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight) * 0.5);
 
-	m_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH }; //uncommented
-	m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
-
-	m_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
+	//m_WD->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(m_WD->m_outputWidth), static_cast<float>(m_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	//m_WD->m_scissorRect[0] = { 0,0,(int)(m_WD->m_outputWidth),(int)(m_WD->m_outputHeight) };
 
 	//m_viewport[1] = { static_cast<float>(m_outputWidth) * 0.5f, 0.0f, static_cast<float>(m_outputWidth) * 0.5f, static_cast<float>(m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	//m_scissorRect[1] = { 0,0,(int)(m_outputWidth),(int)(m_outputHeight * 0.5f) };
@@ -225,32 +224,33 @@ void Game::Render()
 
 	for (int i = 0; i < num_of_cam; i++)
 	{
-		m_commandList->RSSetViewports(1, &m_WD->m_viewport[i]);
-		m_commandList->RSSetScissorRects(1, &m_WD->m_scissorRect[i]);
+		//m_commandList->RSSetViewports(1, &m_WD->m_viewport[i]);
+		//m_commandList->RSSetScissorRects(1, &m_WD->m_scissorRect[i]);
+	}
 		//m_RD->m_cam = m_cam[i];
 		//draw 3D objects
 		//for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 		//{
 		//	(*it)->Render(m_RD);
 		//}
-	}
+		//}
 
 	////finally draw all 2D objects
-	ID3D12DescriptorHeap* heaps[] = {m_RD->m_resourceDescriptors->Heap()};
-	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-	for (int i = 0; i < num_of_cam; i++)
-	{
-		m_RD->m_spriteBatch->SetViewport(m_WD->m_viewport[i]);
-		m_RD->m_spriteBatch->Begin(m_commandList.Get());
+	//ID3D12DescriptorHeap* heaps[] = {m_RD->m_resourceDescriptors->Heap()};
+	//m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+	//for (int i = 0; i < num_of_cam; i++)
+	//{
+	//	m_RD->m_spriteBatch->SetViewport(m_WD->m_viewport[i]);
+	//	m_RD->m_spriteBatch->Begin(m_commandList.Get());
 
-		for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-		{
-			(*it)->Render(m_RD);
-		}
-		m_RD->m_spriteBatch->End();
-	}
+	//	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	//	{
+	//		(*it)->Render(m_RD);
+	//	}
+	//	m_RD->m_spriteBatch->End();
+	//}
 
-	m_sceneManager->Render(m_RD);
+	m_sceneManager->Render(m_RD, m_WD);
 	// Show the new frame.
 	Present();
 	m_graphicsMemory->Commit(m_commandQueue.Get());
