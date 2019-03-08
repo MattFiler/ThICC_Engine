@@ -101,9 +101,6 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 
 	VBGO3D::PushIBVB(_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
-	//debug: output our current directory
-	std::cout << std::experimental::filesystem::current_path();
-
 	pushBackObjects(_RD);
 
 	return true;
