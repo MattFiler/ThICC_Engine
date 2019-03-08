@@ -1,4 +1,9 @@
 {
   "default_track": "RAINBOW ROAD",
-  "player_count": 2.0
+  "player_count": 2.0,
+  "language": "English",
+  "resolution": {
+	"width": 1920,
+	"height": 1080
+  }
 }

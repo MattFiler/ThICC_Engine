@@ -238,12 +238,14 @@ namespace EditorTool
                 if (Directory.Exists("Debug"))
                 {
                     copyAssets("Debug/DATA/");
+                    File.Copy("DATA/MarioKartLauncher.exe", "Debug/Launcher.exe");
                 }
 
                 //Copy to release folder
                 if (Directory.Exists("Release"))
                 {
                     copyAssets("Release/DATA/");
+                    File.Copy("DATA/MarioKartLauncher.exe", "Release/Launcher.exe");
                 }
 
                 Cursor.Current = Cursors.Default;
@@ -271,6 +273,10 @@ namespace EditorTool
             ignored_extensions.Add(".obj");
             ignored_extensions.Add(".mtl");
             ignored_extensions.Add(".bmp");
+            ignored_extensions.Add(".config");
+            ignored_extensions.Add(".pdb");
+            ignored_extensions.Add(".xml");
+            ignored_extensions.Add(".dll");
             DirectoryCopy("DATA/", output_directory, true, ignored_extensions);
         }
 

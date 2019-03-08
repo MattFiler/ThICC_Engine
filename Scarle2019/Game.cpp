@@ -123,10 +123,6 @@ void Game::Initialize(HWND _window, int _width, int _height)
 /* Create all 2D game objects */
 void Game::createAllObjects2D()
 {
-	//test text
-	Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
-	m_2DObjects.push_back(test2);
-
 	//text example 2D objects
 	//ImageGO2D *test = new ImageGO2D(m_RD, "twist");
 	//test->SetOri(45);
@@ -205,10 +201,8 @@ void Game::pushBackObjects()
 /* Update is called once per frame */
 void Game::Update(DX::StepTimer const& _timer)
 {
-
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 	m_sceneManager->Update(m_GSD, m_ID);
-	
 }
 
 /* render the scene */
