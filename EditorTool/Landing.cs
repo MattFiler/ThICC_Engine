@@ -552,6 +552,13 @@ namespace EditorTool
             keybindeditor.Show();
         }
 
+        // Open UI editor
+        private void openUiEditor_Click(object sender, EventArgs e)
+        {
+            UI_Editor uieditor = new UI_Editor();
+            uieditor.Show();
+        }
+
         private void importModel_Click(object sender, EventArgs e)
         {
             //depreciated

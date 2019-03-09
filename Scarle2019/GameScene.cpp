@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "GameStateData.h"
 #include "RenderData.h"
+#include "SceneManager.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -10,14 +11,17 @@ extern void ExitGame();
 
 GameScene::GameScene()
 {
+	m_scene_manager = new SceneManager();
 }
 
 
 GameScene::~GameScene()
 {
+	m_2DObjects.clear();
+	m_3DObjects.clear();
 }
 
-Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
+void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 {
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track, _GSD);
@@ -25,21 +29,9 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 		_GSD->m_gamePadState[i] = _ID->m_gamePad->GetState(i); //set game controllers state[s]
 	}
 
-	//Poll Keyboard and Mouse
-	//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
-	//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input
-	_GSD->m_prevKeyboardState = _GSD->m_keyboardState; // keep previous state for just pressed logic
-	_GSD->m_keyboardState = _ID->m_keyboard->GetState();
-	_GSD->m_mouseState = _ID->m_mouse->GetState();
-
-	if (_GSD->m_keyboardState.Escape)
-	{
-		ExitGame();
-	}
-
 	if (m_keybinds.keyPressed("Quit"))
 	{
-		ExitGame();
+		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	if (m_keybinds.keyPressed("Orbit"))
 	{
@@ -63,19 +55,17 @@ Scenes GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	{
 		(*it)->Tick(_GSD);
 	}
-
-	return nextScene;
 }
 
-void GameScene::Render(RenderData* _RD, WindowData* _WD)
+void GameScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
 	//draw 3D objects
 
 	//camera setup.
 	for (int i = 0; i < game_config["player_count"]; ++i)
 	{
-		_WD->m_commandList->RSSetViewports(1, &_WD->m_viewport[i]);
-		_WD->m_commandList->RSSetScissorRects(1, &_WD->m_scissorRect[i]);
+		m_commandList->RSSetViewports(1, &_WD->m_viewport[i]);
+		m_commandList->RSSetScissorRects(1, &_WD->m_scissorRect[i]);
 		_RD->m_cam = m_cam[i];
 
 		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
@@ -83,12 +73,20 @@ void GameScene::Render(RenderData* _RD, WindowData* _WD)
 			(*it)->Render(_RD);
 		}
 	}
+	//for (int i = 0; i < game_config["player_count"]; ++i)
+	//{
+	//	ID3D12DescriptorHeap* heaps[] = { _RD->m_resourceDescriptors->Heap() };
+	//	_WD->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
-	//draw 2d objects
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		(*it)->Render(_RD);
-	}
+	//	_RD->m_spriteBatch->SetViewport(_WD->m_viewport[i]);
+	//	_RD->m_spriteBatch->Begin(_WD->m_commandList.Get());
+	//	//draw 2d objects
+	//	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	//	{
+	//		(*it)->Render(_RD);
+	//	}
+	//	_RD->m_spriteBatch->End();
+	//}
 }
 
 bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
@@ -97,7 +95,9 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
 
+
 	create3DObjects(_RD ,_ID, _WD);
+	create2DObjects(_RD);
 
 	VBGO3D::PushIBVB(_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
@@ -109,8 +109,8 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 void GameScene::create2DObjects(RenderData* _RD)
 {
 	//test text
-	Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
-	m_2DObjects.push_back(test2);
+	//Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
+	//m_2DObjects.push_back(test2);
 }
 
 void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD)
@@ -177,7 +177,6 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
 	m_3DObjects.push_back(m_light);
 	_RD->m_light = m_light;
-
 }
 
 void GameScene::pushBackObjects(RenderData* _RD)
