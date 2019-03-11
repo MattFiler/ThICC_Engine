@@ -37,11 +37,15 @@ namespace EditorTool
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.compileAssets = new System.Windows.Forms.Button();
             this.modelConfigs = new System.Windows.Forms.GroupBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.modelType = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
             this.model_segmentsize = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
             this.model_scale = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.saveAssetConfig = new System.Windows.Forms.Button();
             this.model_rot_z = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -72,10 +76,6 @@ namespace EditorTool
             this.DEBUG_PLAYERCOUNT = new System.Windows.Forms.NumericUpDown();
             this.DEBUG_SAVE = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.modelType = new System.Windows.Forms.ComboBox();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
@@ -190,6 +190,29 @@ namespace EditorTool
             this.modelConfigs.Text = "Model Configuration";
             this.modelConfigs.Visible = false;
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(7, 18);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(73, 13);
+            this.label16.TabIndex = 34;
+            this.label16.Text = "Model Type";
+            // 
+            // modelType
+            // 
+            this.modelType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.modelType.FormattingEnabled = true;
+            this.modelType.Items.AddRange(new object[] {
+            "Track",
+            "Player",
+            "Prop"});
+            this.modelType.Location = new System.Drawing.Point(10, 34);
+            this.modelType.Name = "modelType";
+            this.modelType.Size = new System.Drawing.Size(210, 21);
+            this.modelType.TabIndex = 33;
+            // 
             // label13
             // 
             this.label13.AutoSize = true;
@@ -263,6 +286,24 @@ namespace EditorTool
             this.label11.Size = new System.Drawing.Size(181, 13);
             this.label11.TabIndex = 28;
             this.label11.Text = "Default starting rotation of this model.";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(7, 87);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(213, 13);
+            this.label10.TabIndex = 27;
+            this.label10.Text = "Other models use this as their initial position.";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 73);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(215, 13);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "For tracks, this specifies the spawn location.";
             // 
             // saveAssetConfig
             // 
@@ -484,13 +525,13 @@ namespace EditorTool
             // 
             // openUiEditor
             // 
-            this.openUiEditor.Enabled = false;
             this.openUiEditor.Location = new System.Drawing.Point(155, 19);
             this.openUiEditor.Name = "openUiEditor";
             this.openUiEditor.Size = new System.Drawing.Size(137, 30);
             this.openUiEditor.TabIndex = 1;
             this.openUiEditor.Text = "UI Editor";
             this.openUiEditor.UseVisualStyleBackColor = true;
+            this.openUiEditor.Click += new System.EventHandler(this.openUiEditor_Click);
             // 
             // label14
             // 
@@ -570,47 +611,6 @@ namespace EditorTool
             this.groupBox3.TabIndex = 34;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Debug Configurations";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(7, 87);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(213, 13);
-            this.label10.TabIndex = 27;
-            this.label10.Text = "Other models use this as their initial position.";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 73);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(215, 13);
-            this.label1.TabIndex = 26;
-            this.label1.Text = "For tracks, this specifies the spawn location.";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(7, 18);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(73, 13);
-            this.label16.TabIndex = 34;
-            this.label16.Text = "Model Type";
-            // 
-            // modelType
-            // 
-            this.modelType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.modelType.FormattingEnabled = true;
-            this.modelType.Items.AddRange(new object[] {
-            "Track",
-            "Player",
-            "Prop"});
-            this.modelType.Location = new System.Drawing.Point(10, 34);
-            this.modelType.Name = "modelType";
-            this.modelType.Size = new System.Drawing.Size(210, 21);
-            this.modelType.TabIndex = 33;
             // 
             // Landing
             // 

@@ -5,32 +5,31 @@
 #include "Constants.h"
 #include "MenuScene.h"
 #include "GameScene.h"
+#include <vector>
 
 class SceneManager
 {
 public:
 
-	SceneManager(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD);
+	SceneManager();
+	~SceneManager();
 
-	int Update(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD);
-	void Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList);
+	void configure(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD);
 
-	Scene* currScene = nullptr;
+	void addScene(Scene* _scene, Scenes _scene_name);
+	void setCurrentScene(Scenes _scene_name);
+	Scenes getCurrentScene();
 
-	Scene* curScene[2]{ nullptr };
+	void Update();
+	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList);
 
+private:
 	RenderData*  m_RD;
 	GameStateData* m_GSD;
 	InputData* m_ID;
 	WindowData* m_WD;
 
-private:
-	void ChangeScene(Scene* _newScene);
-	enum Sce {
-		MENU = 0,
-		GAME = 1,
-	};
-
-	Sce c_s = MENU;
+	Scene** m_scenes = nullptr;
+	static Scenes m_curr_scene;
 };
 
