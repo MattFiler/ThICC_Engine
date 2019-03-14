@@ -53,10 +53,10 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 			{
 				Collision collision;	
 				
-				Plane frontPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::FRONT_LEFT), physModel2->getCorner(PhysModel::m_Corner::FRONT_RIGHT), physModel2->getHeight());
-				Plane backPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::BACK_LEFT), physModel2->getCorner(PhysModel::m_Corner::BACK_RIGHT), physModel2->getHeight());
-				Plane rightPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::FRONT_RIGHT), physModel2->getCorner(PhysModel::m_Corner::BACK_RIGHT), physModel2->getHeight());
-				Plane leftPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::FRONT_LEFT), physModel2->getCorner(PhysModel::m_Corner::BACK_LEFT), physModel2->getHeight());
+				Plane frontPlane = getPlane(physModel2->data.m_globalFrontCentreLeft, physModel2->data.m_globalFrontCentreRight, physModel2->data.m_height);
+				Plane backPlane = getPlane(physModel2->data.m_globalBackCentreLeft, physModel2->data.m_globalBackCentreRight, physModel2->data.m_height);
+				Plane rightPlane = getPlane(physModel2->data.m_globalFrontCentreRight, physModel2->data.m_globalBackCentreRight, physModel2->data.m_height);
+				Plane leftPlane = getPlane(physModel2->data.m_globalFrontCentreLeft, physModel2->data.m_globalBackCentreLeft, physModel2->data.m_height);
 
 				if (physModel1->getCollider().Intersects(backPlane))
 				{

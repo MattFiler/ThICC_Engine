@@ -82,7 +82,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 {
 	//Make sure our assets are compiled at least to some degree!
 	if (!dirExists("DATA")) {
-		throw "ASSETS MUST BE COMPILED BEFORE RUNNING THE GAME";
+		throw std::exception("ASSETS MUST BE COMPILED BEFORE RUNNING THE GAME");
 	}
 	m_ID = new InputData;
 

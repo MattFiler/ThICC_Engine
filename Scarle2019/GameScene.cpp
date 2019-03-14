@@ -264,7 +264,7 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
 	for (int i = 0; i < game_config["player_count"]; i++) {
 		//Create a player and position on track
-		player[i] = new Player(_RD, "Standard Kart", i, *_ID->m_gamePad.get());
+		player[i] = new Player(_RD, "Knuckles Kart", i, *_ID->m_gamePad.get());
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		m_3DObjects.push_back(player[i]);
 

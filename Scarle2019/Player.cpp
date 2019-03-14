@@ -29,8 +29,8 @@ void Player::Tick(GameStateData* _GSD)
 	if (m_playerID == 0)
 	{
 		//FORWARD BACK & STRAFE CONTROL HERE
-		Vector3 forwardMove = 40.0f * m_world.Forward();
-		Vector3 rightMove = 40.0f * m_world.Right();
+		Vector3 forwardMove = 30.0f * m_world.Forward();
+		Vector3 rightMove = 60.0f * m_world.Right();
 		Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 		forwardMove = Vector3::Transform(forwardMove, rotMove);
 		rightMove = Vector3::Transform(rightMove, rotMove);
