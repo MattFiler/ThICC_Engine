@@ -16,7 +16,7 @@ struct TrackData {
 class Track : public PhysModel
 {
 public:
-	Track(RenderData* _RD, string _filename);
+	Track(RenderData* _RD, string _filename, int _id);
 
 	Vector3 getSuitableSpawnSpot();
 

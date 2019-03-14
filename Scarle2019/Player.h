@@ -10,7 +10,7 @@ class Player : public TrackMagnet
 {
 
 public:
-	Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gamePad);
+	Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gamePad, int _id);
 	~Player();
 
 	virtual void Tick(GameStateData* _GSD) override;

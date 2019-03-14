@@ -4,7 +4,7 @@
 #include "GameStateData.h"
 
 
-TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
+TrackMagnet::TrackMagnet(RenderData* _RD, string _filename, int _id) : PhysModel(_RD, _filename, _id)
 {
 	m_autoCalculateWolrd = false;
 	Vector3 scale = Vector3::Zero;

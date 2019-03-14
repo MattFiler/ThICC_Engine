@@ -1,6 +1,5 @@
 #pragma once
 #include "SDKMeshGO3D.h"
-#include "Collision.h"
 #include <json.hpp>
 using json = nlohmann::json;
 
@@ -12,7 +11,9 @@ class PhysModel : public SDKMeshGO3D
 {
 public:
 
-	PhysModel(RenderData* _RD, string _filename);
+	 enum m_Corner{FRONT_LEFT, FRONT_RIGHT, BACK_RIGHT, BACK_LEFT};
+
+	PhysModel(RenderData* _RD, string _filename, int _id);
 	virtual ~PhysModel() = default;
 
 	void initCollider(json &model_data);
@@ -28,14 +29,25 @@ public:
 	void		TogglePhysics() { m_physicsOn = !m_physicsOn; }
 	void		SetDrag(float _drag) { m_drag = _drag; }
 
+	void setMass(float _mass) { m_mass = _mass; };
+	float getMass() { return m_mass; };
+	Vector3 getVelocity() { return m_vel; };
+	Vector3 getVelocityTotal() { return m_velTotal; };
+	void setVelocity(Vector3 _vel) { m_vel = _vel; };
+	void setVelocityTotal(Vector3 _velTotal) { m_velTotal = _velTotal; };
+
 	BoundingOrientedBox getCollider() { return m_collider; };
-	void addCurrentCollision(Collision _currentCollision) { m_currentCollisions.push_back(_currentCollision); };
 
 	SDKMeshGO3D* getDebugCollider() { return m_colliderDebug; };
 
+	Vector3 getCorner(m_Corner _corner);
+
+	int getModelId() { return m_model_id; };
 protected:
+	int m_model_id = 0;
 
 	//very basic physics
+	float m_mass = 1;
 	bool m_physicsOn = false;
 	float m_drag = 0.0f;
 	Vector3 m_velTotal = Vector3::Zero; // The total velocity to apply each frame
@@ -46,8 +58,6 @@ protected:
 	float m_maxGrav = 60; // The maximum length of m_gravVel. m_gravVel will be clamped to this
 	Vector3 m_acc = Vector3::Zero;
 	PhysModelData m_physData;
-
-	std::vector<Collision> m_currentCollisions;
 
 	bool m_hasCollider = false;
 	BoundingOrientedBox m_collider; //Bounding box of the model

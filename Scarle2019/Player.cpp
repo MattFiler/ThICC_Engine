@@ -5,7 +5,7 @@
 
 extern void ExitGame();
 
-Player::Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gamePad) : TrackMagnet(_RD, _filename)
+Player::Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gamePad, int _id) : TrackMagnet(_RD, _filename, _id)
 {
 	SetDrag(0.7);
 	SetPhysicsOn(true);
@@ -125,12 +125,12 @@ void Player::Tick(GameStateData* _GSD)
 		}
 
 		//change orinetation of player
-		float rotSpeed = 0.001f;
+		/*float rotSpeed = 0.001f;
 		m_yaw -= rotSpeed * _GSD->m_mouseState.x;
 		m_pitch -= rotSpeed * _GSD->m_mouseState.y;
 
 		m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX;
-		m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;
+		m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;*/
 	}
 	//apply my base behaviour
 	PhysModel::Tick(_GSD);

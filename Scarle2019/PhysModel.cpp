@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _filename)
+PhysModel::PhysModel(RenderData * _RD, string _filename, int  _id) :SDKMeshGO3D(_RD, _filename)
 {
 	std::string test = m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL);
 	std::ifstream i(test);
@@ -30,6 +30,8 @@ PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _file
 			m_colliderDebug = new SDKMeshGO3D(_RD, _filename + " DEBUG");
 		}
 	}
+
+	m_model_id = _id;
 }
 
 void PhysModel::initCollider(json &model_data)
@@ -129,20 +131,10 @@ void PhysModel::Tick(GameStateData * _GSD)
 			m_gravVel.Normalize();
 			m_gravVel *= m_maxGrav;
 		}
-
+		
 		m_velTotal = m_vel + m_gravVel;
 
 		m_pos += _GSD->m_dt * m_velTotal;
-
-		//Collision Code
-		if (!m_currentCollisions.empty())
-		{
-			Vector3 normalised_vel = m_vel;
-			normalised_vel.Normalize();
-			m_pos -= normalised_vel * 0.05;
-			m_vel = Vector3::Zero;
-			m_currentCollisions.clear();
-		}
 	}
 
 	SDKMeshGO3D::Tick(_GSD);
@@ -150,4 +142,22 @@ void PhysModel::Tick(GameStateData * _GSD)
 	m_acc = Vector3::Zero;
 
 	updateCollider();
+}
+
+Vector3 PhysModel::getCorner(m_Corner _corner)
+{
+	switch(_corner)
+	{
+	case FRONT_LEFT:
+		return m_globalFrontLeft;
+
+	case FRONT_RIGHT:
+		return m_globalFrontRight;
+
+	case BACK_LEFT:
+		return m_globalBackLeft;
+		
+	case BACK_RIGHT:
+		return m_globalBackRight;
+	}
 }

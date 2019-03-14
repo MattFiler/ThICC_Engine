@@ -213,19 +213,19 @@ void Game::createAllObjects3D()
 
 	//Load in a track
 	//track = new Track(m_RD, "GBA Mario Circuit");
-	//track = new Track(m_RD, "Mario Kart Stadium");
-	track = new Track(m_RD, "Rainbow Road");
+	track = new Track(m_RD, "Mario Kart Stadium", m_3DObjects.size());
+	//track = new Track(m_RD, "Rainbow Road");
 	//track = new Track(m_RD, "Luigi Circuit");
 	//track = new Track(m_RD, "Driftway");
 	m_3DObjects.push_back(track);
 
 	//Create a player and position on track
-	player[0] = new Player(m_RD, "Standard Kart", 0, *m_gamePad.get());
+	player[0] = new Player(m_RD, "Standard Kart", 0, *m_gamePad.get(), m_3DObjects.size());
 	player[0]->SetPos(track->getSuitableSpawnSpot());
 	//player[0]->SetPos({0, 0, 0});
 	m_3DObjects.push_back(player[0]);
 
-	player[1] = new Player(m_RD, "Standard Kart", 1, *m_gamePad.get());
+	player[1] = new Player(m_RD, "Standard Kart", 1, *m_gamePad.get(), m_3DObjects.size());
 	player[1]->SetPos(Vector3(player[0]->GetPos().x, player[0]->GetPos().y, player[0]->GetPos().z - 10));
 	//player[0]->SetPos({0, 0, 0});
 	m_3DObjects.push_back(player[1]);
@@ -377,7 +377,7 @@ void Game::Update(DX::StepTimer const& _timer)
 	}
 
 
-	CollisionManager::checkPhysModelCollisions(m_physModels);
+	CollisionManager::collisionDetectionAndResponse(m_physModels);
 }
 
 /* render the scene */
