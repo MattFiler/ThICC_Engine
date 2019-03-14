@@ -143,6 +143,9 @@ bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _inte
 	GetXYZIndexAtPoint(lower);
 	
 	// Then check all the grid sections covered by this area
+	MeshTri* closestTri = nullptr;
+	float bestDist = 100000;
+	Vector closestIntersect = Vector::Zero;
 	for (int i = lower.z; i <= upper.z; i++)
 	{
 		for (int j = lower.y; j <= upper.y; j++)
@@ -154,14 +157,28 @@ bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _inte
 				{
 					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
 					{
-						return true;
+						float dist = Vector::Distance(_startPos, _intersect);
+						if (dist < bestDist)
+						{
+							closestIntersect = _intersect;
+							bestDist = dist;
+							closestTri = _tri;
+						}
 					}
 				}
 			}
 		}
 	}
-
-	return false;
+	if (closestTri)
+	{
+		_intersect = closestIntersect;
+		_tri = closestTri;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 /* Compares the passed vector to the maximum vector member variable, then updates x, y, z if any are bigger */

@@ -43,7 +43,7 @@ protected:
 
 	Vector3 m_gravDirection = Vector3::Down;
 	Vector3 m_gravVel = Vector3::Zero; // The amount of gravity velocity to apply each frame
-	float m_maxGrav = 60; // The maximum length of m_gravVel. m_gravVel will be clamped to this
+	float m_maxGrav = 120; // The maximum length of m_gravVel. m_gravVel will be clamped to this
 	Vector3 m_acc = Vector3::Zero;
 	PhysModelData m_physData;
 
