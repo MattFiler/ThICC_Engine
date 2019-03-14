@@ -17,7 +17,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	Vector intersect;
 	MeshTri* tri = nullptr;
 	Matrix targetWorld = Matrix::Identity;
-	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(m_height*7), m_pos + m_world.Up() * (m_height*2), intersect, tri, m_maxAngle);
+	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(m_height*30), m_pos + (m_world.Up() * m_height*2), intersect, tri, m_maxAngle);
 	float modifiedMaxRotation = m_maxRotation;
 	if (shouldStick)
 	{
@@ -53,7 +53,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 		// Calculate a new rotation using 2 points on the plane that is found
 		Vector secondIntersect;
 		MeshTri* tri2 = nullptr;
-		tri->DoesLineIntersect(m_world.Down() * (m_height * 7), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (m_height * 2)), secondIntersect, tri2, m_maxAngle);
+		tri->DoesLineIntersect(m_world.Down() * (m_height * 30), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (m_height * 2)), secondIntersect, tri2, m_maxAngle);
 		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 	}
@@ -76,8 +76,10 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	{
 		lerpDelta = 1;
 	}
+	
 	// Lerp the rotation by the calculated amount
-	m_quatRot = Quaternion::Lerp(m_quatRot, rot, lerpDelta);
+	
+	m_quatRot = Quaternion::Slerp(m_quatRot, rot, lerpDelta);
 
 	// Rebuild m_world
 	m_rot = Matrix::CreateFromQuaternion(m_quatRot);
