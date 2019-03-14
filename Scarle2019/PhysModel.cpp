@@ -39,38 +39,62 @@ void PhysModel::initCollider(json &model_data)
 	and uses (currently) the top front left point to determine the extents (size) of the collider */
 	m_hasCollider = true;
 
-	m_frontTopLeft = Vector3((float)model_data["collision_box"]["front_top_left"][0] * m_physData.scale,
+	m_physData.m_localFrontTopLeft = Vector3((float)model_data["collision_box"]["front_top_left"][0] * m_physData.scale,
 		(float)model_data["collision_box"]["front_top_left"][1] * m_physData.scale,
 		(float)model_data["collision_box"]["front_top_left"][2] * m_physData.scale);
 
-	m_frontTopRight = Vector3((float)model_data["collision_box"]["front_top_right"][0] * m_physData.scale,
+	m_physData.m_localFrontTopRight = Vector3((float)model_data["collision_box"]["front_top_right"][0] * m_physData.scale,
 		(float)model_data["collision_box"]["front_top_right"][1] * m_physData.scale,
 		(float)model_data["collision_box"]["front_top_right"][2] * m_physData.scale);
 
-	m_backBottomLeft = Vector3((float)model_data["collision_box"]["back_bottom_left"][0] * m_physData.scale,
+	m_physData.m_localFrontBottomLeft = Vector3((float)model_data["collision_box"]["front_bottom_left"][0] * m_physData.scale,
+		(float)model_data["collision_box"]["front_bottom_left"][1] * m_physData.scale,
+		(float)model_data["collision_box"]["front_bottom_left"][2] * m_physData.scale);
+
+	m_physData.m_localFrontBottomRight = Vector3((float)model_data["collision_box"]["front_bottom_right"][0] * m_physData.scale,
+		(float)model_data["collision_box"]["front_bottom_right"][1] * m_physData.scale,
+		(float)model_data["collision_box"]["front_bottom_right"][2] * m_physData.scale);
+
+	m_physData.m_localBackBottomLeft = Vector3((float)model_data["collision_box"]["back_bottom_left"][0] * m_physData.scale,
 		(float)model_data["collision_box"]["back_bottom_left"][1] * m_physData.scale,
 		(float)model_data["collision_box"]["back_bottom_left"][2] * m_physData.scale);
 
-	m_backBottomRight = Vector3((float)model_data["collision_box"]["back_bottom_right"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["back_bottom_right"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["back_bottom_right"][2] * m_physData.scale);
+	m_physData.m_localBackTopLeft = Vector3((float)model_data["collision_box"]["back_top_left"][0] * m_physData.scale,
+		(float)model_data["collision_box"]["back_top_left"][1] * m_physData.scale,
+		(float)model_data["collision_box"]["back_top_left"][2] * m_physData.scale);
 
-	m_collLocalCentre = XMFLOAT3((m_frontTopLeft.x + m_backBottomRight.x) / 2, (m_frontTopLeft.y + m_backBottomRight.y) / 2, (m_frontTopLeft.z + m_backBottomRight.z) / 2);
+	m_physData.m_localBackTopRight = Vector3((float)model_data["collision_box"]["back_top_right"][0] * m_physData.scale,
+		(float)model_data["collision_box"]["back_top_right"][1] * m_physData.scale,
+		(float)model_data["collision_box"]["back_top_right"][2] * m_physData.scale);
+
+
+	m_physData.m_localCentre = Vector3((m_physData.m_localFrontTopLeft.x + m_physData.m_localFrontTopRight.x) / 2
+		, (m_physData.m_localFrontTopLeft.y + m_physData.m_localFrontBottomLeft.y) / 2, (m_physData.m_localFrontTopLeft.z + m_physData.m_localBackTopLeft.z) / 2);
 	//Updates the centre and rotations of the collider 
-	m_collWorldCentre = Vector3::Transform(m_collLocalCentre, m_world);
-	m_collider.Center = m_collWorldCentre;
+	m_physData.m_worldCentre = Vector3::Transform(m_physData.m_localCentre, m_world);
+	m_collider.Center = m_physData.m_worldCentre;
 
 	XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
 	m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z));
 
 	//Storing the Corners of the collider for Toby
-	m_globalFrontLeft = Vector3::Transform(Vector3(m_frontTopLeft.x, m_collLocalCentre.y, m_frontTopLeft.z), m_world);
-	m_globalFrontRight = Vector3::Transform(Vector3(m_frontTopRight.x, m_collLocalCentre.y, m_frontTopRight.z), m_world);
-	m_globalBackLeft = Vector3::Transform(Vector3(m_backBottomLeft.x, m_collLocalCentre.y, m_backBottomLeft.z), m_world);
-	m_globalBackRight = Vector3::Transform(Vector3(m_backBottomRight.x, m_collLocalCentre.y, m_backBottomRight.z), m_world);
-	m_width = m_frontTopLeft.x - m_frontTopRight.x;
-	m_height = m_frontTopLeft.y - m_backBottomLeft.y;
-	m_length = m_frontTopLeft.z - m_backBottomLeft.z;
+	m_physData.m_globalFrontCentreLeft = Vector3::Transform(Vector3(m_physData.m_localFrontTopLeft.x, m_physData.m_localCentre.y, m_physData.m_localFrontTopLeft.z), m_world);
+	m_physData.m_globalFrontCentreRight = Vector3::Transform(Vector3(m_physData.m_localFrontTopRight.x, m_physData.m_localCentre.y, m_physData.m_localFrontTopRight.z), m_world);
+	m_physData.m_globalBackCentreLeft = Vector3::Transform(Vector3(m_physData.m_localBackBottomLeft.x, m_physData.m_localCentre.y, m_physData.m_localBackBottomLeft.z), m_world);
+	m_physData.m_globalBackCentreRight = Vector3::Transform(Vector3(m_physData.m_localBackBottomRight.x, m_physData.m_localCentre.y, m_physData.m_localBackBottomRight.z), m_world);
+
+	m_physData.m_globalFrontTopLeft = Vector3::Transform(m_physData.m_localFrontTopLeft, m_world);
+	m_physData.m_globalFrontTopRight = Vector3::Transform(m_physData.m_localFrontTopRight, m_world);
+	m_physData.m_globalFrontBottomLeft = Vector3::Transform(m_physData.m_localFrontBottomLeft, m_world);
+	m_physData.m_globalFrontBottomRight = Vector3::Transform(m_physData.m_localFrontBottomRight, m_world);
+	m_physData.m_globalBackTopLeft = Vector3::Transform(m_physData.m_localBackTopLeft, m_world);
+	m_physData.m_globalBackTopRight = Vector3::Transform(m_physData.m_localBackTopRight, m_world);
+	m_physData.m_globalBackBottomLeft = Vector3::Transform(m_physData.m_localBackBottomLeft, m_world);
+	m_physData.m_globalBackBottomRight = Vector3::Transform(m_physData.m_localBackBottomRight, m_world);
+
+	m_physData.m_width = m_physData.m_localFrontTopLeft.x - m_physData.m_localFrontTopRight.x;
+	m_physData.m_height = m_physData.m_localFrontTopLeft.y - m_physData.m_localBackBottomLeft.y;
+	m_physData.m_length = m_physData.m_localFrontTopLeft.z - m_physData.m_localBackBottomLeft.z;
 }
 
 XMFLOAT3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)
@@ -96,21 +120,29 @@ void PhysModel::updateCollider()
 	if (m_hasCollider)
 	{
 		//Updates the centre and rotations of the collider 
-		m_collWorldCentre = Vector3::Transform(m_collLocalCentre, m_world);
-		m_collider.Center = m_collWorldCentre;
+		m_physData.m_worldCentre = Vector3::Transform(m_physData.m_localCentre, m_world);
+		m_collider.Center = m_physData.m_worldCentre;
 
 		XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
 		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z));
 
 		//Storing the Corners of the collider for Toby
-		m_globalFrontLeft = Vector3::Transform(Vector3(m_frontTopLeft.x, m_collLocalCentre.y, m_frontTopLeft.z), m_world);
-		m_globalFrontRight = Vector3::Transform(Vector3(m_frontTopRight.x, m_collLocalCentre.y, m_frontTopRight.z), m_world);
-		m_globalBackLeft = Vector3::Transform(Vector3(m_backBottomLeft.x, m_collLocalCentre.y, m_backBottomLeft.z), m_world);
-		m_globalBackRight = Vector3::Transform(Vector3(m_backBottomRight.x, m_collLocalCentre.y, m_backBottomRight.z), m_world);
+		m_physData.m_globalFrontCentreLeft = Vector3::Transform(Vector3(m_physData.m_localFrontTopLeft.x, m_physData.m_localCentre.y, m_physData.m_localFrontTopLeft.z), m_world);
+		m_physData.m_globalFrontCentreRight = Vector3::Transform(Vector3(m_physData.m_localFrontTopRight.x, m_physData.m_localCentre.y, m_physData.m_localFrontTopRight.z), m_world);
+		m_physData.m_globalBackCentreLeft = Vector3::Transform(Vector3(m_physData.m_localBackBottomLeft.x, m_physData.m_localCentre.y, m_physData.m_localBackBottomLeft.z), m_world);
+		m_physData.m_globalBackCentreRight = Vector3::Transform(Vector3(m_physData.m_localBackBottomRight.x, m_physData.m_localCentre.y, m_physData.m_localBackBottomRight.z), m_world);
+
+		m_physData.m_globalFrontTopLeft = Vector3::Transform(m_physData.m_localFrontTopLeft, m_world);
+		m_physData.m_globalFrontTopRight = Vector3::Transform(m_physData.m_localFrontTopRight, m_world);
+		m_physData.m_globalFrontBottomLeft = Vector3::Transform(m_physData.m_localFrontBottomLeft, m_world);
+		m_physData.m_globalFrontBottomRight = Vector3::Transform(m_physData.m_localFrontBottomRight, m_world);
+		m_physData.m_globalBackTopLeft = Vector3::Transform(m_physData.m_localBackTopLeft, m_world);
+		m_physData.m_globalBackTopRight = Vector3::Transform(m_physData.m_localBackTopRight, m_world);
+		m_physData.m_globalBackBottomLeft = Vector3::Transform(m_physData.m_localBackBottomLeft, m_world);
+		m_physData.m_globalBackBottomRight = Vector3::Transform(m_physData.m_localBackBottomRight, m_world);
 
 		//Updates the debug collider position and rotation
-
-		m_colliderDebug->SetPos(m_collWorldCentre);
+		m_colliderDebug->SetPos(m_physData.m_worldCentre);
 		//m_colliderDebug->SetScale(m_collider.Extents);	
 		m_colliderDebug->SetYaw(euler.y);
 		m_colliderDebug->SetPitch(euler.x);
@@ -143,20 +175,4 @@ void PhysModel::Tick(GameStateData * _GSD)
 	updateCollider();
 }
 
-Vector3 PhysModel::getCorner(m_Corner _corner)
-{
-	switch(_corner)
-	{
-	case FRONT_LEFT:
-		return m_globalFrontLeft;
 
-	case FRONT_RIGHT:
-		return m_globalFrontRight;
-
-	case BACK_LEFT:
-		return m_globalBackLeft;
-		
-	case BACK_RIGHT:
-		return m_globalBackRight;
-	}
-}
