@@ -72,9 +72,12 @@ namespace EditorTool
                 }
             }
 
-            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$") || (mat_check_count == 0 && shouldGenerateCollmap.Checked) || (assetName.Text.Length > 5 && assetName.Text.Substring(assetName.Text.Length - 5) == "DEBUG"))
+            if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || 
+                !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$") || (mat_check_count == 0 && shouldGenerateCollmap.Checked) || 
+                (assetName.Text.Length > 5 && assetName.Text.Substring(assetName.Text.Length - 5) == "DEBUG") ||
+                modelType.SelectedIndex == -1)
             {
-                if (modelPath.Text == "" || assetName.Text == "")
+                if (modelPath.Text == "" || assetName.Text == "" || modelType.SelectedIndex == -1)
                 {
                     MessageBox.Show("Please fill out all required inputs.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -594,7 +597,7 @@ namespace EditorTool
                         }
 
                         //Create JSON data
-                        JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\"" + json_extras + ", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0}");
+                        JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"model_type\": \"" + modelType.SelectedItem + "\"" + json_extras + ", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0, \"segment_size\": 10}");
                         File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "JSON", asset_json.ToString(Formatting.Indented));
 
                         //Move new SDKMESH to the correct requested filename
@@ -667,27 +670,27 @@ namespace EditorTool
         {
             if (shouldGenerateCollmap.Checked)
             {
-                importModel.Location = new Point(19, 418);
+                importModel.Location = new Point(19, 459);
                 itemMaterialCategories.Visible = true;
-                this.Size = new Size(310, 493);
-                resizedCollisionGroup.Size = new Size(264, 156);
+                this.Size = new Size(370, 534);
+                resizedCollisionGroup.Size = new Size(325, 156);
             }
             else
             {
-                importModel.Location = new Point(19, 302);
+                importModel.Location = new Point(19, 343);
                 itemMaterialCategories.Visible = false;
-                this.Size = new Size(310, 380);
-                resizedCollisionGroup.Size = new Size(264, 40);
+                this.Size = new Size(370, 421);
+                resizedCollisionGroup.Size = new Size(325, 40);
             }
         }
 
         //On first load, resize form to non-collmap view
         private void Model_Importer_Load(object sender, EventArgs e)
         {
-            importModel.Location = new Point(19, 302);
+            importModel.Location = new Point(19, 343);
             itemMaterialCategories.Visible = false;
-            this.Size = new Size(310, 380);
-            resizedCollisionGroup.Size = new Size(264, 40);
+            this.Size = new Size(370, 421);
+            resizedCollisionGroup.Size = new Size(325, 40);
         }
 
         //Enable/disable transparency options

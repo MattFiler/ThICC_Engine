@@ -23,7 +23,7 @@ Player::~Player()
 void Player::Tick(GameStateData* _GSD)
 {
 	//WORKAROUND TO PREVENT PLAYER MOVEMENT - NEEDS TO BE REMOVED
-	if (m_playerID != 1)
+	if (m_playerID == 0)
 	{
 		//FORWARD BACK & STRAFE CONTROL HERE
 		Vector3 forwardMove = 40.0f * m_world.Forward();
@@ -33,20 +33,19 @@ void Player::Tick(GameStateData* _GSD)
 		rightMove = Vector3::Transform(rightMove, rotMove);
 		//float rotSpeed = 0.05f;
 
-
-		if (_GSD->m_keyboardState.W)
+		if (m_keymindManager.keyHeld("Forward"))
 		{
 			m_acc += forwardMove;
 		}
-		if (_GSD->m_keyboardState.S)
+		if (m_keymindManager.keyHeld("Backwards"))
 		{
 			m_acc -= forwardMove;
 		}
-		if (_GSD->m_keyboardState.A)
+		if (m_keymindManager.keyHeld("Left"))
 		{
 			m_acc -= rightMove;
 		}
-		if (_GSD->m_keyboardState.D)
+		if (m_keymindManager.keyHeld("Right"))
 		{
 			m_acc += rightMove;
 		}
@@ -101,10 +100,15 @@ void Player::Tick(GameStateData* _GSD)
 			m_rot = Matrix::CreateFromQuaternion(rot);
 		}
 
+		//Debug output player location - useful for setting up spawns
+		if (m_keymindManager.keyPressed("Debug Print Player Location")) {
+			std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+		}
+
 		//change orinetation of player
 		float rotSpeed = 0.001f;
-		m_yaw -= rotSpeed * _GSD->m_mouseState.x;
-		m_pitch -= rotSpeed * _GSD->m_mouseState.y;
+		//m_yaw -= rotSpeed * _GSD->m_mouseState.x;
+		//m_pitch -= rotSpeed * _GSD->m_mouseState.y;
 
 		m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX;
 		m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;

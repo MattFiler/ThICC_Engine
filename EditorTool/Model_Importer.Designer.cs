@@ -41,18 +41,22 @@ namespace EditorTool
             this.shouldFlipUV = new System.Windows.Forms.CheckBox();
             this.shouldCreateBoxCollider = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.materialPreview = new System.Windows.Forms.PictureBox();
             this.itemMaterialCategoriesTrans = new System.Windows.Forms.CheckedListBox();
             this.enableTransparency = new System.Windows.Forms.CheckBox();
             this.resizedCollisionGroup = new System.Windows.Forms.GroupBox();
+            this.modelType = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             this.resizedCollisionGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // importModel
             // 
-            this.importModel.Location = new System.Drawing.Point(19, 418);
+            this.importModel.Location = new System.Drawing.Point(19, 459);
             this.importModel.Name = "importModel";
-            this.importModel.Size = new System.Drawing.Size(264, 28);
+            this.importModel.Size = new System.Drawing.Size(325, 28);
             this.importModel.TabIndex = 0;
             this.importModel.Text = "Import";
             this.importModel.UseVisualStyleBackColor = true;
@@ -60,7 +64,7 @@ namespace EditorTool
             // 
             // browseToModel
             // 
-            this.browseToModel.Location = new System.Drawing.Point(208, 65);
+            this.browseToModel.Location = new System.Drawing.Point(269, 65);
             this.browseToModel.Name = "browseToModel";
             this.browseToModel.Size = new System.Drawing.Size(75, 22);
             this.browseToModel.TabIndex = 1;
@@ -73,7 +77,7 @@ namespace EditorTool
             this.modelPath.Location = new System.Drawing.Point(19, 66);
             this.modelPath.Name = "modelPath";
             this.modelPath.ReadOnly = true;
-            this.modelPath.Size = new System.Drawing.Size(183, 20);
+            this.modelPath.Size = new System.Drawing.Size(244, 20);
             this.modelPath.TabIndex = 2;
             // 
             // label1
@@ -99,7 +103,7 @@ namespace EditorTool
             this.assetName.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.assetName.Location = new System.Drawing.Point(19, 27);
             this.assetName.Name = "assetName";
-            this.assetName.Size = new System.Drawing.Size(264, 20);
+            this.assetName.Size = new System.Drawing.Size(325, 20);
             this.assetName.TabIndex = 4;
             // 
             // shouldGenerateCollmap
@@ -118,7 +122,7 @@ namespace EditorTool
             this.itemMaterialCategories.FormattingEnabled = true;
             this.itemMaterialCategories.Location = new System.Drawing.Point(6, 41);
             this.itemMaterialCategories.Name = "itemMaterialCategories";
-            this.itemMaterialCategories.Size = new System.Drawing.Size(252, 109);
+            this.itemMaterialCategories.Size = new System.Drawing.Size(313, 109);
             this.itemMaterialCategories.TabIndex = 7;
             // 
             // shouldFlipUV
@@ -145,15 +149,24 @@ namespace EditorTool
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.materialPreview);
             this.groupBox1.Controls.Add(this.itemMaterialCategoriesTrans);
             this.groupBox1.Controls.Add(this.enableTransparency);
             this.groupBox1.Controls.Add(this.shouldFlipUV);
-            this.groupBox1.Location = new System.Drawing.Point(19, 93);
+            this.groupBox1.Location = new System.Drawing.Point(19, 134);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(264, 157);
+            this.groupBox1.Size = new System.Drawing.Size(325, 157);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Model Materials";
+            // 
+            // materialPreview
+            // 
+            this.materialPreview.Location = new System.Drawing.Point(210, 42);
+            this.materialPreview.Name = "materialPreview";
+            this.materialPreview.Size = new System.Drawing.Size(109, 109);
+            this.materialPreview.TabIndex = 13;
+            this.materialPreview.TabStop = false;
             // 
             // itemMaterialCategoriesTrans
             // 
@@ -161,7 +174,7 @@ namespace EditorTool
             this.itemMaterialCategoriesTrans.FormattingEnabled = true;
             this.itemMaterialCategoriesTrans.Location = new System.Drawing.Point(6, 42);
             this.itemMaterialCategoriesTrans.Name = "itemMaterialCategoriesTrans";
-            this.itemMaterialCategoriesTrans.Size = new System.Drawing.Size(252, 109);
+            this.itemMaterialCategoriesTrans.Size = new System.Drawing.Size(198, 109);
             this.itemMaterialCategoriesTrans.TabIndex = 12;
             this.itemMaterialCategoriesTrans.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.itemMaterialCategoriesTrans_SelectedIndexChanged);
             this.itemMaterialCategoriesTrans.SelectedIndexChanged += new System.EventHandler(this.itemMaterialCategoriesTrans_SelectedIndexChanged_1);
@@ -182,18 +195,42 @@ namespace EditorTool
             this.resizedCollisionGroup.Controls.Add(this.itemMaterialCategories);
             this.resizedCollisionGroup.Controls.Add(this.shouldGenerateCollmap);
             this.resizedCollisionGroup.Controls.Add(this.shouldCreateBoxCollider);
-            this.resizedCollisionGroup.Location = new System.Drawing.Point(19, 256);
+            this.resizedCollisionGroup.Location = new System.Drawing.Point(19, 297);
             this.resizedCollisionGroup.Name = "resizedCollisionGroup";
-            this.resizedCollisionGroup.Size = new System.Drawing.Size(264, 156);
+            this.resizedCollisionGroup.Size = new System.Drawing.Size(325, 156);
             this.resizedCollisionGroup.TabIndex = 12;
             this.resizedCollisionGroup.TabStop = false;
             this.resizedCollisionGroup.Text = "Model Collision";
+            // 
+            // modelType
+            // 
+            this.modelType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.modelType.FormattingEnabled = true;
+            this.modelType.Items.AddRange(new object[] {
+            "Track",
+            "Player",
+            "Prop"});
+            this.modelType.Location = new System.Drawing.Point(19, 107);
+            this.modelType.Name = "modelType";
+            this.modelType.Size = new System.Drawing.Size(325, 21);
+            this.modelType.TabIndex = 13;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(17, 91);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(63, 13);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Model Type";
             // 
             // Model_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 454);
+            this.ClientSize = new System.Drawing.Size(355, 497);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.modelType);
             this.Controls.Add(this.resizedCollisionGroup);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
@@ -209,6 +246,7 @@ namespace EditorTool
             this.Load += new System.EventHandler(this.Model_Importer_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).EndInit();
             this.resizedCollisionGroup.ResumeLayout(false);
             this.resizedCollisionGroup.PerformLayout();
             this.ResumeLayout(false);
@@ -232,6 +270,9 @@ namespace EditorTool
         private System.Windows.Forms.CheckedListBox itemMaterialCategoriesTrans;
         private System.Windows.Forms.GroupBox resizedCollisionGroup;
         private CheckBox enableTransparency;
+        private PictureBox materialPreview;
+        private ComboBox modelType;
+        private Label label3;
     }
 }
 

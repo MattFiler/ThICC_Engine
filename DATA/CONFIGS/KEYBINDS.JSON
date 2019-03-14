@@ -16,5 +16,12 @@
   "Debug Save Matrix": "D1",
   "Debug Load Matrix": "D2",
   "DebugCamLookDown": "Multiply",
-  "DebugCamLookUp": "Divide"
+  "DebugCamLookUp": "Divide",
+  "Left": "A",
+  "Right": "D",
+  "Forward": "W",
+  "Backwards": "S",
+  "Debug Print Player Location": "O",
+  "Debug Print Camera Location": "I",
+  "DebugCamSpeedup": "RightShift"
 }
