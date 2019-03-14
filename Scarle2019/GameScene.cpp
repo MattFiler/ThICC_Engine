@@ -3,6 +3,7 @@
 #include "GameStateData.h"
 #include "RenderData.h"
 #include "SceneManager.h"
+#include "GameDebugToggles.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -54,6 +55,12 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
 		(*it)->Tick(_GSD);
+	}
+	
+	//Toggle debug mesh renders
+	if (m_keybinds.keyPressed("Debug Toggle"))
+	{
+		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 	}
 }
 
