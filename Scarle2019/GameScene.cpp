@@ -48,14 +48,25 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::MATT_CAM);
 	}
 
+
+	// sets the players waypoint
 	for (int i = 0; i < game_config["player_count"]; i++) {
-		for (size_t j = 0; j < track->getWaypointsBB().size(); j++)
+
+		if (player[i]->getCurrentWaypoint() < 37)
 		{
-			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[j]))
+			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[player[i]->getCurrentWaypoint() + 1]))
 			{
-				player[i]->setCurrentWaypoint(j);
+				player[i]->setCurrentWaypoint(player[i]->getCurrentWaypoint() + 1);
 			}
 		}
+		else
+		{
+			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
+			{
+				player[i]->setCurrentWaypoint(0);
+			}
+		}
+
 	}
 
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
@@ -80,6 +91,7 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 void GameScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
 	//draw 3D objects
+
 
 	//camera setup.
 	for (int i = 0; i < game_config["player_count"]; ++i)
@@ -116,6 +128,7 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
 
+	m_RD = _RD;
 	create3DObjects(_RD ,_ID, _WD);
 
 	create2DObjects(_RD, _WD);
@@ -133,7 +146,6 @@ void GameScene::create2DObjects(RenderData* _RD, WindowData* _WD)
 	//Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
 	//m_2DObjects.push_back(test2);
 	ImageGO2D *test[4]; 
-	Text2D *text[4];
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		test[i] = new ImageGO2D(_RD, "twist");
@@ -173,7 +185,7 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 
 	//Load in a track
 	track = new Track(_RD, game_config["default_track"]);
-	track->setUpWaypointBB();
+	track->setWaypointBB();
 	m_3DObjects.push_back(track);
 
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
@@ -185,7 +197,9 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 
 		//Create a camera to follow the player
 		m_cam[i] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
+		m_cam[i]->SetPos({ (float)50, (float)500, (float)300 });
 		m_cam[i]->SetBehav(Camera::BEHAVIOUR::LERP);
+		//m_cam[i]->SetTarget({ (float)track->getWaypoints()[0][0], (float)track->getWaypoints()[0][1], (float)track->getWaypoints()[0][2] });
 		m_3DObjects.push_back(m_cam[i]);
 
 		//Create a viewport

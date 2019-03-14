@@ -36,7 +36,7 @@ public:
 		return waypoint_bb;
 	};
 
-	void setUpWaypointBB();
+	void setWaypointBB();
 
 	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle);
 

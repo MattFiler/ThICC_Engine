@@ -114,10 +114,10 @@ void Player::Tick(GameStateData* _GSD)
 
 		m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX;
 		m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;
+
 	}
 
-	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
-	position->SetText(std::to_string(current_position), m_RD);
+	position->SetText(std::to_string(current_waypoint), m_RD);
 
 	//apply my base behaviour
 	PhysModel::Tick(_GSD);

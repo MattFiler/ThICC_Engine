@@ -52,5 +52,7 @@ private:
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
+
+	RenderData* m_RD;
 };
 
