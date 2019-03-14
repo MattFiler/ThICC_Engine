@@ -616,9 +616,9 @@ namespace EditorTool
                                 {
                                     waypoint_array.Add(data["pos"]);
                                 }
-                                foreach (JToken data in model_blender_data["waypoints"])
+                                foreach (JToken data in model_blender_data["spawns"])
                                 {
-                                    waypoint_array.Add(data["pos"]);
+                                    spawnpoint_array.Add(data["pos"]);
                                 }
                             }
                             asset_json["map_cameras"] = camera_array;
