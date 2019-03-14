@@ -122,8 +122,11 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 
 			Vector velNorm = m_vel;
 			velNorm.Normalize();
-			float dist = Vector::Distance(velNorm, prevVel);
-			m_vel *= 1 - (dist / 2.4f);
+			if (dampenWallReflect)
+			{
+				float dist = Vector::Distance(velNorm, prevVel);
+				m_vel *= 1 - (dist / 2.4f);
+			}
 		}
 	}
 
