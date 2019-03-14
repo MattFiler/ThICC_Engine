@@ -33,9 +33,17 @@ int WINAPI wWinMain(_In_ HINSTANCE _hInstance, _In_opt_ HINSTANCE _hPrevInstance
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED);
 	}
 #endif
+	
+	// Make sure we launch through visual studio or the launcher
+	std::wstring launch_options(_lpCmdLine); 
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	string launch_options_str = converter.to_bytes(launch_options);
+	if (launch_options_str != "Launcher_Auth") {
+		return 0;
+	}
 
 	UNREFERENCED_PARAMETER(_hPrevInstance);
-	UNREFERENCED_PARAMETER(_lpCmdLine);
+	//UNREFERENCED_PARAMETER(_lpCmdLine);
 
 	if (!XMVerifyCPUSupport())
 		return 1;
@@ -252,8 +260,11 @@ LRESULT CALLBACK WndProc(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lPar
 				SetWindowLongPtr(_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
 				SetWindowLongPtr(_hWnd, GWL_EXSTYLE, 0);
 
-				int width = 800;
-				int height = 600;
+				RECT rc;
+				GetClientRect(_hWnd, &rc);
+				int width = rc.right - rc.left;
+				int height = rc.bottom - rc.top;
+
 				if (game)
 					game->GetDefaultSize(width, height);
 

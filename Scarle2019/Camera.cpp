@@ -149,9 +149,12 @@ void Camera::Tick(GameStateData * _GSD)
 	{
 		if (m_targetObject)
 		{
-			rotCam = m_targetObject->GetOri();
 			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 0.0f, -10.0f }, rotCam), m_targetObject->GetWorld().Up());
 
+			if (rotCam != m_targetObject->GetOri())
+			{
+				rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.08);
+			}
 			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam))
 			{
 				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam), 0.8);
@@ -251,130 +254,55 @@ void Camera::Tick(GameStateData * _GSD)
 	}
 	case BEHAVIOUR::MATT_CAM:
 	{
-		// the shitty debug cam code
-		// dont judge me
-
-		float move_speed = 0.5;
-		KeybindManager m_keybind;
-		m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
-		
-		if (_GSD->m_keyboardState.Left)
-		//if (m_keybind.keyPressed("DebugCamLeft"))
+		float cam_speed = 40.0f;
+		float cam_rot_speed = 0.007f;
+		if (m_keybinds.keyHeld("DebugCamSpeedup"))
 		{
-			if(diff_num == 0 || diff_num == 1)
-				m_pos.x -= move_speed;
-			else if (diff_num == 2 || diff_num == 3)
-				m_pos.z -= move_speed;
-			else if (diff_num == 4 || diff_num == 5)
-				m_pos.x += move_speed;
-			else if (diff_num == 6 || diff_num == 7)
-				m_pos.z += move_speed;
-		}
-		else if (_GSD->m_keyboardState.Right)
-		//else if (m_keybind.keyPressed("DebugCamRight"))
-		{
-			if (diff_num == 0 || diff_num == 1)
-				m_pos.x += move_speed;
-			else if (diff_num == 2 || diff_num == 3)
-				m_pos.z += move_speed;
-			else if (diff_num == 4 || diff_num == 5)
-				m_pos.x -= move_speed;
-			else if (diff_num == 6 || diff_num == 7)
-				m_pos.z -= move_speed;
+			cam_speed *= 2;
+			cam_rot_speed *= 2;
 		}
 
-		if (_GSD->m_keyboardState.Up)
-		//if (m_keybind.keyPressed("DebugCamFor"))
+		Vector3 forwardMove = cam_speed * m_world.Forward();
+		Vector3 rightMove = cam_speed * m_world.Right();
+		Matrix rotMove = Matrix::CreateRotationY(m_yaw);
+		forwardMove = Vector3::Transform(forwardMove, rotMove);
+		rightMove = Vector3::Transform(rightMove, rotMove);
+		m_targetPos = m_pos + forwardMove;
+
+		m_yaw -= cam_rot_speed * _GSD->m_mouseState.x;
+		m_pitch -= cam_rot_speed * _GSD->m_mouseState.y;
+
+		if (m_keybinds.keyHeld("DebugCamFor"))
 		{
-			if (diff_num == 0 || diff_num == 1)
-				m_pos.z -= move_speed;
-			else if (diff_num == 2 || diff_num == 3)
-				m_pos.x += move_speed;
-			else if (diff_num == 4 || diff_num == 5)
-				m_pos.z += move_speed;
-			else if (diff_num == 6 || diff_num == 7)
-				m_pos.x -= move_speed;
+			m_pos += _GSD->m_dt * forwardMove;
+			m_targetPos += _GSD->m_dt * forwardMove;
 		}
-		else if (_GSD->m_keyboardState.Down)
-		//else if (m_keybind.keyPressed("DebugCamBack"))
+		else if (m_keybinds.keyHeld("DebugCamBack"))
 		{
-			if (diff_num == 0 || diff_num == 1)
-				m_pos.z += move_speed;
-			else if (diff_num == 2 || diff_num == 3)
-				m_pos.x -= move_speed;
-			else if (diff_num == 4 || diff_num == 5)
-				m_pos.z -= move_speed;
-			else if (diff_num == 6 || diff_num == 7)
-				m_pos.x += move_speed;
+			m_pos -= _GSD->m_dt * forwardMove;
+			m_targetPos -= _GSD->m_dt * forwardMove;
 		}
 
-		if (_GSD->m_keyboardState.PageUp)
-		//if (m_keybind.keyPressed("DebugCamDown"))
+		if (m_keybinds.keyHeld("DebugCamLeft"))
 		{
-			m_pos.y -= move_speed;
+			m_pos -= _GSD->m_dt * rightMove;
+			m_targetPos -= _GSD->m_dt * rightMove;
 		}
-		else if (_GSD->m_keyboardState.Home)
-		//else if (m_keybind.keyPressed("DebugCamUp"))
+		else if (m_keybinds.keyHeld("DebugCamRight"))
 		{
-			m_pos.y += move_speed;
+			m_pos += _GSD->m_dt * rightMove;
+			m_targetPos += _GSD->m_dt * rightMove;
 		}
 
-		//if (_GSD->m_keyboardState.PageDown && _GSD->m_prevKeyboardState.IsKeyUp(Keyboard::Keys::PageDown))
-		if (m_keybind.keyPressed("DebugCamRotLeft"))
-		{
-			diff_num++;
-			if (diff_num > 7)
-			{
-				diff_num = 0;
-			}
-		}
-		//else if (_GSD->m_keyboardState.End && _GSD->m_prevKeyboardState.IsKeyUp(Keyboard::Keys::End))
-		else if (m_keybind.keyPressed("DebugCamRotRight"))
-		{
-			diff_num--;
-			if (diff_num < 0)
-			{
-				diff_num = 7;
-			}
-		}
-
-		if (m_keybind.keyPressed("DebugCamLookUp"))
-		{
-			if (look_up_down != 0)
-			{
-				look_up_down = 0;
-			}
-			else if (look_up_down == 0)
-			{
-				look_up_down = -1;
-			}
-		}
-		//else if (_GSD->m_keyboardState.End && _GSD->m_prevKeyboardState.IsKeyUp(Keyboard::Keys::End))
-		else if (m_keybind.keyPressed("DebugCamLookDown"))
-		{
-			if (look_up_down != 1)
-			{
-				look_up_down = 1;
-			}
-			else if (look_up_down == 1)
-			{
-				look_up_down = -1;
-			}
-		}
-
-		//Debug output camera location - useful for setting up spawns
-		if (m_keybind.keyPressed("Debug Print Camera Location")) {
-			std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
-		}
-
-		m_rot = Matrix::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
-		if (look_up_down == -1)
-			m_targetPos = m_pos + m_differnce[diff_num];
-		else
-			m_targetPos = m_pos + m_differnce2[look_up_down];
 		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
+
 		break;
 	}
+	}
+
+	//Debug output player location - useful for setting up spawns
+	if (m_keybinds.keyPressed("Debug Print Camera Location")) {
+		std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 	}
 
 	GameObject3D::Tick(_GSD);

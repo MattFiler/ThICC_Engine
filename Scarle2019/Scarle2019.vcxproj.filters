@@ -68,14 +68,14 @@
     <Filter Include="Game Base\UI">
       <UniqueIdentifier>{3993abc3-dff0-43b4-8ddc-ee65b1090c8c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game Base\Observe">
-      <UniqueIdentifier>{34c99cbe-fe88-4dbb-9a68-1d681b7be93f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game Base\UI\Game">
       <UniqueIdentifier>{227f7ca3-9a6c-43e5-aab9-f90550f079bc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game Base\UI\Menu">
       <UniqueIdentifier>{aaa860b3-6dd2-408e-a5a0-db4d6681af41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\States">
+      <UniqueIdentifier>{2c82c528-d2a7-446b-92ca-22bbc98d0975}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -196,10 +196,13 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="UIMangager.h">
-      <Filter>Game Base\Managers</Filter>
+    <ClInclude Include="InputData.h">
+      <Filter>Game Base\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="RaceUI.h">
+    <ClInclude Include="WindowData.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerUI.h">
       <Filter>Game Base\UI\Game</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
@@ -211,10 +214,22 @@
     <ClInclude Include="GameDebugToggles.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="KeybindManager.h">
+    <ClInclude Include="LocalisationManager.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="LocalisationManager.h">
+    <ClInclude Include="StateManager.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Game Base\States</Filter>
+    </ClInclude>
+    <ClInclude Include="CharecterSelectionState.h">
+      <Filter>Game Base\States</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackSelectionState.h">
+      <Filter>Game Base\States</Filter>
+    </ClInclude>
+    <ClInclude Include="KeybindManager.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -294,12 +309,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Game Base\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="UIMangager.cpp">
-      <Filter>Game Base\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="RaceUI.cpp">
-      <Filter>Game Base\UI\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Track.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
@@ -321,6 +330,18 @@
     <ClCompile Include="LocalisationManager.cpp">
       <Filter>Game Base\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerUI.cpp">
+      <Filter>Game Base\UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="StateManager.cpp">
+      <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CharecterSelectionState.cpp">
+      <Filter>Game Base\States</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackSelectionState.cpp">
+      <Filter>Game Base\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">
@@ -333,13 +354,11 @@
     </Manifest>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <Filter>Base Application</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="resource.rc">
       <Filter>Windows Assets</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

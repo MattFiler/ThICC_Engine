@@ -31,6 +31,33 @@ namespace EditorTool
         private void Landing_Load(object sender, EventArgs e)
         {
             loadAssetType.SelectedIndex = 0;
+
+            /* LOAD DEBUG CONFIGURATIONS */
+            REFRESH_DEBUG_LIST();
+            JToken game_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/GAME_CORE.JSON"));
+            DEBUG_DEFAULTTRACK.SelectedItem = game_config["default_track"].Value<string>();
+            DEBUG_PLAYERCOUNT.Value = game_config["player_count"].Value<decimal>();
+        }
+
+        /* SAVE DEBUG CONFIG */
+        private void DEBUG_SAVE_Click(object sender, EventArgs e)
+        {
+            JToken game_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/GAME_CORE.JSON"));
+            game_config["default_track"] = DEBUG_DEFAULTTRACK.SelectedItem.ToString();
+            game_config["player_count"] = DEBUG_PLAYERCOUNT.Value;
+            File.WriteAllText("DATA/CONFIGS/GAME_CORE.JSON", game_config.ToString(Formatting.Indented));
+            MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /* UPDATE DEBUG LEVEL CHOICES */
+        void REFRESH_DEBUG_LIST()
+        {
+            string[] levels = Directory.GetFiles("DATA/MODELS/", "*.SDKMESH", SearchOption.AllDirectories);
+            DEBUG_DEFAULTTRACK.Items.Clear();
+            foreach (string level in levels)
+            {
+                DEBUG_DEFAULTTRACK.Items.Add(Path.GetFileNameWithoutExtension(level));
+            }
         }
 
         /* LOAD ASSET LIST */
@@ -73,6 +100,8 @@ namespace EditorTool
                     fontimporter.Show();
                     break;
             }
+
+            REFRESH_DEBUG_LIST();
         }
 
         /* REFRESH CURRENT LIST */
@@ -199,27 +228,40 @@ namespace EditorTool
         /* COMPILE ASSETS TO BUILD FOLDER */
         private void compileAssets_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             try
             {
                 //Fix VS debugging directory config
-                File.WriteAllText("Scarle2019/Scarle2019.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup></Project>");
+                File.WriteAllText("Scarle2019/Scarle2019.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup></Project>");
 
                 //Copy to debug folder
                 if (Directory.Exists("Debug"))
                 {
                     copyAssets("Debug/DATA/");
+                    if (File.Exists("Debug/Launcher.exe"))
+                    {
+                        File.Delete("Debug/Launcher.exe");
+                    }
+                    File.Copy("DATA/MarioKartLauncher.exe", "Debug/Launcher.exe");
                 }
 
                 //Copy to release folder
                 if (Directory.Exists("Release"))
                 {
                     copyAssets("Release/DATA/");
+                    if(File.Exists("Release/Launcher.exe"))
+                    {
+                        File.Delete("Release/Launcher.exe");
+                    }
+                    File.Copy("DATA/MarioKartLauncher.exe", "Release/Launcher.exe");
                 }
-                
+
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show("Assets successfully compiled.", "Compiled assets.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch
             {
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show("An error occured while compiling assets.\nMake sure that the game is closed and no files are open.", "Asset compile failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -239,12 +281,18 @@ namespace EditorTool
             ignored_extensions.Add(".obj");
             ignored_extensions.Add(".mtl");
             ignored_extensions.Add(".bmp");
+            ignored_extensions.Add(".config");
+            ignored_extensions.Add(".pdb");
+            ignored_extensions.Add(".xml");
+            ignored_extensions.Add(".dll");
             DirectoryCopy("DATA/", output_directory, true, ignored_extensions);
         }
 
         /* LOAD ASSET PREVIEW & CONFIG ON CLICK */
         private void assetList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             //Hide all possible previewers
             modelPreview.Visible = false;
             imagePreview.Visible = false;
@@ -268,6 +316,7 @@ namespace EditorTool
 
                     getConfigPathForSelectedAsset();
                     JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
+                    modelType.SelectedItem = asset_json["model_type"].Value<string>();
                     model_world_x.Text = asset_json["start_x"].Value<string>();
                     model_world_y.Text = asset_json["start_y"].Value<string>();
                     model_world_z.Text = asset_json["start_z"].Value<string>();
@@ -343,6 +392,7 @@ namespace EditorTool
                     }
                     break;
             }
+            Cursor.Current = Cursors.Default;
         }
 
         //Play sound when requested
@@ -384,6 +434,7 @@ namespace EditorTool
             {
                 case "Models":
                     JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
+                    asset_json["model_type"] = modelType.SelectedItem.ToString();
                     asset_json["start_x"] = Convert.ToDouble(model_world_x.Text);
                     asset_json["start_y"] = Convert.ToDouble(model_world_y.Text);
                     asset_json["start_z"] = Convert.ToDouble(model_world_z.Text);
@@ -499,6 +550,13 @@ namespace EditorTool
         {
             Keybind_Editor keybindeditor = new Keybind_Editor();
             keybindeditor.Show();
+        }
+
+        // Open UI editor
+        private void openUiEditor_Click(object sender, EventArgs e)
+        {
+            UI_Editor uieditor = new UI_Editor();
+            uieditor.Show();
         }
 
         private void importModel_Click(object sender, EventArgs e)
