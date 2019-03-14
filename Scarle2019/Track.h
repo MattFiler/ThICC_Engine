@@ -20,16 +20,16 @@ public:
 
 	Vector3 getSuitableSpawnSpot();
 
-	std::vector<std::vector<double>> getWaypoints() {
+	std::vector<Vector3> getWaypoints() {
 		return map_waypoints;
 	};
-	std::vector<std::vector<double>> getSpawnpoints() {
+	std::vector<Vector3> getSpawnpoints() {
 		return map_spawnpoints;
 	};
-	std::vector<std::vector<double>> getCamerasPos() {
+	std::vector<Vector3> getCamerasPos() {
 		return map_cams_pos;
 	};
-	std::vector<std::vector<double>> getCamerasRot() {
+	std::vector<Vector3> getCamerasRot() {
 		return map_cams_rot;
 	};
 	std::vector<BoundingBox> getWaypointsBB() {
@@ -73,10 +73,10 @@ private:
 	float m_triSegSize = 10;
 
 	// waypoints, cameras, and spawns
-	std::vector<std::vector<double>> map_waypoints;
-	std::vector<std::vector<double>> map_spawnpoints;
-	std::vector<std::vector<double>> map_cams_pos;
-	std::vector<std::vector<double>> map_cams_rot;
+	std::vector<Vector3> map_waypoints;
+	std::vector<Vector3> map_spawnpoints;
+	std::vector<Vector3> map_cams_pos;
+	std::vector<Vector3> map_cams_rot;
 
 
 	// waypoint bounding box
