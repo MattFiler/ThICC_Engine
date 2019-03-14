@@ -22,9 +22,9 @@ Track::Track(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 	//Parse loaded arrays from config
 	for (json::iterator it = m_track_data_j["map_waypoints"].begin(); it != m_track_data_j["map_waypoints"].end(); ++it) {
 		std::vector<double> this_waypoint;
-		this_waypoint.push_back((double)it.value()[0]);
-		this_waypoint.push_back((double)it.value()[1]);
-		this_waypoint.push_back((double)it.value()[2]);
+		this_waypoint.push_back(((double)it.value()[0]) * m_track_data.scale);
+		this_waypoint.push_back(((double)it.value()[1]) * m_track_data.scale);
+		this_waypoint.push_back(((double)it.value()[2]) * m_track_data.scale);
 		map_waypoints.push_back(this_waypoint);
 	}
 
