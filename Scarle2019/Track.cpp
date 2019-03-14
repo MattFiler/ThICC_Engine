@@ -19,6 +19,36 @@ Track::Track(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 	m_track_data.start_rot = Vector3(m_track_data_j["rot_x"], m_track_data_j["rot_y"], m_track_data_j["rot_z"]); //Hmm, allow this? Will mess with collision.
 	m_triSegSize = m_track_data_j["segment_size"];
 
+	//Parse loaded arrays from config
+	for (json::iterator it = m_track_data_j["map_waypoints"].begin(); it != m_track_data_j["map_waypoints"].end(); ++it) {
+		std::vector<double> this_waypoint;
+		this_waypoint.push_back(((double)it.value()[0]) * m_track_data.scale);
+		this_waypoint.push_back(((double)it.value()[1]) * m_track_data.scale);
+		this_waypoint.push_back(((double)it.value()[2]) * m_track_data.scale);
+		map_waypoints.push_back(this_waypoint);
+	}
+	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
+		std::vector<double> cam_pos;
+		cam_pos.push_back(((double)it.value()["pos"][0]) * m_track_data.scale);
+		cam_pos.push_back(((double)it.value()["pos"][1]) * m_track_data.scale);
+		cam_pos.push_back(((double)it.value()["pos"][2]) * m_track_data.scale);
+
+		std::vector<double> cam_rot;
+		cam_rot.push_back((double)it.value()["rotation"][0]);
+		cam_rot.push_back((double)it.value()["rotation"][1]);
+		cam_rot.push_back((double)it.value()["rotation"][2]);
+
+		map_cams_pos.push_back(cam_pos);
+		map_cams_rot.push_back(cam_rot);
+	}
+	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
+		std::vector<double> this_spawn;
+		this_spawn.push_back(((double)it.value()[0]) * m_track_data.scale);
+		this_spawn.push_back(((double)it.value()[1]) * m_track_data.scale);
+		this_spawn.push_back(((double)it.value()[2]) * m_track_data.scale);
+		map_spawnpoints.push_back(this_spawn);
+	}
+
 	//Set our config in action
 	SetScale(m_track_data.scale);
 	SetRotationInDegrees(m_track_data.start_rot);
@@ -129,6 +159,9 @@ bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _inte
 	GetXYZIndexAtPoint(lower);
 	
 	// Then check all the grid sections covered by this area
+	MeshTri* closestTri = nullptr;
+	float bestDist = 100000;
+	Vector closestIntersect = Vector::Zero;
 	for (int i = lower.z; i <= upper.z; i++)
 	{
 		for (int j = lower.y; j <= upper.y; j++)
@@ -140,14 +173,28 @@ bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _inte
 				{
 					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
 					{
-						return true;
+						float dist = Vector::Distance(_startPos, _intersect);
+						if (dist < bestDist)
+						{
+							closestIntersect = _intersect;
+							bestDist = dist;
+							closestTri = _tri;
+						}
 					}
 				}
 			}
 		}
 	}
-
-	return false;
+	if (closestTri)
+	{
+		_intersect = closestIntersect;
+		_tri = closestTri;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 /* Compares the passed vector to the maximum vector member variable, then updates x, y, z if any are bigger */
