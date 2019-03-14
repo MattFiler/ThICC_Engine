@@ -142,7 +142,7 @@ void PhysModel::updateCollider()
 		m_physData.m_globalBackBottomRight = Vector3::Transform(m_physData.m_localBackBottomRight, m_world);
 
 		//Updates the debug collider position and rotation
-		m_colliderDebug->SetPos(m_physData.m_worldCentre);
+		m_colliderDebug->SetPos(Vector3(m_physData.m_worldCentre.x, m_physData.m_worldCentre.y - (m_physData.m_height / 2), m_physData.m_worldCentre.z));
 		//m_colliderDebug->SetScale(m_collider.Extents);	
 		m_colliderDebug->SetYaw(euler.y);
 		m_colliderDebug->SetPitch(euler.x);

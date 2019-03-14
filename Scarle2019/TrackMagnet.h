@@ -8,7 +8,7 @@ public:
 	bool ShouldStickToTrack(Track& track, GameStateData* _GSD);
 	void ResolveWallCollisions(Track& walls);
 
-	void setDampenWallReflect(bool toggle) { dampenWallReflect = toggle };
+	void setDampenWallReflect(bool toggle) { dampenWallReflect = toggle; };
 
 private:
 	float m_minSnapDist = 0.001f; // Under this distance the kart wont snap to the track

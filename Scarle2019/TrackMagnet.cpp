@@ -26,16 +26,14 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 		{
 			adjustVel *= -1;
 		}
-		// TODO: This offset is hard coded, change if the kart ever has bounds?
-		Vector offset = m_world.Up() / 4;
 		// If the position of the kart is within the snapping area
-		float dist = Vector::Distance(m_pos + offset, intersect);
+		float dist = Vector::Distance(m_pos, intersect);
 		if (dist > m_minSnapDist && dist < m_maxSnapDist)
 		{
 			// Turn gravity off when within the snapping zone, this smooths out movment
 			m_gravVel = Vector3::Zero;
 			m_gravDirection = Vector3::Zero;
-			Vector3 moveVector = (intersect + offset) - m_pos;
+			Vector3 moveVector = intersect - m_pos;
 			if (moveVector.Length() > m_maxSnapSnep* _GSD->m_dt)
 			{
 				moveVector.Normalize();
