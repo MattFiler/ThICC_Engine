@@ -20,9 +20,9 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	float modifiedMaxRotation = m_maxRotation;
 	if (shouldStick)
 	{
-		Vector adjustVel = m_velTotal;
+		Vector adjustVel = m_vel;
 		// If velocity is opposite to direction, then the kart is reversing
-		if ((m_velTotal + m_world.Forward()).Length() < m_velTotal.Length())
+		if ((m_vel + m_world.Forward()).Length() < m_vel.Length())
 		{
 			adjustVel *= -1;
 		}
@@ -95,19 +95,28 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 	Vector backSide = m_globalBackRight - m_globalBackLeft;
 
 	Vector intersect = Vector::Zero;
-	MeshTri* tri = nullptr;
+	MeshTri* wallTri = nullptr;
 
-	if (walls.DoesLineIntersect(leftSide, m_globalFrontLeft, intersect, tri, 15) ||
-		walls.DoesLineIntersect(rightSide, m_globalFrontRight, intersect, tri, 15) ||
-		walls.DoesLineIntersect(frontSide, m_globalFrontLeft, intersect, tri, 15) ||
-		walls.DoesLineIntersect(backSide, m_globalFrontLeft, intersect, tri, 15))
+	if (walls.DoesLineIntersect(leftSide, m_globalFrontLeft, intersect, wallTri, 15) ||
+		walls.DoesLineIntersect(rightSide, m_globalFrontRight, intersect, wallTri, 15) ||
+		walls.DoesLineIntersect(frontSide, m_globalFrontLeft, intersect, wallTri, 15) ||
+		walls.DoesLineIntersect(backSide, m_globalFrontLeft, intersect, wallTri, 15))
 	{
 		// Check if the velocity and this wall are not already diverging
-		if ((tri->m_plane.Normal() + m_vel).Length() < m_vel.Length())
+		if ((wallTri->m_plane.Normal() + m_vel).Length() < m_vel.Length())
 		{
 			Vector prevVel = m_vel;
 			prevVel.Normalize();
-			m_vel = Vector::Reflect(m_vel, tri->m_plane.Normal());
+			m_vel = Vector::Reflect(m_vel, wallTri->m_plane.Normal());
+
+			// Map the end point of the vector back onto the track plane
+
+			Vector endPoint = m_pos + m_vel;
+			Vector mappedToPlane = endPoint;
+			MeshTri* tri2 = nullptr;
+			tri->DoesLineIntersect(m_world.Down(), endPoint, mappedToPlane, tri2, 15);
+			m_vel = mappedToPlane - m_pos;
+
 			Vector velNorm = m_vel;
 			velNorm.Normalize();
 			float dist = Vector::Distance(velNorm, prevVel);

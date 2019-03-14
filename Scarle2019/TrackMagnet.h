@@ -14,7 +14,7 @@ private:
 	float m_maxSnapSnep = 50; // The max distance to snap by each second
 
 	Quaternion m_quatRot = Quaternion::Identity;
-	float m_maxAngle = 0.9f; // The steepest angle that will be considered a viable floor collision
+	float m_maxAngle = 0.6f; // The steepest angle that will be considered a viable floor collision
 	float m_maxRotation = 20; // The maximum amount to rotate by each second
 
 	float gravityMultiplier = 35;
