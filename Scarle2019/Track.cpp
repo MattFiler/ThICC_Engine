@@ -59,6 +59,9 @@ Track::Track(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 
 	//Load track vertex list for generating our collmap
 	LoadVertexList(m_filepath.generateFilepath(_filename, m_filepath.MODEL_COLLMAP));
+
+	//m_colliderDebug = new SDKMeshGO3D(_RD, _filename);
+	//m_hasCollider = true;
 }
 
 /* Returns a suitable spawn location for a player in this map */
@@ -143,7 +146,19 @@ Vector Track::CreateVector(string _vector)
 	return Vector(values[0], values[1], values[2]);
 }
 
-/* Checks through all triangles to see if this line intersects any of them. 
+void Track::setUpWaypointBB()
+{
+	for (size_t i = 0; i < map_waypoints.size(); ++i)
+	{
+		waypoint_bb.push_back(BoundingBox());
+		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i][0]), static_cast<float>(map_waypoints[i][1]), static_cast<float>(map_waypoints[i][2]) };
+		waypoint_bb[i].Extents = { 100, 100, 100 };
+	}
+	//m_colliderDebug->SetPos(waypoint_bb[0].Center);
+	//m_colliderDebug->SetScale(waypoint_bb[0].Extents);
+}
+
+/* Checks through all triangles to see if this line intersects any of them.
    The point of intersecion is stored in _intersect */
 bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle)
 {

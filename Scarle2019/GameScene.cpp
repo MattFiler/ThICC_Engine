@@ -30,6 +30,7 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 		_GSD->m_gamePadState[i] = _ID->m_gamePad->GetState(i); //set game controllers state[s]
 	}
 
+
 	if (m_keybinds.keyPressed("Quit"))
 	{
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
@@ -45,6 +46,16 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	if (m_keybinds.keyPressed("Matt"))
 	{
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::MATT_CAM);
+	}
+
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		for (size_t j = 0; j < track->getWaypointsBB().size(); j++)
+		{
+			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[j]))
+			{
+				player[i]->setCurrentWaypoint(j);
+			}
+		}
 	}
 
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
@@ -105,8 +116,6 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
 
-
-
 	create3DObjects(_RD ,_ID, _WD);
 
 	create2DObjects(_RD, _WD);
@@ -127,18 +136,18 @@ void GameScene::create2DObjects(RenderData* _RD, WindowData* _WD)
 	Text2D *text[4];
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
-		test[i]= new ImageGO2D(_RD, "twist");
+		test[i] = new ImageGO2D(_RD, "twist");
 		//test->SetOri(45);
 		test[i]->SetScale(0.1f*Vector2::One);
 		test[i]->SetPos(Vector2(_WD->m_viewport[i].TopLeftX, _WD->m_viewport[i].TopLeftY));
 		//test->CentreOrigin();
 		m_2DObjects.push_back(test[i]);
-		text[i] = new Text2D(m_localiser.getString("debug_text"), _RD);
 
-		float text_pos_x = _WD->m_viewport[i].TopLeftX + _WD->m_viewport[i].Width - text[i]->GetSize().x;
-		float text_pos_y = _WD->m_viewport[i].TopLeftY + _WD->m_viewport[i].Height - text[i]->GetSize().y;
-		text[i]->SetPos(Vector2(text_pos_x, text_pos_y));
-		m_2DObjects.push_back(text[i]);
+		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
+		float text_pos_x = _WD->m_viewport[i].TopLeftX + _WD->m_viewport[i].Width - player[i]->getPosition()->GetSize().x;
+		float text_pos_y = _WD->m_viewport[i].TopLeftY + _WD->m_viewport[i].Height - player[i]->getPosition()->GetSize().y;
+		player[i]->getPosition()->SetPos(Vector2(text_pos_x, text_pos_y));
+		m_2DObjects.push_back(player[i]->getPosition());
 	}
 
 	*&_WD->sprite_viewport = { 0.0f, 0.0f, static_cast<float>(_WD->m_outputWidth), static_cast<float>(_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
@@ -164,6 +173,7 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 
 	//Load in a track
 	track = new Track(_RD, game_config["default_track"]);
+	track->setUpWaypointBB();
 	m_3DObjects.push_back(track);
 
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();

@@ -7,11 +7,13 @@ extern void ExitGame();
 
 Player::Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gamePad) : TrackMagnet(_RD, _filename)
 {
+	m_RD = _RD;
 	SetDrag(0.7);
 	SetPhysicsOn(true);
 	// SetPhysicsOn(false);
 	m_playerID = _playerID;
 	m_gamePad = &_gamePad;
+	position = new Text2D(std::to_string(current_waypoint), _RD);
 }
 
 Player::~Player()
@@ -113,6 +115,10 @@ void Player::Tick(GameStateData* _GSD)
 		m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX;
 		m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;
 	}
+
+	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
+	position->SetText(std::to_string(current_position), m_RD);
+
 	//apply my base behaviour
 	PhysModel::Tick(_GSD);
 
