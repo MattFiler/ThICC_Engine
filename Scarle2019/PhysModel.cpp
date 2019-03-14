@@ -28,6 +28,7 @@ PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _file
 			initCollider(model_data);
 
 			m_colliderDebug = new SDKMeshGO3D(_RD, _filename + " DEBUG");
+			m_colliderDebug->SetScale(m_physData.scale);
 		}
 	}
 }
@@ -110,7 +111,7 @@ void PhysModel::updateCollider()
 		//Updates the debug collider position and rotation
 
 		m_colliderDebug->SetPos(m_collWorldCentre);
-		m_colliderDebug->SetScale(m_collider.Extents);	
+		//m_colliderDebug->SetScale(m_collider.Extents);	
 		m_colliderDebug->SetYaw(euler.y);
 		m_colliderDebug->SetPitch(euler.x);
 		m_colliderDebug->SetRoll(euler.z);

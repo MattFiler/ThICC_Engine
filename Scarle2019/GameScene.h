@@ -3,6 +3,7 @@
 #include "StepTimer.h"
 #include "Scene.h"
 #include "LocalisationManager.h"
+#include "Banana.h" //test
 #include <vector>
 
 using std::vector;
@@ -43,6 +44,7 @@ private:
 	Light*												m_light;
 
 	KeybindManager m_keybinds;
+	Banana m_banana_test;
 
 	std::vector<PhysModel*> m_physModels;
 

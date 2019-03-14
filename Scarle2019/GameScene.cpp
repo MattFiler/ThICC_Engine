@@ -102,7 +102,6 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
 
-
 	create3DObjects(_RD ,_ID, _WD);
 	create2DObjects(_RD);
 
