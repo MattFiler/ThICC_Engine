@@ -19,7 +19,19 @@ public:
 	Track(RenderData* _RD, string _filename);
 
 	Vector3 getSuitableSpawnSpot();
-	std::vector<std::vector<double>> getWaypoints();
+
+	std::vector<std::vector<double>> getWaypoints() {
+		return map_waypoints;
+	};
+	std::vector<std::vector<double>> getSpawnpoints() {
+		return map_spawnpoints;
+	};
+	std::vector<std::vector<double>> getCamerasPos() {
+		return map_cams_pos;
+	};
+	std::vector<std::vector<double>> getCamerasRot() {
+		return map_cams_rot;
+	};
 
 	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle);
 private:
@@ -57,6 +69,8 @@ private:
 	// waypoints, cameras, and spawns
 	std::vector<std::vector<double>> map_waypoints;
 	std::vector<std::vector<double>> map_spawnpoints;
+	std::vector<std::vector<double>> map_cams_pos;
+	std::vector<std::vector<double>> map_cams_rot;
 
 	// Size of each dimension of the vector
 	int m_triGridX = 0;
