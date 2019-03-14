@@ -62,6 +62,8 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 	}
+
+	CollisionManager::collisionDetectionAndResponse(m_physModels);
 }
 
 void GameScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
