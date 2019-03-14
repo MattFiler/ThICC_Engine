@@ -15,7 +15,6 @@ TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _fi
 bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 {
 	Vector intersect;
-	MeshTri* tri = nullptr;
 	Matrix targetWorld = Matrix::Identity;
 	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(m_height*30), m_pos + (m_world.Up() * m_height*2), intersect, tri, m_maxAngle);
 	float modifiedMaxRotation = m_maxRotation;
@@ -90,18 +89,18 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 
 void TrackMagnet::ResolveWallCollisions(Track& walls)
 {
-	Vector leftSide = m_globalFrontLeft - m_globalBackLeft;
-	Vector rightSide = m_globalFrontRight - m_globalBackRight;
-	Vector frontSide = m_globalFrontLeft - m_globalFrontRight;
-	Vector backSide = m_globalBackLeft - m_globalBackRight;
+	Vector leftSide = m_globalBackLeft - m_globalFrontLeft;
+	Vector rightSide = m_globalBackRight - m_globalFrontRight;
+	Vector frontSide = m_globalFrontRight - m_globalFrontLeft;
+	Vector backSide = m_globalBackRight - m_globalBackLeft;
 
 	Vector intersect = Vector::Zero;
 	MeshTri* tri = nullptr;
 
-	if (walls.DoesLineIntersect(leftSide, m_globalFrontLeft, intersect, tri, 5) ||
-		walls.DoesLineIntersect(rightSide, m_globalFrontRight, intersect, tri, 5) ||
-		walls.DoesLineIntersect(frontSide, m_globalFrontLeft, intersect, tri, 5) ||
-		walls.DoesLineIntersect(backSide, m_globalFrontLeft, intersect, tri, 5))
+	if (walls.DoesLineIntersect(leftSide, m_globalFrontLeft, intersect, tri, 15) ||
+		walls.DoesLineIntersect(rightSide, m_globalFrontRight, intersect, tri, 15) ||
+		walls.DoesLineIntersect(frontSide, m_globalFrontLeft, intersect, tri, 15) ||
+		walls.DoesLineIntersect(backSide, m_globalFrontLeft, intersect, tri, 15))
 	{
 		// Check if the velocity and this wall are not already diverging
 		if ((tri->m_plane.Normal() + m_vel).Length() < m_vel.Length())

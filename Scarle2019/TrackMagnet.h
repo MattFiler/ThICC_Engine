@@ -18,4 +18,6 @@ private:
 	float m_maxRotation = 20; // The maximum amount to rotate by each second
 
 	float gravityMultiplier = 35;
+
+	MeshTri* tri = nullptr;
 };
