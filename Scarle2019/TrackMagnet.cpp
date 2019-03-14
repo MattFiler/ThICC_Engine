@@ -16,7 +16,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 {
 	Vector intersect;
 	Matrix targetWorld = Matrix::Identity;
-	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(m_height*30), m_pos + (m_world.Up() * (m_height/2)), intersect, tri, m_maxAngle);
+	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height*30), m_pos + (m_world.Up() * (data.m_height/2)), intersect, tri, m_maxAngle);
 	float modifiedMaxRotation = m_maxRotation;
 	if (shouldStick)
 	{
@@ -52,7 +52,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 		// Calculate a new rotation using 2 points on the plane that is found
 		Vector secondIntersect;
 		MeshTri* tri2 = nullptr;
-		tri->DoesLineIntersect(m_world.Down() * (m_height * 30), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (m_height / 2)), secondIntersect, tri2, m_maxAngle);
+		tri->DoesLineIntersect(m_world.Down() * (data.m_height * 30), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (data.m_height / 2)), secondIntersect, tri2, m_maxAngle);
 		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 	}
@@ -100,10 +100,10 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 	Vector intersect = Vector::Zero;
 	MeshTri* wallTri = nullptr;
 
-	if (walls.DoesLineIntersect(leftSide, data.m_globalFrontTopLeft, intersect, tri, 5) ||
-		walls.DoesLineIntersect(rightSide, data.m_globalFrontTopRight, intersect, tri, 5) ||
-		walls.DoesLineIntersect(frontSide, data.m_globalFrontTopLeft, intersect, tri, 5) ||
-		walls.DoesLineIntersect(backSide, data.m_globalBackTopLeft, intersect, tri, 5))
+	if (walls.DoesLineIntersect(leftSide, data.m_globalFrontTopLeft, intersect, wallTri, 5) ||
+		walls.DoesLineIntersect(rightSide, data.m_globalFrontTopRight, intersect, wallTri, 5) ||
+		walls.DoesLineIntersect(frontSide, data.m_globalFrontTopLeft, intersect, wallTri, 5) ||
+		walls.DoesLineIntersect(backSide, data.m_globalBackTopLeft, intersect, wallTri, 5))
 	{
 		// Check if the velocity and this wall are not already diverging
 		if ((wallTri->m_plane.Normal() + m_vel).Length() < m_vel.Length())
