@@ -21,6 +21,8 @@ public:
 	ImageGO2D(RenderData* _RD, string _filename);
 	virtual ~ImageGO2D();
 
+	XMUINT2 GetSize() { return size; }
+
 	void Render(RenderData* _RD);
 
 	void CentreOrigin();
@@ -32,5 +34,6 @@ protected:
 	int m_resourceNum = -1;
 
 	GameFilepaths m_filepath;
+	XMUINT2 size;
 };
 

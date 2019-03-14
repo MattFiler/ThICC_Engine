@@ -23,6 +23,8 @@ ImageGO2D::ImageGO2D(RenderData* _RD, string _filename)
 	CreateShaderResourceView(_RD->m_d3dDevice.Get(), m_texture.Get(),
 		_RD->m_resourceDescriptors->GetCpuHandle(m_resourceNum = _RD->m_resourceCount++));
 
+	size = GetTextureSize(m_texture.Get());
+
 	auto uploadResourcesFinished = resourceUpload.End(_RD->m_commandQueue.Get());
 
 	uploadResourcesFinished.wait();
@@ -45,8 +47,6 @@ void ImageGO2D::Render(RenderData* _RD)
 
 void ImageGO2D::CentreOrigin()
 {
-	XMUINT2 size = GetTextureSize(m_texture.Get());
-
 	m_origin.x = float(size.x / 2);
 	m_origin.y = float(size.y / 2);
 }

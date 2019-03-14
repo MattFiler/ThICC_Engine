@@ -73,20 +73,21 @@ void GameScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<
 			(*it)->Render(_RD);
 		}
 	}
-	//for (int i = 0; i < game_config["player_count"]; ++i)
-	//{
-	//	ID3D12DescriptorHeap* heaps[] = { _RD->m_resourceDescriptors->Heap() };
-	//	_WD->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
-	//	_RD->m_spriteBatch->SetViewport(_WD->m_viewport[i]);
-	//	_RD->m_spriteBatch->Begin(_WD->m_commandList.Get());
-	//	//draw 2d objects
-	//	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	//	{
-	//		(*it)->Render(_RD);
-	//	}
-	//	_RD->m_spriteBatch->End();
-	//}
+	ID3D12DescriptorHeap* heaps[] = { _RD->m_resourceDescriptors->Heap() };
+	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+
+	m_commandList->RSSetViewports(1, &_WD->sprite_viewport);
+	m_commandList->RSSetScissorRects(1, &_WD->sprite_rect);
+	_RD->m_spriteBatch->SetViewport(_WD->sprite_viewport);
+	_RD->m_spriteBatch->Begin(m_commandList.Get());
+
+	//draw 2d objects
+	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	{
+		(*it)->Render(_RD);
+	}
+	_RD->m_spriteBatch->End();
 }
 
 bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
@@ -96,8 +97,10 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 	game_config << i;
 
 
+
 	create3DObjects(_RD ,_ID, _WD);
-	create2DObjects(_RD);
+
+	create2DObjects(_RD, _WD);
 
 	VBGO3D::PushIBVB(_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
@@ -106,11 +109,31 @@ bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 	return true;
 }
 
-void GameScene::create2DObjects(RenderData* _RD)
+void GameScene::create2DObjects(RenderData* _RD, WindowData* _WD)
 {
 	//test text
 	//Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
 	//m_2DObjects.push_back(test2);
+	ImageGO2D *test[4]; 
+	Text2D *text[4];
+	for (int i = 0; i < game_config["player_count"]; i++)
+	{
+		test[i]= new ImageGO2D(_RD, "twist");
+		//test->SetOri(45);
+		test[i]->SetScale(0.1f*Vector2::One);
+		test[i]->SetPos(Vector2(_WD->m_viewport[i].TopLeftX, _WD->m_viewport[i].TopLeftY));
+		//test->CentreOrigin();
+		m_2DObjects.push_back(test[i]);
+		text[i] = new Text2D(m_localiser.getString("debug_text"), _RD);
+
+		float text_pos_x = _WD->m_viewport[i].TopLeftX + _WD->m_viewport[i].Width - text[i]->GetSize().x;
+		float text_pos_y = _WD->m_viewport[i].TopLeftY + _WD->m_viewport[i].Height - text[i]->GetSize().y;
+		text[i]->SetPos(Vector2(text_pos_x, text_pos_y));
+		m_2DObjects.push_back(text[i]);
+	}
+
+	*&_WD->sprite_viewport = { 0.0f, 0.0f, static_cast<float>(_WD->m_outputWidth), static_cast<float>(_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	*&_WD->sprite_rect = { 0,0,(int)(_WD->m_outputWidth),(int)(_WD->m_outputHeight) };
 }
 
 void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD)
@@ -142,7 +165,7 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 		m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
-		m_cam[i] = new Camera(*&_WD->m_outputWidth, *&_WD->m_outputHeight, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
+		m_cam[i] = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
 		m_cam[i]->SetBehav(Camera::BEHAVIOUR::LERP);
 		m_3DObjects.push_back(m_cam[i]);
 
@@ -151,23 +174,23 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 		float height_mod = 0.5f;
 		switch (i) {
 		case 0: {
-			*&_WD->m_viewport[i] = { 0.0f, 0.0f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight * 0.5f) };
+			*&_WD->m_viewport[i] = { 0.0f, 0.0f, static_cast<float>(_WD->m_outputWidth) * 0.5f, static_cast<float>(_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(_WD->m_outputWidth * 0.5f),(int)(_WD->m_outputHeight * 0.5f) };
 			break;
 		}
 		case 1: {
-			*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(*&_WD->m_outputWidth)* 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight * 0.5f) };
+			*&_WD->m_viewport[i] = { static_cast<float>(_WD->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(_WD->m_outputWidth)* 0.5f, static_cast<float>(_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(_WD->m_outputWidth),(int)(_WD->m_outputHeight * 0.5f) };
 			break;
 		}
 		case 2: {
-			*&_WD->m_viewport[i] = { 0.0f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight) };
+			*&_WD->m_viewport[i] = { 0.0f, static_cast<float>(_WD->m_outputHeight) * 0.5f, static_cast<float>(_WD->m_outputWidth) * 0.5f, static_cast<float>(_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(_WD->m_outputWidth * 0.5f),(int)(_WD->m_outputHeight) };
 			break;
 		}
 		case 3: {
-			*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
+			*&_WD->m_viewport[i] = { static_cast<float>(_WD->m_outputWidth) * 0.5f, static_cast<float>(_WD->m_outputHeight) * 0.5f, static_cast<float>(_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&_WD->m_scissorRect[i] = { 0,0,(int)(_WD->m_outputWidth),(int)(_WD->m_outputHeight) };
 			break;
 		}
 		}
