@@ -25,14 +25,14 @@ void CollisionManager::collisionDetectionAndResponse(std::vector<PhysModel*> _ph
 			continue;
 		}
 
-		float e = 0.1;
+		float e = 1;
 		float j = -(1.0f + e) * contactVel;
-		j /= collision.m_model1->getMass() + collision.m_model2->getMass();
+		j /= 1/collision.m_model1->getMass() + 1/collision.m_model2->getMass();
 
 		Vector3 impulse = j * collision.m_collisionNormal;
 
-		collision.m_model1->setVelocityTotal(collision.m_model1->getVelocity() - collision.m_model1->getMass() * impulse);
-		collision.m_model2->setVelocityTotal(collision.m_model2->getVelocity() - collision.m_model2->getMass() * impulse);
+		collision.m_model1->setVelocity(collision.m_model1->getVelocity() - impulse*(1.0f/collision.m_model1->getMass()));
+		collision.m_model2->setVelocity(collision.m_model2->getVelocity() + impulse * (1.0f / collision.m_model2->getMass()));
 
 	}
 
@@ -51,11 +51,12 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 		{
 			if (physModel1 != physModel2 && physModel1->getCollider().Intersects(physModel2->getCollider()))
 			{
-				Collision collision;				
-				Plane frontPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::FRONT_LEFT), physModel2->getCorner(PhysModel::m_Corner::FRONT_RIGHT));
-				Plane backPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::BACK_LEFT), physModel2->getCorner(PhysModel::m_Corner::BACK_RIGHT));
-				Plane rightPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::FRONT_RIGHT), physModel2->getCorner(PhysModel::m_Corner::BACK_RIGHT));
-				Plane leftPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::FRONT_LEFT), physModel2->getCorner(PhysModel::m_Corner::BACK_LEFT));
+				Collision collision;	
+				
+				Plane frontPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::FRONT_LEFT), physModel2->getCorner(PhysModel::m_Corner::FRONT_RIGHT), physModel2->getHeight());
+				Plane backPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::BACK_LEFT), physModel2->getCorner(PhysModel::m_Corner::BACK_RIGHT), physModel2->getHeight());
+				Plane rightPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::FRONT_RIGHT), physModel2->getCorner(PhysModel::m_Corner::BACK_RIGHT), physModel2->getHeight());
+				Plane leftPlane = getPlane(physModel2->getCorner(PhysModel::m_Corner::FRONT_LEFT), physModel2->getCorner(PhysModel::m_Corner::BACK_LEFT), physModel2->getHeight());
 
 				if (physModel1->getCollider().Intersects(backPlane))
 				{
@@ -63,7 +64,7 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 					collision.m_collisionNormal = backPlane.Normal();
 				}
 				 
-				if (physModel1->getCollider().Intersects(frontPlane))
+				else if (physModel1->getCollider().Intersects(frontPlane))
 				{
 
 					collision.m_frontBack = Collision::m_FrontBack::FRONT;
@@ -96,11 +97,12 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 	return collisions;
 }
 
-Plane CollisionManager::getPlane(Vector3 _corner1, Vector3 _corner2)
+Plane CollisionManager::getPlane(Vector3 _corner1, Vector3 _corner2, float _height)
 {
 	Vector3 side = _corner1 - _corner2;
 	Vector3 endPoint = _corner1 + side;
-	return Plane(_corner1, endPoint / 2, endPoint);;
+	Vector3 distance = Vector3(_corner1.x, _corner1.y + _height, _corner1.z);
+	return Plane(_corner1, endPoint, distance);
 }
 
 

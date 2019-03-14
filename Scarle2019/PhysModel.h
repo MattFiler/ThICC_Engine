@@ -13,7 +13,7 @@ public:
 
 	 enum m_Corner{FRONT_LEFT, FRONT_RIGHT, BACK_RIGHT, BACK_LEFT};
 
-	PhysModel(RenderData* _RD, string _filename, int _id);
+	PhysModel(RenderData* _RD, string _filename);
 	virtual ~PhysModel() = default;
 
 	void initCollider(json &model_data);
@@ -35,6 +35,7 @@ public:
 	Vector3 getVelocityTotal() { return m_velTotal; };
 	void setVelocity(Vector3 _vel) { m_vel = _vel; };
 	void setVelocityTotal(Vector3 _velTotal) { m_velTotal = _velTotal; };
+	float getHeight() { return m_height; };
 
 	BoundingOrientedBox getCollider() { return m_collider; };
 

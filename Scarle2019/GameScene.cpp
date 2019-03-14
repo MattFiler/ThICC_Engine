@@ -55,6 +55,8 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	{
 		(*it)->Tick(_GSD);
 	}
+
+	CollisionManager::collisionDetectionAndResponse(m_physModels);
 }
 
 void GameScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)

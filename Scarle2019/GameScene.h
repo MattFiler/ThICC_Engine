@@ -3,6 +3,7 @@
 #include "StepTimer.h"
 #include "Scene.h"
 #include "LocalisationManager.h"
+#include "CollisionManager.h"
 #include <vector>
 
 using std::vector;

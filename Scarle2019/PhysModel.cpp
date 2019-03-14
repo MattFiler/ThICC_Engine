@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-PhysModel::PhysModel(RenderData * _RD, string _filename, int  _id) :SDKMeshGO3D(_RD, _filename)
+PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _filename)
 {
 	std::string test = m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL);
 	std::ifstream i(test);
@@ -30,8 +30,6 @@ PhysModel::PhysModel(RenderData * _RD, string _filename, int  _id) :SDKMeshGO3D(
 			m_colliderDebug = new SDKMeshGO3D(_RD, _filename + " DEBUG");
 		}
 	}
-
-	m_model_id = _id;
 }
 
 void PhysModel::initCollider(json &model_data)
