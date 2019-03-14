@@ -19,8 +19,9 @@ class MarioKartToolPanel(Panel):
     
     def draw(self,context):
         layout = self.layout
-        layout.operator(MK_KartSpawnPos.bl_idname, text='Kart Spawn Position', icon='CURSOR')
-        layout.operator(MK_CourseIntroCam.bl_idname, text='Course Intro Cam', icon='OUTLINER_OB_CAMERA')
+        layout.operator(MK_KartSpawnPos.bl_idname, text='Add Kart Spawn Position', icon='CURSOR')
+        layout.operator(MK_TrackWaypoint.bl_idname, text='Add Track Waypoint', icon='CURSOR')
+        layout.operator(MK_CourseIntroCam.bl_idname, text='Add Course Intro Cam', icon='OUTLINER_OB_CAMERA')
         layout.operator(MK_SaveAllIntroCams.bl_idname, text='TEST: Debug Output')
         
         
@@ -37,9 +38,29 @@ class MK_KartSpawnPos(bpy.types.Operator):
         
         kart_spawn = bpy.data.objects.new(name="Kart Spawn Position", object_data=None)
         bpy.context.scene.objects.link(kart_spawn)
-        kart_spawn.location = (0.0, 0.0, 0.0)
+        kart_spawn.location = bpy.context.scene.objects.active.location
         kart_spawn.select = True
         bpy.context.scene.objects.active = kart_spawn
+        
+        return {'FINISHED'}
+        
+        
+# Add a track waypoint
+class MK_TrackWaypoint(bpy.types.Operator):
+    """Add a New Track Waypoint"""
+    bl_idname = "object.mk_trackwaypoint_add"
+    bl_label = "Track Waypoint"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        for item in bpy.context.selectable_objects:  
+            item.select = False  
+        
+        track_waypoint = bpy.data.objects.new(name="Track Waypoint", object_data=None)
+        bpy.context.scene.objects.link(track_waypoint)
+        track_waypoint.location = bpy.context.scene.objects.active.location
+        track_waypoint.select = True
+        bpy.context.scene.objects.active = track_waypoint
         
         return {'FINISHED'}
         
@@ -65,7 +86,7 @@ class MK_CourseIntroCam(bpy.types.Operator):
     cam_role = bpy.props.EnumProperty(name="Cam Role", items=cinecam_types)
 
     def execute(self, context):
-        bpy.ops.object.camera_add(location=[0,0,0],rotation=[3.15/2,0,0])
+        bpy.ops.object.camera_add(location=bpy.context.scene.objects.active.location,rotation=[3.15/2,0,0])
         bpy.context.active_object.name = "Course Intro Cam"
         #bpy.context.active_object["cam_role"] = cam_role
         
@@ -80,26 +101,29 @@ class MK_SaveAllIntroCams(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        mk_json = {'cams': [], 'spawns': []}
+        mk_json = {'cams': [], 'spawns': [], 'waypoints': []}
         
         for object in bpy.data.objects:
-            if object.type == "LAMP":
-                mk_json["spawns"].append({"name": object.name, "pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
+            print(object.name)
+            print(object.type)
+            if object.type == "EMPTY":
+                if object.name[:19] == "Kart Spawn Position":
+                    mk_json["spawns"].append({"name": object.name, "pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
+                if object.name[:14] == "Track Waypoint":
+                    mk_json["waypoints"].append({"name": object.name, "pos": [object.location[0], object.location[1], object.location[2]]})
             if object.type == "CAMERA":
-                #print(object.properties)
                 mk_json["cams"].append({"name": object.name, "role": "WIP", "pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
-              
-        print(mk_json)
-        with open('C:/Temp/MARIO_KART_JSON_DUMP.json', 'w') as outfile:
-            json.dump(mk_json, outfile)
         
-
+        with open('D:/GEP-2019-WorkingAI/BlenderPlugin/MARIO_KART_JSON_DUMP.json', 'w') as outfile:
+            json.dump(mk_json, outfile, indent=2, sort_keys=True)
+        
         return {'FINISHED'}
     
     
 # Add menu functions
 def menu_func(self, context):
     self.layout.operator(MK_KartSpawnPos.bl_idname)
+    self.layout.operator(MK_TrackWaypoint.bl_idname)
     self.layout.operator(MK_CourseIntroCam.bl_idname)
     self.layout.operator(MK_SaveAllIntroCams.bl_idname)
     
@@ -107,6 +131,7 @@ def menu_func(self, context):
 def register():
     bpy.utils.register_class(MarioKartToolPanel)
     bpy.utils.register_class(MK_KartSpawnPos)
+    bpy.utils.register_class(MK_TrackWaypoint)
     bpy.utils.register_class(MK_CourseIntroCam)
     bpy.utils.register_class(MK_SaveAllIntroCams)
     bpy.types.VIEW3D_MT_object.append(menu_func)
@@ -115,6 +140,7 @@ def register():
 def unregister():
     bpy.utils.unregister_class(MarioKartToolPanel)
     bpy.utils.unregister_class(MK_KartSpawnPos)
+    bpy.utils.unregister_class(MK_TrackWaypoint)
     bpy.utils.unregister_class(MK_CourseIntroCam)
     bpy.utils.unregister_class(MK_SaveAllIntroCams)
     bpy.types.VIEW3D_MT_object.remove(menu_func)
