@@ -50,24 +50,10 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 
 
 	// sets the players waypoint
-	for (int i = 0; i < game_config["player_count"]; i++) {
+	SetPlayersWaypoint();
 
-		if (player[i]->getCurrentWaypoint() < 37)
-		{
-			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[player[i]->getCurrentWaypoint() + 1]))
-			{
-				player[i]->setCurrentWaypoint(player[i]->getCurrentWaypoint() + 1);
-			}
-		}
-		else
-		{
-			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
-			{
-				player[i]->setCurrentWaypoint(0);
-			}
-		}
-
-	}
+	// Sets the current position of the player on teh leaderboard
+	SetPlayerRanking();
 
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
@@ -86,6 +72,88 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	}
 
 	CollisionManager::collisionDetectionAndResponse(m_physModels);
+}
+
+void GameScene::SetPlayersWaypoint()
+{
+	for (int i = 0; i < game_config["player_count"]; i++) {
+
+		if (player[i]->GetWaypoint() < 37)
+		{
+			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[player[i]->GetWaypoint() + 1]))
+			{
+				player[i]->SetWaypoint(player[i]->GetWaypoint() + 1);
+			}
+		}
+		else
+		{
+			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
+			{
+				player[i]->SetWaypoint(0);
+				player[i]->SetLap(player[i]->GetLap() + 1);
+			}
+		}
+	}
+}
+
+void GameScene::SetPlayerRanking()
+{
+	for (int i = 0; i < game_config["player_count"]; i++)
+	{
+		player[i]->SetRanking(1);
+	}
+
+	for (int i = 0; i < game_config["player_count"]; i++)
+	{
+		for (int j = 0; j < game_config["player_count"]; j++)
+		{
+			if (i != j)
+			{
+				if (player[i]->GetLap() < player[j]->GetLap())
+				{
+					player[i]->SetRanking(player[i]->GetRanking() + 1);
+				}
+				else if (player[i]->GetLap() == player[j]->GetLap())
+				{
+					if (player[i]->GetWaypoint() < player[j]->GetWaypoint())
+					{
+						player[i]->SetRanking(player[i]->GetRanking() + 1);
+					}
+					else if (player[i]->GetWaypoint() == player[j]->GetWaypoint())
+					{
+						float difference = 0;
+						float difference1 = 0;
+
+						if (player[i]->GetWaypoint() != track->getWaypointsBB().size() - 1 && player[j]->GetWaypoint() != track->getWaypointsBB().size() - 1)
+						{
+							difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[player[i]->GetWaypoint() + 1].Center);
+							difference1 = Vector3::Distance(player[j]->GetPos(), track->getWaypointsBB()[player[j]->GetWaypoint() + 1].Center);
+						}
+						else if (player[i]->GetWaypoint() == track->getWaypointsBB().size() - 1 && player[j]->GetWaypoint() != track->getWaypointsBB().size() - 1)
+						{
+							difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[0].Center);
+							difference1 = Vector3::Distance(player[j]->GetPos(), track->getWaypointsBB()[player[j]->GetWaypoint() + 1].Center);
+						}
+						else if (player[i]->GetWaypoint() != track->getWaypointsBB().size() - 1 && player[j]->GetWaypoint() == track->getWaypointsBB().size() - 1)
+						{
+							difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[player[i]->GetWaypoint() + 1].Center);
+							difference1 = Vector3::Distance(player[j]->GetPos(), track->getWaypointsBB()[0].Center);
+						}
+						else if (player[i]->GetWaypoint() == track->getWaypointsBB().size() - 1 && player[j]->GetWaypoint() == track->getWaypointsBB().size() - 1)
+						{
+							difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[0].Center);
+							difference1 = Vector3::Distance(player[j]->GetPos(), track->getWaypointsBB()[0].Center);
+						}
+
+						if (difference > difference1)
+						{
+							player[i]->SetRanking(player[i]->GetRanking() + 1);
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 void GameScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
@@ -156,10 +224,15 @@ void GameScene::create2DObjects(RenderData* _RD, WindowData* _WD)
 		m_2DObjects.push_back(test[i]);
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
-		float text_pos_x = _WD->m_viewport[i].TopLeftX + _WD->m_viewport[i].Width - player[i]->getPosition()->GetSize().x;
-		float text_pos_y = _WD->m_viewport[i].TopLeftY + _WD->m_viewport[i].Height - player[i]->getPosition()->GetSize().y;
-		player[i]->getPosition()->SetPos(Vector2(text_pos_x, text_pos_y));
-		m_2DObjects.push_back(player[i]->getPosition());
+		float text_lap_x = _WD->m_viewport[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.5f;
+		float text_lap_y = _WD->m_viewport[i].TopLeftY + _WD->m_viewport[i].Height - player[i]->GetLapText()->GetSize().y;
+		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
+		m_2DObjects.push_back(player[i]->GetLapText());
+
+		float text_pos_x = _WD->m_viewport[i].TopLeftX + _WD->m_viewport[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
+		float text_pos_y = _WD->m_viewport[i].TopLeftY + _WD->m_viewport[i].Height - player[i]->GetRankingText()->GetSize().y;
+		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
+		m_2DObjects.push_back(player[i]->GetRankingText());
 	}
 
 	*&_WD->sprite_viewport = { 0.0f, 0.0f, static_cast<float>(_WD->m_outputWidth), static_cast<float>(_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };

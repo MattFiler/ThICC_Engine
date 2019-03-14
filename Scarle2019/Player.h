@@ -14,11 +14,15 @@ public:
 	~Player();
 
 	virtual void Tick(GameStateData* _GSD) override;
-	int getCurrentWaypoint() { return current_waypoint; }
-	Text2D* getPosition() { return position; }
+	int GetWaypoint() { return waypoint; }
+	int GetRanking() { return ranking; }
+	int GetLap() { return lap; }
+	Text2D* GetRankingText() { return text_position; }
+	Text2D* GetLapText() { return text_lap; }
 
-	void setCurrentWaypoint(int waypoint) { current_waypoint = waypoint; }
-
+	void SetWaypoint(int _waypoint) { waypoint = _waypoint; }
+	void SetLap(int _lap) { lap = _lap; }
+	void SetRanking(int _position) { ranking = _position; }
 
 
 protected:
@@ -31,8 +35,9 @@ private:
 	Matrix m_savedMatrix;
 	Vector m_savedVel;
 	Vector m_savedGravVel;
-	int current_position = 0;
-	int current_waypoint = 0;
-	int next_waypoint = 0;
-	Text2D *position = nullptr;
+	int ranking = 0;
+	int waypoint = 0;
+	int lap = 1;
+	Text2D *text_position = nullptr;
+	Text2D *text_lap = nullptr;
 };

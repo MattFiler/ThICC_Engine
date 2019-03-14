@@ -13,7 +13,8 @@ Player::Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gameP
 	// SetPhysicsOn(false);
 	m_playerID = _playerID;
 	m_gamePad = &_gamePad;
-	position = new Text2D(std::to_string(current_waypoint), _RD);
+	text_position = new Text2D(std::to_string(waypoint), _RD);
+	text_lap = new Text2D(std::to_string(lap) + "/3", _RD);
 }
 
 Player::~Player()
@@ -117,7 +118,8 @@ void Player::Tick(GameStateData* _GSD)
 
 	}
 
-	position->SetText(std::to_string(current_waypoint), m_RD);
+	text_position->SetText(std::to_string(ranking), m_RD);
+	text_lap->SetText(std::to_string(lap) + "/3", m_RD);
 
 	//apply my base behaviour
 	PhysModel::Tick(_GSD);

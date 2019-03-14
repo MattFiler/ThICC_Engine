@@ -22,6 +22,8 @@ public:
 	~GameScene();
 
 	void Update(GameStateData* _GSD, InputData* _ID) override;
+	void SetPlayersWaypoint();
+	void SetPlayerRanking();
 	void Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
 	bool Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD) override;
 
