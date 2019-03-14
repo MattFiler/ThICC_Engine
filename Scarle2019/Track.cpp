@@ -19,6 +19,36 @@ Track::Track(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 	m_track_data.start_rot = Vector3(m_track_data_j["rot_x"], m_track_data_j["rot_y"], m_track_data_j["rot_z"]); //Hmm, allow this? Will mess with collision.
 	m_triSegSize = m_track_data_j["segment_size"];
 
+	//Parse loaded arrays from config
+	for (json::iterator it = m_track_data_j["map_waypoints"].begin(); it != m_track_data_j["map_waypoints"].end(); ++it) {
+		std::vector<double> this_waypoint;
+		this_waypoint.push_back(((double)it.value()[0]) * m_track_data.scale);
+		this_waypoint.push_back(((double)it.value()[1]) * m_track_data.scale);
+		this_waypoint.push_back(((double)it.value()[2]) * m_track_data.scale);
+		map_waypoints.push_back(this_waypoint);
+	}
+	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
+		std::vector<double> cam_pos;
+		cam_pos.push_back(((double)it.value()["pos"][0]) * m_track_data.scale);
+		cam_pos.push_back(((double)it.value()["pos"][1]) * m_track_data.scale);
+		cam_pos.push_back(((double)it.value()["pos"][2]) * m_track_data.scale);
+
+		std::vector<double> cam_rot;
+		cam_rot.push_back((double)it.value()["rotation"][0]);
+		cam_rot.push_back((double)it.value()["rotation"][1]);
+		cam_rot.push_back((double)it.value()["rotation"][2]);
+
+		map_cams_pos.push_back(cam_pos);
+		map_cams_rot.push_back(cam_rot);
+	}
+	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
+		std::vector<double> this_spawn;
+		this_spawn.push_back(((double)it.value()[0]) * m_track_data.scale);
+		this_spawn.push_back(((double)it.value()[1]) * m_track_data.scale);
+		this_spawn.push_back(((double)it.value()[2]) * m_track_data.scale);
+		map_spawnpoints.push_back(this_spawn);
+	}
+
 	//Set our config in action
 	SetScale(m_track_data.scale);
 	SetRotationInDegrees(m_track_data.start_rot);
@@ -29,6 +59,9 @@ Track::Track(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 
 	//Load track vertex list for generating our collmap
 	LoadVertexList(m_filepath.generateFilepath(_filename, m_filepath.MODEL_COLLMAP));
+
+	//m_colliderDebug = new SDKMeshGO3D(_RD, _filename);
+	//m_hasCollider = true;
 }
 
 /* Returns a suitable spawn location for a player in this map */
@@ -113,7 +146,19 @@ Vector Track::CreateVector(string _vector)
 	return Vector(values[0], values[1], values[2]);
 }
 
-/* Checks through all triangles to see if this line intersects any of them. 
+void Track::setUpWaypointBB()
+{
+	for (size_t i = 0; i < map_waypoints.size(); ++i)
+	{
+		waypoint_bb.push_back(BoundingBox());
+		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i][0]), static_cast<float>(map_waypoints[i][1]), static_cast<float>(map_waypoints[i][2]) };
+		waypoint_bb[i].Extents = { 100, 100, 100 };
+	}
+	//m_colliderDebug->SetPos(waypoint_bb[0].Center);
+	//m_colliderDebug->SetScale(waypoint_bb[0].Extents);
+}
+
+/* Checks through all triangles to see if this line intersects any of them.
    The point of intersecion is stored in _intersect */
 bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle)
 {

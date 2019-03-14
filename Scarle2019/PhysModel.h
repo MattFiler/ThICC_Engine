@@ -1,16 +1,51 @@
 #pragma once
 #include "SDKMeshGO3D.h"
-#include "Collision.h"
 #include <json.hpp>
 using json = nlohmann::json;
 
-struct PhysModelData {
+struct PhysModelData 
+{
 	float scale = 1.0f;
+	
+	Vector3 m_localCentre;
+	Vector3 m_worldCentre;
+
+	float m_width;
+	float m_length;
+	float m_height;
+
+	//Corner Pos in Local Space
+	Vector3 m_localFrontTopLeft;
+	Vector3 m_localFrontTopRight;
+	Vector3 m_localFrontBottomLeft;
+	Vector3 m_localFrontBottomRight;
+	Vector3 m_localBackTopLeft;
+	Vector3 m_localBackTopRight;
+	Vector3 m_localBackBottomLeft;
+	Vector3 m_localBackBottomRight;
+
+	//Corner Pos in World Space
+	Vector3 m_globalFrontCentreLeft;
+	Vector3 m_globalFrontCentreRight;
+	Vector3 m_globalBackCentreLeft;
+	Vector3 m_globalBackCentreRight;
+
+	Vector3 m_globalFrontTopLeft;
+	Vector3 m_globalFrontTopRight;
+	Vector3 m_globalFrontBottomLeft;
+	Vector3 m_globalFrontBottomRight;
+	Vector3 m_globalBackTopLeft;
+	Vector3 m_globalBackTopRight;
+	Vector3 m_globalBackBottomLeft;
+	Vector3 m_globalBackBottomRight;
+
 };
 
 class PhysModel : public SDKMeshGO3D
 {
 public:
+
+	 enum m_Corner{FRONT_LEFT, FRONT_RIGHT, BACK_RIGHT, BACK_LEFT};
 
 	PhysModel(RenderData* _RD, string _filename);
 	virtual ~PhysModel() = default;
@@ -28,14 +63,24 @@ public:
 	void		TogglePhysics() { m_physicsOn = !m_physicsOn; }
 	void		SetDrag(float _drag) { m_drag = _drag; }
 
+	void setMass(float _mass) { m_mass = _mass; };
+	float getMass() { return m_mass; };
+	Vector3 getVelocity() { return m_vel; };
+	Vector3 getVelocityTotal() { return m_velTotal; };
+	void setVelocity(Vector3 _vel) { m_vel = _vel; };
+	void setVelocityTotal(Vector3 _velTotal) { m_velTotal = _velTotal; };
+
 	BoundingOrientedBox getCollider() { return m_collider; };
-	void addCurrentCollision(Collision _currentCollision) { m_currentCollisions.push_back(_currentCollision); };
 
 	SDKMeshGO3D* getDebugCollider() { return m_colliderDebug; };
 
+	const PhysModelData& data = m_physData;
+
 protected:
+	int m_model_id = 0;
 
 	//very basic physics
+	float m_mass = 1;
 	bool m_physicsOn = false;
 	float m_drag = 0.0f;
 	Vector3 m_velTotal = Vector3::Zero; // The total velocity to apply each frame
@@ -47,28 +92,10 @@ protected:
 	Vector3 m_acc = Vector3::Zero;
 	PhysModelData m_physData;
 
-	std::vector<Collision> m_currentCollisions;
-
 	bool m_hasCollider = false;
 	BoundingOrientedBox m_collider; //Bounding box of the model
 
 	SDKMeshGO3D* m_colliderDebug = nullptr;
-	XMFLOAT3 m_collLocalCentre;//Local Centre of the mesh
-	XMFLOAT3 m_collWorldCentre;//World Centre of the mesh and the centre of the bounding box
-	//Corner Pos in Local Space
-	Vector3 m_frontTopLeft;
-	Vector3 m_frontTopRight;
-	Vector3 m_backBottomLeft;
-	Vector3 m_backBottomRight;
-	//Corner Pos in World Space
-	Vector3 m_globalFrontLeft;
-	Vector3 m_globalFrontRight;
-	Vector3 m_globalBackLeft;
-	Vector3 m_globalBackRight;
-	float m_width;
-	float m_length;
-	float m_height;
-
 	XMFLOAT3 MatrixDecomposeYawPitchRoll(Matrix  mat);
 
 };

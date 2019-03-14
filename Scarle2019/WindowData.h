@@ -17,4 +17,6 @@ struct WindowData
 	D3D12_VIEWPORT										men_viewport;
 	D3D12_RECT											men_scissorRect;
 
+	D3D12_VIEWPORT										sprite_viewport;
+	D3D12_RECT									sprite_rect;
 };

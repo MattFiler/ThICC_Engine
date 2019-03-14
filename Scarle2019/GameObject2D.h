@@ -42,6 +42,5 @@ protected:
 	float m_orientation = 0.0f;
 	Color m_colour = Colors::White;
 	Vector2 m_scale = Vector2::One;
-
 };
 

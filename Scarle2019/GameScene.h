@@ -3,6 +3,8 @@
 #include "StepTimer.h"
 #include "Scene.h"
 #include "LocalisationManager.h"
+#include "Banana.h" //test
+#include "CollisionManager.h"
 #include <vector>
 
 using std::vector;
@@ -28,7 +30,7 @@ private:
 	//State Stuff
 	bool m_isPaused;
 
-	void create2DObjects(RenderData* _RD);
+	void create2DObjects(RenderData* _RD, WindowData* _WD);
 	void create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD);
 	void pushBackObjects(RenderData* _RD);
 
@@ -39,10 +41,12 @@ private:
 
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
+	//std::ptr<DirectX::SpriteBatch> m_spriteBatch[4]{NULL};
 	Camera*												m_cam[4];
 	Light*												m_light;
 
 	KeybindManager m_keybinds;
+	Banana m_banana_test;
 
 	std::vector<PhysModel*> m_physModels;
 

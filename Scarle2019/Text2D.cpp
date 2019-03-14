@@ -4,16 +4,18 @@
 #include <codecvt>
 
 
-Text2D::Text2D(string _text)
+Text2D::Text2D(string _text, RenderData* _RD)
 {
-	SetText(_text);
+	SetText(_text, _RD);
 }
 
-void Text2D::SetText(string _text)
+void Text2D::SetText(string _text, RenderData* _RD)
 {
 	m_text = _text;
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	m_wText = converter.from_bytes(m_text.c_str());
+	XMVECTOR v2 = _RD->m_font->MeasureString(m_wText.c_str());
+	XMStoreFloat4(&size, v2);
 }
 
 Text2D::~Text2D()

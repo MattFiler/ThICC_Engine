@@ -8,6 +8,8 @@ public:
 	bool ShouldStickToTrack(Track& track, GameStateData* _GSD);
 	void ResolveWallCollisions(Track& walls);
 
+	void setDampenWallReflect(bool toggle) { dampenWallReflect = toggle; };
+
 private:
 	float m_minSnapDist = 0.001f; // Under this distance the kart wont snap to the track
 	float m_maxSnapDist = 2; // Over this distance the kart wont snap to the track
@@ -20,4 +22,6 @@ private:
 	float gravityMultiplier = 35;
 
 	MeshTri* tri = nullptr;
+
+	bool dampenWallReflect = true;
 };

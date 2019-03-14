@@ -20,7 +20,26 @@ public:
 
 	Vector3 getSuitableSpawnSpot();
 
+	std::vector<std::vector<double>> getWaypoints() {
+		return map_waypoints;
+	};
+	std::vector<std::vector<double>> getSpawnpoints() {
+		return map_spawnpoints;
+	};
+	std::vector<std::vector<double>> getCamerasPos() {
+		return map_cams_pos;
+	};
+	std::vector<std::vector<double>> getCamerasRot() {
+		return map_cams_rot;
+	};
+	std::vector<BoundingBox> getWaypointsBB() {
+		return waypoint_bb;
+	};
+
+	void setUpWaypointBB();
+
 	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle);
+
 private:
 	void LoadVertexList(string _vertex_list);
 	void CreateAndAddTriangle(string _line);
@@ -52,6 +71,16 @@ private:
 
 	// Size for the tri segments (segments are cubes)
 	float m_triSegSize = 10;
+
+	// waypoints, cameras, and spawns
+	std::vector<std::vector<double>> map_waypoints;
+	std::vector<std::vector<double>> map_spawnpoints;
+	std::vector<std::vector<double>> map_cams_pos;
+	std::vector<std::vector<double>> map_cams_rot;
+
+
+	// waypoint bounding box
+	std::vector<BoundingBox> waypoint_bb;
 
 	// Size of each dimension of the vector
 	int m_triGridX = 0;

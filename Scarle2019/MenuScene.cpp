@@ -66,7 +66,7 @@ bool MenuScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, Windo
 void MenuScene::create2DObjects(RenderData * _RD)
 {
 	//test text
-	Text2D* m_enterMenu = new Text2D("Lewis is not cool.");
+	Text2D* m_enterMenu = new Text2D("Lewis is not cool.", _RD);
 	m_2DObjects.push_back(m_enterMenu);
 }
 
