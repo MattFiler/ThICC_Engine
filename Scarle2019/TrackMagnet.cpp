@@ -115,12 +115,7 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 			m_vel = Vector::Reflect(m_vel, wallTri->m_plane.Normal());
 
 			// Map the end point of the vector back onto the track plane
-
-			Vector endPoint = m_pos + m_vel;
-			Vector mappedToPlane = endPoint;
-			MeshTri* tri2 = nullptr;
-			tri->DoesLineIntersect(m_world.Down(), endPoint, mappedToPlane, tri2, 15);
-			m_vel = mappedToPlane - m_pos;
+			MapVectorOntoTri(m_vel, m_pos, m_world.Down(), tri);
 
 			Vector velNorm = m_vel;
 			velNorm.Normalize();
