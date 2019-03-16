@@ -144,58 +144,59 @@ void Track::setUpWaypointBB()
    The point of intersecion is stored in _intersect */
 bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle)
 {
+	// Check to see if the position is within the grid
+	if (!IsPointInBounds(_startPos, m_smallest, m_largest))
+	{
+		return false;
+	}
 	// Find the bounding box created by _startPos and _startPos + _direction
 	Vector endPos = _startPos + _direction;
 	Vector upper = Vector(_startPos.x > endPos.x ? _startPos.x : endPos.x,
-						  _startPos.y > endPos.y ? _startPos.y : endPos.y,
-						  _startPos.z > endPos.z ? _startPos.z : endPos.z);
+		_startPos.y > endPos.y ? _startPos.y : endPos.y,
+		_startPos.z > endPos.z ? _startPos.z : endPos.z);
 	Vector lower = Vector(_startPos.x < endPos.x ? _startPos.x : endPos.x,
-					      _startPos.y < endPos.y ? _startPos.y : endPos.y,
-					      _startPos.z < endPos.z ? _startPos.z : endPos.z);
+		_startPos.y < endPos.y ? _startPos.y : endPos.y,
+		_startPos.z < endPos.z ? _startPos.z : endPos.z);
 	GetXYZIndexAtPoint(upper);
 	GetXYZIndexAtPoint(lower);
-	
-	try {
-		// Then check all the grid sections covered by this area
-		MeshTri* closestTri = nullptr;
-		float bestDist = 100000;
-		Vector closestIntersect = Vector::Zero;
-		for (int i = lower.z; i <= upper.z; i++)
+
+
+	// Then check all the grid sections covered by this area
+	MeshTri* closestTri = nullptr;
+	float bestDist = 100000;
+	Vector closestIntersect = Vector::Zero;
+	for (int i = lower.z; i <= upper.z; i++)
+	{
+		for (int j = lower.y; j <= upper.y; j++)
 		{
-			for (int j = lower.y; j <= upper.y; j++)
+			int index = (i*m_triGridYX) + (j*m_triGridX);
+			for (int k = lower.x; k <= upper.x; k++)
 			{
-				int index = (i*m_triGridYX) + (j*m_triGridX);
-				for (int k = lower.x; k <= upper.x; k++)
+				for (MeshTri* tri : m_triGrid[index + k])
 				{
-					for (MeshTri* tri : m_triGrid[index + k])
+					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
 					{
-						if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
+						float dist = Vector::Distance(_startPos, _intersect);
+						if (dist < bestDist)
 						{
-							float dist = Vector::Distance(_startPos, _intersect);
-							if (dist < bestDist)
-							{
-								closestIntersect = _intersect;
-								bestDist = dist;
-								closestTri = _tri;
-							}
+							closestIntersect = _intersect;
+							bestDist = dist;
+							closestTri = _tri;
 						}
 					}
 				}
 			}
 		}
-		if (closestTri)
-		{
-			_intersect = closestIntersect;
-			_tri = closestTri;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
-	catch (const std::exception& e) {
-		throw std::runtime_error("Too far away from the track!");
+	if (closestTri)
+	{
+		_intersect = closestIntersect;
+		_tri = closestTri;
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
@@ -303,7 +304,7 @@ Vector Track::GetAreaAtIndex(int _index)
 	return returnVec + m_smallest;
 }
 
-/* Returns true is the passed point is inside the bounding box create by _lowerBound and _upperBound */
+/* Returns true if the passed point is inside the bounding box created by _lowerBound and _upperBound */
 bool Track::IsPointInBounds(Vector& _point, Vector& _lowerBound, Vector& _upperBound)
 {
 	return (((_point.x >= _lowerBound.x) && (_point.x <= _upperBound.x)) &&
