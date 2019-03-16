@@ -26,8 +26,10 @@ private:
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;
 	Matrix m_savedMatrix;
+	Vector m_savedPos;
 	Vector m_savedVel;
 	Vector m_savedGravVel;
+	Vector m_savedGravDir;
 	int current_position = 0;
 	int current_waypoint = 0;
 	int next_waypoint = 0;

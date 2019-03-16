@@ -28,6 +28,29 @@ void Player::Tick()
 	//WORKAROUND TO PREVENT PLAYER MOVEMENT - NEEDS TO BE REMOVED
 	if (m_playerID == 0)
 	{
+		// Debug code to save/load the players game state
+		if (m_keymindManager.keyPressed("Debug Save Matrix"))
+		{
+			m_savedMatrix = m_world;
+			m_savedPos = m_pos + (m_world.Up() *20);
+			m_savedVel = m_vel;
+			m_savedGravVel = m_gravVel;
+			m_savedGravDir = m_gravDirection;
+		}
+		else if (m_keymindManager.keyPressed("Debug Load Matrix"))
+		{
+			m_world = m_savedMatrix;
+			m_vel = m_savedVel;
+			m_pos = m_savedPos;
+			m_gravVel = m_savedGravVel;
+			m_velTotal = m_vel + m_savedGravVel;
+			m_gravDirection = m_savedGravDir;
+			Vector3 scale = Vector3::Zero;
+			Quaternion rot = Quaternion::Identity;
+			m_world.Decompose(scale, rot, m_pos);
+			m_rot = Matrix::CreateFromQuaternion(rot);
+		}
+
 		//FORWARD BACK & STRAFE CONTROL HERE
 		Vector3 forwardMove = 30.0f * m_world.Forward();
 		Vector3 rightMove = 60.0f * m_world.Right();
@@ -86,23 +109,7 @@ void Player::Tick()
 			Locator::getID()->m_gamePad.get()->SetVibration(m_playerID, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1);
 		}
 
-		// Debug code to save/load the players game state
-		if (m_keymindManager.keyPressed("Debug Save Matrix"))
-		{
-			m_savedMatrix = m_world;
-			m_savedVel = m_vel;
-			m_savedGravVel = m_gravVel;
-		}
-		else if (m_keymindManager.keyPressed("Debug Load Matrix"))
-		{
-			m_world = m_savedMatrix;
-			m_vel = m_savedVel;
-			m_gravVel = m_savedGravVel;
-			Vector3 scale = Vector3::Zero;
-			Quaternion rot = Quaternion::Identity;
-			m_world.Decompose(scale, rot, m_pos);
-			m_rot = Matrix::CreateFromQuaternion(rot);
-		}
+
 
 		//Debug output player location - useful for setting up spawns
 		if (m_keymindManager.keyPressed("Debug Print Player Location")) {

@@ -243,7 +243,7 @@ void Track::SplitTrisIntoGrid()
 	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
 	float m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
 	m_triGridYX = m_triGridY*m_triGridX;
-	m_triGrid.reserve(m_triGridX*m_triGridY*m_triGridZ);
+	m_triGrid.reserve((m_triGridX+1)*(m_triGridY + 1)*(m_triGridZ + 1));
 	
 	for (int i = 0; i < m_triGrid.capacity(); i++)
 	{
