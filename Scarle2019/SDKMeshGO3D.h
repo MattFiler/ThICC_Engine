@@ -12,12 +12,12 @@ class SDKMeshGO3D :
 	public GameObject3D
 {
 public:
-	SDKMeshGO3D(RenderData* _RD, string _filename);
+	SDKMeshGO3D(string _filename);
 	virtual ~SDKMeshGO3D();
 
-	virtual void Render(RenderData * _RD);
+	virtual void Render();
 
-	virtual void Tick(GameStateData* _GSD) override;
+	virtual void Tick() override;
 
 	bool isDebugMesh() { return is_debug_mesh; }
 

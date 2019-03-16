@@ -14,8 +14,6 @@ public:
 	SceneManager();
 	~SceneManager();
 
-	void configure(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD);
-
 	void addScene(Scene* _scene, Scenes _scene_name);
 	void setCurrentScene(Scenes _scene_name);
 	Scenes getCurrentScene();

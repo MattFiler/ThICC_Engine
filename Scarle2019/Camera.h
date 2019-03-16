@@ -25,7 +25,7 @@ public:
 	};
 
 	Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos);
-	virtual ~Camera();
+	~Camera() = default;
 
 	void SetTarget(GameObject3D* _target) { m_targetObject = _target; }
 	void SetTarget(Vector3 _target) { m_targetObject = NULL; m_targetPos = _target; }
@@ -36,8 +36,8 @@ public:
 	Matrix GetView() { return m_view; }
 	Vector3 GetDeltaPos() { return m_dpos; };
 
-	virtual void Tick(GameStateData* _GSD);
-	virtual void Render(RenderData* _RD) {};
+	virtual void Tick();
+	virtual void Render() {};
 
 
 

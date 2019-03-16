@@ -241,6 +241,9 @@
     <ClInclude Include="Banana.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="ServiceLocator.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -356,6 +359,9 @@
     </ClCompile>
     <ClCompile Include="Banana.cpp">
       <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceLocator.cpp">
+      <Filter>Game Base\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -25,8 +25,8 @@ public:
 	GameObject3D();
 	virtual ~GameObject3D();
 
-	virtual void Tick(GameStateData* _GSD);
-	virtual void Render(RenderData* _RD) = 0;
+	virtual void Tick();
+	virtual void Render() = 0;
 
 	void SetPos(Vector3 _pos) { m_pos = _pos; }
 	void SetScale(float _scale) { m_scale = _scale * Vector3::One; }

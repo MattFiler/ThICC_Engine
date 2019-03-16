@@ -428,7 +428,7 @@ void VBMarchCubes::init(Vector3 _min, Vector3 _max, Vector3 _size, float _isoLev
 	init(_size, _isoLevel, scale, origin, _RD);
 }
 
-VBMarchCubes::VBMarchCubes(RenderData * _RD): VBGO3D(_RD)
+VBMarchCubes::VBMarchCubes(): VBGO3D()
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = s_psoDesc;
 	// compile pixel shader
@@ -463,7 +463,7 @@ VBMarchCubes::VBMarchCubes(RenderData * _RD): VBGO3D(_RD)
 
 
 	// create the pso
-	hr = _RD->m_d3dDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineStateObject));
+	hr = Locator::getRD()->m_d3dDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineStateObject));
 }
 
 void VBMarchCubes::init(Vector3 _size, float _isolevel, Vector3 _scale, Vector3 _origin, RenderData* _RD)
@@ -531,9 +531,8 @@ void VBMarchCubes::init(Vector3 _size, float _isolevel, Vector3 _scale, Vector3 
 	}
 	CalcNorms(&m_vertices[0], indices, m_numIndices / 3);
 
-	BuildIB(_RD, numVerts, indices);
-
-	BuildVB(_RD, numVerts, &m_vertices[0]);
+	BuildIB(numVerts, indices);
+	BuildVB(numVerts, &m_vertices[0]);
 
 	if (false)
 	{

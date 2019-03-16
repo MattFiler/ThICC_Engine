@@ -5,7 +5,7 @@
 #include <fstream>
 #include "math.h"
 
-Track::Track(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
+Track::Track(string _filename) : PhysModel(_filename)
 {
 	//Read in track config
 	std::ifstream i(m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL));

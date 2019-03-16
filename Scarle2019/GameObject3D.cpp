@@ -14,7 +14,7 @@ GameObject3D::~GameObject3D()
 	m_world = scale * m_rot * trans;
 }
 
-void GameObject3D::Tick(GameStateData* _GSD)
+void GameObject3D::Tick()
 {
 	Matrix trans = Matrix::CreateTranslation(m_pos);
 	Matrix scale = Matrix::CreateScale(m_scale);

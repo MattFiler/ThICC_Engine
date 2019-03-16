@@ -33,12 +33,7 @@ Camera::Camera(float _width, float _height, float _near, float _far, GameObject3
 	}
 }
 
-
-Camera::~Camera()
-{
-}
-
-void Camera::Tick(GameStateData * _GSD)
+void Camera::Tick()
 {
 	switch (behav)
 	{
@@ -121,7 +116,7 @@ void Camera::Tick(GameStateData * _GSD)
 		{
 			m_pos = Vector3::Lerp(points[at], points[at + 1], timer / time_out);
 
-			timer += _GSD->m_dt;
+			timer += Locator::getGSD()->m_dt;
 			if (timer >= time_out)
 			{
 				timer = 0.0f;
@@ -169,12 +164,12 @@ void Camera::Tick(GameStateData * _GSD)
 	case BEHAVIOUR::INDEPENDENT_LERP:
 	{
 		m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
-		if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
+		if (Locator::getGSD()->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
 		{
 			angle -= 3.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 		}
 
-		if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickRight())
+		if (Locator::getGSD()->m_gamePadState[m_cameraID].IsRightThumbStickRight())
 		{
 			angle += 3.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 		}
@@ -215,12 +210,12 @@ void Camera::Tick(GameStateData * _GSD)
 	case BEHAVIOUR::INDEPENDENT_FIXED:
 	{
 		m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
-		if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
+		if (Locator::getGSD()->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
 		{
 			angle -= 1.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 		}
 
-		if (_GSD->m_gamePadState[m_cameraID].IsRightThumbStickRight())
+		if (Locator::getGSD()->m_gamePadState[m_cameraID].IsRightThumbStickRight())
 		{
 			angle += 1.0f;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 		}
@@ -269,29 +264,29 @@ void Camera::Tick(GameStateData * _GSD)
 		rightMove = Vector3::Transform(rightMove, rotMove);
 		m_targetPos = m_pos + forwardMove;
 
-		m_yaw -= cam_rot_speed * _GSD->m_mouseState.x;
-		m_pitch -= cam_rot_speed * _GSD->m_mouseState.y;
+		m_yaw -= cam_rot_speed * Locator::getGSD()->m_mouseState.x;
+		m_pitch -= cam_rot_speed * Locator::getGSD()->m_mouseState.y;
 
 		if (m_keybinds.keyHeld("DebugCamFor"))
 		{
-			m_pos += _GSD->m_dt * forwardMove;
-			m_targetPos += _GSD->m_dt * forwardMove;
+			m_pos += Locator::getGSD()->m_dt * forwardMove;
+			m_targetPos += Locator::getGSD()->m_dt * forwardMove;
 		}
 		else if (m_keybinds.keyHeld("DebugCamBack"))
 		{
-			m_pos -= _GSD->m_dt * forwardMove;
-			m_targetPos -= _GSD->m_dt * forwardMove;
+			m_pos -= Locator::getGSD()->m_dt * forwardMove;
+			m_targetPos -= Locator::getGSD()->m_dt * forwardMove;
 		}
 
 		if (m_keybinds.keyHeld("DebugCamLeft"))
 		{
-			m_pos -= _GSD->m_dt * rightMove;
-			m_targetPos -= _GSD->m_dt * rightMove;
+			m_pos -= Locator::getGSD()->m_dt * rightMove;
+			m_targetPos -= Locator::getGSD()->m_dt * rightMove;
 		}
 		else if (m_keybinds.keyHeld("DebugCamRight"))
 		{
-			m_pos += _GSD->m_dt * rightMove;
-			m_targetPos += _GSD->m_dt * rightMove;
+			m_pos += Locator::getGSD()->m_dt * rightMove;
+			m_targetPos += Locator::getGSD()->m_dt * rightMove;
 		}
 
 		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
@@ -305,5 +300,5 @@ void Camera::Tick(GameStateData * _GSD)
 		std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 	}
 
-	GameObject3D::Tick(_GSD);
+	GameObject3D::Tick();
 }

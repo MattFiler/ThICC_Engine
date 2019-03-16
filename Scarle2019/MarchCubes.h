@@ -10,7 +10,7 @@
 class VBMarchCubes : public VBGO3D
 {
 public:
-	VBMarchCubes(RenderData * _RD);
+	VBMarchCubes();
 	virtual ~VBMarchCubes() {};
 
 	//initialise the Veretx and Index buffers for this function
