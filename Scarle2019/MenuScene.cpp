@@ -46,7 +46,7 @@ void MenuScene::Update()
 	}
 }
 
-void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
+void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList)
 {
 	m_commandList->RSSetViewports(1, &Locator::getWD()->men_viewport);
 	m_commandList->RSSetScissorRects(1, &Locator::getWD()->men_scissorRect);

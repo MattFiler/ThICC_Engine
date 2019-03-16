@@ -31,7 +31,7 @@ void SceneManager::Update() {
 	m_scenes[int(m_curr_scene)]->Update();
 }
 
-void SceneManager::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
+void SceneManager::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList)
 {
 	m_scenes[int(m_curr_scene)]->Render(m_commandList);
 }

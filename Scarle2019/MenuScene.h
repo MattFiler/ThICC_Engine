@@ -21,7 +21,7 @@ public:
 	~MenuScene();
 
 	void Update() override;
-	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
+	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList) override;
 	bool Load() override;
 
 private:
