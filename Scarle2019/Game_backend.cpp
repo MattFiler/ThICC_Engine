@@ -26,7 +26,6 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 	m_WD->m_window = _window;
 	m_WD->m_outputWidth = std::max(_width, 1);
 	m_WD->m_outputHeight = std::max(_height, 1);
-	m_RD = new RenderData;
 
 	CreateDevice();
 	CreateResources();
@@ -43,9 +42,6 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 	eflags = eflags | AudioEngine_Debug;
 #endif
 	m_audEngine = std::make_unique<AudioEngine>(eflags);
-
-	//Create the Game State Data object
-	m_GSD = new GameStateData;
 
 	//GEP: Set up RenderData Object
 	m_RD->m_d3dDevice = m_d3dDevice;

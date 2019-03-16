@@ -8,7 +8,7 @@
 class VBSpiral : public VBCube
 {
 public:
-	VBSpiral(RenderData * _RD) :VBCube(_RD) {};
+	VBSpiral() :VBCube() {};
 protected:
 	virtual void Transform() override
 	{

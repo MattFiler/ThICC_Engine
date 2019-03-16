@@ -9,7 +9,7 @@
 
 using namespace std;
 
-VBSnail::VBSnail(RenderData * _RD, std::string _filename, int _sections, float _scale, float _rot, float _step, Color _col1, Color _col2):VBGO3D(_RD)
+VBSnail::VBSnail(std::string _filename, int _sections, float _scale, float _rot, float _step, Color _col1, Color _col2):VBGO3D()
 {
 	int width = 0;
 
@@ -97,8 +97,8 @@ VBSnail::VBSnail(RenderData * _RD, std::string _filename, int _sections, float _
 	//calculate the normals for the basic lighting in the base shader
 	CalcNorms(vertices, indices, numVerts);
 
-	BuildIB(_RD, m_numIndices, indices);
-	BuildVB(_RD, numVerts, vertices);
+	BuildIB(m_numIndices, indices);
+	BuildVB(numVerts, vertices);
 
 	delete[] vertices; //these are all no longer needed as this is now in the Vertex Buffer
 	delete[] transforms;
@@ -137,15 +137,15 @@ VBSnail::VBSnail(RenderData * _RD, std::string _filename, int _sections, float _
 	psoDesc.RasterizerState = RS; // a default(ish) rasterizer state.
 
 	// create the pso
-	hr = _RD->m_d3dDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineStateObject));
+	hr = Locator::getRD()->m_d3dDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineStateObject));
 }
 
 
 
-void VBSnail::Tick(GameStateData* _GSD)
+void VBSnail::Tick()
 {
 	//m_pitch += _GD->m_dt;
 	//m_yaw -= _GD->m_dt;
 	//m_roll += 0.5f * _GD->m_dt;
-	VBGO3D::Tick(_GSD);
+	VBGO3D::Tick();
 }

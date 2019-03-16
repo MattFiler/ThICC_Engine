@@ -2,9 +2,10 @@
 #include "TrackMagnet.h"
 #include "directxmath.h"
 #include "GameStateData.h"
+#include "ServiceLocator.h"
 
 
-TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
+TrackMagnet::TrackMagnet(string _filename) : PhysModel(_filename)
 {
 	m_autoCalculateWolrd = false;
 	Vector3 scale = Vector3::Zero;
@@ -12,7 +13,7 @@ TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _fi
 }
 
 /* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
-bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
+bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
 	Vector intersect;
 	Matrix targetWorld = Matrix::Identity;
@@ -34,10 +35,10 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 			m_gravVel = Vector3::Zero;
 			m_gravDirection = Vector3::Zero;
 			Vector3 moveVector = intersect - m_pos;
-			if (moveVector.Length() > m_maxSnapSnep* _GSD->m_dt)
+			if (moveVector.Length() > m_maxSnapSnep* Locator::getGSD()->m_dt)
 			{
 				moveVector.Normalize();
-				moveVector *= m_maxSnapSnep* _GSD->m_dt;
+				moveVector *= m_maxSnapSnep* Locator::getGSD()->m_dt;
 			}
 			SetPos(m_pos + moveVector);
 		}
@@ -71,7 +72,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	// Calculate the distance between the current and target rotation
 	Quaternion inverseRot = Quaternion::Identity;
 	m_quatRot.Inverse(inverseRot);
-	float lerpDelta = (modifiedMaxRotation * _GSD->m_dt) / (inverseRot*rot).Length();
+	float lerpDelta = (modifiedMaxRotation * Locator::getGSD()->m_dt) / (inverseRot*rot).Length();
 	if (lerpDelta > 1)
 	{
 		lerpDelta = 1;

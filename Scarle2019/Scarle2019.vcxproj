@@ -74,6 +74,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)nlohmann;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -81,6 +82,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)nlohmann;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -204,6 +206,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SDKMeshGO3D.h" />
+    <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="State.h" />
@@ -255,6 +258,7 @@
     <ClCompile Include="PlayerUI.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SDKMeshGO3D.cpp" />
+    <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TestSound.cpp" />

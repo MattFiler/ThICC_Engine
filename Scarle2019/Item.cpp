@@ -2,7 +2,7 @@
 #include "Item.h"
 #include <fstream>
 
-Item::Item(const std::string& item_type) {
+Item::Item(const std::string& item_type) : TrackMagnet(m_model_name) {
 	//Read in item config
 	std::ifstream i("DATA/ITEMS/ITEM_CONFIG.JSON");
 	m_item_config << i;
@@ -32,4 +32,8 @@ Item::Item(const std::string& item_type) {
 	for (int i = 0; i < 12; i++) {
 		m_probability_modifier[i] = m_item_config["probabilities"]["place_" + std::to_string(i+1)];
 	}
+
+	//Set model name
+	std::string model_name = m_item_config["model"];
+	m_model_name = model_name;
 }
