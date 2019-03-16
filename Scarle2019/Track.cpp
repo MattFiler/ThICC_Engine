@@ -155,42 +155,47 @@ bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _inte
 	GetXYZIndexAtPoint(upper);
 	GetXYZIndexAtPoint(lower);
 	
-	// Then check all the grid sections covered by this area
-	MeshTri* closestTri = nullptr;
-	float bestDist = 100000;
-	Vector closestIntersect = Vector::Zero;
-	for (int i = lower.z; i <= upper.z; i++)
-	{
-		for (int j = lower.y; j <= upper.y; j++)
+	try {
+		// Then check all the grid sections covered by this area
+		MeshTri* closestTri = nullptr;
+		float bestDist = 100000;
+		Vector closestIntersect = Vector::Zero;
+		for (int i = lower.z; i <= upper.z; i++)
 		{
-			int index = (i*m_triGridYX) + (j*m_triGridX);
-			for (int k = lower.x; k <= upper.x; k++)
+			for (int j = lower.y; j <= upper.y; j++)
 			{
-				for (MeshTri* tri : m_triGrid[index+k])
+				int index = (i*m_triGridYX) + (j*m_triGridX);
+				for (int k = lower.x; k <= upper.x; k++)
 				{
-					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
+					for (MeshTri* tri : m_triGrid[index + k])
 					{
-						float dist = Vector::Distance(_startPos, _intersect);
-						if (dist < bestDist)
+						if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
 						{
-							closestIntersect = _intersect;
-							bestDist = dist;
-							closestTri = _tri;
+							float dist = Vector::Distance(_startPos, _intersect);
+							if (dist < bestDist)
+							{
+								closestIntersect = _intersect;
+								bestDist = dist;
+								closestTri = _tri;
+							}
 						}
 					}
 				}
 			}
 		}
+		if (closestTri)
+		{
+			_intersect = closestIntersect;
+			_tri = closestTri;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
-	if (closestTri)
-	{
-		_intersect = closestIntersect;
-		_tri = closestTri;
-		return true;
-	}
-	else
-	{
-		return false;
+	catch (const std::exception& e) {
+		throw std::runtime_error("Too far away from the track!");
 	}
 }
 
@@ -245,7 +250,6 @@ void Track::SplitTrisIntoGrid()
 		std::vector<MeshTri*> vec;
 		m_triGrid.push_back(vec);
 	}
-
 	for (MeshTri& tri : m_triangles)
 	{
 		Vector upper = tri.GetUpperBound();

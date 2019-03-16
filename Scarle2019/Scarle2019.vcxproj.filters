@@ -244,6 +244,9 @@
     <ClInclude Include="ServiceLocator.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="DebugScene.h">
+      <Filter>Game Base\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -362,6 +365,9 @@
     </ClCompile>
     <ClCompile Include="ServiceLocator.cpp">
       <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugScene.cpp">
+      <Filter>Game Base\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

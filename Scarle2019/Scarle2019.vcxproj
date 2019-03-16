@@ -178,6 +178,7 @@
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="DebugScene.h" />
     <ClInclude Include="fileVBGO.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameDebugToggles.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CharecterSelectionState.cpp" />
+    <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="fileVBGO.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject2D.cpp" />

@@ -39,6 +39,11 @@ void MenuScene::Update()
 	{
 		(*it)->Tick();
 	}
+
+	if (m_key.keyPressed("Load Debug Scene"))
+	{
+		m_scene_manager->setCurrentScene(Scenes::DEBUGSCENE);
+	}
 }
 
 void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)

@@ -320,6 +320,16 @@ void Game::CreateDevice()
 		rtState);
 	m_RD->m_GPeffect = std::make_unique<BasicEffect>(m_d3dDevice.Get(), EffectFlags::Lighting, pd3);
 	m_RD->m_GPeffect->EnableDefaultLighting();
+
+
+	EffectPipelineStateDescription pd5(
+		&GeometricPrimitive::VertexType::InputLayout,
+		CommonStates::Opaque,
+		CommonStates::DepthDefault,
+		CommonStates::CullCounterClockwise,
+		rtState);
+
+	m_RD->effect = std::make_unique<NormalMapEffect>(m_d3dDevice.Get(), EffectFlags::PerPixelLighting, pd5);
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.

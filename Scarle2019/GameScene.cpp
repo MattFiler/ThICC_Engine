@@ -46,7 +46,11 @@ void GameScene::Update()
 	}
 	if (m_keybinds.keyPressed("Matt"))
 	{
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::MATT_CAM);
+		if (m_cam[0]->GetBehav() == Camera::BEHAVIOUR::DEBUG_CAM) {
+			m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
+			return;
+		}
+		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
 	}
 
 	for (int i = 0; i < game_config["player_count"]; i++) {
