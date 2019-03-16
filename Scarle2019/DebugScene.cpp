@@ -82,7 +82,7 @@ bool DebugScene::Load()
 	*&Locator::getWD()->m_scissorRect[0] = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight) };
 
 	//Load in debug objects
-	test_model = new SDKMeshGO3D("TEST_ENV3OBJ");
+	test_model = new SDKMeshGO3D("TEST_ILLUM");
 	m_3DObjects.push_back(test_model);
 
 	//Global illumination
