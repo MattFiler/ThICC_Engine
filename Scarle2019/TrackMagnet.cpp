@@ -55,8 +55,11 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 
-		// Map the veclocity onto the track so the kart doesn't fly off or decellerate
-		MapVectorOntoTri(m_vel, m_pos, targetWorld.Down(), tri);
+		if (dist > m_minSnapDist && dist < m_maxSnapDist)
+		{
+			// Map the veclocity onto the track so the kart doesn't fly off or decellerate
+			MapVectorOntoTri(m_vel, m_pos, targetWorld.Down(), tri);
+		}
 	}
 	else
 	{
