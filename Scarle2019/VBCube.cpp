@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "VBCube.h"
 
-void VBCube::Init(int _size, RenderData* _RD)
+void VBCube::Init(int _size)
 {
 	// this is most certinaly not the most efficent way of doing most of this
 	//but it does give you a very clear idea of what is actually going on
@@ -126,8 +126,8 @@ void VBCube::Init(int _size, RenderData* _RD)
 	//calculate the normals for the basic lighting in the base shader
 	CalcNorms(m_vertices, indices, numVerts);
 
-	BuildIB(_RD, m_numIndices, indices);
-	BuildVB(_RD, numVerts, m_vertices);
+	BuildIB(m_numIndices, indices);
+	BuildVB(numVerts, m_vertices);
 
 	delete[] indices;    //this is no longer needed as this is now in the index Buffer
 	delete[] m_vertices; //this is no longer needed as this is now in the Vertex Buffer

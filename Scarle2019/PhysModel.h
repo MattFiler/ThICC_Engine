@@ -47,14 +47,14 @@ public:
 
 	 enum m_Corner{FRONT_LEFT, FRONT_RIGHT, BACK_RIGHT, BACK_LEFT};
 
-	PhysModel(RenderData* _RD, string _filename);
+	PhysModel(string _filename);
 	virtual ~PhysModel() = default;
 
 	void initCollider(json &model_data);
 	bool hasCollider() {return m_hasCollider;};
 	void updateCollider();
 
-	virtual void Tick(GameStateData* _GSD) override;
+	virtual void Tick() override;
 
 	bool		IsPhysicsOn() { return m_physicsOn; }
 	float		GetDrag() { return m_drag; }

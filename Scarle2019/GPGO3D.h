@@ -31,9 +31,9 @@ public:
 	GPGO3D(GPGO3D_Type _type = GP_NONE);
 	virtual ~GPGO3D();
 
-	virtual void Render(RenderData* _RD);
+	virtual void Render();
 
-	virtual void Tick(GameStateData* _GSD) override;
+	virtual void Tick() override;
 
 	void Reset() override;
 

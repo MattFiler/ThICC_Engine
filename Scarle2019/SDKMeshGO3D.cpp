@@ -3,9 +3,11 @@
 #include <codecvt>
 #include "RenderData.h"
 #include "GameDebugToggles.h"
+//#include <wrl.h>
+//#include <d3d11.h>
 
 //The Mesh Content Task of Vis Studio should be able to take fbx, dae and obj models
-SDKMeshGO3D::SDKMeshGO3D(RenderData* _RD, string _filename)
+SDKMeshGO3D::SDKMeshGO3D(string _filename)
 {
 	m_type = GO3D_RT_SDK;
 
@@ -13,11 +15,21 @@ SDKMeshGO3D::SDKMeshGO3D(RenderData* _RD, string _filename)
 	string fullpath = m_filepath.generateFilepath(_filename, m_filepath.MODEL);
 	std::wstring wFilename = converter.from_bytes(fullpath.c_str());
 
+	/*
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> defaultTex;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> cubeMap;
+
+	auto effect = std::make_shared<EnvironmentMapEffect>(Locator::getRD()->m_d3dDevice.Get());
+	effect->EnableDefaultLighting();
+	effect->SetTexture(defaultTex.Get());
+	effect->SetEnvironmentMap(cubeMap.Get());
+	*/
+
 	//A crash here means that the model file wasn't loaded properly.
 	//Have you got the correct file name?
 	m_model = Model::CreateFromSDKMESH(wFilename.c_str());
 
-	ResourceUploadBatch resourceUpload(_RD->m_d3dDevice.Get());
+	ResourceUploadBatch resourceUpload(Locator::getRD()->m_d3dDevice.Get());
 
 	resourceUpload.Begin();
 
@@ -31,11 +43,11 @@ SDKMeshGO3D::SDKMeshGO3D(RenderData* _RD, string _filename)
 
 	//A crash here means that the material texture file wasn't loaded properly.
 	//Did you utilise my brilliant toolkit properly?
-	m_modelResources = m_model->LoadTextures(_RD->m_d3dDevice.Get(), resourceUpload, dirpath_wchar);
+	m_modelResources = m_model->LoadTextures(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, dirpath_wchar);
 
-	_RD->m_fxFactory = std::make_unique<EffectFactory>(m_modelResources->Heap(), _RD->m_states->Heap());
+	Locator::getRD()->m_fxFactory = std::make_unique<EffectFactory>(m_modelResources->Heap(), Locator::getRD()->m_states->Heap());
 
-	auto uploadResourcesFinished = resourceUpload.End(_RD->m_commandQueue.Get());
+	auto uploadResourcesFinished = resourceUpload.End(Locator::getRD()->m_commandQueue.Get());
 
 	uploadResourcesFinished.wait();
 
@@ -55,7 +67,22 @@ SDKMeshGO3D::SDKMeshGO3D(RenderData* _RD, string _filename)
 		CommonStates::CullClockwise,
 		rtState);
 
-	m_modelNormal = m_model->CreateEffects(*_RD->m_fxFactory, pd, pdAlpha);
+	Locator::getRD()->m_fxFactory->EnablePerPixelLighting(true);
+	Locator::getRD()->m_fxFactory->EnableNormalMapEffect(true);
+	m_modelNormal = m_model->CreateEffects(*Locator::getRD()->m_fxFactory, pd, pdAlpha);
+
+	for (auto& effect : m_modelNormal)
+	{
+		auto lights = dynamic_cast<IEffectLights*>(effect.get());
+		if (lights)
+		{
+			lights->SetLightEnabled(0, true);
+			lights->SetLightDiffuseColor(0, Colors::Gold);
+			//lights->SetLightDirection(0, Vector3(0, 0, 0));
+			lights->SetLightEnabled(1, false);
+			lights->SetLightEnabled(2, false);
+		}
+	}
 }
 
 
@@ -65,13 +92,14 @@ SDKMeshGO3D::~SDKMeshGO3D()
 	m_model.reset();
 }
 
-void SDKMeshGO3D::Render(RenderData * _RD)
+void SDKMeshGO3D::Render()
 {
 	if (!isDebugMesh() || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
-		ID3D12DescriptorHeap* heaps[] = { m_modelResources->Heap(), _RD->m_states->Heap() };
-		_RD->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-		Model::UpdateEffectMatrices(m_modelNormal, m_world, _RD->m_cam->GetView(), _RD->m_cam->GetProj());
-		m_model->Draw(_RD->m_commandList.Get(), m_modelNormal.cbegin());
+		ID3D12DescriptorHeap* heaps[] = { m_modelResources->Heap(), Locator::getRD()->m_states->Heap() };
+		Locator::getRD()->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+
+		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
+		m_model->Draw(Locator::getRD()->m_commandList.Get(), m_modelNormal.cbegin());
 	}
 }
 
@@ -82,7 +110,7 @@ void SDKMeshGO3D::Reset()
 	m_modelNormal.clear();
 }
 
-void SDKMeshGO3D::Tick(GameStateData * _GSD)
+void SDKMeshGO3D::Tick()
 {
-	GameObject3D::Tick(_GSD);
+	GameObject3D::Tick();
 }

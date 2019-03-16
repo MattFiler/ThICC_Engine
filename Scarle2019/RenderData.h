@@ -29,6 +29,7 @@ struct RenderData
 	std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch = NULL;
 
 	std::unique_ptr<DirectX::BasicEffect> m_GPeffect = NULL;
+	std::unique_ptr<NormalMapEffect> effect = NULL;
 
 	Camera* m_cam = NULL;
 	Light* m_light=NULL;

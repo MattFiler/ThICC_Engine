@@ -12,10 +12,10 @@ struct GameData;
 class VBSnail : public VBGO3D
 {
 public:
-	VBSnail(RenderData * _RD, std::string _filename, int _sections, float _scale, float _rot, float _step, Color _col1, Color _col2 );
+	VBSnail(std::string _filename, int _sections, float _scale, float _rot, float _step, Color _col1, Color _col2 );
 	virtual ~VBSnail(){};
 
-	virtual void Tick(GameStateData* _GSD) override;
+	virtual void Tick() override;
 
 protected:
 };

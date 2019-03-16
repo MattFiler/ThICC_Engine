@@ -4,6 +4,7 @@
 #include "fileVBGO.h"
 #include "RenderData.h"
 //#include "helper.h"
+#include "ServiceLocator.h"
 #include "DDSTextureLoader.h"
 #include "vertex.h"
 #include <DirectXColors.h>
@@ -11,7 +12,7 @@
 using namespace DirectX;
 using namespace std;
 
-FileVBGO::FileVBGO(string _fileName, RenderData * _RD):VBGO3D(_RD)
+FileVBGO::FileVBGO(string _fileName):VBGO3D()
 {
 	//open file
 	ifstream meshFile;
@@ -36,20 +37,20 @@ FileVBGO::FileVBGO(string _fileName, RenderData * _RD):VBGO3D(_RD)
 		string fullpath = m_filepath.generateFilepath(texFileName, m_filepath.IMAGE);
 		std::wstring wFilename = converter.from_bytes(fullpath.c_str());
 
-		ResourceUploadBatch resourceUpload(_RD->m_d3dDevice.Get());
+		ResourceUploadBatch resourceUpload(Locator::getRD()->m_d3dDevice.Get());
 
 		resourceUpload.Begin();
 
 		DX::ThrowIfFailed(
-			CreateDDSTextureFromFile(_RD->m_d3dDevice.Get(), resourceUpload, wFilename.c_str(),&m_texture));
+			CreateDDSTextureFromFile(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, wFilename.c_str(),&m_texture));
 
-		auto uploadResourcesFinished = resourceUpload.End(_RD->m_commandQueue.Get());
+		auto uploadResourcesFinished = resourceUpload.End(Locator::getRD()->m_commandQueue.Get());
 
 		uploadResourcesFinished.wait();
 
 		for (int i = 0; i < c_swapBufferCount; ++i)
 		{
-			CreateShaderResourceView(_RD->m_d3dDevice.Get(), m_texture, m_mainDescriptorHeap[i]->GetCPUDescriptorHandleForHeapStart());
+			CreateShaderResourceView(Locator::getRD()->m_d3dDevice.Get(), m_texture, m_mainDescriptorHeap[i]->GetCPUDescriptorHandleForHeapStart());
 		}
 	}
 	else
@@ -99,8 +100,8 @@ FileVBGO::FileVBGO(string _fileName, RenderData * _RD):VBGO3D(_RD)
 	}
 	CalcNorms(vertices, indices, m_numIndices);
 
-	BuildIB(_RD, m_numIndices, indices);
-	BuildVB(_RD, numVerts, vertices);
+	BuildIB(m_numIndices, indices);
+	BuildVB(numVerts, vertices);
 
 	//tidy up
 	meshFile.close();

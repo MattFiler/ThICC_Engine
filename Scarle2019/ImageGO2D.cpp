@@ -4,28 +4,28 @@
 #include "RenderData.h"
 
 
-ImageGO2D::ImageGO2D(RenderData* _RD, string _filename)
+ImageGO2D::ImageGO2D(string _filename)
 {
 
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	string fullpath = m_filepath.generateFilepath(_filename, m_filepath.IMAGE);
 	std::wstring wFilename = converter.from_bytes(fullpath.c_str());
 
-	ResourceUploadBatch resourceUpload(_RD->m_d3dDevice.Get());
+	ResourceUploadBatch resourceUpload(Locator::getRD()->m_d3dDevice.Get());
 
 	resourceUpload.Begin();
 
 	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(_RD->m_d3dDevice.Get(), resourceUpload, wFilename.c_str(),
+		CreateDDSTextureFromFile(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, wFilename.c_str(),
 			m_texture.ReleaseAndGetAddressOf()));
 
 
-	CreateShaderResourceView(_RD->m_d3dDevice.Get(), m_texture.Get(),
-		_RD->m_resourceDescriptors->GetCpuHandle(m_resourceNum = _RD->m_resourceCount++));
+	CreateShaderResourceView(Locator::getRD()->m_d3dDevice.Get(), m_texture.Get(),
+		Locator::getRD()->m_resourceDescriptors->GetCpuHandle(m_resourceNum = Locator::getRD()->m_resourceCount++));
 
 	size = GetTextureSize(m_texture.Get());
 
-	auto uploadResourcesFinished = resourceUpload.End(_RD->m_commandQueue.Get());
+	auto uploadResourcesFinished = resourceUpload.End(Locator::getRD()->m_commandQueue.Get());
 
 	uploadResourcesFinished.wait();
 }
@@ -36,9 +36,9 @@ ImageGO2D::~ImageGO2D()
 	m_texture.Reset();
 }
 
-void ImageGO2D::Render(RenderData* _RD)
+void ImageGO2D::Render()
 {
-	_RD->m_spriteBatch->Draw(_RD->m_resourceDescriptors->GetGpuHandle(m_resourceNum),
+	Locator::getRD()->m_spriteBatch->Draw(Locator::getRD()->m_resourceDescriptors->GetGpuHandle(m_resourceNum),
 		GetTextureSize(m_texture.Get()),
 		m_pos, nullptr, m_colour, m_orientation, m_origin, m_scale);
 	//TODO::add sprite effects & layer Depth

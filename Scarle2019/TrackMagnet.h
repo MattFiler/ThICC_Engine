@@ -4,8 +4,8 @@
 class TrackMagnet : public PhysModel
 {
 public:
-	TrackMagnet(RenderData* _RD, string _filename);
-	bool ShouldStickToTrack(Track& track, GameStateData* _GSD);
+	TrackMagnet(string _filename);
+	bool ShouldStickToTrack(Track& track);
 	void ResolveWallCollisions(Track& walls);
 
 	void setDampenWallReflect(bool toggle) { dampenWallReflect = toggle; };

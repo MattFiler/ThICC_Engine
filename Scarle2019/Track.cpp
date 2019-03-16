@@ -5,7 +5,7 @@
 #include <fstream>
 #include "math.h"
 
-Track::Track(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
+Track::Track(string _filename) : PhysModel(_filename)
 {
 	//Read in track config
 	std::ifstream i(m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL));
@@ -21,32 +21,14 @@ Track::Track(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
 
 	//Parse loaded arrays from config
 	for (json::iterator it = m_track_data_j["map_waypoints"].begin(); it != m_track_data_j["map_waypoints"].end(); ++it) {
-		std::vector<double> this_waypoint;
-		this_waypoint.push_back(((double)it.value()[0]) * m_track_data.scale);
-		this_waypoint.push_back(((double)it.value()[1]) * m_track_data.scale);
-		this_waypoint.push_back(((double)it.value()[2]) * m_track_data.scale);
-		map_waypoints.push_back(this_waypoint);
+		map_waypoints.push_back(Vector3(it.value()[0], it.value()[1], it.value()[2]));
 	}
 	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
-		std::vector<double> cam_pos;
-		cam_pos.push_back(((double)it.value()["pos"][0]) * m_track_data.scale);
-		cam_pos.push_back(((double)it.value()["pos"][1]) * m_track_data.scale);
-		cam_pos.push_back(((double)it.value()["pos"][2]) * m_track_data.scale);
-
-		std::vector<double> cam_rot;
-		cam_rot.push_back((double)it.value()["rotation"][0]);
-		cam_rot.push_back((double)it.value()["rotation"][1]);
-		cam_rot.push_back((double)it.value()["rotation"][2]);
-
-		map_cams_pos.push_back(cam_pos);
-		map_cams_rot.push_back(cam_rot);
+		map_cams_pos.push_back(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]));
+		map_cams_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
 	}
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
-		std::vector<double> this_spawn;
-		this_spawn.push_back(((double)it.value()[0]) * m_track_data.scale);
-		this_spawn.push_back(((double)it.value()[1]) * m_track_data.scale);
-		this_spawn.push_back(((double)it.value()[2]) * m_track_data.scale);
-		map_spawnpoints.push_back(this_spawn);
+		map_spawnpoints.push_back(Vector3(it.value()[0], it.value()[1], it.value()[2]));
 	}
 
 	//Set our config in action
@@ -151,7 +133,7 @@ void Track::setUpWaypointBB()
 	for (size_t i = 0; i < map_waypoints.size(); ++i)
 	{
 		waypoint_bb.push_back(BoundingBox());
-		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i][0]), static_cast<float>(map_waypoints[i][1]), static_cast<float>(map_waypoints[i][2]) };
+		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z) };
 		waypoint_bb[i].Extents = { 100, 100, 100 };
 	}
 	//m_colliderDebug->SetPos(waypoint_bb[0].Center);
@@ -173,42 +155,47 @@ bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _inte
 	GetXYZIndexAtPoint(upper);
 	GetXYZIndexAtPoint(lower);
 	
-	// Then check all the grid sections covered by this area
-	MeshTri* closestTri = nullptr;
-	float bestDist = 100000;
-	Vector closestIntersect = Vector::Zero;
-	for (int i = lower.z; i <= upper.z; i++)
-	{
-		for (int j = lower.y; j <= upper.y; j++)
+	try {
+		// Then check all the grid sections covered by this area
+		MeshTri* closestTri = nullptr;
+		float bestDist = 100000;
+		Vector closestIntersect = Vector::Zero;
+		for (int i = lower.z; i <= upper.z; i++)
 		{
-			int index = (i*m_triGridYX) + (j*m_triGridX);
-			for (int k = lower.x; k <= upper.x; k++)
+			for (int j = lower.y; j <= upper.y; j++)
 			{
-				for (MeshTri* tri : m_triGrid[index+k])
+				int index = (i*m_triGridYX) + (j*m_triGridX);
+				for (int k = lower.x; k <= upper.x; k++)
 				{
-					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
+					for (MeshTri* tri : m_triGrid[index + k])
 					{
-						float dist = Vector::Distance(_startPos, _intersect);
-						if (dist < bestDist)
+						if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
 						{
-							closestIntersect = _intersect;
-							bestDist = dist;
-							closestTri = _tri;
+							float dist = Vector::Distance(_startPos, _intersect);
+							if (dist < bestDist)
+							{
+								closestIntersect = _intersect;
+								bestDist = dist;
+								closestTri = _tri;
+							}
 						}
 					}
 				}
 			}
 		}
+		if (closestTri)
+		{
+			_intersect = closestIntersect;
+			_tri = closestTri;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
-	if (closestTri)
-	{
-		_intersect = closestIntersect;
-		_tri = closestTri;
-		return true;
-	}
-	else
-	{
-		return false;
+	catch (const std::exception& e) {
+		throw std::runtime_error("Too far away from the track!");
 	}
 }
 
@@ -263,7 +250,6 @@ void Track::SplitTrisIntoGrid()
 		std::vector<MeshTri*> vec;
 		m_triGrid.push_back(vec);
 	}
-
 	for (MeshTri& tri : m_triangles)
 	{
 		Vector upper = tri.GetUpperBound();
