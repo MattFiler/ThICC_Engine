@@ -9,7 +9,7 @@
 class FileVBGO : public VBGO3D
 {
 public:
-	FileVBGO(std::string _fileName, RenderData * _RD);
+	FileVBGO(std::string _fileName);
 	virtual ~FileVBGO();
 
 private:

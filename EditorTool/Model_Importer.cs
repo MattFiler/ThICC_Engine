@@ -572,7 +572,7 @@ namespace EditorTool
                                 File.Delete(import_directory + Path.GetFileNameWithoutExtension(final_asset_path).Replace(' ', '_') + "_DEBUG.MTL");
                                 if (File.Exists(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + " DEBUG.sdkmesh"))
                                 {
-                                    File.Move(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + " DEBUG.sdkmesh", 
+                                    File.Move(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + " DEBUG.sdkmesh",
                                         import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + " DEBUG.SDKMESH");
                                 }
                             }
@@ -598,6 +598,34 @@ namespace EditorTool
 
                         //Create JSON data
                         JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"model_type\": \"" + modelType.SelectedItem + "\"" + json_extras + ", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0, \"segment_size\": 10}");
+
+                        //Add data dump from Blender if we have it (plugin is still a WIP :))
+                        if (modelType.SelectedItem.ToString() == "Track")
+                        {
+                            JArray camera_array = new JArray();
+                            JArray waypoint_array = new JArray();
+                            JArray spawnpoint_array = new JArray();
+                            if (File.Exists(Path.GetDirectoryName(modelPath.Text) + "\\MARIO_KART_JSON_DUMP.json"))
+                            {
+                                JToken model_blender_data = JToken.Parse(File.ReadAllText(Path.GetDirectoryName(modelPath.Text) + "\\MARIO_KART_JSON_DUMP.json"));
+                                foreach (JToken data in model_blender_data["cams"])
+                                {
+                                    camera_array.Add(data);
+                                }
+                                foreach (JToken data in model_blender_data["waypoints"])
+                                {
+                                    waypoint_array.Add(data["pos"]);
+                                }
+                                foreach (JToken data in model_blender_data["spawns"])
+                                {
+                                    spawnpoint_array.Add(data["pos"]);
+                                }
+                            }
+                            asset_json["map_cameras"] = camera_array;
+                            asset_json["map_waypoints"] = waypoint_array;
+                            asset_json["map_spawnpoints"] = spawnpoint_array;
+                        }
+
                         File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "JSON", asset_json.ToString(Formatting.Indented));
 
                         //Move new SDKMESH to the correct requested filename

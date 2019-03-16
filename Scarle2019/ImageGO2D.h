@@ -18,10 +18,12 @@ class ImageGO2D :
 	public GameObject2D
 {
 public:
-	ImageGO2D(RenderData* _RD, string _filename);
+	ImageGO2D(string _filename);
 	virtual ~ImageGO2D();
 
-	void Render(RenderData* _RD);
+	XMUINT2 GetSize() { return size; }
+
+	void Render();
 
 	void CentreOrigin();
 
@@ -32,5 +34,6 @@ protected:
 	int m_resourceNum = -1;
 
 	GameFilepaths m_filepath;
+	XMUINT2 size;
 };
 

@@ -76,6 +76,7 @@ namespace EditorTool
             this.DEBUG_PLAYERCOUNT = new System.Windows.Forms.NumericUpDown();
             this.DEBUG_SAVE = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.openItemConfig = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
@@ -493,6 +494,7 @@ namespace EditorTool
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.openItemConfig);
             this.groupBox4.Controls.Add(this.openKeybindEditor);
             this.groupBox4.Controls.Add(this.openLocalisationEditor);
             this.groupBox4.Controls.Add(this.openUiEditor);
@@ -501,35 +503,36 @@ namespace EditorTool
             this.groupBox4.Size = new System.Drawing.Size(447, 55);
             this.groupBox4.TabIndex = 14;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Other Tools";
+            this.groupBox4.Text = "Editors";
             // 
             // openKeybindEditor
             // 
-            this.openKeybindEditor.Location = new System.Drawing.Point(6, 19);
+            this.openKeybindEditor.Location = new System.Drawing.Point(117, 19);
             this.openKeybindEditor.Name = "openKeybindEditor";
-            this.openKeybindEditor.Size = new System.Drawing.Size(137, 30);
+            this.openKeybindEditor.Size = new System.Drawing.Size(100, 30);
             this.openKeybindEditor.TabIndex = 3;
-            this.openKeybindEditor.Text = "Keybind Editor";
+            this.openKeybindEditor.Text = "Keybinds";
             this.openKeybindEditor.UseVisualStyleBackColor = true;
             this.openKeybindEditor.Click += new System.EventHandler(this.openKeybindEditor_Click);
             // 
             // openLocalisationEditor
             // 
             this.openLocalisationEditor.Enabled = false;
-            this.openLocalisationEditor.Location = new System.Drawing.Point(304, 19);
+            this.openLocalisationEditor.Location = new System.Drawing.Point(230, 19);
             this.openLocalisationEditor.Name = "openLocalisationEditor";
-            this.openLocalisationEditor.Size = new System.Drawing.Size(137, 30);
+            this.openLocalisationEditor.Size = new System.Drawing.Size(100, 30);
             this.openLocalisationEditor.TabIndex = 2;
-            this.openLocalisationEditor.Text = "Localisation Editor";
+            this.openLocalisationEditor.Text = "Localisation";
             this.openLocalisationEditor.UseVisualStyleBackColor = true;
+            this.openLocalisationEditor.Click += new System.EventHandler(this.openLocalisationEditor_Click);
             // 
             // openUiEditor
             // 
-            this.openUiEditor.Location = new System.Drawing.Point(155, 19);
+            this.openUiEditor.Location = new System.Drawing.Point(7, 19);
             this.openUiEditor.Name = "openUiEditor";
-            this.openUiEditor.Size = new System.Drawing.Size(137, 30);
+            this.openUiEditor.Size = new System.Drawing.Size(99, 30);
             this.openUiEditor.TabIndex = 1;
-            this.openUiEditor.Text = "UI Editor";
+            this.openUiEditor.Text = "UI";
             this.openUiEditor.UseVisualStyleBackColor = true;
             this.openUiEditor.Click += new System.EventHandler(this.openUiEditor_Click);
             // 
@@ -612,6 +615,17 @@ namespace EditorTool
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Debug Configurations";
             // 
+            // openItemConfig
+            // 
+            this.openItemConfig.Enabled = false;
+            this.openItemConfig.Location = new System.Drawing.Point(341, 19);
+            this.openItemConfig.Name = "openItemConfig";
+            this.openItemConfig.Size = new System.Drawing.Size(100, 30);
+            this.openItemConfig.TabIndex = 4;
+            this.openItemConfig.Text = "Items";
+            this.openItemConfig.UseVisualStyleBackColor = true;
+            this.openItemConfig.Click += new System.EventHandler(this.openItemConfig_Click);
+            // 
             // Landing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -689,5 +703,6 @@ namespace EditorTool
         private Label label1;
         private Label label16;
         private ComboBox modelType;
+        private Button openItemConfig;
     }
 }

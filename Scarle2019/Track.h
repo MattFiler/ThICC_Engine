@@ -16,11 +16,30 @@ struct TrackData {
 class Track : public PhysModel
 {
 public:
-	Track(RenderData* _RD, string _filename);
+	Track(string _filename);
 
 	Vector3 getSuitableSpawnSpot();
 
+	std::vector<Vector3> getWaypoints() {
+		return map_waypoints;
+	};
+	std::vector<Vector3> getSpawnpoints() {
+		return map_spawnpoints;
+	};
+	std::vector<Vector3> getCamerasPos() {
+		return map_cams_pos;
+	};
+	std::vector<Vector3> getCamerasRot() {
+		return map_cams_rot;
+	};
+	std::vector<BoundingBox> getWaypointsBB() {
+		return waypoint_bb;
+	};
+
+	void setUpWaypointBB();
+
 	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle);
+
 private:
 	void LoadVertexList(string _vertex_list);
 	void CreateAndAddTriangle(string _line);
@@ -52,6 +71,16 @@ private:
 
 	// Size for the tri segments (segments are cubes)
 	float m_triSegSize = 10;
+
+	// waypoints, cameras, and spawns
+	std::vector<Vector3> map_waypoints;
+	std::vector<Vector3> map_spawnpoints;
+	std::vector<Vector3> map_cams_pos;
+	std::vector<Vector3> map_cams_rot;
+
+
+	// waypoint bounding box
+	std::vector<BoundingBox> waypoint_bb;
 
 	// Size of each dimension of the vector
 	int m_triGridX = 0;

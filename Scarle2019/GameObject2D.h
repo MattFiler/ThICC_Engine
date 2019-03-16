@@ -31,8 +31,8 @@ public:
 
 	virtual void CentreOrigin() = 0;
 
-	virtual void Tick(GameStateData* _GSD) {};
-	virtual void Render(RenderData* _RD) = 0;
+	virtual void Tick() {};
+	virtual void Render() = 0;
 
 	virtual void Reset() = 0;
 
@@ -42,6 +42,5 @@ protected:
 	float m_orientation = 0.0f;
 	Color m_colour = Colors::White;
 	Vector2 m_scale = Vector2::One;
-
 };
 

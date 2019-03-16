@@ -3,6 +3,8 @@
 #include "GameStateData.h"
 #include "RenderData.h"
 #include "SceneManager.h"
+#include "GameDebugToggles.h"
+#include "ServiceLocator.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -21,13 +23,14 @@ GameScene::~GameScene()
 	m_3DObjects.clear();
 }
 
-void GameScene::Update(GameStateData* _GSD, InputData* _ID)
+void GameScene::Update()
 {
 	for (int i = 0; i < game_config["player_count"]; ++i) {
-		player[i]->ShouldStickToTrack(*track, _GSD);
+		player[i]->ShouldStickToTrack(*track);
 		player[i]->ResolveWallCollisions(*track);
-		_GSD->m_gamePadState[i] = _ID->m_gamePad->GetState(i); //set game controllers state[s]
+		Locator::getGSD()->m_gamePadState[i] = Locator::getID()->m_gamePad->GetState(i); //set game controllers state[s]
 	}
+
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -43,79 +46,120 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	}
 	if (m_keybinds.keyPressed("Matt"))
 	{
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::MATT_CAM);
+		if (m_cam[0]->GetBehav() == Camera::BEHAVIOUR::DEBUG_CAM) {
+			m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
+			return;
+		}
+		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
+	}
+
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		for (size_t j = 0; j < track->getWaypointsBB().size(); j++)
+		{
+			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[j]))
+			{
+				player[i]->setCurrentWaypoint(j);
+			}
+		}
 	}
 
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
-		(*it)->Tick(_GSD);
+		(*it)->Tick();
 	}
 
 	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
-		(*it)->Tick(_GSD);
+		(*it)->Tick();
+	}
+	
+	//Toggle debug mesh renders
+	if (m_keybinds.keyPressed("Debug Toggle"))
+	{
+		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 	}
 
 	CollisionManager::collisionDetectionAndResponse(m_physModels);
 }
 
-void GameScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
+void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
 	//draw 3D objects
 
 	//camera setup.
 	for (int i = 0; i < game_config["player_count"]; ++i)
 	{
-		m_commandList->RSSetViewports(1, &_WD->m_viewport[i]);
-		m_commandList->RSSetScissorRects(1, &_WD->m_scissorRect[i]);
-		_RD->m_cam = m_cam[i];
+		m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
+		m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
+		Locator::getRD()->m_cam = m_cam[i];
 
 		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 		{
-			(*it)->Render(_RD);
+			(*it)->Render();
 		}
 	}
-	//for (int i = 0; i < game_config["player_count"]; ++i)
-	//{
-	//	ID3D12DescriptorHeap* heaps[] = { _RD->m_resourceDescriptors->Heap() };
-	//	_WD->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
-	//	_RD->m_spriteBatch->SetViewport(_WD->m_viewport[i]);
-	//	_RD->m_spriteBatch->Begin(_WD->m_commandList.Get());
-	//	//draw 2d objects
-	//	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	//	{
-	//		(*it)->Render(_RD);
-	//	}
-	//	_RD->m_spriteBatch->End();
-	//}
+	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_resourceDescriptors->Heap() };
+	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+
+	m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
+	m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
+	Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
+	Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
+
+	//draw 2d objects
+	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	{
+		(*it)->Render();
+	}
+	Locator::getRD()->m_spriteBatch->End();
 }
 
-bool GameScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
+bool GameScene::Load()
 {
 	//Read in track config
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
 
+	create3DObjects();
 
-	create3DObjects(_RD ,_ID, _WD);
-	create2DObjects(_RD);
+	create2DObjects();
 
-	VBGO3D::PushIBVB(_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
+	VBGO3D::PushIBVB(); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
-	pushBackObjects(_RD);
+	pushBackObjects();
 
 	return true;
 }
 
-void GameScene::create2DObjects(RenderData* _RD)
+void GameScene::create2DObjects()
 {
 	//test text
 	//Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
 	//m_2DObjects.push_back(test2);
+	ImageGO2D *test[4]; 
+	Text2D *text[4];
+	for (int i = 0; i < game_config["player_count"]; i++)
+	{
+		test[i] = new ImageGO2D("twist");
+		//test->SetOri(45);
+		test[i]->SetScale(0.1f*Vector2::One);
+		test[i]->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
+		//test->CentreOrigin();
+		m_2DObjects.push_back(test[i]);
+
+		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
+		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->getPosition()->GetSize().x;
+		float text_pos_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->getPosition()->GetSize().y;
+		player[i]->getPosition()->SetPos(Vector2(text_pos_x, text_pos_y));
+		m_2DObjects.push_back(player[i]->getPosition());
+	}
+
+	*&Locator::getWD()->sprite_viewport = { 0.0f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth), static_cast<float>(Locator::getWD()->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	*&Locator::getWD()->sprite_rect = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight) };
 }
 
-void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD)
+void GameScene::create3DObjects()
 {
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
@@ -133,18 +177,19 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 	}
 
 	//Load in a track
-	track = new Track(_RD, game_config["default_track"]);
+	track = new Track(game_config["default_track"]);
+	track->setUpWaypointBB();
 	m_3DObjects.push_back(track);
 
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
 	for (int i = 0; i < game_config["player_count"]; i++) {
 		//Create a player and position on track
-		player[i] = new Player(_RD, "Standard Kart", i, *_ID->m_gamePad.get());
+		player[i] = new Player("Knuckles Kart", i);
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
-		m_cam[i] = new Camera(*&_WD->m_outputWidth, *&_WD->m_outputHeight, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
+		m_cam[i] = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
 		m_cam[i]->SetBehav(Camera::BEHAVIOUR::LERP);
 		m_3DObjects.push_back(m_cam[i]);
 
@@ -153,23 +198,23 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 		float height_mod = 0.5f;
 		switch (i) {
 		case 0: {
-			*&_WD->m_viewport[i] = { 0.0f, 0.0f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight * 0.5f) };
+			*&Locator::getWD()->m_viewport[i] = { 0.0f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth * 0.5f),(int)(Locator::getWD()->m_outputHeight * 0.5f) };
 			break;
 		}
 		case 1: {
-			*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(*&_WD->m_outputWidth)* 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight * 0.5f) };
+			*&Locator::getWD()->m_viewport[i] = { static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth)* 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight * 0.5f) };
 			break;
 		}
 		case 2: {
-			*&_WD->m_viewport[i] = { 0.0f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight) };
+			*&Locator::getWD()->m_viewport[i] = { 0.0f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth * 0.5f),(int)(Locator::getWD()->m_outputHeight) };
 			break;
 		}
 		case 3: {
-			*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
+			*&Locator::getWD()->m_viewport[i] = { static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(*&Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight) };
 			break;
 		}
 		}
@@ -178,10 +223,10 @@ void GameScene::create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD
 	//Global illumination
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
 	m_3DObjects.push_back(m_light);
-	_RD->m_light = m_light;
+	Locator::getRD()->m_light = m_light;
 }
 
-void GameScene::pushBackObjects(RenderData* _RD)
+void GameScene::pushBackObjects()
 {
 	//Add all 3D game objects with a collider to the collision manager's list
 	for (int i = 0; i < m_3DObjects.size(); i++)

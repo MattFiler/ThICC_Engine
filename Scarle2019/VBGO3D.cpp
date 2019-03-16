@@ -2,6 +2,7 @@
 #include <d3dcompiler.h>
 #include "vertex.h"
 #include "VBGO3D.h"
+#include "ServiceLocator.h"
 #include "RenderData.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
@@ -12,7 +13,7 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC VBGO3D::s_psoDesc = {};
 ID3D12RootSignature* VBGO3D::s_rootSignature = NULL;
 ID3D12Resource* VBGO3D::s_texture= NULL;
 
-VBGO3D::VBGO3D(RenderData * _RD)
+VBGO3D::VBGO3D()
 {
 
 	// create the constant buffer resource heap
@@ -29,14 +30,14 @@ VBGO3D::VBGO3D(RenderData * _RD)
 		heapDesc.NumDescriptors = 1;
 		heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 		heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-		hr = _RD->m_d3dDevice->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_mainDescriptorHeap[i]));
-		CreateShaderResourceView(_RD->m_d3dDevice.Get(), s_texture, m_mainDescriptorHeap[i]->GetCPUDescriptorHandleForHeapStart());
+		hr = Locator::getRD()->m_d3dDevice->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_mainDescriptorHeap[i]));
+		CreateShaderResourceView(Locator::getRD()->m_d3dDevice.Get(), s_texture, m_mainDescriptorHeap[i]->GetCPUDescriptorHandleForHeapStart());
 	}
 
 	// create a resource heap, descriptor heap, and pointer to cbv for each frame
 	for (int i = 0; i < c_swapBufferCount; ++i)
 	{
-		hr = _RD->m_d3dDevice->CreateCommittedResource(
+		hr = Locator::getRD()->m_d3dDevice->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), // this heap will be used to upload the constant buffer data
 			D3D12_HEAP_FLAG_NONE, // no flags
 			&CD3DX12_RESOURCE_DESC::Buffer(1024 * 64), // size of the resource heap. Must be a multiple of 64KB for single-textures and constant buffers
@@ -83,34 +84,34 @@ void VBGO3D::CleanUp()
 	SAFE_RELEASE(s_texture);
 }
 
-void VBGO3D::Tick(GameStateData * _GSD)
+void VBGO3D::Tick()
 {		
-	GameObject3D::Tick(_GSD);
+	GameObject3D::Tick();
 }
 
-void VBGO3D::Render(RenderData * _RD)
+void VBGO3D::Render()
 {
 	ID3D12RootSignature* useRS = m_rootSignature ? m_rootSignature : s_rootSignature;
-	_RD->m_commandList->SetGraphicsRootSignature(useRS); // set the root signature
+	Locator::getRD()->m_commandList->SetGraphicsRootSignature(useRS); // set the root signature
 
-	UpdateConstBuff(_RD);
+	UpdateConstBuff();
 	
 	// draw triangle
 	ID3D12PipelineState* usePSO = m_pipelineStateObject ? m_pipelineStateObject : s_pipelineStateObject;
-	_RD->m_commandList->SetPipelineState(usePSO);
-	_RD->m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // set the primitive topology
-	_RD->m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView); // set the vertex buffer (using the vertex buffer view)
-	_RD->m_commandList->IASetIndexBuffer(&m_indexBufferView);
+	Locator::getRD()->m_commandList->SetPipelineState(usePSO);
+	Locator::getRD()->m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // set the primitive topology
+	Locator::getRD()->m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView); // set the vertex buffer (using the vertex buffer view)
+	Locator::getRD()->m_commandList->IASetIndexBuffer(&m_indexBufferView);
 	// set the descriptor heap
-	ID3D12DescriptorHeap* descriptorHeaps[] = { m_mainDescriptorHeap[*_RD->m_backBufferIndex] };
-	_RD->m_commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+	ID3D12DescriptorHeap* descriptorHeaps[] = { m_mainDescriptorHeap[*Locator::getRD()->m_backBufferIndex] };
+	Locator::getRD()->m_commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 	// set the root descriptor table 0 to the constant buffer descriptor heap
-	_RD->m_commandList->SetGraphicsRootDescriptorTable(1, m_mainDescriptorHeap[*_RD->m_backBufferIndex]->GetGPUDescriptorHandleForHeapStart());
+	Locator::getRD()->m_commandList->SetGraphicsRootDescriptorTable(1, m_mainDescriptorHeap[*Locator::getRD()->m_backBufferIndex]->GetGPUDescriptorHandleForHeapStart());
 
-	_RD->m_commandList->DrawIndexedInstanced(m_numIndices, 1, 0, 0, 0); // draw all my indices
+	Locator::getRD()->m_commandList->DrawIndexedInstanced(m_numIndices, 1, 0, 0, 0); // draw all my indices
 }
 
-bool VBGO3D::SetUpVBGOs(RenderData * _RD)
+bool VBGO3D::SetUpVBGOs()
 {
 	// create root signature
 	GameFilepaths m_filepath; //WHY?!
@@ -174,7 +175,7 @@ bool VBGO3D::SetUpVBGOs(RenderData * _RD)
 	HRESULT hr = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, nullptr);
 	if (FAILED(hr)) return false;
 
-	hr = _RD->m_d3dDevice->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&s_rootSignature));
+	hr = Locator::getRD()->m_d3dDevice->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&s_rootSignature));
 	if (FAILED(hr)) return false;
 
 	// create vertex and pixel shaders
@@ -283,23 +284,23 @@ bool VBGO3D::SetUpVBGOs(RenderData * _RD)
 	s_psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	
 	// create the pso
-	hr = _RD->m_d3dDevice->CreateGraphicsPipelineState(&s_psoDesc, IID_PPV_ARGS(&s_pipelineStateObject));
+	hr = Locator::getRD()->m_d3dDevice->CreateGraphicsPipelineState(&s_psoDesc, IID_PPV_ARGS(&s_pipelineStateObject));
 	if (FAILED(hr))
 	{
 		return false;
 	}	
 
 	//load base texture white
-	ResourceUploadBatch resourceUpload(_RD->m_d3dDevice.Get());
+	ResourceUploadBatch resourceUpload(Locator::getRD()->m_d3dDevice.Get());
 
 	resourceUpload.Begin();
 
 	std::string image_path = m_filepath.generateFilepath("white", m_filepath.IMAGE);
 	std::wstring w_image_path = converter.from_bytes(image_path.c_str());
 	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(_RD->m_d3dDevice.Get(), resourceUpload, w_image_path.c_str(), &s_texture));
+		CreateDDSTextureFromFile(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, w_image_path.c_str(), &s_texture));
 
-	auto uploadResourcesFinished = resourceUpload.End(_RD->m_commandQueue.Get());
+	auto uploadResourcesFinished = resourceUpload.End(Locator::getRD()->m_commandQueue.Get());
 
 	uploadResourcesFinished.wait();
 
@@ -307,42 +308,42 @@ bool VBGO3D::SetUpVBGOs(RenderData * _RD)
 	return true;
 }
 
-void VBGO3D::UpdateConstBuff(RenderData * _RD)
+void VBGO3D::UpdateConstBuff()
 {
 	//update Constant buffer
 	m_ConstBuff.world = m_world.Transpose();
 	int uj = 1;
-	m_ConstBuff.view = _RD->m_cam->GetView().Transpose();
-	m_ConstBuff.projection = _RD->m_cam->GetProj().Transpose();
+	m_ConstBuff.view = Locator::getRD()->m_cam->GetView().Transpose();
+	m_ConstBuff.projection = Locator::getRD()->m_cam->GetProj().Transpose();
 	//for (int i = 0; i < num_of_cam; i++)
 	//{
 	//	m_ConstBuff.view = _RD->m_cam[i]->GetView().Transpose();
 	//	m_ConstBuff.projection = _RD->m_cam[i]->GetProj().Transpose();
 	//}
 	m_ConstBuff.rot = m_rot.Transpose();
-	if (_RD->m_light)
+	if (Locator::getRD()->m_light)
 	{
-		m_ConstBuff.lightCol = _RD->m_light->GetColour();
-		m_ConstBuff.lightPos = _RD->m_light->GetPos();
-		m_ConstBuff.ambientCol = _RD->m_light->GetAmbCol();
+		m_ConstBuff.lightCol = Locator::getRD()->m_light->GetColour();
+		m_ConstBuff.lightPos = Locator::getRD()->m_light->GetPos();
+		m_ConstBuff.ambientCol = Locator::getRD()->m_light->GetAmbCol();
 	}
 
 	// copy our ConstantBuffer instance to the mapped constant buffer resource
-	memcpy(m_ConstBuffGPUAddress[*_RD->m_backBufferIndex], &m_ConstBuff, sizeof(m_ConstBuff));
+	memcpy(m_ConstBuffGPUAddress[*Locator::getRD()->m_backBufferIndex], &m_ConstBuff, sizeof(m_ConstBuff));
 
-	_RD->m_commandList->SetGraphicsRootConstantBufferView(0, m_constantBufferUploadHeap[*_RD->m_backBufferIndex]->GetGPUVirtualAddress());
+	Locator::getRD()->m_commandList->SetGraphicsRootConstantBufferView(0, m_constantBufferUploadHeap[*Locator::getRD()->m_backBufferIndex]->GetGPUVirtualAddress());
 
 	// set constant buffer descriptor heap
 	//ID3D12DescriptorHeap* descriptorHeaps[] = { m_mainDescriptorHeap[*_RD->m_backBufferIndex] };
 	//_RD->m_commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 }
 
-void VBGO3D::BuildIB(RenderData* _RD, int _numI, void * _indices)
+void VBGO3D::BuildIB(int _numI, void * _indices)
 {
 	int iBufferSize = sizeof(DWORD)*_numI;
 
 	// create default heap to hold index buffer
-	_RD->m_d3dDevice->CreateCommittedResource(
+	Locator::getRD()->m_d3dDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), // a default heap
 		D3D12_HEAP_FLAG_NONE, // no flags
 		&CD3DX12_RESOURCE_DESC::Buffer(iBufferSize), // resource description for a buffer
@@ -355,7 +356,7 @@ void VBGO3D::BuildIB(RenderData* _RD, int _numI, void * _indices)
 
 	// create upload heap to upload index buffer
 	ID3D12Resource* iBufferUploadHeap;
-	_RD->m_d3dDevice->CreateCommittedResource(
+	Locator::getRD()->m_d3dDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), // upload heap
 		D3D12_HEAP_FLAG_NONE, // no flags
 		&CD3DX12_RESOURCE_DESC::Buffer(iBufferSize), // resource description for a buffer
@@ -372,10 +373,10 @@ void VBGO3D::BuildIB(RenderData* _RD, int _numI, void * _indices)
 
 										// we are now creating a command with the command list to copy the data from
 										// the upload heap to the default heap
-	UpdateSubresources(_RD->m_commandList.Get(), m_indexBuffer, iBufferUploadHeap, 0, 0, 1, &indexData);
+	UpdateSubresources(Locator::getRD()->m_commandList.Get(), m_indexBuffer, iBufferUploadHeap, 0, 0, 1, &indexData);
 
 	// transition the index buffer data from copy destination state to vertex buffer state
-	_RD->m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_indexBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
+	Locator::getRD()->m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_indexBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
 
 	// create a vertex buffer view for the triangle. We get the GPU memory address to the vertex pointer using the GetGPUVirtualAddress() method
 	m_indexBufferView.BufferLocation = m_indexBuffer->GetGPUVirtualAddress();
@@ -383,7 +384,7 @@ void VBGO3D::BuildIB(RenderData* _RD, int _numI, void * _indices)
 	m_indexBufferView.SizeInBytes = iBufferSize;
 }
 
-void VBGO3D::BuildVB(RenderData* _RD, int _numVerts, void * _vertices)
+void VBGO3D::BuildVB(int _numVerts, void * _vertices)
 {
 	int vBufferSize = sizeof(myVertex) * _numVerts;
 
@@ -391,7 +392,7 @@ void VBGO3D::BuildVB(RenderData* _RD, int _numVerts, void * _vertices)
 	// default heap is memory on the GPU. Only the GPU has access to this memory
 	// To get data into this heap, we will have to upload the data using
 	// an upload heap
-	_RD->m_d3dDevice->CreateCommittedResource(
+	Locator::getRD()->m_d3dDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), // a default heap
 		D3D12_HEAP_FLAG_NONE, // no flags
 		&CD3DX12_RESOURCE_DESC::Buffer(vBufferSize), // resource description for a buffer
@@ -407,7 +408,7 @@ void VBGO3D::BuildVB(RenderData* _RD, int _numVerts, void * _vertices)
 	// upload heaps are used to upload data to the GPU. CPU can write to it, GPU can read from it
 	// We will upload the vertex buffer using this heap to the default heap
 	ID3D12Resource* vBufferUploadHeap;
-	_RD->m_d3dDevice->CreateCommittedResource(
+	Locator::getRD()->m_d3dDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), // upload heap
 		D3D12_HEAP_FLAG_NONE, // no flags
 		&CD3DX12_RESOURCE_DESC::Buffer(vBufferSize), // resource description for a buffer
@@ -424,10 +425,10 @@ void VBGO3D::BuildVB(RenderData* _RD, int _numVerts, void * _vertices)
 
 										 // we are now creating a command within the command list to copy the data from
 										 // the upload heap to the default heap
-	UpdateSubresources(_RD->m_commandList.Get(), m_vertexBuffer, vBufferUploadHeap, 0, 0, 1, &vertexData);
+	UpdateSubresources(Locator::getRD()->m_commandList.Get(), m_vertexBuffer, vBufferUploadHeap, 0, 0, 1, &vertexData);
 
 	// transition the vertex buffer data from copy destination state to vertex buffer state
-	_RD->m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_vertexBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
+	Locator::getRD()->m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_vertexBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
 
 	// create a vertex buffer view for the triangle. We get the GPU memory address to the vertex pointer using the GetGPUVirtualAddress() method
 	m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
@@ -435,16 +436,16 @@ void VBGO3D::BuildVB(RenderData* _RD, int _numVerts, void * _vertices)
 	m_vertexBufferView.SizeInBytes = vBufferSize;
 }
 
-void VBGO3D::PushIBVB(RenderData * _RD)
+void VBGO3D::PushIBVB()
 {
 	// increment the fence value now, otherwise the buffer might not be uploaded by the time we start drawing
-	_RD->m_fenceValues[*_RD->m_backBufferIndex]++;
-	HRESULT hr = _RD->m_commandQueue->Signal(_RD->m_fence.Get(), _RD->m_fenceValues[*_RD->m_backBufferIndex]);
+	Locator::getRD()->m_fenceValues[*Locator::getRD()->m_backBufferIndex]++;
+	HRESULT hr = Locator::getRD()->m_commandQueue->Signal(Locator::getRD()->m_fence.Get(), Locator::getRD()->m_fenceValues[*Locator::getRD()->m_backBufferIndex]);
 
 	// Now we execute the command list to upload the initial assets
-	_RD->m_commandList->Close();
-	ID3D12CommandList* ppCommandLists[] = { _RD->m_commandList.Get() };
-	_RD->m_commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+	Locator::getRD()->m_commandList->Close();
+	ID3D12CommandList* ppCommandLists[] = { Locator::getRD()->m_commandList.Get() };
+	Locator::getRD()->m_commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 }
 
 void VBGO3D::CalcNorms(myVertex* _verts, DWORD* _indices, int _numI)

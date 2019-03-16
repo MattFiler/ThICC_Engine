@@ -7,7 +7,8 @@
 #include "SceneManager.h"
 #include "GameScene.h"
 #include "MenuScene.h"
-
+#include "DebugScene.h"
+#include "ServiceLocator.h"
 #include "CollisionManager.h"
 #include "GameDebugToggles.h"
 #include <iostream>
@@ -20,10 +21,13 @@ using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
-bool GameDebugToggles::show_debug_meshes = true;
+bool GameDebugToggles::show_debug_meshes = false;
 
 Game::Game() :
 	m_WD(new WindowData),
+	m_ID(new InputData),
+	m_GSD(new GameStateData),
+	m_RD(new RenderData),
 	m_featureLevel(D3D_FEATURE_LEVEL_11_0),
 	m_backBufferIndex(0),
 	m_fenceValues{}
@@ -35,6 +39,12 @@ Game::Game() :
 	m_WD->m_window = nullptr;
 	m_WD->m_outputHeight = game_config["window_height"];
 	m_WD->m_outputWidth = game_config["window_width"];
+
+	//Setup service locator
+	Locator::setupRD(m_RD);
+	Locator::setupWD(m_WD);
+	Locator::setupGSD(m_GSD);
+	Locator::setupID(m_ID);
 }
 
 Game::~Game()
@@ -82,20 +92,19 @@ void Game::Initialize(HWND _window, int _width, int _height)
 {
 	//Make sure our assets are compiled at least to some degree!
 	if (!dirExists("DATA")) {
-		throw "ASSETS MUST BE COMPILED BEFORE RUNNING THE GAME";
+		throw std::exception("ASSETS MUST BE COMPILED BEFORE RUNNING THE GAME");
 	}
-	m_ID = new InputData;
 
 	//Initialise our DirectX systems
 	initDX(_window, _width, _height);
 
 	//Set our default font
-	setDefaultFont("Perpetua");
+	setDefaultFont("NeueHaasGroteskDisp Pro BD");
 
 	GetDefaultSize(m_WD->m_width, m_WD->m_height);
 
 	//Set Up VBGO render system
-	if (!VBGO3D::SetUpVBGOs(m_RD))
+	if (!VBGO3D::SetUpVBGOs())
 	{
 		ExitGame();//if anything fails in setting up, QUIT!
 	}
@@ -116,10 +125,23 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//Push back all our game objects to their associated arrays
 	//pushBackObjects();
 
+	// Setup our Platform
+	//ultralight::Platform& platform = ultralight::Platform::instance();
+	//platform.set_config(ultralight::Config());
+	//platform.set_gpu_driver(new GPUDriverD3D(new D3DRenderer()));
+	//platform.set_font_loader(new FontLoaderWin());
+
+	// Create the Renderer
+	//ultralight::Ref<ultralight::Renderer> renderer = ultralight::Renderer::Create();
+
+	// Create the View
+	//ultralight::Ref<ultralight::View> view = renderer->CreateView(800, 600, false);
+	//view->LoadHTML("<h1>Hello World!</h1>");
+
 	//Setup scene manager and all scenes
-	m_sceneManager.configure(m_GSD, m_RD, m_ID, m_WD);
 	m_sceneManager.addScene(new MenuScene(), Scenes::MENUSCENE);
 	m_sceneManager.addScene(new GameScene(), Scenes::GAMESCENE);
+	m_sceneManager.addScene(new DebugScene(), Scenes::DEBUGSCENE);
 	m_sceneManager.setCurrentScene(Scenes::MENUSCENE);
 }
 

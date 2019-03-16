@@ -559,6 +559,19 @@ namespace EditorTool
             uieditor.Show();
         }
 
+        // Open item configuration
+        private void openItemConfig_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // Open localiation editor
+        private void openLocalisationEditor_Click(object sender, EventArgs e)
+        {
+            Localisation_Editor localisationeditor = new Localisation_Editor();
+            localisationeditor.Show();
+        }
+
         private void importModel_Click(object sender, EventArgs e)
         {
             //depreciated

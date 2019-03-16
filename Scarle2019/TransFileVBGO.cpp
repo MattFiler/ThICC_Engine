@@ -3,7 +3,7 @@
 #include "RenderData.h"
 
 
-TransFileVBGO::TransFileVBGO(std::string _fileName, RenderData * _RD):FileVBGO(_fileName,_RD)
+TransFileVBGO::TransFileVBGO(std::string _fileName):FileVBGO(_fileName)
 {
 	//sets up the PSO witha render state to draw this file transparent
 	//obviously we would then need to do a proper ordered draw
@@ -13,7 +13,7 @@ TransFileVBGO::TransFileVBGO(std::string _fileName, RenderData * _RD):FileVBGO(_
 	psoDesc.BlendState = CommonStates::AlphaBlend; // an alpha blend state.
 	psoDesc.DepthStencilState = CommonStates::DepthRead; //only read not write to the depth buffer
 	// create the pso
-	HRESULT hr = _RD->m_d3dDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineStateObject));
+	HRESULT hr = Locator::getRD()->m_d3dDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineStateObject));
 
 }
 

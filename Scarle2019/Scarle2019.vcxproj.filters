@@ -77,6 +77,9 @@
     <Filter Include="Game Base\States">
       <UniqueIdentifier>{2c82c528-d2a7-446b-92ca-22bbc98d0975}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObjects\Items">
+      <UniqueIdentifier>{d8b65f5d-0325-4796-ad53-95b249933137}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StepTimer.h">
@@ -232,6 +235,18 @@
     <ClInclude Include="KeybindManager.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Banana.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceLocator.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugScene.h">
+      <Filter>Game Base\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -341,6 +356,18 @@
     </ClCompile>
     <ClCompile Include="TrackSelectionState.cpp">
       <Filter>Game Base\States</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Banana.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceLocator.cpp">
+      <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugScene.cpp">
+      <Filter>Game Base\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

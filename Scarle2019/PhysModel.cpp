@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "PhysModel.h"
 #include "GameStateData.h"
+#include "ServiceLocator.h"
 #include <iostream>
 #include <fstream>
 
-PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _filename)
+PhysModel::PhysModel(string _filename) :SDKMeshGO3D(_filename)
 {
 	std::string test = m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL);
 	std::ifstream i(test);
@@ -27,7 +28,8 @@ PhysModel::PhysModel(RenderData * _RD, string _filename) :SDKMeshGO3D(_RD, _file
 		{
 			initCollider(model_data);
 
-			m_colliderDebug = new SDKMeshGO3D(_RD, _filename + " DEBUG");
+			m_colliderDebug = new SDKMeshGO3D(_filename + " DEBUG");
+			m_colliderDebug->SetScale(m_physData.scale);
 		}
 	}
 }
@@ -141,22 +143,21 @@ void PhysModel::updateCollider()
 		m_physData.m_globalBackBottomRight = Vector3::Transform(m_physData.m_localBackBottomRight, m_world);
 
 		//Updates the debug collider position and rotation
-
-		m_colliderDebug->SetPos(m_physData.m_worldCentre);
-		m_colliderDebug->SetScale(m_collider.Extents);	
+		m_colliderDebug->SetPos(Vector3(m_physData.m_worldCentre.x, m_physData.m_worldCentre.y - (m_physData.m_height / 2), m_physData.m_worldCentre.z));
+		//m_colliderDebug->SetScale(m_collider.Extents);	
 		m_colliderDebug->SetYaw(euler.y);
 		m_colliderDebug->SetPitch(euler.x);
 		m_colliderDebug->SetRoll(euler.z);
 	}
 }
 
-void PhysModel::Tick(GameStateData * _GSD)
+void PhysModel::Tick()
 {
 	if (m_physicsOn)
 	{
-		m_vel = m_vel + _GSD->m_dt * (m_acc - m_drag*m_vel);
+		m_vel = m_vel + Locator::getGSD()->m_dt * (m_acc - m_drag*m_vel);
 
-		m_gravVel = m_gravVel + _GSD->m_dt * (m_gravDirection);
+		m_gravVel = m_gravVel + Locator::getGSD()->m_dt * (m_gravDirection);
 		if (m_gravVel.Length() > m_maxGrav)
 		{
 			m_gravVel.Normalize();
@@ -165,10 +166,10 @@ void PhysModel::Tick(GameStateData * _GSD)
 		
 		m_velTotal = m_vel + m_gravVel;
 
-		m_pos += _GSD->m_dt * m_velTotal;
+		m_pos += Locator::getGSD()->m_dt * m_velTotal;
 	}
 
-	SDKMeshGO3D::Tick(_GSD);
+	SDKMeshGO3D::Tick();
 
 	m_acc = Vector3::Zero;
 

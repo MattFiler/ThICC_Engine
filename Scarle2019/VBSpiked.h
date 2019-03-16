@@ -8,7 +8,7 @@
 class VBSpike : public VBCube
 {
 public:
-	VBSpike(RenderData * _RD) :VBCube(_RD) {};
+	VBSpike() :VBCube() {};
 
 protected:
 	virtual void Transform() override
