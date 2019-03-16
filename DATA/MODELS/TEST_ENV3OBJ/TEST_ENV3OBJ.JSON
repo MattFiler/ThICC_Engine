@@ -11,7 +11,7 @@
   "rot_x": 0.0,
   "rot_y": 0.0,
   "rot_z": 0.0,
-  "segment_size": 1.0,
+  "segment_size": 10.0,
   "map_cameras": [],
   "map_waypoints": [],
   "map_spawnpoints": []
