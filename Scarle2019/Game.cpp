@@ -141,7 +141,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//Setup scene manager and all scenes
 	m_sceneManager.addScene(new MenuScene(), Scenes::MENUSCENE);
 	m_sceneManager.addScene(new GameScene(), Scenes::GAMESCENE);
-	m_sceneManager.addScene(new DebugScene(), Scenes::DEBUGSCENE);
+	//m_sceneManager.addScene(new DebugScene(), Scenes::DEBUGSCENE);
 	m_sceneManager.setCurrentScene(Scenes::MENUSCENE);
 }
 

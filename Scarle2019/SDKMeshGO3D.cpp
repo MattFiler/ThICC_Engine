@@ -77,7 +77,8 @@ SDKMeshGO3D::SDKMeshGO3D(string _filename)
 		if (lights)
 		{
 			lights->SetLightEnabled(0, true);
-			lights->SetLightDiffuseColor(0, Colors::Gold);
+			lights->SetLightDiffuseColor(0, Colors::White);
+			//lights->SetLightDiffuseColor(0, Colors::Gold);
 			//lights->SetLightDirection(0, Vector3(0, 0, 0));
 			lights->SetLightEnabled(1, false);
 			lights->SetLightEnabled(2, false);
