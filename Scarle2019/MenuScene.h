@@ -44,7 +44,6 @@ private:
 	GameFilepaths m_filepath;
 	KeybindManager m_key;
 	SceneManager* m_scene_manager;
-
-
+	States m_menu_state = States::NOSTATE;
 };
 
