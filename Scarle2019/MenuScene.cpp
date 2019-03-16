@@ -30,6 +30,20 @@ void MenuScene::Update(GameStateData* _GSD, InputData* _ID)
 		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
 	}
 
+	if (_GSD->m_gamePadState[0].IsAPressed() && m_menu_state == States::NOSTATE)
+	{
+		m_menu_state = States::LOBBY;
+		m_2DObjects[1]->SetPos(Vector2(0, -720));
+		m_2DObjects[2]->SetPos(Vector2(0, 0));
+	}
+
+	if (_GSD->m_gamePadState[0].IsBPressed() && m_menu_state == States::LOBBY)
+	{
+		m_menu_state = States::NOSTATE;
+		m_2DObjects[1]->SetPos(Vector2(0, 0));
+		m_2DObjects[2]->SetPos(Vector2(0, -720));
+	}
+
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
 		(*it)->Tick(_GSD);
@@ -51,6 +65,22 @@ void MenuScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<
 	{
 		(*it)->Render(_RD);
 	}
+
+
+	ID3D12DescriptorHeap* heaps[] = { _RD->m_resourceDescriptors->Heap() };
+	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+
+	m_commandList->RSSetViewports(1, &_WD->sprite_viewport);
+	m_commandList->RSSetScissorRects(1, &_WD->sprite_rect);
+	_RD->m_spriteBatch->SetViewport(_WD->sprite_viewport);
+	_RD->m_spriteBatch->Begin(m_commandList.Get());
+
+	//draw 2d objects
+	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	{
+		(*it)->Render(_RD);
+	}
+	_RD->m_spriteBatch->End();
 }
 
 bool MenuScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
@@ -68,6 +98,13 @@ void MenuScene::create2DObjects(RenderData * _RD)
 	//test text
 	Text2D* m_enterMenu = new Text2D("Lewis is not cool.", _RD);
 	m_2DObjects.push_back(m_enterMenu);
+
+	ImageGO2D* splash_screen = new ImageGO2D(_RD, "cbc04-jdryd");
+	m_2DObjects.push_back(splash_screen);
+
+	ImageGO2D* lobby_screen = new ImageGO2D(_RD, "lobby");
+	lobby_screen->SetPos(Vector2(0, -720));
+	m_2DObjects.push_back(lobby_screen);
 }
 
 void MenuScene::create3DObjects(RenderData * _RD, InputData * _ID, WindowData * _WD)
