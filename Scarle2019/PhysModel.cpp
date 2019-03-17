@@ -56,14 +56,6 @@ void PhysModel::initCollider(json &model_data)
 		(float)model_data["collision_box"]["front_bottom_right"][1] * m_physData.scale,
 		(float)model_data["collision_box"]["front_bottom_right"][2] * m_physData.scale);
 
-	m_physData.m_localBackBottomLeft = Vector3((float)model_data["collision_box"]["back_bottom_left"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["back_bottom_left"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["back_bottom_left"][2] * m_physData.scale);
-
-	m_physData.m_localBackBottomRight = Vector3((float)model_data["collision_box"]["back_bottom_right"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["back_bottom_right"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["back_bottom_right"][2] * m_physData.scale);
-
 	m_physData.m_localBackTopLeft = Vector3((float)model_data["collision_box"]["back_top_left"][0] * m_physData.scale,
 		(float)model_data["collision_box"]["back_top_left"][1] * m_physData.scale,
 		(float)model_data["collision_box"]["back_top_left"][2] * m_physData.scale);
@@ -71,6 +63,14 @@ void PhysModel::initCollider(json &model_data)
 	m_physData.m_localBackTopRight = Vector3((float)model_data["collision_box"]["back_top_right"][0] * m_physData.scale,
 		(float)model_data["collision_box"]["back_top_right"][1] * m_physData.scale,
 		(float)model_data["collision_box"]["back_top_right"][2] * m_physData.scale);
+
+	m_physData.m_localBackBottomLeft = Vector3((float)model_data["collision_box"]["back_bottom_left"][0] * m_physData.scale,
+		(float)model_data["collision_box"]["back_bottom_left"][1] * m_physData.scale,
+		(float)model_data["collision_box"]["back_bottom_left"][2] * m_physData.scale);
+
+	m_physData.m_localBackBottomRight = Vector3((float)model_data["collision_box"]["back_bottom_right"][0] * m_physData.scale,
+		(float)model_data["collision_box"]["back_bottom_right"][1] * m_physData.scale,
+		(float)model_data["collision_box"]["back_bottom_right"][2] * m_physData.scale);
 
 
 	m_physData.m_localCentre = Vector3((m_physData.m_localFrontTopLeft.x + m_physData.m_localFrontTopRight.x) / 2
