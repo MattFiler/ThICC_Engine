@@ -9,17 +9,17 @@ class Text2D :
 	public GameObject2D
 {
 public:
-	Text2D(string _text, RenderData* _RD);
+	Text2D(string _text);
 	virtual ~Text2D();
 
-	void SetText(string _text, RenderData* _RD);
+	void SetText(string _text);
 	string GetText() { return m_text; }
 	XMFLOAT4 GetSize() { return size; }
 
 	//place the origin at the middle of the string
 	void CentreOrigin();
 
-	void Render(RenderData* _RD);
+	void Render();
 	virtual void Reset() override {};
 
 protected:

@@ -1,6 +1,7 @@
 {
 	"DEFAULT": {
 		"ui_sprite": "sprite.png",
+		"model": "DEFAULT ITEM",
 		"probabilities": {
 			"place_1": 0,
 			"place_2": 0,

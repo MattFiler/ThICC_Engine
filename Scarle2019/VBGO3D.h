@@ -18,20 +18,20 @@ class VBGO3D :
 	public GameObject3D
 {
 public:
-	VBGO3D(RenderData * _RD);
+	VBGO3D();
 	virtual ~VBGO3D();
 
-	virtual void Tick(GameStateData* _GSD) override;
-	virtual void Render(RenderData* _RD) override;
+	virtual void Tick() override;
+	virtual void Render() override;
 
 	//set up (and clean up) all static objects to be shared between these objects
-	static bool SetUpVBGOs(RenderData* _RD);
+	static bool SetUpVBGOs();
 	static void CleanUp();
 
-	virtual void UpdateConstBuff(RenderData * _RD);
+	virtual void UpdateConstBuff();
 
 	//push all IBs & VBs up to GPU
-	static void PushIBVB(RenderData* _RD);
+	static void PushIBVB();
 
 	void CalcNorms(myVertex* _verts, DWORD* _indices, int _numI);
 
@@ -64,9 +64,9 @@ protected:
 	int m_numIndices = 0;
 
 	//once populated build an Index Buffer
-	void BuildIB(RenderData* _RD, int _numI, void* _indices);
+	void BuildIB(int _numI, void* _indices);
 	//once populated build a Vertex Buffer
-	void BuildVB(RenderData* _RD, int _numVerts, void* _vertices);
+	void BuildVB(int _numVerts, void* _vertices);
 
 	//textures
 	static ID3D12Resource* s_texture;

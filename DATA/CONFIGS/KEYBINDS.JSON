@@ -23,5 +23,6 @@
   "Backwards": "S",
   "Debug Print Player Location": "O",
   "Debug Print Camera Location": "I",
-  "DebugCamSpeedup": "RightShift"
+  "DebugCamSpeedup": "RightShift",
+  "Load Debug Scene": "D"
 }

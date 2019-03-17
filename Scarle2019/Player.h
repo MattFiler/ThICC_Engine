@@ -10,15 +10,16 @@ class Player : public TrackMagnet
 {
 
 public:
-	Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gamePad);
+	Player(string _filename, int _playerID);
 	~Player();
 
-	virtual void Tick(GameStateData* _GSD) override;
+	virtual void Tick() override;
 	int GetWaypoint() { return waypoint; }
 	int GetRanking() { return ranking; }
 	int GetLap() { return lap; }
 	Text2D* GetRankingText() { return text_position; }
 	Text2D* GetLapText() { return text_lap; }
+	virtual void Tick(GameStateData* _GSD) override;
 
 	void SetWaypoint(int _waypoint) { waypoint = _waypoint; }
 	void SetLap(int _lap) { lap = _lap; }
@@ -26,13 +27,13 @@ public:
 
 
 protected:
-	GamePad* m_gamePad;
 	int m_playerID = 0;
-private:
 
+private:
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;
 	Matrix m_savedMatrix;
+	Vector m_savedPos;
 	Vector m_savedVel;
 	Vector m_savedGravVel;
 	int ranking = 0;
@@ -40,4 +41,5 @@ private:
 	int lap = 1;
 	Text2D *text_position = nullptr;
 	Text2D *text_lap = nullptr;
+	Vector m_savedGravDir;
 };

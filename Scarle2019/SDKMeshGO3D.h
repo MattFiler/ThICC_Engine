@@ -12,12 +12,12 @@ class SDKMeshGO3D :
 	public GameObject3D
 {
 public:
-	SDKMeshGO3D(RenderData* _RD, string _filename);
+	SDKMeshGO3D(string _filename);
 	virtual ~SDKMeshGO3D();
 
-	virtual void Render(RenderData * _RD);
+	virtual void Render();
 
-	virtual void Tick(GameStateData* _GSD) override;
+	virtual void Tick() override;
 
 	bool isDebugMesh() { return is_debug_mesh; }
 
@@ -26,7 +26,7 @@ public:
 protected:
 	std::unique_ptr<DirectX::EffectTextureFactory> m_modelResources;
 	std::unique_ptr<DirectX::Model> m_model;
-	std::vector<std::shared_ptr<DirectX::IEffect>> m_modelNormal;
+	std::vector<std::shared_ptr<DirectX::IEffect>> m_modelNormal; 
 
 	GameFilepaths m_filepath;
 

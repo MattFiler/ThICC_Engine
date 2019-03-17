@@ -3,6 +3,7 @@ enum Scenes
 {
 	MENUSCENE,
 	GAMESCENE,
+	DEBUGSCENE,
 
 	SCENE_COUNT // must always be last!
 };

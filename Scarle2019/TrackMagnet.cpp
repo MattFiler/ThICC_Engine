@@ -2,9 +2,10 @@
 #include "TrackMagnet.h"
 #include "directxmath.h"
 #include "GameStateData.h"
+#include "ServiceLocator.h"
 
 
-TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _filename)
+TrackMagnet::TrackMagnet(string _filename) : PhysModel(_filename)
 {
 	m_autoCalculateWolrd = false;
 	Vector3 scale = Vector3::Zero;
@@ -12,7 +13,7 @@ TrackMagnet::TrackMagnet(RenderData* _RD, string _filename) : PhysModel(_RD, _fi
 }
 
 /* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
-bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
+bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
 	Vector intersect;
 	Matrix targetWorld = Matrix::Identity;
@@ -34,10 +35,10 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 			m_gravVel = Vector3::Zero;
 			m_gravDirection = Vector3::Zero;
 			Vector3 moveVector = intersect - m_pos;
-			if (moveVector.Length() > m_maxSnapSnep* _GSD->m_dt)
+			if (moveVector.Length() > m_maxSnapSnep* Locator::getGSD()->m_dt)
 			{
 				moveVector.Normalize();
-				moveVector *= m_maxSnapSnep* _GSD->m_dt;
+				moveVector *= m_maxSnapSnep* Locator::getGSD()->m_dt;
 			}
 			SetPos(m_pos + moveVector);
 		}
@@ -53,6 +54,12 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 		tri->DoesLineIntersect(m_world.Down() * (data.m_height * 30), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (data.m_height / 2)), secondIntersect, tri2, m_maxAngle);
 		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
+
+		if (dist > m_minSnapDist && dist < m_maxSnapDist)
+		{
+			// Map the veclocity onto the track so the kart doesn't fly off or decellerate
+			MapVectorOntoTri(m_vel, m_pos, targetWorld.Down(), tri);
+		}
 	}
 	else
 	{
@@ -71,7 +78,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track, GameStateData* _GSD)
 	// Calculate the distance between the current and target rotation
 	Quaternion inverseRot = Quaternion::Identity;
 	m_quatRot.Inverse(inverseRot);
-	float lerpDelta = (modifiedMaxRotation * _GSD->m_dt) / (inverseRot*rot).Length();
+	float lerpDelta = (modifiedMaxRotation * Locator::getGSD()->m_dt) / (inverseRot*rot).Length();
 	if (lerpDelta > 1)
 	{
 		lerpDelta = 1;
@@ -111,12 +118,7 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 			m_vel = Vector::Reflect(m_vel, wallTri->m_plane.Normal());
 
 			// Map the end point of the vector back onto the track plane
-
-			Vector endPoint = m_pos + m_vel;
-			Vector mappedToPlane = endPoint;
-			MeshTri* tri2 = nullptr;
-			tri->DoesLineIntersect(m_world.Down(), endPoint, mappedToPlane, tri2, 15);
-			m_vel = mappedToPlane - m_pos;
+			MapVectorOntoTri(m_vel, m_pos, m_world.Down(), tri);
 
 			Vector velNorm = m_vel;
 			velNorm.Normalize();
@@ -128,4 +130,13 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 		}
 	}
 
+}
+
+void TrackMagnet::MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector& _down, MeshTri * _tri)
+{
+	Vector endPoint = _startPos + _vect;
+	Vector mappedToPlane = endPoint;
+	MeshTri* tri2 = nullptr;
+	_tri->DoesLineIntersect(_down, endPoint, mappedToPlane, tri2, 15);
+	_vect = mappedToPlane - m_pos;
 }

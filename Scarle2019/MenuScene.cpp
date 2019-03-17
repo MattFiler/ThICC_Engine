@@ -19,58 +19,63 @@ MenuScene::~MenuScene()
 	m_3DObjects.clear();
 }
 
-void MenuScene::Update(GameStateData* _GSD, InputData* _ID)
+void MenuScene::Update()
 {
 	if (m_key.keyPressed("Quit"))
 	{
 		ExitGame();
 	}
-	else if (_GSD->m_keyboardState.Enter)
+	else if (Locator::getGSD()->m_keyboardState.Enter)
 	{
 		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
 	}
 
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
-		(*it)->Tick(_GSD);
+		(*it)->Tick();
 	}
 
 	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
-		(*it)->Tick(_GSD);
+		(*it)->Tick();
+	}
+
+	if (m_key.keyPressed("Load Debug Scene"))
+	{
+		m_scene_manager->setCurrentScene(Scenes::DEBUGSCENE);
 	}
 }
 
-void MenuScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
+void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList)
 {
-	m_commandList->RSSetViewports(1, &_WD->men_viewport);
-	m_commandList->RSSetScissorRects(1, &_WD->men_scissorRect);
-	_RD->m_cam = m_cam;
+	m_commandList->RSSetViewports(1, &Locator::getWD()->men_viewport);
+	m_commandList->RSSetScissorRects(1, &Locator::getWD()->men_scissorRect);
+	Locator::getRD()->m_cam = m_cam;
 
 	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
-		(*it)->Render(_RD);
+		(*it)->Render();
 	}
 }
 
-bool MenuScene::Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD)
+bool MenuScene::Load()
 {
-	create2DObjects(_RD);
-	create3DObjects(_RD, _ID, _WD);
-	VBGO3D::PushIBVB(_RD); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
-	pushBackObjects(_RD);
+	create2DObjects();
+	create3DObjects();
+	VBGO3D::PushIBVB(); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
+	pushBackObjects();
 
 	return true;
 }
 
-void MenuScene::create2DObjects(RenderData * _RD)
+void MenuScene::create2DObjects()
 {
 	//test text
-	Text2D* m_enterMenu = new Text2D("Lewis is not cool.", _RD);
+	Text2D* m_enterMenu = new Text2D("Lewis is not cool.");
 	m_2DObjects.push_back(m_enterMenu);
 }
 
-void MenuScene::create3DObjects(RenderData * _RD, InputData * _ID, WindowData * _WD)
+void MenuScene::create3DObjects()
 {
 	for (int i = 0; i < num_of_cam; i++) {
 		//Create a player and position on track
@@ -79,7 +84,7 @@ void MenuScene::create3DObjects(RenderData * _RD, InputData * _ID, WindowData * 
 		//m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
-		m_cam = new Camera(_WD->m_outputWidth, _WD->m_outputHeight, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+		m_cam = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 		m_cam->SetBehav(Camera::BEHAVIOUR::LERP);
 		m_3DObjects.push_back(m_cam);
 
@@ -88,8 +93,8 @@ void MenuScene::create3DObjects(RenderData * _RD, InputData * _ID, WindowData * 
 		float height_mod = 0.5f;
 		switch (i) {
 		case 0: {
-			*&_WD->men_viewport = { 0.0f, 0.0f, static_cast<float>(_WD->m_outputWidth), static_cast<float>(_WD->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&_WD->men_scissorRect = { 0,0,(int)(_WD->m_outputWidth),(int)(_WD->m_outputHeight) };
+			*&Locator::getWD()->men_viewport = { 0.0f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth), static_cast<float>(Locator::getWD()->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&Locator::getWD()->men_scissorRect = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight) };
 			break;
 		}
 		//case 1: {
@@ -111,7 +116,7 @@ void MenuScene::create3DObjects(RenderData * _RD, InputData * _ID, WindowData * 
 	}
 }
 
-void MenuScene::pushBackObjects(RenderData * _RD)
+void MenuScene::pushBackObjects()
 {
 	for (int i = 0; i < m_3DObjects.size(); i++)
 	{
