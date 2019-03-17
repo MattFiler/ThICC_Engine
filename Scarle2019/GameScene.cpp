@@ -217,10 +217,8 @@ void GameScene::create2DObjects(RenderData* _RD, WindowData* _WD)
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		test[i] = new ImageGO2D(_RD, "twist");
-		//test->SetOri(45);
-		test[i]->SetScale(0.1f*Vector2::One);
+		test[i]->SetScale(0.25f*Vector2::One);
 		test[i]->SetPos(Vector2(_WD->m_viewport[i].TopLeftX, _WD->m_viewport[i].TopLeftY));
-		//test->CentreOrigin();
 		m_2DObjects.push_back(test[i]);
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);

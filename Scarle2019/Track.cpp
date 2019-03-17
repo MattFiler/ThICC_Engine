@@ -129,10 +129,10 @@ Vector Track::CreateVector(string _vector)
 /* Sets up the bounding boxes for each waypoint */
 void Track::setWaypointBB()
 {
-	for (size_t i = 0; i < map_waypoints.size() / 2; ++i)
+	for (size_t i = 0; i < map_waypoints.size(); ++i)
 	{
 		waypoint_bb.push_back(BoundingBox());
-		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i][0]), static_cast<float>(map_waypoints[i][2]), static_cast<float>(map_waypoints[i][1] * -1) };
+		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z * -1) };
 		waypoint_bb[i].Extents = { 5, 5, 5 };
 	}
 }
