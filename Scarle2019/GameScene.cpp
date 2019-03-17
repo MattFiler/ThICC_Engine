@@ -31,6 +31,10 @@ void GameScene::Update()
 		Locator::getGSD()->m_gamePadState[i] = Locator::getID()->m_gamePad->GetState(i); //set game controllers state[s]
 	}
 
+	for (Item* item : m_itemModels)
+	{
+		item->ShouldStickToTrack(*track);
+	}
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -68,14 +72,12 @@ void GameScene::Update()
 		(*it)->Tick();
 	}
 
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	// Note I've changed this to a loop via index since Tick() on players
+	// can introduce new objects, which causes some horrible errors
+	int end = m_3DObjects.size();
+	for(int i = 0; i < end; i++)
 	{
-		(*it)->Tick();
-		if ((*it)->ShouldDestroy())
-		{
-			m_3DObjects.erase(it);
-			delete *it;
-		}
+		m_3DObjects[i]->Tick();
 	}
 	
 	//Toggle debug mesh renders
@@ -253,6 +255,7 @@ Item* GameScene::CreateItem(ItemType type)
 	{
 		Banana* banana = new Banana();
 		m_3DObjects.push_back(banana);
+		m_itemModels.push_back(banana);
 		return banana;
 		break;
 	}

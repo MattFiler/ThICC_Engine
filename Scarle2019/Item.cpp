@@ -2,7 +2,7 @@
 #include "Item.h"
 #include <fstream>
 
-Item::Item(const std::string& item_type) : TrackMagnet(m_model_name) {
+Item::Item(const std::string& item_type) : TrackMagnet(item_type) {
 	//Read in item config
 	std::ifstream i("DATA/ITEMS/ITEM_CONFIG.JSON");
 	m_item_config << i;
@@ -36,4 +36,7 @@ Item::Item(const std::string& item_type) : TrackMagnet(m_model_name) {
 	//Set model name
 	std::string model_name = m_item_config["model"];
 	m_model_name = model_name;
+
+	SetDrag(0.7);
+	SetPhysicsOn(true);
 }

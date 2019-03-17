@@ -114,6 +114,7 @@ void Game::Clear()
 {
 	// Reset command list and allocator.
 	//DX::ThrowIfFailed(m_commandAllocators[m_backBufferIndex]->Reset());
+
 	m_commandAllocators[m_backBufferIndex]->Reset();
 	DX::ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
 

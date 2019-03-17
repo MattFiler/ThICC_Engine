@@ -24,5 +24,6 @@
   "Debug Print Player Location": "O",
   "Debug Print Camera Location": "I",
   "DebugCamSpeedup": "RightShift",
-  "Load Debug Scene": "D"
+  "Load Debug Scene": "D",
+  "Spawn Banana": "F1"
 }

@@ -49,6 +49,7 @@ private:
 
 	KeybindManager m_keybinds;
 	//Banana m_banana_test;
+	std::vector<Item*> m_itemModels;
 
 	std::vector<PhysModel*> m_physModels;
 

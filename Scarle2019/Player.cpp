@@ -32,23 +32,24 @@ void Player::Tick()
 		if (m_keymindManager.keyPressed("Debug Save Matrix"))
 		{
 			m_savedMatrix = m_world;
-			m_savedPos = m_pos + (m_world.Up() *20);
 			m_savedVel = m_vel;
 			m_savedGravVel = m_gravVel;
 			m_savedGravDir = m_gravDirection;
 		}
 		else if (m_keymindManager.keyPressed("Debug Load Matrix"))
 		{
-			m_world = m_savedMatrix;
+			SetWorld(m_savedMatrix);
 			m_vel = m_savedVel;
-			m_pos = m_savedPos;
 			m_gravVel = m_savedGravVel;
 			m_velTotal = m_vel + m_savedGravVel;
 			m_gravDirection = m_savedGravDir;
 			Vector3 scale = Vector3::Zero;
-			Quaternion rot = Quaternion::Identity;
-			m_world.Decompose(scale, rot, m_pos);
-			m_rot = Matrix::CreateFromQuaternion(rot);
+		}
+		else if (m_keymindManager.keyPressed("Spawn Banana"))
+		{
+			Banana* banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
+			//banana->SetPos(m_pos + (m_world.Backward() * (banana->data.m_length + 0.5f)));
+			banana->SetWorld(m_world);
 		}
 
 		//FORWARD BACK & STRAFE CONTROL HERE
