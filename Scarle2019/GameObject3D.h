@@ -29,12 +29,14 @@ public:
 	virtual void Render() = 0;
 
 	void SetPos(Vector3 _pos) { m_pos = _pos; }
+	void AddPos(Vector3 _vec) { m_pos += _vec; }
 	void SetScale(float _scale) { m_scale = _scale * Vector3::One; }
 	void SetScale(Vector3 _scale) { m_scale = _scale; }
 	void SetOri(float _pitch, float _yaw, float _roll) { m_pitch = _pitch; m_yaw = _yaw, m_roll = _roll; }
 	void SetOri(Vector3 _ori) { m_pitch = _ori.x; m_yaw = _ori.y; m_roll = _ori.z; }
 	void SetOri(Matrix _rot) { m_rot = _rot; }
 	void SetWorld(Matrix _world);
+	void UpdateWorld();
 
 	void SetPitch(float _pitch) { m_pitch = _pitch; }
 	void SetYaw(float _yaw) { m_yaw = _yaw; }

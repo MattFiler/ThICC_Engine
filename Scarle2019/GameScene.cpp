@@ -31,10 +31,7 @@ void GameScene::Update()
 		Locator::getGSD()->m_gamePadState[i] = Locator::getID()->m_gamePad->GetState(i); //set game controllers state[s]
 	}
 
-	for (Item* item : m_itemModels)
-	{
-		item->ShouldStickToTrack(*track);
-	}
+	UpdateItems();
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -75,11 +72,20 @@ void GameScene::Update()
 	// Note I've changed this to a loop via index since Tick() on players
 	// can introduce new objects, which causes some horrible errors
 	int end = m_3DObjects.size();
-	for(int i = 0; i < end; i++)
+	int delIndex = -1;
+	for (int i = 0; i < end; i++)
 	{
 		m_3DObjects[i]->Tick();
+		if (m_3DObjects[i]->ShouldDestroy())
+		{
+			delIndex = i;
+		}
 	}
-	
+	if (delIndex != -1)
+	{
+		m_3DObjects.erase(m_3DObjects.begin() + delIndex);
+	}
+
 	//Toggle debug mesh renders
 	if (m_keybinds.keyPressed("Debug Toggle"))
 	{
@@ -87,6 +93,31 @@ void GameScene::Update()
 	}
 
 	CollisionManager::collisionDetectionAndResponse(m_physModels);
+}
+
+void GameScene::UpdateItems()
+{
+	int delIndex = -1;
+	int end = m_itemModels.size();
+	for (int i = 0; i < end; i++)
+	{
+		m_itemModels[i]->ShouldStickToTrack(*track);
+		for (int j = 0; j < game_config["player_count"]; ++j) {
+			if (player[j]->getCollider().Intersects(m_itemModels[i]->getCollider()))
+			{
+				m_itemModels[i]->HitByPlayer(player[j]);
+			}
+		}
+		m_itemModels[i]->Tick();
+		if (m_itemModels[i]->ShouldDestroy())
+		{
+			delIndex = i;
+		}
+	}
+	if (delIndex != -1)
+	{
+		m_itemModels.erase(m_itemModels.begin() + delIndex);
+	}
 }
 
 void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
@@ -103,6 +134,11 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_com
 		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 		{
 			(*it)->Render();
+		}
+
+		for (GameObject3D* obj : m_itemModels)
+		{
+			obj->Render();
 		}
 	}
 
@@ -254,7 +290,6 @@ Item* GameScene::CreateItem(ItemType type)
 	case BANANA:
 	{
 		Banana* banana = new Banana();
-		m_3DObjects.push_back(banana);
 		m_itemModels.push_back(banana);
 		return banana;
 		break;

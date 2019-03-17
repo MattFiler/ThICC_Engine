@@ -35,3 +35,10 @@ void GameObject3D::SetWorld(Matrix _world)
 	m_world.Decompose(m_scale, m_quatRot, m_pos);
 	m_rot = Matrix::CreateFromQuaternion(m_quatRot);
 }
+
+void GameObject3D::UpdateWorld()
+{
+	Matrix trans = Matrix::CreateTranslation(m_pos);
+	Matrix scale = Matrix::CreateScale(m_scale);
+	m_world = scale * m_rot * trans;
+}

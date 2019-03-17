@@ -27,6 +27,9 @@ public:
 	bool Load() override;
 
 private:
+	// Updates
+	void UpdateItems();
+
 	//State Stuff
 	bool m_isPaused;
 

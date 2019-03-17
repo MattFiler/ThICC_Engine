@@ -50,6 +50,8 @@ void Player::Tick()
 			Banana* banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
 			//banana->SetPos(m_pos + (m_world.Backward() * (banana->data.m_length + 0.5f)));
 			banana->SetWorld(m_world);
+			banana->AddPos(m_world.Backward() * 2);
+			banana->UpdateWorld();
 		}
 
 		//FORWARD BACK & STRAFE CONTROL HERE
