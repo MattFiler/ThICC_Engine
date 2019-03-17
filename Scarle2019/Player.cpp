@@ -14,7 +14,8 @@ Player::Player(string _filename, int _playerID) : TrackMagnet(_filename)
 	SetPhysicsOn(true);
 	// SetPhysicsOn(false);
 	m_playerID = _playerID;
-	position = new Text2D(std::to_string(current_waypoint));
+	text_ranking = new Text2D(std::to_string(ranking));
+	text_lap = new Text2D(std::to_string(lap) + "/3");
 }
 
 Player::~Player()
@@ -125,9 +126,9 @@ void Player::Tick()
 		m_pitch += rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightY;
 	}
 
-	text_lap->SetText(std::to_string(lap) + "/3", m_RD);
+	text_lap->SetText(std::to_string(lap) + "/3");
 	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
-	position->SetText(std::to_string(current_position));
+	text_ranking->SetText(std::to_string(ranking));
 
 	//apply my base behaviour
 	PhysModel::Tick();

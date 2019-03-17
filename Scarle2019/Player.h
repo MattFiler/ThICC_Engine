@@ -17,9 +17,8 @@ public:
 	int GetWaypoint() { return waypoint; }
 	int GetRanking() { return ranking; }
 	int GetLap() { return lap; }
-	Text2D* GetRankingText() { return text_position; }
+	Text2D* GetRankingText() { return text_ranking; }
 	Text2D* GetLapText() { return text_lap; }
-	virtual void Tick(GameStateData* _GSD) override;
 
 	void SetWaypoint(int _waypoint) { waypoint = _waypoint; }
 	void SetLap(int _lap) { lap = _lap; }
@@ -39,7 +38,7 @@ private:
 	int ranking = 0;
 	int waypoint = 0;
 	int lap = 1;
-	Text2D *text_position = nullptr;
+	Text2D *text_ranking = nullptr;
 	Text2D *text_lap = nullptr;
 	Vector m_savedGravDir;
 };

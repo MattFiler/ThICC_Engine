@@ -228,12 +228,12 @@ void GameScene::create2DObjects()
 		m_2DObjects.push_back(test[i]);
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
-		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->getPosition()->GetSize().x;
-		float text_pos_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->getPosition()->GetSize().y;
-		player[i]->getPosition()->SetPos(Vector2(text_pos_x, text_pos_y));
-		m_2DObjects.push_back(player[i]->getPosition());
-		float text_lap_x = _WD->m_viewport[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.5f;
-		float text_lap_y = _WD->m_viewport[i].TopLeftY + _WD->m_viewport[i].Height - player[i]->GetLapText()->GetSize().y;
+		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->GetRankingText()->GetSize().x;
+		float text_pos_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetRankingText()->GetSize().y;
+		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
+		m_2DObjects.push_back(player[i]->GetRankingText());
+		float text_lap_x = Locator::getWD()->m_viewport[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.5f;
+		float text_lap_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetLapText()->GetSize().y;
 		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
 		m_2DObjects.push_back(player[i]->GetLapText());
 	}
@@ -261,7 +261,7 @@ void GameScene::create3DObjects()
 
 	//Load in a track
 	track = new Track(game_config["default_track"]);
-	track->setUpWaypointBB();
+	track->setWaypointBB();
 	m_3DObjects.push_back(track);
 
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
