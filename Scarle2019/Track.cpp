@@ -1,9 +1,10 @@
 #pragma once
+#include "math.h"
 #include "Track.h"
 #include "pch.h"
 #include <iostream>
 #include <fstream>
-#include "math.h"
+#include <algorithm>
 
 Track::Track(string _filename) : PhysModel(_filename)
 {
@@ -242,7 +243,7 @@ void Track::SplitTrisIntoGrid()
 	// Reserve space in the references vector based on the size of the track
 	m_triGridX = static_cast<int>(ceilf(trackSize.x / m_triSegSize));
 	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
-	float m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
+	m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
 	m_triGridYX = m_triGridY*m_triGridX;
 	m_triGrid.reserve((m_triGridX+1)*(m_triGridY + 1)*(m_triGridZ + 1));
 	
@@ -331,4 +332,20 @@ void Track::GetXYZIndexAtPoint(Vector& _point)
 	_point.x = floor(_point.x / m_triSegSize);
 	_point.y = floor(_point.y / m_triSegSize);
 	_point.z = floor(_point.z / m_triSegSize);
+
+	Clamp(_point.x, 0.0f, (float)m_triGridX);
+	Clamp(_point.y, 0.0f, (float)m_triGridY);
+	Clamp(_point.z, 0.0f, (float)m_triGridZ);
+}
+
+void Track::Clamp(float& _num, float _min, float _max)
+{
+	if (_num < _min)
+	{
+		_num = _min;
+	}
+	else if (_num > _max)
+	{
+		_num = _max;
+	}
 }

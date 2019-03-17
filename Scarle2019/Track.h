@@ -55,6 +55,9 @@ private:
 	int GetIndexAtPoint(Vector point);
 	void GetXYZIndexAtPoint(Vector& point);
 
+	// std::clamp apparently doesn't exists, so I'll just make it here
+	void Clamp(float& _num, float _min, float _max);
+
 	// Storage for the all the triangles data. 
 	// Make sure to not reserve more on this vector past initization, else the references will all get messed up
 	std::vector<MeshTri> m_triangles;
@@ -85,5 +88,6 @@ private:
 	// Size of each dimension of the vector
 	int m_triGridX = 0;
 	int m_triGridY = 0;
+	int m_triGridZ = 0;
 	int m_triGridYX = 0; // Set to m_triGridY * m_triGridX as this number is used lots
 };
