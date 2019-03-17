@@ -34,6 +34,7 @@ public:
 	void SetOri(float _pitch, float _yaw, float _roll) { m_pitch = _pitch; m_yaw = _yaw, m_roll = _roll; }
 	void SetOri(Vector3 _ori) { m_pitch = _ori.x; m_yaw = _ori.y; m_roll = _ori.z; }
 	void SetOri(Matrix _rot) { m_rot = _rot; }
+	void SetWorld(Matrix _world);
 
 	void SetPitch(float _pitch) { m_pitch = _pitch; }
 	void SetYaw(float _yaw) { m_yaw = _yaw; }
@@ -64,6 +65,7 @@ protected:
 
 	Matrix m_world = Matrix::Identity;
 	Matrix m_rot = Matrix::Identity;
+	Quaternion m_quatRot = Quaternion::Identity;
 
 	bool m_autoCalculateWolrd = true;
 
