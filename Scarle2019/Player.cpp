@@ -48,10 +48,17 @@ void Player::Tick()
 		else if (m_keymindManager.keyPressed("Spawn Banana"))
 		{
 			Banana* banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
-			//banana->SetPos(m_pos + (m_world.Backward() * (banana->data.m_length + 0.5f)));
 			banana->SetWorld(m_world);
 			banana->AddPos(m_world.Backward() * 2);
 			banana->UpdateWorld();
+		}
+		else if (m_keymindManager.keyPressed("Spawn Green Shell"))
+		{
+			GreenShell* greenShell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
+			greenShell->SetWorld(m_world);
+			greenShell->AddPos(m_world.Forward() * 3);
+			greenShell->UpdateWorld();
+			greenShell->setVelocity(60 * m_world.Forward());
 		}
 
 		//FORWARD BACK & STRAFE CONTROL HERE
@@ -132,6 +139,6 @@ void Player::Tick()
 	position->SetText(std::to_string(current_position));
 
 	//apply my base behaviour
-	PhysModel::Tick();
+	TrackMagnet::Tick();
 
 }

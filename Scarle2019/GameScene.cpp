@@ -83,6 +83,7 @@ void GameScene::Update()
 	}
 	if (delIndex != -1)
 	{
+		//delete m_3DObjects[delIndex];
 		m_3DObjects.erase(m_3DObjects.begin() + delIndex);
 	}
 
@@ -102,6 +103,7 @@ void GameScene::UpdateItems()
 	for (int i = 0; i < end; i++)
 	{
 		m_itemModels[i]->ShouldStickToTrack(*track);
+		m_itemModels[i]->ResolveWallCollisions(*track);
 		for (int j = 0; j < game_config["player_count"]; ++j) {
 			if (player[j]->getCollider().Intersects(m_itemModels[i]->getCollider()))
 			{
@@ -116,6 +118,7 @@ void GameScene::UpdateItems()
 	}
 	if (delIndex != -1)
 	{
+		//delete m_itemModels[delIndex];
 		m_itemModels.erase(m_itemModels.begin() + delIndex);
 	}
 }
@@ -295,7 +298,12 @@ Item* GameScene::CreateItem(ItemType type)
 		break;
 	}
 	case GREEN_SHELL:
+	{
+		GreenShell* greenShell = new GreenShell();
+		m_itemModels.push_back(greenShell);
+		return greenShell;
 		break;
+	}
 	case RED_SHELL:
 		break;
 	case MUSHROOM:

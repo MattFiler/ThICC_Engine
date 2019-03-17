@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "LocalisationManager.h"
 #include "Banana.h" //test
+#include "GreenShell.h"
 #include "CollisionManager.h"
 #include <vector>
 

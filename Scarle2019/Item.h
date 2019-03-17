@@ -12,6 +12,7 @@ public:
 	Item(const std::string& item_type);
 	~Item() = default;
 
+	virtual void Tick() override { TrackMagnet::Tick(); };
 	float getProbability(int _position) { return m_probability_modifier[_position]; };
 	virtual void HitByPlayer(Player* player) {};
 protected:

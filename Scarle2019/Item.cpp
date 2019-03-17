@@ -36,7 +36,4 @@ Item::Item(const std::string& item_type) : TrackMagnet(item_type) {
 	//Set model name
 	std::string model_name = m_item_config["model"];
 	m_model_name = model_name;
-
-	SetDrag(0.7);
-	SetPhysicsOn(true);
 }

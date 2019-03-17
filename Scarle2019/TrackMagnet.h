@@ -7,8 +7,9 @@ public:
 	TrackMagnet(string _filename);
 	bool ShouldStickToTrack(Track& track);
 	void ResolveWallCollisions(Track& walls);
+	virtual void Tick() override { PhysModel::Tick(); };
 
-	void setDampenWallReflect(bool _toggle) { dampenWallReflect = _toggle; };
+	void setDampenWallReflect(bool _toggle) { m_dampenWallReflect = _toggle; };
 
 private:
 	void MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector& _down, MeshTri * _tri);
@@ -24,5 +25,5 @@ private:
 
 	MeshTri* tri = nullptr;
 
-	bool dampenWallReflect = true;
+	bool m_dampenWallReflect = true;
 };

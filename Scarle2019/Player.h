@@ -2,6 +2,7 @@
 #include "TrackMagnet.h"
 #include "KeybindManager.h"
 #include "Banana.h"
+#include "GreenShell.h"
 #include "Constants.h"
 #include <functional>
 

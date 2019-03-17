@@ -25,5 +25,6 @@
   "Debug Print Camera Location": "I",
   "DebugCamSpeedup": "RightShift",
   "Load Debug Scene": "D",
-  "Spawn Banana": "F1"
+  "Spawn Banana": "F1",
+  "Spawn Green Shell": "F2"
 }

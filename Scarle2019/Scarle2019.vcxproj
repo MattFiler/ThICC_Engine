@@ -189,6 +189,7 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameStateData.h" />
     <ClInclude Include="GPGO3D.h" />
+    <ClInclude Include="GreenShell.h" />
     <ClInclude Include="ImageGO2D.h" />
     <ClInclude Include="InputData.h" />
     <ClInclude Include="Item.h" />
@@ -239,6 +240,7 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Game_backend.cpp" />
     <ClCompile Include="GPGO3D.cpp" />
+    <ClCompile Include="GreenShell.cpp" />
     <ClCompile Include="ImageGO2D.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="KeybindManager.cpp" />
