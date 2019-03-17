@@ -71,6 +71,11 @@ void GameScene::Update()
 	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
 		(*it)->Tick();
+		if ((*it)->ShouldDestroy())
+		{
+			m_3DObjects.erase(it);
+			delete *it;
+		}
 	}
 	
 	//Toggle debug mesh renders
@@ -184,7 +189,8 @@ void GameScene::create3DObjects()
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
 	for (int i = 0; i < game_config["player_count"]; i++) {
 		//Create a player and position on track
-		player[i] = new Player("Knuckles Kart", i);
+		using std::placeholders::_1;
+		player[i] = new Player("Knuckles Kart", i, std::bind(&GameScene::CreateItem, this, _1));
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		m_3DObjects.push_back(player[i]);
 
@@ -237,4 +243,28 @@ void GameScene::pushBackObjects()
 			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
 		}
 	}
+}
+
+Item* GameScene::CreateItem(ItemType type)
+{
+	switch (type)
+	{
+	case BANANA:
+	{
+		Banana* banana = new Banana();
+		m_3DObjects.push_back(banana);
+		return banana;
+		break;
+	}
+	case GREEN_SHELL:
+		break;
+	case RED_SHELL:
+		break;
+	case MUSHROOM:
+		break;
+	default:
+		return nullptr;
+		break;
+	}
+	return nullptr;
 }

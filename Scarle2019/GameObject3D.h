@@ -50,6 +50,7 @@ public:
 	Matrix GetOri() { return m_rot; }
 	Matrix GetWorld() { return m_world; }
 	GO3D_Render_Type GetType() { return m_type; }
+	bool ShouldDestroy() { return m_shouldDestroy; };
 
 	virtual void Reset() {};
 
@@ -59,6 +60,7 @@ protected:
 	float m_pitch = 0.0f;
 	float m_yaw = 0.0f;
 	float m_roll = 0.0f;
+	bool m_shouldDestroy = false;
 
 	Matrix m_world = Matrix::Identity;
 	Matrix m_rot = Matrix::Identity;

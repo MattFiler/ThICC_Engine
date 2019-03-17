@@ -34,6 +34,8 @@ private:
 	void create3DObjects();
 	void pushBackObjects();
 
+	Item* CreateItem(ItemType type);
+
 	// Test objects
 	Track* track = nullptr;
 	Player* player[4] = { nullptr };

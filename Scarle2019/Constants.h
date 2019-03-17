@@ -23,3 +23,11 @@ enum States
 	RACE_START = 4,
 	RACE_OVER = 5,
 };
+
+enum ItemType
+{
+	BANANA = 0,
+	GREEN_SHELL = 1,
+	RED_SHELL = 2,
+	MUSHROOM = 3
+};
