@@ -23,8 +23,10 @@ public:
 	~GameScene();
 
 	void Update() override;
-	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
+	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList) override;
 	bool Load() override;
+	void SetPlayersWaypoint();
+	void SetPlayerRanking();
 
 private:
 	//State Stuff
@@ -54,5 +56,7 @@ private:
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
+
+	RenderData* m_RD;
 };
 

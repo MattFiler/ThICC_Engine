@@ -54,6 +54,12 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		tri->DoesLineIntersect(m_world.Down() * (data.m_height * 30), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (data.m_height / 2)), secondIntersect, tri2, m_maxAngle);
 		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
+
+		if (dist > m_minSnapDist && dist < m_maxSnapDist)
+		{
+			// Map the veclocity onto the track so the kart doesn't fly off or decellerate
+			MapVectorOntoTri(m_vel, m_pos, targetWorld.Down(), tri);
+		}
 	}
 	else
 	{
@@ -112,12 +118,7 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 			m_vel = Vector::Reflect(m_vel, wallTri->m_plane.Normal());
 
 			// Map the end point of the vector back onto the track plane
-
-			Vector endPoint = m_pos + m_vel;
-			Vector mappedToPlane = endPoint;
-			MeshTri* tri2 = nullptr;
-			tri->DoesLineIntersect(m_world.Down(), endPoint, mappedToPlane, tri2, 15);
-			m_vel = mappedToPlane - m_pos;
+			MapVectorOntoTri(m_vel, m_pos, m_world.Down(), tri);
 
 			Vector velNorm = m_vel;
 			velNorm.Normalize();
@@ -129,4 +130,13 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 		}
 	}
 
+}
+
+void TrackMagnet::MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector& _down, MeshTri * _tri)
+{
+	Vector endPoint = _startPos + _vect;
+	Vector mappedToPlane = endPoint;
+	MeshTri* tri2 = nullptr;
+	_tri->DoesLineIntersect(_down, endPoint, mappedToPlane, tri2, 15);
+	_vect = mappedToPlane - m_pos;
 }

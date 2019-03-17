@@ -14,7 +14,8 @@ Player::Player(string _filename, int _playerID) : TrackMagnet(_filename)
 	SetPhysicsOn(true);
 	// SetPhysicsOn(false);
 	m_playerID = _playerID;
-	position = new Text2D(std::to_string(current_waypoint));
+	text_ranking = new Text2D(std::to_string(ranking));
+	text_lap = new Text2D(std::to_string(lap) + "/3");
 }
 
 Player::~Player()
@@ -28,6 +29,29 @@ void Player::Tick()
 	//WORKAROUND TO PREVENT PLAYER MOVEMENT - NEEDS TO BE REMOVED
 	if (m_playerID == 0)
 	{
+		// Debug code to save/load the players game state
+		if (m_keymindManager.keyPressed("Debug Save Matrix"))
+		{
+			m_savedMatrix = m_world;
+			m_savedPos = m_pos + (m_world.Up() *20);
+			m_savedVel = m_vel;
+			m_savedGravVel = m_gravVel;
+			m_savedGravDir = m_gravDirection;
+		}
+		else if (m_keymindManager.keyPressed("Debug Load Matrix"))
+		{
+			m_world = m_savedMatrix;
+			m_vel = m_savedVel;
+			m_pos = m_savedPos;
+			m_gravVel = m_savedGravVel;
+			m_velTotal = m_vel + m_savedGravVel;
+			m_gravDirection = m_savedGravDir;
+			Vector3 scale = Vector3::Zero;
+			Quaternion rot = Quaternion::Identity;
+			m_world.Decompose(scale, rot, m_pos);
+			m_rot = Matrix::CreateFromQuaternion(rot);
+		}
+
 		//FORWARD BACK & STRAFE CONTROL HERE
 		Vector3 forwardMove = 30.0f * m_world.Forward();
 		Vector3 rightMove = 60.0f * m_world.Right();
@@ -86,23 +110,7 @@ void Player::Tick()
 			Locator::getID()->m_gamePad.get()->SetVibration(m_playerID, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1);
 		}
 
-		// Debug code to save/load the players game state
-		if (m_keymindManager.keyPressed("Debug Save Matrix"))
-		{
-			m_savedMatrix = m_world;
-			m_savedVel = m_vel;
-			m_savedGravVel = m_gravVel;
-		}
-		else if (m_keymindManager.keyPressed("Debug Load Matrix"))
-		{
-			m_world = m_savedMatrix;
-			m_vel = m_savedVel;
-			m_gravVel = m_savedGravVel;
-			Vector3 scale = Vector3::Zero;
-			Quaternion rot = Quaternion::Identity;
-			m_world.Decompose(scale, rot, m_pos);
-			m_rot = Matrix::CreateFromQuaternion(rot);
-		}
+
 
 		//Debug output player location - useful for setting up spawns
 		if (m_keymindManager.keyPressed("Debug Print Player Location")) {
@@ -118,8 +126,9 @@ void Player::Tick()
 		m_pitch += rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightY;
 	}
 
+	text_lap->SetText(std::to_string(lap) + "/3");
 	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
-	position->SetText(std::to_string(current_position));
+	text_ranking->SetText(std::to_string(ranking));
 
 	//apply my base behaviour
 	PhysModel::Tick();

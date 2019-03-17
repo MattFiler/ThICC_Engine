@@ -42,8 +42,6 @@ Track::Track(string _filename) : PhysModel(_filename)
 	//Load track vertex list for generating our collmap
 	LoadVertexList(m_filepath.generateFilepath(_filename, m_filepath.MODEL_COLLMAP));
 
-	//m_colliderDebug = new SDKMeshGO3D(_RD, _filename);
-	//m_hasCollider = true;
 }
 
 /* Returns a suitable spawn location for a player in this map */
@@ -128,16 +126,15 @@ Vector Track::CreateVector(string _vector)
 	return Vector(values[0], values[1], values[2]);
 }
 
-void Track::setUpWaypointBB()
+/* Sets up the bounding boxes for each waypoint */
+void Track::setWaypointBB()
 {
 	for (size_t i = 0; i < map_waypoints.size(); ++i)
 	{
 		waypoint_bb.push_back(BoundingBox());
-		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z) };
-		waypoint_bb[i].Extents = { 100, 100, 100 };
+		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z * -1) };
+		waypoint_bb[i].Extents = { 5, 5, 5 };
 	}
-	//m_colliderDebug->SetPos(waypoint_bb[0].Center);
-	//m_colliderDebug->SetScale(waypoint_bb[0].Extents);
 }
 
 /* Checks through all triangles to see if this line intersects any of them.
@@ -243,7 +240,7 @@ void Track::SplitTrisIntoGrid()
 	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
 	float m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
 	m_triGridYX = m_triGridY*m_triGridX;
-	m_triGrid.reserve(m_triGridX*m_triGridY*m_triGridZ);
+	m_triGrid.reserve((m_triGridX+1)*(m_triGridY + 1)*(m_triGridZ + 1));
 	
 	for (int i = 0; i < m_triGrid.capacity(); i++)
 	{
