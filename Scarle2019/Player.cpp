@@ -21,20 +21,63 @@ Player::~Player()
 	//tidy up anything I've created
 }
 
-
 void Player::Tick(GameStateData* _GSD)
 {
-	//WORKAROUND TO PREVENT PLAYER MOVEMENT - NEEDS TO BE REMOVED
-	if (m_playerID == 0)
+	movement(_GSD);
+	// Debug code to save/load the players game state
+	if (m_keymindManager.keyPressed("Debug Save Matrix"))
 	{
-		//FORWARD BACK & STRAFE CONTROL HERE
-		Vector3 forwardMove = 30.0f * m_world.Forward();
-		Vector3 rightMove = 60.0f * m_world.Right();
-		Matrix rotMove = Matrix::CreateRotationY(m_yaw);
-		forwardMove = Vector3::Transform(forwardMove, rotMove);
-		rightMove = Vector3::Transform(rightMove, rotMove);
-		//float rotSpeed = 0.05f;
+		m_savedMatrix = m_world;
+		m_savedVel = m_vel;
+		m_savedGravVel = m_gravVel;
+	}
+	else if (m_keymindManager.keyPressed("Debug Load Matrix"))
+	{
+		m_world = m_savedMatrix;
+		m_vel = m_savedVel;
+		m_gravVel = m_savedGravVel;
+		Vector3 scale = Vector3::Zero;
+		Quaternion rot = Quaternion::Identity;
+		m_world.Decompose(scale, rot, m_pos);
+		m_rot = Matrix::CreateFromQuaternion(rot);
+	}
 
+	//Debug output player location - useful for setting up spawns
+	if (m_keymindManager.keyPressed("Debug Print Player Location")) {
+		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+	}
+
+	//change orinetation of player
+	float rotSpeed = 0.001f;
+	//m_yaw -= rotSpeed * _GSD->m_mouseState.x;
+	//m_pitch -= rotSpeed * _GSD->m_mouseState.y;
+
+	m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX;
+	m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;
+
+	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
+	position->SetText(std::to_string(current_position), m_RD);
+
+	//apply my base behaviour
+	PhysModel::Tick(_GSD);
+}
+
+void Player::setGamePad(bool _state)
+{
+	m_controlsActive = true;
+}
+
+void Player::movement(GameStateData * _GSD)
+{
+	//FORWARD BACK & STRAFE CONTROL HERE
+	Vector3 forwardMove = 30.0f * m_world.Forward();
+	Vector3 rightMove = 60.0f * m_world.Right();
+	Matrix rotMove = Matrix::CreateRotationY(m_yaw);
+	forwardMove = Vector3::Transform(forwardMove, rotMove);
+	rightMove = Vector3::Transform(rightMove, rotMove);
+	//float rotSpeed = 0.05f;
+	if (m_controlsActive)
+	{
 		if (m_keymindManager.keyHeld("Forward"))
 		{
 			m_acc += forwardMove;
@@ -81,45 +124,7 @@ void Player::Tick(GameStateData* _GSD)
 					m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 				}
 			}
-			m_gamePad->SetVibration(m_playerID, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1);
 		}
-
-		// Debug code to save/load the players game state
-		if (m_keymindManager.keyPressed("Debug Save Matrix"))
-		{
-			m_savedMatrix = m_world;
-			m_savedVel = m_vel;
-			m_savedGravVel = m_gravVel;
-		}
-		else if (m_keymindManager.keyPressed("Debug Load Matrix"))
-		{
-			m_world = m_savedMatrix;
-			m_vel = m_savedVel;
-			m_gravVel = m_savedGravVel;
-			Vector3 scale = Vector3::Zero;
-			Quaternion rot = Quaternion::Identity;
-			m_world.Decompose(scale, rot, m_pos);
-			m_rot = Matrix::CreateFromQuaternion(rot);
-		}
-
-		//Debug output player location - useful for setting up spawns
-		if (m_keymindManager.keyPressed("Debug Print Player Location")) {
-			std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
-		}
-
-		//change orinetation of player
-		float rotSpeed = 0.001f;
-		//m_yaw -= rotSpeed * _GSD->m_mouseState.x;
-		//m_pitch -= rotSpeed * _GSD->m_mouseState.y;
-
-		m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX;
-		m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;
 	}
-
-	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
-	position->SetText(std::to_string(current_position), m_RD);
-
-	//apply my base behaviour
-	PhysModel::Tick(_GSD);
-
+	m_gamePad->SetVibration(m_playerID, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1);
 }

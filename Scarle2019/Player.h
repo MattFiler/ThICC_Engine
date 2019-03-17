@@ -18,6 +18,7 @@ public:
 	Text2D* getPosition() { return position; }
 
 	void setCurrentWaypoint(int waypoint) { current_waypoint = waypoint; }
+	void setGamePad(bool _state);
 
 
 
@@ -25,6 +26,7 @@ protected:
 	GamePad* m_gamePad;
 	int m_playerID = 0;
 private:
+	void movement(GameStateData* _GSD);
 
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;
@@ -35,4 +37,5 @@ private:
 	int current_waypoint = 0;
 	int next_waypoint = 0;
 	Text2D *position = nullptr;
+	bool m_controlsActive = false;
 };

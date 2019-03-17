@@ -29,6 +29,11 @@ private:
 	void create2DObjects(RenderData* _RD);
 	void create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD);
 	void pushBackObjects(RenderData* _RD);
+	void enterPlayerLobby(GameStateData* _GSD);
+	void playerJoin(GameStateData* _GSD);
+	void initCharecterImages(RenderData* _RD);
+	void resetCharecterImagePos();
+
 
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
@@ -45,5 +50,12 @@ private:
 	KeybindManager m_key;
 	SceneManager* m_scene_manager;
 	States m_menu_state = States::NOSTATE;
+
+	//Charecter Images
+	ImageGO2D* m_charecter_images[4][4]; //[player][charecter]
+
+	//Timeout for charecter selection
+	float m_charTimeout[4] = {0.0f,0.0f,0.0f,0.0f};
+
 };
 

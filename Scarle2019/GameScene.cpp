@@ -27,9 +27,9 @@ void GameScene::Update(GameStateData* _GSD, InputData* _ID)
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track, _GSD);
 		player[i]->ResolveWallCollisions(*track);
-		_GSD->m_gamePadState[i] = _ID->m_gamePad->GetState(i); //set game controllers state[s]
 	}
 
+	playerControlsActive(_GSD);
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -230,6 +230,27 @@ void GameScene::pushBackObjects(RenderData* _RD)
 		{
 			m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
 			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
+		}
+	}
+}
+
+void GameScene::playerControlsActive(GameStateData* _GSD)
+{
+	if (m_startTimer > 0)
+	{
+		m_startTimer -= _GSD->m_dt;
+
+		if (m_startTimer <= 0)
+		{
+			m_playerControls = true;
+		}
+	}
+
+	if (m_playerControls)
+	{
+		for (int i = 0; i < 4; ++i)
+		{
+			player[i]->setGamePad(m_playerControls);
 		}
 	}
 }

@@ -33,6 +33,7 @@ private:
 	void create2DObjects(RenderData* _RD, WindowData* _WD);
 	void create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD);
 	void pushBackObjects(RenderData* _RD);
+	void playerControlsActive(GameStateData* _GSD);
 
 	// Test objects
 	Track* track = nullptr;
@@ -54,5 +55,7 @@ private:
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
+	float m_startTimer = 3.0f;
+	bool m_playerControls = false;
 };
 

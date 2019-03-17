@@ -25,23 +25,25 @@ void MenuScene::Update(GameStateData* _GSD, InputData* _ID)
 	{
 		ExitGame();
 	}
-	else if (_GSD->m_keyboardState.Enter)
+	else if (_GSD->m_keyboardState.Enter || _GSD->m_gamePadState[0].IsStartPressed() && m_menu_state == States::LOBBY)
 	{
 		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
 	}
 
-	if (_GSD->m_gamePadState[0].IsAPressed() && m_menu_state == States::NOSTATE)
-	{
-		m_menu_state = States::LOBBY;
-		m_2DObjects[1]->SetPos(Vector2(0, -720));
-		m_2DObjects[2]->SetPos(Vector2(0, 0));
-	}
+	//in splash screen
+	enterPlayerLobby(_GSD);
 
-	if (_GSD->m_gamePadState[0].IsBPressed() && m_menu_state == States::LOBBY)
+	//in lobby
+	if (m_menu_state == States::LOBBY)
 	{
-		m_menu_state = States::NOSTATE;
-		m_2DObjects[1]->SetPos(Vector2(0, 0));
-		m_2DObjects[2]->SetPos(Vector2(0, -720));
+		for (int i = 0; i < 4; ++i)
+		{
+			if (m_charTimeout[i] > 0)
+			{
+				m_charTimeout[i] -= _GSD->m_dt;
+			}
+		}
+		playerJoin(_GSD);
 	}
 
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
@@ -65,7 +67,6 @@ void MenuScene::Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<
 	{
 		(*it)->Render(_RD);
 	}
-
 
 	ID3D12DescriptorHeap* heaps[] = { _RD->m_resourceDescriptors->Heap() };
 	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
@@ -105,6 +106,9 @@ void MenuScene::create2DObjects(RenderData * _RD)
 	ImageGO2D* lobby_screen = new ImageGO2D(_RD, "lobby");
 	lobby_screen->SetPos(Vector2(0, -720));
 	m_2DObjects.push_back(lobby_screen);
+
+	//Charecter images
+	initCharecterImages(_RD);
 }
 
 void MenuScene::create3DObjects(RenderData * _RD, InputData * _ID, WindowData * _WD)
@@ -159,3 +163,104 @@ void MenuScene::pushBackObjects(RenderData * _RD)
 		}
 	}
 }
+
+void MenuScene::enterPlayerLobby(GameStateData* _GSD)
+{
+	if (_GSD->m_gamePadState[0].IsConnected())
+	{
+		if (_GSD->m_gamePadState[0].IsAPressed() && m_menu_state == States::NOSTATE)
+		{
+			m_menu_state = States::LOBBY;
+			m_2DObjects[1]->SetPos(Vector2(0, -720));
+			m_2DObjects[2]->SetPos(Vector2(0, 0));
+			m_charecter_images[0][0]->SetPos(Vector2(200, 200));
+		}
+
+		if (_GSD->m_gamePadState[0].IsBPressed() && m_menu_state == States::LOBBY)
+		{
+			m_menu_state = States::NOSTATE;
+			m_2DObjects[1]->SetPos(Vector2(0, 0));
+			m_2DObjects[2]->SetPos(Vector2(0, -720));
+			resetCharecterImagePos();
+		}
+	}
+}
+
+void MenuScene::playerJoin(GameStateData * _GSD)
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		if (_GSD->m_gamePadState[i].IsConnected())
+		{
+			if (_GSD->m_gamePadState[i].IsAPressed() && m_menu_state == States::LOBBY)
+			{
+				//set player charecter selection image
+				m_charecter_images[i][_GSD->charecter_selected[i]];
+			}
+
+			if (m_charTimeout[i] <= 0) // stops continuous flipping of charecter selection
+			{
+				if (_GSD->m_gamePadState[i].thumbSticks.leftX > 0)
+				{
+					m_charecter_images[i][_GSD->charecter_selected[i]]->SetPos(Vector2(0, -500)); //set old image pos
+					++_GSD->charecter_selected[i];
+
+					if (_GSD->charecter_selected[i] > 3)
+					{
+						_GSD->charecter_selected[i] = 0;
+					}
+					m_charTimeout[i] = 0.3f; // set charecter selection timeout
+					m_charecter_images[i][_GSD->charecter_selected[i]]->SetPos(Vector2(200, 200));//set new image pos
+				}
+
+				if (_GSD->m_gamePadState[i].thumbSticks.leftX < 0)
+				{
+					m_charecter_images[i][_GSD->charecter_selected[i]]->SetPos(Vector2(0, -500)); //set old image pos
+					--_GSD->charecter_selected[i];
+					if (_GSD->charecter_selected[i] < 0)
+					{
+						m_2DObjects[3 + i]->SetPos(Vector2(0, -500));//set old image pos
+						_GSD->charecter_selected[i] = 3;
+					}
+					m_charTimeout[i] = 0.2f; // set charecter selection timeout
+					m_charecter_images[i][_GSD->charecter_selected[i]]->SetPos(Vector2(200, 200));//set new image pos
+				}
+			}
+		}
+	}
+}
+
+void MenuScene::initCharecterImages(RenderData* _RD)
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		m_charecter_images[i][0] = new ImageGO2D(_RD, "twist");
+		m_charecter_images[i][0]->SetPos(Vector2(0, -500));
+		m_charecter_images[i][1] = new ImageGO2D(_RD, "BANANA");
+		m_charecter_images[i][1]->SetPos(Vector2(0, -500));
+		m_charecter_images[i][2] = new ImageGO2D(_RD, "ITEMBOX");
+		m_charecter_images[i][2]->SetPos(Vector2(0, -500));
+		m_charecter_images[i][3] = new ImageGO2D(_RD, "BANANA");
+		m_charecter_images[i][3]->SetPos(Vector2(0, -500));
+	}
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			m_2DObjects.push_back(m_charecter_images[i][j]);
+		}
+	}
+}
+
+void MenuScene::resetCharecterImagePos()
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		m_charecter_images[i][0]->SetPos(Vector2(0, -500));
+		m_charecter_images[i][1]->SetPos(Vector2(0, -500));
+		m_charecter_images[i][2]->SetPos(Vector2(0, -500));
+		m_charecter_images[i][3]->SetPos(Vector2(0, -500));
+	}
+}
+
