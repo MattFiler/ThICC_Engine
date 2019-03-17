@@ -241,6 +241,15 @@
     <ClInclude Include="Banana.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="ServiceLocator.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugScene.h">
+      <Filter>Game Base\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenShell.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -355,6 +364,15 @@
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
     <ClCompile Include="Banana.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceLocator.cpp">
+      <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugScene.cpp">
+      <Filter>Game Base\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="GreenShell.cpp">
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>

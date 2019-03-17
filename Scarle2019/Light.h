@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject3D.h"
+#include "ServiceLocator.h"
 
 //=================================================================
 //a simple light defined by a colour and and ambient colour and 
@@ -15,9 +16,9 @@ public:
 	Light(Vector3 _pos, Color _colour, Color _ambientColour);
 	~Light();
 
-	virtual void Render(RenderData* _RD) override { _RD; }; //draws nothing
+	virtual void Render() override { Locator::getRD(); }; //draws nothing
 
-	virtual void Tick(GameStateData* _GSD) override;
+	virtual void Tick() override;
 
 	//getters
 	Color GetColour() { return m_colour; }

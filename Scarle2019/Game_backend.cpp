@@ -26,7 +26,6 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 	m_WD->m_window = _window;
 	m_WD->m_outputWidth = std::max(_width, 1);
 	m_WD->m_outputHeight = std::max(_height, 1);
-	m_RD = new RenderData;
 
 	CreateDevice();
 	CreateResources();
@@ -43,9 +42,6 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 	eflags = eflags | AudioEngine_Debug;
 #endif
 	m_audEngine = std::make_unique<AudioEngine>(eflags);
-
-	//Create the Game State Data object
-	m_GSD = new GameStateData;
 
 	//GEP: Set up RenderData Object
 	m_RD->m_d3dDevice = m_d3dDevice;
@@ -118,6 +114,7 @@ void Game::Clear()
 {
 	// Reset command list and allocator.
 	//DX::ThrowIfFailed(m_commandAllocators[m_backBufferIndex]->Reset());
+
 	m_commandAllocators[m_backBufferIndex]->Reset();
 	DX::ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
 
@@ -324,6 +321,16 @@ void Game::CreateDevice()
 		rtState);
 	m_RD->m_GPeffect = std::make_unique<BasicEffect>(m_d3dDevice.Get(), EffectFlags::Lighting, pd3);
 	m_RD->m_GPeffect->EnableDefaultLighting();
+
+
+	EffectPipelineStateDescription pd5(
+		&GeometricPrimitive::VertexType::InputLayout,
+		CommonStates::Opaque,
+		CommonStates::DepthDefault,
+		CommonStates::CullCounterClockwise,
+		rtState);
+
+	m_RD->effect = std::make_unique<NormalMapEffect>(m_d3dDevice.Get(), EffectFlags::PerPixelLighting, pd5);
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.

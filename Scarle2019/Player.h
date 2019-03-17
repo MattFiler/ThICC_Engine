@@ -1,6 +1,10 @@
 #pragma once
 #include "TrackMagnet.h"
 #include "KeybindManager.h"
+#include "Banana.h"
+#include "GreenShell.h"
+#include "Constants.h"
+#include <functional>
 
 //=================================================================
 //Base Player Class (i.e. a model GO3D the player controls)
@@ -10,29 +14,29 @@ class Player : public TrackMagnet
 {
 
 public:
-	Player(RenderData* _RD, string _filename, int _playerID, GamePad &_gamePad);
+	Player(string _filename, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
 	~Player();
 
-	virtual void Tick(GameStateData* _GSD) override;
+	virtual void Tick() override;
 	int getCurrentWaypoint() { return current_waypoint; }
 	Text2D* getPosition() { return position; }
 
 	void setCurrentWaypoint(int waypoint) { current_waypoint = waypoint; }
 	void setGamePad(bool _state);
-
-
-
 protected:
-	GamePad* m_gamePad;
 	int m_playerID = 0;
+
 private:
+	std::function<Item*(ItemType)> CreateItem;
 	void movement(GameStateData* _GSD);
 
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;
 	Matrix m_savedMatrix;
+	Vector m_savedPos;
 	Vector m_savedVel;
 	Vector m_savedGravVel;
+	Vector m_savedGravDir;
 	int current_position = 0;
 	int current_waypoint = 0;
 	int next_waypoint = 0;

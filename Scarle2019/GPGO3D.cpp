@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "GPGO3D.h"
+#include "ServiceLocator.h"
 #include "RenderData.h"
 
 
@@ -55,7 +56,7 @@ GPGO3D::~GPGO3D()
 	}
 }
 
-void GPGO3D::Render(RenderData * _RD)
+void GPGO3D::Render()
 {
 	//TODO:: See  https://github.com/Microsoft/DirectXTK12/wiki/3D-shapes add textures to these things
 	//TODO:: Use the perpixel lighting from there too!
@@ -67,15 +68,15 @@ void GPGO3D::Render(RenderData * _RD)
 		//	_RD->m_GPeffect->SetMatrices(m_world, _RD->m_cam[i]->GetView(), _RD->m_cam[i]->GetProj());
 		//}
 		int uj = 0;
-		_RD->m_GPeffect->SetMatrices(m_world, _RD->m_cam->GetView(), _RD->m_cam->GetProj());
-		_RD->m_GPeffect->Apply(_RD->m_commandList.Get());
-		m_shape->Draw(_RD->m_commandList.Get());
+		Locator::getRD()->m_GPeffect->SetMatrices(m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
+		Locator::getRD()->m_GPeffect->Apply(Locator::getRD()->m_commandList.Get());
+		m_shape->Draw(Locator::getRD()->m_commandList.Get());
 	}
 }
 
-void GPGO3D::Tick(GameStateData * _GSD)
+void GPGO3D::Tick()
 {
-	GameObject3D::Tick(_GSD);
+	GameObject3D::Tick();
 }
 
 void GPGO3D::Reset()

@@ -20,15 +20,15 @@ public:
 	MenuScene();
 	~MenuScene();
 
-	void Update(GameStateData* _GSD, InputData* _ID) override;
-	void Render(RenderData* _RD, WindowData* _WD, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
-	bool Load(GameStateData* _GSD, RenderData* _RD, InputData* _ID, WindowData* _WD) override;
+	void Update() override;
+	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
+	bool Load() override;
 
 private:
 
-	void create2DObjects(RenderData* _RD);
-	void create3DObjects(RenderData* _RD, InputData* _ID, WindowData* _WD);
-	void pushBackObjects(RenderData* _RD);
+	void create2DObjects();
+	void create3DObjects();
+	void pushBackObjects();
 	void enterPlayerLobby(GameStateData* _GSD);
 	void playerJoin(GameStateData* _GSD);
 	void initCharecterImages(RenderData* _RD);

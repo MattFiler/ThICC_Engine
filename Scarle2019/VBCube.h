@@ -10,11 +10,11 @@
 class VBCube : public VBGO3D
 {
 public:
-	VBCube(RenderData * _RD):VBGO3D(_RD){};
+	VBCube():VBGO3D(){};
 	virtual ~VBCube(){};
 
 	//initialise the Veretx and Index buffers for the cube
-	void Init(int _size, RenderData* _RD);
+	void Init(int _size);
 
 protected:
 	//this is to allow custom versions of this which create the basic cube and then distort it

@@ -25,15 +25,18 @@ public:
 	GameObject3D();
 	virtual ~GameObject3D();
 
-	virtual void Tick(GameStateData* _GSD);
-	virtual void Render(RenderData* _RD) = 0;
+	virtual void Tick();
+	virtual void Render() = 0;
 
 	void SetPos(Vector3 _pos) { m_pos = _pos; }
+	void AddPos(Vector3 _vec) { m_pos += _vec; }
 	void SetScale(float _scale) { m_scale = _scale * Vector3::One; }
 	void SetScale(Vector3 _scale) { m_scale = _scale; }
 	void SetOri(float _pitch, float _yaw, float _roll) { m_pitch = _pitch; m_yaw = _yaw, m_roll = _roll; }
 	void SetOri(Vector3 _ori) { m_pitch = _ori.x; m_yaw = _ori.y; m_roll = _ori.z; }
 	void SetOri(Matrix _rot) { m_rot = _rot; }
+	void SetWorld(Matrix _world);
+	void UpdateWorld();
 
 	void SetPitch(float _pitch) { m_pitch = _pitch; }
 	void SetYaw(float _yaw) { m_yaw = _yaw; }
@@ -50,6 +53,7 @@ public:
 	Matrix GetOri() { return m_rot; }
 	Matrix GetWorld() { return m_world; }
 	GO3D_Render_Type GetType() { return m_type; }
+	bool ShouldDestroy() { return m_shouldDestroy; };
 
 	virtual void Reset() {};
 
@@ -59,9 +63,11 @@ protected:
 	float m_pitch = 0.0f;
 	float m_yaw = 0.0f;
 	float m_roll = 0.0f;
+	bool m_shouldDestroy = false;
 
 	Matrix m_world = Matrix::Identity;
 	Matrix m_rot = Matrix::Identity;
+	Quaternion m_quatRot = Quaternion::Identity;
 
 	bool m_autoCalculateWolrd = true;
 
