@@ -25,7 +25,7 @@ Player::~Player()
 
 void Player::Tick()
 {
-	movement(_GSD);
+	movement();
 	// Debug code to save/load the players game state
 	if (m_keymindManager.keyPressed("Debug Save Matrix"))
 	{
@@ -71,23 +71,24 @@ void Player::Tick()
 		//float rotSpeed = 0.05f;
 
 	//Debug output player location - useful for setting up spawns
-	if (m_keymindManager.keyPressed("Debug Print Player Location")) {
-		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+		if (m_keymindManager.keyPressed("Debug Print Player Location")) {
+			std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+		}
+
+		//change orinetation of player
+		float rotSpeed = 0.001f;
+		//m_yaw -= rotSpeed * _GSD->m_mouseState.x;
+		//m_pitch -= rotSpeed * _GSD->m_mouseState.y;
+
+		m_yaw -= rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightX;
+		m_pitch += rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightY;
+
+		//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
+		position->SetText(std::to_string(current_position));
+
+		//apply my base behaviour
+		PhysModel::Tick();
 	}
-
-	//change orinetation of player
-	float rotSpeed = 0.001f;
-	//m_yaw -= rotSpeed * _GSD->m_mouseState.x;
-	//m_pitch -= rotSpeed * _GSD->m_mouseState.y;
-
-	m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX;
-	m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;
-
-	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
-	position->SetText(std::to_string(current_position), m_RD);
-
-	//apply my base behaviour
-	PhysModel::Tick(_GSD);
 }
 
 void Player::setGamePad(bool _state)
@@ -95,7 +96,7 @@ void Player::setGamePad(bool _state)
 	m_controlsActive = true;
 }
 
-void Player::movement(GameStateData * _GSD)
+void Player::movement()
 {
 	//FORWARD BACK & STRAFE CONTROL HERE
 	Vector3 forwardMove = 30.0f * m_world.Forward();
@@ -124,36 +125,50 @@ void Player::movement(GameStateData * _GSD)
 		}
 
 		//GameController Movement
-		if (Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
+		if (m_controlsActive)
 		{
-			if (Locator::getGSD()->m_gamePadState[m_playerID].IsViewPressed())
+			if (Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
 			{
-				ExitGame();
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsViewPressed())
+				{
+					ExitGame();
+				}
+				else
+				{
+					if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
+					{
+						m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
+					}
+
+					if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
+					{
+						m_acc -= forwardMove; //* _GSD->m_gamePadState->triggers.left;
+					}
+
+					if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
+					{
+						m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+					}
+
+					if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+					{
+						m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+					}
+				}
 			}
-			else
-			{
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
-				{
-					m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
-				{
-					m_acc -= forwardMove; //* _GSD->m_gamePadState->triggers.left;
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
-				{
-					m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
-				{
-					m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-				}
-			}
-			m_gamePad->SetVibration(m_playerID, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1);
 		}
+
+		//change orinetation of player
+		float rotSpeed = 0.001f;
+		//m_yaw -= rotSpeed * _GSD->m_mouseState.x;
+		//m_pitch -= rotSpeed * _GSD->m_mouseState.y;
+
+		m_yaw -= rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightX;
+		m_pitch += rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightY;
+	}
+		//Car rumble
+		Locator::getID()->m_gamePad->SetVibration(m_playerID, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1);
+
 
 		// Debug code to save/load the players game state
 		if (m_keymindManager.keyPressed("Debug Save Matrix"))
@@ -177,17 +192,6 @@ void Player::movement(GameStateData * _GSD)
 		if (m_keymindManager.keyPressed("Debug Print Player Location")) {
 			std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 		}
-
-		//change orinetation of player
-		float rotSpeed = 0.001f;
-		//m_yaw -= rotSpeed * _GSD->m_mouseState.x;
-		//m_pitch -= rotSpeed * _GSD->m_mouseState.y;
-
-		m_yaw -= rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightX;
-		m_pitch += rotSpeed * _GSD->m_gamePadState[m_playerID].thumbSticks.rightY;
-	}
-	m_gamePad->SetVibration(m_playerID, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1, _GSD->m_gamePadState[m_playerID].triggers.right * 0.1);
-}
 
 	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
 	position->SetText(std::to_string(current_position));

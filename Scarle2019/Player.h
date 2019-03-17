@@ -28,7 +28,7 @@ protected:
 
 private:
 	std::function<Item*(ItemType)> CreateItem;
-	void movement(GameStateData* _GSD);
+	void movement();
 
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;

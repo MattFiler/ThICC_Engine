@@ -29,9 +29,9 @@ private:
 	void create2DObjects();
 	void create3DObjects();
 	void pushBackObjects();
-	void enterPlayerLobby(GameStateData* _GSD);
-	void playerJoin(GameStateData* _GSD);
-	void initCharecterImages(RenderData* _RD);
+	void enterPlayerLobby();
+	void playerJoin();
+	void initCharecterImages();
 	void resetCharecterImagePos();
 
 

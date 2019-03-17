@@ -32,7 +32,7 @@ void GameScene::Update()
 	}
 
 	UpdateItems();
-	playerControlsActive(_GSD);
+	playerControlsActive();
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -287,11 +287,11 @@ void GameScene::pushBackObjects()
 	}
 }
 
-void GameScene::playerControlsActive(GameStateData* _GSD)
+void GameScene::playerControlsActive()
 {
 	if (m_startTimer > 0)
 	{
-		m_startTimer -= _GSD->m_dt;
+		m_startTimer -= Locator::getGSD()->m_dt;
 
 		if (m_startTimer <= 0)
 		{
