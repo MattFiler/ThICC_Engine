@@ -25,11 +25,6 @@ struct PhysModelData
 	Vector3 m_localBackBottomRight;
 
 	//Corner Pos in World Space
-	Vector3 m_globalFrontCentreLeft;
-	Vector3 m_globalFrontCentreRight;
-	Vector3 m_globalBackCentreLeft;
-	Vector3 m_globalBackCentreRight;
-
 	Vector3 m_globalFrontTopLeft;
 	Vector3 m_globalFrontTopRight;
 	Vector3 m_globalFrontBottomLeft;

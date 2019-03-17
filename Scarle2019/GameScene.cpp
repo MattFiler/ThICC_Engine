@@ -76,6 +76,37 @@ void GameScene::Update()
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 	}
 
+	for (int i = 0; i < 8; i++)
+	{
+		switch (i)
+		{
+		case 0:
+			debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopLeft);
+			break;
+		case 1:
+			debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopRight);
+			break;
+		case 2:
+			debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomLeft);
+			break;
+		case 3:
+			debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomRight);
+			break;
+		case 4:
+			debug_cups[i]->SetPos(player[0]->data.m_globalBackTopLeft);
+			break;
+		case 5:
+			debug_cups[i]->SetPos(player[0]->data.m_globalBackTopRight);
+			break;
+		case 6:
+			debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomLeft);
+			break;
+		case 7:
+			debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomRight);
+			break;
+		}
+	}
+
 	CollisionManager::collisionDetectionAndResponse(m_physModels);
 }
 
@@ -302,6 +333,12 @@ void GameScene::create3DObjects()
 			break;
 		}
 		}
+	}
+
+	for (SDKMeshGO3D*& cup : debug_cups)
+	{
+		cup = new SDKMeshGO3D("Cup");
+		m_3DObjects.push_back(cup);
 	}
 
 	//Global illumination

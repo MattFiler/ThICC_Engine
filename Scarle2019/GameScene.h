@@ -40,6 +40,7 @@ private:
 	Track* track = nullptr;
 	Player* player[4] = { nullptr };
 	PhysModel* test_model = nullptr;
+	SDKMeshGO3D* debug_cups[8] = { nullptr };
 
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects

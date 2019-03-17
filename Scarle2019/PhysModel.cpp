@@ -26,10 +26,10 @@ PhysModel::PhysModel(string _filename) :SDKMeshGO3D(_filename)
 
 		if (m_hasCollider)
 		{
-			initCollider(model_data);
-
 			m_colliderDebug = new SDKMeshGO3D(_filename + " DEBUG");
 			m_colliderDebug->SetScale(m_physData.scale);
+			initCollider(model_data);
+
 		}
 	}
 }
@@ -75,31 +75,13 @@ void PhysModel::initCollider(json &model_data)
 
 	m_physData.m_localCentre = Vector3((m_physData.m_localFrontTopLeft.x + m_physData.m_localFrontTopRight.x) / 2
 		, (m_physData.m_localFrontTopLeft.y + m_physData.m_localFrontBottomLeft.y) / 2, (m_physData.m_localFrontTopLeft.z + m_physData.m_localBackTopLeft.z) / 2);
-	//Updates the centre and rotations of the collider 
-	m_physData.m_worldCentre = Vector3::Transform(m_physData.m_localCentre, m_world);
-	m_collider.Center = m_physData.m_worldCentre;
 
-	XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
-	m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y , euler.x, euler.z));
+	updateCollider();
+	m_collider.Extents = Vector3(m_physData.scale, m_physData.scale,m_physData.scale);
 
-	//Storing the Corners of the collider for Toby
-	m_physData.m_globalFrontCentreLeft = Vector3::Transform(Vector3(m_physData.m_localFrontTopLeft.x, m_physData.m_localCentre.y, m_physData.m_localFrontTopLeft.z), m_world);
-	m_physData.m_globalFrontCentreRight = Vector3::Transform(Vector3(m_physData.m_localFrontTopRight.x, m_physData.m_localCentre.y, m_physData.m_localFrontTopRight.z), m_world);
-	m_physData.m_globalBackCentreLeft = Vector3::Transform(Vector3(m_physData.m_localBackBottomLeft.x, m_physData.m_localCentre.y, m_physData.m_localBackBottomLeft.z), m_world);
-	m_physData.m_globalBackCentreRight = Vector3::Transform(Vector3(m_physData.m_localBackBottomRight.x, m_physData.m_localCentre.y, m_physData.m_localBackBottomRight.z), m_world);
-
-	m_physData.m_globalFrontTopLeft = Vector3::Transform(m_physData.m_localFrontTopLeft, m_world);
-	m_physData.m_globalFrontTopRight = Vector3::Transform(m_physData.m_localFrontTopRight, m_world);
-	m_physData.m_globalFrontBottomLeft = Vector3::Transform(m_physData.m_localFrontBottomLeft, m_world);
-	m_physData.m_globalFrontBottomRight = Vector3::Transform(m_physData.m_localFrontBottomRight, m_world);
-	m_physData.m_globalBackTopLeft = Vector3::Transform(m_physData.m_localBackTopLeft, m_world);
-	m_physData.m_globalBackTopRight = Vector3::Transform(m_physData.m_localBackTopRight, m_world);
-	m_physData.m_globalBackBottomLeft = Vector3::Transform(m_physData.m_localBackBottomLeft, m_world);
-	m_physData.m_globalBackBottomRight = Vector3::Transform(m_physData.m_localBackBottomRight, m_world);
-
-	m_physData.m_width = m_physData.m_localFrontTopLeft.x - m_physData.m_localFrontTopRight.x;
-	m_physData.m_height = m_physData.m_localFrontTopLeft.y - m_physData.m_localBackBottomLeft.y;
-	m_physData.m_length = m_physData.m_localFrontTopLeft.z - m_physData.m_localBackBottomLeft.z;
+	m_physData.m_width = m_physData.m_globalFrontTopLeft.x - m_physData.m_globalFrontTopRight.x;
+	m_physData.m_height = m_physData.m_globalFrontTopLeft.y - m_physData.m_globalFrontBottomLeft.y;
+	m_physData.m_length = m_physData.m_globalFrontTopLeft.z - m_physData.m_globalBackTopLeft.z;
 }
 
 XMFLOAT3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)
@@ -124,19 +106,6 @@ void PhysModel::updateCollider()
 {
 	if (m_hasCollider)
 	{
-		//Updates the centre and rotations of the collider 
-		m_physData.m_worldCentre = Vector3::Transform(m_physData.m_localCentre, m_world);
-		m_collider.Center = m_physData.m_worldCentre;
-
-		XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
-		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y , euler.x, euler.z));
-
-		//Storing the Corners of the collider for Toby
-		m_physData.m_globalFrontCentreLeft = Vector3::Transform(Vector3(m_physData.m_localFrontTopLeft.x, m_physData.m_localCentre.y, m_physData.m_localFrontTopLeft.z), m_world);
-		m_physData.m_globalFrontCentreRight = Vector3::Transform(Vector3(m_physData.m_localFrontTopRight.x, m_physData.m_localCentre.y, m_physData.m_localFrontTopRight.z), m_world);
-		m_physData.m_globalBackCentreLeft = Vector3::Transform(Vector3(m_physData.m_localBackBottomLeft.x, m_physData.m_localCentre.y, m_physData.m_localBackBottomLeft.z), m_world);
-		m_physData.m_globalBackCentreRight = Vector3::Transform(Vector3(m_physData.m_localBackBottomRight.x, m_physData.m_localCentre.y, m_physData.m_localBackBottomRight.z), m_world);
-
 		m_physData.m_globalFrontTopLeft = Vector3::Transform(m_physData.m_localFrontTopLeft, m_world);
 		m_physData.m_globalFrontTopRight = Vector3::Transform(m_physData.m_localFrontTopRight, m_world);
 		m_physData.m_globalFrontBottomLeft = Vector3::Transform(m_physData.m_localFrontBottomLeft, m_world);
@@ -146,9 +115,15 @@ void PhysModel::updateCollider()
 		m_physData.m_globalBackBottomLeft = Vector3::Transform(m_physData.m_localBackBottomLeft, m_world);
 		m_physData.m_globalBackBottomRight = Vector3::Transform(m_physData.m_localBackBottomRight, m_world);
 
+		m_physData.m_worldCentre = Vector3::Transform(m_physData.m_localCentre, m_world);
+		m_collider.Center = m_physData.m_worldCentre;
+
+		XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
+		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y , euler.x, euler.z));
 		//Updates the debug collider position and rotation
-		m_colliderDebug->SetPos(Vector3(m_physData.m_worldCentre.x, m_physData.m_worldCentre.y - (m_physData.m_height / 2), m_physData.m_worldCentre.z));
-		//m_colliderDebug->SetScale(m_collider.Extents);	
+		//m_colliderDebug->SetPos(Vector3(m_physData.m_worldCentre.x, m_physData.m_worldCentre.y - (m_physData.m_height / 2), m_physData.m_worldCentre.z));
+		m_colliderDebug->SetPos(m_collider.Center);
+		m_colliderDebug->SetScale(m_collider.Extents);	
 		m_colliderDebug->SetYaw(euler.y);
 		m_colliderDebug->SetPitch(euler.x);
 		m_colliderDebug->SetRoll(euler.z);
