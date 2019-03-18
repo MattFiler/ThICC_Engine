@@ -15,8 +15,34 @@
       ]
     }
   ],
-  "finish_line": [],
-  "item_boxes": [],
+  "finish_line": [
+    {
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "item_boxes": [
+    {
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
   "spawns": [],
   "waypoints": [
     {
