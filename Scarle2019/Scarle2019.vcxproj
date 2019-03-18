@@ -193,6 +193,7 @@
     <ClInclude Include="ImageGO2D.h" />
     <ClInclude Include="InputData.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemBox.h" />
     <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LocalisationManager.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="GreenShell.cpp" />
     <ClCompile Include="ImageGO2D.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="KeybindManager.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="LocalisationManager.cpp" />
