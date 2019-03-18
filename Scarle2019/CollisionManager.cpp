@@ -17,6 +17,8 @@ void CollisionManager::collisionDetectionAndResponse(std::vector<PhysModel*> _ph
 
 	for (Collision& collision : collisions)	
 	{
+		// IF MODEL1 OR MODEL2 IS AN ITEM BOX...
+
 		Vector3 rv = collision.m_model2->getVelocity() - collision.m_model1->getVelocity();
 		float contactVel = rv.Dot(collision.m_collisionNormal);
 

@@ -2,6 +2,9 @@
 #include "PhysModel.h"
 #include "MeshTri.h"
 #include "GameFilepaths.h"
+#include "ItemBox.h"
+#include "DebugMarker.h"
+#include "UnFuckVector.h"
 #include <json.hpp>
 using json = nlohmann::json;
 
@@ -9,6 +12,15 @@ struct TrackData {
 	float scale = 1.0f;
 	Vector3 spawn_pos = Vector3(0, 0, 0);
 	Vector3 start_rot = Vector3(0, 0, 0);
+};
+
+struct FinishLine {
+	FinishLine(Vector3 _pos, Vector3 _rot) {
+		position = _pos;
+		rotation = _rot;
+	}
+	Vector3 position = Vector3(0, 0, 0);
+	Vector3 rotation = Vector3(0, 0, 0);
 };
 
 /* A type of PhysModel that stores a reference to their triangles, used so that TrackMagnet objects
@@ -35,8 +47,27 @@ public:
 	std::vector<BoundingBox> getWaypointsBB() {
 		return waypoint_bb;
 	};
+	FinishLine getFinishLine() {
+		//This is all stored as a vector, but really there should only be one finish line per map - so just return element zero.
+		//If we end up changing maps to have multiple end-points, then this can easily be supported by modifying this return type.
+		return FinishLine(map_finishline_pos.at(0), map_finishline_rot.at(0));
+	};
+	std::vector<Vector3> getItemBoxesPos() {
+		return map_itemboxes_pos;
+	};
+	std::vector<Vector3> getItemBoxesRot() {
+		return map_itemboxes_rot;
+	};
 
 	void setWaypointBB();
+
+	std::vector<ItemBox*> GetItemBoxes() {
+		return item_boxes;
+	};
+
+	std::vector<DebugMarker*> GetDebugMarkers() {
+		return debug_markers;
+	};
 
 	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle);
 
@@ -55,6 +86,9 @@ private:
 	int GetIndexAtPoint(Vector point);
 	void GetXYZIndexAtPoint(Vector& point);
 
+	// std::clamp apparently doesn't exists, so I'll just make it here
+	void Clamp(float& _num, float _min, float _max);
+
 	// Storage for the all the triangles data. 
 	// Make sure to not reserve more on this vector past initization, else the references will all get messed up
 	std::vector<MeshTri> m_triangles;
@@ -72,18 +106,30 @@ private:
 	// Size for the tri segments (segments are cubes)
 	float m_triSegSize = 10;
 
-	// waypoints, cameras, and spawns
+	// Map config data from Blender
 	std::vector<Vector3> map_waypoints;
 	std::vector<Vector3> map_spawnpoints;
 	std::vector<Vector3> map_cams_pos;
 	std::vector<Vector3> map_cams_rot;
-
+	std::vector<Vector3> map_itemboxes_pos;
+	std::vector<Vector3> map_itemboxes_rot;
+	std::vector<Vector3> map_finishline_pos;
+	std::vector<Vector3> map_finishline_rot;
 
 	// waypoint bounding box
 	std::vector<BoundingBox> waypoint_bb;
 
+	//Item boxes
+	std::vector<ItemBox*> item_boxes;
+
+	//Debugmarkers
+	std::vector<DebugMarker*> debug_markers;
+
+	UnFuckVector vector_fun;
+
 	// Size of each dimension of the vector
 	int m_triGridX = 0;
 	int m_triGridY = 0;
+	int m_triGridZ = 0;
 	int m_triGridYX = 0; // Set to m_triGridY * m_triGridX as this number is used lots
 };
