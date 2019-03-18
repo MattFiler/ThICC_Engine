@@ -24,6 +24,7 @@ using Microsoft::WRL::ComPtr;
 
 bool GameDebugToggles::show_debug_meshes = false;
 bool GameDebugToggles::render_level = true;
+double ItemBoxConfig::respawn_time = 0.0;
 
 Game::Game() :
 	m_WD(new WindowData),
@@ -41,6 +42,7 @@ Game::Game() :
 	m_WD->m_window = nullptr;
 	m_WD->m_outputHeight = game_config["window_height"];
 	m_WD->m_outputWidth = game_config["window_width"];
+	ItemBoxConfig::respawn_time = game_config["itembox_respawn_time"];
 
 	//Setup service locator
 	Locator::setupRD(m_RD);

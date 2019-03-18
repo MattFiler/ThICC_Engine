@@ -55,3 +55,7 @@ enum ItemType
 	RED_SHELL_3X,
 	BANANA_3X
 };
+
+struct ItemBoxConfig {
+	static double respawn_time;
+};
