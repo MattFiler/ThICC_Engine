@@ -31,6 +31,14 @@ Track::Track(string _filename) : PhysModel(_filename)
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(Vector3(it.value()[0], it.value()[1], it.value()[2]));
 	}
+	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
+		map_itemboxes_pos.push_back(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]));
+		map_itemboxes_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
+	}
+	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
+		map_finishline_pos.push_back(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]));
+		map_finishline_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
+	}
 
 	//Set our config in action
 	SetScale(m_track_data.scale);

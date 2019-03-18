@@ -35,6 +35,18 @@ public:
 	std::vector<BoundingBox> getWaypointsBB() {
 		return waypoint_bb;
 	};
+	std::vector<Vector3> getFinishLinePos() {
+		return map_finishline_pos;
+	};
+	std::vector<Vector3> getFinishLineRot() {
+		return map_finishline_rot;
+	};
+	std::vector<Vector3> getItemBoxesPos() {
+		return map_itemboxes_pos;
+	};
+	std::vector<Vector3> getItemBoxesRot() {
+		return map_itemboxes_rot;
+	};
 
 	void setWaypointBB();
 
@@ -80,6 +92,10 @@ private:
 	std::vector<Vector3> map_spawnpoints;
 	std::vector<Vector3> map_cams_pos;
 	std::vector<Vector3> map_cams_rot;
+	std::vector<Vector3> map_itemboxes_pos;
+	std::vector<Vector3> map_itemboxes_rot;
+	std::vector<Vector3> map_finishline_pos;
+	std::vector<Vector3> map_finishline_rot;
 
 
 	// waypoint bounding box

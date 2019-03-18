@@ -139,11 +139,11 @@ class MK_CourseIntroCam(bpy.types.Operator):
         return {'FINISHED'}
         
         
-# Save all cinematic cams
+# Save all cinematic camss
 class MK_SaveAllIntroCams(bpy.types.Operator, ExportHelper):
-    """Save All Cameras"""
+    """Save Mario Kart DX12 Config"""
     bl_idname = "export_test.mk_cinecam_get"
-    bl_label = "SAVE ALL CINECAMS"
+    bl_label = "Save MK Config"
     
     filename_ext = ".json"
 
