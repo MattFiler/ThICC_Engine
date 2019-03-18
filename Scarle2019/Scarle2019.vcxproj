@@ -221,7 +221,7 @@
     <ClInclude Include="TrackMagnet.h" />
     <ClInclude Include="TrackSelectionState.h" />
     <ClInclude Include="TransFileVBGO.h" />
-    <ClInclude Include="UnFuckVector.h" />
+    <ClInclude Include="BlenderToDirectX.h" />
     <ClInclude Include="VBCube.h" />
     <ClInclude Include="VBGO3D.h" />
     <ClInclude Include="VBSnail.h" />

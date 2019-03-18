@@ -256,7 +256,7 @@
     <ClInclude Include="DebugMarker.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="UnFuckVector.h">
+    <ClInclude Include="BlenderToDirectX.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
   </ItemGroup>

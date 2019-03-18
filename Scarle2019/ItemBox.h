@@ -9,5 +9,7 @@ public:
 	ItemBox(Vector3& position, Vector3& rotation);
 	~ItemBox() = default;
 
+	void hasCollided();
+
 private:
 };

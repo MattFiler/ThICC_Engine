@@ -4,7 +4,7 @@
 #include "GameFilepaths.h"
 #include "ItemBox.h"
 #include "DebugMarker.h"
-#include "UnFuckVector.h"
+#include "BlenderToDirectX.h"
 #include <json.hpp>
 using json = nlohmann::json;
 
@@ -125,7 +125,7 @@ private:
 	//Debugmarkers
 	std::vector<DebugMarker*> debug_markers;
 
-	UnFuckVector vector_fun;
+	BlenderToDirectX blender_vector;
 
 	// Size of each dimension of the vector
 	int m_triGridX = 0;

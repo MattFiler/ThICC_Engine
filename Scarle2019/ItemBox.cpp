@@ -9,3 +9,7 @@ ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("Default Item
 
 	std::cout << "(" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
 }
+
+void ItemBox::hasCollided() {
+	setVisible(false);
+}

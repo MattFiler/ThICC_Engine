@@ -221,26 +221,30 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 
 		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 		{
-			if (dynamic_cast<Track*>(*it)) //debugging only
-			{
-				if (GameDebugToggles::render_level) {
+			if ((*it)->isVisible()) {
+				if (dynamic_cast<Track*>(*it)) //debugging only
+				{
+					if (GameDebugToggles::render_level) {
+						(*it)->Render();
+					}
+				}
+				else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+					if (GameDebugToggles::show_debug_meshes) {
+						(*it)->Render();
+					}
+				}
+				else
+				{
 					(*it)->Render();
 				}
-			}
-			else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
-				if (GameDebugToggles::show_debug_meshes) {
-					(*it)->Render();
-				}
-			}
-			else
-			{
-				(*it)->Render();
 			}
 		}
 
 		for (GameObject3D* obj : m_itemModels)
 		{
-			obj->Render();
+			if (obj->isVisible()) {
+				obj->Render();
+			}
 		}
 	}
 
