@@ -26,5 +26,6 @@
   "DebugCamSpeedup": "RightShift",
   "Load Debug Scene": "D",
   "Spawn Banana": "F1",
-  "Spawn Green Shell": "F2"
+  "Spawn Green Shell": "F2",
+  "Debug Toggle World Render": "U"
 }

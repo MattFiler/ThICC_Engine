@@ -22,6 +22,7 @@ using namespace DirectX::SimpleMath;
 using Microsoft::WRL::ComPtr;
 
 bool GameDebugToggles::show_debug_meshes = false;
+bool GameDebugToggles::render_level = true;
 
 Game::Game() :
 	m_WD(new WindowData),

@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "GameDebugToggles.h"
 #include "ServiceLocator.h"
+#include "DebugMarker.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -89,6 +90,9 @@ void GameScene::Update()
 	if (m_keybinds.keyPressed("Debug Toggle"))
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
+	}
+	if (m_keybinds.keyPressed("Debug Toggle World Render")) {
+		GameDebugToggles::render_level = !GameDebugToggles::render_level;
 	}
 
 	CollisionManager::collisionDetectionAndResponse(m_physModels);
@@ -217,7 +221,21 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 
 		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 		{
-			(*it)->Render();
+			if (dynamic_cast<Track*>(*it)) //debugging only
+			{
+				if (GameDebugToggles::render_level) {
+					(*it)->Render();
+				}
+			}
+			else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+				if (GameDebugToggles::show_debug_meshes) {
+					(*it)->Render();
+				}
+			}
+			else
+			{
+				(*it)->Render();
+			}
 		}
 
 		for (GameObject3D* obj : m_itemModels)
@@ -310,6 +328,16 @@ void GameScene::create3DObjects()
 	track = new Track(game_config["default_track"]);
 	track->setWaypointBB();
 	m_3DObjects.push_back(track);
+
+	//Add all track item boxes to 3D object update array
+	for (ItemBox* this_item_box : track->GetItemBoxes()) {
+		m_3DObjects.push_back(this_item_box);
+	}
+
+	//Add all debug markers
+	for (DebugMarker* this_debug_marker : track->GetDebugMarkers()) {
+		m_3DObjects.push_back(this_debug_marker);
+	}
 
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
 	for (int i = 0; i < game_config["player_count"]; i++) {

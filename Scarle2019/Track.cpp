@@ -22,22 +22,39 @@ Track::Track(string _filename) : PhysModel(_filename)
 
 	//Parse loaded arrays from config
 	for (json::iterator it = m_track_data_j["map_waypoints"].begin(); it != m_track_data_j["map_waypoints"].end(); ++it) {
-		map_waypoints.push_back(Vector3(it.value()[0], it.value()[1], it.value()[2]));
+		Vector3 pos = vector_fun.UnFuck(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale);
+
+		map_waypoints.push_back(pos);
+
+		DebugMarker* new_marker = new DebugMarker(pos, Vector3(0,0,0));
+		debug_markers.push_back(new_marker);
 	}
 	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
-		map_cams_pos.push_back(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]));
-		map_cams_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
+		map_cams_pos.push_back(vector_fun.UnFuck(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale));
+		map_cams_rot.push_back(vector_fun.UnFuck(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale));
 	}
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
-		map_spawnpoints.push_back(Vector3(it.value()[0], it.value()[1], it.value()[2]));
+		map_spawnpoints.push_back(vector_fun.UnFuck(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));
 	}
 	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
-		map_itemboxes_pos.push_back(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]));
-		map_itemboxes_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
+		Vector3 box_pos = vector_fun.UnFuck(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
+		Vector3 box_rot = vector_fun.UnFuck(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale);
+
+		map_itemboxes_pos.push_back(box_pos);
+		map_itemboxes_rot.push_back(box_rot);
+
+		ItemBox* new_item_box = new ItemBox(box_pos, box_rot);
+		item_boxes.push_back(new_item_box);
 	}
 	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
-		map_finishline_pos.push_back(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]));
-		map_finishline_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
+		Vector3 pos = vector_fun.UnFuck(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
+		Vector3 rot = vector_fun.UnFuck(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale);
+
+		map_finishline_pos.push_back(pos);
+		map_finishline_rot.push_back(rot);
+
+		DebugMarker* new_marker = new DebugMarker(pos, rot);
+		debug_markers.push_back(new_marker);
 	}
 
 	//Set our config in action
