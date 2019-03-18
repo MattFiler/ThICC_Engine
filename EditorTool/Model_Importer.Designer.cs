@@ -45,8 +45,9 @@ namespace EditorTool
             this.itemMaterialCategoriesTrans = new System.Windows.Forms.CheckedListBox();
             this.enableTransparency = new System.Windows.Forms.CheckBox();
             this.resizedCollisionGroup = new System.Windows.Forms.GroupBox();
-            this.modelType = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.trackConfig = new System.Windows.Forms.TextBox();
+            this.locateTrackConfig = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             this.resizedCollisionGroup.SuspendLayout();
@@ -202,35 +203,41 @@ namespace EditorTool
             this.resizedCollisionGroup.TabStop = false;
             this.resizedCollisionGroup.Text = "Model Collision";
             // 
-            // modelType
-            // 
-            this.modelType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.modelType.FormattingEnabled = true;
-            this.modelType.Items.AddRange(new object[] {
-            "Track",
-            "Player",
-            "Prop"});
-            this.modelType.Location = new System.Drawing.Point(19, 107);
-            this.modelType.Name = "modelType";
-            this.modelType.Size = new System.Drawing.Size(325, 21);
-            this.modelType.TabIndex = 13;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(17, 91);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(63, 13);
+            this.label3.Size = new System.Drawing.Size(122, 13);
             this.label3.TabIndex = 14;
-            this.label3.Text = "Model Type";
+            this.label3.Text = "Track Properties (JSON)";
+            // 
+            // trackConfig
+            // 
+            this.trackConfig.Location = new System.Drawing.Point(19, 107);
+            this.trackConfig.Name = "trackConfig";
+            this.trackConfig.ReadOnly = true;
+            this.trackConfig.Size = new System.Drawing.Size(244, 20);
+            this.trackConfig.TabIndex = 16;
+            // 
+            // locateTrackConfig
+            // 
+            this.locateTrackConfig.Location = new System.Drawing.Point(269, 106);
+            this.locateTrackConfig.Name = "locateTrackConfig";
+            this.locateTrackConfig.Size = new System.Drawing.Size(75, 22);
+            this.locateTrackConfig.TabIndex = 15;
+            this.locateTrackConfig.Text = "Browse";
+            this.locateTrackConfig.UseVisualStyleBackColor = true;
+            this.locateTrackConfig.Click += new System.EventHandler(this.locateTrackConfig_Click);
             // 
             // Model_Importer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(355, 497);
+            this.Controls.Add(this.trackConfig);
+            this.Controls.Add(this.locateTrackConfig);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.modelType);
             this.Controls.Add(this.resizedCollisionGroup);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
@@ -271,8 +278,9 @@ namespace EditorTool
         private System.Windows.Forms.GroupBox resizedCollisionGroup;
         private CheckBox enableTransparency;
         private PictureBox materialPreview;
-        private ComboBox modelType;
         private Label label3;
+        private TextBox trackConfig;
+        private Button locateTrackConfig;
     }
 }
 

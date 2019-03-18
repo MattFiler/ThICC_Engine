@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "GameDebugToggles.h"
 #include "ServiceLocator.h"
+#include "DebugMarker.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -65,6 +66,9 @@ void GameScene::Update()
 		Locator::getGSD()->m_gamePadState[i] = Locator::getID()->m_gamePad->GetState(i); //set game controllers state[s]
 	}
 
+	UpdateItems();
+	playerControlsActive();
+
 	if (m_keybinds.keyPressed("Quit"))
 	{
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
@@ -98,18 +102,61 @@ void GameScene::Update()
 		(*it)->Tick();
 	}
 
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	// Note I've changed this to a loop via index since Tick() on players
+	// can introduce new objects, which causes some horrible errors
+	int end = m_3DObjects.size();
+	int delIndex = -1;
+	for (int i = 0; i < end; i++)
 	{
-		(*it)->Tick();
+		m_3DObjects[i]->Tick();
+		if (m_3DObjects[i]->ShouldDestroy())
+		{
+			delIndex = i;
+		}
 	}
-	
+	if (delIndex != -1)
+	{
+		//delete m_3DObjects[delIndex];
+		m_3DObjects.erase(m_3DObjects.begin() + delIndex);
+	}
+
 	//Toggle debug mesh renders
 	if (m_keybinds.keyPressed("Debug Toggle"))
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 	}
+	if (m_keybinds.keyPressed("Debug Toggle World Render")) {
+		GameDebugToggles::render_level = !GameDebugToggles::render_level;
+	}
 
 	CollisionManager::collisionDetectionAndResponse(m_physModels);
+}
+
+void GameScene::UpdateItems()
+{
+	int delIndex = -1;
+	int end = m_itemModels.size();
+	for (int i = 0; i < end; i++)
+	{
+		m_itemModels[i]->ShouldStickToTrack(*track);
+		m_itemModels[i]->ResolveWallCollisions(*track);
+		for (int j = 0; j < game_config["player_count"]; ++j) {
+			if (player[j]->getCollider().Intersects(m_itemModels[i]->getCollider()))
+			{
+				m_itemModels[i]->HitByPlayer(player[j]);
+			}
+		}
+		m_itemModels[i]->Tick();
+		if (m_itemModels[i]->ShouldDestroy())
+		{
+			delIndex = i;
+		}
+	}
+	if (delIndex != -1)
+	{
+		//delete m_itemModels[delIndex];
+		m_itemModels.erase(m_itemModels.begin() + delIndex);
+	}
 }
 
 void GameScene::SetPlayersWaypoint()
@@ -210,7 +257,21 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 
 		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 		{
-			(*it)->Render();
+			if (dynamic_cast<Track*>(*it)) //debugging only
+			{
+				if (GameDebugToggles::render_level) {
+					(*it)->Render();
+				}
+			}
+			else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+				if (GameDebugToggles::show_debug_meshes) {
+					(*it)->Render();
+				}
+			}
+			else
+			{
+				(*it)->Render();
+			}
 		}
 		break;
 	case COUNTDOWN:
@@ -219,6 +280,12 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
 			m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
 			Locator::getRD()->m_cam = m_cam[i];
+
+		for (GameObject3D* obj : m_itemModels)
+		{
+			obj->Render();
+		}
+	}
 
 			for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 			{
@@ -348,10 +415,21 @@ void GameScene::create3DObjects()
 	track->setWaypointBB();
 	m_3DObjects.push_back(track);
 
+	//Add all track item boxes to 3D object update array
+	for (ItemBox* this_item_box : track->GetItemBoxes()) {
+		m_3DObjects.push_back(this_item_box);
+	}
+
+	//Add all debug markers
+	for (DebugMarker* this_debug_marker : track->GetDebugMarkers()) {
+		m_3DObjects.push_back(this_debug_marker);
+	}
+
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
 	for (int i = 0; i < game_config["player_count"]; i++) {
 		//Create a player and position on track
-		player[i] = new Player("Knuckles Kart", i);
+		using std::placeholders::_1;
+		player[i] = new Player("Knuckles Kart", i, std::bind(&GameScene::CreateItem, this, _1));
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		m_3DObjects.push_back(player[i]);
 
@@ -410,4 +488,54 @@ void GameScene::pushBackObjects()
 			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
 		}
 	}
+}
+
+void GameScene::playerControlsActive()
+{
+	if (m_startTimer > 0)
+	{
+		m_startTimer -= Locator::getGSD()->m_dt;
+
+		if (m_startTimer <= 0)
+		{
+			m_playerControls = true;
+		}
+	}
+
+	if (m_playerControls)
+	{
+		for (int i = 0; i < 4; ++i)
+		{
+			player[i]->setGamePad(m_playerControls);
+		}
+	}
+}
+
+Item* GameScene::CreateItem(ItemType type)
+{
+	switch (type)
+	{
+	case BANANA:
+	{
+		Banana* banana = new Banana();
+		m_itemModels.push_back(banana);
+		return banana;
+		break;
+	}
+	case GREEN_SHELL:
+	{
+		GreenShell* greenShell = new GreenShell();
+		m_itemModels.push_back(greenShell);
+		return greenShell;
+		break;
+	}
+	case RED_SHELL:
+		break;
+	case MUSHROOM:
+		break;
+	default:
+		return nullptr;
+		break;
+	}
+	return nullptr;
 }

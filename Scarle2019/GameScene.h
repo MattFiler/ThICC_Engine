@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "LocalisationManager.h"
 #include "Banana.h" //test
+#include "GreenShell.h"
 #include "CollisionManager.h"
 #include <vector>
 
@@ -29,12 +30,18 @@ public:
 	void SetPlayerRanking();
 
 private:
+	// Updates
+	void UpdateItems();
+
 	//State Stuff
 	bool m_isPaused;
 
 	void create2DObjects();
 	void create3DObjects();
 	void pushBackObjects();
+	void playerControlsActive();
+
+	Item* CreateItem(ItemType type);
 
 	// Test objects
 	Track* track = nullptr;
@@ -50,6 +57,7 @@ private:
 
 	KeybindManager m_keybinds;
 	//Banana m_banana_test;
+	std::vector<Item*> m_itemModels;
 
 	std::vector<PhysModel*> m_physModels;
 
@@ -57,8 +65,9 @@ private:
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
-
+	
 	RenderData* m_RD;
+	bool m_playerControls = false;
 
 	// useful debug code dont delete
 	Text2D* camera_pos = nullptr;

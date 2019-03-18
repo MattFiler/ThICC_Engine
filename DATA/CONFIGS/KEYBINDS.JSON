@@ -23,6 +23,9 @@
   "Backwards": "S",
   "Debug Print Player Location": "O",
   "Debug Print Camera Location": "I",
+  "Spawn Banana": "F1",
+  "Spawn Green Shell": "F2",
+  "Debug Toggle World Render": "U"
   "DebugCamSpeedup": "Enter",
   "Load Debug Scene": "D"
 }
