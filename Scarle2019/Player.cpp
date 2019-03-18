@@ -166,32 +166,31 @@ void Player::movement()
 		m_yaw -= rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightX;
 		m_pitch += rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightY;
 	}
-		//Car rumble
-		Locator::getID()->m_gamePad->SetVibration(m_playerID, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1);
+	//Car rumble
+	Locator::getID()->m_gamePad->SetVibration(m_playerID, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1);
 
+	// Debug code to save/load the players game state
+	if (m_keymindManager.keyPressed("Debug Save Matrix"))
+	{
+		m_savedMatrix = m_world;
+		m_savedVel = m_vel;
+		m_savedGravVel = m_gravVel;
+	}
+	else if (m_keymindManager.keyPressed("Debug Load Matrix"))
+	{
+		m_world = m_savedMatrix;
+		m_vel = m_savedVel;
+		m_gravVel = m_savedGravVel;
+		Vector3 scale = Vector3::Zero;
+		Quaternion rot = Quaternion::Identity;
+		m_world.Decompose(scale, rot, m_pos);
+		m_rot = Matrix::CreateFromQuaternion(rot);
+	}
 
-		// Debug code to save/load the players game state
-		if (m_keymindManager.keyPressed("Debug Save Matrix"))
-		{
-			m_savedMatrix = m_world;
-			m_savedVel = m_vel;
-			m_savedGravVel = m_gravVel;
-		}
-		else if (m_keymindManager.keyPressed("Debug Load Matrix"))
-		{
-			m_world = m_savedMatrix;
-			m_vel = m_savedVel;
-			m_gravVel = m_savedGravVel;
-			Vector3 scale = Vector3::Zero;
-			Quaternion rot = Quaternion::Identity;
-			m_world.Decompose(scale, rot, m_pos);
-			m_rot = Matrix::CreateFromQuaternion(rot);
-		}
-
-		//Debug output player location - useful for setting up spawns
-		if (m_keymindManager.keyPressed("Debug Print Player Location")) {
-			std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
-		}
+	//Debug output player location - useful for setting up spawns
+	if (m_keymindManager.keyPressed("Debug Print Player Location")) {
+		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+	}
 
 	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
 	position->SetText(std::to_string(current_position));

@@ -178,7 +178,7 @@ void MenuScene::enterPlayerLobby()
 			m_menu_state = States::LOBBY;
 			m_2DObjects[1]->SetPos(Vector2(0, -720));
 			m_2DObjects[2]->SetPos(Vector2(0, 0));
-			m_charecter_images[0][0]->SetPos(Vector2(200, 200));
+			//m_charecter_images[0][0]->SetPos(Vector2(200, 200));
 		}
 
 		if (Locator::getGSD()->m_gamePadState[0].IsBPressed() && m_menu_state == States::LOBBY)
@@ -215,7 +215,7 @@ void MenuScene::playerJoin()
 						Locator::getGSD()->charecter_selected[i] = 0;
 					}
 					m_charTimeout[i] = 0.3f; // set charecter selection timeout
-					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(200, 200));//set new image pos
+					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
 				}
 
 				if (Locator::getGSD()->m_gamePadState[i].thumbSticks.leftX < 0)
@@ -228,7 +228,7 @@ void MenuScene::playerJoin()
 						Locator::getGSD()->charecter_selected[i] = 3;
 					}
 					m_charTimeout[i] = 0.2f; // set charecter selection timeout
-					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(200, 200));//set new image pos
+					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
 				}
 			}
 		}
@@ -239,13 +239,13 @@ void MenuScene::initCharecterImages()
 {
 	for (int i = 0; i < 4; ++i)
 	{
-		m_charecter_images[i][0] = new ImageGO2D("twist");
+		m_charecter_images[i][0] = new ImageGO2D("BOWSER");
 		m_charecter_images[i][0]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][1] = new ImageGO2D("BANANA");
+		m_charecter_images[i][1] = new ImageGO2D("MARIO");
 		m_charecter_images[i][1]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][2] = new ImageGO2D("ITEMBOX");
+		m_charecter_images[i][2] = new ImageGO2D("PEACH");
 		m_charecter_images[i][2]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][3] = new ImageGO2D("BANANA");
+		m_charecter_images[i][3] = new ImageGO2D("WALUIGI");
 		m_charecter_images[i][3]->SetPos(Vector2(0, -500));
 	}
 
