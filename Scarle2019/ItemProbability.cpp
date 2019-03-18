@@ -5,6 +5,7 @@
 #include <iterator>
 #include <map>
 
+/* Set the probability percentages for items */
 ItemProbability::ItemProbability() {
 	std::ifstream i("DATA/ITEMS/ITEM_CONFIG.JSON");
 	complete_config << i;
@@ -30,6 +31,7 @@ ItemProbability::ItemProbability() {
 	ProcessConfig(banana_3x_probability, "BANANA_3X");
 }
 
+/* Get a random item based on the player position */
 ItemType ItemProbability::GetRandomItem(int _position) {
 	std::mt19937 gen(std::time(NULL));
 
@@ -59,6 +61,7 @@ ItemType ItemProbability::GetRandomItem(int _position) {
 	return static_cast<ItemType>(d(gen));
 }
 
+/* Get the probability of getting an item from the mystery box at a position in the race (e.g. 1st) */
 float ItemProbability::GetProbability(ItemType _item, int _position) {
 	switch (_item) {
 		case GREEN_SHELL: {
@@ -122,6 +125,7 @@ float ItemProbability::GetProbability(ItemType _item, int _position) {
 	return 0.0f;
 }
 
+/* Process the config for an item type, and set the probability array */
 void ItemProbability::ProcessConfig(float* config_to_set, const std::string& config_name) {
 	//Adjust config for item/default params
 	json temp_config_specialised = complete_config[config_name];
@@ -143,8 +147,6 @@ void ItemProbability::ProcessConfig(float* config_to_set, const std::string& con
 			}
 		}
 	}
-
-	std::cout << config_to_set[0];
 
 	//Update item probabilities
 	for (int i = 0; i < 12; i++) {

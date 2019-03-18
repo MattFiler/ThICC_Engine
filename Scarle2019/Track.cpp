@@ -294,7 +294,7 @@ void Track::SplitTrisIntoGrid()
 		}
 	}
 
-	std::cout << "Track tri map created with " << m_triGridX*m_triGridY*m_triGridZ << " segments";
+	std::cout << "Track tri map created with " << m_triGridX*m_triGridY*m_triGridZ << " segments" << std::endl;
 }
 
 /* Loops though the m_trianges vector and finds every tri that falls within the area at _index  */
