@@ -28,11 +28,6 @@ Item::Item(const std::string& item_type) : TrackMagnet(item_type) {
 		}
 	}
 
-	//Update item probabilities
-	for (int i = 0; i < 12; i++) {
-		m_probability_modifier[i] = m_item_config["probabilities"]["place_" + std::to_string(i+1)];
-	}
-
 	//Set model name
 	std::string model_name = m_item_config["model"];
 	m_model_name = model_name;
