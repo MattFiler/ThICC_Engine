@@ -11,6 +11,7 @@
 #include "ServiceLocator.h"
 #include "CollisionManager.h"
 #include "GameDebugToggles.h"
+#include "Item.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -46,6 +47,7 @@ Game::Game() :
 	Locator::setupWD(m_WD);
 	Locator::setupGSD(m_GSD);
 	Locator::setupID(m_ID);
+	Locator::setupProbabilities(&m_probabilities);
 }
 
 Game::~Game()

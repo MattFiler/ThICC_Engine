@@ -37,6 +37,7 @@ public:
 		if (inventory_item == _item) { 
 			active_item = _item; 
 			inventory_item = ItemType::NONE;
+			std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
 		} 
 		else
 		{
@@ -48,6 +49,7 @@ public:
 	void setItemInInventory(ItemType _item) {
 		if (inventory_item == ItemType::NONE) {
 			inventory_item = _item;
+			std::cout << "PLAYER " << m_playerID << " HAS ACQUIRED ITEM: " << _item << std::endl; //debug
 		}
 	}
 	

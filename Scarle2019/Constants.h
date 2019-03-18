@@ -1,4 +1,12 @@
 #pragma once
+#include <vector>
+
+/*
+
+	!!!		DO NOT REORDER ANY OF THESE ENUMS!		!!!
+
+*/
+
 enum Scenes
 {
 	MENUSCENE,
@@ -27,8 +35,23 @@ enum States
 enum ItemType
 {
 	NONE = -1,
-	BANANA = 0,
-	GREEN_SHELL,
+	GREEN_SHELL = 0,
 	RED_SHELL,
-	MUSHROOM
+	BANANA,
+	FAKE_BOX,
+	MUSHROOM,
+	MUSHROOM_3X,
+	BOMB,
+	BLUE_SHELL,
+	LIGHTNING_BOLT,
+	STAR,
+	MUSHROOM_UNLIMITED,
+	MUSHROOM_GIANT,
+	SQUID,
+	POW,
+	LIGHTNING_CLOUD,
+	BULLET_BILL,
+	GREEN_SHELL_3X,
+	RED_SHELL_3X,
+	BANANA_3X
 };

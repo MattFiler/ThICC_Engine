@@ -2,6 +2,9 @@
 #include "ItemBox.h"
 #include "ServiceLocator.h"
 #include "Player.h"
+#include "Item.h"
+#include "ServiceLocator.h"
+#include "ItemProbability.h"
 
 //Todo: replace "Default Item" with item box model
 ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("Default Item") {
@@ -13,10 +16,7 @@ ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("Default Item
 
 void ItemBox::hasCollided(Player* collided_player) {
 	setVisible(false);
-
-	//Generate an item here based on probability
-
-	collided_player->setItemInInventory(ItemType::GREEN_SHELL);
+	collided_player->setItemInInventory(Locator::getProbabilities()->GetRandomItem(collided_player->GetRanking()));
 }
 
 void ItemBox::Tick() {
