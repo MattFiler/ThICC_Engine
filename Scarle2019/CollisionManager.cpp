@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CollisionManager.h"
 #include "ItemBox.h"
+#include "Player.h"
 
 
 CollisionManager::CollisionManager()
@@ -18,12 +19,16 @@ void CollisionManager::collisionDetectionAndResponse(std::vector<PhysModel*> _ph
 
 	for (Collision& collision : collisions)	
 	{
-		//Collided with item box on track
-		if (dynamic_cast<ItemBox*>(collision.m_model1)) {
-			dynamic_cast<ItemBox*>(collision.m_model1)->hasCollided();
+		//Player collided with item box on track
+		if (dynamic_cast<ItemBox*>(collision.m_model1) && dynamic_cast<Player*>(collision.m_model2)) {
+			if (collision.m_model1->isVisible()) {
+				dynamic_cast<ItemBox*>(collision.m_model1)->hasCollided(dynamic_cast<Player*>(collision.m_model2));
+			}
 		}
-		else if (dynamic_cast<ItemBox*>(collision.m_model2)) {
-			dynamic_cast<ItemBox*>(collision.m_model2)->hasCollided();
+		else if (dynamic_cast<ItemBox*>(collision.m_model2) && dynamic_cast<Player*>(collision.m_model1)) {
+			if (collision.m_model2->isVisible()) {
+				dynamic_cast<ItemBox*>(collision.m_model2)->hasCollided(dynamic_cast<Player*>(collision.m_model1));
+			}
 		}
 		//Collided with another player
 		else {

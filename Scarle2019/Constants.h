@@ -10,24 +10,25 @@ enum Scenes
 
 enum States
 {
-	NOSTATE = -1 ,
+	NOSTATE = -1,
 	PAUSED = 0,
 
 	//MENU
-	LOBBY					= 1,
-	START_GAME				= 2,
-	CHARECTER_SELECTION		= 3,
-	TRACK_SELECTION			= 4,
+	LOBBY = 1,
+	START_GAME,
+	CHARECTER_SELECTION,
+	TRACK_SELECTION,
 
 	//Game
-	RACE_START				= 5,
-	RACE_OVER				= 6
+	RACE_START,
+	RACE_OVER
 };
 
 enum ItemType
 {
+	NONE = -1,
 	BANANA = 0,
-	GREEN_SHELL = 1,
-	RED_SHELL = 2,
-	MUSHROOM = 3
+	GREEN_SHELL,
+	RED_SHELL,
+	MUSHROOM
 };
