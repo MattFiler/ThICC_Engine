@@ -114,7 +114,8 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 		if ((wallTri->m_plane.Normal() + m_vel).Length() < m_vel.Length())
 		{
 			Vector prevVel = m_vel;
-			prevVel.Normalize();
+			Vector prevVelNorm = m_vel;
+			prevVelNorm.Normalize();
 			m_vel = Vector::Reflect(m_vel, wallTri->m_plane.Normal());
 
 			// Map the end point of the vector back onto the track plane
@@ -122,9 +123,13 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 
 			Vector velNorm = m_vel;
 			velNorm.Normalize();
-			if (dampenWallReflect)
+
+			// Return the velocity back to its previous magnitude
+			m_vel = velNorm * prevVel.Length();
+
+			if (m_dampenWallReflect)
 			{
-				float dist = Vector::Distance(velNorm, prevVel);
+				float dist = Vector::Distance(velNorm, prevVelNorm);
 				m_vel *= 1 - (dist / 2.4f);
 			}
 		}

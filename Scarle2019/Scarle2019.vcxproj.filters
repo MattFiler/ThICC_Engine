@@ -247,6 +247,9 @@
     <ClInclude Include="DebugScene.h">
       <Filter>Game Base\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="GreenShell.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -368,6 +371,9 @@
     </ClCompile>
     <ClCompile Include="DebugScene.cpp">
       <Filter>Game Base\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="GreenShell.cpp">
+      <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

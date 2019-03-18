@@ -7,7 +7,7 @@
 
 extern void ExitGame();
 
-Player::Player(string _filename, int _playerID) : TrackMagnet(_filename)
+Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_filename), CreateItem(_createItemFunction)
 {
 	m_RD = Locator::getRD();
 	SetDrag(0.7);
@@ -32,23 +32,33 @@ void Player::Tick()
 		if (m_keymindManager.keyPressed("Debug Save Matrix"))
 		{
 			m_savedMatrix = m_world;
-			m_savedPos = m_pos + (m_world.Up() *20);
 			m_savedVel = m_vel;
 			m_savedGravVel = m_gravVel;
 			m_savedGravDir = m_gravDirection;
 		}
 		else if (m_keymindManager.keyPressed("Debug Load Matrix"))
 		{
-			m_world = m_savedMatrix;
+			SetWorld(m_savedMatrix);
 			m_vel = m_savedVel;
-			m_pos = m_savedPos;
 			m_gravVel = m_savedGravVel;
 			m_velTotal = m_vel + m_savedGravVel;
 			m_gravDirection = m_savedGravDir;
 			Vector3 scale = Vector3::Zero;
-			Quaternion rot = Quaternion::Identity;
-			m_world.Decompose(scale, rot, m_pos);
-			m_rot = Matrix::CreateFromQuaternion(rot);
+		}
+		else if (m_keymindManager.keyPressed("Spawn Banana"))
+		{
+			Banana* banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
+			banana->SetWorld(m_world);
+			banana->AddPos(m_world.Backward() * 2);
+			banana->UpdateWorld();
+		}
+		else if (m_keymindManager.keyPressed("Spawn Green Shell"))
+		{
+			GreenShell* greenShell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
+			greenShell->SetWorld(m_world);
+			greenShell->AddPos(m_world.Forward() * 3);
+			greenShell->UpdateWorld();
+			greenShell->setVelocity(60 * m_world.Forward());
 		}
 
 		//FORWARD BACK & STRAFE CONTROL HERE
@@ -129,6 +139,6 @@ void Player::Tick()
 	position->SetText(std::to_string(current_position));
 
 	//apply my base behaviour
-	PhysModel::Tick();
+	TrackMagnet::Tick();
 
 }
