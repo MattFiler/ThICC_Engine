@@ -58,17 +58,24 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 				Plane rightPlane = getPlane(physModel2->data.m_globalFrontTopRight, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
 				Plane leftPlane = getPlane(physModel2->data.m_globalFrontTopLeft, physModel2->data.m_globalBackTopLeft, physModel2->data.m_height);
 
+		
 				if (physModel1->getCollider().Intersects(backPlane))
 				{
 					collision.m_collisionNormal = backPlane.Normal();
-				}
-				 
+				}			 
 				else if (physModel1->getCollider().Intersects(frontPlane))
 				{
 
 					collision.m_collisionNormal = frontPlane.Normal();
 				}
-				
+				else if (physModel1->getCollider().Intersects(rightPlane))
+				{
+					collision.m_collisionNormal = leftPlane.Normal();
+				}
+				else if (physModel1->getCollider().Intersects(leftPlane))
+				{
+					collision.m_collisionNormal = leftPlane.Normal();
+				}
 				collision.m_model1 = physModel1;
 				collision.m_model2 = physModel2;
 

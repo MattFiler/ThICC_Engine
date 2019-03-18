@@ -338,7 +338,7 @@ void GameScene::create3DObjects()
 	for (SDKMeshGO3D*& cup : debug_cups)
 	{
 		cup = new SDKMeshGO3D("Cup");
-		m_3DObjects.push_back(cup);
+		//m_3DObjects.push_back(cup);
 	}
 
 	//Global illumination
