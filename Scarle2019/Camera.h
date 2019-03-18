@@ -21,7 +21,7 @@ public:
 		INDEPENDENT_LERP = 5,
 		ORBIT = 6,
 		CINEMATIC = 7,
-		MATT_CAM = 8, // the shitty debug cam code
+		DEBUG_CAM = 8,
 	};
 
 	Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos);
@@ -31,6 +31,7 @@ public:
 	void SetTarget(Vector3 _target) { m_targetObject = NULL; m_targetPos = _target; }
 	void SetDPos(Vector3 _m_dpos) {  m_dpos = _m_dpos; }
 	void SetBehav(BEHAVIOUR _behav) { behav = _behav; }
+	BEHAVIOUR GetBehav() { return behav; }
 
 	Matrix GetProj() { return m_proj; }
 	Matrix GetView() { return m_view; }
@@ -52,7 +53,7 @@ protected:
 	Matrix m_proj = Matrix::Identity;
 	Matrix m_view = Matrix::Identity;
 	Matrix rotCam = Matrix::Identity;
-	Vector3	m_dpos; //I'll lurk this far behind and away from it
+	Vector3	m_dpos; 
 	std::vector<Vector3> points;
 	std::vector<Vector3> rotations;
 	BEHAVIOUR behav = BEHAVIOUR::LERP;

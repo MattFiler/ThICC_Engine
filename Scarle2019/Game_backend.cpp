@@ -23,19 +23,19 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 {
 	//CRASHES HERE RESULT IN THE ERROR ABOVE
 	//RUN THE ASSET COMPILER IN THE TOOLS BEFORE PLAYING THE GAME!
-	m_WD->m_window = _window;
-	m_WD->m_outputWidth = std::max(_width, 1);
-	m_WD->m_outputHeight = std::max(_height, 1);
+	Locator::getWD()->m_window = _window;
+	Locator::getWD()->m_outputWidth = std::max(_width, 1);
+	Locator::getWD()->m_outputHeight = std::max(_height, 1);
 
 	CreateDevice();
 	CreateResources();
 
 	//set up input stuff
-	m_ID->m_keyboard = std::make_unique<Keyboard>();
-	m_ID->m_mouse = std::make_unique<Mouse>();
-	m_ID->m_mouse->SetWindow(_window);// mouse device needs to linked to this program's window
-	m_ID->m_mouse->SetMode(Mouse::Mode::MODE_RELATIVE); // gives a delta postion as opposed to a MODE_ABSOLUTE position in 2-D space
-	m_ID->m_gamePad = std::make_unique<GamePad>();
+	Locator::getID()->m_keyboard = std::make_unique<Keyboard>();
+	Locator::getID()->m_mouse = std::make_unique<Mouse>();
+	Locator::getID()->m_mouse->SetWindow(_window);// mouse device needs to linked to this program's window
+	Locator::getID()->m_mouse->SetMode(Mouse::Mode::MODE_RELATIVE); // gives a delta postion as opposed to a MODE_ABSOLUTE position in 2-D space
+	Locator::getID()->m_gamePad = std::make_unique<GamePad>();
 
 	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
 #ifdef _DEBUG
@@ -44,18 +44,18 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 	m_audEngine = std::make_unique<AudioEngine>(eflags);
 
 	//GEP: Set up RenderData Object
-	m_RD->m_d3dDevice = m_d3dDevice;
-	m_RD->m_commandQueue = m_commandQueue;
-	m_RD->m_commandList = m_commandList;
+	Locator::getRD()->m_d3dDevice = m_d3dDevice;
+	Locator::getRD()->m_commandQueue = m_commandQueue;
+	Locator::getRD()->m_commandList = m_commandList;
 	for (int i = 0; i < c_swapBufferCount; i++)
 	{
-		m_RD->m_commandAllocators[i] = m_commandAllocators[i];
+		Locator::getRD()->m_commandAllocators[i] = m_commandAllocators[i];
 	}
-	m_RD->m_fenceValues = m_fenceValues;
-	m_RD->m_fence = m_fence;
-	m_RD->m_backBufferIndex = &m_backBufferIndex;
+	Locator::getRD()->m_fenceValues = m_fenceValues;
+	Locator::getRD()->m_fence = m_fence;
+	Locator::getRD()->m_backBufferIndex = &m_backBufferIndex;
 
-	m_RD->m_resourceDescriptors = std::make_unique<DescriptorHeap>(m_d3dDevice.Get(),
+	Locator::getRD()->m_resourceDescriptors = std::make_unique<DescriptorHeap>(m_d3dDevice.Get(),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
 		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
 		100);
@@ -65,7 +65,7 @@ void Game::initDX(const HWND &_window, int &_width, int &_height)
 void Game::setDefaultFont(string _default_font)
 {
 	////GEP: Set up Sprite batch for drawing textures also loads the font for text
-	m_RD->m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
+	Locator::getRD()->m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 	ResourceUploadBatch resourceUpload(m_d3dDevice.Get());
 
 	resourceUpload.Begin();
@@ -74,14 +74,14 @@ void Game::setDefaultFont(string _default_font)
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	string font_path = m_filepath.generateFilepath(_default_font, m_filepath.FONT);
 	std::wstring w_font_path = converter.from_bytes(font_path.c_str());
-	pd.blendDesc = m_RD->m_states->NonPremultiplied;
-	m_RD->m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dDevice.Get(), resourceUpload, pd);
+	pd.blendDesc = Locator::getRD()->m_states->NonPremultiplied;
+	Locator::getRD()->m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dDevice.Get(), resourceUpload, pd);
 	//This will throw an exception in <memory> if we try to load a non-existant font.
-	m_RD->m_font = std::make_unique<SpriteFont>(m_d3dDevice.Get(), resourceUpload,
+	Locator::getRD()->m_font = std::make_unique<SpriteFont>(m_d3dDevice.Get(), resourceUpload,
 		w_font_path.c_str(),
-		m_RD->m_resourceDescriptors->GetCpuHandle(m_RD->m_resourceCount),
-		m_RD->m_resourceDescriptors->GetGpuHandle(m_RD->m_resourceCount));
-	m_RD->m_resourceCount++;
+		Locator::getRD()->m_resourceDescriptors->GetCpuHandle(Locator::getRD()->m_resourceCount),
+		Locator::getRD()->m_resourceDescriptors->GetGpuHandle(Locator::getRD()->m_resourceCount));
+	Locator::getRD()->m_resourceCount++;
 	auto uploadResourcesFinished = resourceUpload.End(m_commandQueue.Get());
 }
 
@@ -114,6 +114,7 @@ void Game::Clear()
 {
 	// Reset command list and allocator.
 	//DX::ThrowIfFailed(m_commandAllocators[m_backBufferIndex]->Reset());
+
 	m_commandAllocators[m_backBufferIndex]->Reset();
 	DX::ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
 
@@ -187,8 +188,8 @@ void Game::OnResuming()
 
 void Game::OnWindowSizeChanged(int _width, int _height)
 {
-	m_WD->m_outputWidth = std::max(_width, 1);
-	m_WD->m_outputHeight = std::max(_height, 1);
+	Locator::getWD()->m_outputWidth = std::max(_width, 1);
+	Locator::getWD()->m_outputHeight = std::max(_height, 1);
 
 	CreateResources();
 
@@ -307,8 +308,8 @@ void Game::CreateDevice()
 		CommonStates::CullNone,
 		rtState);
 
-	m_RD->m_GPeffect = std::make_unique<BasicEffect>(m_d3dDevice.Get(), EffectFlags::Lighting, pd);
-	m_RD->m_GPeffect->EnableDefaultLighting();
+	Locator::getRD()->m_GPeffect = std::make_unique<BasicEffect>(m_d3dDevice.Get(), EffectFlags::Lighting, pd);
+	Locator::getRD()->m_GPeffect->EnableDefaultLighting();
 
 
 	//set up things for the obj model loader / renderer
@@ -318,8 +319,18 @@ void Game::CreateDevice()
 		CommonStates::DepthDefault,
 		CommonStates::CullNone,
 		rtState);
-	m_RD->m_GPeffect = std::make_unique<BasicEffect>(m_d3dDevice.Get(), EffectFlags::Lighting, pd3);
-	m_RD->m_GPeffect->EnableDefaultLighting();
+	Locator::getRD()->m_GPeffect = std::make_unique<BasicEffect>(m_d3dDevice.Get(), EffectFlags::Lighting, pd3);
+	Locator::getRD()->m_GPeffect->EnableDefaultLighting();
+
+
+	EffectPipelineStateDescription pd5(
+		&GeometricPrimitive::VertexType::InputLayout,
+		CommonStates::Opaque,
+		CommonStates::DepthDefault,
+		CommonStates::CullCounterClockwise,
+		rtState);
+
+	Locator::getRD()->effect = std::make_unique<NormalMapEffect>(m_d3dDevice.Get(), EffectFlags::PerPixelLighting, pd5);
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
@@ -337,8 +348,8 @@ void Game::CreateResources()
 
 	DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 	DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT;
-	UINT backBufferWidth = static_cast<UINT>(m_WD->m_outputWidth);
-	UINT backBufferHeight = static_cast<UINT>(m_WD->m_outputHeight);
+	UINT backBufferWidth = static_cast<UINT>(Locator::getWD()->m_outputWidth);
+	UINT backBufferHeight = static_cast<UINT>(Locator::getWD()->m_outputHeight);
 
 	// If the swap chain already exists, resize it, otherwise create one.
 	if (m_swapChain)
@@ -381,7 +392,7 @@ void Game::CreateResources()
 		ComPtr<IDXGISwapChain1> swapChain;
 		DX::ThrowIfFailed(m_dxgiFactory->CreateSwapChainForHwnd(
 			m_commandQueue.Get(),
-			m_WD->m_window,
+			Locator::getWD()->m_window,
 			&swapChainDesc,
 			&fsSwapChainDesc,
 			nullptr,
@@ -533,7 +544,7 @@ void Game::GetAdapter(IDXGIAdapter1** _ppAdapter)
 void Game::OnDeviceLost()
 {
 	//reset DKTK stuff
-	m_RD->m_font.reset();
+	Locator::getRD()->m_font.reset();
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
 		(*it)->Reset();
@@ -548,13 +559,13 @@ void Game::OnDeviceLost()
 			(*it)->Reset();
 		}
 	}
-	m_RD->m_GPeffect.reset();
+	Locator::getRD()->m_GPeffect.reset();
 
 	//SDK Mesh loader / renderer
-	m_RD->m_states.reset();
-	m_RD->m_fxFactory.reset();
+	Locator::getRD()->m_states.reset();
+	Locator::getRD()->m_fxFactory.reset();
 
-	m_RD->m_resourceDescriptors.reset();
+	Locator::getRD()->m_resourceDescriptors.reset();
 	m_graphicsMemory.reset();
 
 	//Perform Direct3D resource cleanup.

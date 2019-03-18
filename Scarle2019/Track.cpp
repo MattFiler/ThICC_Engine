@@ -1,9 +1,10 @@
 #pragma once
+#include "math.h"
 #include "Track.h"
 #include "pch.h"
 #include <iostream>
 #include <fstream>
-#include "math.h"
+#include <algorithm>
 
 Track::Track(string _filename) : PhysModel(_filename)
 {
@@ -30,6 +31,14 @@ Track::Track(string _filename) : PhysModel(_filename)
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(Vector3(it.value()[0], it.value()[1], it.value()[2]));
 	}
+	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
+		map_itemboxes_pos.push_back(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]));
+		map_itemboxes_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
+	}
+	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
+		map_finishline_pos.push_back(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]));
+		map_finishline_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
+	}
 
 	//Set our config in action
 	SetScale(m_track_data.scale);
@@ -42,8 +51,6 @@ Track::Track(string _filename) : PhysModel(_filename)
 	//Load track vertex list for generating our collmap
 	LoadVertexList(m_filepath.generateFilepath(_filename, m_filepath.MODEL_COLLMAP));
 
-	//m_colliderDebug = new SDKMeshGO3D(_RD, _filename);
-	//m_hasCollider = true;
 }
 
 /* Returns a suitable spawn location for a player in this map */
@@ -128,33 +135,38 @@ Vector Track::CreateVector(string _vector)
 	return Vector(values[0], values[1], values[2]);
 }
 
-void Track::setUpWaypointBB()
+/* Sets up the bounding boxes for each waypoint */
+void Track::setWaypointBB()
 {
 	for (size_t i = 0; i < map_waypoints.size(); ++i)
 	{
 		waypoint_bb.push_back(BoundingBox());
-		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z) };
-		waypoint_bb[i].Extents = { 100, 100, 100 };
+		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z * -1) };
+		waypoint_bb[i].Extents = { 5, 5, 5 };
 	}
-	//m_colliderDebug->SetPos(waypoint_bb[0].Center);
-	//m_colliderDebug->SetScale(waypoint_bb[0].Extents);
 }
 
 /* Checks through all triangles to see if this line intersects any of them.
    The point of intersecion is stored in _intersect */
 bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle)
 {
+	// Check to see if the position is within the grid
+	if (!IsPointInBounds(_startPos, m_smallest, m_largest))
+	{
+		return false;
+	}
 	// Find the bounding box created by _startPos and _startPos + _direction
 	Vector endPos = _startPos + _direction;
 	Vector upper = Vector(_startPos.x > endPos.x ? _startPos.x : endPos.x,
-						  _startPos.y > endPos.y ? _startPos.y : endPos.y,
-						  _startPos.z > endPos.z ? _startPos.z : endPos.z);
+		_startPos.y > endPos.y ? _startPos.y : endPos.y,
+		_startPos.z > endPos.z ? _startPos.z : endPos.z);
 	Vector lower = Vector(_startPos.x < endPos.x ? _startPos.x : endPos.x,
-					      _startPos.y < endPos.y ? _startPos.y : endPos.y,
-					      _startPos.z < endPos.z ? _startPos.z : endPos.z);
+		_startPos.y < endPos.y ? _startPos.y : endPos.y,
+		_startPos.z < endPos.z ? _startPos.z : endPos.z);
 	GetXYZIndexAtPoint(upper);
 	GetXYZIndexAtPoint(lower);
-	
+
+
 	// Then check all the grid sections covered by this area
 	MeshTri* closestTri = nullptr;
 	float bestDist = 100000;
@@ -166,7 +178,7 @@ bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _inte
 			int index = (i*m_triGridYX) + (j*m_triGridX);
 			for (int k = lower.x; k <= upper.x; k++)
 			{
-				for (MeshTri* tri : m_triGrid[index+k])
+				for (MeshTri* tri : m_triGrid[index + k])
 				{
 					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
 					{
@@ -236,16 +248,15 @@ void Track::SplitTrisIntoGrid()
 	// Reserve space in the references vector based on the size of the track
 	m_triGridX = static_cast<int>(ceilf(trackSize.x / m_triSegSize));
 	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
-	float m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
+	m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
 	m_triGridYX = m_triGridY*m_triGridX;
-	m_triGrid.reserve(m_triGridX*m_triGridY*m_triGridZ);
+	m_triGrid.reserve((m_triGridX+1)*(m_triGridY + 1)*(m_triGridZ + 1));
 	
 	for (int i = 0; i < m_triGrid.capacity(); i++)
 	{
 		std::vector<MeshTri*> vec;
 		m_triGrid.push_back(vec);
 	}
-
 	for (MeshTri& tri : m_triangles)
 	{
 		Vector upper = tri.GetUpperBound();
@@ -299,7 +310,7 @@ Vector Track::GetAreaAtIndex(int _index)
 	return returnVec + m_smallest;
 }
 
-/* Returns true is the passed point is inside the bounding box create by _lowerBound and _upperBound */
+/* Returns true if the passed point is inside the bounding box created by _lowerBound and _upperBound */
 bool Track::IsPointInBounds(Vector& _point, Vector& _lowerBound, Vector& _upperBound)
 {
 	return (((_point.x >= _lowerBound.x) && (_point.x <= _upperBound.x)) &&
@@ -326,4 +337,20 @@ void Track::GetXYZIndexAtPoint(Vector& _point)
 	_point.x = floor(_point.x / m_triSegSize);
 	_point.y = floor(_point.y / m_triSegSize);
 	_point.z = floor(_point.z / m_triSegSize);
+
+	Clamp(_point.x, 0.0f, (float)m_triGridX);
+	Clamp(_point.y, 0.0f, (float)m_triGridY);
+	Clamp(_point.z, 0.0f, (float)m_triGridZ);
+}
+
+void Track::Clamp(float& _num, float _min, float _max)
+{
+	if (_num < _min)
+	{
+		_num = _min;
+	}
+	else if (_num > _max)
+	{
+		_num = _max;
+	}
 }

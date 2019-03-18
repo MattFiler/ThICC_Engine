@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "LocalisationManager.h"
 #include "Banana.h" //test
+#include "GreenShell.h"
 #include "CollisionManager.h"
 #include <vector>
 
@@ -23,16 +24,24 @@ public:
 	~GameScene();
 
 	void Update() override;
-	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
+	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList) override;
 	bool Load() override;
+	void SetPlayersWaypoint();
+	void SetPlayerRanking();
 
 private:
+	// Updates
+	void UpdateItems();
+
 	//State Stuff
 	bool m_isPaused;
 
 	void create2DObjects();
 	void create3DObjects();
 	void pushBackObjects();
+	void playerControlsActive();
+
+	Item* CreateItem(ItemType type);
 
 	// Test objects
 	Track* track = nullptr;
@@ -47,6 +56,7 @@ private:
 
 	KeybindManager m_keybinds;
 	//Banana m_banana_test;
+	std::vector<Item*> m_itemModels;
 
 	std::vector<PhysModel*> m_physModels;
 
@@ -54,5 +64,9 @@ private:
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
+	
+	RenderData* m_RD;
+	float m_startTimer = 3.0f;
+	bool m_playerControls = false;
 };
 

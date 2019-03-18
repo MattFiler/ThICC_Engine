@@ -247,7 +247,7 @@ void Camera::Tick()
 		}
 		break;
 	}
-	case BEHAVIOUR::MATT_CAM:
+	case BEHAVIOUR::DEBUG_CAM:
 	{
 		float cam_speed = 40.0f;
 		float cam_rot_speed = 0.007f;

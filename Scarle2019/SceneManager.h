@@ -19,7 +19,7 @@ public:
 	Scenes getCurrentScene();
 
 	void Update();
-	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList);
+	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList);
 
 private:
 	RenderData*  m_RD;

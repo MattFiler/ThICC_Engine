@@ -1,0 +1,18 @@
+{
+  "asset_name": "TEST_ILLUM",
+  "asset_type": "Models",
+  "model_type": "Track",
+  "has_box_collider": false,
+  "visible": true,
+  "start_x": 0,
+  "start_y": 0,
+  "start_z": 0,
+  "modelscale": 1.0,
+  "rot_x": 0,
+  "rot_y": 0,
+  "rot_z": 0,
+  "segment_size": 10,
+  "map_cameras": [],
+  "map_waypoints": [],
+  "map_spawnpoints": []
+}
