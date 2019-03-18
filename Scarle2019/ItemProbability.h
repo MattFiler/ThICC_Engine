@@ -11,6 +11,7 @@ public:
 
 	ItemType GetRandomItem(int _position);
 	float GetProbability(ItemType _item, int _position);
+	float GetCumulativeProbability(ItemType _item, int _position);
 
 private:
 	void ProcessConfig(float* config_to_set, const std::string& config_name);

@@ -33,35 +33,69 @@ ItemProbability::ItemProbability() {
 
 /* Get a random item based on the player position */
 ItemType ItemProbability::GetRandomItem(int _position) {
-	std::mt19937 gen(std::time(NULL));
+	float random_out_of_100 = (rand() % 101);
 
-	float probability[19] = {
-		GetProbability(GREEN_SHELL, _position),
-		GetProbability(RED_SHELL, _position),
-		GetProbability(BANANA, _position),
-		GetProbability(FAKE_BOX, _position),
-		GetProbability(MUSHROOM, _position),
-		GetProbability(MUSHROOM_3X, _position),
-		GetProbability(BOMB, _position),
-		GetProbability(BLUE_SHELL, _position),
-		GetProbability(LIGHTNING_BOLT, _position),
-		GetProbability(STAR, _position),
-		GetProbability(MUSHROOM_UNLIMITED, _position),
-		GetProbability(MUSHROOM_GIANT, _position),
-		GetProbability(SQUID, _position),
-		GetProbability(POW, _position),
-		GetProbability(LIGHTNING_CLOUD, _position),
-		GetProbability(BULLET_BILL, _position),
-		GetProbability(GREEN_SHELL_3X, _position),
-		GetProbability(RED_SHELL_3X, _position),
-		GetProbability(BANANA_3X, _position)
-	};
-
-	std::discrete_distribution<> d(std::begin(probability), std::end(probability));
-	return static_cast<ItemType>(d(gen));
+	if (random_out_of_100 <= GetCumulativeProbability(GREEN_SHELL, _position)) {
+		return GREEN_SHELL;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(RED_SHELL, _position)) {
+		return RED_SHELL;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(BANANA, _position)) {
+		return BANANA;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(FAKE_BOX, _position)) {
+		return FAKE_BOX;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(MUSHROOM, _position)) {
+		return MUSHROOM;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(MUSHROOM_3X, _position)) {
+		return MUSHROOM_3X;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(BOMB, _position)) {
+		return BOMB;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(BLUE_SHELL, _position)) {
+		return BLUE_SHELL;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(LIGHTNING_BOLT, _position)) {
+		return LIGHTNING_BOLT;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(STAR, _position)) {
+		return STAR;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(RED_SHELL, _position)) {
+		return RED_SHELL;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(MUSHROOM_UNLIMITED, _position)) {
+		return MUSHROOM_UNLIMITED;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(MUSHROOM_GIANT, _position)) {
+		return MUSHROOM_GIANT;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(SQUID, _position)) {
+		return SQUID;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(POW, _position)) {
+		return POW;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(LIGHTNING_CLOUD, _position)) {
+		return LIGHTNING_CLOUD;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(BULLET_BILL, _position)) {
+		return BULLET_BILL;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(GREEN_SHELL_3X, _position)) {
+		return GREEN_SHELL_3X;
+	}
+	else if (random_out_of_100 <= GetCumulativeProbability(RED_SHELL_3X, _position)) {
+		return RED_SHELL_3X;
+	}
+	return BANANA_3X;
 }
 
-/* Get the probability of getting an item from the mystery box at a position in the race (e.g. 1st) */
+/* Get the solo probability of getting an item from the mystery box at a position in the race (e.g. 1st) */
 float ItemProbability::GetProbability(ItemType _item, int _position) {
 	switch (_item) {
 		case GREEN_SHELL: {
@@ -120,6 +154,96 @@ float ItemProbability::GetProbability(ItemType _item, int _position) {
 		}
 		case BANANA_3X: {
 			return banana_3x_probability[_position];
+		}
+	}
+	return 0.0f;
+}
+
+/* Work out item probability out of 100 cumulatively */
+float ItemProbability::GetCumulativeProbability(ItemType _item, int _position) {
+	switch (_item) {
+		case GREEN_SHELL: {
+			return green_shell_probability[_position];
+		}
+		case RED_SHELL: {
+			return red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case BANANA: {
+			return banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case FAKE_BOX: {
+			return fake_box_probability[_position] + banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case MUSHROOM: {
+			return mushroom_probability[_position] + fake_box_probability[_position] + banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case MUSHROOM_3X: {
+			return mushroom_3x_probability[_position] + mushroom_probability[_position] + fake_box_probability[_position] + banana_probability[_position] + red_shell_probability[_position] + 
+				green_shell_probability[_position];
+		}
+		case BOMB: {
+			return bomb_probability[_position] + mushroom_3x_probability[_position] + mushroom_probability[_position] + fake_box_probability[_position] + banana_probability[_position] + 
+				red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case BLUE_SHELL: {
+			return blue_shell_probability[_position] + bomb_probability[_position] + mushroom_3x_probability[_position] + mushroom_probability[_position] + fake_box_probability[_position] +
+				banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case LIGHTNING_BOLT: {
+			return lightning_bolt_probability[_position] + blue_shell_probability[_position] + bomb_probability[_position] + mushroom_3x_probability[_position] + mushroom_probability[_position] + 
+				fake_box_probability[_position] + banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case STAR: {
+			return star_probability[_position] + lightning_bolt_probability[_position] + blue_shell_probability[_position] + bomb_probability[_position] + mushroom_3x_probability[_position] +
+				mushroom_probability[_position] + fake_box_probability[_position] + banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case MUSHROOM_UNLIMITED: {
+			return mushroom_unlimited_probability[_position] + star_probability[_position] + lightning_bolt_probability[_position] + blue_shell_probability[_position] + bomb_probability[_position] +
+				mushroom_3x_probability[_position] + mushroom_probability[_position] + fake_box_probability[_position] + banana_probability[_position] + red_shell_probability[_position] +
+				green_shell_probability[_position];
+		}
+		case MUSHROOM_GIANT: {
+			return mushroom_giant_probability[_position] + mushroom_unlimited_probability[_position] + star_probability[_position] + lightning_bolt_probability[_position] + blue_shell_probability[_position] +
+				bomb_probability[_position] + mushroom_3x_probability[_position] + mushroom_probability[_position] + fake_box_probability[_position] + banana_probability[_position] + 
+				red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case SQUID: {
+			return squid_probability[_position] + mushroom_giant_probability[_position] + mushroom_unlimited_probability[_position] + star_probability[_position] + lightning_bolt_probability[_position] +
+				blue_shell_probability[_position] + bomb_probability[_position] + mushroom_3x_probability[_position] + mushroom_probability[_position] + fake_box_probability[_position] +
+				banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case POW: {
+			return pow_probability[_position] + squid_probability[_position] + mushroom_giant_probability[_position] + mushroom_unlimited_probability[_position] + star_probability[_position] +
+				lightning_bolt_probability[_position] + blue_shell_probability[_position] + bomb_probability[_position] + mushroom_3x_probability[_position] + mushroom_probability[_position] +
+				fake_box_probability[_position] + banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case LIGHTNING_CLOUD: {
+			return lightning_cloud_probability[_position] + pow_probability[_position] + squid_probability[_position] + mushroom_giant_probability[_position] + mushroom_unlimited_probability[_position] + 
+				star_probability[_position] + lightning_bolt_probability[_position] + blue_shell_probability[_position] + bomb_probability[_position] + mushroom_3x_probability[_position] + 
+				mushroom_probability[_position] + fake_box_probability[_position] + banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case BULLET_BILL: {
+			return bullet_bill_probability[_position] + lightning_cloud_probability[_position] + pow_probability[_position] + squid_probability[_position] + mushroom_giant_probability[_position] +
+				mushroom_unlimited_probability[_position] + star_probability[_position] + lightning_bolt_probability[_position] + blue_shell_probability[_position] + bomb_probability[_position] +
+				mushroom_3x_probability[_position] + mushroom_probability[_position] + fake_box_probability[_position] + banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case GREEN_SHELL_3X: {
+			return green_shell_3x_probability[_position] + bullet_bill_probability[_position] + lightning_cloud_probability[_position] + pow_probability[_position] + squid_probability[_position] + 
+				mushroom_giant_probability[_position] + mushroom_unlimited_probability[_position] + star_probability[_position] + lightning_bolt_probability[_position] + blue_shell_probability[_position] + 
+				bomb_probability[_position] + mushroom_3x_probability[_position] + mushroom_probability[_position] + fake_box_probability[_position] + banana_probability[_position] +
+				red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case RED_SHELL_3X: {
+			return red_shell_3x_probability[_position] + green_shell_3x_probability[_position] + bullet_bill_probability[_position] + lightning_cloud_probability[_position] + pow_probability[_position] + 
+				squid_probability[_position] + mushroom_giant_probability[_position] + mushroom_unlimited_probability[_position] + star_probability[_position] + lightning_bolt_probability[_position] +
+				blue_shell_probability[_position] + bomb_probability[_position] + mushroom_3x_probability[_position] + mushroom_probability[_position] + fake_box_probability[_position] +
+				banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
+		}
+		case BANANA_3X: {
+			return banana_3x_probability[_position] + red_shell_3x_probability[_position] + green_shell_3x_probability[_position] + bullet_bill_probability[_position] + lightning_cloud_probability[_position] + 
+				pow_probability[_position] + squid_probability[_position] + mushroom_giant_probability[_position] + mushroom_unlimited_probability[_position] + star_probability[_position] +
+				lightning_bolt_probability[_position] + blue_shell_probability[_position] + bomb_probability[_position] + mushroom_3x_probability[_position] + mushroom_probability[_position] +
+				fake_box_probability[_position] + banana_probability[_position] + red_shell_probability[_position] + green_shell_probability[_position];
 		}
 	}
 	return 0.0f;
