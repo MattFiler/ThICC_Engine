@@ -32,6 +32,7 @@ void GameScene::Update()
 	}
 
 	UpdateItems();
+	playerControlsActive();
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -366,6 +367,27 @@ void GameScene::pushBackObjects()
 		{
 			m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
 			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
+		}
+	}
+}
+
+void GameScene::playerControlsActive()
+{
+	if (m_startTimer > 0)
+	{
+		m_startTimer -= Locator::getGSD()->m_dt;
+
+		if (m_startTimer <= 0)
+		{
+			m_playerControls = true;
+		}
+	}
+
+	if (m_playerControls)
+	{
+		for (int i = 0; i < 4; ++i)
+		{
+			player[i]->setGamePad(m_playerControls);
 		}
 	}
 }

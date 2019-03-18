@@ -39,6 +39,7 @@ private:
 	void create2DObjects();
 	void create3DObjects();
 	void pushBackObjects();
+	void playerControlsActive();
 
 	Item* CreateItem(ItemType type);
 
@@ -63,7 +64,9 @@ private:
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
-
+	
 	RenderData* m_RD;
+	float m_startTimer = 3.0f;
+	bool m_playerControls = false;
 };
 

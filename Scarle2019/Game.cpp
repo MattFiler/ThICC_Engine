@@ -193,6 +193,10 @@ void Game::Update(DX::StepTimer const& _timer)
 	m_GSD->m_keyboardState = m_ID->m_keyboard->GetState();
 	m_GSD->m_mouseState = m_ID->m_mouse->GetState();
 
+	for (int i = 0; i < 4; ++i)
+	{
+		m_GSD->m_gamePadState[i] = m_ID->m_gamePad->GetState(i); //set game controllers state[s]
+	}
 
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 	m_sceneManager.Update();
@@ -207,7 +211,7 @@ void Game::Render()
 		return;
 	}
 
-	//// Prepare the command list to render a new frame.
+	// Prepare the command list to render a new frame.
 	Clear();
 
 	m_sceneManager.Render(m_commandList);

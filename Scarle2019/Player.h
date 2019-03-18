@@ -28,12 +28,15 @@ public:
 	void SetLap(int _lap) { lap = _lap; }
 	void SetRanking(int _position) { ranking = _position; }
 
-
+	void setCurrentWaypoint(int waypoint) { current_waypoint = waypoint; }
+	void setGamePad(bool _state);
+	
 protected:
 	int m_playerID = 0;
 
 private:
 	std::function<Item*(ItemType)> CreateItem;
+	void movement();
 
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;
@@ -47,4 +50,10 @@ private:
 	Text2D *text_ranking = nullptr;
 	Text2D *text_lap = nullptr;
 	Vector m_savedGravDir;
+	
+	int current_position = 0;
+	int current_waypoint = 0;
+	int next_waypoint = 0;
+	Text2D *position = nullptr;
+	bool m_controlsActive = false;
 };
