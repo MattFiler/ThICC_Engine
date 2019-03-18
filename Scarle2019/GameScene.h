@@ -39,7 +39,6 @@ private:
 	void create2DObjects();
 	void create3DObjects();
 	void pushBackObjects();
-	void playerControlsActive();
 
 	Item* CreateItem(ItemType type);
 

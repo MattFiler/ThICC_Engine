@@ -47,17 +47,18 @@ void GameScene::Update()
 		if (timeout > 0)
 		{
 			timeout -= Locator::getGSD()->m_dt;
+			countdown_text->SetText(std::to_string((int)std::ceil(timeout)));
 		}
 		else
 		{
 			state = PLAY;
-			timeout = 2.99999f;
+			for (int i = 0; i < 4; ++i)
+			{
+				player[i]->setGamePad(m_playerControls);
+			}
 		}
 		break;
 	}
-
-
-	countdown_text->SetText(std::to_string((int)std::ceil(timeout)));
 
 
 	for (int i = 0; i < game_config["player_count"]; ++i) {
@@ -67,7 +68,6 @@ void GameScene::Update()
 	}
 
 	UpdateItems();
-	playerControlsActive();
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -127,6 +127,14 @@ void GameScene::Update()
 	}
 	if (m_keybinds.keyPressed("Debug Toggle World Render")) {
 		GameDebugToggles::render_level = !GameDebugToggles::render_level;
+	}
+	else if (m_keybinds.keyPressed("Activate"))
+	{
+		state = PLAY;
+		for (int i = 0; i < 4; ++i)
+		{
+			player[i]->setGamePad(m_playerControls);
+		}
 	}
 
 	CollisionManager::collisionDetectionAndResponse(m_physModels);
@@ -209,22 +217,12 @@ void GameScene::SetPlayerRanking()
 						float difference = 0;
 						float difference1 = 0;
 
-						if (player[i]->GetWaypoint() != track->getWaypointsBB().size() - 1 && player[j]->GetWaypoint() != track->getWaypointsBB().size() - 1)
+						if (player[i]->GetWaypoint() != track->getWaypointsBB().size() - 1)
 						{
 							difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[player[i]->GetWaypoint() + 1].Center);
 							difference1 = Vector3::Distance(player[j]->GetPos(), track->getWaypointsBB()[player[j]->GetWaypoint() + 1].Center);
 						}
-						else if (player[i]->GetWaypoint() == track->getWaypointsBB().size() - 1 && player[j]->GetWaypoint() != track->getWaypointsBB().size() - 1)
-						{
-							difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[0].Center);
-							difference1 = Vector3::Distance(player[j]->GetPos(), track->getWaypointsBB()[player[j]->GetWaypoint() + 1].Center);
-						}
-						else if (player[i]->GetWaypoint() != track->getWaypointsBB().size() - 1 && player[j]->GetWaypoint() == track->getWaypointsBB().size() - 1)
-						{
-							difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[player[i]->GetWaypoint() + 1].Center);
-							difference1 = Vector3::Distance(player[j]->GetPos(), track->getWaypointsBB()[0].Center);
-						}
-						else if (player[i]->GetWaypoint() == track->getWaypointsBB().size() - 1 && player[j]->GetWaypoint() == track->getWaypointsBB().size() - 1)
+						else if (player[i]->GetWaypoint() == track->getWaypointsBB().size() - 1)
 						{
 							difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[0].Center);
 							difference1 = Vector3::Distance(player[j]->GetPos(), track->getWaypointsBB()[0].Center);
@@ -281,17 +279,18 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
 			Locator::getRD()->m_cam = m_cam[i];
 
-		for (GameObject3D* obj : m_itemModels)
-		{
-			obj->Render();
-		}
-	}
 
 			for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 			{
 				(*it)->Render();
 			}
 		}
+
+		for (GameObject3D* obj : m_itemModels)
+		{
+			obj->Render();
+		}
+
 
 		m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 		m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
@@ -359,15 +358,11 @@ void GameScene::create2DObjects()
 	//test text
 	//Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
 	//m_2DObjects.push_back(test2);
-	ImageGO2D *test[4];
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
-		test[i] = new ImageGO2D("twist");
-		//test->SetOri(45);
-		test[i]->SetScale(0.1f*Vector2::One);
-		test[i]->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
+		player[i]->GetItemImg()->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
 		//test->CentreOrigin();
-		m_2DObjects.push_back(test[i]);
+		m_2DObjects.push_back(player[i]->GetItemImg());
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
 		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->GetRankingText()->GetSize().x;
@@ -385,7 +380,6 @@ void GameScene::create2DObjects()
 	countdown_text = new Text2D(std::to_string((int)std::ceil(timeout)));
 	//countdown_text->CentreOrigin();
 	countdown_text->SetPos({Locator::getWD()->sprite_viewport.TopLeftX + Locator::getWD()->sprite_viewport.Width / 2 - countdown_text->GetSize().x / 2 , Locator::getWD()->sprite_viewport.TopLeftY + Locator::getWD()->sprite_viewport.Height / 2 - countdown_text->GetSize().y / 2 });
-	m_2DObjects.push_back(countdown_text);
 
 	//camera_pos = new Text2D(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" + 
 	//	std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
@@ -427,6 +421,7 @@ void GameScene::create3DObjects()
 
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
 	for (int i = 0; i < game_config["player_count"]; i++) {
+
 		//Create a player and position on track
 		using std::placeholders::_1;
 		player[i] = new Player("Knuckles Kart", i, std::bind(&GameScene::CreateItem, this, _1));
@@ -436,7 +431,6 @@ void GameScene::create3DObjects()
 		//Create a camera to follow the player
 		m_cam[i] = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
 		m_cam[i]->SetBehav(Camera::BEHAVIOUR::LERP);
-		//m_cam[i]->SetTarget({ (float)track->getWaypoints()[0][0], (float)track->getWaypoints()[0][1], (float)track->getWaypoints()[0][2] });
 		m_3DObjects.push_back(m_cam[i]);
 
 		//Create a viewport
@@ -486,27 +480,6 @@ void GameScene::pushBackObjects()
 		{
 			m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
 			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
-		}
-	}
-}
-
-void GameScene::playerControlsActive()
-{
-	if (m_startTimer > 0)
-	{
-		m_startTimer -= Locator::getGSD()->m_dt;
-
-		if (m_startTimer <= 0)
-		{
-			m_playerControls = true;
-		}
-	}
-
-	if (m_playerControls)
-	{
-		for (int i = 0; i < 4; ++i)
-		{
-			player[i]->setGamePad(m_playerControls);
 		}
 	}
 }

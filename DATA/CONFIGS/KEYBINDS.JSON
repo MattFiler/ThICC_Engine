@@ -11,8 +11,6 @@
   "DebugCamBack": "NumPad5",
   "DebugCamLeft": "NumPad4",
   "DebugCamRight": "NumPad6",
-  "DebugCamRotLeft": "PageDown",
-  "DebugCamRotRight": "End",
   "Debug Save Matrix": "D1",
   "Debug Load Matrix": "D2",
   "DebugCamLookDown": "Multiply",
@@ -23,9 +21,9 @@
   "Backwards": "S",
   "Debug Print Player Location": "O",
   "Debug Print Camera Location": "I",
+  "DebugCamSpeedup": "Enter",
+  "Load Debug Scene": "D",
   "Spawn Banana": "F1",
   "Spawn Green Shell": "F2",
   "Debug Toggle World Render": "U"
-  "DebugCamSpeedup": "Enter",
-  "Load Debug Scene": "D"
 }
