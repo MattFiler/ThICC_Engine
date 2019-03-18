@@ -11,6 +11,15 @@ struct TrackData {
 	Vector3 start_rot = Vector3(0, 0, 0);
 };
 
+struct FinishLine {
+	FinishLine(Vector3 _pos, Vector3 _rot) {
+		position = _pos;
+		rotation = _rot;
+	}
+	Vector3 position = Vector3(0, 0, 0);
+	Vector3 rotation = Vector3(0, 0, 0);
+};
+
 /* A type of PhysModel that stores a reference to their triangles, used so that TrackMagnet objects
    can calculate the exact point of collision with this mesh. */
 class Track : public PhysModel
@@ -35,11 +44,10 @@ public:
 	std::vector<BoundingBox> getWaypointsBB() {
 		return waypoint_bb;
 	};
-	std::vector<Vector3> getFinishLinePos() {
-		return map_finishline_pos;
-	};
-	std::vector<Vector3> getFinishLineRot() {
-		return map_finishline_rot;
+	FinishLine getFinishLine() {
+		//This is all stored as a vector, but really there should only be one finish line per map - so just return element zero.
+		//If we end up changing maps to have multiple end-points, then this can easily be supported by modifying this return type.
+		return FinishLine(map_finishline_pos.at(0), map_finishline_rot.at(0));
 	};
 	std::vector<Vector3> getItemBoxesPos() {
 		return map_itemboxes_pos;
@@ -87,7 +95,7 @@ private:
 	// Size for the tri segments (segments are cubes)
 	float m_triSegSize = 10;
 
-	// waypoints, cameras, and spawns
+	// Map config data from Blender
 	std::vector<Vector3> map_waypoints;
 	std::vector<Vector3> map_spawnpoints;
 	std::vector<Vector3> map_cams_pos;
@@ -96,7 +104,6 @@ private:
 	std::vector<Vector3> map_itemboxes_rot;
 	std::vector<Vector3> map_finishline_pos;
 	std::vector<Vector3> map_finishline_rot;
-
 
 	// waypoint bounding box
 	std::vector<BoundingBox> waypoint_bb;
