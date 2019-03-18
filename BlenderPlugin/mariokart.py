@@ -1,12 +1,16 @@
 bl_info = {
     "name": "Mario Kart Tools",
     "category": "System",
+    "author": "Matt Filer",
+    "description": "Tools for developing custom maps in Mario Kart DX12.",
 }
 
 import bpy
 import json
 import numpy as np
 from bpy.types import Panel
+from bpy_extras.io_utils import ExportHelper
+from bpy.props import StringProperty
 
 
 # The main UI panel for our Mario Kart tools
@@ -21,8 +25,10 @@ class MarioKartToolPanel(Panel):
         layout = self.layout
         layout.operator(MK_KartSpawnPos.bl_idname, text='Add Kart Spawn Position', icon='CURSOR')
         layout.operator(MK_TrackWaypoint.bl_idname, text='Add Track Waypoint', icon='CURSOR')
+        layout.operator(MK_FinishLine.bl_idname, text='Add Finish Line', icon='CURSOR')
+        layout.operator(MK_ItemBox.bl_idname, text='Add Item Box Location', icon='CURSOR')
         layout.operator(MK_CourseIntroCam.bl_idname, text='Add Course Intro Cam', icon='OUTLINER_OB_CAMERA')
-        layout.operator(MK_SaveAllIntroCams.bl_idname, text='TEST: Debug Output')
+        layout.operator(MK_SaveAllIntroCams.bl_idname, text='Save Config', icon='SAVE_COPY')
         
         
 # Add a kart spawn position
@@ -65,6 +71,46 @@ class MK_TrackWaypoint(bpy.types.Operator):
         return {'FINISHED'}
         
         
+# Add a marker for the finish line
+class MK_FinishLine(bpy.types.Operator):
+    """Add a Finish Line Marker"""
+    bl_idname = "object.mk_finishline_add"
+    bl_label = "Finish Line"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        for item in bpy.context.selectable_objects:  
+            item.select = False  
+            
+        finish_line = bpy.data.objects.new(name="Finish Line", object_data=None)
+        bpy.context.scene.objects.link(finish_line)
+        finish_line.location = bpy.context.scene.objects.active.location
+        finish_line.select = True
+        bpy.context.scene.objects.active = finish_line
+        
+        return {'FINISHED'}
+        
+        
+# Add an item box location
+class MK_ItemBox(bpy.types.Operator):
+    """Add an Item Box Location"""
+    bl_idname = "object.mk_itembox_add"
+    bl_label = "Item Box Spawn"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        for item in bpy.context.selectable_objects:  
+            item.select = False  
+            
+        itembox_spawn = bpy.data.objects.new(name="Item Box Spawn", object_data=None)
+        bpy.context.scene.objects.link(itembox_spawn)
+        itembox_spawn.location = bpy.context.scene.objects.active.location
+        itembox_spawn.select = True
+        bpy.context.scene.objects.active = itembox_spawn
+        
+        return {'FINISHED'}
+        
+        
 # Add a cinematic camera start/end pos for course intro cutscenes
 cinecam_types = [
     ("MK_CINECAM_1_START", "Course Intro Cam 1 - Start", "Course intro cam start position to animate from.", 1),
@@ -94,27 +140,36 @@ class MK_CourseIntroCam(bpy.types.Operator):
         
         
 # Save all cinematic cams
-class MK_SaveAllIntroCams(bpy.types.Operator):
+class MK_SaveAllIntroCams(bpy.types.Operator, ExportHelper):
     """Save All Cameras"""
-    bl_idname = "object.mk_cinecam_get"
+    bl_idname = "export_test.mk_cinecam_get"
     bl_label = "SAVE ALL CINECAMS"
-    bl_options = {'REGISTER', 'UNDO'}
+    
+    filename_ext = ".json"
+
+    filter_glob = StringProperty(
+            default="*.json",
+            options={'HIDDEN'},
+            maxlen=255,  # Max internal buffer length, longer would be clamped.
+            )
 
     def execute(self, context):
-        mk_json = {'cams': [], 'spawns': [], 'waypoints': []}
+        mk_json = {'cams': [], 'spawns': [], 'waypoints': [], 'finish_line': [], 'item_boxes': []}
         
         for object in bpy.data.objects:
-            print(object.name)
-            print(object.type)
             if object.type == "EMPTY":
                 if object.name[:19] == "Kart Spawn Position":
                     mk_json["spawns"].append({"name": object.name, "pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
                 if object.name[:14] == "Track Waypoint":
                     mk_json["waypoints"].append({"name": object.name, "pos": [object.location[0], object.location[1], object.location[2]]})
+                if object.name[:11] == "Finish Line":
+                    mk_json["finish_line"].append({"pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
+                if object.name[:14] == "Item Box Spawn":
+                    mk_json["item_boxes"].append({"pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
             if object.type == "CAMERA":
                 mk_json["cams"].append({"name": object.name, "role": "WIP", "pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
         
-        with open('D:/GEP-2019-WorkingAI/BlenderPlugin/MARIO_KART_JSON_DUMP.json', 'w') as outfile:
+        with open(self.filepath, 'w') as outfile:
             json.dump(mk_json, outfile, indent=2, sort_keys=True)
         
         return {'FINISHED'}
@@ -125,7 +180,12 @@ def menu_func(self, context):
     self.layout.operator(MK_KartSpawnPos.bl_idname)
     self.layout.operator(MK_TrackWaypoint.bl_idname)
     self.layout.operator(MK_CourseIntroCam.bl_idname)
+    self.layout.operator(MK_ItemBox.bl_idname)
+    self.layout.operator(MK_FinishLine.bl_idname)
+    
+def menu_func_export(self, context):
     self.layout.operator(MK_SaveAllIntroCams.bl_idname)
+    
     
 # Register plugin on load
 def register():
@@ -133,8 +193,11 @@ def register():
     bpy.utils.register_class(MK_KartSpawnPos)
     bpy.utils.register_class(MK_TrackWaypoint)
     bpy.utils.register_class(MK_CourseIntroCam)
+    bpy.utils.register_class(MK_ItemBox)
+    bpy.utils.register_class(MK_FinishLine)
     bpy.utils.register_class(MK_SaveAllIntroCams)
     bpy.types.VIEW3D_MT_object.append(menu_func)
+    bpy.types.INFO_MT_file_export.append(menu_func_export)
     
 # Unregister on exit
 def unregister():
@@ -142,8 +205,11 @@ def unregister():
     bpy.utils.unregister_class(MK_KartSpawnPos)
     bpy.utils.unregister_class(MK_TrackWaypoint)
     bpy.utils.unregister_class(MK_CourseIntroCam)
+    bpy.utils.unregister_class(MK_ItemBox)
+    bpy.utils.unregister_class(MK_FinishLine)
     bpy.utils.unregister_class(MK_SaveAllIntroCams)
     bpy.types.VIEW3D_MT_object.remove(menu_func)
+    bpy.types.INFO_MT_file_export.remove(menu_func_export)
     
     
 if __name__ == '__main__':
