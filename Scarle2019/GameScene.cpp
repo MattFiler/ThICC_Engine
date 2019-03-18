@@ -123,7 +123,7 @@ void GameScene::UpdateItems()
 	}
 }
 
-void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
+void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList)
 {
 	//draw 3D objects
 
