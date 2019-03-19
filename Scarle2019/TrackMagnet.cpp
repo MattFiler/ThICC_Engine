@@ -110,6 +110,10 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 		walls.DoesLineIntersect(frontSide, data.m_globalFrontTopLeft, intersect, wallTri, 5) ||
 		walls.DoesLineIntersect(backSide, data.m_globalBackTopLeft, intersect, wallTri, 5))
 	{
+		//std::cout << std::to_string(wallTri->m_pointA.x - m_pos.x) << std::endl;
+		/*offset = (wallTri->m_pointA.x - m_pos.x) * 2;
+		std::cout << std::to_string(offset) << std::endl;*/
+
 		// Check if the velocity and this wall are not already diverging
 		if ((wallTri->m_plane.Normal() + m_vel).Length() < m_vel.Length())
 		{

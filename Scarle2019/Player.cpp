@@ -18,6 +18,8 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	text_lap = new Text2D(std::to_string(lap) + "/3");
 	item_img = new ImageGO2D("twist");
 	item_img->SetScale(0.1f*Vector2::One);
+
+	debug_print = _playerID == 0;
 }
 
 Player::~Player()

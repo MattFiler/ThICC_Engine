@@ -39,7 +39,7 @@ void PhysModel::initCollider(json &model_data)
 	/*Gets the the top front left and back bottom right points of the mesh from the json file - finds the average between them to get the centre of the mesh
 	and uses (currently) the top front left point to determine the extents (size) of the collider */
 	m_hasCollider = true;
-
+	float offest = 4;
 	m_physData.m_localFrontTopLeft = Vector3((float)model_data["collision_box"]["front_top_left"][0] * m_physData.scale,
 		(float)model_data["collision_box"]["front_top_left"][1] * m_physData.scale,
 		(float)model_data["collision_box"]["front_top_left"][2] * m_physData.scale);
@@ -84,10 +84,10 @@ void PhysModel::initCollider(json &model_data)
 	m_physData.m_length = m_physData.m_globalFrontTopLeft.z - m_physData.m_globalBackTopLeft.z;
 }
 
-XMFLOAT3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)
+Vector3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)
 {
 	//Breaks down a matrix into yaw, pitch, and roll. Returns them as a float3
-	XMFLOAT3 euler;
+	Vector3 euler;
 	euler.x = asinf(-mat._32);                  
 	if (cosf(euler.x) > 0.0001)                 
 	{
@@ -106,27 +106,34 @@ void PhysModel::updateCollider()
 {
 	if (m_hasCollider)
 	{
-		m_physData.m_globalFrontTopLeft = Vector3::Transform(m_physData.m_localFrontTopLeft, m_world);
-		m_physData.m_globalFrontTopRight = Vector3::Transform(m_physData.m_localFrontTopRight, m_world);
-		m_physData.m_globalFrontBottomLeft = Vector3::Transform(m_physData.m_localFrontBottomLeft, m_world);
-		m_physData.m_globalFrontBottomRight = Vector3::Transform(m_physData.m_localFrontBottomRight, m_world);
-		m_physData.m_globalBackTopLeft = Vector3::Transform(m_physData.m_localBackTopLeft, m_world);
-		m_physData.m_globalBackTopRight = Vector3::Transform(m_physData.m_localBackTopRight, m_world);
-		m_physData.m_globalBackBottomLeft = Vector3::Transform(m_physData.m_localBackBottomLeft, m_world);
-		m_physData.m_globalBackBottomRight = Vector3::Transform(m_physData.m_localBackBottomRight, m_world);
+		m_physData.m_globalFrontTopLeft = applyOffset(Vector3::Transform(m_physData.m_localFrontTopLeft, m_world));
+		m_physData.m_globalFrontTopRight = applyOffset(Vector3::Transform(m_physData.m_localFrontTopRight, m_world));
+		m_physData.m_globalFrontBottomLeft = applyOffset(Vector3::Transform(m_physData.m_localFrontBottomLeft, m_world));
+		m_physData.m_globalFrontBottomRight = applyOffset(Vector3::Transform(m_physData.m_localFrontBottomRight, m_world));
+		m_physData.m_globalBackTopLeft = applyOffset(Vector3::Transform(m_physData.m_localBackTopLeft, m_world));
+		m_physData.m_globalBackTopRight = applyOffset(Vector3::Transform(m_physData.m_localBackTopRight, m_world));
+		m_physData.m_globalBackBottomLeft = applyOffset(Vector3::Transform(m_physData.m_localBackBottomLeft, m_world));
+		m_physData.m_globalBackBottomRight = applyOffset(Vector3::Transform(m_physData.m_localBackBottomRight, m_world));
 
 		m_physData.m_worldCentre = Vector3::Transform(m_physData.m_localCentre, m_world);
 		m_collider.Center = m_physData.m_worldCentre;
-
-		XMFLOAT3 euler = MatrixDecomposeYawPitchRoll(m_rot);
+		Vector3 euler = MatrixDecomposeYawPitchRoll(m_rot);
 		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y , euler.x, euler.z));
 		//Updates the debug collider position and rotation
-		m_colliderDebug->SetPos(Vector3(m_collider.Center.x, m_physData.m_worldCentre.y - (m_physData.m_height / 2), m_physData.m_worldCentre.z));
-		//m_colliderDebug->SetPos(m_collider.Center);
+		m_colliderDebug->SetPos(Vector3(m_collider.Center.x, m_collider.Center.y - (m_physData.m_height / 2), m_collider.Center.z));
 		m_colliderDebug->SetScale(m_collider.Extents);	
+
 		m_colliderDebug->SetYaw(euler.y);
 		m_colliderDebug->SetPitch(euler.x);
 		m_colliderDebug->SetRoll(euler.z);
+
+		if (debug_print)
+		{
+			std::cout << "Mesh Centre: X: " << std::to_string(m_physData.m_worldCentre.x) << " Y: " << std::to_string(m_physData.m_worldCentre.y) << " Z: " << std::to_string(m_physData.m_worldCentre.z) << std::endl;
+			std::cout << "Position: X: " << std::to_string(m_pos.x) << " Y: " << std::to_string(m_pos.y) << " Z: " << std::to_string(m_pos.z) << std::endl;
+			Vector3 diff = m_physData.m_worldCentre - m_pos;
+			std::cout << "Diff: X: " << std::to_string(diff.x) << " Y: " << std::to_string(diff.y) << " Z: " << std::to_string(diff.z) << std::endl;
+		}
 	}
 }
 
@@ -156,3 +163,7 @@ void PhysModel::Tick()
 }
 
 
+Vector3 PhysModel::applyOffset(Vector3 pos)
+{
+	return Vector3(pos.x - offset, pos.y, pos.z);
+}

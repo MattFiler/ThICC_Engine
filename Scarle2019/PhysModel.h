@@ -71,6 +71,7 @@ public:
 
 	const PhysModelData& data = m_physData;
 
+	bool debug_print = false;
 protected:
 	int m_model_id = 0;
 
@@ -91,6 +92,8 @@ protected:
 	BoundingOrientedBox m_collider; //Bounding box of the model
 
 	SDKMeshGO3D* m_colliderDebug = nullptr;
-	XMFLOAT3 MatrixDecomposeYawPitchRoll(Matrix  mat);
+	Vector3 MatrixDecomposeYawPitchRoll(Matrix  mat);
+	Vector3 applyOffset(Vector3 pos);
+	float offset = 0.5;
 
 };
