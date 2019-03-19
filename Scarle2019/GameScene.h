@@ -39,7 +39,6 @@ private:
 	void create2DObjects();
 	void create3DObjects();
 	void pushBackObjects();
-	void playerControlsActive();
 
 	Item* CreateItem(ItemType type);
 
@@ -51,8 +50,9 @@ private:
 
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
-	//std::ptr<DirectX::SpriteBatch> m_spriteBatch[4]{NULL};
+
 	Camera*												m_cam[4];
+	Camera*												cine_cam;
 	Light*												m_light;
 
 	KeybindManager m_keybinds;
@@ -67,7 +67,22 @@ private:
 	SceneManager* m_scene_manager;
 	
 	RenderData* m_RD;
-	float m_startTimer = 3.0f;
 	bool m_playerControls = false;
+
+	// useful debug code dont delete
+	Text2D* camera_pos = nullptr;
+	Text2D* countdown_text = nullptr;
+
+	float timeout = 8.7f;
+
+	enum States {
+		OPENING = 0,
+		COUNTDOWN = 1,
+		PLAY = 2,
+		END = 3
+	};
+
+	States state = OPENING;
+
 };
 

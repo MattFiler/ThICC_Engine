@@ -256,8 +256,11 @@
     <ClInclude Include="DebugMarker.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="UnFuckVector.h">
+    <ClInclude Include="BlenderToDirectX.h">
       <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemProbability.h">
+      <Filter>GameObjects\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -389,6 +392,9 @@
     </ClCompile>
     <ClCompile Include="DebugMarker.cpp">
       <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemProbability.cpp">
+      <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
