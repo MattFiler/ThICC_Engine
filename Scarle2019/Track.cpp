@@ -158,8 +158,8 @@ void Track::setWaypointBB()
 	for (size_t i = 0; i < map_waypoints.size(); ++i)
 	{
 		waypoint_bb.push_back(BoundingBox());
-		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z * -1) };
-		waypoint_bb[i].Extents = { 5, 5, 5 };
+		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z) };
+		waypoint_bb[i].Extents = { 100, 100, 5 };
 	}
 }
 
