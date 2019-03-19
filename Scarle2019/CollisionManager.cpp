@@ -27,7 +27,7 @@ void CollisionManager::collisionDetectionAndResponse(std::vector<PhysModel*> _ph
 			continue;
 		}
 
-		float e = 1;
+		float e = 0.75;
 		float j = -(1.0f + e) * contactVel;
 		j /= 1/collision.m_model1->getMass() + 1/collision.m_model2->getMass();
 
@@ -67,7 +67,6 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 				}			 
 				else if (physModel1->getCollider().Intersects(frontPlane))
 				{
-
 					collision.m_collisionNormal = frontPlane.Normal();
 				}
 				else if (physModel1->getCollider().Intersects(rightPlane))

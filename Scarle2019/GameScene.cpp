@@ -99,30 +99,30 @@ void GameScene::Update()
 	{
 		switch (i)
 		{
-		case 0:
-			debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopLeft);
-			break;
-		case 1:
-			debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopRight);
-			break;
-		case 2:
-			debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomLeft);
-			break;
-		case 3:
-			debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomRight);
-			break;
-		case 4:
-			debug_cups[i]->SetPos(player[0]->data.m_globalBackTopLeft);
-			break;
-		case 5:
-			debug_cups[i]->SetPos(player[0]->data.m_globalBackTopRight);
-			break;
-		case 6:
-			debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomLeft);
-			break;
-		case 7:
-			debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomRight);
-			break;
+		//case 0:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopLeft);
+		//	break;
+		//case 1:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopRight);
+		//	break;
+		//case 2:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomLeft);
+		//	break;
+		//case 3:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomRight);
+		//	break;
+		//case 4:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackTopLeft);
+		//	break;
+		//case 5:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackTopRight);
+		//	break;
+		//case 6:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomLeft);
+		//	break;
+		//case 7:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomRight);
+		//	break;
 		}
 	}
 
@@ -376,6 +376,7 @@ void GameScene::create3DObjects()
 		using std::placeholders::_1;
 		player[i] = new Player("Knuckles Kart", i, std::bind(&GameScene::CreateItem, this, _1));
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		player[i]->setMass(10);
 		m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
@@ -414,7 +415,7 @@ void GameScene::create3DObjects()
 	for (SDKMeshGO3D*& cup : debug_cups)
 	{
 		cup = new SDKMeshGO3D("Cup");
-		//m_3DObjects.push_back(cup);
+		m_3DObjects.push_back(cup);
 	}
 
 	//Global illumination
