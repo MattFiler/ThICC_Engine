@@ -47,7 +47,9 @@ void GameScene::Update()
 		if (timeout > 0)
 		{
 			timeout -= Locator::getGSD()->m_dt;
-			countdown_text->SetText(std::to_string((int)std::ceil(timeout)));
+			for (int i = 0; i < game_config["player_count"]; ++i) {
+				player[i]->GetCountdown()->SetText(std::to_string((int)std::ceil(timeout)));
+			}
 		}
 		else
 		{
@@ -241,9 +243,6 @@ void GameScene::SetPlayerRanking()
 
 void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList)
 {
-
-
-
 	// temp solution for having a cinematic cam and countdown for the beta
 	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_resourceDescriptors->Heap() };
 	switch (state)
@@ -293,7 +292,6 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
 				m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
 				Locator::getRD()->m_cam = m_cam[i];
-
 				//Render 3D objects
 				for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 				{
@@ -324,14 +322,17 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 					}
 				}
 			}
+			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
 			//Render countdown in screen centre
-			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 			m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
 			m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
 			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
 			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
-			countdown_text->Render();
+			for (int i = 0; i < game_config["player_count"]; i++)
+			{
+				player[i]->GetCountdown()->Render();
+			}
 			Locator::getRD()->m_spriteBatch->End();
 			break;
 
@@ -436,9 +437,12 @@ void GameScene::create2DObjects()
 	}
 
 
-	countdown_text = new Text2D(std::to_string((int)std::ceil(timeout)));
+	//countdown_text = new Text2D(std::to_string((int)std::ceil(timeout)));
 	//countdown_text->CentreOrigin();
-	countdown_text->SetPos({Locator::getWD()->sprite_viewport.TopLeftX + Locator::getWD()->sprite_viewport.Width / 2 - countdown_text->GetSize().x / 2 , Locator::getWD()->sprite_viewport.TopLeftY + Locator::getWD()->sprite_viewport.Height / 2 - countdown_text->GetSize().y / 2 });
+	for (int i = 0; i < game_config["player_count"]; i++)
+	{
+		player[i]->GetCountdown()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2 });
+	}
 
 	//camera_pos = new Text2D(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" + 
 	//	std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
