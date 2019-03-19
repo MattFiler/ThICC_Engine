@@ -18,11 +18,18 @@ public:
 	~Player();
 
 	virtual void Tick() override;
-	int getCurrentWaypoint() { return current_waypoint; }
-	Text2D* getPosition() { return position; }
+	int GetWaypoint() { return waypoint; }
+	int GetRanking() { return ranking; }
+	int GetLap() { return lap; }
+	Text2D* GetRankingText() { return text_ranking; }
+	Text2D* GetLapText() { return text_lap; }
+	ImageGO2D* GetItemImg() { return item_img; }
 
-	void setCurrentWaypoint(int waypoint) { current_waypoint = waypoint; }
+	void SetWaypoint(int _waypoint) { waypoint = _waypoint; }
+	void SetLap(int _lap) { lap = _lap; }
+	void SetRanking(int _position) { ranking = _position; }
 	void setGamePad(bool _state);
+	
 protected:
 	int m_playerID = 0;
 
@@ -36,10 +43,14 @@ private:
 	Vector m_savedPos;
 	Vector m_savedVel;
 	Vector m_savedGravVel;
-	Vector m_savedGravDir;
-	int current_position = 0;
-	int current_waypoint = 0;
-	int next_waypoint = 0;
+	int ranking = 0;
+	int waypoint = 0;
+	int lap = 1;
+	Text2D *text_ranking = nullptr;
+	Text2D *text_lap = nullptr;
 	Text2D *position = nullptr;
+	Vector m_savedGravDir;
+	ImageGO2D *item_img = nullptr;
+	
 	bool m_controlsActive = false;
 };

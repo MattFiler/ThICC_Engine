@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "GameDebugToggles.h"
 #include "ServiceLocator.h"
+#include "DebugMarker.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -25,6 +26,41 @@ GameScene::~GameScene()
 
 void GameScene::Update()
 {
+	//  camera_pos->SetText(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" +
+	//	std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
+
+
+	switch (state)
+	{
+	case OPENING:
+		if (timeout > 0)
+		{
+			timeout -= Locator::getGSD()->m_dt;
+		}
+		else
+		{
+			state = COUNTDOWN;
+			timeout = 2.99999f;
+		}
+		break;
+	case COUNTDOWN:
+		if (timeout > 0)
+		{
+			timeout -= Locator::getGSD()->m_dt;
+			countdown_text->SetText(std::to_string((int)std::ceil(timeout)));
+		}
+		else
+		{
+			state = PLAY;
+			for (int i = 0; i < 4; ++i)
+			{
+				player[i]->setGamePad(m_playerControls);
+			}
+		}
+		break;
+	}
+
+
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track);
 		player[i]->ResolveWallCollisions(*track);
@@ -32,7 +68,6 @@ void GameScene::Update()
 	}
 
 	UpdateItems();
-	playerControlsActive();
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -55,15 +90,12 @@ void GameScene::Update()
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
 	}
 
-	for (int i = 0; i < game_config["player_count"]; i++) {
-		for (size_t j = 0; j < track->getWaypointsBB().size(); j++)
-		{
-			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[j]))
-			{
-				player[i]->setCurrentWaypoint(j);
-			}
-		}
-	}
+
+	// sets the players waypoint
+	SetPlayersWaypoint();
+
+	// Sets the current position of the player on teh leaderboard
+	SetPlayerRanking();
 
 	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
@@ -92,6 +124,17 @@ void GameScene::Update()
 	if (m_keybinds.keyPressed("Debug Toggle"))
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
+	}
+	if (m_keybinds.keyPressed("Debug Toggle World Render")) {
+		GameDebugToggles::render_level = !GameDebugToggles::render_level;
+	}
+	else if (m_keybinds.keyPressed("Activate"))
+	{
+		state = PLAY;
+		for (int i = 0; i < 4; ++i)
+		{
+			player[i]->setGamePad(m_playerControls);
+		}
 	}
 
 	CollisionManager::collisionDetectionAndResponse(m_physModels);
@@ -124,42 +167,171 @@ void GameScene::UpdateItems()
 	}
 }
 
-void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
+void GameScene::SetPlayersWaypoint()
 {
-	//draw 3D objects
+	for (int i = 0; i < game_config["player_count"]; i++) {
 
-	//camera setup.
-	for (int i = 0; i < game_config["player_count"]; ++i)
+		if (player[i]->GetWaypoint() < track->getWaypoints().size() -1)
+		{
+			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[player[i]->GetWaypoint() + 1]))
+			{
+				player[i]->SetWaypoint(player[i]->GetWaypoint() + 1);
+			}
+		}
+		else
+		{
+			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
+			{
+				player[i]->SetWaypoint(0);
+				player[i]->SetLap(player[i]->GetLap() + 1);
+			}
+		}
+	}
+}
+
+void GameScene::SetPlayerRanking()
+{
+	for (int i = 0; i < game_config["player_count"]; i++)
 	{
-		m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
-		m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
-		Locator::getRD()->m_cam = m_cam[i];
+		player[i]->SetRanking(1);
+	}
+
+	for (int i = 0; i < game_config["player_count"]; i++)
+	{
+		for (int j = 0; j < game_config["player_count"]; j++)
+		{
+			if (i != j)
+			{
+				if (player[i]->GetLap() < player[j]->GetLap())
+				{
+					player[i]->SetRanking(player[i]->GetRanking() + 1);
+				}
+				else if (player[i]->GetLap() == player[j]->GetLap())
+				{
+					if (player[i]->GetWaypoint() < player[j]->GetWaypoint())
+					{
+						player[i]->SetRanking(player[i]->GetRanking() + 1);
+					}
+					else if (player[i]->GetWaypoint() == player[j]->GetWaypoint())
+					{
+						float difference = 0;
+						float difference1 = 0;
+
+						if (player[i]->GetWaypoint() != track->getWaypointsBB().size() - 1)
+						{
+							difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[player[i]->GetWaypoint() + 1].Center);
+							difference1 = Vector3::Distance(player[j]->GetPos(), track->getWaypointsBB()[player[j]->GetWaypoint() + 1].Center);
+						}
+						else if (player[i]->GetWaypoint() == track->getWaypointsBB().size() - 1)
+						{
+							difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[0].Center);
+							difference1 = Vector3::Distance(player[j]->GetPos(), track->getWaypointsBB()[0].Center);
+						}
+
+						if (difference > difference1)
+						{
+							player[i]->SetRanking(player[i]->GetRanking() + 1);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList)
+{
+
+
+
+	// temp solution for having a cinematic cam and countdown for the beta
+	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_resourceDescriptors->Heap() };
+	switch (state)
+	{
+	case OPENING:
+		m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
+		m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
+		Locator::getRD()->m_cam = cine_cam;
 
 		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 		{
-			(*it)->Render();
+			if (dynamic_cast<Track*>(*it)) //debugging only
+			{
+				if (GameDebugToggles::render_level) {
+					(*it)->Render();
+				}
+			}
+			else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+				if (GameDebugToggles::show_debug_meshes) {
+					(*it)->Render();
+				}
+			}
+			else
+			{
+				(*it)->Render();
+			}
+		}
+		break;
+	case COUNTDOWN:
+		for (int i = 0; i < game_config["player_count"]; ++i)
+		{
+			m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
+			m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
+			Locator::getRD()->m_cam = m_cam[i];
+
+
+			for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+			{
+				(*it)->Render();
+			}
 		}
 
 		for (GameObject3D* obj : m_itemModels)
 		{
 			obj->Render();
 		}
+
+
+		m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+		m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
+		m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
+		Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
+		Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
+
+		countdown_text->Render();
+		Locator::getRD()->m_spriteBatch->End();
+
+		break;
+	case PLAY:
+		//camera setup.
+		for (int i = 0; i < game_config["player_count"]; ++i)
+		{
+			m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
+			m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
+			Locator::getRD()->m_cam = m_cam[i];
+
+			for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+			{
+				(*it)->Render();
+			}
+		}
+
+		m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+		m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
+		m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
+		Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
+		Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
+		//draw 2d objects
+		for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+		{
+			(*it)->Render();
+		}
+		Locator::getRD()->m_spriteBatch->End();
+		break;
+	case END:
+
+		break;
 	}
-
-	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_resourceDescriptors->Heap() };
-	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-
-	m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
-	m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
-	Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
-	Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
-
-	//draw 2d objects
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		(*it)->Render();
-	}
-	Locator::getRD()->m_spriteBatch->End();
 }
 
 bool GameScene::Load()
@@ -167,7 +339,7 @@ bool GameScene::Load()
 	//Read in track config
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
-
+	
 	create3DObjects();
 
 	create2DObjects();
@@ -181,29 +353,38 @@ bool GameScene::Load()
 
 void GameScene::create2DObjects()
 {
+	*&Locator::getWD()->sprite_viewport = { 0.0f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth), static_cast<float>(Locator::getWD()->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	*&Locator::getWD()->sprite_rect = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight) };
 	//test text
 	//Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
 	//m_2DObjects.push_back(test2);
-	ImageGO2D *test[4]; 
-	Text2D *text[4];
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
-		test[i] = new ImageGO2D("twist");
-		//test->SetOri(45);
-		test[i]->SetScale(0.1f*Vector2::One);
-		test[i]->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
+		player[i]->GetItemImg()->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
 		//test->CentreOrigin();
-		m_2DObjects.push_back(test[i]);
+		m_2DObjects.push_back(player[i]->GetItemImg());
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
-		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->getPosition()->GetSize().x;
-		float text_pos_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->getPosition()->GetSize().y;
-		player[i]->getPosition()->SetPos(Vector2(text_pos_x, text_pos_y));
-		m_2DObjects.push_back(player[i]->getPosition());
+		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->GetRankingText()->GetSize().x;
+		float text_pos_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetRankingText()->GetSize().y;
+		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
+		m_2DObjects.push_back(player[i]->GetRankingText());
+
+		float text_lap_x = Locator::getWD()->m_viewport[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.5f;
+		float text_lap_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetLapText()->GetSize().y;
+		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
+		m_2DObjects.push_back(player[i]->GetLapText());
 	}
 
-	*&Locator::getWD()->sprite_viewport = { 0.0f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth), static_cast<float>(Locator::getWD()->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	*&Locator::getWD()->sprite_rect = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight) };
+
+	countdown_text = new Text2D(std::to_string((int)std::ceil(timeout)));
+	//countdown_text->CentreOrigin();
+	countdown_text->SetPos({Locator::getWD()->sprite_viewport.TopLeftX + Locator::getWD()->sprite_viewport.Width / 2 - countdown_text->GetSize().x / 2 , Locator::getWD()->sprite_viewport.TopLeftY + Locator::getWD()->sprite_viewport.Height / 2 - countdown_text->GetSize().y / 2 });
+
+	//camera_pos = new Text2D(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" + 
+	//	std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
+	//camera_pos->SetPos({ 20,100 });
+	//m_2DObjects.push_back(camera_pos);
 }
 
 void GameScene::create3DObjects()
@@ -225,11 +406,22 @@ void GameScene::create3DObjects()
 
 	//Load in a track
 	track = new Track(game_config["default_track"]);
-	track->setUpWaypointBB();
+	track->setWaypointBB();
 	m_3DObjects.push_back(track);
+
+	//Add all track item boxes to 3D object update array
+	for (ItemBox* this_item_box : track->GetItemBoxes()) {
+		m_3DObjects.push_back(this_item_box);
+	}
+
+	//Add all debug markers
+	for (DebugMarker* this_debug_marker : track->GetDebugMarkers()) {
+		m_3DObjects.push_back(this_debug_marker);
+	}
 
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
 	for (int i = 0; i < game_config["player_count"]; i++) {
+
 		//Create a player and position on track
 		using std::placeholders::_1;
 		player[i] = new Player("Knuckles Kart", i, std::bind(&GameScene::CreateItem, this, _1));
@@ -268,6 +460,11 @@ void GameScene::create3DObjects()
 		}
 	}
 
+
+	cine_cam = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
+	m_3DObjects.push_back(cine_cam);
+
 	//Global illumination
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
 	m_3DObjects.push_back(m_light);
@@ -283,27 +480,6 @@ void GameScene::pushBackObjects()
 		{
 			m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
 			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
-		}
-	}
-}
-
-void GameScene::playerControlsActive()
-{
-	if (m_startTimer > 0)
-	{
-		m_startTimer -= Locator::getGSD()->m_dt;
-
-		if (m_startTimer <= 0)
-		{
-			m_playerControls = true;
-		}
-	}
-
-	if (m_playerControls)
-	{
-		for (int i = 0; i < 4; ++i)
-		{
-			player[i]->setGamePad(m_playerControls);
 		}
 	}
 }

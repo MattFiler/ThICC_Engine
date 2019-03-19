@@ -250,6 +250,15 @@
     <ClInclude Include="GreenShell.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="ItemBox.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugMarker.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="UnFuckVector.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -374,6 +383,12 @@
     </ClCompile>
     <ClCompile Include="GreenShell.cpp">
       <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemBox.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugMarker.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

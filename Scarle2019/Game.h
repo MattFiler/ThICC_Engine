@@ -105,7 +105,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>        m_dsvDescriptorHeap;
 	static const UINT									c_swapBufferCount =2;
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>      m_commandAllocators[c_swapBufferCount];
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>   m_commandList;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>  m_commandList;
 	Microsoft::WRL::ComPtr<ID3D12Fence>                 m_fence;
 	UINT64                                              m_fenceValues[c_swapBufferCount];
 	Microsoft::WRL::Wrappers::Event                     m_fenceEvent;

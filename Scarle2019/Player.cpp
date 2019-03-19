@@ -14,7 +14,10 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	SetPhysicsOn(true);
 	// SetPhysicsOn(false);
 	m_playerID = _playerID;
-	position = new Text2D(std::to_string(current_waypoint));
+	text_ranking = new Text2D(std::to_string(ranking));
+	text_lap = new Text2D(std::to_string(lap) + "/3");
+	item_img = new ImageGO2D("twist");
+	item_img->SetScale(0.1f*Vector2::One);
 }
 
 Player::~Player()
@@ -84,7 +87,7 @@ void Player::Tick()
 		m_pitch += rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightY;
 
 		//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
-		position->SetText(std::to_string(current_position));
+		position->SetText(std::to_string(ranking));
 
 		//apply my base behaviour
 		PhysModel::Tick();
@@ -107,21 +110,24 @@ void Player::movement()
 	//float rotSpeed = 0.05f;
 	if (m_controlsActive)
 	{
-		if (m_keymindManager.keyHeld("Forward"))
+		if (m_playerID == 0)
 		{
-			m_acc += forwardMove;
-		}
-		if (m_keymindManager.keyHeld("Backwards"))
-		{
-			m_acc -= forwardMove;
-		}
-		if (m_keymindManager.keyHeld("Left"))
-		{
-			m_acc -= rightMove;
-		}
-		if (m_keymindManager.keyHeld("Right"))
-		{
-			m_acc += rightMove;
+			if (m_keymindManager.keyHeld("Forward"))
+			{
+				m_acc += forwardMove;
+			}
+			if (m_keymindManager.keyHeld("Backwards"))
+			{
+				m_acc -= forwardMove;
+			}
+			if (m_keymindManager.keyHeld("Left"))
+			{
+				m_acc -= rightMove;
+			}
+			if (m_keymindManager.keyHeld("Right"))
+			{
+				m_acc += rightMove;
+			}
 		}
 
 		//GameController Movement
@@ -192,8 +198,9 @@ void Player::movement()
 		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 	}
 
+	text_lap->SetText(std::to_string(lap) + "/3");
 	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
-	position->SetText(std::to_string(current_position));
+	text_ranking->SetText(std::to_string(ranking));
 
 	//apply my base behaviour
 	TrackMagnet::Tick();

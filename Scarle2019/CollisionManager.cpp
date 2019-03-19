@@ -17,6 +17,8 @@ void CollisionManager::collisionDetectionAndResponse(std::vector<PhysModel*> _ph
 
 	for (Collision& collision : collisions)	
 	{
+		// IF MODEL1 OR MODEL2 IS AN ITEM BOX...
+
 		Vector3 rv = collision.m_model2->getVelocity() - collision.m_model1->getVelocity();
 		float contactVel = rv.Dot(collision.m_collisionNormal);
 
@@ -60,32 +62,15 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 
 				if (physModel1->getCollider().Intersects(backPlane))
 				{
-					collision.m_frontBack = Collision::m_FrontBack::BACK;
 					collision.m_collisionNormal = backPlane.Normal();
 				}
 				 
 				else if (physModel1->getCollider().Intersects(frontPlane))
 				{
 
-					collision.m_frontBack = Collision::m_FrontBack::FRONT;
 					collision.m_collisionNormal = frontPlane.Normal();
 				}
 				
-				if (physModel1->getCollider().Intersects(leftPlane))
-				{
-					collision.m_leftRight = Collision::m_LeftRight::LEFT;
-				}
-
-				if (physModel1->getCollider().Intersects(rightPlane))
-				{
-					collision.m_leftRight = Collision::m_LeftRight::RIGHT;
-				}
-
-				collision.m_penertation_depth = physModel1->GetPos() - physModel2->GetPos();
-				collision.m_penertation_depth.x = abs(collision.m_penertation_depth.x);
-				collision.m_penertation_depth.y = abs(collision.m_penertation_depth.y);
-				collision.m_penertation_depth.z = abs(collision.m_penertation_depth.z);
-
 				collision.m_model1 = physModel1;
 				collision.m_model2 = physModel2;
 

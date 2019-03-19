@@ -12,25 +12,6 @@ Camera::Camera(float _width, float _height, float _near, float _far, GameObject3
 	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f, _width  / _height , _near, _far);
 	m_targetObject = _target;
 	m_dpos = _dpos;
-
-	float x = 0.0f, y = 0.0f, z = 0.0f;
-	float x_m = 50.0f, y_m = 50.0f, z_m = 50.0f;
-	Vector3 rots = { 0.0f, 0.0f, 0.0f };
-
-	for (int i = 0; i < 6; i++)
-	{
-		points.push_back(Vector3{x, y, z});
-		x += x_m;
-		y += y_m;
-		z += z_m;
-		x_m += 5;
-		y_m += 5;
-		z_m += 5;
-		rotations.push_back(rots);
-		rots.x += 10;
-		rots.y += 10;
-		rots.z += 10;
-	}
 }
 
 void Camera::Tick()
@@ -58,14 +39,13 @@ void Camera::Tick()
 		if (m_targetObject)
 		{
 			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-			//rotCam = m_targetObject->GetOri();
 			if (rotCam != m_targetObject->GetOri())
 			{
-				rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.08);
+				rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.1);
 			}
 			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam))
 			{
-				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.2);
+				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.25);
 			}
 		}
 		else
@@ -101,27 +81,36 @@ void Camera::Tick()
 	}
 	case BEHAVIOUR::CINEMATIC:
 	{
-		if (m_targetObject)
+
+		if (points.size())
 		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
+
+			rotCam = Matrix::Identity;
+
+			if (cam_point != -1)
+			{
+				m_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / time_out);
+				m_targetPos = look_points[cam_point];
+				timer += Locator::getGSD()->m_dt;
+				if (timer >= time_out)
+				{
+					timer = 0.0f;
+					cam_point--;
+				}
+			}
+
+			if (m_targetObject)
+			{
+				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
+			}
+			else
+			{
+				m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+			}
 		}
 		else
 		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_targetObject->GetWorld().Up());
-		}
-
-		rotCam = Matrix::Identity;
-
-		if (at != points.size() - 1)
-		{
-			m_pos = Vector3::Lerp(points[at], points[at + 1], timer / time_out);
-
-			timer += Locator::getGSD()->m_dt;
-			if (timer >= time_out)
-			{
-				timer = 0.0f;
-				at++;
-			}
+			behav = BEHAVIOUR::ORBIT;
 		}
 
 		break;
@@ -259,9 +248,11 @@ void Camera::Tick()
 
 		Vector3 forwardMove = cam_speed * m_world.Forward();
 		Vector3 rightMove = cam_speed * m_world.Right();
+		Vector3 upMove = cam_speed * m_world.Up();
 		Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 		forwardMove = Vector3::Transform(forwardMove, rotMove);
 		rightMove = Vector3::Transform(rightMove, rotMove);
+		upMove = Vector3::Transform(upMove, rotMove);
 		m_targetPos = m_pos + forwardMove;
 
 		m_yaw -= cam_rot_speed * Locator::getGSD()->m_mouseState.x;
@@ -287,6 +278,17 @@ void Camera::Tick()
 		{
 			m_pos += Locator::getGSD()->m_dt * rightMove;
 			m_targetPos += Locator::getGSD()->m_dt * rightMove;
+		}
+
+		if (m_keybinds.keyHeld("DebugCamUp"))
+		{
+			m_pos -= Locator::getGSD()->m_dt * upMove;
+			m_targetPos -= Locator::getGSD()->m_dt * upMove;
+		}
+		else if (m_keybinds.keyHeld("DebugCamDown"))
+		{
+			m_pos += Locator::getGSD()->m_dt * upMove;
+			m_targetPos += Locator::getGSD()->m_dt * upMove;
 		}
 
 		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
