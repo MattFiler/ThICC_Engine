@@ -112,7 +112,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//pushBackObjects();
 
 
-	Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->SetVolume(1.f);
+	//Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->SetVolume(1.f);
 
 	// Setup our Platform
 	//ultralight::Platform& platform = ultralight::Platform::instance();
@@ -179,10 +179,10 @@ void Game::Update(DX::StepTimer const& _timer)
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
 
 	KeybindManager keys;
-	if (keys.keyPressed("Activate"))
-	{
-		Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME);
-	}
+	//if (keys.keyPressed("Activate"))
+	//{
+	//	Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME);
+	//}
 
 	m_sceneManager.Update();
 }

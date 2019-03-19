@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "GameDebugToggles.h"
 #include "ServiceLocator.h"
+#include "AudioManager.h"
 #include "DebugMarker.h"
 #include <iostream>
 #include <experimental/filesystem>
@@ -31,16 +32,37 @@ void GameScene::Update()
 
 	switch (state)
 	{
+	case START:
+		Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::INTRO_MUSIC)->SetVolume(1.f);
+		Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::INTRO_MUSIC);
+		state = OPENING;
+		break;
 	case OPENING:
-		if (timeout > 0)
+		if (timeout >= 0)
 		{
 			timeout -= Locator::getGSD()->m_dt;
+			cine_cam->Tick();
 		}
 		else
 		{
-			state = COUNTDOWN;
+			state = CAM_OPEN;
 			timeout = 2.99999f;
 		}
+		std::cout << timeout << std::endl;
+		break;
+	case CAM_OPEN:
+			for (int i = 0; i < game_config["player_count"]; ++i) {
+				m_cam[i]->Tick();
+			}
+
+			if (m_cam[3]->GetBehav() == Camera::BEHAVIOUR::LERP)
+			{
+				Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START)->SetVolume(0.7f);
+				Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START);
+				Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN)->SetVolume(0.7f);
+				Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN);
+				state = COUNTDOWN;
+			}
 		break;
 	case COUNTDOWN:
 		if (timeout > 0)
@@ -48,6 +70,7 @@ void GameScene::Update()
 			timeout -= Locator::getGSD()->m_dt;
 			for (int i = 0; i < game_config["player_count"]; ++i) {
 				player[i]->GetCountdown()->SetText(std::to_string((int)std::ceil(timeout)));
+				m_cam[i]->Tick();
 			}
 		}
 		else
@@ -59,8 +82,12 @@ void GameScene::Update()
 			}
 		}
 		break;
+	case PLAY:
+		for (int i = 0; i < game_config["player_count"]; ++i) {
+			m_cam[i]->Tick();
+		}
+		break;
 	}
-
 
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track);
@@ -283,7 +310,7 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			}
 
 			break;
-
+		case CAM_OPEN:
 		case COUNTDOWN:
 			for (int i = 0; i < game_config["player_count"]; ++i)
 			{
@@ -323,18 +350,20 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			}
 			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
-			//Render countdown in screen centre
-			m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
-			m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
-			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
-			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
-			for (int i = 0; i < game_config["player_count"]; i++)
+			if (state == COUNTDOWN)
 			{
-				player[i]->GetCountdown()->Render();
+				//Render countdown in screen centre
+				m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
+				m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
+				Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
+				Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
+				for (int i = 0; i < game_config["player_count"]; i++)
+				{
+					player[i]->GetCountdown()->Render();
+				}
+				Locator::getRD()->m_spriteBatch->End();
 			}
-			Locator::getRD()->m_spriteBatch->End();
 			break;
-
 		case PLAY:
 			for (int i = 0; i < game_config["player_count"]; ++i)
 			{
@@ -481,8 +510,8 @@ void GameScene::create3DObjects()
 
 		//Create a camera to follow the player
 		m_cam[i] = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
-		m_cam[i]->SetBehav(Camera::BEHAVIOUR::LERP);
-		m_3DObjects.push_back(m_cam[i]);
+		m_cam[i]->SetBehav(Camera::BEHAVIOUR::START_RACE);
+		//m_3DObjects.push_back(m_cam[i]);
 
 		//Create a viewport
 		float width_mod = 0.5f;

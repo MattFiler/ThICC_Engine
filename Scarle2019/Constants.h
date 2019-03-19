@@ -81,7 +81,7 @@ enum class SOUNDS_GAME : int
 	MKS_GAME = 1
 };
 
-// game sounds
+// character sounds
 enum class SOUNDS_CHARACTER : int
 {
 	MARIO = 0,

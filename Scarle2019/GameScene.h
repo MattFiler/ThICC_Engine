@@ -72,16 +72,18 @@ private:
 	Text2D* camera_pos = nullptr;
 	Text2D* countdown_text = nullptr;
 
-	float timeout = 8.7f;
+	float timeout = 12.f;
 
 	enum States {
-		OPENING = 0,
-		COUNTDOWN = 1,
-		PLAY = 2,
-		END = 3
+		START = 0,
+		OPENING = 1,
+		CAM_OPEN = 2,
+		COUNTDOWN = 3,
+		PLAY = 4,
+		END = 5
 	};
 
-	States state = OPENING;
+	States state = START;
 
 };
 
