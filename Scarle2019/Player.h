@@ -23,13 +23,34 @@ public:
 	int GetLap() { return lap; }
 	Text2D* GetRankingText() { return text_ranking; }
 	Text2D* GetLapText() { return text_lap; }
+	ImageGO2D* GetItemImg() { return item_img; }
 
 	void SetWaypoint(int _waypoint) { waypoint = _waypoint; }
 	void SetLap(int _lap) { lap = _lap; }
 	void SetRanking(int _position) { ranking = _position; }
-
-	void setCurrentWaypoint(int waypoint) { current_waypoint = waypoint; }
 	void setGamePad(bool _state);
+
+	/* Inventory Management */
+	ItemType getActiveItem() { return active_item; };
+	void setActiveItem(ItemType _item) { 
+		if (inventory_item == _item) { 
+			active_item = _item; 
+			inventory_item = ItemType::NONE;
+			std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
+		} 
+		else
+		{
+			//We should never get here - so if we do, throw a useful error.
+			throw std::runtime_error("Player tried to use an item that they did not have. This should never be requested!");
+		}
+	};
+	ItemType getItemInInventory() { return inventory_item; };
+	void setItemInInventory(ItemType _item) {
+		if (inventory_item == ItemType::NONE) {
+			inventory_item = _item;
+			std::cout << "PLAYER " << m_playerID << " HAS ACQUIRED ITEM: " << _item << std::endl; //debug
+		}
+	}
 	
 protected:
 	int m_playerID = 0;
@@ -49,11 +70,19 @@ private:
 	int lap = 1;
 	Text2D *text_ranking = nullptr;
 	Text2D *text_lap = nullptr;
-	Vector m_savedGravDir;
-	
-	int current_position = 0;
-	int current_waypoint = 0;
-	int next_waypoint = 0;
 	Text2D *position = nullptr;
+	Vector m_savedGravDir;
+
+	// Player items:
+	//	A player can have an ACTIVE item (e.g. holding a banana behind themselves) AND also an INVENTORY item.
+	//	An inventory item is an item in the UI square which is held back ready to be used.
+	//	If there is an item in inventory, the player cannot	aquire another.
+	//	If there is an active item, the player can acquire one to their inventory.
+	//	When an item is used it should move from inventory to active (or be immediately used, etc - some items differ).
+	ItemType active_item = ItemType::NONE;
+	ItemType inventory_item = ItemType::NONE;
+	
+	ImageGO2D *item_img = nullptr;
+	
 	bool m_controlsActive = false;
 };

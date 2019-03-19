@@ -2,6 +2,9 @@
 #include "PhysModel.h"
 #include "MeshTri.h"
 #include "GameFilepaths.h"
+#include "ItemBox.h"
+#include "DebugMarker.h"
+#include "BlenderToDirectX.h"
 #include <json.hpp>
 using json = nlohmann::json;
 
@@ -58,6 +61,14 @@ public:
 
 	void setWaypointBB();
 
+	std::vector<ItemBox*> GetItemBoxes() {
+		return item_boxes;
+	};
+
+	std::vector<DebugMarker*> GetDebugMarkers() {
+		return debug_markers;
+	};
+
 	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle);
 
 private:
@@ -107,6 +118,14 @@ private:
 
 	// waypoint bounding box
 	std::vector<BoundingBox> waypoint_bb;
+
+	//Item boxes
+	std::vector<ItemBox*> item_boxes;
+
+	//Debugmarkers
+	std::vector<DebugMarker*> debug_markers;
+
+	BlenderToDirectX blender_vector;
 
 	// Size of each dimension of the vector
 	int m_triGridX = 0;

@@ -253,6 +253,15 @@
     <ClInclude Include="ItemBox.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="DebugMarker.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BlenderToDirectX.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemProbability.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -379,6 +388,12 @@
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
     <ClCompile Include="ItemBox.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugMarker.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemProbability.cpp">
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>
