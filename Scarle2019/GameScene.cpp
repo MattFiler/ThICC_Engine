@@ -29,7 +29,6 @@ void GameScene::Update()
 	//  camera_pos->SetText(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" +
 	//	std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
 
-
 	switch (state)
 	{
 	case OPENING:
@@ -415,9 +414,7 @@ void GameScene::create2DObjects()
 {
 	*&Locator::getWD()->sprite_viewport = { 0.0f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth), static_cast<float>(Locator::getWD()->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	*&Locator::getWD()->sprite_rect = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight) };
-	//test text
-	//Text2D *test2 = new Text2D(m_localiser.getString("debug_text"));
-	//m_2DObjects.push_back(test2);
+
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		player[i]->GetItemImg()->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
@@ -437,8 +434,7 @@ void GameScene::create2DObjects()
 	}
 
 
-	//countdown_text = new Text2D(std::to_string((int)std::ceil(timeout)));
-	//countdown_text->CentreOrigin();
+	// player countdown text
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		player[i]->GetCountdown()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2 });
@@ -458,14 +454,6 @@ void GameScene::create3DObjects()
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 	*/
-
-	for (int i = 1; i < GP_COUNT; i++)
-	{
-		//GPGO3D* test3d2 = new GPGO3D((GPGO3D_Type)i);
-		//test3d2->SetPos(12.0f*Vector3::Forward + 10.0f*(i - 1)*Vector3::Left);
-		//test3d2->SetScale(5.0f);
-		//m_3DObjects.push_back(test3d2);
-	}
 
 	//Load in a track
 	track = new Track(game_config["default_track"]);

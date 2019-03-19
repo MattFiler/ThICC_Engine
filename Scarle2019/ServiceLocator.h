@@ -7,6 +7,7 @@ class WindowData;
 class GameStateData;
 class InputData;
 class ItemProbability;
+class AudioManager;
 
 struct Locator {
 	static RenderData* getRD() {
@@ -39,6 +40,13 @@ struct Locator {
 		}
 		return ref_ItemProbability;
 	}
+	static AudioManager* getAudio() {
+		if (ref_audio == nullptr) {
+			throw std::runtime_error("Call to audio before initialisation.");
+		}
+		return ref_audio;
+	}
+
 
 	static void setupRD(RenderData* inst_RD) {
 		ref_RD = inst_RD;
@@ -55,6 +63,9 @@ struct Locator {
 	static void setupProbabilities(ItemProbability* inst_ItemProbability) {
 		ref_ItemProbability = inst_ItemProbability;
 	}
+	static void setupAudio(AudioManager* inst_audio) {
+		ref_audio = inst_audio;
+	}
 
 private:
 	static RenderData* ref_RD;
@@ -62,4 +73,5 @@ private:
 	static GameStateData* ref_GSD;
 	static InputData* ref_ID;
 	static ItemProbability* ref_ItemProbability;
+	static AudioManager* ref_audio;
 };

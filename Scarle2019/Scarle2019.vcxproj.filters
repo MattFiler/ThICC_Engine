@@ -262,6 +262,9 @@
     <ClInclude Include="ItemProbability.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -395,6 +398,9 @@
     </ClCompile>
     <ClCompile Include="ItemProbability.cpp">
       <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Game Base\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
