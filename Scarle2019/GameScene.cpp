@@ -248,89 +248,148 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_resourceDescriptors->Heap() };
 	switch (state)
 	{
-	case OPENING:
-		m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
-		m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
-		Locator::getRD()->m_cam = cine_cam;
+		case OPENING:
+			//Configure viewport
+			m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
+			m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
+			Locator::getRD()->m_cam = cine_cam;
 
-		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-		{
-			if (dynamic_cast<Track*>(*it)) //debugging only
-			{
-				if (GameDebugToggles::render_level) {
-					(*it)->Render();
-				}
-			}
-			else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
-				if (GameDebugToggles::show_debug_meshes) {
-					(*it)->Render();
-				}
-			}
-			else
-			{
-				(*it)->Render();
-			}
-		}
-		break;
-	case COUNTDOWN:
-		for (int i = 0; i < game_config["player_count"]; ++i)
-		{
-			m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
-			m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
-			Locator::getRD()->m_cam = m_cam[i];
-
-
+			//Render 3D objects
 			for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 			{
-				(*it)->Render();
+				if ((*it)->isVisible()) {
+					if (dynamic_cast<Track*>(*it)) //debugging only
+					{
+						if (GameDebugToggles::render_level) {
+							(*it)->Render();
+						}
+					}
+					else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+						if (GameDebugToggles::show_debug_meshes) {
+							(*it)->Render();
+						}
+					}
+					else
+					{
+						(*it)->Render();
+					}
+				}
 			}
-		}
 
-		for (GameObject3D* obj : m_itemModels)
-		{
-			obj->Render();
-		}
+			//Render items
+			for (GameObject3D* obj : m_itemModels)
+			{
+				if (obj->isVisible()) {
+					obj->Render();
+				}
+			}
 
+			break;
 
-		m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-		m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
-		m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
-		Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
-		Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
+		case COUNTDOWN:
+			for (int i = 0; i < game_config["player_count"]; ++i)
+			{
+				//Configure viewports
+				m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
+				m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
+				Locator::getRD()->m_cam = m_cam[i];
 
-		countdown_text->Render();
-		Locator::getRD()->m_spriteBatch->End();
+				//Render 3D objects
+				for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+				{
+					if ((*it)->isVisible()) {
+						if (dynamic_cast<Track*>(*it)) //debugging only
+						{
+							if (GameDebugToggles::render_level) {
+								(*it)->Render();
+							}
+						}
+						else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+							if (GameDebugToggles::show_debug_meshes) {
+								(*it)->Render();
+							}
+						}
+						else
+						{
+							(*it)->Render();
+						}
+					}
+				}
 
-		break;
-	case PLAY:
-		//camera setup.
-		for (int i = 0; i < game_config["player_count"]; ++i)
-		{
-			m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
-			m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
-			Locator::getRD()->m_cam = m_cam[i];
+				//Render items
+				for (GameObject3D* obj : m_itemModels)
+				{
+					if (obj->isVisible()) {
+						obj->Render();
+					}
+				}
+			}
 
-			for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+			//Render countdown in screen centre
+			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+			m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
+			m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
+			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
+			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
+			countdown_text->Render();
+			Locator::getRD()->m_spriteBatch->End();
+			break;
+
+		case PLAY:
+			for (int i = 0; i < game_config["player_count"]; ++i)
+			{
+				//Setup viewport
+				m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
+				m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
+				Locator::getRD()->m_cam = m_cam[i];
+
+				//Render 3D objects
+				for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+				{
+					if ((*it)->isVisible()) {
+						if (dynamic_cast<Track*>(*it)) //debugging only
+						{
+							if (GameDebugToggles::render_level) {
+								(*it)->Render();
+							}
+						}
+						else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+							if (GameDebugToggles::show_debug_meshes) {
+								(*it)->Render();
+							}
+						}
+						else
+						{
+							(*it)->Render();
+						}
+					}
+				}
+
+				//Render items
+				for (GameObject3D* obj : m_itemModels)
+				{
+					if (obj->isVisible()) {
+						obj->Render();
+					}
+				}
+			}
+
+			//Render sprites
+			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+			m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
+			m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
+			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
+			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
+			//draw 2d objects
+			for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 			{
 				(*it)->Render();
 			}
-		}
+			Locator::getRD()->m_spriteBatch->End();
+			break;
 
-		m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-		m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
-		m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
-		Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
-		Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
-		//draw 2d objects
-		for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-		{
-			(*it)->Render();
-		}
-		Locator::getRD()->m_spriteBatch->End();
-		break;
-	case END:
-
-		break;
+		case END:
+			break;
 	}
 }
 

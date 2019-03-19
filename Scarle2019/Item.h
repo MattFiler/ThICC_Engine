@@ -13,8 +13,8 @@ public:
 	~Item() = default;
 
 	virtual void Tick() override { TrackMagnet::Tick(); };
-	float getProbability(int _position) { return m_probability_modifier[_position]; };
 	virtual void HitByPlayer(Player* player) {};
+
 protected:
 	float m_probability_modifier[12] = {};
 	json m_item_config;
