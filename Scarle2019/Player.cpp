@@ -188,8 +188,10 @@ void Player::movement()
 		}
 	}
 
+	if (m_controlsActive)
+	{
 		//GameController Movement
-		
+
 		if (Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
 		{
 			if (Locator::getGSD()->m_gamePadState[m_playerID].IsViewPressed())
@@ -251,7 +253,7 @@ void Player::movement()
 				}
 			}
 		}
-		
+	}
 
 	////change orinetation of player
 	//float rotSpeed = 0.001f;
