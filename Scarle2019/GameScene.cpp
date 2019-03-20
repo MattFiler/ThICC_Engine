@@ -99,7 +99,7 @@ void GameScene::Update()
 			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START);
 			for (int i = 0; i < 4; ++i)
 			{
-				player[i]->setGamePad(m_playerControls);
+				player[i]->setGamePad(true);
 			}
 		}
 		break;
@@ -123,7 +123,41 @@ void GameScene::Update()
 		player[i]->ShouldStickToTrack(*track);
 		player[i]->ResolveWallCollisions(*track);
 		Locator::getGSD()->m_gamePadState[i] = Locator::getID()->m_gamePad->GetState(i); //set game controllers state[s]
+
 	}
+
+
+	for (int j = 0; j < track->getWaypointsBB().size(); j++){
+
+		for (int k = 0; k < game_config["player_count"]; ++k) {
+
+			for (int i = 0; i < game_config["player_count"]; ++i) {
+
+				if (i != k)
+				{
+					float difference = 0;
+					float difference1 = 0;
+
+					difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[j].Center);
+					difference1 = Vector3::Distance(player[k]->GetPos(), track->getWaypointsBB()[j].Center);
+
+					if (difference < difference1)
+					{
+						track->getWaypointsBB()[j].Orientation = Quaternion::CreateFromYawPitchRoll(player[i]->GetYaw(), player[i]->GetPitch(), player[i]->GetRoll()) * Quaternion::CreateFromRotationMatrix(player[i]->GetWorld());
+						Vector3 trans = MatrixDecomposeYawPitchRoll(player[0]->GetOri() * track->GetWorld());
+						track->GetDebugMarkers()[j]->SetOri(Matrix::CreateFromYawPitchRoll(trans.x, trans.y, trans.z));
+					}
+				}
+			}
+		}
+	}
+
+	Vector3 trasns = MatrixDecomposeYawPitchRoll(player[0]->GetOri());
+	//trasns *= Vector3::Up;
+	//std::cout << track->GetDebugMarkers()[10]->GetYaw() << "," << track->GetDebugMarkers()[10]->GetPitch() << "," << track->GetDebugMarkers()[10]->GetRoll() << std::endl;
+	//std::cout << player[0]->GetYaw() << "," << player[0]->GetPitch() << "," << player[0]->GetRoll() << std::endl;
+	//std::cout << trasns.x << "," << trasns.y << "," << trasns.z << std::endl;
+
 
 	UpdateItems();
 
@@ -147,6 +181,10 @@ void GameScene::Update()
 			return;
 		}
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
+	}
+	if (m_keybinds.keyPressed("Save Display Player Pos"))
+	{
+		std::cout << trasns.x << "," << trasns.y << "," << trasns.z << std::endl;
 	}
 
 
@@ -189,8 +227,8 @@ void GameScene::Update()
 	}
 	else if (m_keybinds.keyPressed("Activate"))
 	{
-		state = COUNTDOWN;
 		timeout = 2.999999f;
+		state = COUNTDOWN;
 	}
 
 	for (int i = 0; i < 8; i++)
@@ -229,6 +267,24 @@ void GameScene::Update()
 	//	<< " X: " << std::to_string(player[0]->getCollider().Orientation.x)
 	//	<< " Y: " << std::to_string(player[0]->getCollider().Orientation.y)
 	//	<< " Z: " << std::to_string(player[0]->getCollider().Orientation.z) << std::endl;
+}
+
+Vector3 GameScene::MatrixDecomposeYawPitchRoll(Matrix  mat)
+{
+	//Breaks down a matrix into yaw, pitch, and roll. Returns them as a float3
+	Vector3 euler;
+	euler.x = asinf(-mat._32);
+	if (cosf(euler.x) > 0.0001)
+	{
+		euler.y = atan2f(mat._31, mat._33);
+		euler.z = atan2f(mat._12, mat._22);
+	}
+	else
+	{
+		euler.y = 0.0f;
+		euler.z = atan2f(-mat._21, mat._11);
+	}
+	return euler;
 }
 
 void GameScene::UpdateItems()
@@ -292,7 +348,16 @@ void GameScene::SetPlayersWaypoint()
 			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
 			{
 				player[i]->SetWaypoint(0);
-				player[i]->SetLap(player[i]->GetLap() + 1);
+				if (player[i]->GetLap() == 3)
+				{
+					m_cam[i]->SetBehav(Camera::BEHAVIOUR::ORBIT);
+					player[i]->setGamePad(false);
+				}
+				else if (player[i]->GetLap() < 3)
+				{
+					player[i]->SetLap(player[i]->GetLap() + 1);
+
+				}
 			}
 		}
 	}

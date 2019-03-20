@@ -148,11 +148,14 @@ void Player::ReleaseItem()
 		m_trailingItem = nullptr;
 		active_item = NONE;
 	}
+
+	text_lap->SetText(std::to_string(lap) + "/3");
+	text_ranking->SetText(std::to_string(waypoint));
 }
 
 void Player::setGamePad(bool _state)
 {
-	m_controlsActive = true;
+	m_controlsActive = _state;
 }
 
 void Player::movement()
@@ -164,27 +167,26 @@ void Player::movement()
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
 	rightMove = Vector3::Transform(rightMove, rotMove);
 	//float rotSpeed = 0.05f;
-	if (m_controlsActive)
+
+	if (m_playerID == 0)
 	{
-		if (m_playerID == 0)
+		if (m_keymindManager.keyHeld("Forward"))
 		{
-			if (m_keymindManager.keyHeld("Forward"))
-			{
-				m_acc += forwardMove;
-			}
-			if (m_keymindManager.keyHeld("Backwards"))
-			{
-				m_acc -= forwardMove;
-			}
-			if (m_keymindManager.keyHeld("Left"))
-			{
-				m_acc -= rightMove;
-			}
-			if (m_keymindManager.keyHeld("Right"))
-			{
-				m_acc += rightMove;
-			}
+			m_acc += forwardMove;
 		}
+		if (m_keymindManager.keyHeld("Backwards"))
+		{
+			m_acc -= forwardMove;
+		}
+		if (m_keymindManager.keyHeld("Left"))
+		{
+			m_acc -= rightMove;
+		}
+		if (m_keymindManager.keyHeld("Right"))
+		{
+			m_acc += rightMove;
+		}
+	}
 
 		//GameController Movement
 		
@@ -251,14 +253,13 @@ void Player::movement()
 		}
 		
 
-		//change orinetation of player
-		float rotSpeed = 0.001f;
-		//m_yaw -= rotSpeed * _GSD->m_mouseState.x;
-		//m_pitch -= rotSpeed * _GSD->m_mouseState.y;
+	////change orinetation of player
+	//float rotSpeed = 0.001f;
+	////m_yaw -= rotSpeed * _GSD->m_mouseState.x;
+	////m_pitch -= rotSpeed * _GSD->m_mouseState.y;
 
-		m_yaw -= rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightX;
-		m_pitch += rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightY;
-	}
+	//m_yaw -= rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightX;
+	//m_pitch += rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightY;
 	//Car rumble
 	Locator::getID()->m_gamePad->SetVibration(m_playerID, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1);
 
@@ -284,10 +285,6 @@ void Player::movement()
 	if (m_keymindManager.keyPressed("Debug Print Player Location")) {
 		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 	}
-
-	text_lap->SetText(std::to_string(lap) + "/3");
-	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
-	text_ranking->SetText(std::to_string(ranking));
 
 	//apply my base behaviour
 	TrackMagnet::Tick();
