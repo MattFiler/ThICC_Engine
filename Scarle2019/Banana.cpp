@@ -3,9 +3,9 @@
 #include "Player.h"
 #include <iostream>
 
-Banana::Banana() : Item("DEFAULT ITEM") {
-	SetDrag(0.9f);
-	SetPhysicsOn(true);
+Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BANANA)) {
+	m_mesh->SetDrag(0.9f);
+	m_mesh->SetPhysicsOn(true);
 }
 
 void Banana::HitByPlayer(Player* player)

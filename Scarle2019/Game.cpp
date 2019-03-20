@@ -40,10 +40,13 @@ Game::Game() :
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
 
+	//Parse game config
 	m_WD->m_window = nullptr;
 	m_WD->m_outputHeight = game_config["window_height"];
 	m_WD->m_outputWidth = game_config["window_width"];
 	ItemBoxConfig::respawn_time = game_config["itembox_respawn_time"];
+
+	srand(std::time(NULL));
 
 	//Setup service locator
 	Locator::setupRD(m_RD);

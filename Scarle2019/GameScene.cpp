@@ -9,6 +9,7 @@
 #include "DebugMarker.h"
 #include <iostream>
 #include <experimental/filesystem>
+#include <memory>
 
 extern void ExitGame();
 
@@ -34,7 +35,7 @@ GameScene::~GameScene()
 
 void GameScene::Update()
 {
-	 //camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
+	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
 	switch (state)
 	{
@@ -48,9 +49,17 @@ void GameScene::Update()
 		{
 			timeout -= Locator::getGSD()->m_dt;
 			cine_cam->Tick();
+			if (timeout <= Locator::getGSD()->m_dt + 0.1) {
+				for (int i = 0; i < game_config["player_count"]; ++i) {
+					m_cam[i]->Tick();
+				}
+			}
 		}
 		else
 		{
+			for (int i = 0; i < game_config["player_count"]; ++i) {
+				m_cam[i]->Tick();
+			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
 			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::PRE_COUNTDOWN);
@@ -60,6 +69,7 @@ void GameScene::Update()
 			for (int i = 0; i < game_config["player_count"]; ++i) {
 				m_cam[i]->Tick();
 			}
+			cine_cam->Tick();
 
 			if (m_cam[3]->GetBehav() == Camera::BEHAVIOUR::LERP)
 			{
@@ -73,7 +83,11 @@ void GameScene::Update()
 		{
 			timeout -= Locator::getGSD()->m_dt;
 			for (int i = 0; i < game_config["player_count"]; ++i) {
-				player[i]->GetCountdown()->SetText(std::to_string((int)std::ceil(timeout)));
+				std::string countdown_time = std::to_string((int)std::ceil(timeout));
+				if (countdown_time == "0") {
+					countdown_time = "GO!";
+				}
+				player[i]->GetCountdown()->SetText(countdown_time);
 				m_cam[i]->Tick();
 			}
 		}
@@ -213,14 +227,46 @@ void GameScene::Update()
 	}
 	else if (m_keybinds.keyPressed("Activate"))
 	{
-		state = PLAY;
-		for (int i = 0; i < 4; ++i)
+		timeout = 2.999999f;
+		state = COUNTDOWN;
+	}
+
+	for (int i = 0; i < 8; i++)
+	{
+		switch (i)
 		{
-			player[i]->setGamePad(true);
+		//case 0:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopLeft);
+		//	break;
+		//case 1:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopRight);
+		//	break;
+		//case 2:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomLeft);
+		//	break;
+		//case 3:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomRight);
+		//	break;
+		//case 4:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackTopLeft);
+		//	break;
+		//case 5:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackTopRight);
+		//	break;
+		//case 6:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomLeft);
+		//	break;
+		//case 7:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomRight);
+		//	break;
 		}
 	}
 
 	CollisionManager::collisionDetectionAndResponse(m_physModels);
+	//std::cout << " W: " << std::to_string(player[0]->getCollider().Orientation.w)
+	//	<< " X: " << std::to_string(player[0]->getCollider().Orientation.x)
+	//	<< " Y: " << std::to_string(player[0]->getCollider().Orientation.y)
+	//	<< " Z: " << std::to_string(player[0]->getCollider().Orientation.z) << std::endl;
 }
 
 Vector3 GameScene::MatrixDecomposeYawPitchRoll(Matrix  mat)
@@ -247,10 +293,13 @@ void GameScene::UpdateItems()
 	int end = m_itemModels.size();
 	for (int i = 0; i < end; i++)
 	{
-		m_itemModels[i]->ShouldStickToTrack(*track);
-		m_itemModels[i]->ResolveWallCollisions(*track);
+		if (m_itemModels[i]->GetMesh())
+		{
+			m_itemModels[i]->GetMesh()->ShouldStickToTrack(*track);
+			m_itemModels[i]->GetMesh()->ResolveWallCollisions(*track);
+		}
 		for (int j = 0; j < game_config["player_count"]; ++j) {
-			if (player[j]->getCollider().Intersects(m_itemModels[i]->getCollider()))
+			if (m_itemModels[i]->GetMesh() && player[j]->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
 			{
 				m_itemModels[i]->HitByPlayer(player[j]);
 			}
@@ -260,10 +309,25 @@ void GameScene::UpdateItems()
 		{
 			delIndex = i;
 		}
+
+		if (m_itemModels[i]->GetMesh())
+		{
+			int end2 = m_itemModels.size();
+			for (int j = 0; j < end2; j++)
+			{
+				if (m_itemModels[i] != m_itemModels[j] && m_itemModels[j]->GetMesh() && m_itemModels[j]->GetMesh()->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
+				{
+					m_itemModels[i]->FlagForDestoy();
+					m_itemModels[j]->FlagForDestoy();
+				}
+			}
+		}
 	}
 	if (delIndex != -1)
 	{
 		//delete m_itemModels[delIndex];
+		//std::thread tr(&GameScene::DeleteMemoryTest, this, m_itemModels[delIndex]);
+		//tr.detach();
 		m_itemModels.erase(m_itemModels.begin() + delIndex);
 	}
 }
@@ -384,10 +448,11 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			}
 
 			//Render items
-			for (GameObject3D* obj : m_itemModels)
+			for (Item* obj : m_itemModels)
 			{
-				if (obj->isVisible()) {
-					obj->Render();
+				if (obj->GetMesh())
+				{
+					obj->GetMesh()->Render();
 				}
 			}
 			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
@@ -397,7 +462,6 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
 			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
 			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
-			camera_pos->Render();
 			Locator::getRD()->m_spriteBatch->End();
 
 			break;
@@ -432,10 +496,11 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				}
 
 				//Render items
-				for (GameObject3D* obj : m_itemModels)
+				for (Item* obj : m_itemModels)
 				{
-					if (obj->isVisible()) {
-						obj->Render();
+					if (obj->GetMesh())
+					{
+						obj->GetMesh()->Render();
 					}
 				}
 			}
@@ -486,10 +551,11 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				}
 
 				//Render items
-				for (GameObject3D* obj : m_itemModels)
+				for (Item* obj : m_itemModels)
 				{
-					if (obj->isVisible()) {
-						obj->Render();
+					if (obj->GetMesh())
+					{
+						obj->GetMesh()->Render();
 					}
 				}
 			}
@@ -559,11 +625,6 @@ void GameScene::create2DObjects()
 	{
 		player[i]->GetCountdown()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2 });
 	}
-
-	camera_pos = new Text2D(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" + 
-		std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
-	camera_pos->SetPos({ 20,100 });
-	m_2DObjects.push_back(camera_pos);
 }
 
 void GameScene::create3DObjects()
@@ -597,6 +658,7 @@ void GameScene::create3DObjects()
 		using std::placeholders::_1;
 		player[i] = new Player("Knuckles Kart", i, std::bind(&GameScene::CreateItem, this, _1));
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		player[i]->setMass(10);
 		m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
@@ -631,11 +693,17 @@ void GameScene::create3DObjects()
 		}
 	}
 
+	for (SDKMeshGO3D*& cup : debug_cups)
+	{
+		cup = new SDKMeshGO3D("Cup");
+		m_3DObjects.push_back(cup);
+	}
+
 
 	cine_cam = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
-	cine_cam->SetCinematicRot(track->getCamerasRot());
-	cine_cam->SetCinematicPos(track->getCamerasPos());
+	//cine_cam->SetCinematicRot(track->getCamerasRot());
+	//cine_cam->SetCinematicPos(track->getCamerasPos());
 	//m_3DObjects.push_back(cine_cam);
 
 	//Global illumination
@@ -678,10 +746,21 @@ Item* GameScene::CreateItem(ItemType type)
 	case RED_SHELL:
 		break;
 	case MUSHROOM:
+	{
+		Mushroom * mushroom = new Mushroom();
+		m_itemModels.push_back(mushroom);
+		return mushroom;
 		break;
+	}
 	default:
 		return nullptr;
 		break;
 	}
 	return nullptr;
+}
+
+void GameScene::DeleteMemoryTest(Item* item)
+{
+	//std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	delete item;
 }

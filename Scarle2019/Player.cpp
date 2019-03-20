@@ -3,6 +3,7 @@
 #include "GameStateData.h"
 #include "ServiceLocator.h"
 #include "InputData.h"
+#include "ItemData.h"
 #include <iostream>
 
 extern void ExitGame();
@@ -12,25 +13,48 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	m_RD = Locator::getRD();
 	SetDrag(0.7);
 	SetPhysicsOn(true);
-	// SetPhysicsOn(false);
 	m_playerID = _playerID;
 	text_ranking = new Text2D(std::to_string(ranking));
 	text_ranking->SetScale(0.1f * Vector2::One);
 	text_lap = new Text2D(std::to_string(lap) + "/3");
-	countdown = new Text2D("0");
-	item_img = new ImageGO2D("twist");
-	item_img->SetScale(0.1f*Vector2::One);
+	countdown = new Text2D("3");
+	item_img = new ImageGO2D("ITEM_PLACEHOLDER");
 }
 
 Player::~Player()
 {
-	//tidy up anything I've created
+	delete item_img;
+	item_img = nullptr;
+}
+
+
+void Player::setActiveItem(ItemType _item) {
+	if (inventory_item == _item) {
+		active_item = _item;
+		item_img->UpdateSprite("ITEM_PLACEHOLDER");
+		inventory_item = ItemType::NONE;
+		std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
+	}
+	else
+	{
+		//We should never get here - so if we do, throw a useful error.
+		throw std::runtime_error("Player tried to use an item that they did not have. This should never be requested!");
+	}
+};
+
+void Player::setItemInInventory(ItemType _item) {
+	if (inventory_item == ItemType::NONE) {
+		inventory_item = _item;
+		item_img->UpdateSprite(Locator::getItemData()->GetItemSpriteName(_item));
+		std::cout << "PLAYER " << m_playerID << " HAS ACQUIRED ITEM: " << _item << std::endl; //debug
+	}
 }
 
 
 void Player::Tick()
 {
 	movement();
+
 	// Debug code to save/load the players game state
 	if (m_keymindManager.keyPressed("Debug Save Matrix"))
 	{
@@ -50,23 +74,79 @@ void Player::Tick()
 	}
 	else if (m_keymindManager.keyPressed("Spawn Banana"))
 	{
-		Banana* banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
-		banana->SetWorld(m_world);
-		banana->AddPos(m_world.Backward() * 2);
-		banana->UpdateWorld();
+		SpawnItem(ItemType::GREEN_SHELL);
 	}
-	else if (m_keymindManager.keyPressed("Spawn Green Shell"))
+	else if (m_keymindManager.keyHeld("Spawn Banana"))
 	{
-		GreenShell* greenShell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
-		greenShell->SetWorld(m_world);
-		greenShell->AddPos(m_world.Forward() * 3);
-		greenShell->UpdateWorld();
-		greenShell->setVelocity(60 * m_world.Forward());
+		TrailItem();
 	}
+	/*else
+	{
+		ReleaseItem();
+	}*/
 
-//Debug output player location - useful for setting up spawns
+	//Debug output player location - useful for setting up spawns
 	if (m_keymindManager.keyPressed("Debug Print Player Location")) {
 		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+	}
+
+	//Update UI
+	text_ranking->SetText(std::to_string(ranking));
+	item_img->Tick();
+
+	//apply my base behaviour
+	//PhysModel::Tick();
+}
+
+void Player::TrailItem()
+{
+	m_isTrailing = true;
+	m_trailingItem->GetMesh()->SetWorld(m_world);
+	m_trailingItem->GetMesh()->AddPos(m_world.Backward() * 2.2);
+	m_trailingItem->GetMesh()->UpdateWorld();
+}
+
+void Player::SpawnItem(ItemType type)
+{
+	setActiveItem(type);
+	switch (type)
+	{
+		case BANANA:
+		{
+			Banana * banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
+			m_trailingItem = banana;
+			TrailItem();
+			break;
+		}
+
+		case MUSHROOM:
+		{
+			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
+			mushroom->Use(this);
+			break;
+		}
+
+		case GREEN_SHELL:
+		{
+			GreenShell* shell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
+			m_trailingItem = shell;
+			TrailItem();
+			break;
+		}
+
+		default:
+			break;
+	}
+}
+
+void Player::ReleaseItem()
+{
+	if (m_trailingItem)
+	{
+		m_trailingItem->Use(this);
+		m_isTrailing = false;
+		m_trailingItem = nullptr;
+		active_item = NONE;
 	}
 
 	text_lap->SetText(std::to_string(lap) + "/3");
@@ -108,9 +188,8 @@ void Player::movement()
 		}
 	}
 
-	//GameController Movement
-	if (m_controlsActive)
-	{
+		//GameController Movement
+		
 		if (Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
 		{
 			if (Locator::getGSD()->m_gamePadState[m_playerID].IsViewPressed())
@@ -133,13 +212,30 @@ void Player::movement()
 				{
 					m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 				}
-				else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
 				{
 					m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed() && (inventory_item != NONE || active_item != NONE))
+				{
+					if (!m_isTrailing)
+					{
+						SpawnItem(inventory_item);
+					}
+					else
+					{
+						TrailItem();
+					}
+				}
+				else
+				{
+					ReleaseItem();
+				}
 			}
 		}
-	}
+		
 
 	////change orinetation of player
 	//float rotSpeed = 0.001f;
@@ -178,3 +274,5 @@ void Player::movement()
 	TrackMagnet::Tick();
 
 }
+
+

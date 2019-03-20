@@ -27,6 +27,8 @@ public:
 
 	void CentreOrigin();
 
+	void UpdateSprite(string _filename);
+
 	virtual void Reset() override;
 
 protected:
