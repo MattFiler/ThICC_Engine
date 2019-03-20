@@ -2,22 +2,29 @@
 
 #include "GameFilepaths.h"
 #include "TrackMagnet.h"
-#include <json.hpp>
-using json = nlohmann::json;
+#include "ServiceLocator.h"
+#include "ItemData.h"
 
 class Player;
 
-class Item : public TrackMagnet {
+class Item 
+{
 public:
+	Item() = default;
 	Item(const std::string& item_type);
 	~Item() = default;
+	
+	virtual void Tick();
+	virtual void HitByPlayer(Player* player) = 0;
+	virtual void Use(Player* player) = 0;
 
-	virtual void Tick() override { TrackMagnet::Tick(); };
-	virtual void HitByPlayer(Player* player) {};
+	bool ShouldDestroy() { return m_shouldDestroy; };
+	void FlagForDestoy() { m_shouldDestroy = true; };
+
+	TrackMagnet* GetMesh() { return m_mesh; };
+
 
 protected:
-	float m_probability_modifier[12] = {};
-	json m_item_config;
-	GameFilepaths m_filepath;
-	std::string m_model_name = "";
+	TrackMagnet * m_mesh = nullptr;
+	bool m_shouldDestroy = false;
 };

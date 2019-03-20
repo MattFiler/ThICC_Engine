@@ -1,6 +1,6 @@
 {
 	"DEFAULT": {
-		"ui_sprite": "sprite.png",
+		"ui_sprite": "ITEM_PLACEHOLDER",
 		"model": "DEFAULT ITEM",
 		"probabilities": {
 			"place_1": 0,
@@ -18,6 +18,8 @@
 		}
 	},
 	"GREEN_SHELL": {
+		"ui_sprite": "ITEM_GREEN_SHELL",
+		"model": "ITEM_GREEN_SHELL",
 		"probabilities": {
 			"place_1": 25.5,
 			"place_2": 17.5,
@@ -27,6 +29,8 @@
 		}
 	},
 	"RED_SHELL": {
+		"ui_sprite": "ITEM_RED_SHELL",
+		"model": "ITEM_RED_SHELL",
 		"probabilities": {
 			"place_1": 7.5,
 			"place_2": 25,
@@ -39,6 +43,8 @@
 		}
 	},
 	"BANANA": {
+		"ui_sprite": "ITEM_BANANA",
+		"model": "ITEM_BANANA",
 		"probabilities": {
 			"place_1": 37.5,
 			"place_2": 17.5,
@@ -48,6 +54,7 @@
 		}
 	},
 	"FAKE_BOX": {
+		"ui_sprite": "ITEM_FAKEBOX",
 		"probabilities": {
 			"place_1": 17.5,
 			"place_2": 10,
@@ -57,6 +64,7 @@
 		}
 	},
 	"MUSHROOM": {
+		"ui_sprite": "ITEM_MUSHROOM",
 		"probabilities": {
 			"place_2": 10,
 			"place_3": 17.5,
@@ -68,6 +76,7 @@
 		}
 	},
 	"MUSHROOM_3X": {
+		"ui_sprite": "ITEM_MUSHROOM_3X",
 		"probabilities": {
 			"place_3": 5,
 			"place_4": 10,
@@ -82,6 +91,8 @@
 		}
 	},
 	"BOMB": {
+		"ui_sprite": "ITEM_BOMB",
+		"model": "ITEM_BOMB",
 		"probabilities": {
 			"place_2": 2.5,
 			"place_3": 7.5,
@@ -91,6 +102,8 @@
 		}
 	},
 	"BLUE_SHELL": {
+		"ui_sprite": "ITEM_BLUE_SHELL",
+		"model": "ITEM_BLUE_SHELL",
 		"probabilities": {
 			"place_4": 2.5,
 			"place_5": 5,
@@ -100,6 +113,7 @@
 		}
 	},
 	"LIGHTNING_BOLT": {
+		"ui_sprite": "ITEM_LIGHTNING",
 		"probabilities": {
 			"place_9": 2.5,
 			"place_10": 7.5,
@@ -108,6 +122,7 @@
 		}
 	},
 	"STAR": {
+		"ui_sprite": "ITEM_STAR",
 		"probabilities": {
 			"place_7": 7.5,
 			"place_8": 12.5,
@@ -118,6 +133,7 @@
 		}
 	},
 	"MUSHROOM_UNLIMITED": {
+		"ui_sprite": "ITEM_MUSHROOM_UNLIMITED",
 		"probabilities": {
 			"place_6": 5,
 			"place_7": 15,
@@ -129,6 +145,7 @@
 		}
 	},
 	"MUSHROOM_GIANT": {
+		"ui_sprite": "ITEM_MUSHROOM_GIANT",
 		"probabilities": {
 			"place_4": 2.5,
 			"place_5": 5,
@@ -138,6 +155,8 @@
 		}
 	},
 	"SQUID": {
+		"ui_sprite": "ITEM_SQUID",
+		"model": "ITEM_BLOOPER",
 		"probabilities": {
 			"place_4": 2.5,
 			"place_5": 5,
@@ -148,6 +167,7 @@
 		}
 	},
 	"POW": {
+		"ui_sprite": "ITEM_POW",
 		"probabilities": {
 			"place_5": 5,
 			"place_6": 5,
@@ -157,6 +177,7 @@
 		}
 	},
 	"LIGHTNING_CLOUD": {
+		"ui_sprite": "ITEM_LIGHTNING_CLOUD",
 		"probabilities": {
 			"place_3": 5,
 			"place_4": 7.5,
@@ -166,6 +187,8 @@
 		}
 	},
 	"BULLET_BILL": {
+		"ui_sprite": "ITEM_BULLET_BILL",
+		"model": "ITEM_BULLET_BILL",
 		"probabilities": {
 			"place_8": 5,
 			"place_9": 10,
@@ -175,6 +198,7 @@
 		}
 	},
 	"GREEN_SHELL_3X": {
+		"ui_sprite": "ITEM_GREEN_SHELL_3X",
 		"probabilities": {
 			"place_2": 5,
 			"place_3": 12.5,
@@ -183,6 +207,7 @@
 		}
 	},
 	"RED_SHELL_3X": {
+		"ui_sprite": "ITEM_RED_SHELL_3X",
 		"probabilities": {
 			"place_4": 7.5,
 			"place_5": 12.5,
@@ -192,6 +217,7 @@
 		}
 	},
 	"BANANA_3X": {
+		"ui_sprite": "ITEM_BANANAS_X3",
 		"probabilities": {
 			"place_1": 12.5,
 			"place_2": 12.5,

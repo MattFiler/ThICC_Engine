@@ -6,7 +6,30 @@
 
 ImageGO2D::ImageGO2D(string _filename)
 {
+	UpdateSprite(_filename);
+}
 
+ImageGO2D::~ImageGO2D()
+{
+	m_texture.Reset();
+}
+
+void ImageGO2D::Render()
+{
+	Locator::getRD()->m_spriteBatch->Draw(Locator::getRD()->m_resourceDescriptors->GetGpuHandle(m_resourceNum),
+		GetTextureSize(m_texture.Get()),
+		m_pos, nullptr, m_colour, m_orientation, m_origin, m_scale);
+	//TODO::add sprite effects & layer Depth
+	//TODO::example stuff for sprite sheet
+}
+
+void ImageGO2D::CentreOrigin()
+{
+	m_origin.x = float(size.x / 2);
+	m_origin.y = float(size.y / 2);
+}
+
+void ImageGO2D::UpdateSprite(string _filename) {
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	string fullpath = m_filepath.generateFilepath(_filename, m_filepath.IMAGE);
 	std::wstring wFilename = converter.from_bytes(fullpath.c_str());
@@ -28,27 +51,6 @@ ImageGO2D::ImageGO2D(string _filename)
 	auto uploadResourcesFinished = resourceUpload.End(Locator::getRD()->m_commandQueue.Get());
 
 	uploadResourcesFinished.wait();
-}
-
-
-ImageGO2D::~ImageGO2D()
-{
-	m_texture.Reset();
-}
-
-void ImageGO2D::Render()
-{
-	Locator::getRD()->m_spriteBatch->Draw(Locator::getRD()->m_resourceDescriptors->GetGpuHandle(m_resourceNum),
-		GetTextureSize(m_texture.Get()),
-		m_pos, nullptr, m_colour, m_orientation, m_origin, m_scale);
-	//TODO::add sprite effects & layer Depth
-	//TODO::example stuff for sprite sheet
-}
-
-void ImageGO2D::CentreOrigin()
-{
-	m_origin.x = float(size.x / 2);
-	m_origin.y = float(size.y / 2);
 }
 
 void ImageGO2D::Reset()

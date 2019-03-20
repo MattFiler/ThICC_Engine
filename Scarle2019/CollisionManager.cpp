@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CollisionManager.h"
+#include "AudioManager.h"
 #include "ItemBox.h"
 #include "Player.h"
 
@@ -23,11 +24,13 @@ void CollisionManager::collisionDetectionAndResponse(std::vector<PhysModel*> _ph
 		if (dynamic_cast<ItemBox*>(collision.m_model1) && dynamic_cast<Player*>(collision.m_model2)) {
 			if (collision.m_model1->isVisible()) {
 				dynamic_cast<ItemBox*>(collision.m_model1)->hasCollided(dynamic_cast<Player*>(collision.m_model2));
+				Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
 			}
 		}
 		else if (dynamic_cast<ItemBox*>(collision.m_model2) && dynamic_cast<Player*>(collision.m_model1)) {
 			if (collision.m_model2->isVisible()) {
 				dynamic_cast<ItemBox*>(collision.m_model2)->hasCollided(dynamic_cast<Player*>(collision.m_model1));
+				Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
 			}
 		}
 		//Collided with another player
@@ -68,22 +71,28 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 			{
 				Collision collision;	
 				
-				Plane frontPlane = getPlane(physModel2->data.m_globalFrontCentreLeft, physModel2->data.m_globalFrontCentreRight, physModel2->data.m_height);
-				Plane backPlane = getPlane(physModel2->data.m_globalBackCentreLeft, physModel2->data.m_globalBackCentreRight, physModel2->data.m_height);
-				Plane rightPlane = getPlane(physModel2->data.m_globalFrontCentreRight, physModel2->data.m_globalBackCentreRight, physModel2->data.m_height);
-				Plane leftPlane = getPlane(physModel2->data.m_globalFrontCentreLeft, physModel2->data.m_globalBackCentreLeft, physModel2->data.m_height);
+				Plane frontPlane = getPlane(physModel2->data.m_globalFrontTopLeft, physModel2->data.m_globalFrontTopRight, physModel2->data.m_height);
+				Plane backPlane = getPlane(physModel2->data.m_globalBackTopLeft, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
+				Plane rightPlane = getPlane(physModel2->data.m_globalFrontTopRight, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
+				Plane leftPlane = getPlane(physModel2->data.m_globalFrontTopLeft, physModel2->data.m_globalBackTopLeft, physModel2->data.m_height);
 
+		
 				if (physModel1->getCollider().Intersects(backPlane))
 				{
 					collision.m_collisionNormal = backPlane.Normal();
-				}
-				 
+				}			 
 				else if (physModel1->getCollider().Intersects(frontPlane))
 				{
-
 					collision.m_collisionNormal = frontPlane.Normal();
 				}
-				
+				else if (physModel1->getCollider().Intersects(rightPlane))
+				{
+					collision.m_collisionNormal = leftPlane.Normal();
+				}
+				else if (physModel1->getCollider().Intersects(leftPlane))
+				{
+					collision.m_collisionNormal = leftPlane.Normal();
+				}
 				collision.m_model1 = physModel1;
 				collision.m_model2 = physModel2;
 

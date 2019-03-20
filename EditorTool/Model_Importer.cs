@@ -58,7 +58,18 @@ namespace EditorTool
                 itemMaterialCategoriesTrans.Items.Add(material);
             }
         }
-        
+
+        /* Browse to config file */
+        private void locateTrackConfig_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog filePicker = new OpenFileDialog();
+            filePicker.Filter = "Track Config (JSON)|*.JSON";
+            if (filePicker.ShowDialog() == DialogResult.OK)
+            {
+                trackConfig.Text = filePicker.FileName;
+            }
+        }
+
         /* Import model and textures */
         private void importModel_Click(object sender, EventArgs e)
         {
@@ -765,11 +776,6 @@ namespace EditorTool
         private void itemMaterialCategoriesTrans_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             //depreciated
-        }
-
-        private void locateTrackConfig_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

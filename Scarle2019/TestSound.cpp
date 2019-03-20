@@ -3,7 +3,7 @@
 #include "GameStateData.h"
 
 
-TestSound::TestSound(AudioEngine* _audEngine, string _filename) :Sound(_audEngine, _filename)
+TestSound::TestSound(AudioEngine* _audEngine, string _filename, bool _loop)// :Sound(_audEngine, _filename)
 {
 }
 
@@ -14,8 +14,8 @@ TestSound::~TestSound()
 
 void TestSound::Tick(GameStateData * _GSD)
 {
-	if (_GSD->m_keyboardState.Space && !_GSD->m_prevKeyboardState.Space)
-	{
-		Play();
-	}
+	//if (_GSD->m_keyboardState.Space && !_GSD->m_prevKeyboardState.Space)
+	//{
+	//	Play();
+	//}
 }

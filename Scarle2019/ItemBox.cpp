@@ -2,7 +2,7 @@
 #include "ItemBox.h"
 #include "ServiceLocator.h"
 #include "Player.h"
-#include "ItemProbability.h"
+#include "ItemData.h"
 #include "Constants.h"
 
 //Todo: replace "Default Item" with item box model
@@ -15,7 +15,7 @@ ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("Default Item
 
 void ItemBox::hasCollided(Player* collided_player) {
 	setVisible(false);
-	collided_player->setItemInInventory(Locator::getProbabilities()->GetRandomItem(collided_player->GetRanking()));
+	collided_player->setItemInInventory(Locator::getItemData()->GetRandomItem(collided_player->GetRanking()));
 }
 
 void ItemBox::Tick() {

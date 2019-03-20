@@ -3,6 +3,7 @@
 #include "KeybindManager.h"
 #include "Banana.h"
 #include "GreenShell.h"
+#include "Mushroom.h"
 #include "Constants.h"
 #include <functional>
 
@@ -18,12 +19,14 @@ public:
 	~Player();
 
 	virtual void Tick() override;
+
 	int GetWaypoint() { return waypoint; }
 	int GetRanking() { return ranking; }
 	int GetLap() { return lap; }
 	Text2D* GetRankingText() { return text_ranking; }
 	Text2D* GetLapText() { return text_lap; }
 	ImageGO2D* GetItemImg() { return item_img; }
+	Text2D* GetCountdown() { return countdown; }
 
 	void SetWaypoint(int _waypoint) { waypoint = _waypoint; }
 	void SetLap(int _lap) { lap = _lap; }
@@ -32,32 +35,20 @@ public:
 
 	/* Inventory Management */
 	ItemType getActiveItem() { return active_item; };
-	void setActiveItem(ItemType _item) { 
-		if (inventory_item == _item) { 
-			active_item = _item; 
-			inventory_item = ItemType::NONE;
-			std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
-		} 
-		else
-		{
-			//We should never get here - so if we do, throw a useful error.
-			throw std::runtime_error("Player tried to use an item that they did not have. This should never be requested!");
-		}
-	};
+	void setActiveItem(ItemType _item);
 	ItemType getItemInInventory() { return inventory_item; };
-	void setItemInInventory(ItemType _item) {
-		if (inventory_item == ItemType::NONE) {
-			inventory_item = _item;
-			std::cout << "PLAYER " << m_playerID << " HAS ACQUIRED ITEM: " << _item << std::endl; //debug
-		}
-	}
-	
+	void setItemInInventory(ItemType _item);
+	void TrailItem();
+	void SpawnItem(ItemType type);
+	void ReleaseItem();
+
 protected:
 	int m_playerID = 0;
 
 private:
 	std::function<Item*(ItemType)> CreateItem;
 	void movement();
+
 
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;
@@ -70,7 +61,7 @@ private:
 	int lap = 1;
 	Text2D *text_ranking = nullptr;
 	Text2D *text_lap = nullptr;
-	Text2D *position = nullptr;
+	Text2D *countdown = nullptr;
 	Vector m_savedGravDir;
 
 	// Player items:
@@ -83,6 +74,8 @@ private:
 	ItemType inventory_item = ItemType::NONE;
 	
 	ImageGO2D *item_img = nullptr;
+	Item* m_trailingItem = nullptr;
+	bool  m_isTrailing = false;
 	
 	bool m_controlsActive = false;
 };

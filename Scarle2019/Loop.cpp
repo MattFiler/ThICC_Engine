@@ -2,7 +2,7 @@
 #include "Loop.h"
 
 
-Loop::Loop(AudioEngine* _audEngine, string _filename) :Sound(_audEngine, _filename)
+Loop::Loop(AudioEngine* _audEngine, string _filename, bool _loop) //:Sound(_audEngine, _filename)
 {
 	if (m_sfx)
 	{
@@ -31,11 +31,12 @@ void Loop::Play()
 
 }
 
-
-void Loop::Tick(GameStateData* _GSD)
-{
-	m_loop->SetVolume(m_volume);
-	m_loop->SetPitch(m_pitch);
-	m_loop->SetPan(m_pan);
-	m_loop->Play(m_playing);
-}
+//
+//void Loop::Tick(GameStateData* _GSD)
+//{
+//
+//	//m_loop->SetVolume(m_volume);
+//	//m_loop->SetPitch(m_pitch);
+//	//m_loop->SetPan(m_pan);
+//	//m_loop->Play(m_playing);
+//}

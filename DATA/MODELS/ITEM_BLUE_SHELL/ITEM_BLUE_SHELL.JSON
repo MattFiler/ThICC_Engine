@@ -1,0 +1,57 @@
+{
+  "asset_name": "ITEM_BLUE_SHELL",
+  "asset_type": "Models",
+  "model_type": "Track",
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      4.17631,
+      11.187203,
+      4.28496
+    ],
+    "front_top_right": [
+      -4.17631,
+      11.187203,
+      4.28496
+    ],
+    "front_bottom_right": [
+      -4.17631,
+      -0.017287,
+      4.28496
+    ],
+    "front_bottom_left": [
+      4.17631,
+      -0.017287,
+      4.28496
+    ],
+    "back_top_left": [
+      4.17631,
+      11.187203,
+      -4.844289
+    ],
+    "back_top_right": [
+      -4.17631,
+      11.187203,
+      -4.844289
+    ],
+    "back_bottom_right": [
+      -4.17631,
+      -0.017287,
+      -4.844289
+    ],
+    "back_bottom_left": [
+      4.17631,
+      -0.017287,
+      -4.844289
+    ]
+  },
+  "visible": true,
+  "start_x": 0.0,
+  "start_y": 0.0,
+  "start_z": 0.0,
+  "modelscale": 1.0,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 10.0
+}

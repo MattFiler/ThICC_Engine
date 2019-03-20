@@ -34,7 +34,7 @@ namespace Launcher
         private void Launcher_Load(object sender, EventArgs e)
         {
             //Load image and select default res
-            //launcherImage.Image = new Bitmap(Properties.Resources.launcher_banner);
+            launcherImage.Image = new Bitmap(Properties.Resources.beta_banner);
             resolutionSelector.SelectedIndex = 0;
             po_language.SelectedIndex = 0;
             tabPage2.AutoScroll = true;
