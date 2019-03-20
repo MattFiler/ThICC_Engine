@@ -471,14 +471,21 @@ void GameScene::create2DObjects()
 		float text_lap_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetLapText()->GetSize().y;
 		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
 		m_2DObjects.push_back(player[i]->GetLapText());
-	}
 
+		float text_timer_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width * 0.3;
+		float text_timer_y = Locator::getWD()->m_viewport[i].TopLeftY;
+		player[i]->GetTotalLapTimerText()->SetPos(Vector2(text_timer_x, text_timer_y));
+		player[i]->GetTotalLapTimerText()->SetScale(Vector2(0.1, 0.1));
+		m_2DObjects.push_back(player[i]->GetTotalLapTimerText());
+	}
 
 	// player countdown text
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		player[i]->GetCountdown()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2 });
 	}
+
+	// player countdown text
 
 	//camera_pos = new Text2D(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" + 
 	//	std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));

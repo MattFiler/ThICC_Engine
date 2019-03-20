@@ -28,7 +28,6 @@ public:
 	void SetColour(Color _col) { m_colour = _col; }
 	void SetScale(Vector2 _scale) { m_scale = _scale; }
 
-
 	virtual void CentreOrigin() = 0;
 
 	virtual void Tick() {};

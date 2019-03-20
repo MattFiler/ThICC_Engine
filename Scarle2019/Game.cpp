@@ -69,7 +69,6 @@ Game::~Game()
 	delete m_GSD;
 	delete m_ID;
 	delete m_WD;
-
 	VBGO3D::CleanUp();
 }
 

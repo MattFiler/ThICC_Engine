@@ -21,20 +21,26 @@ public:
 	int GetWaypoint() { return waypoint; }
 	int GetRanking() { return ranking; }
 	int GetLap() { return lap; }
+	float GetLapTimer() { return m_totalLapTime; }
 	Text2D* GetRankingText() { return text_ranking; }
 	Text2D* GetLapText() { return text_lap; }
 	ImageGO2D* GetItemImg() { return item_img; }
 	Text2D* GetCountdown() { return countdown; }
+	Text2D* GetTotalLapTimerText() { return m_totalLapTimeText; }
+	bool GetControlsActive() { return m_controlsActive; }
 
 	void SetWaypoint(int _waypoint) { waypoint = _waypoint; }
 	void SetLap(int _lap) { lap = _lap; }
+	void SetLapTimer(float _time) { m_totalLapTime = _time; }
 	void SetRanking(int _position) { ranking = _position; }
 	void setGamePad(bool _state);
 
 	/* Inventory Management */
 	ItemType getActiveItem() { return active_item; };
-	void setActiveItem(ItemType _item) { 
-		if (inventory_item == _item) { 
+	void setActiveItem(ItemType _item) 
+	{ 
+		if (inventory_item == _item) 
+		{ 
 			active_item = _item; 
 			inventory_item = ItemType::NONE;
 			std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
@@ -69,11 +75,18 @@ private:
 	int ranking = 0;
 	int waypoint = 0;
 	int lap = 1;
-	Text2D *text_ranking = nullptr;
-	Text2D *text_lap = nullptr;
-	Text2D *position = nullptr;
-	Text2D *countdown = nullptr;
+	float seconds = 0;
+	int minutes = 0;
+	int hours = 0;
+	float m_totalLapTime = 0.0f;
+	Text2D *text_ranking			= nullptr;
+	Text2D *text_lap				= nullptr;
+	Text2D *position				= nullptr;
+	Text2D *countdown				= nullptr;
+	Text2D *m_lapCounterText		= nullptr;
+	Text2D *m_totalLapTimeText			= nullptr;
 	Vector m_savedGravDir;
+
 
 	// Player items:
 	//	A player can have an ACTIVE item (e.g. holding a banana behind themselves) AND also an INVENTORY item.

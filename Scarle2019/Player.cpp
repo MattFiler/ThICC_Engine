@@ -4,6 +4,7 @@
 #include "ServiceLocator.h"
 #include "InputData.h"
 #include <iostream>
+#include <iomanip>
 
 extern void ExitGame();
 
@@ -17,6 +18,8 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	text_ranking = new Text2D(std::to_string(ranking));
 	text_lap = new Text2D(std::to_string(lap) + "/3");
 	countdown = new Text2D("0");
+	m_totalLapTimeText = new Text2D("00:00:00");
+	m_totalLapTimeText->SetScale( 0.1f * Vector2::One);
 	item_img = new ImageGO2D("twist");
 	item_img->SetScale(0.1f*Vector2::One);
 }
@@ -30,6 +33,23 @@ Player::~Player()
 void Player::Tick()
 {
 	movement();
+
+	//update timer
+	if (lap < 3)
+	{
+		if (m_controlsActive)
+		{
+			seconds += Locator::getGSD()->m_dt;
+			if (seconds > 60)
+			{
+				seconds = 0;
+				minutes += 1;
+			}
+			m_totalLapTimeText->SetText("Time: " + std::to_string(hours) + ":" + std::to_string(minutes) + ":" + std::to_string((int)seconds));
+			m_totalLapTimeText->SetScale(0.1f * Vector2::One);
+		}
+	}
+
 	// Debug code to save/load the players game state
 	if (m_keymindManager.keyPressed("Debug Save Matrix"))
 	{
@@ -202,8 +222,5 @@ void Player::movement()
 	text_lap->SetText(std::to_string(lap) + "/3");
 	//position->SetText(std::to_string(int(GetPos().x)) + ", " + std::to_string(int(GetPos().y)) + ", " + std::to_string(int(GetPos().z)), m_RD);
 	text_ranking->SetText(std::to_string(ranking));
-
-	//apply my base behaviour
 	TrackMagnet::Tick();
-
 }
