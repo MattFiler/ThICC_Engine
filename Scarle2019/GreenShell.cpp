@@ -26,7 +26,7 @@ void GreenShell::Use(Player * player)
 {
 	m_player = player;
 	m_mesh->SetWorld(player->GetWorld());
-	m_mesh->AddPos(player->GetWorld().Forward() * 3);
+	m_mesh->AddPos(player->GetWorld().Forward() * 1);
 	m_mesh->UpdateWorld();
 	m_mesh->setVelocity(60 * player->GetWorld().Forward());
 }
