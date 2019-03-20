@@ -74,10 +74,9 @@ void Camera::Tick()
 	case BEHAVIOUR::CINEMATIC:
 	{
 		timer += Locator::getGSD()->m_dt;
-		time_out = 4.0f;
+		time_out = 8.0f;
 		if (points.size())
 		{
-
 			rotCam = Matrix::Identity;
 
 			if (cam_point != -1)

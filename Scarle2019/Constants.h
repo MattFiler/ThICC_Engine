@@ -100,6 +100,7 @@ enum class SOUNDS_MENU : int
 enum class SOUNDS_MISC : int
 {
 	INTRO_MUSIC = 0,
-	COUNTDOWN = 1,
-	ITEM_BOX_HIT = 2,
+	PRE_COUNTDOWN = 1,
+	COUNTDOWN = 2,
+	ITEM_BOX_HIT = 3,
 };

@@ -47,6 +47,7 @@ void GameScene::Update()
 		{
 			state = CAM_OPEN;
 			timeout = 2.99999f;
+			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::PRE_COUNTDOWN);
 		}
 		std::cout << timeout << std::endl;
 		break;
@@ -57,8 +58,6 @@ void GameScene::Update()
 
 			if (m_cam[3]->GetBehav() == Camera::BEHAVIOUR::LERP)
 			{
-				Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START)->SetVolume(0.7f);
-				Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START);
 				Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN)->SetVolume(0.7f);
 				Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN);
 				state = COUNTDOWN;
@@ -76,6 +75,9 @@ void GameScene::Update()
 		else
 		{
 			state = PLAY;
+			timeout = 3.5f;
+			Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START)->SetVolume(0.7f);
+			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START);
 			for (int i = 0; i < 4; ++i)
 			{
 				player[i]->setGamePad(m_playerControls);
@@ -86,6 +88,15 @@ void GameScene::Update()
 		for (int i = 0; i < game_config["player_count"]; ++i) {
 			m_cam[i]->Tick();
 		}
+
+		timeout -= Locator::getGSD()->m_dt;
+
+		if (timeout <= 0 && track_music_start)
+		{
+			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME);
+			track_music_start = false;
+		}
+
 		break;
 	}
 
