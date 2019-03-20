@@ -5,14 +5,13 @@
 // Info about it in this wiki tutorial, plus more info about the base "Audio Engine"
 //https://github.com/Microsoft/DirectXTK/wiki/Adding-audio-to-your-project
 
-class Loop :
-	public Sound
+class Loop
 {
 public:
-	Loop(AudioEngine* _audEngine, string _filename);
+	Loop(AudioEngine* _audEngine, string _filename, bool _loop);
 	~Loop();
 
-	virtual void Tick(GameStateData* _GSD);
+	//virtual void Tick(GameStateData* _GSD);
 
 	virtual void Play();
 
@@ -21,6 +20,7 @@ public:
 	void SetPlaying(bool _playing) { m_playing = _playing; }
 
 protected:
+	std::unique_ptr<DirectX::SoundEffect> m_sfx;
 	std::unique_ptr<DirectX::SoundEffectInstance> m_loop;
 	bool m_playing = false;
 };

@@ -1,0 +1,781 @@
+# Blender MTL File: 'None'
+# Material Count: 71
+
+newmtl ef_dashboard
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ef_dashboard02_Alb.png
+map_d ef_dashboard02_Alb.png
+
+newmtl ef_glideboard
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ef_glideboard02_Alb.png
+map_d ef_glideboard02_Alb.png
+
+newmtl ef_gravityboard
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ef_GravityPanell_Alb2.png
+map_d ef_GravityPanell_Alb2.png
+
+newmtl fc_ColorRoad
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_ColorRoad_Alb.png
+map_d ufc_ColorRoad_Alb.png
+
+newmtl fc_ConcreteOutside
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_ConcreteOutside_Alb.png
+map_d ufc_ConcreteOutside_Alb.png
+
+newmtl fc_Enkei_Building_3D
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_Enkei_Building_Alb.png
+map_d ufc_Enkei_Building_Alb.png
+
+newmtl fc_Enkei_Building_Plane
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_Enkei_Building_Alb.png
+map_d ufc_Enkei_Building_Alb.png
+
+newmtl fc_Enkei_RedLight
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_RedLight_Alb.png
+map_d ufc_RedLight_Alb.png
+
+newmtl fc_KabeShiro
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_KabeShiro_Alb.png
+map_d ufc_KabeShiro_Alb.png
+
+newmtl fc_LightObj
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_Light_1_Alb.png
+map_d ufc_Light_1_Alb.png
+
+newmtl fc_LightObj.002
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_Light_1_Alb.png
+map_d ufc_Light_1_Alb.png
+
+newmtl fc_LightObj_CubeMap
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_Light_1_Alb.png
+map_d ufc_Light_1_Alb.png
+
+newmtl fc_LightObj_NoBake
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_Light_1_Alb.png
+map_d ufc_Light_1_Alb.png
+
+newmtl fc_MARIOKART
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_MARIOKART_Alb.png
+map_d ufc_MARIOKART_Alb.png
+
+newmtl fc_MichiUra
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_MichiUra_Alb.png
+map_d ufc_MichiUra_Alb.png
+
+newmtl fc_Obj_01
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_obj_01_Alb.png
+map_d ufc_obj_01_Alb.png
+
+newmtl fc_PitYuka
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_PitYuka_Alb.png
+map_d ufc_PitYuka_Alb.png
+
+newmtl fc_RoadOther
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_RoadOther_Alb.png
+map_d ufc_RoadOther_Alb.png
+
+newmtl fc_RoadOther2
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_RoadOther2_Alb.png
+map_d ufc_RoadOther2_Alb.png
+
+newmtl fc_RoadOther2.002
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_RoadOther2_Alb.png
+map_d ufc_RoadOther2_Alb.png
+
+newmtl fc_RoadOther2_G
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_RoadOther2_Alb.png
+map_d ufc_RoadOther2_Alb.png
+
+newmtl fc_RoofParts
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_RoofParts_Alb.png
+map_d ufc_RoofParts_Alb.png
+
+newmtl fc_ScrollingLight
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_ScrollingLight_Alb.png
+map_d ufc_ScrollingLight_Alb.png
+
+newmtl fc_SignPole
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_SignPole_Alb.png
+map_d ufc_SignPole_Alb.png
+
+newmtl fc_StadiumLight
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_StadiumLight_Alb.png
+map_d ufc_StadiumLight_Alb.png
+
+newmtl fc_StadiumLight_CubeMap
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_StadiumLight_Alb.png
+map_d ufc_StadiumLight_Alb.png
+
+newmtl fc_StadiumRoof
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_StadiumRoof_Alb.png
+map_d ufc_StadiumRoof_Alb.png
+
+newmtl fc_StadiumSignboard
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_StadiumSignboard_Alb.png
+map_d ufc_StadiumSignboard_Alb.png
+
+newmtl fc_StartGate
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_StartGate_Alb.png
+map_d ufc_StartGate_Alb.png
+
+newmtl fc_StaticShadow
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 1.000000
+illum 1
+
+newmtl fc_TV_MKTV
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd MKTV.0.png
+map_d MKTV.0.png
+
+newmtl fc_TV_capture
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd Screen_Dummy.png
+map_d Screen_Dummy.png
+
+newmtl fc_TeamLogo_nuki
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_TeamLogo_nuki_Alb.png
+map_d ufc_TeamLogo_nuki_Alb.png
+
+newmtl fc_WhiteLine
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_WhiteLine_Alb.png
+map_d ufc_WhiteLine_Alb.png
+
+newmtl fc_WhiteWall
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_WhiteWall_Alb.png
+map_d ufc_WhiteWall_Alb.png
+
+newmtl fc_WhiteWall_Outside
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_WhiteWall_Alb.png
+map_d ufc_WhiteWall_Alb.png
+
+newmtl fc_YellowWall
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_YellowWall_Alb.png
+map_d ufc_YellowWall_Alb.png
+
+newmtl fc_bench
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_bench_Alb.png
+map_d ufc_bench_Alb.png
+
+newmtl fc_bush_LeafBase
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_bush_LeafBase_Alb.png
+map_d ufc_bush_LeafBase_Alb.png
+
+newmtl fc_concrete_road
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_concrete_Alb.png
+map_d ufc_concrete_Alb.png
+
+newmtl fc_flower
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_flower_Alb.png
+map_d ufc_flower_Alb.png
+
+newmtl fc_grass_Outside
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_siba_Alb.png
+map_d ufc_siba_Alb.png
+
+newmtl fc_kyokyaku_1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_kyokyaku_1_Alb.png
+map_d ufc_kyokyaku_1_Alb.png
+
+newmtl fc_kyokyaku_2
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_kyokyaku_2_Alb.png
+map_d ufc_kyokyaku_2_Alb.png
+
+newmtl fc_monument
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_monument_Alb.png
+map_d ufc_monument_Alb.png
+
+newmtl fc_nuki_1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_nuki_1_Alb.png
+map_d ufc_nuki_1_Alb.png
+
+newmtl fc_nuki_2
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_nuki_2_Alb.png
+map_d ufc_nuki_2_Alb.png
+
+newmtl fc_nuki_3
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_nuki_3_Alb.png
+map_d ufc_nuki_3_Alb.png
+
+newmtl fc_nuki_3_CubeMap
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_nuki_3_Alb.png
+map_d ufc_nuki_3_Alb.png
+
+newmtl fc_nuki_4
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_nuki_4_Alb.png
+map_d ufc_nuki_4_Alb.png
+
+newmtl fc_nuki_5
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_nuki_5_Alb.png
+map_d ufc_nuki_5_Alb.png
+
+newmtl fc_obj_2
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_obj_2_Alb.png
+map_d ufc_obj_2_Alb.png
+
+newmtl fc_obj_3
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_obj_3_Alb.png
+map_d ufc_obj_3_Alb.png
+
+newmtl fc_obj_4
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_obj_4_Alb.png
+map_d ufc_obj_4_Alb.png
+
+newmtl fc_pit
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_pit_Alb.png
+map_d ufc_pit_Alb.png
+
+newmtl fc_road
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_road_Alb.png
+map_d ufc_road_Alb.png
+
+newmtl fc_road_G
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_road_Alb.png
+map_d ufc_road_Alb.png
+
+newmtl fc_road_MARIOKART
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_road_MARIOKART_Alb.png
+map_d ufc_road_MARIOKART_Alb.png
+
+newmtl fc_road_WhiteLine
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_road_Alb2.png
+map_d ufc_road_Alb2.png
+
+newmtl fc_road_WhiteLine_G
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_road_Alb2.png
+map_d ufc_road_Alb2.png
+
+newmtl fc_saku
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_saku_Alb.png
+map_d ufc_saku_Alb.png
+
+newmtl fc_shiba
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_siba_Alb.png
+map_d ufc_siba_Alb.png
+
+newmtl fc_signboard
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_signboard_Alb.png
+map_d ufc_signboard_Alb.png
+
+newmtl fc_signboard_Emm
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_signboard_Alb.png
+map_d ufc_signboard_Alb.png
+
+newmtl fc_steps
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_steps_Alb.png
+map_d ufc_steps_Alb.png
+
+newmtl fc_suna
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_suna_Alb.png
+map_d ufc_suna_Alb.png
+
+newmtl fc_tetukabe
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_tetukabe_Alb.png
+map_d ufc_tetukabe_Alb.png
+
+newmtl fc_truck
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_truck_Alb.png
+map_d ufc_truck_Alb.png
+
+newmtl fc_window_1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_window_1_Alb.png
+map_d ufc_window_1_Alb.png
+
+newmtl fc_window_2
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_window_1_Alb.png
+map_d ufc_window_1_Alb.png
+
+newmtl fc_yane
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd ufc_yane_Alb.png
+map_d ufc_yane_Alb.png

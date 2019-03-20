@@ -4,7 +4,6 @@
 #include <iostream>
 
 Banana::Banana() : Item("DEFAULT ITEM") {
-	std::cout << "PROBABILITY FOR FIRST PLACE BANANA: " << m_item_config["probabilities"]["place_1"] << std::endl;
 	SetDrag(0.9f);
 	SetPhysicsOn(true);
 }

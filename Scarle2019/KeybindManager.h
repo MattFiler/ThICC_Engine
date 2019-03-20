@@ -359,8 +359,7 @@ private:
 	{
 		if (config[keybind].is_null())
 		{
-			std::cout << "WARNING: ATTEMPTED TO ACCESS UNINITIALISED KEYBIND - " << keybind;
-			return false;
+			throw std::runtime_error("Attempted to access an undeclared keybind: " + keybind);
 		}
 		return true;
 	}

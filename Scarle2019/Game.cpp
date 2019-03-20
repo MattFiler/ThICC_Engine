@@ -8,9 +8,11 @@
 #include "GameScene.h"
 #include "MenuScene.h"
 #include "DebugScene.h"
+#include "AudioManager.h"
 #include "ServiceLocator.h"
 #include "CollisionManager.h"
 #include "GameDebugToggles.h"
+#include "Item.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -23,6 +25,7 @@ using Microsoft::WRL::ComPtr;
 
 bool GameDebugToggles::show_debug_meshes = false;
 bool GameDebugToggles::render_level = true;
+double ItemBoxConfig::respawn_time = 0.0;
 
 Game::Game() :
 	m_WD(new WindowData),
@@ -40,12 +43,15 @@ Game::Game() :
 	m_WD->m_window = nullptr;
 	m_WD->m_outputHeight = game_config["window_height"];
 	m_WD->m_outputWidth = game_config["window_width"];
+	ItemBoxConfig::respawn_time = game_config["itembox_respawn_time"];
 
 	//Setup service locator
 	Locator::setupRD(m_RD);
 	Locator::setupWD(m_WD);
 	Locator::setupGSD(m_GSD);
 	Locator::setupID(m_ID);
+	Locator::setupProbabilities(&m_probabilities);
+	Locator::setupAudio(&m_AM);
 }
 
 Game::~Game()
@@ -58,27 +64,6 @@ Game::~Game()
 	// Ensure that the GPU is no longer referencing resources that are about to be destroyed.
 	WaitForGpu();
 
-	////delete the GO2Ds
-	//for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	//{
-	//	delete (*it);
-	//}
-
-	//m_2DObjects.clear();
-
-	////delete the GO3Ds
-	//for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-	//{
-	//	delete (*it);
-	//}
-	//m_3DObjects.clear();
-
-	//delete the sounds
-	for (vector<Sound *>::iterator it = m_sounds.begin(); it != m_sounds.end(); it++)
-	{
-		delete (*it);
-	}
-	m_sounds.clear();
 
 	delete m_RD;
 	delete m_GSD;
@@ -126,6 +111,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//Push back all our game objects to their associated arrays
 	//pushBackObjects();
 
+
+	//Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->SetVolume(1.f);
+
 	// Setup our Platform
 	//ultralight::Platform& platform = ultralight::Platform::instance();
 	//platform.set_config(ultralight::Config());
@@ -149,27 +137,16 @@ void Game::Initialize(HWND _window, int _width, int _height)
 /* Create all 2D game objects */
 void Game::createAllObjects2D()
 {
-	//text example 2D objects
-	//ImageGO2D *test = new ImageGO2D(m_RD, "twist");
-	//test->SetOri(45);
-	//test->SetPos(Vector2(200, 300));
-	//test->CentreOrigin();
-	//test->SetScale(0.5f*Vector2::One);
-	//m_2DObjects.push_back(test);
-	//test = new ImageGO2D(m_RD, "guides_logo");
-	//test->SetPos(Vector2(100, 100));
-	//test->SetScale(Vector2(5.0f, 0.5f));
-	//test->SetColour(Color(1, 0, 0, 1));`
-	//m_2DObjects.push_back(test);
-
 	//Test Sounds
-	Loop *loop = new Loop(m_audEngine.get(), "Course Intro Soundtrack");
-	loop->SetVolume(0.1f);
-	//loop->Play();
-	m_sounds.push_back(loop);
+	//loop = new Sound(m_audEngine.get(), "Course Intro Soundtrack", true);
+	//loop->SetVolume(0.1f);
+	//loop = new Loop(m_audEngine.get(), "Course Intro Soundtrack");
+	//loop->SetVolume(0.1f);
+	////loop->Play();
+	//m_sounds.push_back(loop);
 
-	TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
-	m_sounds.push_back(TS);
+	//TestSound* TS = new TestSound(m_audEngine.get(), "Explo1");
+	//m_sounds.push_back(TS);
 }
 
 /* Create all 3d game objects */
@@ -200,6 +177,13 @@ void Game::Update(DX::StepTimer const& _timer)
 	}
 
 	m_GSD->m_dt = float(_timer.GetElapsedSeconds());
+
+	KeybindManager keys;
+	//if (keys.keyPressed("Activate"))
+	//{
+	//	Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME);
+	//}
+
 	m_sceneManager.Update();
 }
 
