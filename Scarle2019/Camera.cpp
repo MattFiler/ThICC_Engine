@@ -107,7 +107,7 @@ void Camera::Tick()
 			Vector3 rotty = Vector3::Lerp(rotations[cam_point][0], rotations[cam_point][1], timer / time_out);
 
 			if (!m_targetObject)
-				m_view = Matrix::CreateFromYawPitchRoll(rotty.x, rotty.y, rotty.z );
+				m_view = Matrix::CreateFromYawPitchRoll(rotty.y, rotty.x , rotty.z );
 
 			if (timer >= time_out)
 			{

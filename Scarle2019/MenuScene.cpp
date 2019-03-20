@@ -3,6 +3,7 @@
 #include "GameStateData.h"
 #include "RenderData.h"
 #include "SceneManager.h"
+#include "AudioManager.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -214,6 +215,7 @@ void MenuScene::playerJoin()
 					{
 						Locator::getGSD()->charecter_selected[i] = 0;
 					}
+					Locator::getAudio()->Play(SOUND_TYPE::CHARACTER_SEL, Locator::getGSD()->charecter_selected[i]);
 					m_charTimeout[i] = 0.3f; // set charecter selection timeout
 					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
 				}
@@ -227,6 +229,7 @@ void MenuScene::playerJoin()
 						m_2DObjects[3 + i]->SetPos(Vector2(0, -500));//set old image pos
 						Locator::getGSD()->charecter_selected[i] = 3;
 					}
+					Locator::getAudio()->Play(SOUND_TYPE::CHARACTER_SEL, Locator::getGSD()->charecter_selected[i]);
 					m_charTimeout[i] = 0.2f; // set charecter selection timeout
 					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
 				}
@@ -239,9 +242,9 @@ void MenuScene::initCharecterImages()
 {
 	for (int i = 0; i < 4; ++i)
 	{
-		m_charecter_images[i][0] = new ImageGO2D("BOWSER");
+		m_charecter_images[i][0] = new ImageGO2D("MARIO");
 		m_charecter_images[i][0]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][1] = new ImageGO2D("MARIO");
+		m_charecter_images[i][1] = new ImageGO2D("BOWSER");
 		m_charecter_images[i][1]->SetPos(Vector2(0, -500));
 		m_charecter_images[i][2] = new ImageGO2D("PEACH");
 		m_charecter_images[i][2]->SetPos(Vector2(0, -500));

@@ -15,6 +15,7 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	// SetPhysicsOn(false);
 	m_playerID = _playerID;
 	text_ranking = new Text2D(std::to_string(ranking));
+	text_ranking->SetScale(0.1f * Vector2::One);
 	text_lap = new Text2D(std::to_string(lap) + "/3");
 	countdown = new Text2D("0");
 	item_img = new ImageGO2D("twist");

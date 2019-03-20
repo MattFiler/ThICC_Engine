@@ -115,6 +115,7 @@ void GameScene::Update()
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
+		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	if (m_keybinds.keyPressed("Orbit"))
