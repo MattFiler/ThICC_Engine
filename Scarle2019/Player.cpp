@@ -31,6 +31,7 @@ Player::~Player()
 void Player::setActiveItem(ItemType _item) {
 	if (inventory_item == _item) {
 		active_item = _item;
+		item_img->UpdateSprite("ITEM_PLACEHOLDER");
 		inventory_item = ItemType::NONE;
 		std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
 	}
@@ -73,16 +74,16 @@ void Player::Tick()
 	}
 	else if (m_keymindManager.keyPressed("Spawn Banana"))
 	{
-		SpawnItem(ItemType::BANANA);
+		SpawnItem(ItemType::GREEN_SHELL);
 	}
 	else if (m_keymindManager.keyHeld("Spawn Banana"))
 	{
 		TrailItem();
 	}
-	else
+	/*else
 	{
 		ReleaseItem();
-	}
+	}*/
 
 	//Debug output player location - useful for setting up spawns
 	if (m_keymindManager.keyPressed("Debug Print Player Location")) {
@@ -99,6 +100,7 @@ void Player::Tick()
 
 void Player::TrailItem()
 {
+	m_isTrailing = true;
 	m_trailingItem->GetMesh()->SetWorld(m_world);
 	m_trailingItem->GetMesh()->AddPos(m_world.Backward() * 2.2);
 	m_trailingItem->GetMesh()->UpdateWorld();
@@ -106,33 +108,34 @@ void Player::TrailItem()
 
 void Player::SpawnItem(ItemType type)
 {
-
+	setActiveItem(type);
 	switch (type)
 	{
-		case ItemType::BANANA:
+		case BANANA:
 		{
 			Banana * banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
-			m_isTrailing = true;
 			m_trailingItem = banana;
 			TrailItem();
 			break;
 		}
 
-		case ItemType::MUSHROOM:
+		case MUSHROOM:
 		{
 			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
 			mushroom->Use(this);
 			break;
 		}
 
-		case ItemType::GREEN_SHELL:
+		case GREEN_SHELL:
 		{
 			GreenShell* shell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
-			m_isTrailing = true;
 			m_trailingItem = shell;
 			TrailItem();
 			break;
 		}
+
+		default:
+			break;
 	}
 }
 
@@ -143,6 +146,7 @@ void Player::ReleaseItem()
 		m_trailingItem->Use(this);
 		m_isTrailing = false;
 		m_trailingItem = nullptr;
+		active_item = NONE;
 	}
 }
 
@@ -212,11 +216,11 @@ void Player::movement()
 					m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
 				}
 
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed() && (inventory_item != NONE || active_item != NONE))
 				{
-					if (!m_trailingItem)
+					if (!m_isTrailing)
 					{
-						SpawnItem(ItemType::GREEN_SHELL);
+						SpawnItem(inventory_item);
 					}
 					else
 					{
