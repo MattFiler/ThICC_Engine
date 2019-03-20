@@ -50,7 +50,7 @@ Game::Game() :
 	Locator::setupWD(m_WD);
 	Locator::setupGSD(m_GSD);
 	Locator::setupID(m_ID);
-	Locator::setupProbabilities(&m_probabilities);
+	Locator::setupItemData(&m_probabilities);
 	Locator::setupAudio(&m_AM);
 }
 

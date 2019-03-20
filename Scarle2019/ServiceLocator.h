@@ -34,9 +34,9 @@ struct Locator {
 		}
 		return ref_ID;
 	}
-	static ItemData* getProbabilities() {
+	static ItemData* getItemData() {
 		if (ref_ItemProbability == nullptr) {
-			throw std::runtime_error("Call to probabilities before initialisation.");
+			throw std::runtime_error("Call to item data before initialisation.");
 		}
 		return ref_ItemProbability;
 	}
@@ -60,7 +60,7 @@ struct Locator {
 	static void setupID(InputData* inst_ID) {
 		ref_ID = inst_ID;
 	}
-	static void setupProbabilities(ItemData* inst_ItemProbability) {
+	static void setupItemData(ItemData* inst_ItemProbability) {
 		ref_ItemProbability = inst_ItemProbability;
 	}
 	static void setupAudio(AudioManager* inst_audio) {
