@@ -14,6 +14,30 @@ Camera::Camera(float _width, float _height, float _near, float _far, GameObject3
 	m_dpos = _dpos;
 }
 
+void Camera::SetCinematicPos(std::vector<Vector3> positions)
+{
+	int x = 0;
+	for (int i = 0; i < positions.size(); i+=2)
+	{
+		std::array<Vector3, 2> array_points;
+		array_points[x] = positions[i];
+		array_points[x+1] = positions[i+1];
+		points.push_back(array_points);
+	}
+}
+
+void Camera::SetCinematicRot(std::vector<Vector3> _rotations)
+{
+	int x = 0;
+	for (int i = 0; i < _rotations.size(); i += 2)
+	{
+		std::array<Vector3, 2> array_points;
+		array_points[x] = _rotations[i];
+		array_points[x + 1] = _rotations[i + 1];
+		rotations.push_back(array_points);
+	}
+}
+
 void Camera::Tick()
 {
 	switch (behav)
@@ -74,32 +98,25 @@ void Camera::Tick()
 	case BEHAVIOUR::CINEMATIC:
 	{
 		timer += Locator::getGSD()->m_dt;
-		time_out = 8.0f;
-		if (points.size())
+		time_out = 4.0f;
+		rotCam = Matrix::Identity;
+
+		if (cam_point < points.size())
 		{
-			rotCam = Matrix::Identity;
+			m_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / time_out);
+			Vector3 rotty = Vector3::Lerp(rotations[cam_point][0], rotations[cam_point][1], timer / time_out);
 
-			if (cam_point != -1)
+			if (!m_targetObject)
+				m_view = Matrix::CreateFromYawPitchRoll(rotty.x, rotty.y, rotty.z );
+
+			if (timer >= time_out)
 			{
-				if (timer < time_out)
-				{
-					m_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / time_out);
-					m_targetPos = look_points[cam_point];
-				}
-				else if (timer >= time_out)
-				{
-					timer = 0.0f;
-					cam_point--;
-				}
+				std::cout << "CAMERA Rot: (" << rotty.x << ", " << rotty.y << ", " << rotty.z << ")" << std::endl;
+				timer = 0.0f;
+				cam_point++;
 			}
-
-			if (m_targetObject)
-				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), Vector3::Up);
-			else
-				m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
 		}
-		else
-			behav = BEHAVIOUR::ORBIT;
+
 
 		break;
 	}

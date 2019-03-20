@@ -23,12 +23,18 @@ GameScene::~GameScene()
 {
 	m_2DObjects.clear();
 	m_3DObjects.clear();
+	delete cine_cam;
+	cine_cam = nullptr;
+	for (int i = 0; i < 4; i++)
+	{
+		delete m_cam[i];
+		m_cam[i] = nullptr;
+	}
 }
 
 void GameScene::Update()
 {
-	//  camera_pos->SetText(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" +
-	//	std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
+	  camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
 	switch (state)
 	{
@@ -49,7 +55,6 @@ void GameScene::Update()
 			timeout = 2.99999f;
 			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::PRE_COUNTDOWN);
 		}
-		std::cout << timeout << std::endl;
 		break;
 	case CAM_OPEN:
 			for (int i = 0; i < game_config["player_count"]; ++i) {
@@ -319,6 +324,15 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 					obj->Render();
 				}
 			}
+			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+
+			//Render countdown in screen centre
+			m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
+			m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
+			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
+			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
+			camera_pos->Render();
+			Locator::getRD()->m_spriteBatch->End();
 
 			break;
 		case CAM_OPEN:
@@ -480,10 +494,10 @@ void GameScene::create2DObjects()
 		player[i]->GetCountdown()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2 });
 	}
 
-	//camera_pos = new Text2D(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" + 
-	//	std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
-	//camera_pos->SetPos({ 20,100 });
-	//m_2DObjects.push_back(camera_pos);
+	camera_pos = new Text2D(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" + 
+		std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
+	camera_pos->SetPos({ 20,100 });
+	m_2DObjects.push_back(camera_pos);
 }
 
 void GameScene::create3DObjects()
@@ -554,7 +568,9 @@ void GameScene::create3DObjects()
 
 	cine_cam = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
-	m_3DObjects.push_back(cine_cam);
+	cine_cam->SetCinematicRot(track->getCamerasRot());
+	cine_cam->SetCinematicPos(track->getCamerasPos());
+	//m_3DObjects.push_back(cine_cam);
 
 	//Global illumination
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));

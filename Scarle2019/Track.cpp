@@ -30,15 +30,15 @@ Track::Track(string _filename) : PhysModel(_filename)
 		debug_markers.push_back(new_marker);
 	}
 	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
-		map_cams_pos.push_back(blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale));
-		map_cams_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale);
+		map_cams_pos.push_back(blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2])) * m_track_data.scale);
+		map_cams_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
 	}
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));
 	}
 	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
 		Vector3 box_pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
-		Vector3 box_rot = Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale; 
+		Vector3 box_rot = Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]); 
 
 		map_itemboxes_pos.push_back(box_pos);
 		map_itemboxes_rot.push_back(box_rot);
@@ -157,7 +157,7 @@ void Track::setWaypointBB()
 {
 	for (size_t i = 0; i < map_waypoints.size(); ++i)
 	{
-		waypoint_bb.push_back(BoundingBox());
+		waypoint_bb.push_back(BoundingOrientedBox());
 		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z) };
 		waypoint_bb[i].Extents = { 100, 100, 5 };
 	}
