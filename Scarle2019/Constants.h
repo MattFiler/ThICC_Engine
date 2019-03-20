@@ -56,6 +56,51 @@ enum ItemType
 	BANANA_3X
 };
 
+
 struct ItemBoxConfig {
 	static double respawn_time;
+};
+
+
+
+
+// sound
+// sound catergories
+enum class SOUND_TYPE : int
+{
+	MENU = 0,
+	GAME = 1,
+	CHARACTER_SEL = 2,
+	MISC = 3,
+};
+
+// game sounds
+enum class SOUNDS_GAME : int
+{
+	MKS_START = 0,
+	MKS_GAME = 1
+};
+
+// character sounds
+enum class SOUNDS_CHARACTER : int
+{
+	MARIO = 0,
+	BOWSER = 1,
+	PEACH = 2,
+	WALUIGI = 3,
+};
+
+// menu sounds
+enum class SOUNDS_MENU : int
+{
+	INTRO_MUSIC = 0,
+};
+
+// misc sounds
+enum class SOUNDS_MISC : int
+{
+	INTRO_MUSIC = 0,
+	PRE_COUNTDOWN = 1,
+	COUNTDOWN = 2,
+	ITEM_BOX_HIT = 3,
 };

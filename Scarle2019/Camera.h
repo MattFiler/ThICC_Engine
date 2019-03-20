@@ -22,6 +22,7 @@ public:
 		ORBIT = 6,
 		CINEMATIC = 7,
 		DEBUG_CAM = 8,
+		START_RACE = 9,
 	};
 
 	Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos);
@@ -46,19 +47,17 @@ protected:
 
 	GameObject3D* m_targetObject = NULL;
 	Vector3 m_targetPos = Vector3::Zero;
-	Vector3 m_differnce[8] = { { 0, 0, -10 },{ 5, 0, -5 },{ 10, 0, 0 },{ 10, 0, 0 },{ 5, 0, 5 },{ 0, 0, 10 },{ -5, 0, 5 },{ -10, 0, 0 }};
-	int diff_num = 0;
-	int look_up_down = -1;
-	Vector3 m_differnce2[2]{ { 0, 10, -1 },{ 0, -10, -1 } };
 	Matrix m_proj = Matrix::Identity;
 	Matrix m_view = Matrix::Identity;
 	Matrix rotCam = Matrix::Identity;
 	Vector3	m_dpos; 
+
 	std::vector<std::array<Vector3, 2>> points{ {Vector3{27, 156, 89},Vector3{ 27, 156, 0 }},
-	{ Vector3{ 426, 333, -455 },Vector3{ 408, 313, -426 } },
-	{ Vector3{ 61, 291, 167 },Vector3{ -56, 291, 74 } } };
+	{ Vector3{ 426, 333, -455 }, Vector3{ 408, 313, -426 } },
+	{ Vector3{ 61, 291, 167 }, Vector3{ -56, 291, 74 } } };
 	std::vector<Vector3> look_points{ Vector3{ 27, 156, -89 },Vector3{ 312, 173, -253 } ,Vector3{ -336, 344, 119 } };
 	std::vector<Vector3> rotations;
+
 	BEHAVIOUR behav = BEHAVIOUR::LERP;
 
 	KeybindManager m_keybinds;
@@ -69,4 +68,3 @@ protected:
 	float timer = 0.0f;
 	int m_cameraID = 0;
 };
-

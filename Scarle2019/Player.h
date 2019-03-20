@@ -24,6 +24,7 @@ public:
 	Text2D* GetRankingText() { return text_ranking; }
 	Text2D* GetLapText() { return text_lap; }
 	ImageGO2D* GetItemImg() { return item_img; }
+	Text2D* GetCountdown() { return countdown; }
 
 	void SetWaypoint(int _waypoint) { waypoint = _waypoint; }
 	void SetLap(int _lap) { lap = _lap; }
@@ -71,6 +72,7 @@ private:
 	Text2D *text_ranking = nullptr;
 	Text2D *text_lap = nullptr;
 	Text2D *position = nullptr;
+	Text2D *countdown = nullptr;
 	Vector m_savedGravDir;
 
 	// Player items:
@@ -83,6 +85,7 @@ private:
 	ItemType inventory_item = ItemType::NONE;
 	
 	ImageGO2D *item_img = nullptr;
+
 	
 	bool m_controlsActive = false;
 };
