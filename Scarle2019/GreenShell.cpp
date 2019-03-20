@@ -33,10 +33,13 @@ void GreenShell::Use(Player * player)
 
 void GreenShell::Tick()
 {
-	m_elapsedTime += Locator::getGSD()->m_dt;
-	if (m_elapsedTime > m_maxDuration)
+	if (m_player)
 	{
-		m_shouldDestroy = true;
+		m_elapsedTime += Locator::getGSD()->m_dt;
+		if (m_elapsedTime > m_maxDuration)
+		{
+			m_shouldDestroy = true;
+		}
 	}
 	Item::Tick();
 }

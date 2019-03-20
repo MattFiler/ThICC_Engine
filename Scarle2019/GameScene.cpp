@@ -253,6 +253,19 @@ void GameScene::UpdateItems()
 		{
 			delIndex = i;
 		}
+
+		if (m_itemModels[i]->GetMesh())
+		{
+			int end2 = m_itemModels.size();
+			for (int j = 0; j < end2; j++)
+			{
+				if (m_itemModels[i] != m_itemModels[j] && m_itemModels[j]->GetMesh() && m_itemModels[j]->GetMesh()->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
+				{
+					m_itemModels[i]->FlagForDestoy();
+					m_itemModels[j]->FlagForDestoy();
+				}
+			}
+		}
 	}
 	if (delIndex != -1)
 	{
