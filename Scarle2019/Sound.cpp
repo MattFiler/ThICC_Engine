@@ -21,6 +21,37 @@ void Sound::Play()
 {
 	if (m_sfx)
 	{
-		m_sfx->Play(m_volume, m_pitch, m_pan);
+		if (loop)
+		{
+			if (m_playing)
+			{
+				m_loop->Stop(true);
+			}
+			else
+			{
+				m_loop->Play(true);
+			}
+			m_playing = !m_playing;
+		}
+		else
+		{
+			m_sfx->Play(m_volume, m_pitch, m_pan);
+		}
 	}
+}
+
+void Sound::Tick(GameStateData* _GSD)
+{
+	if (m_loop)
+	{
+		m_loop->SetVolume(m_volume);
+		m_loop->SetPitch(m_pitch);
+		m_loop->SetPan(m_pan);
+		m_loop->Play(m_playing);
+	}
+}
+
+void Sound::SetLoop(bool _loop) { 
+	m_loop = m_sfx->CreateInstance();
+	loop = _loop;
 }

@@ -38,7 +38,7 @@ void DebugScene::Update()
 	}
 }
 
-void DebugScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
+void DebugScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList)
 {
 	//draw 3D objects
 

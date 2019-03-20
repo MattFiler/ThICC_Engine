@@ -25,11 +25,6 @@ struct PhysModelData
 	Vector3 m_localBackBottomRight;
 
 	//Corner Pos in World Space
-	Vector3 m_globalFrontCentreLeft;
-	Vector3 m_globalFrontCentreRight;
-	Vector3 m_globalBackCentreLeft;
-	Vector3 m_globalBackCentreRight;
-
 	Vector3 m_globalFrontTopLeft;
 	Vector3 m_globalFrontTopRight;
 	Vector3 m_globalFrontBottomLeft;
@@ -76,6 +71,7 @@ public:
 
 	const PhysModelData& data = m_physData;
 
+	bool debug_print = false;
 protected:
 	int m_model_id = 0;
 
@@ -96,6 +92,8 @@ protected:
 	BoundingOrientedBox m_collider; //Bounding box of the model
 
 	SDKMeshGO3D* m_colliderDebug = nullptr;
-	XMFLOAT3 MatrixDecomposeYawPitchRoll(Matrix  mat);
+	Vector3 MatrixDecomposeYawPitchRoll(Matrix  mat);
+	Vector3 applyOffset(Vector3 pos);
+	float offset = 0.5;
 
 };

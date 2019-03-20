@@ -58,7 +58,18 @@ namespace EditorTool
                 itemMaterialCategoriesTrans.Items.Add(material);
             }
         }
-        
+
+        /* Browse to config file */
+        private void locateTrackConfig_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog filePicker = new OpenFileDialog();
+            filePicker.Filter = "Track Config (JSON)|*.JSON";
+            if (filePicker.ShowDialog() == DialogResult.OK)
+            {
+                trackConfig.Text = filePicker.FileName;
+            }
+        }
+
         /* Import model and textures */
         private void importModel_Click(object sender, EventArgs e)
         {
@@ -74,10 +85,9 @@ namespace EditorTool
 
             if (Directory.Exists(import_directory) || modelPath.Text == "" || assetName.Text == "" || 
                 !Regex.IsMatch(assetName.Text, "^[_a-zA-Z0-9\x20]+$") || (mat_check_count == 0 && shouldGenerateCollmap.Checked) || 
-                (assetName.Text.Length > 5 && assetName.Text.Substring(assetName.Text.Length - 5) == "DEBUG") ||
-                modelType.SelectedIndex == -1)
+                (assetName.Text.Length > 5 && assetName.Text.Substring(assetName.Text.Length - 5) == "DEBUG"))
             {
-                if (modelPath.Text == "" || assetName.Text == "" || modelType.SelectedIndex == -1)
+                if (modelPath.Text == "" || assetName.Text == "")
                 {
                     MessageBox.Show("Please fill out all required inputs.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -597,17 +607,19 @@ namespace EditorTool
                         }
 
                         //Create JSON data
-                        JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"model_type\": \"" + modelType.SelectedItem + "\"" + json_extras + ", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0, \"segment_size\": 10}");
+                        JToken asset_json = JToken.Parse("{\"asset_name\": \"" + assetName.Text + "\", \"asset_type\": \"Models\", \"model_type\": \"Track\"" + json_extras + ", \"visible\": true, \"start_x\": 0, \"start_y\": 0, \"start_z\": 0, \"modelscale\": 1.0, \"rot_x\": 0, \"rot_y\": 0, \"rot_z\": 0, \"segment_size\": 10}");
 
-                        //Add data dump from Blender if we have it (plugin is still a WIP :))
-                        if (modelType.SelectedItem.ToString() == "Track")
+                        //Parse track config if we have it
+                        if (trackConfig.Text != "")
                         {
                             JArray camera_array = new JArray();
                             JArray waypoint_array = new JArray();
                             JArray spawnpoint_array = new JArray();
-                            if (File.Exists(Path.GetDirectoryName(modelPath.Text) + "\\MARIO_KART_JSON_DUMP.json"))
+                            JArray finishline_array = new JArray();
+                            JArray itembox_array = new JArray();
+                            if (File.Exists(trackConfig.Text))
                             {
-                                JToken model_blender_data = JToken.Parse(File.ReadAllText(Path.GetDirectoryName(modelPath.Text) + "\\MARIO_KART_JSON_DUMP.json"));
+                                JToken model_blender_data = JToken.Parse(File.ReadAllText(trackConfig.Text));
                                 foreach (JToken data in model_blender_data["cams"])
                                 {
                                     camera_array.Add(data);
@@ -620,10 +632,20 @@ namespace EditorTool
                                 {
                                     spawnpoint_array.Add(data["pos"]);
                                 }
+                                foreach (JToken data in model_blender_data["finish_line"])
+                                {
+                                    finishline_array.Add(data);
+                                }
+                                foreach (JToken data in model_blender_data["item_boxes"])
+                                {
+                                    itembox_array.Add(data);
+                                }
                             }
                             asset_json["map_cameras"] = camera_array;
                             asset_json["map_waypoints"] = waypoint_array;
                             asset_json["map_spawnpoints"] = spawnpoint_array;
+                            asset_json["map_finishline"] = finishline_array;
+                            asset_json["map_itemboxes"] = itembox_array;
                         }
 
                         File.WriteAllText(final_asset_path.Substring(0, final_asset_path.Length - 7) + "JSON", asset_json.ToString(Formatting.Indented));

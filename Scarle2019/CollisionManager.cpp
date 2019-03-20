@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "CollisionManager.h"
+#include "ItemBox.h"
+#include "Player.h"
 
 
 CollisionManager::CollisionManager()
@@ -17,23 +19,36 @@ void CollisionManager::collisionDetectionAndResponse(std::vector<PhysModel*> _ph
 
 	for (Collision& collision : collisions)	
 	{
-		Vector3 rv = collision.m_model2->getVelocity() - collision.m_model1->getVelocity();
-		float contactVel = rv.Dot(collision.m_collisionNormal);
-
-		if (contactVel > 0)
-		{
-			continue;
+		//Player collided with item box on track
+		if (dynamic_cast<ItemBox*>(collision.m_model1) && dynamic_cast<Player*>(collision.m_model2)) {
+			if (collision.m_model1->isVisible()) {
+				dynamic_cast<ItemBox*>(collision.m_model1)->hasCollided(dynamic_cast<Player*>(collision.m_model2));
+			}
 		}
+		else if (dynamic_cast<ItemBox*>(collision.m_model2) && dynamic_cast<Player*>(collision.m_model1)) {
+			if (collision.m_model2->isVisible()) {
+				dynamic_cast<ItemBox*>(collision.m_model2)->hasCollided(dynamic_cast<Player*>(collision.m_model1));
+			}
+		}
+		//Collided with another player
+		else {
+			Vector3 rv = collision.m_model2->getVelocity() - collision.m_model1->getVelocity();
+			float contactVel = rv.Dot(collision.m_collisionNormal);
 
-		float e = 1;
-		float j = -(1.0f + e) * contactVel;
-		j /= 1/collision.m_model1->getMass() + 1/collision.m_model2->getMass();
+			if (contactVel > 0)
+			{
+				continue;
+			}
 
-		Vector3 impulse = j * collision.m_collisionNormal;
+			float e = 1;
+			float j = -(1.0f + e) * contactVel;
+			j /= 1 / collision.m_model1->getMass() + 1 / collision.m_model2->getMass();
 
-		collision.m_model1->setVelocity(collision.m_model1->getVelocity() - impulse*(1.0f/collision.m_model1->getMass()));
-		collision.m_model2->setVelocity(collision.m_model2->getVelocity() + impulse * (1.0f / collision.m_model2->getMass()));
+			Vector3 impulse = j * collision.m_collisionNormal;
 
+			collision.m_model1->setVelocity(collision.m_model1->getVelocity() - impulse * (1.0f / collision.m_model1->getMass()));
+			collision.m_model2->setVelocity(collision.m_model2->getVelocity() + impulse * (1.0f / collision.m_model2->getMass()));
+		}
 	}
 
 }
@@ -53,39 +68,28 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 			{
 				Collision collision;	
 				
-				Plane frontPlane = getPlane(physModel2->data.m_globalFrontCentreLeft, physModel2->data.m_globalFrontCentreRight, physModel2->data.m_height);
-				Plane backPlane = getPlane(physModel2->data.m_globalBackCentreLeft, physModel2->data.m_globalBackCentreRight, physModel2->data.m_height);
-				Plane rightPlane = getPlane(physModel2->data.m_globalFrontCentreRight, physModel2->data.m_globalBackCentreRight, physModel2->data.m_height);
-				Plane leftPlane = getPlane(physModel2->data.m_globalFrontCentreLeft, physModel2->data.m_globalBackCentreLeft, physModel2->data.m_height);
+				Plane frontPlane = getPlane(physModel2->data.m_globalFrontTopLeft, physModel2->data.m_globalFrontTopRight, physModel2->data.m_height);
+				Plane backPlane = getPlane(physModel2->data.m_globalBackTopLeft, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
+				Plane rightPlane = getPlane(physModel2->data.m_globalFrontTopRight, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
+				Plane leftPlane = getPlane(physModel2->data.m_globalFrontTopLeft, physModel2->data.m_globalBackTopLeft, physModel2->data.m_height);
 
+		
 				if (physModel1->getCollider().Intersects(backPlane))
 				{
-					collision.m_frontBack = Collision::m_FrontBack::BACK;
 					collision.m_collisionNormal = backPlane.Normal();
-				}
-				 
+				}			 
 				else if (physModel1->getCollider().Intersects(frontPlane))
 				{
-
-					collision.m_frontBack = Collision::m_FrontBack::FRONT;
 					collision.m_collisionNormal = frontPlane.Normal();
 				}
-				
-				if (physModel1->getCollider().Intersects(leftPlane))
+				else if (physModel1->getCollider().Intersects(rightPlane))
 				{
-					collision.m_leftRight = Collision::m_LeftRight::LEFT;
+					collision.m_collisionNormal = leftPlane.Normal();
 				}
-
-				if (physModel1->getCollider().Intersects(rightPlane))
+				else if (physModel1->getCollider().Intersects(leftPlane))
 				{
-					collision.m_leftRight = Collision::m_LeftRight::RIGHT;
+					collision.m_collisionNormal = leftPlane.Normal();
 				}
-
-				collision.m_penertation_depth = physModel1->GetPos() - physModel2->GetPos();
-				collision.m_penertation_depth.x = abs(collision.m_penertation_depth.x);
-				collision.m_penertation_depth.y = abs(collision.m_penertation_depth.y);
-				collision.m_penertation_depth.z = abs(collision.m_penertation_depth.z);
-
 				collision.m_model1 = physModel1;
 				collision.m_model2 = physModel2;
 

@@ -208,9 +208,6 @@
     <ClInclude Include="PlayerUI.h">
       <Filter>Game Base\UI\Game</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>GameObjects\3D\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
@@ -249,6 +246,21 @@
     </ClInclude>
     <ClInclude Include="GreenShell.h">
       <Filter>GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBox.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugMarker.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BlenderToDirectX.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemData.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Game Base\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -336,9 +348,6 @@
     <ClCompile Include="TrackMagnet.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>GameObjects\3D\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Game_backend.cpp">
       <Filter>Game Base\Source</Filter>
     </ClCompile>
@@ -374,6 +383,18 @@
     </ClCompile>
     <ClCompile Include="GreenShell.cpp">
       <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemBox.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugMarker.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemData.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Game Base\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

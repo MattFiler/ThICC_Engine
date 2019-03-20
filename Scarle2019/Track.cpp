@@ -22,14 +22,39 @@ Track::Track(string _filename) : PhysModel(_filename)
 
 	//Parse loaded arrays from config
 	for (json::iterator it = m_track_data_j["map_waypoints"].begin(); it != m_track_data_j["map_waypoints"].end(); ++it) {
-		map_waypoints.push_back(Vector3(it.value()[0], it.value()[1], it.value()[2]));
+		Vector3 pos = blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale);
+
+		map_waypoints.push_back(pos);
+
+		DebugMarker* new_marker = new DebugMarker(pos, Vector3(0,0,0));
+		debug_markers.push_back(new_marker);
 	}
 	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
-		map_cams_pos.push_back(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]));
-		map_cams_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
+		map_cams_pos.push_back(blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale));
+		map_cams_rot.push_back(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale);
 	}
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
-		map_spawnpoints.push_back(Vector3(it.value()[0], it.value()[1], it.value()[2]));
+		map_spawnpoints.push_back(blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));
+	}
+	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
+		Vector3 box_pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
+		Vector3 box_rot = Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale; 
+
+		map_itemboxes_pos.push_back(box_pos);
+		map_itemboxes_rot.push_back(box_rot);
+
+		ItemBox* new_item_box = new ItemBox(box_pos, box_rot);
+		item_boxes.push_back(new_item_box);
+	}
+	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
+		Vector3 pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
+		Vector3 rot = Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale;
+
+		map_finishline_pos.push_back(pos);
+		map_finishline_rot.push_back(rot);
+
+		DebugMarker* new_marker = new DebugMarker(pos, rot);
+		debug_markers.push_back(new_marker);
 	}
 
 	//Set our config in action
@@ -43,8 +68,6 @@ Track::Track(string _filename) : PhysModel(_filename)
 	//Load track vertex list for generating our collmap
 	LoadVertexList(m_filepath.generateFilepath(_filename, m_filepath.MODEL_COLLMAP));
 
-	//m_colliderDebug = new SDKMeshGO3D(_RD, _filename);
-	//m_hasCollider = true;
 }
 
 /* Returns a suitable spawn location for a player in this map */
@@ -129,16 +152,15 @@ Vector Track::CreateVector(string _vector)
 	return Vector(values[0], values[1], values[2]);
 }
 
-void Track::setUpWaypointBB()
+/* Sets up the bounding boxes for each waypoint */
+void Track::setWaypointBB()
 {
 	for (size_t i = 0; i < map_waypoints.size(); ++i)
 	{
 		waypoint_bb.push_back(BoundingBox());
 		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z) };
-		waypoint_bb[i].Extents = { 100, 100, 100 };
+		waypoint_bb[i].Extents = { 100, 100, 5 };
 	}
-	//m_colliderDebug->SetPos(waypoint_bb[0].Center);
-	//m_colliderDebug->SetScale(waypoint_bb[0].Extents);
 }
 
 /* Checks through all triangles to see if this line intersects any of them.
@@ -272,7 +294,7 @@ void Track::SplitTrisIntoGrid()
 		}
 	}
 
-	std::cout << "Track tri map created with " << m_triGridX*m_triGridY*m_triGridZ << " segments";
+	std::cout << "Track tri map created with " << m_triGridX*m_triGridY*m_triGridZ << " segments" << std::endl;
 }
 
 /* Loops though the m_trianges vector and finds every tri that falls within the area at _index  */

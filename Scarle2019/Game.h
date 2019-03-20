@@ -9,6 +9,8 @@
 #include "KeybindManager.h"
 #include "LocalisationManager.h"
 #include "SceneManager.h"
+#include "ItemData.h"
+#include "AudioManager.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -105,7 +107,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>        m_dsvDescriptorHeap;
 	static const UINT									c_swapBufferCount =2;
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>      m_commandAllocators[c_swapBufferCount];
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>   m_commandList;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>  m_commandList;
 	Microsoft::WRL::ComPtr<ID3D12Fence>                 m_fence;
 	UINT64                                              m_fenceValues[c_swapBufferCount];
 	Microsoft::WRL::Wrappers::Event                     m_fenceEvent;
@@ -125,7 +127,6 @@ private:
 	//This uses a simple system, but a better pipeline can be used using Wave Banks
 	//See here: https://github.com/Microsoft/DirectXTK/wiki/Creating-and-playing-sounds Using wave banks Section
 	std::unique_ptr<DirectX::AudioEngine> m_audEngine;
-	vector<Sound*> m_sounds;
 
 	// Game State
 	DX::StepTimer                                       m_timer;
@@ -145,4 +146,6 @@ private:
 	std::vector<PhysModel*> m_physModels;
 	SceneManager m_sceneManager;
 
+	ItemData m_probabilities;
+	AudioManager m_AM;
 };

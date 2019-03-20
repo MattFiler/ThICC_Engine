@@ -24,8 +24,10 @@ public:
 	~GameScene();
 
 	void Update() override;
-	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
+	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList) override;
 	bool Load() override;
+	void SetPlayersWaypoint();
+	void SetPlayerRanking();
 
 private:
 	// Updates
@@ -44,11 +46,13 @@ private:
 	Track* track = nullptr;
 	Player* player[4] = { nullptr };
 	PhysModel* test_model = nullptr;
+	SDKMeshGO3D* debug_cups[8] = { nullptr };
 
 	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
 	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
-	//std::ptr<DirectX::SpriteBatch> m_spriteBatch[4]{NULL};
+
 	Camera*												m_cam[4];
+	Camera*												cine_cam;
 	Light*												m_light;
 
 	KeybindManager m_keybinds;
@@ -61,5 +65,28 @@ private:
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
+	
+	RenderData* m_RD;
+	bool m_playerControls = false;
+
+	// useful debug code dont delete
+	Text2D* camera_pos = nullptr;
+	Text2D* countdown_text = nullptr;
+
+	float timeout = 12.f;
+
+	enum States {
+		START = 0,
+		OPENING = 1,
+		CAM_OPEN = 2,
+		COUNTDOWN = 3,
+		PLAY = 4,
+		END = 5
+	};
+
+	States state = START;
+
+	bool track_music_start = true;
+
 };
 

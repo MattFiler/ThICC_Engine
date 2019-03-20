@@ -55,6 +55,9 @@ public:
 	GO3D_Render_Type GetType() { return m_type; }
 	bool ShouldDestroy() { return m_shouldDestroy; };
 
+	void setVisible(bool visible) { is_visible = visible; };
+	bool isVisible() { return is_visible; };
+
 	virtual void Reset() {};
 
 protected:
@@ -64,6 +67,7 @@ protected:
 	float m_yaw = 0.0f;
 	float m_roll = 0.0f;
 	bool m_shouldDestroy = false;
+	bool is_visible = true;
 
 	Matrix m_world = Matrix::Identity;
 	Matrix m_rot = Matrix::Identity;
