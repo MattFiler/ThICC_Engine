@@ -307,10 +307,10 @@ void Camera::Tick()
 	}
 
 	//std::cout << timer << std::endl;
-	////Debug output player location - useful for setting up spawns
-	//if (m_keybinds.keyPressed("Debug Print Camera Location")) {
-	//	std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
-	//}
+	//Debug output player location - useful for setting up spawns
+	if (m_keybinds.keyPressed("Debug Print Camera Location")) {
+		std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+	}
 
 	GameObject3D::Tick();
 }

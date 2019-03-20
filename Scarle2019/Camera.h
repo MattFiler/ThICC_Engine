@@ -32,8 +32,11 @@ public:
 	void SetTarget(Vector3 _target) { m_targetObject = NULL; m_targetPos = _target; }
 	void SetDPos(Vector3 _m_dpos) {  m_dpos = _m_dpos; }
 	void SetBehav(BEHAVIOUR _behav) { behav = _behav; }
+
+	/*
 	void SetCinematicPos(std::vector<Vector3> positions);
 	void SetCinematicRot(std::vector<Vector3> _rotations);
+	*/
 
 	Matrix GetProj() { return m_proj; }
 	Matrix GetView() { return m_view; }
@@ -59,8 +62,25 @@ protected:
 	Matrix rotCam = Matrix::Identity;
 	Vector3	m_dpos; 
 
-	std::vector<std::array<Vector3, 2>> points{ { Vector3{ 61, 291, 167 }, Vector3{ -56, 291, 74 } }, { Vector3{ 426, 333, -455 }, Vector3{ 408, 313, -426 } }, {Vector3{27, 156, 89},Vector3{ 27, 156, 0 }} };
-	std::vector<Vector3> look_points{ Vector3{ 312, 173, -253 },Vector3{ 27, 156, -89 } ,Vector3{ -336, 344, 119 } };
+	std::vector<std::array<Vector3, 2>> points{ 
+		{ 
+			Vector3{ 61, 291, 167 }, 
+			Vector3{ -56, 291, 74 } 
+		}, 
+		{ 
+			Vector3{ 426, 333, -455 }, 
+			Vector3{ 408, 313, -426 } 
+		}, 
+		{ 
+			Vector3{ 4, 158, -46 },
+			Vector3{ 8, 166, -63 } 
+		} 
+	};
+	std::vector<Vector3> look_points{ 
+		Vector3{ -336, 344, 119 }, 
+		Vector3{ 27, 156, -89 }, 
+		Vector3{ 30, 152, 30 } 
+	};
 	std::vector<Vector3> rotations;
 
 	/*
