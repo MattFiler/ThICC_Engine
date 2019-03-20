@@ -72,7 +72,6 @@ void PhysModel::initCollider(json &model_data)
 		(float)model_data["collision_box"]["back_bottom_right"][1] * m_physData.scale,
 		(float)model_data["collision_box"]["back_bottom_right"][2] * m_physData.scale);
 
-
 	m_physData.m_localCentre = Vector3((m_physData.m_localFrontTopLeft.x + m_physData.m_localFrontTopRight.x) / 2
 		, (m_physData.m_localFrontTopLeft.y + m_physData.m_localFrontBottomLeft.y) / 2, (m_physData.m_localFrontTopLeft.z + m_physData.m_localBackTopLeft.z) / 2);
 	//Updates the centre and rotations of the collider 
@@ -159,15 +158,14 @@ void PhysModel::Tick()
 {
 	if (m_physicsOn)
 	{
-		m_vel = m_vel + Locator::getGSD()->m_dt * (m_acc - m_drag*m_vel);
-
+		m_vel = m_vel + Locator::getGSD()->m_dt * (m_acc - m_drag * m_vel);
 		m_gravVel = m_gravVel + Locator::getGSD()->m_dt * (m_gravDirection);
+
 		if (m_gravVel.Length() > m_maxGrav)
 		{
 			m_gravVel.Normalize();
 			m_gravVel *= m_maxGrav;
 		}
-		
 		m_velTotal = m_vel + m_gravVel;
 
 		m_pos += Locator::getGSD()->m_dt * m_velTotal;

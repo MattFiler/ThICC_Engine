@@ -75,16 +75,19 @@ private:
 	int ranking = 0;
 	int waypoint = 0;
 	int lap = 1;
-	float seconds = 0;
-	int minutes = 0;
-	int hours = 0;
+	float m_seconds = 0;
+	int m_minutes = 0;
+	int m_hours = 0;
+
+
+
 	float m_totalLapTime = 0.0f;
 	Text2D *text_ranking			= nullptr;
 	Text2D *text_lap				= nullptr;
 	Text2D *position				= nullptr;
 	Text2D *countdown				= nullptr;
 	Text2D *m_lapCounterText		= nullptr;
-	Text2D *m_totalLapTimeText			= nullptr;
+	Text2D *m_totalLapTimeText		= nullptr;
 	Vector m_savedGravDir;
 
 
