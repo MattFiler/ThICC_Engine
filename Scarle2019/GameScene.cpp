@@ -569,8 +569,8 @@ void GameScene::create3DObjects()
 
 	cine_cam = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
-	cine_cam->SetCinematicRot(track->getCamerasRot());
-	cine_cam->SetCinematicPos(track->getCamerasPos());
+	//cine_cam->SetCinematicRot(track->getCamerasRot());
+	//cine_cam->SetCinematicPos(track->getCamerasPos());
 	//m_3DObjects.push_back(cine_cam);
 
 	//Global illumination

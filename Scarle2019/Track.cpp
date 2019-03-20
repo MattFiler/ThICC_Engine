@@ -38,7 +38,7 @@ Track::Track(string _filename) : PhysModel(_filename)
 	}
 	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
 		Vector3 box_pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
-		Vector3 box_rot = Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]); 
+		Vector3 box_rot = blender_vector.ConvertAngle(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
 
 		map_itemboxes_pos.push_back(box_pos);
 		map_itemboxes_rot.push_back(box_rot);
@@ -48,7 +48,7 @@ Track::Track(string _filename) : PhysModel(_filename)
 	}
 	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
 		Vector3 pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
-		Vector3 rot = Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale;
+		Vector3 rot = blender_vector.ConvertAngle(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale);
 
 		map_finishline_pos.push_back(pos);
 		map_finishline_rot.push_back(rot);

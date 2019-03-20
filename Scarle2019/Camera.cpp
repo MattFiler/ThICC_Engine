@@ -14,6 +14,7 @@ Camera::Camera(float _width, float _height, float _near, float _far, GameObject3
 	m_dpos = _dpos;
 }
 
+/*
 void Camera::SetCinematicPos(std::vector<Vector3> positions)
 {
 	int x = 0;
@@ -37,6 +38,7 @@ void Camera::SetCinematicRot(std::vector<Vector3> _rotations)
 		rotations.push_back(array_points);
 	}
 }
+*/
 
 void Camera::Tick()
 {
@@ -104,8 +106,14 @@ void Camera::Tick()
 		if (cam_point < points.size())
 		{
 			m_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / time_out);
+			m_targetPos = look_points[cam_point];
+			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
+
+			/*
+			m_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / time_out);
 			Vector3 rotty = Vector3::Lerp(rotations[cam_point][0], rotations[cam_point][1], timer / time_out);
 			m_view = Matrix::CreateRotationZ(rotty.z) * Matrix::CreateRotationY(rotty.y) * Matrix::CreateRotationX(rotty.x);
+			*/
 
 			if (timer >= time_out)
 			{

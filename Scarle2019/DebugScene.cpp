@@ -84,8 +84,8 @@ bool DebugScene::Load()
 	//Create a camera
 	m_cam = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	m_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
-	m_cam->SetCinematicPos(m_track->getCamerasPos());
-	m_cam->SetCinematicRot(m_track->getCamerasRot());
+	//m_cam->SetCinematicPos(m_track->getCamerasPos());
+	//m_cam->SetCinematicRot(m_track->getCamerasRot());
 	m_cam->SetPos(Vector3(0, 50, 0));
 	m_3DObjects.push_back(m_cam);
 	*&Locator::getWD()->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth), static_cast<float>(Locator::getWD()->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
