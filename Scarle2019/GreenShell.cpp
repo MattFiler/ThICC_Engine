@@ -6,9 +6,9 @@
 
 GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_SHELL))
 {
-	SetDrag(0);
-	SetPhysicsOn(true);
-	setDampenWallReflect(false);
+	m_mesh->SetDrag(0);
+	m_mesh->SetPhysicsOn(true);
+	m_mesh->setDampenWallReflect(false);
 }
 
 void GreenShell::HitByPlayer(Player* player)

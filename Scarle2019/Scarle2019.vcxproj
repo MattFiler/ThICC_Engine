@@ -204,6 +204,7 @@
     <ClInclude Include="MarchCubes.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="MeshTri.h" />
+    <ClInclude Include="Mushroom.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
