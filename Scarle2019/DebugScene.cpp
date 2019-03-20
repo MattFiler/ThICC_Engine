@@ -36,6 +36,11 @@ void DebugScene::Update()
 	{
 		(*it)->Tick();
 	}
+
+	//debug reset cam cinematic
+	if (m_cam->getTimer() > 12) {
+		m_cam->resetTimer();
+	}
 }
 
 void DebugScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList)
@@ -73,17 +78,22 @@ bool DebugScene::Load()
 	Text2D *debug_text = new Text2D("DEBUG SCENE");
 	m_2DObjects.push_back(debug_text);
 
+	m_track = new Track("DEBUG_CUBE");
+	m_3DObjects.push_back(m_track);
+
 	//Create a camera
 	m_cam = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	m_cam->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
+	m_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
+	m_cam->SetCinematicPos(m_track->getCamerasPos());
+	m_cam->SetCinematicRot(m_track->getCamerasRot());
 	m_cam->SetPos(Vector3(0, 50, 0));
 	m_3DObjects.push_back(m_cam);
 	*&Locator::getWD()->m_viewport[0] = { 0.0f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth), static_cast<float>(Locator::getWD()->m_outputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 	*&Locator::getWD()->m_scissorRect[0] = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight) };
 
 	//Load in debug objects
-	test_model = new SDKMeshGO3D("TEST_ILLUM");
-	m_3DObjects.push_back(test_model);
+	//test_model = new SDKMeshGO3D("TEST_ENV3OBJ");
+	//m_3DObjects.push_back(test_model);
 
 	//Global illumination
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));

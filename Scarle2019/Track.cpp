@@ -31,7 +31,7 @@ Track::Track(string _filename) : PhysModel(_filename)
 	}
 	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
 		map_cams_pos.push_back(blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
-		map_cams_rot.push_back(Vector3((float)it.value()["rotation"][0], (float)it.value()["rotation"][1], (float)it.value()["rotation"][2]));
+		map_cams_rot.push_back(blender_vector.ConvertAngle(Vector3((float)it.value()["rotation"][0], (float)it.value()["rotation"][1], (float)it.value()["rotation"][2])));
 	}
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));

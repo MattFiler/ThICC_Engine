@@ -44,6 +44,11 @@ public:
 	virtual void Render() {};
 
 
+	//Timer debug
+	float getTimer() { return timer; };
+	void resetTimer() { timer = 0.0f; };
+
+
 
 protected:
 

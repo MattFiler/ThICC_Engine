@@ -4,29 +4,15 @@
   "model_type": "Track",
   "has_box_collider": false,
   "visible": true,
-  "start_x": 0,
-  "start_y": 0,
-  "start_z": 0,
-  "modelscale": 1.0,
-  "rot_x": 0,
-  "rot_y": 0,
-  "rot_z": 0,
-  "segment_size": 10,
+  "start_x": -35.286,
+  "start_y": 53.984,
+  "start_z": 33.639,
+  "modelscale": 11.0,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 50.0,
   "map_cameras": [
-    {
-      "name": "Camera",
-      "pos": [
-        7.4811315536499023,
-        -6.5076398849487305,
-        5.34366512298584
-      ],
-      "role": "WIP",
-      "rotation": [
-        1.1093189716339111,
-        0.0,
-        0.81492817401885986
-      ]
-    },
     {
       "name": "Course Intro Cam",
       "pos": [

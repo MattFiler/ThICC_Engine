@@ -105,13 +105,10 @@ void Camera::Tick()
 		{
 			m_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / time_out);
 			Vector3 rotty = Vector3::Lerp(rotations[cam_point][0], rotations[cam_point][1], timer / time_out);
-
-			if (!m_targetObject)
-				m_view = Matrix::CreateFromYawPitchRoll(rotty.y, rotty.x , rotty.z );
+			m_view = Matrix::CreateRotationZ(rotty.z) * Matrix::CreateRotationY(rotty.y) * Matrix::CreateRotationX(rotty.x);
 
 			if (timer >= time_out)
 			{
-				std::cout << "CAMERA Rot: (" << rotty.x << ", " << rotty.y << ", " << rotty.z << ")" << std::endl;
 				timer = 0.0f;
 				cam_point++;
 			}
