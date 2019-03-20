@@ -2,6 +2,8 @@
 
 #include "GameFilepaths.h"
 #include "TrackMagnet.h"
+#include "ServiceLocator.h"
+#include "ItemData.h"
 #include <json.hpp>
 using json = nlohmann::json;
 

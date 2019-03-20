@@ -4,7 +4,7 @@
 
 class BlenderToDirectX {
 public:
-	Vector3 Convert(Vector3 _blender) {
+	Vector3 ConvertPosition(Vector3 _blender) {
 		return Vector3(_blender.x, _blender.z, _blender.y * -1);
 	}
 };

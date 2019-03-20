@@ -256,10 +256,10 @@
     <ClInclude Include="BlenderToDirectX.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="ItemProbability.h">
+    <ClInclude Include="ItemData.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionManager.h">
+    <ClInclude Include="AudioManager.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -390,10 +390,10 @@
     <ClCompile Include="DebugMarker.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
-    <ClCompile Include="ItemProbability.cpp">
+    <ClCompile Include="ItemData.cpp">
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
+    <ClCompile Include="AudioManager.cpp">
       <Filter>Game Base\Managers</Filter>
     </ClCompile>
   </ItemGroup>

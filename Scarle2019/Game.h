@@ -9,7 +9,8 @@
 #include "KeybindManager.h"
 #include "LocalisationManager.h"
 #include "SceneManager.h"
-#include "ItemProbability.h"
+#include "ItemData.h"
+#include "AudioManager.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -126,7 +127,6 @@ private:
 	//This uses a simple system, but a better pipeline can be used using Wave Banks
 	//See here: https://github.com/Microsoft/DirectXTK/wiki/Creating-and-playing-sounds Using wave banks Section
 	std::unique_ptr<DirectX::AudioEngine> m_audEngine;
-	vector<Sound*> m_sounds;
 
 	// Game State
 	DX::StepTimer                                       m_timer;
@@ -146,6 +146,6 @@ private:
 	std::vector<PhysModel*> m_physModels;
 	SceneManager m_sceneManager;
 
-	ItemProbability m_probabilities;
-
+	ItemData m_probabilities;
+	AudioManager m_AM;
 };

@@ -4,7 +4,7 @@
 #include "ServiceLocator.h"
 #include <iostream>
 
-GreenShell::GreenShell() : Item("DEFAULT ITEM") 
+GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_SHELL))
 {
 	SetDrag(0);
 	SetPhysicsOn(true);

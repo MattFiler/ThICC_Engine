@@ -15,7 +15,7 @@ public:
 	Sound(AudioEngine* _audEngine, string _filename);
 	virtual ~Sound();
 
-	virtual void Tick(GameStateData* _GSD) {};
+	virtual void Tick(GameStateData* _GSD);
 
 	virtual void Play();
 
@@ -28,12 +28,20 @@ public:
 	void SetPan(float _pan) { m_pan = _pan; }
 	float GetPan() { return m_pan; }
 
+	void SetLoop(bool _loop);
+
+	bool IsPlaying() { return m_sfx->IsInUse(); }
+
 protected:
 	std::unique_ptr<DirectX::SoundEffect> m_sfx;
+	std::unique_ptr<DirectX::SoundEffectInstance> m_loop;
 
 	float m_volume = 1.0f;
 	float m_pitch = 0.0f;
 	float m_pan = 0.0f;
+
+	bool loop = false;
+	bool m_playing = false;
 
 	GameFilepaths m_filepath;
 };

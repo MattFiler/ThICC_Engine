@@ -3,7 +3,7 @@
 #include "Player.h"
 #include <iostream>
 
-Banana::Banana() : Item("DEFAULT ITEM") {
+Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BANANA)) {
 	SetDrag(0.9f);
 	SetPhysicsOn(true);
 }

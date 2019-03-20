@@ -170,6 +170,7 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Banana.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
@@ -195,7 +196,7 @@
     <ClInclude Include="InputData.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemBox.h" />
-    <ClInclude Include="ItemProbability.h" />
+    <ClInclude Include="ItemData.h" />
     <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LocalisationManager.h" />
@@ -232,6 +233,7 @@
     <ClInclude Include="WindowData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
@@ -249,7 +251,7 @@
     <ClCompile Include="ImageGO2D.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemBox.cpp" />
-    <ClCompile Include="ItemProbability.cpp" />
+    <ClCompile Include="ItemData.cpp" />
     <ClCompile Include="KeybindManager.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="LocalisationManager.cpp" />
