@@ -72,10 +72,11 @@ void Player::Tick()
 	}
 	else if (m_keymindManager.keyPressed("Spawn Banana"))
 	{
-		Banana* banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
-		banana->GetMesh()->SetWorld(m_world);
-		banana->GetMesh()->AddPos(m_world.Backward() * 2);
-		banana->GetMesh()->UpdateWorld();
+		spawnItem(ItemType::BANANA);
+	}
+	else if (m_keymindManager.keyHeld("Spawn Banana") /*&& m_trailing_item*/)
+	{
+		trailItem();
 	}
 	else if (m_keymindManager.keyPressed("Spawn Green Shell"))
 	{
@@ -96,8 +97,38 @@ void Player::Tick()
 	item_img->Tick();
 
 	//apply my base behaviour
-	PhysModel::Tick();
 	//PhysModel::Tick();
+}
+
+void Player::trailItem()
+{
+	m_currentItem->GetMesh()->SetWorld(m_world);
+	m_currentItem->GetMesh()->AddPos(m_world.Backward() * 2.2);
+	m_currentItem->GetMesh()->UpdateWorld();
+}
+
+void Player::spawnItem(ItemType type)
+{
+
+	switch (type)
+	{
+	case ItemType::BANANA:
+	{
+		Banana * banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
+		m_trailing_item = false;
+		m_currentItem = banana;
+		trailItem();
+		break;
+	}
+
+	case ItemType::MUSHROOM:
+	{
+		Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
+		mushroom->Use(this);
+		break;
+	}
+	}
+	
 }
 
 void Player::setGamePad(bool _state)
@@ -137,38 +168,54 @@ void Player::movement()
 		}
 
 		//GameController Movement
-		if (m_controlsActive)
+		
+		if (Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
 		{
-			if (Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
+			if (Locator::getGSD()->m_gamePadState[m_playerID].IsViewPressed())
 			{
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsViewPressed())
+				ExitGame();
+			}
+			else
+			{
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
 				{
-					ExitGame();
+					m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
+				{
+					m_acc -= forwardMove; //* _GSD->m_gamePadState->triggers.left;
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
+				{
+					m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+				{
+					m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
+				{
+					if (!m_currentItem)
+					{
+						spawnItem(ItemType::MUSHROOM);
+					}
+					else
+					{
+						trailItem();
+					}
 				}
 				else
 				{
-					if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
-					{
-						m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
-					}
-
-					if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
-					{
-						m_acc -= forwardMove; //* _GSD->m_gamePadState->triggers.left;
-					}
-
-					if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
-					{
-						m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-					}
-
-					if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
-					{
-						m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-					}
+					m_trailing_item = false;
+					m_currentItem = nullptr;
 				}
 			}
 		}
+		
 
 		//change orinetation of player
 		float rotSpeed = 0.001f;

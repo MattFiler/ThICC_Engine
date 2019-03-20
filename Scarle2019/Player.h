@@ -3,6 +3,7 @@
 #include "KeybindManager.h"
 #include "Banana.h"
 #include "GreenShell.h"
+#include "Mushroom.h"
 #include "Constants.h"
 #include <functional>
 
@@ -18,6 +19,8 @@ public:
 	~Player();
 
 	virtual void Tick() override;
+	void trailItem();
+	void spawnItem(ItemType type);
 	int GetWaypoint() { return waypoint; }
 	int GetRanking() { return ranking; }
 	int GetLap() { return lap; }
@@ -68,7 +71,8 @@ private:
 	ItemType inventory_item = ItemType::NONE;
 	
 	ImageGO2D *item_img = nullptr;
-
+	Item* m_currentItem = nullptr;
+	bool  m_trailing_item = false;
 	
 	bool m_controlsActive = false;
 };
