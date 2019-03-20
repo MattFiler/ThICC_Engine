@@ -97,6 +97,7 @@ void Player::Tick()
 
 	//apply my base behaviour
 	PhysModel::Tick();
+	//PhysModel::Tick();
 }
 
 void Player::setGamePad(bool _state)
