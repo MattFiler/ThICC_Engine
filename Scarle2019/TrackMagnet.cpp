@@ -97,10 +97,10 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 
 void TrackMagnet::ResolveWallCollisions(Track& walls)
 {
-	Vector leftSide = data.m_globalBackTopLeft - data.m_globalFrontTopLeft;
-	Vector rightSide = data.m_globalBackTopRight - data.m_globalFrontTopRight;
-	Vector frontSide = data.m_globalFrontTopRight - data.m_globalFrontTopLeft;
-	Vector backSide = data.m_globalBackTopRight - data.m_globalBackTopLeft;
+	Vector leftSide = data.m_globalBackTopLeft - data.m_globalFrontTopLeft + (m_world.Down() *1);
+	Vector rightSide = data.m_globalBackTopRight - data.m_globalFrontTopRight + (m_world.Down() * 1);
+	Vector frontSide = data.m_globalFrontTopRight - data.m_globalFrontTopLeft + (m_world.Down() * 1);
+	Vector backSide = data.m_globalBackTopRight - data.m_globalBackTopLeft + (m_world.Down() * 1);
 
 	Vector intersect = Vector::Zero;
 	MeshTri* wallTri = nullptr;

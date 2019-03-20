@@ -9,6 +9,7 @@
 #include "DebugMarker.h"
 #include <iostream>
 #include <experimental/filesystem>
+#include <memory>
 
 extern void ExitGame();
 
@@ -240,6 +241,8 @@ void GameScene::UpdateItems()
 	if (delIndex != -1)
 	{
 		//delete m_itemModels[delIndex];
+		//std::thread tr(&GameScene::DeleteMemoryTest, this, m_itemModels[delIndex]);
+		//tr.detach();
 		m_itemModels.erase(m_itemModels.begin() + delIndex);
 	}
 }
@@ -655,4 +658,10 @@ Item* GameScene::CreateItem(ItemType type)
 		break;
 	}
 	return nullptr;
+}
+
+void GameScene::DeleteMemoryTest(Item* item)
+{
+	//std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	delete item;
 }
