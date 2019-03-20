@@ -48,7 +48,7 @@ Track::Track(string _filename) : PhysModel(_filename)
 	}
 	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
 		Vector3 pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
-		Vector3 rot = Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale;
+		Vector3 rot = Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]);
 
 		map_finishline_pos.push_back(pos);
 		map_finishline_rot.push_back(rot);
@@ -159,7 +159,13 @@ void Track::setWaypointBB()
 	{
 		waypoint_bb.push_back(BoundingOrientedBox());
 		waypoint_bb[i].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z) };
-		waypoint_bb[i].Extents = { 100, 100, 5 };
+		waypoint_bb[i].Extents = { 100, 100, 100 };
+	}
+	for (size_t i = 0; i < map_finishline_pos.size(); ++i)
+	{
+		waypoint_bb.push_back(BoundingOrientedBox());
+		waypoint_bb[i].Center = { static_cast<float>(map_finishline_pos[i].x), static_cast<float>(map_finishline_pos[i].y), static_cast<float>(map_finishline_pos[i].z) };
+		waypoint_bb[i].Extents = { 100, 100, 2 };
 	}
 }
 

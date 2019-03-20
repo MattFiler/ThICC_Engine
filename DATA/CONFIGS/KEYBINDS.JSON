@@ -25,5 +25,6 @@
   "Load Debug Scene": "D",
   "Spawn Banana": "F1",
   "Spawn Green Shell": "F2",
-  "Debug Toggle World Render": "U"
+  "Debug Toggle World Render": "U",
+  "Save Display Player Pos": "N"
 }

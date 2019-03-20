@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "DebugMarker.h"
 
-DebugMarker::DebugMarker(Vector3& position, Vector3& rotation) : PhysModel("Cup") {
+DebugMarker::DebugMarker(Vector3& position, Vector3& rotation) : PhysModel("Default Item") {
 	SetPos(position);
 	SetRotation(rotation);
 

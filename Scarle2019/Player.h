@@ -71,7 +71,6 @@ private:
 	int lap = 1;
 	Text2D *text_ranking = nullptr;
 	Text2D *text_lap = nullptr;
-	Text2D *position = nullptr;
 	Text2D *countdown = nullptr;
 	Vector m_savedGravDir;
 

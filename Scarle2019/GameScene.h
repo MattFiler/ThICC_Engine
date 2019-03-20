@@ -64,6 +64,8 @@ private:
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
+
+	Vector3 MatrixDecomposeYawPitchRoll(Matrix  mat);
 	
 	RenderData* m_RD;
 	bool m_playerControls = false;
