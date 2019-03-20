@@ -6,7 +6,7 @@ class RenderData;
 class WindowData;
 class GameStateData;
 class InputData;
-class ItemProbability;
+class ItemData;
 
 struct Locator {
 	static RenderData* getRD() {
@@ -33,7 +33,7 @@ struct Locator {
 		}
 		return ref_ID;
 	}
-	static ItemProbability* getProbabilities() {
+	static ItemData* getProbabilities() {
 		if (ref_ItemProbability == nullptr) {
 			throw std::runtime_error("Call to probabilities before initialisation.");
 		}
@@ -52,7 +52,7 @@ struct Locator {
 	static void setupID(InputData* inst_ID) {
 		ref_ID = inst_ID;
 	}
-	static void setupProbabilities(ItemProbability* inst_ItemProbability) {
+	static void setupProbabilities(ItemData* inst_ItemProbability) {
 		ref_ItemProbability = inst_ItemProbability;
 	}
 
@@ -61,5 +61,5 @@ private:
 	static WindowData* ref_WD;
 	static GameStateData* ref_GSD;
 	static InputData* ref_ID;
-	static ItemProbability* ref_ItemProbability;
+	static ItemData* ref_ItemProbability;
 };

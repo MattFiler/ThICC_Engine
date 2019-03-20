@@ -9,7 +9,7 @@
 #include "KeybindManager.h"
 #include "LocalisationManager.h"
 #include "SceneManager.h"
-#include "ItemProbability.h"
+#include "ItemData.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -146,6 +146,6 @@ private:
 	std::vector<PhysModel*> m_physModels;
 	SceneManager m_sceneManager;
 
-	ItemProbability m_probabilities;
+	ItemData m_probabilities;
 
 };

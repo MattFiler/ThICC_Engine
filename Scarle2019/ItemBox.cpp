@@ -2,7 +2,7 @@
 #include "ItemBox.h"
 #include "ServiceLocator.h"
 #include "Player.h"
-#include "ItemProbability.h"
+#include "ItemData.h"
 #include "Constants.h"
 
 //Todo: replace "Default Item" with item box model
