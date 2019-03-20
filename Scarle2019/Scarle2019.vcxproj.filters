@@ -401,6 +401,9 @@
       <Filter>Game Base\Managers</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">

@@ -2,7 +2,6 @@
 #include "GreenShell.h"
 #include "Player.h"
 #include "ServiceLocator.h"
-#include <iostream>
 
 GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_SHELL))
 {

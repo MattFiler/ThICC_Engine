@@ -261,6 +261,7 @@
     <ClCompile Include="MarchCubes.cpp" />
     <ClCompile Include="MeshTri.cpp" />
     <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
