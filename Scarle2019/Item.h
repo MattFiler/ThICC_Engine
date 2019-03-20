@@ -21,6 +21,7 @@ public:
 	virtual void Use(Player* player) = 0;
 
 	bool ShouldDestroy() { return m_shouldDestroy; };
+	void FlagForDestoy() { m_shouldDestroy = true; };
 
 	TrackMagnet* GetMesh() { return m_mesh; };
 
