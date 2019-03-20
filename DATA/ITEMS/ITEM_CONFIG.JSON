@@ -217,7 +217,7 @@
 		}
 	},
 	"BANANA_3X": {
-		"ui_sprite": "ITEM_BANANAS_3X",
+		"ui_sprite": "ITEM_BANANAS_X3",
 		"probabilities": {
 			"place_1": 12.5,
 			"place_2": 12.5,
