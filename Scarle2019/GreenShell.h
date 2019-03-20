@@ -10,7 +10,7 @@ public:
 
 	virtual void Tick() override;
 	void HitByPlayer(Player* player) override;
-	void Use(Player* player) override {};
+	void Use(Player* player) override;
 
 private:
 	double m_elapsedTime = 0;

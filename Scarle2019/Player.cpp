@@ -72,19 +72,15 @@ void Player::Tick()
 	}
 	else if (m_keymindManager.keyPressed("Spawn Banana"))
 	{
-		spawnItem(ItemType::BANANA);
+		SpawnItem(ItemType::BANANA);
 	}
-	else if (m_keymindManager.keyHeld("Spawn Banana") /*&& m_trailing_item*/)
+	else if (m_keymindManager.keyHeld("Spawn Banana"))
 	{
-		trailItem();
+		TrailItem();
 	}
-	else if (m_keymindManager.keyPressed("Spawn Green Shell"))
+	else
 	{
-		GreenShell* greenShell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
-		greenShell->GetMesh()->SetWorld(m_world);
-		greenShell->GetMesh()->AddPos(m_world.Forward() * 3);
-		greenShell->GetMesh()->UpdateWorld();
-		greenShell->GetMesh()->setVelocity(60 * m_world.Forward());
+		ReleaseItem();
 	}
 
 	//Debug output player location - useful for setting up spawns
@@ -100,35 +96,53 @@ void Player::Tick()
 	//PhysModel::Tick();
 }
 
-void Player::trailItem()
+void Player::TrailItem()
 {
-	m_currentItem->GetMesh()->SetWorld(m_world);
-	m_currentItem->GetMesh()->AddPos(m_world.Backward() * 2.2);
-	m_currentItem->GetMesh()->UpdateWorld();
+	m_trailingItem->GetMesh()->SetWorld(m_world);
+	m_trailingItem->GetMesh()->AddPos(m_world.Backward() * 2.2);
+	m_trailingItem->GetMesh()->UpdateWorld();
 }
 
-void Player::spawnItem(ItemType type)
+void Player::SpawnItem(ItemType type)
 {
 
 	switch (type)
 	{
-	case ItemType::BANANA:
-	{
-		Banana * banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
-		m_trailing_item = false;
-		m_currentItem = banana;
-		trailItem();
-		break;
-	}
+		case ItemType::BANANA:
+		{
+			Banana * banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
+			m_isTrailing = true;
+			m_trailingItem = banana;
+			TrailItem();
+			break;
+		}
 
-	case ItemType::MUSHROOM:
+		case ItemType::MUSHROOM:
+		{
+			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
+			mushroom->Use(this);
+			break;
+		}
+
+		case ItemType::GREEN_SHELL:
+		{
+			GreenShell* shell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
+			m_isTrailing = true;
+			m_trailingItem = shell;
+			TrailItem();
+			break;
+		}
+	}
+}
+
+void Player::ReleaseItem()
+{
+	if (m_trailingItem)
 	{
-		Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
-		mushroom->Use(this);
-		break;
+		m_trailingItem->Use(this);
+		m_isTrailing = false;
+		m_trailingItem = nullptr;
 	}
-	}
-	
 }
 
 void Player::setGamePad(bool _state)
@@ -199,19 +213,18 @@ void Player::movement()
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
 				{
-					if (!m_currentItem)
+					if (!m_trailingItem)
 					{
-						spawnItem(ItemType::MUSHROOM);
+						SpawnItem(ItemType::GREEN_SHELL);
 					}
 					else
 					{
-						trailItem();
+						TrailItem();
 					}
 				}
 				else
 				{
-					m_trailing_item = false;
-					m_currentItem = nullptr;
+					ReleaseItem();
 				}
 			}
 		}
@@ -259,3 +272,5 @@ void Player::movement()
 	TrackMagnet::Tick();
 
 }
+
+

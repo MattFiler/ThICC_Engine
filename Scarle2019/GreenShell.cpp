@@ -17,6 +17,14 @@ void GreenShell::HitByPlayer(Player* player)
 	m_shouldDestroy = true;
 }
 
+void GreenShell::Use(Player * player)
+{
+	m_mesh->SetWorld(player->GetWorld());
+	m_mesh->AddPos(player->GetWorld().Forward() * 3);
+	m_mesh->UpdateWorld();
+	m_mesh->setVelocity(60 * player->GetWorld().Forward());
+}
+
 void GreenShell::Tick()
 {
 	m_elapsedTime += Locator::getGSD()->m_dt;
