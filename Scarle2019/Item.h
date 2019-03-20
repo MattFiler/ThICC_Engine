@@ -16,7 +16,6 @@ public:
 
 	virtual void Tick() override { TrackMagnet::Tick(); };
 	virtual void HitByPlayer(Player* player) {};
-
 protected:
 	float m_probability_modifier[12] = {};
 	json m_item_config;

@@ -18,6 +18,8 @@ public:
 	~Player();
 
 	virtual void Tick() override;
+	void trailItem();
+	void spawnItem();
 	int GetWaypoint() { return waypoint; }
 	int GetRanking() { return ranking; }
 	int GetLap() { return lap; }
@@ -68,7 +70,8 @@ private:
 	ItemType inventory_item = ItemType::NONE;
 	
 	ImageGO2D *item_img = nullptr;
-
+	GameObject3D* m_currentItem = nullptr;
+	bool  m_trailing_item = false;
 	
 	bool m_controlsActive = false;
 };

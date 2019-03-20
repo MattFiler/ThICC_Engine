@@ -94,6 +94,6 @@ protected:
 	SDKMeshGO3D* m_colliderDebug = nullptr;
 	Vector3 MatrixDecomposeYawPitchRoll(Matrix  mat);
 	Vector3 applyOffset(Vector3 pos);
-	float offset = 0.5;
+	float offset = 0;
 
 };
