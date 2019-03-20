@@ -19,6 +19,7 @@
 	},
 	"GREEN_SHELL": {
 		"ui_sprite": "ITEM_GREEN_SHELL",
+		"model": "ITEM_GREEN_SHELL",
 		"probabilities": {
 			"place_1": 25.5,
 			"place_2": 17.5,
@@ -29,6 +30,7 @@
 	},
 	"RED_SHELL": {
 		"ui_sprite": "ITEM_RED_SHELL",
+		"model": "ITEM_RED_SHELL",
 		"probabilities": {
 			"place_1": 7.5,
 			"place_2": 25,
@@ -42,6 +44,7 @@
 	},
 	"BANANA": {
 		"ui_sprite": "ITEM_BANANA",
+		"model": "ITEM_BANANA",
 		"probabilities": {
 			"place_1": 37.5,
 			"place_2": 17.5,
@@ -89,6 +92,7 @@
 	},
 	"BOMB": {
 		"ui_sprite": "ITEM_BOMB",
+		"model": "ITEM_BOMB",
 		"probabilities": {
 			"place_2": 2.5,
 			"place_3": 7.5,
@@ -99,6 +103,7 @@
 	},
 	"BLUE_SHELL": {
 		"ui_sprite": "ITEM_BLUE_SHELL",
+		"model": "ITEM_BLUE_SHELL",
 		"probabilities": {
 			"place_4": 2.5,
 			"place_5": 5,
@@ -151,6 +156,7 @@
 	},
 	"SQUID": {
 		"ui_sprite": "ITEM_SQUID",
+		"model": "ITEM_BLOOPER",
 		"probabilities": {
 			"place_4": 2.5,
 			"place_5": 5,
@@ -182,6 +188,7 @@
 	},
 	"BULLET_BILL": {
 		"ui_sprite": "ITEM_BULLET_BILL",
+		"model": "ITEM_BULLET_BILL",
 		"probabilities": {
 			"place_8": 5,
 			"place_9": 10,
