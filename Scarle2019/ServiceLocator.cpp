@@ -5,5 +5,5 @@ RenderData* Locator::ref_RD = nullptr;
 WindowData* Locator::ref_WD = nullptr;
 GameStateData* Locator::ref_GSD = nullptr;
 InputData* Locator::ref_ID = nullptr;
-ItemProbability* Locator::ref_ItemProbability = nullptr;
+ItemData* Locator::ref_ItemProbability = nullptr;
 AudioManager* Locator::ref_audio = nullptr;

@@ -196,7 +196,7 @@
     <ClInclude Include="InputData.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemBox.h" />
-    <ClInclude Include="ItemProbability.h" />
+    <ClInclude Include="ItemData.h" />
     <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LocalisationManager.h" />
@@ -251,7 +251,7 @@
     <ClCompile Include="ImageGO2D.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemBox.cpp" />
-    <ClCompile Include="ItemProbability.cpp" />
+    <ClCompile Include="ItemData.cpp" />
     <ClCompile Include="KeybindManager.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="LocalisationManager.cpp" />
