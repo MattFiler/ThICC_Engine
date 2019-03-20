@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Constants.h"
+#include "GameFilepaths.h"
 #include <json.hpp>
 using json = nlohmann::json;
 
@@ -17,7 +18,7 @@ public:
 	float GetCumulativeProbability(ItemType _item, int _position);
 
 	/* Return item sprite/model info */
-	std::string GetItemSpritePath(ItemType _item);
+	std::string GetItemSpriteName(ItemType _item);
 	std::string GetItemModelName(ItemType _item);
 
 private:
@@ -29,4 +30,6 @@ private:
 	float item_probability[19][12];
 	std::string item_sprite[19];
 	std::string item_model[19];
+
+	GameFilepaths m_filepath;
 };

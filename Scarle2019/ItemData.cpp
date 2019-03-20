@@ -110,8 +110,8 @@ float ItemData::GetCumulativeProbability(ItemType _item, int _position) {
 	return return_probability;
 }
 
-/* Return the item's sprite path for the UI */
-std::string ItemData::GetItemSpritePath(ItemType _item) {
+/* Return the item's sprite name for the UI */
+std::string ItemData::GetItemSpriteName(ItemType _item) {
 	return item_sprite[static_cast<int>(_item)];
 }
 
