@@ -220,8 +220,11 @@ void GameScene::UpdateItems()
 	int end = m_itemModels.size();
 	for (int i = 0; i < end; i++)
 	{
-		m_itemModels[i]->GetMesh()->ShouldStickToTrack(*track);
-		m_itemModels[i]->GetMesh()->ResolveWallCollisions(*track);
+		if (m_itemModels[i]->GetMesh())
+		{
+			m_itemModels[i]->GetMesh()->ShouldStickToTrack(*track);
+			m_itemModels[i]->GetMesh()->ResolveWallCollisions(*track);
+		}
 		for (int j = 0; j < game_config["player_count"]; ++j) {
 			if (m_itemModels[i]->GetMesh() && player[j]->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
 			{
@@ -350,7 +353,10 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			//Render items
 			for (Item* obj : m_itemModels)
 			{
-				obj->GetMesh()->Render();
+				if (obj->GetMesh())
+				{
+					obj->GetMesh()->Render();
+				}
 			}
 
 			break;
@@ -387,7 +393,10 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				//Render items
 				for (Item* obj : m_itemModels)
 				{
-					obj->GetMesh()->Render();
+					if (obj->GetMesh())
+					{
+						obj->GetMesh()->Render();
+					}
 				}
 			}
 			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
@@ -439,7 +448,10 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				//Render items
 				for (Item* obj : m_itemModels)
 				{
-					obj->GetMesh()->Render();
+					if (obj->GetMesh())
+					{
+						obj->GetMesh()->Render();
+					}
 				}
 			}
 
@@ -632,7 +644,12 @@ Item* GameScene::CreateItem(ItemType type)
 	case RED_SHELL:
 		break;
 	case MUSHROOM:
+	{
+		Mushroom * mushroom = new Mushroom();
+		m_itemModels.push_back(mushroom);
+		return mushroom;
 		break;
+	}
 	default:
 		return nullptr;
 		break;

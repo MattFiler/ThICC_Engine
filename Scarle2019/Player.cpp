@@ -72,7 +72,7 @@ void Player::Tick()
 	}
 	else if (m_keymindManager.keyPressed("Spawn Banana"))
 	{
-		spawnItem();
+		spawnItem(ItemType::BANANA);
 	}
 	else if (m_keymindManager.keyHeld("Spawn Banana") /*&& m_trailing_item*/)
 	{
@@ -102,17 +102,33 @@ void Player::Tick()
 
 void Player::trailItem()
 {
-	m_currentItem->SetWorld(m_world);
-	m_currentItem->AddPos(m_world.Backward() * 2);
-	m_currentItem->UpdateWorld();
+	m_currentItem->GetMesh()->SetWorld(m_world);
+	m_currentItem->GetMesh()->AddPos(m_world.Backward() * 2.2);
+	m_currentItem->GetMesh()->UpdateWorld();
 }
 
-void Player::spawnItem()
+void Player::spawnItem(ItemType type)
 {
-	Banana* banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
-	m_trailing_item = false;
-	m_currentItem = banana;
-	trailItem();
+
+	switch (type)
+	{
+	case ItemType::BANANA:
+	{
+		Banana * banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
+		m_trailing_item = false;
+		m_currentItem = banana;
+		trailItem();
+		break;
+	}
+
+	case ItemType::MUSHROOM:
+	{
+		Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
+		mushroom->Use(this);
+		break;
+	}
+	}
+	
 }
 
 void Player::setGamePad(bool _state)
@@ -185,7 +201,7 @@ void Player::movement()
 				{
 					if (!m_currentItem)
 					{
-						spawnItem();
+						spawnItem(ItemType::MUSHROOM);
 					}
 					else
 					{
