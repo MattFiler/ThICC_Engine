@@ -81,10 +81,10 @@ void Player::Tick()
 	else if (m_keymindManager.keyPressed("Spawn Green Shell"))
 	{
 		GreenShell* greenShell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
-		greenShell->SetWorld(m_world);
-		greenShell->AddPos(m_world.Forward() * 3);
-		greenShell->UpdateWorld();
-		greenShell->setVelocity(60 * m_world.Forward());
+		greenShell->GetMesh()->SetWorld(m_world);
+		greenShell->GetMesh()->AddPos(m_world.Forward() * 3);
+		greenShell->GetMesh()->UpdateWorld();
+		greenShell->GetMesh()->setVelocity(60 * m_world.Forward());
 	}
 
 	//Debug output player location - useful for setting up spawns

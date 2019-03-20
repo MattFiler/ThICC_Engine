@@ -9,16 +9,23 @@ using json = nlohmann::json;
 
 class Player;
 
-class Item : public TrackMagnet {
+class Item 
+{
 public:
+	Item() = default;
 	Item(const std::string& item_type);
 	~Item() = default;
 
-	virtual void Tick() override { TrackMagnet::Tick(); };
-	virtual void HitByPlayer(Player* player) {};
+	virtual void Tick();
+	virtual void HitByPlayer(Player* player) = 0;
+	virtual void Use(Player* player) = 0;
+
+	bool ShouldDestroy() { return m_shouldDestroy; };
+
+	TrackMagnet* GetMesh() { return m_mesh; };
+
+
 protected:
-	float m_probability_modifier[12] = {};
-	json m_item_config;
-	GameFilepaths m_filepath;
-	std::string m_model_name = "";
+	TrackMagnet * m_mesh = nullptr;
+	bool m_shouldDestroy = false;
 };

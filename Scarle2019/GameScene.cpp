@@ -220,10 +220,10 @@ void GameScene::UpdateItems()
 	int end = m_itemModels.size();
 	for (int i = 0; i < end; i++)
 	{
-		m_itemModels[i]->ShouldStickToTrack(*track);
-		m_itemModels[i]->ResolveWallCollisions(*track);
+		m_itemModels[i]->GetMesh()->ShouldStickToTrack(*track);
+		m_itemModels[i]->GetMesh()->ResolveWallCollisions(*track);
 		for (int j = 0; j < game_config["player_count"]; ++j) {
-			if (player[j]->getCollider().Intersects(m_itemModels[i]->getCollider()))
+			if (m_itemModels[i]->GetMesh() && player[j]->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
 			{
 				m_itemModels[i]->HitByPlayer(player[j]);
 			}
@@ -348,11 +348,9 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			}
 
 			//Render items
-			for (GameObject3D* obj : m_itemModels)
+			for (Item* obj : m_itemModels)
 			{
-				if (obj->isVisible()) {
-					obj->Render();
-				}
+				obj->GetMesh()->Render();
 			}
 
 			break;
@@ -387,11 +385,9 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				}
 
 				//Render items
-				for (GameObject3D* obj : m_itemModels)
+				for (Item* obj : m_itemModels)
 				{
-					if (obj->isVisible()) {
-						obj->Render();
-					}
+					obj->GetMesh()->Render();
 				}
 			}
 			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
@@ -441,11 +437,9 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				}
 
 				//Render items
-				for (GameObject3D* obj : m_itemModels)
+				for (Item* obj : m_itemModels)
 				{
-					if (obj->isVisible()) {
-						obj->Render();
-					}
+					obj->GetMesh()->Render();
 				}
 			}
 

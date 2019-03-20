@@ -2,13 +2,12 @@
 
 #include "Item.h"
 
-class Banana : public Item {
+class Mushroom : public Item {
 public:
-	Banana();
-	~Banana() = default;
+	Mushroom();
+	~Mushroom() = default;
 
 	virtual void Tick() override { Item::Tick(); };
-
-	void Use(Player* player) override {};
 	void HitByPlayer(Player* player) override;
+	void Use(Player* player) override;
 };

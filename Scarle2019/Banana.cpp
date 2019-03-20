@@ -4,8 +4,8 @@
 #include <iostream>
 
 Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BANANA)) {
-	SetDrag(0.9f);
-	SetPhysicsOn(true);
+	m_mesh->SetDrag(0.9f);
+	m_mesh->SetPhysicsOn(true);
 }
 
 void Banana::HitByPlayer(Player* player)

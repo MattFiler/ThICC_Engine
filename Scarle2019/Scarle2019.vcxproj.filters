@@ -262,6 +262,10 @@
     <ClInclude Include="AudioManager.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Mushroom.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -395,6 +399,10 @@
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
