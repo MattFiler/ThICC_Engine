@@ -208,12 +208,28 @@ void Player::movement()
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
 				{
-					m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+					//m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+					if (m_vel.Length() < 1.0)
+					{
+						m_acc -= rightMove / 1000;
+					}
+					else
+					{
+						m_acc -= rightMove;
+					}
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
 				{
-					m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+					//m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+					if (m_vel.Length() < 1.0)
+					{
+						m_acc += rightMove / 1000;
+					}
+					else
+					{
+						m_acc += rightMove;
+					}
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed() && (inventory_item != NONE || active_item != NONE))
