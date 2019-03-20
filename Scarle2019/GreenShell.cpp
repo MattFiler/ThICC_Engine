@@ -2,13 +2,12 @@
 #include "GreenShell.h"
 #include "Player.h"
 #include "ServiceLocator.h"
-#include <iostream>
 
 GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_SHELL))
 {
-	SetDrag(0);
-	SetPhysicsOn(true);
-	setDampenWallReflect(false);
+	m_mesh->SetDrag(0);
+	m_mesh->SetPhysicsOn(true);
+	m_mesh->setDampenWallReflect(false);
 }
 
 void GreenShell::HitByPlayer(Player* player)
@@ -16,6 +15,14 @@ void GreenShell::HitByPlayer(Player* player)
 	player->setVelocity(Vector3::Zero);
 	player->AddPos(player->GetWorld().Up() * 4);
 	m_shouldDestroy = true;
+}
+
+void GreenShell::Use(Player * player)
+{
+	m_mesh->SetWorld(player->GetWorld());
+	m_mesh->AddPos(player->GetWorld().Forward() * 3);
+	m_mesh->UpdateWorld();
+	m_mesh->setVelocity(60 * player->GetWorld().Forward());
 }
 
 void GreenShell::Tick()

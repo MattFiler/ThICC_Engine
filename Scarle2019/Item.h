@@ -7,11 +7,23 @@
 
 class Player;
 
-class Item : public TrackMagnet {
+class Item 
+{
 public:
+	Item() = default;
 	Item(const std::string& item_type);
 	~Item() = default;
+	
+	virtual void Tick();
+	virtual void HitByPlayer(Player* player) = 0;
+	virtual void Use(Player* player) = 0;
 
-	virtual void Tick() override { TrackMagnet::Tick(); };
-	virtual void HitByPlayer(Player* player) {};
+	bool ShouldDestroy() { return m_shouldDestroy; };
+
+	TrackMagnet* GetMesh() { return m_mesh; };
+
+
+protected:
+	TrackMagnet * m_mesh = nullptr;
+	bool m_shouldDestroy = false;
 };

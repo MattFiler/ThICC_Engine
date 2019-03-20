@@ -3,6 +3,7 @@
 #include "KeybindManager.h"
 #include "Banana.h"
 #include "GreenShell.h"
+#include "Mushroom.h"
 #include "Constants.h"
 #include <functional>
 
@@ -18,6 +19,7 @@ public:
 	~Player();
 
 	virtual void Tick() override;
+
 	int GetWaypoint() { return waypoint; }
 	int GetRanking() { return ranking; }
 	int GetLap() { return lap; }
@@ -36,13 +38,17 @@ public:
 	void setActiveItem(ItemType _item);
 	ItemType getItemInInventory() { return inventory_item; };
 	void setItemInInventory(ItemType _item);
-	
+	void TrailItem();
+	void SpawnItem(ItemType type);
+	void ReleaseItem();
+
 protected:
 	int m_playerID = 0;
 
 private:
 	std::function<Item*(ItemType)> CreateItem;
 	void movement();
+
 
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;
@@ -68,7 +74,8 @@ private:
 	ItemType inventory_item = ItemType::NONE;
 	
 	ImageGO2D *item_img = nullptr;
-
+	Item* m_trailingItem = nullptr;
+	bool  m_isTrailing = false;
 	
 	bool m_controlsActive = false;
 };

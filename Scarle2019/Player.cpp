@@ -73,18 +73,15 @@ void Player::Tick()
 	}
 	else if (m_keymindManager.keyPressed("Spawn Banana"))
 	{
-		Banana* banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
-		banana->SetWorld(m_world);
-		banana->AddPos(m_world.Backward() * 2);
-		banana->UpdateWorld();
+		SpawnItem(ItemType::BANANA);
 	}
-	else if (m_keymindManager.keyPressed("Spawn Green Shell"))
+	else if (m_keymindManager.keyHeld("Spawn Banana"))
 	{
-		GreenShell* greenShell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
-		greenShell->SetWorld(m_world);
-		greenShell->AddPos(m_world.Forward() * 3);
-		greenShell->UpdateWorld();
-		greenShell->setVelocity(60 * m_world.Forward());
+		TrailItem();
+	}
+	else
+	{
+		ReleaseItem();
 	}
 
 	//Debug output player location - useful for setting up spawns
@@ -97,7 +94,56 @@ void Player::Tick()
 	item_img->Tick();
 
 	//apply my base behaviour
-	PhysModel::Tick();
+	//PhysModel::Tick();
+}
+
+void Player::TrailItem()
+{
+	m_trailingItem->GetMesh()->SetWorld(m_world);
+	m_trailingItem->GetMesh()->AddPos(m_world.Backward() * 2.2);
+	m_trailingItem->GetMesh()->UpdateWorld();
+}
+
+void Player::SpawnItem(ItemType type)
+{
+
+	switch (type)
+	{
+		case ItemType::BANANA:
+		{
+			Banana * banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
+			m_isTrailing = true;
+			m_trailingItem = banana;
+			TrailItem();
+			break;
+		}
+
+		case ItemType::MUSHROOM:
+		{
+			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
+			mushroom->Use(this);
+			break;
+		}
+
+		case ItemType::GREEN_SHELL:
+		{
+			GreenShell* shell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
+			m_isTrailing = true;
+			m_trailingItem = shell;
+			TrailItem();
+			break;
+		}
+	}
+}
+
+void Player::ReleaseItem()
+{
+	if (m_trailingItem)
+	{
+		m_trailingItem->Use(this);
+		m_isTrailing = false;
+		m_trailingItem = nullptr;
+	}
 }
 
 void Player::setGamePad(bool _state)
@@ -137,38 +183,53 @@ void Player::movement()
 		}
 
 		//GameController Movement
-		if (m_controlsActive)
+		
+		if (Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
 		{
-			if (Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
+			if (Locator::getGSD()->m_gamePadState[m_playerID].IsViewPressed())
 			{
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsViewPressed())
+				ExitGame();
+			}
+			else
+			{
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
 				{
-					ExitGame();
+					m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
+				{
+					m_acc -= forwardMove; //* _GSD->m_gamePadState->triggers.left;
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
+				{
+					m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+				{
+					m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
+				{
+					if (!m_trailingItem)
+					{
+						SpawnItem(ItemType::GREEN_SHELL);
+					}
+					else
+					{
+						TrailItem();
+					}
 				}
 				else
 				{
-					if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
-					{
-						m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
-					}
-
-					if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
-					{
-						m_acc -= forwardMove; //* _GSD->m_gamePadState->triggers.left;
-					}
-
-					if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
-					{
-						m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-					}
-
-					if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
-					{
-						m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-					}
+					ReleaseItem();
 				}
 			}
 		}
+		
 
 		//change orinetation of player
 		float rotSpeed = 0.001f;
@@ -212,3 +273,5 @@ void Player::movement()
 	TrackMagnet::Tick();
 
 }
+
+

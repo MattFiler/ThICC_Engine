@@ -9,6 +9,7 @@
 #include "DebugMarker.h"
 #include <iostream>
 #include <experimental/filesystem>
+#include <memory>
 
 extern void ExitGame();
 
@@ -182,7 +183,42 @@ void GameScene::Update()
 		}
 	}
 
+	for (int i = 0; i < 8; i++)
+	{
+		switch (i)
+		{
+		//case 0:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopLeft);
+		//	break;
+		//case 1:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopRight);
+		//	break;
+		//case 2:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomLeft);
+		//	break;
+		//case 3:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomRight);
+		//	break;
+		//case 4:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackTopLeft);
+		//	break;
+		//case 5:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackTopRight);
+		//	break;
+		//case 6:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomLeft);
+		//	break;
+		//case 7:
+		//	debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomRight);
+		//	break;
+		}
+	}
+
 	CollisionManager::collisionDetectionAndResponse(m_physModels);
+	//std::cout << " W: " << std::to_string(player[0]->getCollider().Orientation.w)
+	//	<< " X: " << std::to_string(player[0]->getCollider().Orientation.x)
+	//	<< " Y: " << std::to_string(player[0]->getCollider().Orientation.y)
+	//	<< " Z: " << std::to_string(player[0]->getCollider().Orientation.z) << std::endl;
 }
 
 void GameScene::UpdateItems()
@@ -191,10 +227,13 @@ void GameScene::UpdateItems()
 	int end = m_itemModels.size();
 	for (int i = 0; i < end; i++)
 	{
-		m_itemModels[i]->ShouldStickToTrack(*track);
-		m_itemModels[i]->ResolveWallCollisions(*track);
+		if (m_itemModels[i]->GetMesh())
+		{
+			m_itemModels[i]->GetMesh()->ShouldStickToTrack(*track);
+			m_itemModels[i]->GetMesh()->ResolveWallCollisions(*track);
+		}
 		for (int j = 0; j < game_config["player_count"]; ++j) {
-			if (player[j]->getCollider().Intersects(m_itemModels[i]->getCollider()))
+			if (m_itemModels[i]->GetMesh() && player[j]->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
 			{
 				m_itemModels[i]->HitByPlayer(player[j]);
 			}
@@ -208,6 +247,8 @@ void GameScene::UpdateItems()
 	if (delIndex != -1)
 	{
 		//delete m_itemModels[delIndex];
+		//std::thread tr(&GameScene::DeleteMemoryTest, this, m_itemModels[delIndex]);
+		//tr.detach();
 		m_itemModels.erase(m_itemModels.begin() + delIndex);
 	}
 }
@@ -319,10 +360,11 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			}
 
 			//Render items
-			for (GameObject3D* obj : m_itemModels)
+			for (Item* obj : m_itemModels)
 			{
-				if (obj->isVisible()) {
-					obj->Render();
+				if (obj->GetMesh())
+				{
+					obj->GetMesh()->Render();
 				}
 			}
 			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
@@ -367,10 +409,11 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				}
 
 				//Render items
-				for (GameObject3D* obj : m_itemModels)
+				for (Item* obj : m_itemModels)
 				{
-					if (obj->isVisible()) {
-						obj->Render();
+					if (obj->GetMesh())
+					{
+						obj->GetMesh()->Render();
 					}
 				}
 			}
@@ -421,10 +464,11 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				}
 
 				//Render items
-				for (GameObject3D* obj : m_itemModels)
+				for (Item* obj : m_itemModels)
 				{
-					if (obj->isVisible()) {
-						obj->Render();
+					if (obj->GetMesh())
+					{
+						obj->GetMesh()->Render();
 					}
 				}
 			}
@@ -532,6 +576,7 @@ void GameScene::create3DObjects()
 		using std::placeholders::_1;
 		player[i] = new Player("Knuckles Kart", i, std::bind(&GameScene::CreateItem, this, _1));
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		player[i]->setMass(10);
 		m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
@@ -564,6 +609,12 @@ void GameScene::create3DObjects()
 			break;
 		}
 		}
+	}
+
+	for (SDKMeshGO3D*& cup : debug_cups)
+	{
+		cup = new SDKMeshGO3D("Cup");
+		m_3DObjects.push_back(cup);
 	}
 
 
@@ -613,10 +664,21 @@ Item* GameScene::CreateItem(ItemType type)
 	case RED_SHELL:
 		break;
 	case MUSHROOM:
+	{
+		Mushroom * mushroom = new Mushroom();
+		m_itemModels.push_back(mushroom);
+		return mushroom;
 		break;
+	}
 	default:
 		return nullptr;
 		break;
 	}
 	return nullptr;
+}
+
+void GameScene::DeleteMemoryTest(Item* item)
+{
+	//std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	delete item;
 }
