@@ -1,5 +1,7 @@
 #pragma once
 #include "Collision.h"
+#include "Player.h"
+#include "Item.h"
 #include <vector>
 
 class CollisionManager
@@ -8,9 +10,11 @@ public:
 	CollisionManager() = default;
 	~CollisionManager() = default;
 
-	static  void collisionDetectionAndResponse(std::vector<PhysModel*> _physModel);
+	static  void CollisionDetectionAndResponse(std::vector<PhysModel*> _physModel, std::vector<Item*> _items);
 private:
-	static std::vector<Collision> checkPhysModelCollisions(std::vector<PhysModel*> _physModel);
+	static std::vector<Collision> CheckPhysModelCollisions(std::vector<PhysModel*> _physModels );
+	static void CheckResolveItemCollisions(std::vector<PhysModel*> _physModels, std::vector<Item*> _items);
+
 	static void PlayerCollisions(Collision & collision);
 	static void ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox);
 

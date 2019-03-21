@@ -196,6 +196,7 @@
     <ClInclude Include="InputData.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemBox.h" />
+    <ClInclude Include="ItemCollision.h" />
     <ClInclude Include="ItemData.h" />
     <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="Light.h" />

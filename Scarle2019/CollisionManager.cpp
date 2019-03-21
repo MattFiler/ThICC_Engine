@@ -2,11 +2,11 @@
 #include "CollisionManager.h"
 #include "AudioManager.h"
 #include "ItemBox.h"
-#include "Player.h"
 
-void CollisionManager::collisionDetectionAndResponse(std::vector<PhysModel*> _physModels)
+void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _physModels, std::vector<Item*> _items)
 {
-	std::vector<Collision> collisions = checkPhysModelCollisions(_physModels);
+	std::vector<Collision> collisions = CheckPhysModelCollisions(_physModels);
+	CheckResolveItemCollisions(_physModels, _items);
 
 	for (Collision& collision : collisions)	
 	{
@@ -64,7 +64,7 @@ void CollisionManager::PlayerCollisions(Collision & collision)
 /*Checks all physModels in the vector to see if they're inside one another. 
 If true it creates a collision struct with the two models in the collision and adds it to a vector.
 It also sets the phymodels collisions to true. Returns the vector of collisions*/
-std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<PhysModel*> _physModels)
+std::vector<Collision> CollisionManager::CheckPhysModelCollisions(std::vector<PhysModel*> _physModels )
 {
 	std::vector<Collision> collisions;
 
@@ -106,6 +106,45 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 	}
 
 	return collisions;
+}
+
+void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physModels, std::vector<Item*> _items)
+{
+
+	for (Item* item1 : _items)
+	{
+		if (item1->GetMesh())
+		{
+			bool hit_player = false;
+
+			//Player x Item Collision
+			for (PhysModel* model : _physModels)
+			{
+				Player* player = dynamic_cast<Player*>(model);
+				if (player && item1->GetMesh()->getCollider().Intersects(player->getCollider()))
+				{
+					item1->HitByPlayer(player);
+					hit_player = true;
+					break;
+				}
+			}
+
+			if (!hit_player)
+			{
+				//Item x Item Collision
+				for (Item* item2 : _items)
+				{
+					if (item1 != item2 && item2->GetMesh() && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
+					{
+						item1->FlagForDestoy();
+						item2->FlagForDestoy();
+						break;
+					}
+				}
+			}
+		}
+	}
+
 }
 
 Plane CollisionManager::getPlane(Vector3 _corner1, Vector3 _corner2, float _height)
