@@ -7,6 +7,7 @@
 #include "ServiceLocator.h"
 #include "AudioManager.h"
 #include "DebugMarker.h"
+#include "WaitForGPU.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
@@ -126,8 +127,6 @@ void GameScene::Update()
 
 	}
 
-	UpdateItems();
-
 	if (m_keybinds.keyPressed("Quit"))
 	{
 		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
@@ -230,6 +229,8 @@ void GameScene::Update()
 	//	<< " X: " << std::to_string(player[0]->getCollider().Orientation.x)
 	//	<< " Y: " << std::to_string(player[0]->getCollider().Orientation.y)
 	//	<< " Z: " << std::to_string(player[0]->getCollider().Orientation.z) << std::endl;
+
+	UpdateItems();
 }
 
 void GameScene::UpdateItems()
@@ -270,10 +271,10 @@ void GameScene::UpdateItems()
 	}
 	if (delIndex != -1)
 	{
-		//delete m_itemModels[delIndex];
-		//std::thread tr(&GameScene::DeleteMemoryTest, this, m_itemModels[delIndex]);
-		//tr.detach();
+		Item* toby_broke_it = m_itemModels[delIndex];
 		m_itemModels.erase(m_itemModels.begin() + delIndex);
+		delete toby_broke_it;
+		WaitForGPU::should_wait = true;
 	}
 }
 
@@ -711,10 +712,4 @@ Item* GameScene::CreateItem(ItemType type)
 		break;
 	}
 	return nullptr;
-}
-
-void GameScene::DeleteMemoryTest(Item* item)
-{
-	//std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	delete item;
 }

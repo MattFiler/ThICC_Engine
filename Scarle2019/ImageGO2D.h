@@ -32,8 +32,13 @@ public:
 	virtual void Reset() override;
 
 protected:
+	void InternalSpriteUpdate(string _filename);
+
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
 	int m_resourceNum = -1;
+
+	std::string current_filepath = "ITEM_PLACEHOLDER";
+	std::string new_filepath = "ITEM_PLACEHOLDER";
 
 	GameFilepaths m_filepath;
 	XMUINT2 size;

@@ -13,6 +13,7 @@
 #include "CollisionManager.h"
 #include "GameDebugToggles.h"
 #include "Item.h"
+#include "WaitForGPU.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -26,6 +27,7 @@ using Microsoft::WRL::ComPtr;
 bool GameDebugToggles::show_debug_meshes = false;
 bool GameDebugToggles::render_level = true;
 double ItemBoxConfig::respawn_time = 0.0;
+bool WaitForGPU::should_wait = false;
 
 Game::Game() :
 	m_WD(new WindowData),
@@ -167,6 +169,11 @@ void Game::pushBackObjects()
 /* Update is called once per frame */
 void Game::Update(DX::StepTimer const& _timer)
 {
+	if (WaitForGPU::should_wait) {
+		WaitForGpu();
+		WaitForGPU::should_wait = false;
+	}
+
 	//Poll Keyboard and Mouse
 	//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
 	//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input

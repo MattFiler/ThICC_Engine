@@ -62,7 +62,7 @@ private:
 	Vector m_savedGravVel;
 	int m_ranking = 0;
 	int m_waypoint = 0;
-	int m_lap = 3;
+	int m_lap = 1;
 	Text2D *m_textRanking = nullptr;
 	Text2D *m_textLap = nullptr;
 	Text2D *m_textCountdown = nullptr;
