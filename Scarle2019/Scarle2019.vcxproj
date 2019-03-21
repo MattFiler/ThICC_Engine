@@ -231,6 +231,7 @@
     <ClInclude Include="VBSpiked.h" />
     <ClInclude Include="VBspiral.h" />
     <ClInclude Include="vertex.h" />
+    <ClInclude Include="WaitForGPU.h" />
     <ClInclude Include="WindowData.h" />
   </ItemGroup>
   <ItemGroup>

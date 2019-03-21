@@ -81,7 +81,7 @@ void Camera::Tick()
 		{
 			m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
 			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-			angle += 1.0f;
+			angle += 1.5f;
 
 			if (rotCam != m_targetObject->GetOri())
 				rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.1);
