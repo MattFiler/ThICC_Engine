@@ -60,7 +60,7 @@ private:
 	float m_maxTurnRateMutliplier = 2.3f;
 	float m_maxDriftTurnMutliplier = 4.2f;
 	double m_timeForMaxTurn = 4;
-	double m_timeForMaxDrift = 4;
+	double m_timeForMaxDrift = 8;
 	bool m_drifting = false;
 	bool m_driftingRight = false;
 	float m_driftBoost = 300;
