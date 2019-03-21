@@ -41,9 +41,10 @@ void GameScene::Update()
 
 	if (finished == 4)
 	{
-		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
-		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
-		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
+		//m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
+		//Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
+		//Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
+		//finished = 0;
 	}
 
 	switch (state)

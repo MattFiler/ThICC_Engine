@@ -164,9 +164,14 @@ void Player::setGamePad(bool _state)
 
 void Player::movement()
 {
+	bool isTurning = false;
 	//FORWARD BACK & STRAFE CONTROL HERE
-	Vector3 forwardMove = 30.0f * m_world.Forward();
-	Vector3 rightMove = 60.0f * m_world.Right();
+	Vector3 forwardMove = 25.0f * m_world.Forward();
+	Vector3 rightMove = 12.5f * m_world.Right();
+	Vector3 forwardComponent = Vector::Zero;
+	Vector3 turnComponent = Vector::Zero;
+	float driftMultiplier = 1;
+
 	Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
 	rightMove = Vector3::Transform(rightMove, rotMove);
@@ -176,19 +181,23 @@ void Player::movement()
 	{
 		if (m_keymindManager.keyHeld("Forward"))
 		{
-			m_acc += forwardMove;
+			//m_acc += forwardMove;
+			forwardComponent += forwardMove;
 		}
 		if (m_keymindManager.keyHeld("Backwards"))
 		{
-			m_acc -= forwardMove / 2;
+			//m_acc -= forwardMove / 2;
+			forwardComponent -= forwardMove / 2;
 		}
 		if (m_keymindManager.keyHeld("Left"))
 		{
 			m_acc -= rightMove;
+			isTurning = true;
 		}
 		if (m_keymindManager.keyHeld("Right"))
 		{
 			m_acc += rightMove;
+			isTurning = true;
 		}
 	}
 
@@ -204,40 +213,139 @@ void Player::movement()
 			}
 			else
 			{
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightShoulderPressed())
+				{
+					isTurning = true;
+					if (m_drifting == false)
+					{
+						Vector addVel = Vector::Zero;
+						m_drifting = true;
+						if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
+						{
+							m_driftingRight = false;
+						}
+						else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+						{
+							m_driftingRight = true;
+						}
+						else
+						{
+							isTurning = false;
+							m_drifting = false;
+						}
+						m_vel += addVel;
+					}
+				}
+				else
+				{
+					if (m_drifting)
+					{
+						EndDrift();
+					}
+				}
+
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
 				{
-					m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
+					//m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
+					forwardComponent += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
 				{
-					m_acc -= forwardMove / 2; //* _GSD->m_gamePadState->triggers.left;
+					//m_acc -= forwardMove / 2; //* _GSD->m_gamePadState->triggers.left;
+					forwardComponent -= forwardMove / 2;
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
 				{
-					//m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-					if (m_vel.Length() < 1.0)
+					if (m_drifting)
 					{
-						m_acc -= rightMove / 1000;
+						if (m_driftingRight)
+						{
+							driftMultiplier = 0.5f;
+						}
+						else
+						{
+							driftMultiplier = 1.5f;
+						}
 					}
 					else
 					{
-						m_acc -= rightMove;
+						//m_acc -= rightMove;
+						turnComponent -= rightMove;
 					}
+					isTurning = true;
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
 				{
-					//m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-					if (m_vel.Length() < 1.0)
+					if (m_drifting)
 					{
-						m_acc += rightMove / 1000;
+						if (m_driftingRight)
+						{
+							driftMultiplier = 2;
+						}
+						else
+						{
+							driftMultiplier = 0.1f;
+						}
 					}
 					else
 					{
-						m_acc += rightMove;
+						turnComponent += rightMove;
 					}
+					isTurning = true;
+				}
+
+				m_acc = forwardComponent;
+
+				if (isTurning)
+				{
+					if (m_drifting)
+					{
+						if (m_timeTurning > m_timeForMaxDrift)
+						{
+							m_timeTurning = m_timeForMaxDrift;
+						}
+						if (m_driftingRight)
+						{
+							turnComponent = rightMove;
+						}
+						else
+						{
+							turnComponent = -rightMove;
+						}
+
+						m_timeTurning += Locator::getGSD()->m_dt * driftMultiplier;
+						turnComponent *= 1 + ((m_timeTurning / m_timeForMaxDrift)  * m_maxDriftTurnMutliplier);
+						turnComponent *= 1 + (m_timeTurning / 1.3f);
+					}
+					else
+					{
+						if (m_timeTurning > m_timeForMaxTurn)
+						{
+							m_timeTurning = m_timeForMaxTurn;
+						}
+						m_timeTurning += Locator::getGSD()->m_dt;
+						turnComponent *= 1 + ((m_timeTurning / m_timeForMaxTurn)  * m_maxTurnRateMutliplier);
+						turnComponent *= 1 + (m_timeTurning / 1.3f);
+					}
+
+
+
+					float accLength = m_acc.Length();
+					if (turnComponent.LengthSquared() > 0)
+					{
+						accLength += turnComponent.Length() / 4;
+					}
+					m_acc += turnComponent;
+					m_acc.Normalize();
+					m_acc *= accLength;
+
+				}
+				else
+				{
+					EndDrift();
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
@@ -301,4 +409,27 @@ void Player::movement()
 
 }
 
+void Player::EndDrift()
+{
+	m_drifting = false;
+	if (m_timeTurning > m_timeForMaxDrift / 3)
+	{
+		m_vel = m_world.Forward() * m_vel.Length();
+	}
+	/*
+	if (m_timeTurning > m_timeForMaxDrift / 3)
+	{
+		m_acc += m_world.Forward() * (m_driftBoost);
+	}
+	else if (m_timeTurning > m_timeForMaxDrift / 1.5f)
+	{
+		m_acc += m_world.Forward() * (m_driftBoost * 1.5f);
+	}
+	else if (m_timeTurning >= m_timeForMaxDrift)
+	{
+		m_acc += m_world.Forward() * (m_driftBoost * 2);
+	}
+	*/
+	m_timeTurning = 0;
+}
 
