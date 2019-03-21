@@ -165,7 +165,7 @@ void Player::setGamePad(bool _state)
 void Player::movement()
 {
 	//FORWARD BACK & STRAFE CONTROL HERE
-	Vector3 forwardMove = 30.0f * m_world.Forward();
+	Vector3 forwardMove = 25.0f * m_world.Forward();
 	Vector3 rightMove = 60.0f * m_world.Right();
 	Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
