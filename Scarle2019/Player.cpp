@@ -14,24 +14,25 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	SetDrag(0.7);
 	SetPhysicsOn(true);
 	m_playerID = _playerID;
-	text_ranking = new Text2D(std::to_string(ranking));
-	text_ranking->SetScale(0.1f * Vector2::One);
-	text_lap = new Text2D(std::to_string(lap) + "/3");
-	countdown = new Text2D("3");
-	item_img = new ImageGO2D("ITEM_PLACEHOLDER");
+	m_textRanking = new Text2D(std::to_string(m_ranking));
+	m_textRanking->SetScale(0.1f * Vector2::One);
+	m_textLap = new Text2D(std::to_string(m_lap) + "/3");
+	m_textCountdown = new Text2D("3");
+	m_imgItem = new ImageGO2D("ITEM_PLACEHOLDER");
+	m_textFinishOrder = new Text2D("0" + m_orderIndicator[0]);
 }
 
 Player::~Player()
 {
-	delete item_img;
-	item_img = nullptr;
+	delete m_imgItem;
+	m_imgItem = nullptr;
 }
 
 
 void Player::setActiveItem(ItemType _item) {
 	if (inventory_item == _item) {
 		active_item = _item;
-		item_img->UpdateSprite("ITEM_PLACEHOLDER");
+		m_imgItem->UpdateSprite("ITEM_PLACEHOLDER");
 		inventory_item = ItemType::NONE;
 		std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
 	}
@@ -45,7 +46,7 @@ void Player::setActiveItem(ItemType _item) {
 void Player::setItemInInventory(ItemType _item) {
 	if (inventory_item == ItemType::NONE) {
 		inventory_item = _item;
-		item_img->UpdateSprite(Locator::getItemData()->GetItemSpriteName(_item));
+		m_imgItem->UpdateSprite(Locator::getItemData()->GetItemSpriteName(_item));
 		std::cout << "PLAYER " << m_playerID << " HAS ACQUIRED ITEM: " << _item << std::endl; //debug
 	}
 }
@@ -91,8 +92,12 @@ void Player::Tick()
 	}
 
 	//Update UI
-	text_ranking->SetText(std::to_string(ranking));
-	item_img->Tick();
+	if (!m_finished)
+	{
+		m_textRanking->SetText(std::to_string(m_ranking));
+		m_textLap->SetText(std::to_string(m_lap) + "/3");
+		m_imgItem->Tick();
+	}
 
 	//apply my base behaviour
 	//PhysModel::Tick();
@@ -148,9 +153,6 @@ void Player::ReleaseItem()
 		m_trailingItem = nullptr;
 		active_item = NONE;
 	}
-
-	text_lap->SetText(std::to_string(lap) + "/3");
-	text_ranking->SetText(std::to_string(waypoint));
 }
 
 void Player::setGamePad(bool _state)

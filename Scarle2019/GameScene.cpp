@@ -126,39 +126,6 @@ void GameScene::Update()
 
 	}
 
-
-	for (int j = 0; j < track->getWaypointsBB().size(); j++){
-
-		for (int k = 0; k < game_config["player_count"]; ++k) {
-
-			for (int i = 0; i < game_config["player_count"]; ++i) {
-
-				if (i != k)
-				{
-					float difference = 0;
-					float difference1 = 0;
-
-					difference = Vector3::Distance(player[i]->GetPos(), track->getWaypointsBB()[j].Center);
-					difference1 = Vector3::Distance(player[k]->GetPos(), track->getWaypointsBB()[j].Center);
-
-					if (difference < difference1)
-					{
-						track->getWaypointsBB()[j].Orientation = Quaternion::CreateFromYawPitchRoll(player[i]->GetYaw(), player[i]->GetPitch(), player[i]->GetRoll()) * Quaternion::CreateFromRotationMatrix(player[i]->GetWorld());
-						Vector3 trans = MatrixDecomposeYawPitchRoll(player[0]->GetOri() * track->GetWorld());
-						track->GetDebugMarkers()[j]->SetOri(Matrix::CreateFromYawPitchRoll(trans.x, trans.y, trans.z));
-					}
-				}
-			}
-		}
-	}
-
-	Vector3 trasns = MatrixDecomposeYawPitchRoll(player[0]->GetOri());
-	//trasns *= Vector3::Up;
-	//std::cout << track->GetDebugMarkers()[10]->GetYaw() << "," << track->GetDebugMarkers()[10]->GetPitch() << "," << track->GetDebugMarkers()[10]->GetRoll() << std::endl;
-	//std::cout << player[0]->GetYaw() << "," << player[0]->GetPitch() << "," << player[0]->GetRoll() << std::endl;
-	//std::cout << trasns.x << "," << trasns.y << "," << trasns.z << std::endl;
-
-
 	UpdateItems();
 
 	if (m_keybinds.keyPressed("Quit"))
@@ -181,10 +148,6 @@ void GameScene::Update()
 			return;
 		}
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
-	}
-	if (m_keybinds.keyPressed("Save Display Player Pos"))
-	{
-		std::cout << trasns.x << "," << trasns.y << "," << trasns.z << std::endl;
 	}
 
 
@@ -269,24 +232,6 @@ void GameScene::Update()
 	//	<< " Z: " << std::to_string(player[0]->getCollider().Orientation.z) << std::endl;
 }
 
-Vector3 GameScene::MatrixDecomposeYawPitchRoll(Matrix  mat)
-{
-	//Breaks down a matrix into yaw, pitch, and roll. Returns them as a float3
-	Vector3 euler;
-	euler.x = asinf(-mat._32);
-	if (cosf(euler.x) > 0.0001)
-	{
-		euler.y = atan2f(mat._31, mat._33);
-		euler.z = atan2f(mat._12, mat._22);
-	}
-	else
-	{
-		euler.y = 0.0f;
-		euler.z = atan2f(-mat._21, mat._11);
-	}
-	return euler;
-}
-
 void GameScene::UpdateItems()
 {
 	int delIndex = -1;
@@ -336,7 +281,7 @@ void GameScene::SetPlayersWaypoint()
 {
 	for (int i = 0; i < game_config["player_count"]; i++) {
 
-		if (player[i]->GetWaypoint() < track->getWaypoints().size() -1)
+		if (player[i]->GetWaypoint() < track->getWaypointsBB().size() -1)
 		{
 			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[player[i]->GetWaypoint() + 1]))
 			{
@@ -350,14 +295,12 @@ void GameScene::SetPlayersWaypoint()
 				player[i]->SetWaypoint(0);
 				if (player[i]->GetLap() == 3)
 				{
+					player[i]->SetFinished(true);
+					player[i]->GetFinishOrder()->SetText(std::to_string(player[i]->GetRanking()) + player[i]->GetOrderIndicator()[player[i]->GetRanking() - 1]);
 					m_cam[i]->SetBehav(Camera::BEHAVIOUR::ORBIT);
 					player[i]->setGamePad(false);
 				}
-				else if (player[i]->GetLap() < 3)
-				{
-					player[i]->SetLap(player[i]->GetLap() + 1);
-
-				}
+				player[i]->SetLap(player[i]->GetLap() + 1);
 			}
 		}
 	}
@@ -567,14 +510,24 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
 			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
 			//draw 2d objects
-			for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+			//for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+			//{
+			//	(*it)->Render();
+			//}
+			for (int i = 0; i < game_config["player_count"]; i++)
 			{
-				(*it)->Render();
+				if (player[i]->GetFinished())
+				{
+					player[i]->GetFinishOrder()->Render();
+				}
+				else if (!player[i]->GetFinished())
+				{
+					player[i]->GetRankingText()->Render();
+					player[i]->GetLapText()->Render();
+					player[i]->GetItemImg()->Render();
+				}
 			}
 			Locator::getRD()->m_spriteBatch->End();
-			break;
-
-		case END:
 			break;
 	}
 }
@@ -608,12 +561,12 @@ void GameScene::create2DObjects()
 		m_2DObjects.push_back(player[i]->GetItemImg());
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
-		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->GetRankingText()->GetSize().x;
+		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
 		float text_pos_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetRankingText()->GetSize().y;
 		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
 		m_2DObjects.push_back(player[i]->GetRankingText());
 
-		float text_lap_x = Locator::getWD()->m_viewport[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.5f;
+		float text_lap_x = Locator::getWD()->m_viewport[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
 		float text_lap_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetLapText()->GetSize().y;
 		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
 		m_2DObjects.push_back(player[i]->GetLapText());
@@ -624,6 +577,7 @@ void GameScene::create2DObjects()
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		player[i]->GetCountdown()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2 });
+		player[i]->GetFinishOrder()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetFinishOrder()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetFinishOrder()->GetSize().y / 2 });
 	}
 }
 
