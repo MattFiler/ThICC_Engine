@@ -7,6 +7,7 @@
 #include "ServiceLocator.h"
 #include "AudioManager.h"
 #include "DebugMarker.h"
+#include "WaitForGPU.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
@@ -40,9 +41,10 @@ void GameScene::Update()
 
 	if (finished == 4)
 	{
-		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
-		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
-		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
+		//m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
+		//Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
+		//Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
+		//finished = 0;
 	}
 
 	switch (state)
@@ -139,8 +141,6 @@ void GameScene::Update()
 		Locator::getGSD()->m_gamePadState[i] = Locator::getID()->m_gamePad->GetState(i); //set game controllers state[s]
 
 	}
-
-	UpdateItems();
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -245,6 +245,8 @@ void GameScene::Update()
 	//	<< " X: " << std::to_string(player[0]->getCollider().Orientation.x)
 	//	<< " Y: " << std::to_string(player[0]->getCollider().Orientation.y)
 	//	<< " Z: " << std::to_string(player[0]->getCollider().Orientation.z) << std::endl;
+
+	UpdateItems();
 }
 
 void GameScene::UpdateItems()
@@ -285,10 +287,10 @@ void GameScene::UpdateItems()
 	}
 	if (delIndex != -1)
 	{
-		//delete m_itemModels[delIndex];
-		//std::thread tr(&GameScene::DeleteMemoryTest, this, m_itemModels[delIndex]);
-		//tr.detach();
+		//Item* toby_broke_it = m_itemModels[delIndex];
 		m_itemModels.erase(m_itemModels.begin() + delIndex);
+		//delete toby_broke_it;
+		//WaitForGPU::should_wait = true;
 	}
 }
 
@@ -580,7 +582,8 @@ void GameScene::create2DObjects()
 
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
-		player[i]->GetItemImg()->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
+		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
+		player[i]->SetItemPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
 		//test->CentreOrigin();
 		m_2DObjects.push_back(player[i]->GetItemImg());
 
@@ -735,10 +738,4 @@ Item* GameScene::CreateItem(ItemType type)
 		break;
 	}
 	return nullptr;
-}
-
-void GameScene::DeleteMemoryTest(Item* item)
-{
-	//std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	delete item;
 }

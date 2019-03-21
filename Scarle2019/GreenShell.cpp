@@ -13,7 +13,7 @@ GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_S
 void GreenShell::HitByPlayer(Player* player)
 {
 	// Prevent collisions with the parent that fired this for a bit
-	if (m_elapsedTime < 1 && player == m_player)
+	if (player == m_player)
 	{
 		return;
 	}

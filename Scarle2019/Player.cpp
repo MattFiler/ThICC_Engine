@@ -18,7 +18,7 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	m_textRanking->SetScale(0.1f * Vector2::One);
 	m_textLap = new Text2D(std::to_string(m_lap) + "/3");
 	m_textCountdown = new Text2D("3");
-	m_imgItem = new ImageGO2D("ITEM_PLACEHOLDER");
+	m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 	m_textFinishOrder = new Text2D("0" + m_orderIndicator[0]);
 }
 
@@ -32,21 +32,23 @@ Player::~Player()
 void Player::setActiveItem(ItemType _item) {
 	if (inventory_item == _item) {
 		active_item = _item;
-		m_imgItem->UpdateSprite("ITEM_PLACEHOLDER");
+		m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
+		m_imgItem->SetPos(m_itemPos);
 		inventory_item = ItemType::NONE;
 		std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
 	}
 	else
 	{
-		//We should never get here - so if we do, throw a useful error.
-		throw std::runtime_error("Player tried to use an item that they did not have. This should never be requested!");
+		//We should never get here
+		std::cout << "Player tried to use an item that they did not have. This should never be requested!" << std::endl;
 	}
 };
 
 void Player::setItemInInventory(ItemType _item) {
 	if (inventory_item == ItemType::NONE) {
 		inventory_item = _item;
-		m_imgItem->UpdateSprite(Locator::getItemData()->GetItemSpriteName(_item));
+		m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
+		m_imgItem->SetPos(m_itemPos);
 		std::cout << "PLAYER " << m_playerID << " HAS ACQUIRED ITEM: " << _item << std::endl; //debug
 	}
 }
@@ -163,7 +165,7 @@ void Player::setGamePad(bool _state)
 void Player::movement()
 {
 	//FORWARD BACK & STRAFE CONTROL HERE
-	Vector3 forwardMove = 30.0f * m_world.Forward();
+	Vector3 forwardMove = 25.0f * m_world.Forward();
 	Vector3 rightMove = 60.0f * m_world.Right();
 	Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
@@ -178,7 +180,7 @@ void Player::movement()
 		}
 		if (m_keymindManager.keyHeld("Backwards"))
 		{
-			m_acc -= forwardMove;
+			m_acc -= forwardMove / 2;
 		}
 		if (m_keymindManager.keyHeld("Left"))
 		{
@@ -209,7 +211,7 @@ void Player::movement()
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
 				{
-					m_acc -= forwardMove; //* _GSD->m_gamePadState->triggers.left;
+					m_acc -= forwardMove / 2; //* _GSD->m_gamePadState->triggers.left;
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
@@ -238,15 +240,19 @@ void Player::movement()
 					}
 				}
 
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed() && (inventory_item != NONE || active_item != NONE))
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
 				{
 					if (!m_isTrailing)
 					{
-						SpawnItem(inventory_item);
+						if (inventory_item != NONE) {
+							SpawnItem(inventory_item);
+						}
 					}
 					else
 					{
-						TrailItem();
+						if (m_trailingItem != nullptr) {
+							TrailItem();
+						}
 					}
 				}
 				else

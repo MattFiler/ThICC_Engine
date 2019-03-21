@@ -266,6 +266,9 @@
     <ClInclude Include="Mushroom.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="WaitForGPU.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

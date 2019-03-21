@@ -42,7 +42,6 @@ private:
 	void pushBackObjects();
 
 	Item* CreateItem(ItemType type);
-	void DeleteMemoryTest(Item* item);
 
 	// Test objects
 	Track* track = nullptr;
