@@ -13,6 +13,7 @@
 #include "CollisionManager.h"
 #include "GameDebugToggles.h"
 #include "Item.h"
+#include "WaitForGPU.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -26,6 +27,7 @@ using Microsoft::WRL::ComPtr;
 bool GameDebugToggles::show_debug_meshes = false;
 bool GameDebugToggles::render_level = true;
 double ItemBoxConfig::respawn_time = 0.0;
+bool WaitForGPU::should_wait = false;
 
 Game::Game() :
 	m_WD(new WindowData),
@@ -53,7 +55,6 @@ Game::Game() :
 	Locator::setupWD(m_WD);
 	Locator::setupGSD(m_GSD);
 	Locator::setupID(m_ID);
-	Locator::setupItemData(&m_probabilities);
 	Locator::setupAudio(&m_AM);
 }
 
@@ -103,6 +104,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//Setup keybinds
 	m_keybinds.setup(m_GSD);
+
+	m_probabilities = new ItemData();
+	Locator::setupItemData(m_probabilities);
 
 	//Create all GameObjects
 	//createAllObjects2D();
@@ -167,6 +171,11 @@ void Game::pushBackObjects()
 /* Update is called once per frame */
 void Game::Update(DX::StepTimer const& _timer)
 {
+	if (WaitForGPU::should_wait) {
+		WaitForGpu();
+		WaitForGPU::should_wait = false;
+	}
+
 	//Poll Keyboard and Mouse
 	//More details here: https://github.com/Microsoft/DirectXTK/wiki/Mouse-and-keyboard-input
 	//You can find out how to set up controllers here: https://github.com/Microsoft/DirectXTK/wiki/Game-controller-input

@@ -3,6 +3,7 @@
 #include "GameStateData.h"
 #include "RenderData.h"
 #include "SceneManager.h"
+#include "AudioManager.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -28,13 +29,30 @@ void MenuScene::Update()
 	else if (Locator::getGSD()->m_keyboardState.Enter || Locator::getGSD()->m_gamePadState[0].IsStartPressed())
 	{
 		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
+		Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
+	}
+
+	if (game_start)
+	{
+		Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TITLE_START);
+		game_start = false;
 	}
 
 	//in splash screen
 	enterPlayerLobby();
 
+	if (m_menu_state == States::NOSTATE)
+	{
+		timeout -= Locator::getGSD()->m_dt;
+
+		if (timeout < 0 && intro_music_start)
+		{
+			Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TTLE_LOOP);
+			intro_music_start = false;
+		}
+	}
 	//in lobby
-	if (m_menu_state == States::LOBBY)
+	else if (m_menu_state == States::LOBBY)
 	{
 		for (int i = 0; i < 4; ++i)
 		{
@@ -179,10 +197,16 @@ void MenuScene::enterPlayerLobby()
 			m_2DObjects[1]->SetPos(Vector2(0, -720));
 			m_2DObjects[2]->SetPos(Vector2(0, 0));
 			//m_charecter_images[0][0]->SetPos(Vector2(200, 200));
+			Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TTLE_LOOP)->Stop();
+			Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP);
 		}
 
 		if (Locator::getGSD()->m_gamePadState[0].IsBPressed() && m_menu_state == States::LOBBY)
 		{
+			intro_music_start = true;
+			timeout = 1.2f;
+			game_start = true;
+			Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
 			m_menu_state = States::NOSTATE;
 			m_2DObjects[1]->SetPos(Vector2(0, 0));
 			m_2DObjects[2]->SetPos(Vector2(0, -720));
@@ -200,7 +224,7 @@ void MenuScene::playerJoin()
 			if (Locator::getGSD()->m_gamePadState[i].IsAPressed() && m_menu_state == States::LOBBY)
 			{
 				//set player charecter selection image
-				m_charecter_images[i][Locator::getGSD()->charecter_selected[i]];
+				m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));
 			}
 
 			if (m_charTimeout[i] <= 0) // stops continuous flipping of charecter selection
@@ -214,6 +238,7 @@ void MenuScene::playerJoin()
 					{
 						Locator::getGSD()->charecter_selected[i] = 0;
 					}
+					Locator::getAudio()->Play(SOUND_TYPE::CHARACTER_SEL, Locator::getGSD()->charecter_selected[i]);
 					m_charTimeout[i] = 0.3f; // set charecter selection timeout
 					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
 				}
@@ -227,6 +252,7 @@ void MenuScene::playerJoin()
 						m_2DObjects[3 + i]->SetPos(Vector2(0, -500));//set old image pos
 						Locator::getGSD()->charecter_selected[i] = 3;
 					}
+					Locator::getAudio()->Play(SOUND_TYPE::CHARACTER_SEL, Locator::getGSD()->charecter_selected[i]);
 					m_charTimeout[i] = 0.2f; // set charecter selection timeout
 					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
 				}
@@ -239,9 +265,9 @@ void MenuScene::initCharecterImages()
 {
 	for (int i = 0; i < 4; ++i)
 	{
-		m_charecter_images[i][0] = new ImageGO2D("BOWSER");
+		m_charecter_images[i][0] = new ImageGO2D("MARIO");
 		m_charecter_images[i][0]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][1] = new ImageGO2D("MARIO");
+		m_charecter_images[i][1] = new ImageGO2D("BOWSER");
 		m_charecter_images[i][1]->SetPos(Vector2(0, -500));
 		m_charecter_images[i][2] = new ImageGO2D("PEACH");
 		m_charecter_images[i][2]->SetPos(Vector2(0, -500));

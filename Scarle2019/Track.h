@@ -44,7 +44,7 @@ public:
 	std::vector<Vector3> getCamerasRot() {
 		return map_cams_rot;
 	};
-	std::vector<BoundingBox> getWaypointsBB() {
+	std::vector<BoundingOrientedBox> getWaypointsBB() {
 		return waypoint_bb;
 	};
 	FinishLine getFinishLine() {
@@ -117,7 +117,7 @@ private:
 	std::vector<Vector3> map_finishline_rot;
 
 	// waypoint bounding box
-	std::vector<BoundingBox> waypoint_bb;
+	std::vector<BoundingOrientedBox> waypoint_bb;
 
 	//Item boxes
 	std::vector<ItemBox*> item_boxes;

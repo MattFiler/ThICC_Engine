@@ -27,6 +27,8 @@ private:
 	SDKMeshGO3D* test_model = nullptr;
 	Camera* m_cam = nullptr;
 	Light* m_light = nullptr;
+	
+	Track* m_track = nullptr;
 
 	vector<GameObject2D*> m_2DObjects; 
 	vector<GameObject3D*> m_3DObjects; 

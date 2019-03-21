@@ -1,0 +1,105 @@
+{
+  "asset_name": "DEBUG_CUBE",
+  "asset_type": "Models",
+  "model_type": "Track",
+  "has_box_collider": false,
+  "visible": true,
+  "start_x": 0.0,
+  "start_y": 0.0,
+  "start_z": 0.0,
+  "modelscale": 10.0,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 10.0,
+  "map_cameras": [
+    {
+      "name": "Course Intro Cam",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "role": "WIP",
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "Course Intro Cam.001",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "role": "WIP",
+      "rotation": [
+        1.5707963705062866,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "Course Intro Cam.002",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "role": "WIP",
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "Course Intro Cam.003",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "role": "WIP",
+      "rotation": [
+        0.0,
+        1.5707963705062866,
+        0.0
+      ]
+    },
+    {
+      "name": "Course Intro Cam.004",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "role": "WIP",
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "Course Intro Cam.005",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "role": "WIP",
+      "rotation": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ]
+    }
+  ],
+  "map_waypoints": [],
+  "map_spawnpoints": [],
+  "map_finishline": [],
+  "map_itemboxes": []
+}

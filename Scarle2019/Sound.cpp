@@ -40,6 +40,20 @@ void Sound::Play()
 	}
 }
 
+
+/*Only used for looping sounds*/
+void Sound::Stop()
+{
+	if (m_sfx)
+	{
+		if (loop)
+		{
+			m_loop->Stop(true);
+			m_playing = false;
+		}
+	}
+}
+
 void Sound::Tick(GameStateData* _GSD)
 {
 	if (m_loop)

@@ -42,7 +42,6 @@ private:
 	void pushBackObjects();
 
 	Item* CreateItem(ItemType type);
-	void DeleteMemoryTest(Item* item);
 
 	// Test objects
 	Track* track = nullptr;
@@ -58,7 +57,6 @@ private:
 	Light*												m_light;
 
 	KeybindManager m_keybinds;
-	//Banana m_banana_test;
 	std::vector<Item*> m_itemModels;
 
 	std::vector<PhysModel*> m_physModels;
@@ -71,8 +69,6 @@ private:
 	RenderData* m_RD;
 	bool m_playerControls = false;
 
-	// useful debug code dont delete
-	Text2D* camera_pos = nullptr;
 	Text2D* countdown_text = nullptr;
 
 	float timeout = 12.f;
@@ -89,6 +85,9 @@ private:
 	States state = START;
 
 	bool track_music_start = true;
+	bool final_lap_start = false;
+	bool final_lap = false;
+	int finished = 0;
 
 };
 

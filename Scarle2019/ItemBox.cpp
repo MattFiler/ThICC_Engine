@@ -6,7 +6,7 @@
 #include "Constants.h"
 
 //Todo: replace "Default Item" with item box model
-ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("Default Item") {
+ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("ITEM CUBE") {
 	SetPos(position);
 	SetRotation(rotation);
 
