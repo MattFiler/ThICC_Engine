@@ -5,12 +5,14 @@ AudioManager::AudioManager()
 {
 	m_audEngine = std::unique_ptr<DirectX::AudioEngine>(new DirectX::AudioEngine);
 
-	for (int i = 0; i <= (int)SOUNDS_MENU::INTRO_MUSIC; i++)
+	for (int i = 0; i <= (int)SOUNDS_MENU::TTLE_LOOP; i++)
 	{
 		Sound* new_sound = new Sound(m_audEngine.get(), menuSounds[i]);
+		if (i == 0 || i == 2)
+			new_sound->SetLoop(true);
 		m_menuSounds.push_back(new_sound);
 	}
-	for (int i = 0; i <= (int)SOUNDS_GAME::MKS_GAME; i++)
+	for (int i = 0; i <= (int)SOUNDS_GAME::MKS_FL_GAME; i++)
 	{
 		Sound* new_sound = new Sound(m_audEngine.get(), gameSounds[i]);
 		if (i == 1)
@@ -22,7 +24,7 @@ AudioManager::AudioManager()
 		Sound* new_sound = new Sound(m_audEngine.get(), characterSounds[i]);
 		m_characterSounds.push_back(new_sound);
 	}
-	for (int i = 0; i <= (int)SOUNDS_MISC::ITEM_BOX_HIT; i++)
+	for (int i = 0; i <= (int)SOUNDS_MISC::FINAL_LAP_IND; i++)
 	{
 		Sound* new_sound = new Sound(m_audEngine.get(), miscSounds[i]);
 		m_miscSounds.push_back(new_sound);

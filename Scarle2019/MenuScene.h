@@ -56,5 +56,9 @@ private:
 	//Timeout for charecter selection
 	float m_charTimeout[4] = {0.0f,0.0f,0.0f,0.0f};
 
+	float timeout = 1.2f;
+	bool intro_music_start = true;
+	bool game_start = true;
+
 };
 
