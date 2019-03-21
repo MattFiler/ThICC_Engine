@@ -38,8 +38,8 @@ void Player::setActiveItem(ItemType _item) {
 	}
 	else
 	{
-		//We should never get here - so if we do, throw a useful error.
-		throw std::runtime_error("Player tried to use an item that they did not have. This should never be requested!");
+		//We should never get here
+		std::cout << "Player tried to use an item that they did not have. This should never be requested!" << std::endl;
 	}
 };
 
@@ -238,7 +238,7 @@ void Player::movement()
 					}
 				}
 
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed() && (inventory_item != NONE || active_item != NONE))
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed() && inventory_item != NONE)
 				{
 					if (!m_isTrailing)
 					{
