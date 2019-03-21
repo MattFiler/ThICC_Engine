@@ -224,7 +224,7 @@ void MenuScene::playerJoin()
 			if (Locator::getGSD()->m_gamePadState[i].IsAPressed() && m_menu_state == States::LOBBY)
 			{
 				//set player charecter selection image
-				m_charecter_images[i][Locator::getGSD()->charecter_selected[i]];
+				m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));
 			}
 
 			if (m_charTimeout[i] <= 0) // stops continuous flipping of charecter selection
