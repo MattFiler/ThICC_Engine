@@ -55,7 +55,6 @@ Game::Game() :
 	Locator::setupWD(m_WD);
 	Locator::setupGSD(m_GSD);
 	Locator::setupID(m_ID);
-	Locator::setupItemData(&m_probabilities);
 	Locator::setupAudio(&m_AM);
 }
 
@@ -105,6 +104,9 @@ void Game::Initialize(HWND _window, int _width, int _height)
 
 	//Setup keybinds
 	m_keybinds.setup(m_GSD);
+
+	m_probabilities = new ItemData();
+	Locator::setupItemData(m_probabilities);
 
 	//Create all GameObjects
 	//createAllObjects2D();

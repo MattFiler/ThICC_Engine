@@ -29,6 +29,7 @@ public:
 	Text2D* GetCountdown() { return m_textCountdown; }
 	Text2D* GetFinishOrder() { return m_textFinishOrder; }
 	ImageGO2D* GetItemImg() { return m_imgItem; }
+	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
 	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
 
 	void SetWaypoint(int _waypoint) { m_waypoint = _waypoint; }
@@ -81,7 +82,9 @@ private:
 	ItemType active_item = ItemType::NONE;
 	ItemType inventory_item = ItemType::NONE;
 	
+	Vector2 m_itemPos = Vector2(0, 0); //temp gpu fix 
 	ImageGO2D *m_imgItem = nullptr;
+
 	Item* m_trailingItem = nullptr;
 	bool  m_isTrailing = false;
 	

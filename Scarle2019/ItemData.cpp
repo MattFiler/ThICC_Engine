@@ -29,6 +29,11 @@ ItemData::ItemData() {
 	ProcessConfig(GREEN_SHELL_3X, "GREEN_SHELL_3X");
 	ProcessConfig(RED_SHELL_3X, "RED_SHELL_3X");
 	ProcessConfig(BANANA_3X, "BANANA_3X");
+
+	//Set item placeholder sprite
+	for (int i = 0; i < 4; i++) {
+		item_sprite_image[19][i] = new ImageGO2D("ITEM_PLACEHOLDER");
+	}
 }
 
 /* Get a random item based on the player position */
@@ -47,31 +52,44 @@ ItemType ItemData::GetRandomItem(int _position) {
 
 /* Get the solo probability of getting an item from the mystery box at a position in the race (e.g. 1st) */
 float ItemData::GetProbability(ItemType _item, int _position) {
+	IdiotCheck(_item);
 	return item_probability[static_cast<int>(_item)][_position - 1];
 }
 
 /* Work out item probability out of 100 cumulatively */
 float ItemData::GetCumulativeProbability(ItemType _item, int _position) {
+	IdiotCheck(_item);
+
 	int item_id = static_cast<int>(_item);
 	float return_probability = 0.0f;
 	for (int i = item_id; i >= 0; i--) {
 		return_probability += item_probability[item_id - i][_position - 1];
 	}
+
 	return return_probability;
 }
 
 /* Return the item's sprite name for the UI */
 std::string ItemData::GetItemSpriteName(ItemType _item) {
+	IdiotCheck(_item);
 	return item_sprite[static_cast<int>(_item)];
 }
 
 /* Return the name of the model for an item */
 std::string ItemData::GetItemModelName(ItemType _item) {
+	IdiotCheck(_item);
 	return item_model[static_cast<int>(_item)];
+}
+
+/* Return the actual sprite for an item */
+ImageGO2D* ItemData::GetItemSprite(ItemType _item, int _player_id) {
+	return item_sprite_image[static_cast<int>(_item)][_player_id];
 }
 
 /* Process the config for an item type, and set the probability array */
 void ItemData::ProcessConfig(ItemType _item, const std::string& config_name) {
+	IdiotCheck(_item);
+
 	//Adjust config for item/default params
 	json temp_config_specialised = complete_config[config_name];
 	json temp_config_default = complete_config["DEFAULT"];
@@ -99,5 +117,10 @@ void ItemData::ProcessConfig(ItemType _item, const std::string& config_name) {
 		item_probability[item_id][i] = temp_config_default["probabilities"]["place_" + std::to_string(i + 1)];
 		item_sprite[item_id] = temp_config_default["ui_sprite"];
 		item_model[item_id] = temp_config_default["model"];
+	}
+
+	//Set item sprites
+	for (int i = 0; i < 4; i++) {
+		item_sprite_image[item_id][i] = new ImageGO2D(item_sprite[item_id]);
 	}
 }

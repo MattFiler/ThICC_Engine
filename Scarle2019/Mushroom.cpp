@@ -10,7 +10,7 @@ void Mushroom::Use(Player* player)
 {
 	Vector vel = player->getVelocity();
 	vel.Normalize();
-	vel *= 10;
+	vel *= 30;
 	player->setVelocity(player->getVelocity() + vel);
 }
 

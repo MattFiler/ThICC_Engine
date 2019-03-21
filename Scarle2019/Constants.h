@@ -53,7 +53,9 @@ enum ItemType
 	BULLET_BILL,
 	GREEN_SHELL_3X,
 	RED_SHELL_3X,
-	BANANA_3X
+	BANANA_3X,
+
+	PLACEHOLDER //This isn't an item - is used as the placeholder UI sprite. Do not call unless for that use case.
 };
 
 

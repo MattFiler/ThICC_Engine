@@ -271,10 +271,10 @@ void GameScene::UpdateItems()
 	}
 	if (delIndex != -1)
 	{
-		Item* toby_broke_it = m_itemModels[delIndex];
+		//Item* toby_broke_it = m_itemModels[delIndex];
 		m_itemModels.erase(m_itemModels.begin() + delIndex);
-		delete toby_broke_it;
-		WaitForGPU::should_wait = true;
+		//delete toby_broke_it;
+		//WaitForGPU::should_wait = true;
 	}
 }
 
@@ -557,7 +557,8 @@ void GameScene::create2DObjects()
 
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
-		player[i]->GetItemImg()->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
+		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
+		player[i]->SetItemPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
 		//test->CentreOrigin();
 		m_2DObjects.push_back(player[i]->GetItemImg());
 

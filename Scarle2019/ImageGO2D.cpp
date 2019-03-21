@@ -35,7 +35,7 @@ void ImageGO2D::CentreOrigin()
 }
 
 void ImageGO2D::UpdateSprite(string _filename) {
-	WaitForGPU::should_wait = true;
+	//WaitForGPU::should_wait = true;
 	new_filepath = _filename;
 }
 
