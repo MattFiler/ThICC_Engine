@@ -78,7 +78,9 @@ enum class SOUND_TYPE : int
 enum class SOUNDS_GAME : int
 {
 	MKS_START = 0,
-	MKS_GAME = 1
+	MKS_GAME = 1,
+	MKS_FL_START = 2,
+	MKS_FL_GAME = 3
 };
 
 // character sounds
@@ -93,7 +95,9 @@ enum class SOUNDS_CHARACTER : int
 // menu sounds
 enum class SOUNDS_MENU : int
 {
-	INTRO_MUSIC = 0,
+	MENU_LOOP = 0,
+	TITLE_START = 1,
+	TTLE_LOOP = 2,
 };
 
 // misc sounds
@@ -103,4 +107,5 @@ enum class SOUNDS_MISC : int
 	PRE_COUNTDOWN = 1,
 	COUNTDOWN = 2,
 	ITEM_BOX_HIT = 3,
+	FINAL_LAP_IND = 4,
 };

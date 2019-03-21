@@ -37,6 +37,14 @@ void GameScene::Update()
 {
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
+
+	if (finished == 4)
+	{
+		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
+		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
+		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
+	}
+
 	switch (state)
 	{
 	case START:
@@ -116,6 +124,12 @@ void GameScene::Update()
 			track_music_start = false;
 		}
 
+		if (timeout <= 0 && final_lap_start)
+		{
+			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_FL_GAME);
+			final_lap_start = false;
+		}
+
 		break;
 	}
 
@@ -131,6 +145,7 @@ void GameScene::Update()
 	if (m_keybinds.keyPressed("Quit"))
 	{
 		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
+		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_FL_GAME)->Stop();
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	if (m_keybinds.keyPressed("Orbit"))
@@ -299,6 +314,15 @@ void GameScene::SetPlayersWaypoint()
 					player[i]->GetFinishOrder()->SetText(std::to_string(player[i]->GetRanking()) + player[i]->GetOrderIndicator()[player[i]->GetRanking() - 1]);
 					m_cam[i]->SetBehav(Camera::BEHAVIOUR::ORBIT);
 					player[i]->setGamePad(false);
+					finished++;
+				}
+				else if (player[i]->GetLap() == 2 && !final_lap)
+				{
+					Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
+					Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::FINAL_LAP_IND);
+					final_lap = true;
+					final_lap_start = true;
+					timeout = 3.8f;
 				}
 				player[i]->SetLap(player[i]->GetLap() + 1);
 			}

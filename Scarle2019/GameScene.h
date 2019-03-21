@@ -86,6 +86,9 @@ private:
 	States state = START;
 
 	bool track_music_start = true;
+	bool final_lap_start = false;
+	bool final_lap = false;
+	int finished = 0;
 
 };
 

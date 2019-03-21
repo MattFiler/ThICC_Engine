@@ -49,6 +49,7 @@ void Sound::Stop()
 		if (loop)
 		{
 			m_loop->Stop(true);
+			m_playing = false;
 		}
 	}
 }
