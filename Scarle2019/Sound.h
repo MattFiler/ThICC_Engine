@@ -19,6 +19,8 @@ public:
 
 	virtual void Play();
 
+	virtual void Stop();
+
 	void SetVolume(float _vol) { m_volume = _vol; }
 	float GetVolume() { return m_volume; }
 

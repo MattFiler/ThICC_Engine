@@ -7,6 +7,7 @@
 #include "ServiceLocator.h"
 #include "AudioManager.h"
 #include "DebugMarker.h"
+#include "WaitForGPU.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
@@ -24,12 +25,18 @@ GameScene::~GameScene()
 {
 	m_2DObjects.clear();
 	m_3DObjects.clear();
+	delete cine_cam;
+	cine_cam = nullptr;
+	for (int i = 0; i < 4; i++)
+	{
+		delete m_cam[i];
+		m_cam[i] = nullptr;
+	}
 }
 
 void GameScene::Update()
 {
-	//  camera_pos->SetText(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" +
-	//	std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
+	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
 	switch (state)
 	{
@@ -43,19 +50,27 @@ void GameScene::Update()
 		{
 			timeout -= Locator::getGSD()->m_dt;
 			cine_cam->Tick();
+			if (timeout <= Locator::getGSD()->m_dt + 0.1) {
+				for (int i = 0; i < game_config["player_count"]; ++i) {
+					m_cam[i]->Tick();
+				}
+			}
 		}
 		else
 		{
+			for (int i = 0; i < game_config["player_count"]; ++i) {
+				m_cam[i]->Tick();
+			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
 			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::PRE_COUNTDOWN);
 		}
-		std::cout << timeout << std::endl;
 		break;
 	case CAM_OPEN:
 			for (int i = 0; i < game_config["player_count"]; ++i) {
 				m_cam[i]->Tick();
 			}
+			cine_cam->Tick();
 
 			if (m_cam[3]->GetBehav() == Camera::BEHAVIOUR::LERP)
 			{
@@ -69,7 +84,11 @@ void GameScene::Update()
 		{
 			timeout -= Locator::getGSD()->m_dt;
 			for (int i = 0; i < game_config["player_count"]; ++i) {
-				player[i]->GetCountdown()->SetText(std::to_string((int)std::ceil(timeout)));
+				std::string countdown_time = std::to_string((int)std::ceil(timeout));
+				if (countdown_time == "0") {
+					countdown_time = "GO!";
+				}
+				player[i]->GetCountdown()->SetText(countdown_time);
 				m_cam[i]->Tick();
 			}
 		}
@@ -81,7 +100,7 @@ void GameScene::Update()
 			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START);
 			for (int i = 0; i < 4; ++i)
 			{
-				player[i]->setGamePad(m_playerControls);
+				player[i]->setGamePad(true);
 			}
 		}
 		break;
@@ -105,12 +124,12 @@ void GameScene::Update()
 		player[i]->ShouldStickToTrack(*track);
 		player[i]->ResolveWallCollisions(*track);
 		Locator::getGSD()->m_gamePadState[i] = Locator::getID()->m_gamePad->GetState(i); //set game controllers state[s]
-	}
 
-	UpdateItems();
+	}
 
 	if (m_keybinds.keyPressed("Quit"))
 	{
+		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	if (m_keybinds.keyPressed("Orbit"))
@@ -170,11 +189,8 @@ void GameScene::Update()
 	}
 	else if (m_keybinds.keyPressed("Activate"))
 	{
-		state = PLAY;
-		for (int i = 0; i < 4; ++i)
-		{
-			player[i]->setGamePad(m_playerControls);
-		}
+		timeout = 2.999999f;
+		state = COUNTDOWN;
 	}
 
 	for (int i = 0; i < 8; i++)
@@ -213,6 +229,8 @@ void GameScene::Update()
 	//	<< " X: " << std::to_string(player[0]->getCollider().Orientation.x)
 	//	<< " Y: " << std::to_string(player[0]->getCollider().Orientation.y)
 	//	<< " Z: " << std::to_string(player[0]->getCollider().Orientation.z) << std::endl;
+
+	UpdateItems();
 }
 
 void GameScene::UpdateItems()
@@ -253,10 +271,10 @@ void GameScene::UpdateItems()
 	}
 	if (delIndex != -1)
 	{
-		//delete m_itemModels[delIndex];
-		//std::thread tr(&GameScene::DeleteMemoryTest, this, m_itemModels[delIndex]);
-		//tr.detach();
+		Item* toby_broke_it = m_itemModels[delIndex];
 		m_itemModels.erase(m_itemModels.begin() + delIndex);
+		delete toby_broke_it;
+		WaitForGPU::should_wait = true;
 	}
 }
 
@@ -264,7 +282,7 @@ void GameScene::SetPlayersWaypoint()
 {
 	for (int i = 0; i < game_config["player_count"]; i++) {
 
-		if (player[i]->GetWaypoint() < track->getWaypoints().size() -1)
+		if (player[i]->GetWaypoint() < track->getWaypointsBB().size() -1)
 		{
 			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[player[i]->GetWaypoint() + 1]))
 			{
@@ -276,6 +294,13 @@ void GameScene::SetPlayersWaypoint()
 			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
 			{
 				player[i]->SetWaypoint(0);
+				if (player[i]->GetLap() == 3)
+				{
+					player[i]->SetFinished(true);
+					player[i]->GetFinishOrder()->SetText(std::to_string(player[i]->GetRanking()) + player[i]->GetOrderIndicator()[player[i]->GetRanking() - 1]);
+					m_cam[i]->SetBehav(Camera::BEHAVIOUR::ORBIT);
+					player[i]->setGamePad(false);
+				}
 				player[i]->SetLap(player[i]->GetLap() + 1);
 			}
 		}
@@ -374,6 +399,14 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 					obj->GetMesh()->Render();
 				}
 			}
+			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+
+			//Render countdown in screen centre
+			m_commandList->RSSetViewports(1, &Locator::getWD()->sprite_viewport);
+			m_commandList->RSSetScissorRects(1, &Locator::getWD()->sprite_rect);
+			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
+			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
+			Locator::getRD()->m_spriteBatch->End();
 
 			break;
 		case CAM_OPEN:
@@ -478,14 +511,24 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
 			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
 			//draw 2d objects
-			for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+			//for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+			//{
+			//	(*it)->Render();
+			//}
+			for (int i = 0; i < game_config["player_count"]; i++)
 			{
-				(*it)->Render();
+				if (player[i]->GetFinished())
+				{
+					player[i]->GetFinishOrder()->Render();
+				}
+				else if (!player[i]->GetFinished())
+				{
+					player[i]->GetRankingText()->Render();
+					player[i]->GetLapText()->Render();
+					player[i]->GetItemImg()->Render();
+				}
 			}
 			Locator::getRD()->m_spriteBatch->End();
-			break;
-
-		case END:
 			break;
 	}
 }
@@ -519,12 +562,12 @@ void GameScene::create2DObjects()
 		m_2DObjects.push_back(player[i]->GetItemImg());
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
-		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->GetRankingText()->GetSize().x;
+		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
 		float text_pos_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetRankingText()->GetSize().y;
 		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
 		m_2DObjects.push_back(player[i]->GetRankingText());
 
-		float text_lap_x = Locator::getWD()->m_viewport[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.5f;
+		float text_lap_x = Locator::getWD()->m_viewport[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
 		float text_lap_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetLapText()->GetSize().y;
 		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
 		m_2DObjects.push_back(player[i]->GetLapText());
@@ -535,12 +578,8 @@ void GameScene::create2DObjects()
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		player[i]->GetCountdown()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2 });
+		player[i]->GetFinishOrder()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetFinishOrder()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetFinishOrder()->GetSize().y / 2 });
 	}
-
-	//camera_pos = new Text2D(std::to_string((int)m_cam[0]->GetPos().x) + "," + std::to_string((int)m_cam[0]->GetPos().y) + "," + std::to_string((int)m_cam[0]->GetPos().z) + "\n" + 
-	//	std::to_string((int)m_cam[0]->GetOri().Translation().x) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().y) + "," + std::to_string((int)m_cam[0]->GetOri().Translation().z));
-	//camera_pos->SetPos({ 20,100 });
-	//m_2DObjects.push_back(camera_pos);
 }
 
 void GameScene::create3DObjects()
@@ -618,7 +657,9 @@ void GameScene::create3DObjects()
 
 	cine_cam = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
-	m_3DObjects.push_back(cine_cam);
+	//cine_cam->SetCinematicRot(track->getCamerasRot());
+	//cine_cam->SetCinematicPos(track->getCamerasPos());
+	//m_3DObjects.push_back(cine_cam);
 
 	//Global illumination
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
@@ -671,10 +712,4 @@ Item* GameScene::CreateItem(ItemType type)
 		break;
 	}
 	return nullptr;
-}
-
-void GameScene::DeleteMemoryTest(Item* item)
-{
-	//std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	delete item;
 }

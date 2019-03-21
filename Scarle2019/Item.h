@@ -4,8 +4,6 @@
 #include "TrackMagnet.h"
 #include "ServiceLocator.h"
 #include "ItemData.h"
-#include <json.hpp>
-using json = nlohmann::json;
 
 class Player;
 
@@ -15,7 +13,7 @@ public:
 	Item() = default;
 	Item(const std::string& item_type);
 	~Item() = default;
-
+	
 	virtual void Tick();
 	virtual void HitByPlayer(Player* player) = 0;
 	virtual void Use(Player* player) = 0;

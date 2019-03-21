@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CollisionManager.h"
+#include "AudioManager.h"
 #include "ItemBox.h"
 #include "Player.h"
 
@@ -23,11 +24,13 @@ void CollisionManager::collisionDetectionAndResponse(std::vector<PhysModel*> _ph
 		if (dynamic_cast<ItemBox*>(collision.m_model1) && dynamic_cast<Player*>(collision.m_model2)) {
 			if (collision.m_model1->isVisible()) {
 				dynamic_cast<ItemBox*>(collision.m_model1)->hasCollided(dynamic_cast<Player*>(collision.m_model2));
+				Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
 			}
 		}
 		else if (dynamic_cast<ItemBox*>(collision.m_model2) && dynamic_cast<Player*>(collision.m_model1)) {
 			if (collision.m_model2->isVisible()) {
 				dynamic_cast<ItemBox*>(collision.m_model2)->hasCollided(dynamic_cast<Player*>(collision.m_model1));
+				Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
 			}
 		}
 		//Collided with another player
