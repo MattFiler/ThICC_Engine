@@ -178,7 +178,7 @@ void Player::movement()
 		}
 		if (m_keymindManager.keyHeld("Backwards"))
 		{
-			m_acc -= forwardMove;
+			m_acc -= forwardMove / 2;
 		}
 		if (m_keymindManager.keyHeld("Left"))
 		{
@@ -209,7 +209,7 @@ void Player::movement()
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
 				{
-					m_acc -= forwardMove; //* _GSD->m_gamePadState->triggers.left;
+					m_acc -= forwardMove / 2; //* _GSD->m_gamePadState->triggers.left;
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
