@@ -16,7 +16,7 @@ public:
 	
 	virtual void Tick();
 	virtual void HitByPlayer(Player* player) = 0;
-	virtual void Use(Player* player) = 0;
+	virtual void Use(Player* player, bool _altUse) = 0;
 
 	bool ShouldDestroy() { return m_shouldDestroy; };
 	void FlagForDestoy() { m_shouldDestroy = true; };

@@ -129,7 +129,7 @@ void Player::SpawnItem(ItemType type)
 		case MUSHROOM:
 		{
 			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
-			mushroom->Use(this);
+			mushroom->Use(this, false);
 			break;
 		}
 
@@ -150,7 +150,7 @@ void Player::ReleaseItem()
 {
 	if (m_trailingItem)
 	{
-		m_trailingItem->Use(this);
+		m_trailingItem->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
 		m_isTrailing = false;
 		m_trailingItem = nullptr;
 		active_item = NONE;
