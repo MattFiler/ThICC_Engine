@@ -123,6 +123,12 @@
     <Compile Include="Sound_Importer.Designer.cs">
       <DependentUpon>Sound_Importer.cs</DependentUpon>
     </Compile>
+    <Compile Include="TrackImporter_PostBeta\TrackImporter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrackImporter_PostBeta\TrackImporter.Designer.cs">
+      <DependentUpon>TrackImporter.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI_Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,6 +161,9 @@
     </Compile>
     <EmbeddedResource Include="Sound_Importer.resx">
       <DependentUpon>Sound_Importer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrackImporter_PostBeta\TrackImporter.resx">
+      <DependentUpon>TrackImporter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI_Editor.resx">
       <DependentUpon>UI_Editor.cs</DependentUpon>

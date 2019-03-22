@@ -23,8 +23,18 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	for (GameObject2D* object : m_2DObjects) {
+		delete object;
+		object = nullptr;
+	}
 	m_2DObjects.clear();
+
+	for (GameObject3D* object : m_3DObjects) {
+		delete object;
+		object = nullptr;
+	}
 	m_3DObjects.clear();
+
 	delete cine_cam;
 	cine_cam = nullptr;
 	for (int i = 0; i < 4; i++)

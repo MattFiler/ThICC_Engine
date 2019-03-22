@@ -67,6 +67,7 @@ namespace EditorTool
             this.playSoundPreview = new System.Windows.Forms.Button();
             this.soundPreview = new NAudio.Gui.WaveViewer();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.openItemConfig = new System.Windows.Forms.Button();
             this.openKeybindEditor = new System.Windows.Forms.Button();
             this.openLocalisationEditor = new System.Windows.Forms.Button();
             this.openUiEditor = new System.Windows.Forms.Button();
@@ -76,7 +77,7 @@ namespace EditorTool
             this.DEBUG_PLAYERCOUNT = new System.Windows.Forms.NumericUpDown();
             this.DEBUG_SAVE = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.openItemConfig = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
@@ -505,6 +506,17 @@ namespace EditorTool
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Editors";
             // 
+            // openItemConfig
+            // 
+            this.openItemConfig.Enabled = false;
+            this.openItemConfig.Location = new System.Drawing.Point(341, 19);
+            this.openItemConfig.Name = "openItemConfig";
+            this.openItemConfig.Size = new System.Drawing.Size(100, 30);
+            this.openItemConfig.TabIndex = 4;
+            this.openItemConfig.Text = "Items";
+            this.openItemConfig.UseVisualStyleBackColor = true;
+            this.openItemConfig.Click += new System.EventHandler(this.openItemConfig_Click);
+            // 
             // openKeybindEditor
             // 
             this.openKeybindEditor.Location = new System.Drawing.Point(117, 19);
@@ -615,22 +627,22 @@ namespace EditorTool
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Debug Configurations";
             // 
-            // openItemConfig
+            // button1
             // 
-            this.openItemConfig.Enabled = false;
-            this.openItemConfig.Location = new System.Drawing.Point(341, 19);
-            this.openItemConfig.Name = "openItemConfig";
-            this.openItemConfig.Size = new System.Drawing.Size(100, 30);
-            this.openItemConfig.TabIndex = 4;
-            this.openItemConfig.Text = "Items";
-            this.openItemConfig.UseVisualStyleBackColor = true;
-            this.openItemConfig.Click += new System.EventHandler(this.openItemConfig_Click);
+            this.button1.Location = new System.Drawing.Point(147, 564);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(168, 23);
+            this.button1.TabIndex = 35;
+            this.button1.Text = "debug track importer";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Landing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(469, 566);
+            this.ClientSize = new System.Drawing.Size(469, 594);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.modelConfigs);
@@ -704,5 +716,6 @@ namespace EditorTool
         private Label label16;
         private ComboBox modelType;
         private Button openItemConfig;
+        private Button button1;
     }
 }

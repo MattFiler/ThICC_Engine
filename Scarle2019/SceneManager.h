@@ -6,6 +6,7 @@
 #include "MenuScene.h"
 #include "GameScene.h"
 #include <vector>
+#include <memory>
 
 class SceneManager
 {
@@ -27,7 +28,13 @@ private:
 	InputData* m_ID;
 	WindowData* m_WD;
 
-	Scene** m_scenes = nullptr;
+	Scene* m_scene_mem_1 = nullptr;
+	Scene* m_scene_mem_2 = nullptr;
 	static Scenes m_curr_scene;
+	static Scenes m_new_scene;
+	bool did_just_update_1 = false;
+	bool did_just_update_2 = false;
+	bool is_safe_1 = false;
+	bool is_safe_2 = false;
 };
 

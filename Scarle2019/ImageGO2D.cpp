@@ -7,7 +7,7 @@
 ImageGO2D::ImageGO2D(string _filename)
 {
 	new_filepath = _filename;
-	InternalSpriteUpdate(_filename);
+	UpdateSprite(_filename);
 }
 
 ImageGO2D::~ImageGO2D()
