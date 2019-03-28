@@ -419,9 +419,9 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			//Render items
 			for (Item* obj : m_itemModels)
 			{
-				if (obj->GetMesh())
+				if (obj->GetRenderMesh())
 				{
-					obj->GetMesh()->Render();
+					obj->GetRenderMesh()->Render();
 				}
 			}
 			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
@@ -469,7 +469,7 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				{
 					if (obj->GetMesh())
 					{
-						obj->GetMesh()->Render();
+						obj->GetRenderMesh()->Render();
 					}
 				}
 			}
@@ -524,7 +524,7 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				{
 					if (obj->GetMesh())
 					{
-						obj->GetMesh()->Render();
+						obj->GetRenderMesh()->Render();
 					}
 				}
 			}

@@ -8,6 +8,8 @@ GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_S
 	m_mesh->SetDrag(0);
 	m_mesh->SetPhysicsOn(true);
 	m_mesh->setDampenWallReflect(false);
+
+	m_displayedMesh->Spin(1000, 300);
 }
 
 void GreenShell::HitByPlayer(Player* player)
