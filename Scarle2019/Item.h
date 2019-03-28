@@ -4,10 +4,11 @@
 #include "TrackMagnet.h"
 #include "ServiceLocator.h"
 #include "ItemData.h"
+#include "Deletable.h"
 
 class Player;
 
-class Item 
+class Item  : public Deletable
 {
 public:
 	Item() = default;
