@@ -15,8 +15,8 @@ public:
 	~Item() = default;
 	
 	virtual void Tick();
-	virtual void HitByPlayer(Player* player) = 0;
-	virtual void Use(Player* player, bool _altUse) = 0;
+	virtual void HitByPlayer(Player* _player) = 0;
+	virtual void Use(Player* _player, bool _altUse) = 0;
 
 	bool ShouldDestroy() { return m_shouldDestroy; };
 	void FlagForDestoy() { m_shouldDestroy = true; };

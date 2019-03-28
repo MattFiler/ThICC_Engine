@@ -9,25 +9,25 @@ Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BANANA))
 	m_mesh->SetPhysicsOn(true);
 }
 
-void Banana::Use(Player * player, bool _altUse)
+void Banana::Use(Player * _player, bool _altUse)
 {
 	if (_altUse)
 	{
-		m_mesh->SetWorld(player->GetWorld());
-		m_mesh->AddPos(player->GetWorld().Right() * 3);
+		//Positions the banan
+		m_mesh->SetWorld(_player->GetWorld());
+		m_mesh->AddPos(_player->GetWorld().Right() * 2 + _player->GetWorld().Up() * 2);
 		m_mesh->UpdateWorld();
 
-		float throw_force = 500;
-
-		Vector3 forward = player->GetWorld().Forward();
-		Vector3 up = player->GetWorld().Up();
-
-		m_mesh->setVelocity(player->GetWorld().Forward() * player->GetWorld().Up() * throw_force);
+		//Yeets said banan
+		float forward_force = 100;
+		float upward_force = 1;
+		m_mesh->setMaxGrav(500);
+		m_mesh->setGravVelocity(_player->getVelocity() + (_player->GetWorld().Forward() * forward_force) + (_player->GetWorld().Up() * upward_force));
 	}
 }
 
-void Banana::HitByPlayer(Player* player)
+void Banana::HitByPlayer(Player* _player)
 {
-	player->setVelocity(player->getVelocity() / 3);
+	_player->setVelocity(_player->getVelocity() / 3);
 	m_shouldDestroy = true;
 }

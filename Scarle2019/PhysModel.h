@@ -64,7 +64,8 @@ public:
 	Vector3 getVelocityTotal() { return m_velTotal; };
 	void setVelocity(Vector3 _vel) { m_vel = _vel; };
 	void setVelocityTotal(Vector3 _velTotal) { m_velTotal = _velTotal; };
-
+	void setGravVelocity(Vector3 _gravVel) { m_gravVel = _gravVel; };
+	void setMaxGrav(float _maxGrav) { m_maxGrav = _maxGrav; };
 	BoundingOrientedBox getCollider() { return m_collider; };
 
 	SDKMeshGO3D* getDebugCollider() { return m_colliderDebug; };
