@@ -262,12 +262,17 @@
     <ClInclude Include="AudioManager.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Mushroom.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
     <ClInclude Include="WaitForGPU.h">
       <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemCollision.h">
+      <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
     <ClInclude Include="GarbageCollector.h">
       <Filter>Game Base\Managers</Filter>
@@ -412,9 +417,11 @@
     <ClCompile Include="AudioManager.cpp">
       <Filter>Game Base\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Mushroom.cpp">
       <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Game Base\Managers</Filter>
     </ClCompile>
     <ClCompile Include="AnimationMesh.cpp">
       <Filter>GameObjects\3D\Source</Filter>

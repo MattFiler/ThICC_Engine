@@ -23,13 +23,13 @@ void GreenShell::HitByPlayer(Player* player)
 	m_shouldDestroy = true;
 }
 
-void GreenShell::Use(Player * player)
+void GreenShell::Use(Player * player, bool _altUse)
 {
 	m_player = player;
 	m_mesh->SetWorld(player->GetWorld());
-	m_mesh->AddPos(player->GetWorld().Forward() * 1);
+	m_mesh->AddPos(player->GetWorld().Right() * 1);
 	m_mesh->UpdateWorld();
-	m_mesh->setVelocity(60 * player->GetWorld().Forward());
+	m_mesh->setVelocity(60 * player->GetWorld().Forward() * (_altUse? -1 : 1));
 }
 
 void GreenShell::Tick()

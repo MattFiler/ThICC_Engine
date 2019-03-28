@@ -9,8 +9,8 @@ public:
 	~GreenShell() = default;
 
 	virtual void Tick() override;
-	void HitByPlayer(Player* player) override;
-	void Use(Player* player) override;
+	void HitByPlayer(Player* _player) override;
+	void Use(Player* _player, bool _altUse) override;
 
 private:
 	Player * m_player = nullptr;
