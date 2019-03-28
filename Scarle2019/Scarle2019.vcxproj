@@ -190,12 +190,14 @@
     <ClInclude Include="GameObjectList.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameStateData.h" />
+    <ClInclude Include="GarbageCollector.h" />
     <ClInclude Include="GPGO3D.h" />
     <ClInclude Include="GreenShell.h" />
     <ClInclude Include="ImageGO2D.h" />
     <ClInclude Include="InputData.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemBox.h" />
+    <ClInclude Include="ItemCollision.h" />
     <ClInclude Include="ItemData.h" />
     <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="Light.h" />

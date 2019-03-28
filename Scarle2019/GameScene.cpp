@@ -8,9 +8,11 @@
 #include "AudioManager.h"
 #include "DebugMarker.h"
 #include "WaitForGPU.h"
+#include "GarbageCollector.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
+#include <thread>
 
 extern void ExitGame();
 
@@ -240,7 +242,7 @@ void GameScene::Update()
 		}
 	}
 
-	CollisionManager::collisionDetectionAndResponse(m_physModels);
+	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels);
 	//std::cout << " W: " << std::to_string(player[0]->getCollider().Orientation.w)
 	//	<< " X: " << std::to_string(player[0]->getCollider().Orientation.x)
 	//	<< " Y: " << std::to_string(player[0]->getCollider().Orientation.y)
@@ -260,19 +262,19 @@ void GameScene::UpdateItems()
 			m_itemModels[i]->GetMesh()->ShouldStickToTrack(*track);
 			m_itemModels[i]->GetMesh()->ResolveWallCollisions(*track);
 		}
-		for (int j = 0; j < game_config["player_count"]; ++j) {
+		/*for (int j = 0; j < game_config["player_count"]; ++j) {
 			if (m_itemModels[i]->GetMesh() && player[j]->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
 			{
 				m_itemModels[i]->HitByPlayer(player[j]);
 			}
-		}
+		}*/
 		m_itemModels[i]->Tick();
 		if (m_itemModels[i]->ShouldDestroy())
 		{
 			delIndex = i;
 		}
 
-		if (m_itemModels[i]->GetMesh())
+		/*if (m_itemModels[i]->GetMesh())
 		{
 			int end2 = m_itemModels.size();
 			for (int j = 0; j < end2; j++)
@@ -283,14 +285,12 @@ void GameScene::UpdateItems()
 					m_itemModels[j]->FlagForDestoy();
 				}
 			}
-		}
+		}*/
 	}
 	if (delIndex != -1)
 	{
-		//Item* toby_broke_it = m_itemModels[delIndex];
+		Locator::getGarbageCollector()->DeletePointer(m_itemModels[delIndex]);
 		m_itemModels.erase(m_itemModels.begin() + delIndex);
-		//delete toby_broke_it;
-		//WaitForGPU::should_wait = true;
 	}
 }
 
@@ -738,4 +738,15 @@ Item* GameScene::CreateItem(ItemType type)
 		break;
 	}
 	return nullptr;
+}
+
+void GameScene::DeleteItem(Item * item)
+{
+	std::thread thread(&GameScene::DeleteThread, this, item);
+	thread.detach();
+}
+void GameScene::DeleteThread(Item * item)
+{
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	delete item;
 }

@@ -7,3 +7,4 @@ GameStateData* Locator::ref_GSD = nullptr;
 InputData* Locator::ref_ID = nullptr;
 ItemData* Locator::ref_ItemProbability = nullptr;
 AudioManager* Locator::ref_audio = nullptr;
+GarbageCollector* Locator::ref_GC = nullptr;

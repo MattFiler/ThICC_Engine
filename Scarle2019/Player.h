@@ -54,6 +54,16 @@ private:
 	std::function<Item*(ItemType)> CreateItem;
 	void movement();
 
+	void EndDrift();
+
+	double m_timeTurning = 0;
+	float m_maxTurnRateMutliplier = 2.3f;
+	float m_maxDriftTurnMutliplier = 4.2f;
+	double m_timeForMaxTurn = 4;
+	double m_timeForMaxDrift = 8;
+	bool m_drifting = false;
+	bool m_driftingRight = false;
+	float m_driftBoost = 300;
 
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;

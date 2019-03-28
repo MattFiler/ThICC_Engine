@@ -2,64 +2,69 @@
 #include "CollisionManager.h"
 #include "AudioManager.h"
 #include "ItemBox.h"
-#include "Player.h"
 
-
-CollisionManager::CollisionManager()
+void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _physModels, std::vector<Item*> _items)
 {
-}
-
-
-CollisionManager::~CollisionManager()
-{
-}
-
-void CollisionManager::collisionDetectionAndResponse(std::vector<PhysModel*> _physModels)
-{
-	std::vector<Collision> collisions = checkPhysModelCollisions(_physModels);
+	std::vector<Collision> collisions = CheckPhysModelCollisions(_physModels);
+	CheckResolveItemCollisions(_physModels, _items);
 
 	for (Collision& collision : collisions)	
 	{
-		//Player collided with item box on track
-		if (dynamic_cast<ItemBox*>(collision.m_model1) && dynamic_cast<Player*>(collision.m_model2)) {
-			if (collision.m_model1->isVisible()) {
-				dynamic_cast<ItemBox*>(collision.m_model1)->hasCollided(dynamic_cast<Player*>(collision.m_model2));
-				Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
-			}
-		}
-		else if (dynamic_cast<ItemBox*>(collision.m_model2) && dynamic_cast<Player*>(collision.m_model1)) {
-			if (collision.m_model2->isVisible()) {
-				dynamic_cast<ItemBox*>(collision.m_model2)->hasCollided(dynamic_cast<Player*>(collision.m_model1));
-				Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
-			}
-		}
-		//Collided with another player
-		else {
-			Vector3 rv = collision.m_model2->getVelocity() - collision.m_model1->getVelocity();
-			float contactVel = rv.Dot(collision.m_collisionNormal);
-
-			if (contactVel > 0)
+		if (dynamic_cast<Player*>(collision.m_model1))
+		{
+			//Player x Player Collision
+			if (dynamic_cast<Player*>(collision.m_model2))
 			{
-				continue;
+				PlayerCollisions(collision);
 			}
-
-			float e = 1;
-			float j = -(1.0f + e) * contactVel;
-			j /= 1 / collision.m_model1->getMass() + 1 / collision.m_model2->getMass();
-
-			Vector3 impulse = j * collision.m_collisionNormal;
-
-			collision.m_model1->setVelocity(collision.m_model1->getVelocity() - impulse * (1.0f / collision.m_model1->getMass()));
-			collision.m_model2->setVelocity(collision.m_model2->getVelocity() + impulse * (1.0f / collision.m_model2->getMass()));
+			//Player x Item Box Collision
+			else if (collision.m_model2->isVisible() && dynamic_cast<ItemBox*>(collision.m_model2))
+			{
+				ItemBoxCollision(collision.m_model1, collision.m_model2);
+			}
+		}
+		else if (dynamic_cast<Player*>(collision.m_model2))
+		{
+			//Player x Item Box Collision
+			if (collision.m_model2->isVisible() && dynamic_cast<ItemBox*>(collision.m_model2))
+			{
+				ItemBoxCollision(collision.m_model2, collision.m_model1);
+			}		
 		}
 	}
 
 }
 
+void CollisionManager::ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox)
+{
+	dynamic_cast<ItemBox*>(_itemBox)->hasCollided(dynamic_cast<Player*>(_player));
+	Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
+}
+
+void CollisionManager::PlayerCollisions(Collision & collision)
+{
+	Vector3 rv = collision.m_model2->getVelocity() - collision.m_model1->getVelocity();
+	float contactVel = rv.Dot(collision.m_collisionNormal);
+
+	if (contactVel > 0)
+	{
+		return;
+	}
+
+	float e = 1;
+	float j = -(1.0f + e) * contactVel;
+	j /= 1 / collision.m_model1->getMass() + 1 / collision.m_model2->getMass();
+
+	Vector3 impulse = j * collision.m_collisionNormal;
+
+	collision.m_model1->setVelocity(collision.m_model1->getVelocity() - impulse * (1.0f / collision.m_model1->getMass()));
+	collision.m_model2->setVelocity(collision.m_model2->getVelocity() + impulse * (1.0f / collision.m_model2->getMass()));
+}
+
 /*Checks all physModels in the vector to see if they're inside one another. 
 If true it creates a collision struct with the two models in the collision and adds it to a vector.
 It also sets the phymodels collisions to true. Returns the vector of collisions*/
-std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<PhysModel*> _physModels)
+std::vector<Collision> CollisionManager::CheckPhysModelCollisions(std::vector<PhysModel*> _physModels )
 {
 	std::vector<Collision> collisions;
 
@@ -75,8 +80,7 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 				Plane backPlane = getPlane(physModel2->data.m_globalBackTopLeft, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
 				Plane rightPlane = getPlane(physModel2->data.m_globalFrontTopRight, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
 				Plane leftPlane = getPlane(physModel2->data.m_globalFrontTopLeft, physModel2->data.m_globalBackTopLeft, physModel2->data.m_height);
-
-		
+	
 				if (physModel1->getCollider().Intersects(backPlane))
 				{
 					collision.m_collisionNormal = backPlane.Normal();
@@ -102,6 +106,45 @@ std::vector<Collision> CollisionManager::checkPhysModelCollisions(std::vector<Ph
 	}
 
 	return collisions;
+}
+
+void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physModels, std::vector<Item*> _items)
+{
+
+	for (Item* item1 : _items)
+	{
+		if (item1->GetMesh())
+		{
+			bool hit_player = false;
+
+			//Player x Item Collision
+			for (PhysModel* model : _physModels)
+			{
+				Player* player = dynamic_cast<Player*>(model);
+				if (player && item1->GetMesh()->getCollider().Intersects(player->getCollider()))
+				{
+					item1->HitByPlayer(player);
+					hit_player = true;
+					break;
+				}
+			}
+
+			if (!hit_player)
+			{
+				//Item x Item Collision
+				for (Item* item2 : _items)
+				{
+					if (item1 != item2 && item2->GetMesh() && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
+					{
+						item1->FlagForDestoy();
+						item2->FlagForDestoy();
+						break;
+					}
+				}
+			}
+		}
+	}
+
 }
 
 Plane CollisionManager::getPlane(Vector3 _corner1, Vector3 _corner2, float _height)

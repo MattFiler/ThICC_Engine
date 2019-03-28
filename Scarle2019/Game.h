@@ -11,6 +11,7 @@
 #include "SceneManager.h"
 #include "ItemData.h"
 #include "AudioManager.h"
+#include "GarbageCollector.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -148,4 +149,5 @@ private:
 
 	ItemData* m_probabilities = nullptr;
 	AudioManager m_AM;
+	GarbageCollector m_GC;
 };
