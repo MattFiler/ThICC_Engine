@@ -33,6 +33,8 @@ public:
 private:
 	// Updates
 	void UpdateItems();
+	void DeleteItem(Item * item);
+	void DeleteThread(Item * item);
 
 	//State Stuff
 	bool m_isPaused;
@@ -42,7 +44,6 @@ private:
 	void pushBackObjects();
 
 	Item* CreateItem(ItemType type);
-	void DeleteMemoryTest(Item* item);
 
 	// Test objects
 	Track* track = nullptr;
@@ -66,8 +67,6 @@ private:
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
-
-	Vector3 MatrixDecomposeYawPitchRoll(Matrix  mat);
 	
 	RenderData* m_RD;
 	bool m_playerControls = false;
@@ -88,6 +87,9 @@ private:
 	States state = START;
 
 	bool track_music_start = true;
+	bool final_lap_start = false;
+	bool final_lap = false;
+	int finished = 0;
 
 };
 

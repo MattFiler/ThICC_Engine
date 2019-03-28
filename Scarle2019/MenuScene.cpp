@@ -29,13 +29,30 @@ void MenuScene::Update()
 	else if (Locator::getGSD()->m_keyboardState.Enter || Locator::getGSD()->m_gamePadState[0].IsStartPressed())
 	{
 		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
+		Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
+	}
+
+	if (game_start)
+	{
+		Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TITLE_START);
+		game_start = false;
 	}
 
 	//in splash screen
 	enterPlayerLobby();
 
+	if (m_menu_state == States::NOSTATE)
+	{
+		timeout -= Locator::getGSD()->m_dt;
+
+		if (timeout < 0 && intro_music_start)
+		{
+			Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TTLE_LOOP);
+			intro_music_start = false;
+		}
+	}
 	//in lobby
-	if (m_menu_state == States::LOBBY)
+	else if (m_menu_state == States::LOBBY)
 	{
 		for (int i = 0; i < 4; ++i)
 		{
@@ -180,10 +197,16 @@ void MenuScene::enterPlayerLobby()
 			m_2DObjects[1]->SetPos(Vector2(0, -720));
 			m_2DObjects[2]->SetPos(Vector2(0, 0));
 			//m_charecter_images[0][0]->SetPos(Vector2(200, 200));
+			Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TTLE_LOOP)->Stop();
+			Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP);
 		}
 
 		if (Locator::getGSD()->m_gamePadState[0].IsBPressed() && m_menu_state == States::LOBBY)
 		{
+			intro_music_start = true;
+			timeout = 1.2f;
+			game_start = true;
+			Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
 			m_menu_state = States::NOSTATE;
 			m_2DObjects[1]->SetPos(Vector2(0, 0));
 			m_2DObjects[2]->SetPos(Vector2(0, -720));
@@ -201,7 +224,7 @@ void MenuScene::playerJoin()
 			if (Locator::getGSD()->m_gamePadState[i].IsAPressed() && m_menu_state == States::LOBBY)
 			{
 				//set player charecter selection image
-				m_charecter_images[i][Locator::getGSD()->charecter_selected[i]];
+				m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));
 			}
 
 			if (m_charTimeout[i] <= 0) // stops continuous flipping of charecter selection

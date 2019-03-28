@@ -14,38 +14,41 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	SetDrag(0.7);
 	SetPhysicsOn(true);
 	m_playerID = _playerID;
-	text_ranking = new Text2D(std::to_string(ranking));
-	text_ranking->SetScale(0.1f * Vector2::One);
-	text_lap = new Text2D(std::to_string(lap) + "/3");
-	countdown = new Text2D("3");
-	item_img = new ImageGO2D("ITEM_PLACEHOLDER");
+	m_textRanking = new Text2D(std::to_string(m_ranking));
+	m_textRanking->SetScale(0.1f * Vector2::One);
+	m_textLap = new Text2D(std::to_string(m_lap) + "/3");
+	m_textCountdown = new Text2D("3");
+	m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
+	m_textFinishOrder = new Text2D("0" + m_orderIndicator[0]);
 }
 
 Player::~Player()
 {
-	delete item_img;
-	item_img = nullptr;
+	delete m_imgItem;
+	m_imgItem = nullptr;
 }
 
 
 void Player::setActiveItem(ItemType _item) {
 	if (inventory_item == _item) {
 		active_item = _item;
-		item_img->UpdateSprite("ITEM_PLACEHOLDER");
+		m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
+		m_imgItem->SetPos(m_itemPos);
 		inventory_item = ItemType::NONE;
 		std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
 	}
 	else
 	{
-		//We should never get here - so if we do, throw a useful error.
-		throw std::runtime_error("Player tried to use an item that they did not have. This should never be requested!");
+		//We should never get here
+		std::cout << "Player tried to use an item that they did not have. This should never be requested!" << std::endl;
 	}
 };
 
 void Player::setItemInInventory(ItemType _item) {
 	if (inventory_item == ItemType::NONE) {
 		inventory_item = _item;
-		item_img->UpdateSprite(Locator::getItemData()->GetItemSpriteName(_item));
+		m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
+		m_imgItem->SetPos(m_itemPos);
 		std::cout << "PLAYER " << m_playerID << " HAS ACQUIRED ITEM: " << _item << std::endl; //debug
 	}
 }
@@ -91,8 +94,12 @@ void Player::Tick()
 	}
 
 	//Update UI
-	text_ranking->SetText(std::to_string(ranking));
-	item_img->Tick();
+	if (!m_finished)
+	{
+		m_textRanking->SetText(std::to_string(m_ranking));
+		m_textLap->SetText(std::to_string(m_lap) + "/3");
+		m_imgItem->Tick();
+	}
 
 	//apply my base behaviour
 	//PhysModel::Tick();
@@ -148,9 +155,6 @@ void Player::ReleaseItem()
 		m_trailingItem = nullptr;
 		active_item = NONE;
 	}
-
-	text_lap->SetText(std::to_string(lap) + "/3");
-	text_ranking->SetText(std::to_string(waypoint));
 }
 
 void Player::setGamePad(bool _state)
@@ -160,9 +164,14 @@ void Player::setGamePad(bool _state)
 
 void Player::movement()
 {
+	bool isTurning = false;
 	//FORWARD BACK & STRAFE CONTROL HERE
-	Vector3 forwardMove = 30.0f * m_world.Forward();
-	Vector3 rightMove = 60.0f * m_world.Right();
+	Vector3 forwardMove = 25.0f * m_world.Forward();
+	Vector3 rightMove = 12.5f * m_world.Right();
+	Vector3 forwardComponent = Vector::Zero;
+	Vector3 turnComponent = Vector::Zero;
+	float driftMultiplier = 1;
+
 	Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
 	rightMove = Vector3::Transform(rightMove, rotMove);
@@ -172,24 +181,30 @@ void Player::movement()
 	{
 		if (m_keymindManager.keyHeld("Forward"))
 		{
-			m_acc += forwardMove;
+			//m_acc += forwardMove;
+			forwardComponent += forwardMove;
 		}
 		if (m_keymindManager.keyHeld("Backwards"))
 		{
-			m_acc -= forwardMove;
+			//m_acc -= forwardMove / 2;
+			forwardComponent -= forwardMove / 2;
 		}
 		if (m_keymindManager.keyHeld("Left"))
 		{
 			m_acc -= rightMove;
+			isTurning = true;
 		}
 		if (m_keymindManager.keyHeld("Right"))
 		{
 			m_acc += rightMove;
+			isTurning = true;
 		}
 	}
 
+	if (m_controlsActive)
+	{
 		//GameController Movement
-		
+
 		if (Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
 		{
 			if (Locator::getGSD()->m_gamePadState[m_playerID].IsViewPressed())
@@ -198,35 +213,154 @@ void Player::movement()
 			}
 			else
 			{
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightShoulderPressed())
+				{
+					isTurning = true;
+					if (m_drifting == false)
+					{
+						Vector addVel = Vector::Zero;
+						m_drifting = true;
+						if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
+						{
+							m_driftingRight = false;
+						}
+						else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+						{
+							m_driftingRight = true;
+						}
+						else
+						{
+							isTurning = false;
+							m_drifting = false;
+						}
+						m_vel += addVel;
+					}
+				}
+				else
+				{
+					if (m_drifting)
+					{
+						EndDrift();
+					}
+				}
+
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
 				{
-					m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
+					//m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
+					forwardComponent += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
 				{
-					m_acc -= forwardMove; //* _GSD->m_gamePadState->triggers.left;
+					//m_acc -= forwardMove / 2; //* _GSD->m_gamePadState->triggers.left;
+					forwardComponent -= forwardMove / 2;
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
 				{
-					m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
+					if (m_drifting)
+					{
+						if (m_driftingRight)
+						{
+							driftMultiplier = 0.5f;
+						}
+						else
+						{
+							driftMultiplier = 1.5f;
+						}
+					}
+					else
+					{
+						//m_acc -= rightMove;
+						turnComponent -= rightMove;
+					}
+					isTurning = true;
 				}
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
 				{
-					m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed() && (inventory_item != NONE || active_item != NONE))
-				{
-					if (!m_isTrailing)
+					if (m_drifting)
 					{
-						SpawnItem(inventory_item);
+						if (m_driftingRight)
+						{
+							driftMultiplier = 2;
+						}
+						else
+						{
+							driftMultiplier = 0.1f;
+						}
 					}
 					else
 					{
-						TrailItem();
+						turnComponent += rightMove;
+					}
+					isTurning = true;
+				}
+
+				m_acc = forwardComponent;
+
+				if (isTurning)
+				{
+					if (m_drifting)
+					{
+						if (m_timeTurning > m_timeForMaxDrift)
+						{
+							m_timeTurning = m_timeForMaxDrift;
+						}
+						if (m_driftingRight)
+						{
+							turnComponent = rightMove;
+						}
+						else
+						{
+							turnComponent = -rightMove;
+						}
+
+						m_timeTurning += Locator::getGSD()->m_dt * driftMultiplier;
+						turnComponent *= 1 + ((m_timeTurning / m_timeForMaxDrift)  * m_maxDriftTurnMutliplier);
+						turnComponent *= 1 + (m_timeTurning / 1.3f);
+					}
+					else
+					{
+						if (m_timeTurning > m_timeForMaxTurn)
+						{
+							m_timeTurning = m_timeForMaxTurn;
+						}
+						m_timeTurning += Locator::getGSD()->m_dt;
+						turnComponent *= 1 + ((m_timeTurning / m_timeForMaxTurn)  * m_maxTurnRateMutliplier);
+						turnComponent *= 1 + (m_timeTurning / 1.3f);
+					}
+
+
+
+					float accLength = m_acc.Length();
+					if (turnComponent.LengthSquared() > 0)
+					{
+						accLength += turnComponent.Length() / 4;
+					}
+					m_acc += turnComponent;
+					m_acc.Normalize();
+					m_acc *= accLength;
+
+				}
+				else
+				{
+					EndDrift();
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
+				{
+					if (!m_isTrailing)
+					{
+						if (inventory_item != NONE) {
+							SpawnItem(inventory_item);
+						}
+					}
+					else
+					{
+						if (m_trailingItem != nullptr) {
+							TrailItem();
+						}
 					}
 				}
 				else
@@ -235,7 +369,7 @@ void Player::movement()
 				}
 			}
 		}
-		
+	}
 
 	////change orinetation of player
 	//float rotSpeed = 0.001f;
@@ -275,4 +409,27 @@ void Player::movement()
 
 }
 
+void Player::EndDrift()
+{
+	m_drifting = false;
+	if (m_timeTurning > m_timeForMaxDrift / 3)
+	{
+		m_vel = m_world.Forward() * m_vel.Length();
+	}
+	/*
+	if (m_timeTurning > m_timeForMaxDrift / 3)
+	{
+		m_acc += m_world.Forward() * (m_driftBoost);
+	}
+	else if (m_timeTurning > m_timeForMaxDrift / 1.5f)
+	{
+		m_acc += m_world.Forward() * (m_driftBoost * 1.5f);
+	}
+	else if (m_timeTurning >= m_timeForMaxDrift)
+	{
+		m_acc += m_world.Forward() * (m_driftBoost * 2);
+	}
+	*/
+	m_timeTurning = 0;
+}
 

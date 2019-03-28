@@ -8,6 +8,7 @@ class GameStateData;
 class InputData;
 class ItemData;
 class AudioManager;
+class GarbageCollector;
 
 struct Locator {
 	static RenderData* getRD() {
@@ -46,6 +47,12 @@ struct Locator {
 		}
 		return ref_audio;
 	}
+	static GarbageCollector* getGarbageCollector() {
+		if (ref_GC == nullptr) {
+			throw std::runtime_error("Call to garbage collector before initialisation.");
+		}
+		return ref_GC;
+	}
 
 
 	static void setupRD(RenderData* inst_RD) {
@@ -66,6 +73,9 @@ struct Locator {
 	static void setupAudio(AudioManager* inst_audio) {
 		ref_audio = inst_audio;
 	}
+	static void setupGarbageCollector(GarbageCollector* inst_GC) {
+		ref_GC = inst_GC;
+	}
 
 private:
 	static RenderData* ref_RD;
@@ -74,4 +84,5 @@ private:
 	static InputData* ref_ID;
 	static ItemData* ref_ItemProbability;
 	static AudioManager* ref_audio;
+	static GarbageCollector* ref_GC;
 };

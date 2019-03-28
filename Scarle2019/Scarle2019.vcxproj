@@ -22,7 +22,7 @@
     <RootNamespace>Scarle2019</RootNamespace>
     <ProjectGuid>{beb5860e-fef9-4f22-baeb-f76c22cf75d6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -190,6 +190,7 @@
     <ClInclude Include="GameObjectList.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameStateData.h" />
+    <ClInclude Include="GarbageCollector.h" />
     <ClInclude Include="GPGO3D.h" />
     <ClInclude Include="GreenShell.h" />
     <ClInclude Include="ImageGO2D.h" />
@@ -231,6 +232,7 @@
     <ClInclude Include="VBSpiked.h" />
     <ClInclude Include="VBspiral.h" />
     <ClInclude Include="vertex.h" />
+    <ClInclude Include="WaitForGPU.h" />
     <ClInclude Include="WindowData.h" />
   </ItemGroup>
   <ItemGroup>

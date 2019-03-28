@@ -11,6 +11,7 @@
 #include "SceneManager.h"
 #include "ItemData.h"
 #include "AudioManager.h"
+#include "GarbageCollector.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -146,6 +147,7 @@ private:
 	std::vector<PhysModel*> m_physModels;
 	SceneManager m_sceneManager;
 
-	ItemData m_probabilities;
+	ItemData* m_probabilities = nullptr;
 	AudioManager m_AM;
+	GarbageCollector m_GC;
 };
