@@ -14,4 +14,11 @@ namespace EditorTool
         SOUND,
         FONT
     }
+    public enum ModelType
+    {
+        MAP,
+        ITEM,
+        PLAYER,
+        PROP
+    }
 }

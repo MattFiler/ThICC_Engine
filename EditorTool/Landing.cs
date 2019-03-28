@@ -49,9 +49,16 @@ namespace EditorTool
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
-                    Model_Importer modelimporter = new Model_Importer();
-                    modelimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
-                    modelimporter.Show();
+                    using (var form = new Model_Importer_Preselect())
+                    {
+                        var result = form.ShowDialog();
+                        if (result == DialogResult.OK)
+                        {
+                            Model_Importer modelimporter = new Model_Importer(form.selected_model_type);
+                            modelimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                            modelimporter.Show();
+                        }
+                    }
                     break;
                 case "Meshes":
                     MessageBox.Show("This functionality is coming soon.");

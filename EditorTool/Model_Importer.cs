@@ -18,8 +18,11 @@ namespace EditorTool
 {
     public partial class Model_Importer : Form
     {
-        public Model_Importer()
+        ModelType selected_model_type = ModelType.PROP;
+
+        public Model_Importer(ModelType model_type)
         {
+            selected_model_type = model_type;
             InitializeComponent();
         }
 
