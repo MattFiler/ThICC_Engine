@@ -31,5 +31,6 @@ protected:
 	GameFilepaths m_filepath;
 
 	bool is_debug_mesh = false;
+	bool m_shouldRender = true;
 };
 

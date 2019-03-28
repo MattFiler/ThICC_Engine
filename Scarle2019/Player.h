@@ -19,6 +19,7 @@ public:
 	~Player();
 
 	virtual void Tick() override;
+	virtual void Render() override;
 
 	int GetWaypoint() { return m_waypoint; }
 	int GetRanking() { return m_ranking; }
@@ -46,6 +47,8 @@ public:
 	void TrailItem();
 	void SpawnItem(ItemType type);
 	void ReleaseItem();
+
+	void Animations();
 
 protected:
 	int m_playerID = 0;
@@ -99,4 +102,11 @@ private:
 	bool  m_isTrailing = false;
 	
 	bool m_controlsActive = false;
+
+	std::unique_ptr<SDKMeshGO3D> m_displayedMesh = nullptr;
+	Vector3 m_animPosOffset = Vector3::Zero;
+	Vector3 m_animRotOffset = Vector3::Zero;
+	Vector3 m_targetAnimPosOffset = Vector3::Zero;
+	Vector3 m_targetAnimRotOffset = Vector3::Zero;
+
 };
