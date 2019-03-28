@@ -232,7 +232,7 @@ void Player::movement()
 					isTurning = true;
 					if (m_drifting == false)
 					{
-						m_displayedMesh->Flip(1, 0.5f);
+						m_displayedMesh->Jump(0.5f, 0.25f);
 						Vector addVel = Vector::Zero;
 						m_drifting = true;
 						if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())

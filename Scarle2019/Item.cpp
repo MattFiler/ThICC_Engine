@@ -6,6 +6,8 @@ Item::Item(const std::string& item_type)
 {
 	//Set model name
 	m_mesh = new TrackMagnet(item_type);
+	m_mesh->SetShouldRender(false);
+	m_displayedMesh = std::make_unique<AnimationMesh>(item_type);
 }
 
 void Item::Tick()

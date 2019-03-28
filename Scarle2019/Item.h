@@ -5,6 +5,7 @@
 #include "ServiceLocator.h"
 #include "ItemData.h"
 #include "Deletable.h"
+#include "AnimationMesh.h"
 
 class Player;
 
@@ -23,9 +24,11 @@ public:
 	void FlagForDestoy() { m_shouldDestroy = true; };
 
 	TrackMagnet* GetMesh() { return m_mesh; };
+	SDKMeshGO3D* GetRenderMesh() { return m_displayedMesh.get(); };
 
 
 protected:
 	TrackMagnet * m_mesh = nullptr;
+	std::unique_ptr<AnimationMesh> m_displayedMesh = nullptr;
 	bool m_shouldDestroy = false;
 };

@@ -51,6 +51,7 @@ public:
 
 	void Spin(int _revolutions, float _duration) { m_displayedMesh->Spin(_revolutions, _duration); };
 	void Flip(int _revolutions, float _duration) { m_displayedMesh->Flip(_revolutions, _duration); };
+	void Jump(float _jumpHeight, float _duration) { m_displayedMesh->Jump(_jumpHeight, _duration); };
 
 protected:
 	int m_playerID = 0;
