@@ -17,12 +17,6 @@ namespace EditorTool
             InitializeComponent();
         }
 
-        /* Select a new map image */
-        private void selectImageAsset_Click(object sender, EventArgs e)
-        {
-            mapPreviewImage.Text = selectAsset(AssetType.IMAGE);
-        }
-
         /* Launch asset selector */
         string selectAsset(AssetType asset_type)
         {
@@ -36,6 +30,32 @@ namespace EditorTool
                 }
             }
             return asset_path;
+        }
+
+        /* Select assets */
+        private void selectImageAsset_Click(object sender, EventArgs e)
+        {
+            mapPreviewImage.Text = selectAsset(AssetType.IMAGE);
+        }
+        private void selectMapModel_Click(object sender, EventArgs e)
+        {
+            mapModelAsset.Text = selectAsset(AssetType.MODEL);
+        }
+        private void selectSoundtrackIntro_Click(object sender, EventArgs e)
+        {
+            soundtrackIntro.Text = selectAsset(AssetType.SOUND);
+        }
+        private void selectSoundtrackLoop_Click(object sender, EventArgs e)
+        {
+            soundtrackIntroLoop.Text = selectAsset(AssetType.SOUND);
+        }
+        private void selectFinalLapIntro_Click(object sender, EventArgs e)
+        {
+            finalLapIntro.Text = selectAsset(AssetType.SOUND);
+        }
+        private void selectFinalLapLoop_Click(object sender, EventArgs e)
+        {
+            finalLapLoop.Text = selectAsset(AssetType.SOUND);
         }
     }
 }

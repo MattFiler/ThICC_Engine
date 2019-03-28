@@ -1,5 +1,6 @@
 {
 	"MARIO KART STADIUM": {
+		"map_identifier": "MARIO KART STADIUM",
 		"menu_sprite": "MARIO KART STADIUM PREVIEW",
 		"friendly_name": "MAP_MKS",
 		"model": "MARIO KART STADIUM",
