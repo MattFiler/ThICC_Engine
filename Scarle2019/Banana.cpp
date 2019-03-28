@@ -11,5 +11,6 @@ Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BANANA)) {
 void Banana::HitByPlayer(Player* player)
 {
 	player->setVelocity(player->getVelocity() / 3);
+	player->Spin(1, 0.5f);
 	m_shouldDestroy = true;
 }

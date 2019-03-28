@@ -23,9 +23,8 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 
 	// Don't render this mesh, render a second one instead
 	m_shouldRender = false;
-	m_displayedMesh = std::make_unique<SDKMeshGO3D>(_filename);
+	m_displayedMesh = std::make_unique<AnimationMesh>(_filename);
 
-	m_animRotOffset = m_world.Forward();
 	m_targetAnimRotOffset = m_world.Forward();
 }
 
@@ -62,7 +61,6 @@ void Player::setItemInInventory(ItemType _item) {
 
 void Player::Render()
 {
-	m_displayedMesh->SetWorld(Matrix::CreateScale(m_scale) * Matrix::CreateWorld(m_pos, m_animRotOffset, m_world.Up()));
 	m_displayedMesh->Render();
 	SDKMeshGO3D::Render();
 }
@@ -115,10 +113,10 @@ void Player::Tick()
 		m_imgItem->Tick();
 	}
 
-	Animations();
-
 	//apply my base behaviour
-	//PhysModel::Tick();
+	TrackMagnet::Tick();
+
+	Animations();
 }
 
 void Player::TrailItem()
@@ -234,6 +232,7 @@ void Player::movement()
 					isTurning = true;
 					if (m_drifting == false)
 					{
+						m_displayedMesh->Flip(1, 0.5f);
 						Vector addVel = Vector::Zero;
 						m_drifting = true;
 						if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
@@ -441,9 +440,6 @@ void Player::movement()
 		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 	}
 
-	//apply my base behaviour
-	TrackMagnet::Tick();
-
 }
 
 void Player::EndDrift()
@@ -472,5 +468,5 @@ void Player::EndDrift()
 
 void Player::Animations()
 {
-	m_animRotOffset = Vector3::Lerp(m_animRotOffset, m_targetAnimRotOffset, 0.1f);
+	m_displayedMesh->Update(m_world ,m_targetAnimRotOffset);
 }

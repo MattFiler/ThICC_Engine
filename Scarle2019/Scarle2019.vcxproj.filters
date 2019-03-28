@@ -275,6 +275,9 @@
     <ClInclude Include="Deletable.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationMesh.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -412,6 +415,9 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Mushroom.cpp">
       <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationMesh.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
