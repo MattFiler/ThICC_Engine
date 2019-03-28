@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "GUIManager.h"
-
+#include "Player.h"
 
 
 GUIManager::GUIManager()
@@ -9,49 +9,36 @@ GUIManager::GUIManager()
 	{
 		m_itemSprites.emplace_back(new ImageGO2D(m_itemSpritePaths[i]));
 	}
-}
 
-
-void GUIManager::Render(Scenes _current_scene, States _current_state)
-{
-	switch (_current_scene)
+	for (int i = 0; i < m_positionPlaceSprites.size(); ++i)
 	{
-	case Scenes::MENUSCENE:
+		m_positionPlaceSprites.emplace_back(new ImageGO2D(m_positionSpritePaths[i]));
+	}
 
-		break;
-	case Scenes::GAMESCENE:
-		switch (_current_state)
-		{
-		case States::PLAY:
-			for (int i = 0; i < 4; ++i)
-			{
-				m_activePlayerItemGUI[i]->Render();
-				m_activePlayerPositionGUI[i]->Render();
-				m_activePlayerLapGUI[i]->Render();
-			}
-				break;
-		default:
-			break;
-		}
-	default:
-		break;
+	for (int i = 0; i < m_charecterMenuSpritepaths->size(); ++i)
+	{
+		m_charecterMenuSprites.emplace_back(new ImageGO2D(m_charecterMenuSpritepaths[i]));
+	}
+
+	for (int i = 0; i < m_miniMapSpritesPaths->size(); ++i)
+	{
+		m_miniMapCharecterSprites.emplace_back(new ImageGO2D(m_miniMapSpritesPaths[i]));
 	}
 }
 
-void GUIManager::load()
+
+void GUIManager::RenderPlayersGUI()
 {
-	//Init all sprites here
+}
 
-	//set position of menu elements here e.g. charecter selected
-	//set position of all 4 players GUI here.
-
-
+void GUIManager::RenderMiniMap()
+{
 
 }
 
-void GUIManager::setActivePlayerItemGUI(ItemType _current_item, int _playerID)
+void GUIManager::setActivePlayerItemGUI(Player& _player)
 {
-	m_activePlayerItemGUI[_playerID] = m_itemSprites[static_cast<int>(_current_item)];
+	m_activePlayerItemGUI[_player.get] = m_itemSprites[static_cast<int>(_current_item)];
 }
 
 void GUIManager::setActivePlayerPositionGUI(int _current_position, int _playerID)

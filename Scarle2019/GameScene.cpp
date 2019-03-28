@@ -40,8 +40,6 @@ GameScene::~GameScene()
 void GameScene::Update()
 {
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
-
-
 	if (finished == 4)
 	{
 		//m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
@@ -141,7 +139,6 @@ void GameScene::Update()
 		player[i]->ShouldStickToTrack(*track);
 		player[i]->ResolveWallCollisions(*track);
 		Locator::getGSD()->m_gamePadState[i] = Locator::getID()->m_gamePad->GetState(i); //set game controllers state[s]
-
 	}
 
 	if (m_keybinds.keyPressed("Quit"))

@@ -6,18 +6,21 @@
 #include <vector>
 
 
+class Player;
+
 class GUIManager
 {
 public:
 	GUIManager();
 	~GUIManager() = default;
 
-	void Render(Scenes _current_scene, States _current_state);
+	void RenderPlayersGUI();
+	void RenderMiniMap();
 
 	void load();
 
 	//setters
-	void setActivePlayerItemGUI(ItemType _current_item, int _playerID);
+	void setActivePlayerItemGUI(Player& _player);
 	void setActivePlayerPositionGUI(int _current_position, int _playerID);
 	void setPlayerlapGUI(int _current_lap, int _playerID);
 	//void setMiniMapGUI(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  _m_commandList);
@@ -28,9 +31,9 @@ private:
 		"ITEM_BULLET_BILL", "ITEM_FAKE_ITEMBOX", "ITEM_GREEN_SHELL", "ITEM_GREEN_SHELL_2", "ITEM_GREEN_SHELL_3",
 		"ITEM_LIGHTNING", "ITEM_MUSHROOM", "ITEM_MUSHROOM_2", "ITEM_MUSHROOM_3", "ITEM_MUSHROOM_GOLD", "ITEM_RED_SHELL", "ITEM_RED_SHELL_2", "ITEM_RED_SHELL_3",
 		"ITEM_ITEM_SQUID" };
-
 	std::string m_charecterMenuSpritepaths[5]{ "Bowser", "Mario", "Peach", "Waluigi", "Yoshi" };
 	std::string m_miniMapSpritesPaths[4]{ "Track_1", "Track_1", "Track_1", "Track_1" };
+	std::string m_positionSpritePaths[12]{ "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th" };
 
 	ImageGO2D* m_activePlayerItemGUI[4]		= { nullptr, nullptr, nullptr, nullptr };
 	ImageGO2D* m_activePlayerPositionGUI[4] = { nullptr, nullptr, nullptr, nullptr };

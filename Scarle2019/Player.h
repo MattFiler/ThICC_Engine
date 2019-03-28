@@ -31,6 +31,7 @@ public:
 	ImageGO2D* GetItemImg() { return m_imgItem; }
 	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
 	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
+	int getPlayerID() { return m_playerID; }
 
 	void SetWaypoint(int _waypoint) { m_waypoint = _waypoint; }
 	void SetLap(int _lap) { m_lap = _lap; }

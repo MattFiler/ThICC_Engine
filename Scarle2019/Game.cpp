@@ -135,6 +135,7 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//ultralight::Ref<ultralight::View> view = renderer->CreateView(800, 600, false);
 	//view->LoadHTML("<h1>Hello World!</h1>");
 
+
 	//Setup scene manager and all scenes
 	m_sceneManager.addScene(new MenuScene(), Scenes::MENUSCENE);
 	m_sceneManager.addScene(new GameScene(), Scenes::GAMESCENE);
