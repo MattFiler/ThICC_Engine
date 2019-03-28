@@ -120,7 +120,7 @@ void Player::SpawnItem(ItemType type)
 	{
 		case BANANA:
 		{
-			Banana * banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
+			Banana * banana = static_cast<Banana*>(CreateItem(BANANA));
 			m_trailingItem = banana;
 			TrailItem();
 			break;
@@ -128,19 +128,25 @@ void Player::SpawnItem(ItemType type)
 
 		case MUSHROOM:
 		{
-			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
+			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(MUSHROOM));
 			mushroom->Use(this, false);
 			break;
 		}
 
 		case GREEN_SHELL:
 		{
-			GreenShell* shell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
+			GreenShell* shell = static_cast<GreenShell*>(CreateItem(GREEN_SHELL));
 			m_trailingItem = shell;
 			TrailItem();
 			break;
 		}
 
+		case BOMB:
+		{
+			Bomb* bomb = static_cast<Bomb*>(CreateItem(BOMB));
+			m_trailingItem = bomb;
+			TrailItem();
+		}
 		default:
 			break;
 	}

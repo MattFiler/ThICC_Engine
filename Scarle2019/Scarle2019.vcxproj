@@ -172,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Banana.h" />
+    <ClInclude Include="Bomb.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionManager.h" />
@@ -239,6 +240,7 @@
   <ItemGroup>
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />
+    <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CharecterSelectionState.cpp" />

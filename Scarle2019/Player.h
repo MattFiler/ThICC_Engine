@@ -5,6 +5,7 @@
 #include "GreenShell.h"
 #include "Mushroom.h"
 #include "Constants.h"
+#include "Bomb.h"
 #include <functional>
 
 //=================================================================

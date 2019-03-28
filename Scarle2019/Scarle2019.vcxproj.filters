@@ -277,6 +277,9 @@
     <ClInclude Include="GarbageCollector.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -416,6 +419,9 @@
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -422,6 +422,7 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				if (obj->GetMesh())
 				{
 					obj->GetMesh()->Render();
+
 				}
 			}
 			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
@@ -470,6 +471,7 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 					if (obj->GetMesh())
 					{
 						obj->GetMesh()->Render();
+
 					}
 				}
 			}
@@ -525,6 +527,7 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 					if (obj->GetMesh())
 					{
 						obj->GetMesh()->Render();
+
 					}
 				}
 			}
@@ -714,30 +717,34 @@ Item* GameScene::CreateItem(ItemType type)
 	{
 		Banana* banana = new Banana();
 		m_itemModels.push_back(banana);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(banana->GetMesh())->getDebugCollider());
 		return banana;
-		break;
 	}
 	case GREEN_SHELL:
 	{
 		GreenShell* greenShell = new GreenShell();
 		m_itemModels.push_back(greenShell);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(greenShell->GetMesh())->getDebugCollider());
+
 		return greenShell;
-		break;
 	}
-	case RED_SHELL:
-		break;
 	case MUSHROOM:
 	{
 		Mushroom * mushroom = new Mushroom();
 		m_itemModels.push_back(mushroom);
 		return mushroom;
-		break;
+	}
+	case BOMB:
+	{
+		Bomb* bomb = new Bomb();
+		m_itemModels.push_back(bomb);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(bomb->GetMesh())->getDebugCollider());
+
+		return bomb;
 	}
 	default:
 		return nullptr;
-		break;
 	}
-	return nullptr;
 }
 
 void GameScene::DeleteItem(Item * item)
