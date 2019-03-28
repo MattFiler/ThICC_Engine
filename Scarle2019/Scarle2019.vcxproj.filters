@@ -272,6 +272,9 @@
     <ClInclude Include="GarbageCollector.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Deletable.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
