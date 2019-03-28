@@ -13,7 +13,8 @@ TrackSelectionState::~TrackSelectionState()
 
 States TrackSelectionState::Update(GameStateData * _GSD, InputData * _ID)
 {
-	return m_nextState;
+	//set to no state, needs changing had error.
+	return States::NOSTATE;
 }
 
 void TrackSelectionState::Render()

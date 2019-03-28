@@ -15,7 +15,7 @@ CharecterSelectionState::~CharecterSelectionState()
 
 States CharecterSelectionState::Update(GameStateData * _GSD, InputData * _ID)
 {
-	return m_nextState;
+	return States::END;
 }
 
 void CharecterSelectionState::Render()

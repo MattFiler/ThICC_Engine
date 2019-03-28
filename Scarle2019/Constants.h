@@ -19,17 +19,19 @@ enum Scenes
 enum States
 {
 	NOSTATE = -1,
-	PAUSED = 0,
+	//Game States
+	START = 0,
+	OPENING = 1,
+	CAM_OPEN = 2,
+	COUNTDOWN = 3,
+	PLAY = 4,
+	END = 5,
 
-	//MENU
-	LOBBY = 1,
-	START_GAME,
-	CHARECTER_SELECTION,
-	TRACK_SELECTION,
+	//MenuStates
+	LOBBY = 6,
+	CHARECTER_SELECTION = 7,
+	TRACK_SELECTION = 8,
 
-	//Game
-	RACE_START,
-	RACE_OVER
 };
 
 enum ItemType
@@ -64,8 +66,6 @@ struct ItemBoxConfig {
 };
 
 
-
-
 // sound
 // sound catergories
 enum class SOUND_TYPE : int
@@ -86,7 +86,7 @@ enum class SOUNDS_GAME : int
 };
 
 // character sounds
-enum class SOUNDS_CHARACTER : int
+enum class CHARACTER : int
 {
 	MARIO = 0,
 	BOWSER = 1,

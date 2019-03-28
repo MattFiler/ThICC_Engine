@@ -80,6 +80,7 @@ private:
 	Text2D *m_textFinishOrder = nullptr;
 	Vector m_savedGravDir;
 	bool m_finished = false;
+	ImageGO2D* m_minimap_sprite;
 
 	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th" };
 

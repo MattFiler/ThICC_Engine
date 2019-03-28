@@ -6,6 +6,7 @@
 #include "GameDebugToggles.h"
 #include "ServiceLocator.h"
 #include "AudioManager.h"
+#include "GUIManager.h"
 #include "DebugMarker.h"
 #include "WaitForGPU.h"
 #include "GarbageCollector.h"
@@ -133,7 +134,6 @@ void GameScene::Update()
 			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_FL_GAME);
 			final_lap_start = false;
 		}
-
 		break;
 	}
 
@@ -166,7 +166,6 @@ void GameScene::Update()
 		}
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
 	}
-
 
 	// sets the players waypoint
 	SetPlayersWaypoint();
@@ -432,7 +431,6 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getWD()->sprite_viewport);
 			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
 			Locator::getRD()->m_spriteBatch->End();
-
 			break;
 		case CAM_OPEN:
 		case COUNTDOWN:
@@ -553,6 +551,10 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 					player[i]->GetItemImg()->Render();
 				}
 			}
+
+			//Render GUI Manager here
+			m_gui_manager->Render(m_scene_manager->getCurrentScene(), state);
+
 			Locator::getRD()->m_spriteBatch->End();
 			break;
 	}
@@ -598,6 +600,8 @@ void GameScene::create2DObjects()
 		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
 		m_2DObjects.push_back(player[i]->GetLapText());
 	}
+
+	//Setup minimap
 
 
 	// player countdown text

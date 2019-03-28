@@ -19,7 +19,7 @@ AudioManager::AudioManager()
 			new_sound->SetLoop(true);
 		m_gameSounds.push_back(new_sound);
 	}
-	for (int i = 0; i <= (int)SOUNDS_CHARACTER::WALUIGI; i++)
+	for (int i = 0; i <= (int)CHARACTER::WALUIGI; i++)
 	{
 		Sound* new_sound = new Sound(m_audEngine.get(), characterSounds[i]);
 		m_characterSounds.push_back(new_sound);
@@ -29,7 +29,6 @@ AudioManager::AudioManager()
 		Sound* new_sound = new Sound(m_audEngine.get(), miscSounds[i]);
 		m_miscSounds.push_back(new_sound);
 	}
-
 }
 
 

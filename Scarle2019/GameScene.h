@@ -17,6 +17,7 @@ class GameObject3D;
 struct RenderData;
 struct InputData;
 class SceneManager;
+class GUIManager;
 
 class GameScene : public Scene
 {
@@ -67,6 +68,7 @@ private:
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
+	GUIManager* m_gui_manager;
 	
 	RenderData* m_RD;
 	bool m_playerControls = false;
@@ -75,14 +77,14 @@ private:
 
 	float timeout = 12.f;
 
-	enum States {
-		START = 0,
-		OPENING = 1,
-		CAM_OPEN = 2,
-		COUNTDOWN = 3,
-		PLAY = 4,
-		END = 5
-	};
+	//enum States {
+	//	START = 0,
+	//	OPENING = 1,
+	//	CAM_OPEN = 2,
+	//	COUNTDOWN = 3,
+	//	PLAY = 4,
+	//	END = 5
+	//};
 
 	States state = START;
 
