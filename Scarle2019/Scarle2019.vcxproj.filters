@@ -274,6 +274,9 @@
     <ClInclude Include="ItemCollision.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="GarbageCollector.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

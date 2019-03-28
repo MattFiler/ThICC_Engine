@@ -56,6 +56,7 @@ Game::Game() :
 	Locator::setupGSD(m_GSD);
 	Locator::setupID(m_ID);
 	Locator::setupAudio(&m_AM);
+	Locator::setupGarbageCollector(&m_GC);
 }
 
 Game::~Game()

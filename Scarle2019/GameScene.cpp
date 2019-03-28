@@ -8,9 +8,11 @@
 #include "AudioManager.h"
 #include "DebugMarker.h"
 #include "WaitForGPU.h"
+#include "GarbageCollector.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
+#include <thread>
 
 extern void ExitGame();
 
@@ -287,10 +289,8 @@ void GameScene::UpdateItems()
 	}
 	if (delIndex != -1)
 	{
-		//Item* toby_broke_it = m_itemModels[delIndex];
+		Locator::getGarbageCollector()->DeletePointer(m_itemModels[delIndex]);
 		m_itemModels.erase(m_itemModels.begin() + delIndex);
-		//delete toby_broke_it;
-		//WaitForGPU::should_wait = true;
 	}
 }
 
@@ -738,4 +738,15 @@ Item* GameScene::CreateItem(ItemType type)
 		break;
 	}
 	return nullptr;
+}
+
+void GameScene::DeleteItem(Item * item)
+{
+	std::thread thread(&GameScene::DeleteThread, this, item);
+	thread.detach();
+}
+void GameScene::DeleteThread(Item * item)
+{
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	delete item;
 }
