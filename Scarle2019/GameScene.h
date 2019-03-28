@@ -33,6 +33,8 @@ public:
 private:
 	// Updates
 	void UpdateItems();
+	void DeleteItem(Item * item);
+	void DeleteThread(Item * item);
 
 	//State Stuff
 	bool m_isPaused;

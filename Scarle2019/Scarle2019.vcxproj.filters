@@ -269,6 +269,9 @@
     <ClInclude Include="WaitForGPU.h">
       <Filter>Game Base\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="GarbageCollector.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
