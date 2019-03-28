@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Item.h"
-
+#include "Explosion.h"
 class Bomb : public Item
 {
 public:
-	Bomb();
+	Bomb(std::function<Explosion*()> _CreateExplosionFunciton);
 	~Bomb() = default;
 
 	virtual void Tick() override;
@@ -14,5 +14,6 @@ public:
 	void HitByPlayer(Player* player) override;
 
 private:
-
+	std::function<Explosion*()> CreateExplosion;
+	Explosion* explosion;
 };

@@ -736,7 +736,7 @@ Item* GameScene::CreateItem(ItemType type)
 	}
 	case BOMB:
 	{
-		Bomb* bomb = new Bomb();
+		Bomb* bomb = new Bomb(std::bind(&GameScene::CreateExplosion, this));
 		m_itemModels.push_back(bomb);
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(bomb->GetMesh())->getDebugCollider());
 
@@ -745,6 +745,14 @@ Item* GameScene::CreateItem(ItemType type)
 	default:
 		return nullptr;
 	}
+}
+
+Explosion * GameScene::CreateExplosion()
+{
+	Explosion* explosion = new Explosion();
+	m_3DObjects.push_back(explosion);
+	m_3DObjects.push_back(dynamic_cast<PhysModel*>(explosion)->getDebugCollider());
+	return explosion;
 }
 
 void GameScene::DeleteItem(Item * item)

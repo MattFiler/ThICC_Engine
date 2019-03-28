@@ -2,6 +2,7 @@
 #include "CollisionManager.h"
 #include "AudioManager.h"
 #include "ItemBox.h"
+#include "Explosion.h"
 
 void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _physModels, std::vector<Item*> _items)
 {
@@ -22,14 +23,24 @@ void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _ph
 			{
 				ItemBoxCollision(collision.m_model1, collision.m_model2);
 			}
+			//Player x Explosion Collision
+			else if (dynamic_cast<Explosion*>(collision.m_model2))
+			{
+				ExplosionCollision(collision.m_model1, collision.m_model2);
+			}
 		}
 		else if (dynamic_cast<Player*>(collision.m_model2))
 		{
-			//Player x Item Box Collision
+			//Item Box x Player Collision
 			if (collision.m_model2->isVisible() && dynamic_cast<ItemBox*>(collision.m_model2))
 			{
 				ItemBoxCollision(collision.m_model2, collision.m_model1);
-			}		
+			}
+			//Explosion x Player Collision
+			else if (dynamic_cast<Explosion*>(collision.m_model1))
+			{
+				ExplosionCollision(collision.m_model2, collision.m_model1);
+			}
 		}
 	}
 
@@ -39,6 +50,11 @@ void CollisionManager::ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBo
 {
 	dynamic_cast<ItemBox*>(_itemBox)->hasCollided(dynamic_cast<Player*>(_player));
 	Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
+}
+
+void CollisionManager::ExplosionCollision(PhysModel *& _player, PhysModel *& _explosion)
+{
+	dynamic_cast<Explosion*>(_explosion)->HitByPlayer(dynamic_cast<Player*>(_player));
 }
 
 void CollisionManager::PlayerCollisions(Collision & collision)

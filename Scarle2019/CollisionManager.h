@@ -17,6 +17,7 @@ private:
 
 	static void PlayerCollisions(Collision & collision);
 	static void ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox);
+	static void ExplosionCollision(PhysModel*& _player, PhysModel*& _explosion);
 
 	static Plane getPlane(Vector3 _corner1, Vector3 _corner2, float height);
 };

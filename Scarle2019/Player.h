@@ -53,6 +53,7 @@ protected:
 
 private:
 	std::function<Item*(ItemType)> CreateItem;
+
 	void movement();
 
 	void EndDrift();

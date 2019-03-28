@@ -182,6 +182,7 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DebugMarker.h" />
     <ClInclude Include="DebugScene.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="fileVBGO.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameDebugToggles.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="CharecterSelectionState.cpp" />
     <ClCompile Include="DebugMarker.cpp" />
     <ClCompile Include="DebugScene.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="fileVBGO.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject2D.cpp" />

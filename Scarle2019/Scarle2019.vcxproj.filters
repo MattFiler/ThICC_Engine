@@ -280,6 +280,7 @@
     <ClInclude Include="Bomb.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="Explosion.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -423,6 +424,7 @@
     <ClCompile Include="Bomb.cpp">
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Explosion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">
