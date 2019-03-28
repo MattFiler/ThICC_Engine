@@ -116,7 +116,7 @@ void Game::Clear()
 	//DX::ThrowIfFailed(m_commandAllocators[m_backBufferIndex]->Reset());
 
 	m_commandAllocators[m_backBufferIndex]->Reset();
-	DX::ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
+	//DX::ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
 
 	// Transition the render target into the correct state to allow for drawing into it.
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_backBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
@@ -140,7 +140,7 @@ void Game::Present()
 	m_commandList->ResourceBarrier(1, &barrier);
 
 	// Send the command list off to the GPU for processing.
-	DX::ThrowIfFailed(m_commandList->Close());
+	//DX::ThrowIfFailed(m_commandList->Close());
 	m_commandQueue->ExecuteCommandLists(1, CommandListCast(m_commandList.GetAddressOf()));
 
 	// The first argument instructs DXGI to block until VSync, putting the application

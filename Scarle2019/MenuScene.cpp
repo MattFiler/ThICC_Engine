@@ -11,7 +11,7 @@ extern void ExitGame();
 
 MenuScene::MenuScene()
 {
-	m_scene_manager = new SceneManager();
+
 }
 
 MenuScene::~MenuScene()
@@ -20,7 +20,7 @@ MenuScene::~MenuScene()
 	m_3DObjects.clear();
 }
 
-void MenuScene::Update()
+Scenes MenuScene::Update()
 {
 	if (m_key.keyPressed("Quit"))
 	{
@@ -28,7 +28,7 @@ void MenuScene::Update()
 	}
 	else if (Locator::getGSD()->m_keyboardState.Enter || Locator::getGSD()->m_gamePadState[0].IsStartPressed())
 	{
-		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
+		return Scenes::GAMESCENE;
 		Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
 	}
 
@@ -76,8 +76,10 @@ void MenuScene::Update()
 
 	if (m_key.keyPressed("Load Debug Scene"))
 	{
-		m_scene_manager->setCurrentScene(Scenes::DEBUGSCENE);
+		//m_scene_manager->setCurrentScene(Scenes::DEBUGSCENE);
+		return Scenes::DEBUGSCENE;
 	}
+	return Scenes::SCENE_COUNT;
 }
 
 void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList)
@@ -120,8 +122,8 @@ bool MenuScene::Load()
 void MenuScene::create2DObjects()
 {
 	//test text
-	Text2D* m_enterMenu = new Text2D("Lewis is not cool.");
-	m_2DObjects.push_back(m_enterMenu);
+	//Text2D* m_enterMenu = new Text2D("Lewis is not cool.");
+	//m_2DObjects.push_back(m_enterMenu);
 
 	ImageGO2D* splash_screen = new ImageGO2D("cbc04-jdryd");
 	m_2DObjects.push_back(splash_screen);

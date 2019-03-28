@@ -20,7 +20,7 @@ public:
 	MenuScene();
 	~MenuScene();
 
-	void Update() override;
+	Scenes Update() override;
 	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList) override;
 	bool Load() override;
 

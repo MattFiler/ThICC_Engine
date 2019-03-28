@@ -57,6 +57,9 @@ Game::Game() :
 	Locator::setupID(m_ID);
 	Locator::setupAudio(&m_AM);
 	Locator::setupGarbageCollector(&m_GC);
+
+	m_sceneManager = new SceneManager();
+
 }
 
 Game::~Game()
@@ -136,10 +139,10 @@ void Game::Initialize(HWND _window, int _width, int _height)
 	//view->LoadHTML("<h1>Hello World!</h1>");
 
 	//Setup scene manager and all scenes
-	m_sceneManager.addScene(new MenuScene(), Scenes::MENUSCENE);
-	m_sceneManager.addScene(new GameScene(), Scenes::GAMESCENE);
+	//m_sceneManager.addScene(new MenuScene(), Scenes::MENUSCENE);
+	//m_sceneManager.addScene(new GameScene(), Scenes::GAMESCENE);
 	//m_sceneManager.addScene(new DebugScene(), Scenes::DEBUGSCENE);
-	m_sceneManager.setCurrentScene(Scenes::MENUSCENE);
+	//m_sceneManager->settCurrentScene(Scenes::MENUSCENE);
 }
 
 /* Create all 2D game objects */
@@ -197,7 +200,7 @@ void Game::Update(DX::StepTimer const& _timer)
 	//	Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME);
 	//}
 
-	m_sceneManager.Update();
+	m_sceneManager->Update();
 }
 
 /* render the scene */
@@ -212,7 +215,7 @@ void Game::Render()
 	// Prepare the command list to render a new frame.
 	Clear();
 
-	m_sceneManager.Render(m_commandList);
+	m_sceneManager->Render(m_commandList);
 	// Show the new frame.
 	Present();
 	m_graphicsMemory->Commit(m_commandQueue.Get());

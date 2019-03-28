@@ -145,7 +145,7 @@ private:
 	json game_config;
 
 	std::vector<PhysModel*> m_physModels;
-	SceneManager m_sceneManager;
+	SceneManager* m_sceneManager;
 
 	ItemData* m_probabilities = nullptr;
 	AudioManager m_AM;

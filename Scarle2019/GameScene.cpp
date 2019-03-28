@@ -36,7 +36,7 @@ GameScene::~GameScene()
 	}
 }
 
-void GameScene::Update()
+Scenes GameScene::Update()
 {
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
@@ -47,6 +47,7 @@ void GameScene::Update()
 		//Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
 		//Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
 		//finished = 0;
+
 	}
 
 	switch (state)
@@ -148,7 +149,7 @@ void GameScene::Update()
 	{
 		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
 		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_FL_GAME)->Stop();
-		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
+		return Scenes::MENUSCENE;
 	}
 	if (m_keybinds.keyPressed("Orbit"))
 	{
@@ -162,7 +163,6 @@ void GameScene::Update()
 	{
 		if (m_cam[0]->GetBehav() == Camera::BEHAVIOUR::DEBUG_CAM) {
 			m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
-			return;
 		}
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
 	}

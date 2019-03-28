@@ -23,7 +23,7 @@ DebugScene::~DebugScene()
 	m_3DObjects.clear();
 }
 
-void DebugScene::Update()
+Scenes DebugScene::Update()
 {
 	Locator::getGSD()->m_gamePadState[0] = Locator::getID()->m_gamePad->GetState(0); //set game controllers state[s]
 
@@ -41,6 +41,7 @@ void DebugScene::Update()
 	if (m_cam->getTimer() > 12) {
 		m_cam->resetTimer();
 	}
+	return Scenes::SCENE_COUNT;
 }
 
 void DebugScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_commandList)

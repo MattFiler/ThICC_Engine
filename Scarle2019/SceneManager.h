@@ -16,6 +16,7 @@ public:
 
 	void addScene(Scene* _scene, Scenes _scene_name);
 	void setCurrentScene(Scenes _scene_name);
+	void settCurrentScene(Scenes _scene_name);
 	Scenes getCurrentScene();
 
 	void Update();
@@ -29,5 +30,7 @@ private:
 
 	Scene** m_scenes = nullptr;
 	static Scenes m_curr_scene;
+	Scene* m_current_scene = nullptr;
+
 };
 
