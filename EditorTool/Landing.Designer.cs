@@ -35,7 +35,6 @@ namespace EditorTool
             this.deleteAsset = new System.Windows.Forms.Button();
             this.importAsset = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.compileAssets = new System.Windows.Forms.Button();
             this.modelConfigs = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
             this.modelType = new System.Windows.Forms.ComboBox();
@@ -66,26 +65,12 @@ namespace EditorTool
             this.imagePreview = new System.Windows.Forms.PictureBox();
             this.playSoundPreview = new System.Windows.Forms.Button();
             this.soundPreview = new NAudio.Gui.WaveViewer();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.openKeybindEditor = new System.Windows.Forms.Button();
-            this.openLocalisationEditor = new System.Windows.Forms.Button();
-            this.openUiEditor = new System.Windows.Forms.Button();
-            this.label14 = new System.Windows.Forms.Label();
-            this.DEBUG_DEFAULTTRACK = new System.Windows.Forms.ComboBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.DEBUG_PLAYERCOUNT = new System.Windows.Forms.NumericUpDown();
-            this.DEBUG_SAVE = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.openItemConfig = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.model_scale)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).BeginInit();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DEBUG_PLAYERCOUNT)).BeginInit();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // loadAssetType
@@ -137,25 +122,14 @@ namespace EditorTool
             // 
             this.groupBox2.Controls.Add(this.loadAssetType);
             this.groupBox2.Controls.Add(this.deleteAsset);
-            this.groupBox2.Controls.Add(this.compileAssets);
             this.groupBox2.Controls.Add(this.assetList);
             this.groupBox2.Controls.Add(this.importAsset);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(215, 415);
+            this.groupBox2.Size = new System.Drawing.Size(215, 385);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Asset Browser";
-            // 
-            // compileAssets
-            // 
-            this.compileAssets.Location = new System.Drawing.Point(6, 379);
-            this.compileAssets.Name = "compileAssets";
-            this.compileAssets.Size = new System.Drawing.Size(202, 30);
-            this.compileAssets.TabIndex = 0;
-            this.compileAssets.Text = "Compile Assets and Configs";
-            this.compileAssets.UseVisualStyleBackColor = true;
-            this.compileAssets.Click += new System.EventHandler(this.compileAssets_Click);
             // 
             // modelConfigs
             // 
@@ -492,147 +466,11 @@ namespace EditorTool
             this.soundPreview.Visible = false;
             this.soundPreview.WaveStream = null;
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.openItemConfig);
-            this.groupBox4.Controls.Add(this.openKeybindEditor);
-            this.groupBox4.Controls.Add(this.openLocalisationEditor);
-            this.groupBox4.Controls.Add(this.openUiEditor);
-            this.groupBox4.Location = new System.Drawing.Point(12, 433);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(447, 55);
-            this.groupBox4.TabIndex = 14;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Editors";
-            // 
-            // openKeybindEditor
-            // 
-            this.openKeybindEditor.Location = new System.Drawing.Point(117, 19);
-            this.openKeybindEditor.Name = "openKeybindEditor";
-            this.openKeybindEditor.Size = new System.Drawing.Size(100, 30);
-            this.openKeybindEditor.TabIndex = 3;
-            this.openKeybindEditor.Text = "Keybinds";
-            this.openKeybindEditor.UseVisualStyleBackColor = true;
-            this.openKeybindEditor.Click += new System.EventHandler(this.openKeybindEditor_Click);
-            // 
-            // openLocalisationEditor
-            // 
-            this.openLocalisationEditor.Enabled = false;
-            this.openLocalisationEditor.Location = new System.Drawing.Point(230, 19);
-            this.openLocalisationEditor.Name = "openLocalisationEditor";
-            this.openLocalisationEditor.Size = new System.Drawing.Size(100, 30);
-            this.openLocalisationEditor.TabIndex = 2;
-            this.openLocalisationEditor.Text = "Localisation";
-            this.openLocalisationEditor.UseVisualStyleBackColor = true;
-            this.openLocalisationEditor.Click += new System.EventHandler(this.openLocalisationEditor_Click);
-            // 
-            // openUiEditor
-            // 
-            this.openUiEditor.Location = new System.Drawing.Point(7, 19);
-            this.openUiEditor.Name = "openUiEditor";
-            this.openUiEditor.Size = new System.Drawing.Size(99, 30);
-            this.openUiEditor.TabIndex = 1;
-            this.openUiEditor.Text = "UI";
-            this.openUiEditor.UseVisualStyleBackColor = true;
-            this.openUiEditor.Click += new System.EventHandler(this.openUiEditor_Click);
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(4, 19);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(72, 13);
-            this.label14.TabIndex = 15;
-            this.label14.Text = "Default Track";
-            // 
-            // DEBUG_DEFAULTTRACK
-            // 
-            this.DEBUG_DEFAULTTRACK.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.DEBUG_DEFAULTTRACK.FormattingEnabled = true;
-            this.DEBUG_DEFAULTTRACK.Items.AddRange(new object[] {
-            "Models",
-            "Meshes",
-            "Sounds",
-            "Images",
-            "Fonts"});
-            this.DEBUG_DEFAULTTRACK.Location = new System.Drawing.Point(7, 35);
-            this.DEBUG_DEFAULTTRACK.Name = "DEBUG_DEFAULTTRACK";
-            this.DEBUG_DEFAULTTRACK.Size = new System.Drawing.Size(202, 21);
-            this.DEBUG_DEFAULTTRACK.TabIndex = 16;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(212, 18);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(67, 13);
-            this.label15.TabIndex = 17;
-            this.label15.Text = "Player Count";
-            // 
-            // DEBUG_PLAYERCOUNT
-            // 
-            this.DEBUG_PLAYERCOUNT.Location = new System.Drawing.Point(215, 35);
-            this.DEBUG_PLAYERCOUNT.Maximum = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.DEBUG_PLAYERCOUNT.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.DEBUG_PLAYERCOUNT.Name = "DEBUG_PLAYERCOUNT";
-            this.DEBUG_PLAYERCOUNT.Size = new System.Drawing.Size(101, 20);
-            this.DEBUG_PLAYERCOUNT.TabIndex = 32;
-            this.DEBUG_PLAYERCOUNT.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // DEBUG_SAVE
-            // 
-            this.DEBUG_SAVE.Location = new System.Drawing.Point(322, 19);
-            this.DEBUG_SAVE.Name = "DEBUG_SAVE";
-            this.DEBUG_SAVE.Size = new System.Drawing.Size(120, 37);
-            this.DEBUG_SAVE.TabIndex = 33;
-            this.DEBUG_SAVE.Text = "Save";
-            this.DEBUG_SAVE.UseVisualStyleBackColor = true;
-            this.DEBUG_SAVE.Click += new System.EventHandler(this.DEBUG_SAVE_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.label14);
-            this.groupBox3.Controls.Add(this.DEBUG_SAVE);
-            this.groupBox3.Controls.Add(this.DEBUG_DEFAULTTRACK);
-            this.groupBox3.Controls.Add(this.DEBUG_PLAYERCOUNT);
-            this.groupBox3.Controls.Add(this.label15);
-            this.groupBox3.Location = new System.Drawing.Point(12, 494);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(447, 64);
-            this.groupBox3.TabIndex = 34;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Debug Configurations";
-            // 
-            // openItemConfig
-            // 
-            this.openItemConfig.Enabled = false;
-            this.openItemConfig.Location = new System.Drawing.Point(341, 19);
-            this.openItemConfig.Name = "openItemConfig";
-            this.openItemConfig.Size = new System.Drawing.Size(100, 30);
-            this.openItemConfig.TabIndex = 4;
-            this.openItemConfig.Text = "Items";
-            this.openItemConfig.UseVisualStyleBackColor = true;
-            this.openItemConfig.Click += new System.EventHandler(this.openItemConfig_Click);
-            // 
             // Landing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(469, 566);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox4);
+            this.ClientSize = new System.Drawing.Size(469, 437);
             this.Controls.Add(this.modelConfigs);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -648,10 +486,6 @@ namespace EditorTool
             ((System.ComponentModel.ISupportInitialize)(this.model_scale)).EndInit();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.DEBUG_PLAYERCOUNT)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -680,29 +514,17 @@ namespace EditorTool
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button openLocalisationEditor;
-        private System.Windows.Forms.Button openUiEditor;
-        private System.Windows.Forms.Button compileAssets;
         private System.Windows.Forms.PictureBox imagePreview;
         private NAudio.Gui.WaveViewer soundPreview;
         private System.Windows.Forms.Button playSoundPreview;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown model_scale;
-        private Button openKeybindEditor;
         private Label label13;
         private NumericUpDown model_segmentsize;
-        private Label label14;
-        private ComboBox DEBUG_DEFAULTTRACK;
-        private Label label15;
-        private NumericUpDown DEBUG_PLAYERCOUNT;
-        private Button DEBUG_SAVE;
-        private GroupBox groupBox3;
         private Label label10;
         private Label label1;
         private Label label16;
         private ComboBox modelType;
-        private Button openItemConfig;
     }
 }
