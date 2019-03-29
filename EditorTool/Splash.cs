@@ -196,6 +196,14 @@ namespace EditorTool
             DEBUG_DEFAULTTRACK.Items.Clear();
             foreach (string level in levels)
             {
+
+                //Eventually, filter this by assets tagged as track
+
+                string file_name = Path.GetFileName(level);
+                if (file_name.Length > 14 && file_name.Substring(file_name.Length - 13).ToUpper() == "DEBUG.SDKMESH")
+                {
+                    continue; //Skip over collision debug meshes
+                }
                 DEBUG_DEFAULTTRACK.Items.Add(Path.GetFileNameWithoutExtension(level));
             }
         }
