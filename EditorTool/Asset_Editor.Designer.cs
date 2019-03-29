@@ -2,7 +2,7 @@
 
 namespace EditorTool
 {
-    partial class Landing
+    partial class Asset_Editor
     {
         /// <summary>
         /// Required designer variable.
@@ -35,6 +35,7 @@ namespace EditorTool
             this.deleteAsset = new System.Windows.Forms.Button();
             this.importAsset = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.editAsset = new System.Windows.Forms.Button();
             this.modelConfigs = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
             this.modelType = new System.Windows.Forms.ComboBox();
@@ -65,6 +66,7 @@ namespace EditorTool
             this.imagePreview = new System.Windows.Forms.PictureBox();
             this.playSoundPreview = new System.Windows.Forms.Button();
             this.soundPreview = new NAudio.Gui.WaveViewer();
+            this.localisationPreview = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
@@ -82,7 +84,8 @@ namespace EditorTool
             "Meshes",
             "Sounds",
             "Images",
-            "Fonts"});
+            "Fonts",
+            "Strings"});
             this.loadAssetType.Location = new System.Drawing.Point(6, 19);
             this.loadAssetType.Name = "loadAssetType";
             this.loadAssetType.Size = new System.Drawing.Size(202, 21);
@@ -120,16 +123,27 @@ namespace EditorTool
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.editAsset);
             this.groupBox2.Controls.Add(this.loadAssetType);
             this.groupBox2.Controls.Add(this.deleteAsset);
             this.groupBox2.Controls.Add(this.assetList);
             this.groupBox2.Controls.Add(this.importAsset);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(215, 385);
+            this.groupBox2.Size = new System.Drawing.Size(215, 409);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Asset Browser";
+            // 
+            // editAsset
+            // 
+            this.editAsset.Location = new System.Drawing.Point(6, 380);
+            this.editAsset.Name = "editAsset";
+            this.editAsset.Size = new System.Drawing.Size(202, 23);
+            this.editAsset.TabIndex = 6;
+            this.editAsset.Text = "Edit";
+            this.editAsset.UseVisualStyleBackColor = true;
+            this.editAsset.Click += new System.EventHandler(this.editAsset_Click);
             // 
             // modelConfigs
             // 
@@ -423,6 +437,7 @@ namespace EditorTool
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.localisationPreview);
             this.groupBox1.Controls.Add(this.imagePreview);
             this.groupBox1.Controls.Add(this.playSoundPreview);
             this.groupBox1.Controls.Add(this.modelPreview);
@@ -466,7 +481,17 @@ namespace EditorTool
             this.soundPreview.Visible = false;
             this.soundPreview.WaveStream = null;
             // 
-            // Landing
+            // localisationPreview
+            // 
+            this.localisationPreview.Location = new System.Drawing.Point(6, 20);
+            this.localisationPreview.Multiline = true;
+            this.localisationPreview.Name = "localisationPreview";
+            this.localisationPreview.ReadOnly = true;
+            this.localisationPreview.Size = new System.Drawing.Size(214, 132);
+            this.localisationPreview.TabIndex = 18;
+            this.localisationPreview.Visible = false;
+            // 
+            // Asset_Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -475,7 +500,7 @@ namespace EditorTool
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Landing";
+            this.Name = "Asset_Editor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mario Kart Asset Manager";
             this.Load += new System.EventHandler(this.Landing_Load);
@@ -485,6 +510,7 @@ namespace EditorTool
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.model_scale)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).EndInit();
             this.ResumeLayout(false);
 
@@ -526,5 +552,7 @@ namespace EditorTool
         private Label label1;
         private Label label16;
         private ComboBox modelType;
+        private Button editAsset;
+        private TextBox localisationPreview;
     }
 }

@@ -17,13 +17,14 @@ using System.Xml.Linq;
 
 namespace EditorTool
 {
-    public partial class Landing : Form
+    public partial class Asset_Editor : Form
     {
         List<string> full_loaded_filenames = new List<string>(); //Used for saving full list item file paths
         SoundPlayer sound_player = new SoundPlayer(); //for previewing sounds
         UsefulFunctions function_libary = new UsefulFunctions();
+        JObject localisation_config;
         string path_to_current_config = "";
-        public Landing()
+        public Asset_Editor()
         {
             InitializeComponent();
         }
@@ -84,6 +85,11 @@ namespace EditorTool
                     fontimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
                     fontimporter.Show();
                     break;
+                case "Strings":
+                    Localisation_Editor stringEditor = new Localisation_Editor();
+                    stringEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    stringEditor.Show();
+                    break;
             }
         }
 
@@ -92,8 +98,12 @@ namespace EditorTool
         {
             assetList.SelectedIndex = -1;
 
+            full_loaded_filenames.Clear();
+            assetList.Items.Clear();
+
             string path = "";
             string extension = "";
+            bool should_go_further = true;
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
@@ -116,19 +126,28 @@ namespace EditorTool
                     path = "DATA/FONTS/";
                     extension = "*.SPRITEFONT";
                     break;
+                case "Strings":
+                    should_go_further = false;
+                    localisation_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/LOCALISATION.JSON"));
+                    foreach (var localised_string in localisation_config["ENGLISH"].ToObject<JObject>()) //Only working with English for now
+                    {
+                        assetList.Items.Add(localised_string.Key);
+                    }
+                    break;
             }
 
-            string[] files = Directory.GetFiles(path, extension, SearchOption.AllDirectories);
-            full_loaded_filenames.Clear();
-            assetList.Items.Clear();
-            foreach (string file in files)
+            if (should_go_further)
             {
-                if (Path.GetFileName(file).Length > 14 && Path.GetFileName(file).Substring(Path.GetFileName(file).Length - 13).ToUpper() == "DEBUG.SDKMESH")
+                string[] files = Directory.GetFiles(path, extension, SearchOption.AllDirectories);
+                foreach (string file in files)
                 {
-                    continue; //Skip over collision debug meshes
+                    if (Path.GetFileName(file).Length > 14 && Path.GetFileName(file).Substring(Path.GetFileName(file).Length - 13).ToUpper() == "DEBUG.SDKMESH")
+                    {
+                        continue; //Skip over collision debug meshes
+                    }
+                    full_loaded_filenames.Add(file);
+                    assetList.Items.Add(Path.GetFileNameWithoutExtension(file));
                 }
-                full_loaded_filenames.Add(file);
-                assetList.Items.Add(Path.GetFileNameWithoutExtension(file));
             }
         }
 
@@ -163,7 +182,15 @@ namespace EditorTool
                 return;
             }
 
-            string selected_file_name = full_loaded_filenames.ElementAt(assetList.SelectedIndex);
+            string selected_file_name = "";
+            if (loadAssetType.SelectedItem.ToString() != "Strings")
+            {
+                selected_file_name = full_loaded_filenames.ElementAt(assetList.SelectedIndex);
+            }
+            else
+            {
+                selected_file_name = assetList.SelectedItem.ToString();
+            }
             assetList.SelectedIndex = -1; //Clear any item preview so we can delete it
             function_libary.closeLingeringSoundStreams();
 
@@ -199,6 +226,10 @@ namespace EditorTool
                         }
                     }
                     break;
+                case "Strings":
+                    localisation_config["ENGLISH"][selected_file_name].Parent.Remove();
+                    File.WriteAllText("DATA/CONFIGS/LOCALISATION.JSON", localisation_config.ToString(Formatting.Indented));
+                    break;
                 default:
                     File.Delete(selected_file_name);
                     File.Delete(selected_file_name.Substring(0, selected_file_name.Length - 3) + "JSON");
@@ -222,6 +253,8 @@ namespace EditorTool
             imagePreview.Visible = false;
             soundPreview.Visible = false;
             playSoundPreview.Visible = false;
+            localisationPreview.Visible = false;
+            localisationPreview.Text = "";
             sound_player.Stop();
 
             //Hide all configs
@@ -259,8 +292,37 @@ namespace EditorTool
                 case "Fonts":
                     function_libary.loadFontPreview(assetList, imagePreview);
                     break;
+                case "Strings":
+                    if (assetList.SelectedIndex == -1)
+                    {
+                        break;
+                    }
+                    localisationPreview.Visible = true;
+                    localisationPreview.Text = localisation_config["ENGLISH"][assetList.SelectedItem.ToString()].Value<string>();
+                    break;
             }
             Cursor.Current = Cursors.Default;
+        }
+
+        /* Edit selected asset */
+        private void editAsset_Click(object sender, EventArgs e)
+        {
+            if (assetList.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select an asset to edit!", "No asset selected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
+            switch (loadAssetType.SelectedItem)
+            {
+                case "Strings":
+                    Localisation_Editor stringEditor = new Localisation_Editor(assetList.SelectedItem.ToString());
+                    stringEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    stringEditor.Show();
+                    break;
+                default:
+                    break;
+            }
         }
 
         //Play sound when requested

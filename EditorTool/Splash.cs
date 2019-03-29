@@ -23,7 +23,7 @@ namespace EditorTool
         /* Open Asset Manager */
         private void openAssetManager_Click(object sender, EventArgs e)
         {
-            Landing assetManager = new Landing();
+            Asset_Editor assetManager = new Asset_Editor();
             assetManager.Show();
         }
 

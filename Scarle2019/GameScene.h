@@ -64,6 +64,7 @@ private:
 	std::vector<PhysModel*> m_physModels;
 
 	json game_config;
+	json track_config;
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
