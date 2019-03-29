@@ -36,6 +36,7 @@
             this.soundPreview = new NAudio.Gui.WaveViewer();
             this.imagePreview = new System.Windows.Forms.PictureBox();
             this.localisationPreview = new System.Windows.Forms.TextBox();
+            this.createNew = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).BeginInit();
             this.SuspendLayout();
@@ -124,11 +125,22 @@
             this.localisationPreview.TabIndex = 19;
             this.localisationPreview.Visible = false;
             // 
+            // createNew
+            // 
+            this.createNew.Location = new System.Drawing.Point(10, 527);
+            this.createNew.Name = "createNew";
+            this.createNew.Size = new System.Drawing.Size(299, 23);
+            this.createNew.TabIndex = 15;
+            this.createNew.Text = "Create New";
+            this.createNew.UseVisualStyleBackColor = true;
+            this.createNew.Click += new System.EventHandler(this.createNew_Click);
+            // 
             // Asset_Browser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(318, 528);
+            this.ClientSize = new System.Drawing.Size(318, 557);
+            this.Controls.Add(this.createNew);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.selectAsset);
             this.Controls.Add(this.assetList);
@@ -154,5 +166,6 @@
         private NAudio.Gui.WaveViewer soundPreview;
         private System.Windows.Forms.PictureBox imagePreview;
         private System.Windows.Forms.TextBox localisationPreview;
+        private System.Windows.Forms.Button createNew;
     }
 }

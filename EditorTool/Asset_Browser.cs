@@ -99,13 +99,13 @@ namespace EditorTool
                     }
                 }
             }
-            assetList.SelectedIndex = index_to_default_to;
-
             modelPreview.Visible = false;
             imagePreview.Visible = false;
             soundPreview.Visible = false;
             playSoundPreview.Visible = false;
             localisationPreview.Visible = false;
+
+            assetList.SelectedIndex = index_to_default_to;
         }
 
         /* Select the highlighted asset */
@@ -149,6 +149,14 @@ namespace EditorTool
         private void playSoundPreview_Click(object sender, EventArgs e)
         {
             function_libary.playSoundPreview(assetList, sound_player);
+        }
+
+        /* Open asset manager & close */
+        private void createNew_Click(object sender, EventArgs e)
+        {
+            Asset_Editor assetEditor = new Asset_Editor(file_type);
+            assetEditor.Show();
+            this.Close();
         }
     }
 }

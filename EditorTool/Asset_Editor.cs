@@ -24,15 +24,17 @@ namespace EditorTool
         UsefulFunctions function_libary = new UsefulFunctions();
         JObject localisation_config;
         string path_to_current_config = "";
-        public Asset_Editor()
+        AssetType on_load = AssetType.MODEL;
+        public Asset_Editor(AssetType type_to_load_to = AssetType.MODEL)
         {
+            on_load = type_to_load_to;
             InitializeComponent();
         }
 
         /* ON LOAD */
         private void Landing_Load(object sender, EventArgs e)
         {
-            loadAssetType.SelectedIndex = 0;
+            loadAssetType.SelectedIndex = (int)on_load;
         }
         
         private void DEBUG_SAVE_Click(object sender, EventArgs e)
