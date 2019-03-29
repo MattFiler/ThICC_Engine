@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EditorTool
+﻿namespace EditorTool
 {
     public enum AssetType
     {
@@ -12,7 +6,8 @@ namespace EditorTool
         MESH,
         IMAGE,
         SOUND,
-        FONT
+        FONT,
+        STRING
     }
     public enum ModelType
     {

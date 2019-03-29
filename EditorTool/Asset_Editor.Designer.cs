@@ -63,10 +63,10 @@ namespace EditorTool
             this.label9 = new System.Windows.Forms.Label();
             this.modelPreview = new System.Windows.Forms.Integration.ElementHost();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.localisationPreview = new System.Windows.Forms.TextBox();
             this.imagePreview = new System.Windows.Forms.PictureBox();
             this.playSoundPreview = new System.Windows.Forms.Button();
             this.soundPreview = new NAudio.Gui.WaveViewer();
-            this.localisationPreview = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
@@ -449,6 +449,16 @@ namespace EditorTool
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Asset Preview";
             // 
+            // localisationPreview
+            // 
+            this.localisationPreview.Location = new System.Drawing.Point(6, 19);
+            this.localisationPreview.Multiline = true;
+            this.localisationPreview.Name = "localisationPreview";
+            this.localisationPreview.ReadOnly = true;
+            this.localisationPreview.Size = new System.Drawing.Size(214, 134);
+            this.localisationPreview.TabIndex = 18;
+            this.localisationPreview.Visible = false;
+            // 
             // imagePreview
             // 
             this.imagePreview.Location = new System.Drawing.Point(6, 19);
@@ -480,16 +490,6 @@ namespace EditorTool
             this.soundPreview.TabIndex = 16;
             this.soundPreview.Visible = false;
             this.soundPreview.WaveStream = null;
-            // 
-            // localisationPreview
-            // 
-            this.localisationPreview.Location = new System.Drawing.Point(6, 20);
-            this.localisationPreview.Multiline = true;
-            this.localisationPreview.Name = "localisationPreview";
-            this.localisationPreview.ReadOnly = true;
-            this.localisationPreview.Size = new System.Drawing.Size(214, 132);
-            this.localisationPreview.TabIndex = 18;
-            this.localisationPreview.Visible = false;
             // 
             // Asset_Editor
             // 

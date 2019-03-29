@@ -1,4 +1,5 @@
 ﻿using NAudio.Wave;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +21,8 @@ namespace EditorTool
         string file_path = "";
         string file_extension = "";
         string pre_selected_option = "";
+        JObject localisation_config;
+        int index_to_default_to = -1;
 
         SoundPlayer sound_player = new SoundPlayer();
         UsefulFunctions function_libary = new UsefulFunctions();
@@ -29,6 +32,8 @@ namespace EditorTool
         /* Configure asset list filtering */
         public Asset_Browser(AssetType type_to_select_from, string existing_option = "")
         {
+            InitializeComponent();
+
             file_type = type_to_select_from;
             switch (type_to_select_from)
             {
@@ -52,34 +57,46 @@ namespace EditorTool
                     file_path = "DATA/FONTS/";
                     file_extension = "*.SPRITEFONT";
                     break;
+                case AssetType.STRING:
+                    localisation_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/LOCALISATION.JSON"));
+                    foreach (var localised_string in localisation_config["ENGLISH"].ToObject<JObject>()) //Only working with English for now
+                    {
+                        assetList.Items.Add(localised_string.Key);
+
+                        if (assetList.Items[assetList.Items.Count - 1].ToString() == pre_selected_option)
+                        {
+                            index_to_default_to = assetList.Items.Count - 1;
+                        }
+                    }
+                    break;
                 default:
                     this.Close();
                     break;
             }
             pre_selected_option = existing_option;
-
-            InitializeComponent();
         }
 
         /* Fetch asset list on form load */
         private void Asset_Browser_Load(object sender, EventArgs e)
         {
-            string[] files = Directory.GetFiles(file_path, file_extension, SearchOption.AllDirectories);
-            full_loaded_filenames.Clear();
-            assetList.Items.Clear();
-            int index_to_default_to = -1;
-            foreach (string file in files)
+            if (file_type != AssetType.STRING)
             {
-                if (Path.GetFileName(file).Length > 14 && Path.GetFileName(file).Substring(Path.GetFileName(file).Length - 13).ToUpper() == "DEBUG.SDKMESH")
+                string[] files = Directory.GetFiles(file_path, file_extension, SearchOption.AllDirectories);
+                full_loaded_filenames.Clear();
+                assetList.Items.Clear();
+                foreach (string file in files)
                 {
-                    continue; //Skip over collision debug meshes
-                }
-                full_loaded_filenames.Add(file);
-                assetList.Items.Add(Path.GetFileNameWithoutExtension(file));
-                
-                if (assetList.Items[assetList.Items.Count-1].ToString() == pre_selected_option)
-                {
-                    index_to_default_to = assetList.Items.Count-1;
+                    if (Path.GetFileName(file).Length > 14 && Path.GetFileName(file).Substring(Path.GetFileName(file).Length - 13).ToUpper() == "DEBUG.SDKMESH")
+                    {
+                        continue; //Skip over collision debug meshes
+                    }
+                    full_loaded_filenames.Add(file);
+                    assetList.Items.Add(Path.GetFileNameWithoutExtension(file));
+
+                    if (assetList.Items[assetList.Items.Count - 1].ToString() == pre_selected_option)
+                    {
+                        index_to_default_to = assetList.Items.Count - 1;
+                    }
                 }
             }
             assetList.SelectedIndex = index_to_default_to;
@@ -88,6 +105,7 @@ namespace EditorTool
             imagePreview.Visible = false;
             soundPreview.Visible = false;
             playSoundPreview.Visible = false;
+            localisationPreview.Visible = false;
         }
 
         /* Select the highlighted asset */
@@ -108,25 +126,20 @@ namespace EditorTool
             switch (file_type)
             {
                 case AssetType.SOUND:
-                {
                     function_libary.loadSoundPreview(assetList, sound_player, soundPreview, playSoundPreview);
                     break;
-                }
                 case AssetType.IMAGE:
-                {
                     function_libary.loadImagePreview(assetList, imagePreview);
                     break;
-                }
                 case AssetType.MODEL:
-                {
                     function_libary.loadModelPreview(assetList, modelPreview);
                     break;
-                }
                 case AssetType.FONT:
-                {
                     function_libary.loadFontPreview(assetList, imagePreview);
                     break;
-                }
+                case AssetType.STRING:
+                    function_libary.loadStringPreview(assetList, localisationPreview, localisation_config);
+                    break;
             }
 
             selected_file_path = assetList.SelectedItem.ToString();

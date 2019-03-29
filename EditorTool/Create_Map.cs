@@ -15,6 +15,8 @@ namespace EditorTool
 {
     public partial class Create_Map : Form
     {
+        UsefulFunctions function_libary = new UsefulFunctions();
+
         /* If editing, load data */
         JObject maps_json_config = null;
         string map_json_key = "";
@@ -81,6 +83,10 @@ namespace EditorTool
         {
             finalLapLoop.Text = selectAsset(AssetType.SOUND, finalLapLoop.Text);
         }
+        private void loadString_Click(object sender, EventArgs e)
+        {
+            mapName.Text = selectAsset(AssetType.STRING, mapName.Text);
+        }
 
         /* Save map to config */
         private void saveMap_Click(object sender, EventArgs e)
@@ -95,14 +101,16 @@ namespace EditorTool
                 maps_json_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/MAP_CONFIG.JSON"));
             }
 
+            string map_name = function_libary.getLocalisedString(mapName.Text);
+
             //Add map to config
-            maps_json_config[mapName.Text]["friendly_name"] = mapName.Text;
-            maps_json_config[mapName.Text]["menu_sprite"] = mapPreviewImage.Text;
-            maps_json_config[mapName.Text]["model"] = mapModelAsset.Text;
-            maps_json_config[mapName.Text]["audio"]["background_start"] = soundtrackIntro.Text;
-            maps_json_config[mapName.Text]["audio"]["background"] = soundtrackIntroLoop.Text;
-            maps_json_config[mapName.Text]["audio"]["final_lap_start"] = finalLapIntro.Text;
-            maps_json_config[mapName.Text]["audio"]["final_lap"] = finalLapLoop.Text;
+            maps_json_config[map_name]["friendly_name"] = mapName.Text;
+            maps_json_config[map_name]["menu_sprite"] = mapPreviewImage.Text;
+            maps_json_config[map_name]["model"] = mapModelAsset.Text;
+            maps_json_config[map_name]["audio"]["background_start"] = soundtrackIntro.Text;
+            maps_json_config[map_name]["audio"]["background"] = soundtrackIntroLoop.Text;
+            maps_json_config[map_name]["audio"]["final_lap_start"] = finalLapIntro.Text;
+            maps_json_config[map_name]["audio"]["final_lap"] = finalLapLoop.Text;
 
             //Save back out
             File.WriteAllText("DATA/CONFIGS/MAP_CONFIG.JSON", maps_json_config.ToString(Formatting.Indented));

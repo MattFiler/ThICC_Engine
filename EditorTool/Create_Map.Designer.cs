@@ -51,6 +51,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.mapName = new System.Windows.Forms.TextBox();
+            this.loadString = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -250,6 +251,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.loadString);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.mapName);
             this.groupBox2.Controls.Add(this.label1);
@@ -278,8 +280,19 @@
             // 
             this.mapName.Location = new System.Drawing.Point(9, 34);
             this.mapName.Name = "mapName";
-            this.mapName.Size = new System.Drawing.Size(310, 20);
+            this.mapName.ReadOnly = true;
+            this.mapName.Size = new System.Drawing.Size(229, 20);
             this.mapName.TabIndex = 8;
+            // 
+            // loadString
+            // 
+            this.loadString.Location = new System.Drawing.Point(244, 33);
+            this.loadString.Name = "loadString";
+            this.loadString.Size = new System.Drawing.Size(75, 23);
+            this.loadString.TabIndex = 11;
+            this.loadString.Text = "Load";
+            this.loadString.UseVisualStyleBackColor = true;
+            this.loadString.Click += new System.EventHandler(this.loadString_Click);
             // 
             // Create_Map
             // 
@@ -327,5 +340,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox mapName;
+        private System.Windows.Forms.Button loadString;
     }
 }

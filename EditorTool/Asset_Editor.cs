@@ -293,12 +293,7 @@ namespace EditorTool
                     function_libary.loadFontPreview(assetList, imagePreview);
                     break;
                 case "Strings":
-                    if (assetList.SelectedIndex == -1)
-                    {
-                        break;
-                    }
-                    localisationPreview.Visible = true;
-                    localisationPreview.Text = localisation_config["ENGLISH"][assetList.SelectedItem.ToString()].Value<string>();
+                    function_libary.loadStringPreview(assetList, localisationPreview, localisation_config);
                     break;
             }
             Cursor.Current = Cursors.Default;

@@ -1,5 +1,6 @@
 ﻿using NAudio.Gui;
 using NAudio.Wave;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -82,6 +83,18 @@ namespace EditorTool
             return true;
         }
 
+        /* Load a string preview */
+        public bool loadStringPreview(ListBox assetList, TextBox localisationPreview, JObject localisation_config)
+        { 
+            if (assetList.SelectedIndex == -1)
+            {
+                return false;
+            }
+            localisationPreview.Visible = true;
+            localisationPreview.Text = localisation_config["ENGLISH"][assetList.SelectedItem.ToString()].Value<string>();
+            return true;
+        }
+
         /* Load a sound preview from asset list into a wave viewer */
         public bool loadSoundPreview(ListBox assetList, SoundPlayer sound_player, WaveViewer soundPreview, Button playSoundPreview)
         {
@@ -132,6 +145,13 @@ namespace EditorTool
                 sound_stream.Close();
             }
             sound_stream = null;
+        }
+
+        /* Get a localised string */
+        public string getLocalisedString(string request, string language = "ENGLISH")
+        {
+            JObject string_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/LOCALISATION.JSON"));
+            return string_config[language][request].Value<string>();
         }
     }
 }
