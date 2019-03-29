@@ -21,6 +21,7 @@ namespace EditorTool
     {
         List<string> full_loaded_filenames = new List<string>(); //Used for saving full list item file paths
         SoundPlayer sound_player = new SoundPlayer(); //for previewing sounds
+        UsefulFunctions function_libary = new UsefulFunctions();
         string path_to_current_config = "";
         public Landing()
         {
@@ -164,7 +165,7 @@ namespace EditorTool
 
             string selected_file_name = full_loaded_filenames.ElementAt(assetList.SelectedIndex);
             assetList.SelectedIndex = -1; //Clear any item preview so we can delete it
-            closeSoundStream();
+            function_libary.closeLingeringSoundStreams();
 
             DialogResult showErrorInfo = MessageBox.Show("Are you sure you want to delete this asset?", "About to delete selected asset...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (showErrorInfo != DialogResult.Yes)
@@ -230,89 +231,33 @@ namespace EditorTool
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
-                    if (assetList.SelectedIndex == -1)
+                    if (function_libary.loadModelPreview(assetList, modelPreview))
                     {
-                        modelPreview.Child = new ModelViewer("");
-                        break;
+                        //If preview loads properly, load config
+                        getConfigPathForSelectedAsset();
+                        JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
+                        modelType.SelectedItem = asset_json["model_type"].Value<string>();
+                        model_world_x.Text = asset_json["start_x"].Value<string>();
+                        model_world_y.Text = asset_json["start_y"].Value<string>();
+                        model_world_z.Text = asset_json["start_z"].Value<string>();
+                        model_rot_x.Text = asset_json["rot_x"].Value<string>();
+                        model_rot_y.Text = asset_json["rot_y"].Value<string>();
+                        model_rot_z.Text = asset_json["rot_z"].Value<string>();
+                        model_scale.Text = asset_json["modelscale"].Value<string>();
+                        model_segmentsize.Value = asset_json["segment_size"].Value<decimal>();
                     }
-                    modelConfigs.Visible = true;
-
-                    getConfigPathForSelectedAsset();
-                    JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
-                    modelType.SelectedItem = asset_json["model_type"].Value<string>();
-                    model_world_x.Text = asset_json["start_x"].Value<string>();
-                    model_world_y.Text = asset_json["start_y"].Value<string>();
-                    model_world_z.Text = asset_json["start_z"].Value<string>();
-                    model_rot_x.Text = asset_json["rot_x"].Value<string>();
-                    model_rot_y.Text = asset_json["rot_y"].Value<string>();
-                    model_rot_z.Text = asset_json["rot_z"].Value<string>();
-                    model_scale.Text = asset_json["modelscale"].Value<string>();
-                    model_segmentsize.Value = asset_json["segment_size"].Value<decimal>();
-
-                    modelPreview.Visible = true;
-                    modelPreview.Child = new ModelViewer("DATA/MODELS/" + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
                     break;
                 case "Meshes":
                     //WIP
                     break;
                 case "Images":
-                    if (assetList.SelectedIndex == -1)
-                    {
-                        imagePreview.Image = null;
-                        break;
-                    }
-                    imagePreview.Visible = true;
-
-                    string file_path_without_extension = "DATA/IMAGES/" + assetList.SelectedItem.ToString() + ".";
-                    string file_path_with_extension = "";
-                    if (File.Exists(file_path_without_extension + "PNG"))
-                    {
-                        file_path_with_extension = file_path_without_extension + "PNG";
-                    }
-                    else if (File.Exists(file_path_without_extension + "JPG"))
-                    {
-                        file_path_with_extension = file_path_without_extension + "JPG";
-                    }
-                    else if (File.Exists(file_path_without_extension + "JPEG"))
-                    {
-                        file_path_with_extension = file_path_without_extension + "JPEG";
-                    }
-                    else
-                    {
-                        break;
-                    }
-
-                    using (var tempPreviewImg = new Bitmap(file_path_with_extension))
-                    {
-                        imagePreview.Image = new Bitmap(tempPreviewImg);
-                    }
+                    function_libary.loadImagePreview(assetList, imagePreview);
                     break;
                 case "Sounds":
-                    if (assetList.SelectedIndex == -1)
-                    {
-                        closeSoundStream();
-                        soundPreview.WaveStream = null;
-                        sound_player.Stream = null;
-                        break;
-                    }
-                    playSoundPreview.Visible = true;
-                    soundPreview.Visible = true;
-                    openSoundStream();
-                    soundPreview.WaveStream = new WaveFileReader(sound_stream);
-                    soundPreview.SamplesPerPixel = 150;
+                    function_libary.loadSoundPreview(assetList, sound_player, soundPreview, playSoundPreview);
                     break;
                 case "Fonts":
-                    if (assetList.SelectedIndex == -1)
-                    {
-                        imagePreview.Image = null;
-                        break;
-                    }
-                    imagePreview.Visible = true;
-
-                    using (var tempPreviewImg = new Bitmap("DATA/FONTS/" + assetList.SelectedItem.ToString() + ".BMP"))
-                    {
-                        imagePreview.Image = new Bitmap(tempPreviewImg);
-                    }
+                    function_libary.loadFontPreview(assetList, imagePreview);
                     break;
             }
             Cursor.Current = Cursors.Default;
@@ -321,26 +266,7 @@ namespace EditorTool
         //Play sound when requested
         private void playSoundPreview_Click(object sender, EventArgs e)
         {
-            openSoundStream();
-            sound_player.Stream = sound_stream;
-            try { sound_player.Play(); }
-            catch { MessageBox.Show("An error ocurred while trying to play this sound - it may have imported incorrectly.", "Error.", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-        }
-
-        //Update sound stream to use for any previews
-        Stream sound_stream;
-        void openSoundStream()
-        {
-            closeSoundStream();
-            sound_stream = File.Open("DATA/SOUNDS/" + assetList.SelectedItem.ToString() + ".WAV", FileMode.Open, FileAccess.Read);
-        }
-        void closeSoundStream()
-        {
-            if(sound_stream != null)
-            {
-                sound_stream.Close();
-            }
-            sound_stream = null;
+            function_libary.playSoundPreview(assetList, sound_player);
         }
 
         /* SAVE CONFIG FOR ASSET */

@@ -117,31 +117,6 @@ void Track::LoadVertexList(string _vertex_list)
 	SplitTrisIntoGrid();
 }
 
-/* Takes a part from the file and extracts the Vector it represents out */
-Vector Track::CreateVector(string _vector)
-{
-	string value = "";
-	float values[3];
-	int pointIndex = 0;
-
-	for (char& c : _vector)
-	{
-		// Once a comma is hit, thats the end of this value
-		if (c == ',')
-		{
-			values[pointIndex] = std::stof(value);
-			value = "";
-			pointIndex++;
-		}
-		else
-		{
-			value += c;
-		}
-	}
-	values[2] = std::stof(value);
-	return Vector(values[0], values[1], values[2]);
-}
-
 /* Sets up the bounding boxes for each waypoint */
 void Track::setWaypointBB()
 {

@@ -73,7 +73,6 @@ public:
 
 private:
 	void LoadVertexList(string _vertex_list);
-	Vector CreateVector(string _vector);
 	void CompareVectorToMinimum(Vector& _vect);
 	void CompareVectorToMaximum(Vector& _vect);
 

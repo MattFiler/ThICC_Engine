@@ -63,6 +63,7 @@
             this.deleteMap.TabIndex = 6;
             this.deleteMap.Text = "Delete Selected Map";
             this.deleteMap.UseVisualStyleBackColor = true;
+            this.deleteMap.Click += new System.EventHandler(this.deleteMap_Click);
             // 
             // editMap
             // 
@@ -72,6 +73,7 @@
             this.editMap.TabIndex = 7;
             this.editMap.Text = "Edit Selected Map";
             this.editMap.UseVisualStyleBackColor = true;
+            this.editMap.Click += new System.EventHandler(this.editMap_Click);
             // 
             // previewImage
             // 

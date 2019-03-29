@@ -63,6 +63,7 @@
             this.saveMap.TabIndex = 0;
             this.saveMap.Text = "Create";
             this.saveMap.UseVisualStyleBackColor = true;
+            this.saveMap.Click += new System.EventHandler(this.saveMap_Click);
             // 
             // mapPreviewImage
             // 
@@ -292,6 +293,7 @@
             this.Name = "Create_Map";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create New Map";
+            this.Load += new System.EventHandler(this.Create_Map_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

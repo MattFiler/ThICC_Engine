@@ -160,6 +160,7 @@
     <Compile Include="UI_Editor.Designer.cs">
       <DependentUpon>UI_Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="UsefulFunctions.cs" />
     <EmbeddedResource Include="Asset_Browser.resx">
       <DependentUpon>Asset_Browser.cs</DependentUpon>
     </EmbeddedResource>
