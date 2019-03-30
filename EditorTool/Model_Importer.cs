@@ -368,6 +368,9 @@ namespace EditorTool
                         }
                     }
 
+
+                    /* It would be nice to handle all this data as FLOAT rather than DOUBLE.
+                     * We don't really need the precision, and it would half the filesize of the collision map. */
                     if (File.Exists(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
                     {
                         string final_asset_path = import_directory + assetName.Text + ".sdkmesh";

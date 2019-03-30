@@ -73,19 +73,11 @@ namespace EditorTool
                     */
                     break;
                 case "Images":
-                    Image_Importer imageimporter = new Image_Importer();
-                    imageimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
-                    imageimporter.Show();
-                    break;
                 case "Sounds":
-                    Sound_Importer soundimporter = new Sound_Importer();
-                    soundimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
-                    soundimporter.Show();
-                    break;
                 case "Fonts":
-                    Font_Importer fontimporter = new Font_Importer();
-                    fontimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
-                    fontimporter.Show();
+                    Generic_Importer multipurposeImporter = new Generic_Importer((AssetType)loadAssetType.SelectedIndex);
+                    multipurposeImporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    multipurposeImporter.Show();
                     break;
                 case "Strings":
                     Localisation_Editor stringEditor = new Localisation_Editor();

@@ -82,8 +82,8 @@ namespace EditorTool
             this.loadAssetType.Items.AddRange(new object[] {
             "Models",
             "Meshes",
-            "Sounds",
             "Images",
+            "Sounds",
             "Fonts",
             "Strings"});
             this.loadAssetType.Location = new System.Drawing.Point(6, 19);

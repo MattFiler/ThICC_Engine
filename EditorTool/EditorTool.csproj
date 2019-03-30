@@ -83,17 +83,11 @@
     <Compile Include="Create_Map.Designer.cs">
       <DependentUpon>Create_Map.cs</DependentUpon>
     </Compile>
-    <Compile Include="Font_Importer.cs">
+    <Compile Include="Generic_Importer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Font_Importer.Designer.cs">
-      <DependentUpon>Font_Importer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Image_Importer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Image_Importer.Designer.cs">
-      <DependentUpon>Image_Importer.cs</DependentUpon>
+    <Compile Include="Generic_Importer.Designer.cs">
+      <DependentUpon>Generic_Importer.cs</DependentUpon>
     </Compile>
     <Compile Include="Keybind_Editor.cs">
       <SubType>Form</SubType>
@@ -142,12 +136,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sound_Importer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Sound_Importer.Designer.cs">
-      <DependentUpon>Sound_Importer.cs</DependentUpon>
-    </Compile>
     <Compile Include="Splash.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,11 +155,8 @@
     <EmbeddedResource Include="Create_Map.resx">
       <DependentUpon>Create_Map.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Font_Importer.resx">
-      <DependentUpon>Font_Importer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Image_Importer.resx">
-      <DependentUpon>Image_Importer.cs</DependentUpon>
+    <EmbeddedResource Include="Generic_Importer.resx">
+      <DependentUpon>Generic_Importer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Asset_Editor.resx">
       <DependentUpon>Asset_Editor.cs</DependentUpon>
@@ -200,9 +185,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Sound_Importer.resx">
-      <DependentUpon>Sound_Importer.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
     </EmbeddedResource>

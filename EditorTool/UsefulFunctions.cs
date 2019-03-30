@@ -1,21 +1,31 @@
 ﻿using NAudio.Gui;
 using NAudio.Wave;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
 namespace EditorTool
 {
+    /* Common functionality library */
     class UsefulFunctions
-    {
+    {        
+        /*
+         * 
+         * Asset Previewing Functionality
+         * 
+         */
+
         /* Load an image preview from an asset list to a picture box */
         public bool loadImagePreview(ListBox assetList, PictureBox imagePreview)
         {
@@ -124,6 +134,15 @@ namespace EditorTool
             return true;
         }
 
+        ///////////////////////////////////////////////
+        ///////////////////////////////////////////////
+
+        /* 
+         * 
+         * Sound Streaming Functionality
+         * 
+         */
+
         /* A public handle to close lingering sound streams */
         public bool closeLingeringSoundStreams()
         {
@@ -147,11 +166,257 @@ namespace EditorTool
             sound_stream = null;
         }
 
+        ///////////////////////////////////////////////
+        ///////////////////////////////////////////////
+
+        /* 
+         * 
+         * File Location
+         * 
+         */
+
+        /* Allow user to locate a file */
+        public string userLocatedFile(string filter)
+        {
+            OpenFileDialog filePicker = new OpenFileDialog();
+            filePicker.Filter = filter;
+            if (filePicker.ShowDialog() == DialogResult.OK)
+            {
+                return filePicker.FileName;
+            }
+            return "";
+        }
+        
+        ///////////////////////////////////////////////
+        ///////////////////////////////////////////////
+
+        /* 
+         * 
+         * Config Parsing Functionality
+         * 
+         */
+
         /* Get a localised string */
         public string getLocalisedString(string request, string language = "ENGLISH")
         {
             JObject string_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/LOCALISATION.JSON"));
             return string_config[language][request].Value<string>();
+        }
+
+        ///////////////////////////////////////////////
+        ///////////////////////////////////////////////
+
+        /* 
+         * 
+         * Asset Import Functionality
+         * 
+         */
+
+        /* Import a sound asset */
+        public bool importSound(string asset_name, string sound_path)
+        {
+            string asset_path = "DATA/SOUNDS/" + asset_name.ToUpper() + ".WAV";
+            string asset_path_orig_ext = "DATA/SOUNDS/" + asset_name.ToUpper() + Path.GetExtension(sound_path);
+
+            if (File.Exists(asset_path) || sound_path == "" || asset_name == "" || !Regex.IsMatch(asset_name, "^[_a-zA-Z0-9\x20]+$"))
+            {
+                if (sound_path == "" || asset_name == "")
+                {
+                    MessageBox.Show("Please fill out all required inputs.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                else if (!Regex.IsMatch(asset_name, "^[_a-zA-Z0-9\x20]+$"))
+                {
+                    MessageBox.Show("Your asset name cannot contain any special characters.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                MessageBox.Show("Couldn't import sound, a sound with the same name already exists.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                //Copy file to working directory
+                File.Copy(sound_path, asset_path_orig_ext);
+
+                string output = "";
+                if (Path.GetExtension(sound_path).ToUpper() != ".WAV")
+                {
+                    //Convert file to WAV if it isn't already
+                    ProcessStartInfo soundConverter = new ProcessStartInfo();
+                    soundConverter.WorkingDirectory = "DATA/SOUNDS";
+                    soundConverter.FileName = "DATA/SOUNDS/ffmpeg.exe";
+                    soundConverter.Arguments = "-i \"" + Path.GetFileName(asset_path_orig_ext) + "\" \"" + Path.GetFileName(asset_path) + "\"";
+                    soundConverter.UseShellExecute = false;
+                    soundConverter.RedirectStandardOutput = true;
+                    Process converterProcess = Process.Start(soundConverter);
+                    StreamReader reader = converterProcess.StandardOutput;
+                    converterProcess.WaitForExit();
+
+                    //Capture DDS convert output incase we errored
+                    output = reader.ReadToEnd();
+
+                    File.Delete(asset_path_orig_ext);
+                }
+
+                if (!File.Exists(asset_path))
+                {
+                    //Conversion failed, show reason if requested
+                    if (File.Exists(asset_path_orig_ext))
+                    {
+                        File.Delete(asset_path_orig_ext);
+                    }
+                    DialogResult showErrorInfo = MessageBox.Show("Sound import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (showErrorInfo == DialogResult.Yes)
+                    {
+                        MessageBox.Show(output, "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    return false;
+                }
+
+                //Create JSON data
+                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + asset_name + "\", \"asset_type\": \"Sounds\", \"is_looping\": false, \"volume\": 1.0, \"pitch\": 0.0, \"pan\": 0.0}");
+                File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "JSON", asset_json.ToString(Formatting.Indented));
+
+                //Import success
+                MessageBox.Show("Sound successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                return true;
+            }
+        }
+
+        /* Import an image asset */
+        public bool importImage(string asset_name, string image_path)
+        {
+            string asset_path = "DATA/IMAGES/" + asset_name.ToUpper() + ".DDS";
+            string asset_path_orig_ext = "DATA/IMAGES/" + asset_name.ToUpper() + Path.GetExtension(image_path);
+
+            if (File.Exists(asset_path) || image_path == "" || asset_name == "" || !Regex.IsMatch(asset_name, "^[_a-zA-Z0-9\x20]+$"))
+            {
+                if (image_path == "" || asset_name == "")
+                {
+                    MessageBox.Show("Please fill out all required inputs.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                else if (!Regex.IsMatch(asset_name, "^[_a-zA-Z0-9\x20]+$"))
+                {
+                    MessageBox.Show("Your asset name cannot contain any special characters.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                MessageBox.Show("Couldn't import asset, an image with the same name already exists.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                //Copy file to "working directory"
+                File.Copy(image_path, asset_path_orig_ext);
+
+                //Convert copied image to DDS
+                ProcessStartInfo imageConverter = new ProcessStartInfo();
+                imageConverter.WorkingDirectory = "DATA/IMAGES";
+                imageConverter.FileName = "DATA/IMAGES/texconv.exe";
+                imageConverter.Arguments = "\"" + Path.GetFileName(asset_path_orig_ext) + "\"";
+                imageConverter.UseShellExecute = false;
+                imageConverter.RedirectStandardOutput = true;
+                Process converterProcess = Process.Start(imageConverter);
+                StreamReader reader = converterProcess.StandardOutput;
+                converterProcess.WaitForExit();
+
+                //Capture DDS convert output incase we errored
+                string output = reader.ReadToEnd();
+
+                //Get dimensions
+                int image_width = 0;
+                int image_height = 0;
+                using (Image img = Image.FromFile(asset_path_orig_ext))
+                {
+                    image_width = img.Width;
+                    image_height = img.Height;
+                }
+                File.Move(asset_path_orig_ext, asset_path_orig_ext.ToUpper());
+
+                //Uppercase extension pls
+                if (File.Exists(asset_path.Substring(0, asset_path.Length - 3) + "dds"))
+                {
+                    File.Move(asset_path.Substring(0, asset_path.Length - 3) + "dds", asset_path);
+                }
+
+                if (!File.Exists(asset_path))
+                {
+                    //Import failed, show reason if requested
+                    if (File.Exists(asset_path_orig_ext))
+                    {
+                        File.Delete(asset_path_orig_ext);
+                    }
+                    DialogResult showErrorInfo = MessageBox.Show("Image import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (showErrorInfo == DialogResult.Yes)
+                    {
+                        MessageBox.Show(output, "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    return false;
+                }
+
+                //Create JSON data
+                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + asset_name + "\", \"asset_type\": \"Images\", \"visible\": true, \"is_2d\": true, \"res_x\": " + image_width + ", \"res_y\": " + image_height + ", \"x_pos\": 0, \"y_pos\": 0}");
+                File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "JSON", asset_json.ToString(Formatting.Indented));
+
+                //Import success
+                MessageBox.Show("Image successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                return true;
+            }
+        }
+
+        /* Import a system font */
+        public bool importFont(ComboBox selected_font, decimal font_size)
+        {
+            string asset_path = "DATA/FONTS/" + selected_font.SelectedItem.ToString().ToUpper() + ".SPRITEFONT";
+
+            if (File.Exists(asset_path) || selected_font.SelectedItem.ToString() == "" || selected_font.SelectedIndex == -1 || !(font_size > 0))
+            {
+                if (File.Exists(asset_path))
+                {
+                    MessageBox.Show("Couldn't import asset, an image with the same name already exists.", "Import Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                MessageBox.Show("Please fill out all required inputs.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                //Convert font to SPRITEFONT
+                ProcessStartInfo imageConverter = new ProcessStartInfo();
+                imageConverter.WorkingDirectory = "DATA/FONTS";
+                imageConverter.FileName = "DATA/FONTS/MakeSpriteFont.exe";
+                imageConverter.Arguments = "\"" + selected_font.SelectedItem.ToString() + "\" \"" + selected_font.SelectedItem.ToString().ToUpper() + ".SPRITEFONT\" /FontSize:" + font_size + " /DebugOutputSpriteSheet:\"" + selected_font.SelectedItem.ToString().ToUpper() + ".BMP\"";
+                imageConverter.UseShellExecute = false;
+                imageConverter.RedirectStandardOutput = true;
+                Process converterProcess = Process.Start(imageConverter);
+                StreamReader reader = converterProcess.StandardOutput;
+                converterProcess.WaitForExit();
+
+                //Capture output incase we errored
+                string output = reader.ReadToEnd();
+
+                if (!File.Exists(asset_path))
+                {
+                    //Import failed, show reason if requested
+                    DialogResult showErrorInfo = MessageBox.Show("Font import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (showErrorInfo == DialogResult.Yes)
+                    {
+                        MessageBox.Show(output, "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    return false;
+                }
+
+                //Create JSON data
+                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + selected_font.SelectedItem.ToString() + "\", \"asset_type\": \"Fonts\"}");
+                File.WriteAllText(asset_path.Substring(0, asset_path.Length - 10) + "JSON", asset_json.ToString(Formatting.Indented));
+
+                //Import success
+                MessageBox.Show("Font successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                return true;
+            }
         }
     }
 }
