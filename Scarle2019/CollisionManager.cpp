@@ -2,7 +2,7 @@
 #include "CollisionManager.h"
 #include "AudioManager.h"
 #include "ItemBox.h"
-#include "Explosion.h"
+#include "Bomb.h"
 
 void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _physModels, std::vector<Item*> _items)
 {
@@ -152,6 +152,23 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 				{
 					if (item1 != item2 && item2->GetMesh() && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
 					{
+						//Checking for bombs
+						Bomb* bomb1 = dynamic_cast<Bomb*>(item1);
+						Bomb* bomb2 = dynamic_cast<Bomb*>(item2);
+
+						if (bomb1)
+						{
+							bomb1->Detonate();
+							item2->FlagForDestoy();
+							break;
+						}
+						else if (bomb2)
+						{
+							item1->FlagForDestoy();
+							bomb2->Detonate();
+							break;
+						}
+
 						item1->FlagForDestoy();
 						item2->FlagForDestoy();
 						break;
