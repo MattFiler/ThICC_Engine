@@ -29,5 +29,6 @@ void Banana::Use(Player * _player, bool _altUse)
 void Banana::HitByPlayer(Player* _player)
 {
 	_player->setVelocity(_player->getVelocity() / 3);
+	_player->Spin(1, 0.5f);
 	m_shouldDestroy = true;
 }

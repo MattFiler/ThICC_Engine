@@ -20,6 +20,12 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	m_textCountdown = new Text2D("3");
 	m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 	m_textFinishOrder = new Text2D("0" + m_orderIndicator[0]);
+
+	// Don't render this mesh, render a second one instead
+	m_shouldRender = false;
+	m_displayedMesh = std::make_unique<AnimationMesh>(_filename);
+
+	m_targetAnimRotOffset = m_world.Forward();
 }
 
 Player::~Player()
@@ -51,6 +57,12 @@ void Player::setItemInInventory(ItemType _item) {
 		m_imgItem->SetPos(m_itemPos);
 		std::cout << "PLAYER " << m_playerID << " HAS ACQUIRED ITEM: " << _item << std::endl; //debug
 	}
+}
+
+void Player::Render()
+{
+	m_displayedMesh->Render();
+	SDKMeshGO3D::Render();
 }
 
 
@@ -102,7 +114,9 @@ void Player::Tick()
 	}
 
 	//apply my base behaviour
-	//PhysModel::Tick();
+	TrackMagnet::Tick();
+
+	Animations();
 }
 
 void Player::TrailItem()
@@ -224,6 +238,7 @@ void Player::movement()
 					isTurning = true;
 					if (m_drifting == false)
 					{
+						m_displayedMesh->Jump(0.5f, 0.25f);
 						Vector addVel = Vector::Zero;
 						m_drifting = true;
 						if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
@@ -240,6 +255,14 @@ void Player::movement()
 							m_drifting = false;
 						}
 						m_vel += addVel;
+					}
+					if (m_driftingRight)
+					{
+						m_targetAnimRotOffset = (m_world.Forward() * 2) + m_world.Right();
+					}
+					else
+					{
+						m_targetAnimRotOffset = (m_world.Forward() * 2) + m_world.Left();
 					}
 				}
 				else
@@ -264,14 +287,17 @@ void Player::movement()
 
 				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
 				{
+					m_targetAnimRotOffset = (m_world.Forward() * 2.5f) + m_world.Left();
 					if (m_drifting)
 					{
 						if (m_driftingRight)
 						{
-							driftMultiplier = 0.5f;
+							m_targetAnimRotOffset = (m_world.Forward() * 3) + m_world.Right();
+							driftMultiplier = 0.1f;
 						}
 						else
 						{
+							m_targetAnimRotOffset = (m_world.Forward()) + m_world.Left();
 							driftMultiplier = 1.5f;
 						}
 					}
@@ -282,17 +308,19 @@ void Player::movement()
 					}
 					isTurning = true;
 				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+				else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
 				{
+					m_targetAnimRotOffset = (m_world.Forward() * 2.5f) + m_world.Right();
 					if (m_drifting)
 					{
 						if (m_driftingRight)
 						{
+							m_targetAnimRotOffset = (m_world.Forward()) + m_world.Right();
 							driftMultiplier = 2;
 						}
 						else
 						{
+							m_targetAnimRotOffset = (m_world.Forward() * 3) + m_world.Left();
 							driftMultiplier = 0.1f;
 						}
 					}
@@ -302,6 +330,14 @@ void Player::movement()
 					}
 					isTurning = true;
 				}
+				else
+				{
+					if (!m_drifting)
+					{
+						m_targetAnimRotOffset = m_world.Forward();
+					}
+				}
+
 
 				m_acc = forwardComponent;
 
@@ -410,9 +446,6 @@ void Player::movement()
 		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 	}
 
-	//apply my base behaviour
-	TrackMagnet::Tick();
-
 }
 
 void Player::EndDrift()
@@ -439,3 +472,7 @@ void Player::EndDrift()
 	m_timeTurning = 0;
 }
 
+void Player::Animations()
+{
+	m_displayedMesh->Update(m_world ,m_targetAnimRotOffset);
+}

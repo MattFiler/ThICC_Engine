@@ -283,6 +283,12 @@
     <ClInclude Include="Explosion.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="Deletable.h">
+      <Filter>Game Base\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationMesh.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -422,6 +428,9 @@
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Game Base\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationMesh.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
     <ClCompile Include="Bomb.cpp">
       <Filter>GameObjects\Items</Filter>

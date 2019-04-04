@@ -35,6 +35,7 @@ public:
 	void SetOri(float _pitch, float _yaw, float _roll) { m_pitch = _pitch; m_yaw = _yaw, m_roll = _roll; }
 	void SetOri(Vector3 _ori) { m_pitch = _ori.x; m_yaw = _ori.y; m_roll = _ori.z; }
 	void SetOri(Matrix _rot) { m_rot = _rot; }
+	void SetOri(Quaternion _rot) { m_rot = Matrix::CreateFromQuaternion(_rot); };
 	void SetWorld(Matrix _world);
 	void UpdateWorld();
 

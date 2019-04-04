@@ -170,6 +170,7 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationMesh.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Banana.h" />
     <ClInclude Include="Bomb.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="DebugMarker.h" />
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="Explosion.h" />
+    <ClInclude Include="Deletable.h" />
     <ClInclude Include="fileVBGO.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameDebugToggles.h" />
@@ -239,6 +241,7 @@
     <ClInclude Include="WindowData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationMesh.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />
     <ClCompile Include="Bomb.cpp" />

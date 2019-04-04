@@ -8,6 +8,8 @@ GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_S
 	m_mesh->SetDrag(0);
 	m_mesh->SetPhysicsOn(true);
 	m_mesh->setDampenWallReflect(false);
+
+	m_displayedMesh->Spin(1000, 300);
 }
 
 void GreenShell::HitByPlayer(Player* player)
@@ -17,7 +19,8 @@ void GreenShell::HitByPlayer(Player* player)
 	{
 		return;
 	}
-	player->setVelocity(Vector3::Zero);
+	player->Jump(1.5f, 1);
+	player->Flip(1, 0.8f);
 	player->AddPos(player->GetWorld().Up() * 4);
 	m_shouldDestroy = true;
 }

@@ -5,6 +5,7 @@
 #include "GreenShell.h"
 #include "Mushroom.h"
 #include "Constants.h"
+#include "AnimationMesh.h"
 #include "Bomb.h"
 #include <functional>
 
@@ -20,6 +21,7 @@ public:
 	~Player();
 
 	virtual void Tick() override;
+	virtual void Render() override;
 
 	int GetWaypoint() { return m_waypoint; }
 	int GetRanking() { return m_ranking; }
@@ -48,10 +50,15 @@ public:
 	void SpawnItem(ItemType type);
 	void ReleaseItem();
 
+	void Spin(int _revolutions, float _duration) { m_displayedMesh->Spin(_revolutions, _duration); };
+	void Flip(int _revolutions, float _duration) { m_displayedMesh->Flip(_revolutions, _duration); };
+	void Jump(float _jumpHeight, float _duration) { m_displayedMesh->Jump(_jumpHeight, _duration); };
+
 protected:
 	int m_playerID = 0;
 
 private:
+	void Animations();
 	std::function<Item*(ItemType)> CreateItem;
 
 	void movement();
@@ -101,4 +108,9 @@ private:
 	bool  m_isTrailing = false;
 	
 	bool m_controlsActive = false;
+
+	std::unique_ptr<AnimationMesh> m_displayedMesh = nullptr;
+	Vector3 m_targetAnimPosOffset = Vector3::Zero;
+	Vector3 m_targetAnimRotOffset = Vector3::Zero;
+
 };
