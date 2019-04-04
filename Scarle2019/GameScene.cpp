@@ -751,6 +751,7 @@ Explosion * GameScene::CreateExplosion()
 {
 	Explosion* explosion = new Explosion();
 	m_3DObjects.push_back(explosion);
+	m_physModels.push_back(explosion);
 	m_3DObjects.push_back(dynamic_cast<PhysModel*>(explosion)->getDebugCollider());
 	return explosion;
 }

@@ -11,15 +11,18 @@ Bomb::Bomb(std::function<Explosion*()> _CreateExplosionFunciton) : Item(Locator:
 void Bomb::Tick()
 {
 	Item::Tick();
+
 }
 
 void Bomb::Use(Player * player, bool _altUse)
 {
 	explosion = CreateExplosion();
 	explosion->SetWorld(m_mesh->GetWorld());
+	explosion->explode();
+	FlagForDestoy();
 }
 
 void Bomb::HitByPlayer(Player * player)
 {
-	CreateExplosion();
+	Use(player, false);
 }
