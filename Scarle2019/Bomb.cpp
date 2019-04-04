@@ -12,10 +12,39 @@ void Bomb::Tick()
 {
 	Item::Tick();
 
+	if (m_countdown)
+	{
+		m_current_time += Locator::getGSD()->m_dt;
+
+		if (m_current_time >= m_countdown_time)
+		{
+			Detonate();
+		}
+	}
 }
 
 void Bomb::Use(Player * player, bool _altUse)
 {
+	if (_altUse)
+	{
+		//Positions the bomb
+		m_mesh->SetWorld(player->GetWorld());
+		m_mesh->AddPos(player->GetWorld().Right() * 2 + player->GetWorld().Up() * 2);
+		m_mesh->UpdateWorld();
+
+		//Yeets said bomb
+		float forward_force = 100;
+		float upward_force = 1;
+		m_mesh->setMaxGrav(500);
+		m_mesh->setGravVelocity(player->getVelocity() + (player->GetWorld().Forward() * forward_force) + (player->GetWorld().Up() * upward_force));
+	}
+	m_countdown = true;
+	//Detonate();
+}
+
+void Bomb::Detonate()
+{
+	m_countdown = false;
 	explosion = CreateExplosion();
 	explosion->SetWorld(m_mesh->GetWorld());
 	explosion->explode();
@@ -24,5 +53,5 @@ void Bomb::Use(Player * player, bool _altUse)
 
 void Bomb::HitByPlayer(Player * player)
 {
-	Use(player, false);
+	Detonate();
 }

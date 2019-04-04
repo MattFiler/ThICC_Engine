@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "Deletable.h"
 
 //Base 3D Game Object
 
@@ -19,7 +20,7 @@ enum GO3D_Render_Type
 	GO3D_RT_COUNT
 };
 
-class GameObject3D
+class GameObject3D : public Deletable
 {
 public:
 	GameObject3D();
@@ -55,7 +56,7 @@ public:
 	Matrix GetWorld() { return m_world; }
 	GO3D_Render_Type GetType() { return m_type; }
 	bool ShouldDestroy() { return m_shouldDestroy; };
-
+	
 	void setVisible(bool visible) { is_visible = visible; };
 	bool isVisible() { return is_visible; };
 

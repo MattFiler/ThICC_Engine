@@ -12,7 +12,8 @@ Explosion::Explosion() : TrackMagnet("bomb_explosion")
 void Explosion::HitByPlayer(Player * _player)
 {
 	_player->setVelocity(Vector3::Zero);
-	//Flip the player
+	_player->Jump(2, 1.6f);
+	_player->Flip(1, 0.8f);
 }
 
 void Explosion::Tick()
@@ -27,7 +28,7 @@ void Explosion::Tick()
 		if (m_percent > 1)
 		{
 			m_percent = 1;
-			Locator::getGarbageCollector()->DeletePointer(this);
+			m_shouldDestroy = true;
 		}
 	}
 }

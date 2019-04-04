@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+#include "Deletable.h"
 class Explosion : public TrackMagnet
 {
 public:
@@ -15,7 +16,7 @@ private:
 	Vector3 m_startSize;
 	Vector3 m_endSize;
 	float m_percent = 0;
-	float m_speed = 1;
+	float m_speed = 1.5;
 
 };
 
