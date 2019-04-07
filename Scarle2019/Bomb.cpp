@@ -6,6 +6,7 @@ Bomb::Bomb(std::function<Explosion*()> _CreateExplosionFunciton) : Item(Locator:
 {
 	m_mesh->SetDrag(0.9f);
 	m_mesh->SetPhysicsOn(true);
+	m_maxImmunityTime = 1;
 }
 
 void Bomb::Tick()

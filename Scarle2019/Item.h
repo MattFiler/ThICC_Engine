@@ -31,4 +31,11 @@ protected:
 	TrackMagnet * m_mesh = nullptr;
 	std::unique_ptr<AnimationMesh> m_displayedMesh = nullptr;
 	bool m_shouldDestroy = false;
+
+	float m_elapsedTime = 0;
+	float m_maxDuration = 120;
+
+	float m_elapsedImmunityTime = 0;
+	float m_maxImmunityTime = 0;
+	Player* m_player;
 };
