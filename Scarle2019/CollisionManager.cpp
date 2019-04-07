@@ -150,7 +150,7 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 				//Item x Item Collision
 				for (Item* item2 : _items)
 				{
-					if (item1 != item2 && item2->GetMesh() && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
+					if (item1 != item2 && item2->GetMesh() && !CheckItemImmunity(item1, item2) && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
 					{
 						//Checking for bombs
 						Bomb* bomb1 = dynamic_cast<Bomb*>(item1);
@@ -178,6 +178,27 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 		}
 	}
 
+}
+
+bool CollisionManager::CheckItemImmunity(Item * _item1, Item * _item2)
+{
+	for (Item* item : _item1->GetImmuneItems())
+	{
+		if(item == _item2)
+		{
+			return true;
+		}
+	}
+
+	for (Item* item : _item2->GetImmuneItems())
+	{
+		if (item == _item1)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 Plane CollisionManager::getPlane(Vector3 _corner1, Vector3 _corner2, float _height)

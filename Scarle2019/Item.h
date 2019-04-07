@@ -26,6 +26,9 @@ public:
 	TrackMagnet* GetMesh() { return m_mesh; };
 	SDKMeshGO3D* GetRenderMesh() { return m_displayedMesh.get(); };
 
+	virtual void AddImmuneItem(Item* _item) { m_immuneItems.push_back(_item); };
+	virtual void addImmuneItems(std::vector<Item*> _immuneItems) { m_immuneItems = _immuneItems; };
+	virtual std::vector<Item*> GetImmuneItems() { return m_immuneItems; };
 
 protected:
 	TrackMagnet * m_mesh = nullptr;
@@ -41,6 +44,8 @@ protected:
 
 	float m_elapsedImmunityTime = 0;
 	float m_maxImmunityTime = 0;
+
+	std::vector<Item*> m_immuneItems;
 
 	virtual bool ignorePlayerCollisions(Player* player);
 	virtual void setItemInUse(Player* player);
