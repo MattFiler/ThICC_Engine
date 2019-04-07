@@ -7,6 +7,8 @@ Bomb::Bomb(std::function<Explosion*()> _CreateExplosionFunciton) : Item(Locator:
 	m_mesh->SetDrag(0.9f);
 	m_mesh->SetPhysicsOn(true);
 	m_maxImmunityTime = 1;
+	m_maxImmunityTime = 0.1;
+
 }
 
 void Bomb::Tick()
@@ -26,6 +28,8 @@ void Bomb::Tick()
 
 void Bomb::Use(Player * player, bool _altUse)
 {
+	Item::setItemInUse(player);
+
 	if (_altUse)
 	{
 		//Positions the bomb
@@ -54,5 +58,9 @@ void Bomb::Detonate()
 
 void Bomb::HitByPlayer(Player * player)
 {
+	if (Item::ignorePlayerCollisions(player))
+	{
+		return;
+	}	
 	Detonate();
 }

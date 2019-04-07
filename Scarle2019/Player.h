@@ -17,7 +17,7 @@ class Player : public TrackMagnet
 {
 
 public:
-	Player(string _filename, int _playerID, std::function<Item*(ItemType, Player* player)> _createItemFunction);
+	Player(string _filename, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
 	~Player();
 
 	virtual void Tick() override;
@@ -59,7 +59,7 @@ protected:
 
 private:
 	void Animations();
-	std::function<Item*(ItemType, Player* player)> CreateItem;
+	std::function<Item*(ItemType)> CreateItem;
 
 	void movement();
 

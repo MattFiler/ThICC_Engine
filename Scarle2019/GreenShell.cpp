@@ -11,16 +11,17 @@ GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_S
 
 	m_displayedMesh->Spin(1000, 300);
 	m_maxDuration = 20;
-	m_maxImmunityTime = 1;
+	m_maxImmunityTime = 0.5;
 }
 
 void GreenShell::HitByPlayer(Player* player)
 {
 	// Prevent collisions with the parent that fired this for a bit
-	if (player == m_player)
+	if (Item::ignorePlayerCollisions(player))
 	{
 		return;
 	}
+
 	player->Jump(1.5f, 1);
 	player->Flip(1, 0.8f);
 	player->AddPos(player->GetWorld().Up() * 4);
@@ -29,7 +30,8 @@ void GreenShell::HitByPlayer(Player* player)
 
 void GreenShell::Use(Player * player, bool _altUse)
 {
-	m_player = player;
+	Item::setItemInUse(player);
+
 	m_mesh->SetWorld(player->GetWorld());
 	m_mesh->AddPos(player->GetWorld().Right() * 1);
 	m_mesh->UpdateWorld();
@@ -38,19 +40,5 @@ void GreenShell::Use(Player * player, bool _altUse)
 
 void GreenShell::Tick()
 {
-	/*if (m_player)
-	{
-		m_elapsedImmunityTime += Locator::getGSD()->m_dt;
-		if (m_elapsedImmunityTime >= m_maxImmunityTume)
-		{
-			m_player = nullptr;
-		}
-	}*/
-
-	/*m_elapsedTime += Locator::getGSD()->m_dt;
-	if (m_elapsedTime > m_maxDuration)
-	{
-		m_shouldDestroy = true;
-	}*/
 	Item::Tick();
 }

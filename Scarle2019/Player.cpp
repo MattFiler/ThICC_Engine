@@ -8,7 +8,7 @@
 
 extern void ExitGame();
 
-Player::Player(string _filename, int _playerID, std::function<Item*(ItemType, Player* player)> _createItemFunction) : TrackMagnet(_filename), CreateItem(_createItemFunction)
+Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_filename), CreateItem(_createItemFunction)
 {
 	m_RD = Locator::getRD();
 	SetDrag(0.7);

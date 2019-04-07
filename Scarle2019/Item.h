@@ -29,13 +29,19 @@ public:
 
 protected:
 	TrackMagnet * m_mesh = nullptr;
+	Player* m_player = nullptr;
+
 	std::unique_ptr<AnimationMesh> m_displayedMesh = nullptr;
 	bool m_shouldDestroy = false;
+	bool m_itemUsed = false;
+	bool m_trailingPlayerImmunity = true;
 
 	float m_elapsedTime = 0;
-	float m_maxDuration = 120;
+	float m_maxDuration = 300;
 
 	float m_elapsedImmunityTime = 0;
 	float m_maxImmunityTime = 0;
-	Player* m_player;
+
+	virtual bool ignorePlayerCollisions(Player* player);
+	virtual void setItemInUse(Player* player);
 };
