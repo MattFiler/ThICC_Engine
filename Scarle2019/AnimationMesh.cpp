@@ -88,9 +88,9 @@ void AnimationMesh::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
 
 void AnimationMesh::Jump(float _jumpHeight, float _duration)
 {
-	m_timeBetweenPos = _duration / 2;
 	if (m_posAnimPoints.empty())
 	{
+		m_timeBetweenPos = _duration / 2;
 		m_posTimeElapsed = 0;
 		Vector3 m_prevPoint = Vector3::Zero;
 		m_posAnimPoints.push(m_world.Up() * _jumpHeight);
@@ -100,9 +100,9 @@ void AnimationMesh::Jump(float _jumpHeight, float _duration)
 
 void AnimationMesh::Spin(int _revolutions, float _duration)
 {
-	m_timeBetweenRot = _duration / (4 * _revolutions);
 	if (m_rotAnimPoints.empty())
 	{
+		m_timeBetweenRot = _duration / (4 * _revolutions);
 		m_rotTimeElapsed = 0;
 		direction m_prevDirection = FORWARD;
 		for (int i = 0; i < _revolutions; i++)
@@ -117,9 +117,9 @@ void AnimationMesh::Spin(int _revolutions, float _duration)
 
 void AnimationMesh::Flip(int _revolutions, float _duration)
 {
-	m_timeBetweenRot = _duration / (4 * _revolutions);
 	if (m_rotAnimPoints.empty())
 	{
+		m_timeBetweenRot = _duration / (4 * _revolutions);
 		m_rotTimeElapsed = 0;
 		direction m_prevDirection = FORWARD;
 		for (int i = 0; i < _revolutions; i++)
