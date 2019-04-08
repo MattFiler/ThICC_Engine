@@ -22,7 +22,7 @@
     <RootNamespace>Scarle2019</RootNamespace>
     <ProjectGuid>{beb5860e-fef9-4f22-baeb-f76c22cf75d6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -203,6 +203,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="LocalisationManager.h" />
     <ClInclude Include="Loop.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="MarchCubes.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="MeshTri.h" />
@@ -261,6 +262,7 @@
     <ClCompile Include="LocalisationManager.cpp" />
     <ClCompile Include="Loop.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="MarchCubes.cpp" />
     <ClCompile Include="MeshTri.cpp" />
     <ClCompile Include="MenuScene.cpp" />

@@ -62,6 +62,33 @@ namespace EditorTool
             return true;
         }
 
+        /* Try find our material preview, show it if we find it */
+        public void loadMaterialPreview(JToken this_token, PictureBox materialPreview)
+        {
+            string[] map_types = { "map_Ka", "map_Kd", "map_Ks", "map_Ns", "map_d" };
+            string path_to_mat = "";
+            foreach (string map_type in map_types)
+            {
+                if (this_token[map_type] == null)
+                {
+                    continue;
+                }
+                if (this_token[map_type].Type == JTokenType.String)
+                {
+                    path_to_mat = this_token[map_type].Value<string>();
+                }
+            }
+            if (path_to_mat == "" || !File.Exists(path_to_mat))
+            {
+                return;
+            }
+            
+            using (var tempPreviewImg = new Bitmap(path_to_mat))
+            {
+                materialPreview.Image = new Bitmap(tempPreviewImg);
+            }
+        }
+
         /* Load a model preview from asset list into a model viewer */
         public bool loadModelPreview(ListBox assetList, ElementHost modelPreview)
         {

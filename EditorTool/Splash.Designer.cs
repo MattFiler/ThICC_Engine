@@ -44,6 +44,8 @@
             this.DEBUG_SAVE = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.DEBUG_DEFAULTTRACK = new System.Windows.Forms.ComboBox();
+            this.debug_button = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -235,11 +237,33 @@
             this.DEBUG_DEFAULTTRACK.Size = new System.Drawing.Size(268, 21);
             this.DEBUG_DEFAULTTRACK.TabIndex = 16;
             // 
+            // debug_button
+            // 
+            this.debug_button.Location = new System.Drawing.Point(19, 463);
+            this.debug_button.Name = "debug_button";
+            this.debug_button.Size = new System.Drawing.Size(120, 37);
+            this.debug_button.TabIndex = 34;
+            this.debug_button.Text = "debug lol";
+            this.debug_button.UseVisualStyleBackColor = true;
+            this.debug_button.Click += new System.EventHandler(this.debug_button_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(145, 463);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(120, 37);
+            this.button1.TabIndex = 36;
+            this.button1.Text = "debug lol 2";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(304, 458);
+            this.ClientSize = new System.Drawing.Size(304, 512);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.debug_button);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -277,5 +301,7 @@
         private System.Windows.Forms.NumericUpDown DEBUG_PLAYERCOUNT;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Button DEBUG_SAVE;
+        private System.Windows.Forms.Button debug_button;
+        private System.Windows.Forms.Button button1;
     }
 }

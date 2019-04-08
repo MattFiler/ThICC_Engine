@@ -119,11 +119,29 @@
     <Compile Include="Mesh_Creator.Designer.cs">
       <DependentUpon>Mesh_Creator.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model_Importer_AssetSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Model_Importer_AssetSelector.Designer.cs">
+      <DependentUpon>Model_Importer_AssetSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model_Importer_MaterialEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Model_Importer_MaterialEditor.Designer.cs">
+      <DependentUpon>Model_Importer_MaterialEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model_Importer_Preselect.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Model_Importer_Preselect.Designer.cs">
       <DependentUpon>Model_Importer_Preselect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model_Importer_MaterialList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Model_Importer_MaterialList.Designer.cs">
+      <DependentUpon>Model_Importer_MaterialList.cs</DependentUpon>
     </Compile>
     <Compile Include="Model_Viewer.xaml.cs">
       <DependentUpon>Model_Viewer.xaml</DependentUpon>
@@ -173,8 +191,17 @@
     <EmbeddedResource Include="Model_Importer.resx">
       <DependentUpon>Model_Importer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Model_Importer_AssetSelector.resx">
+      <DependentUpon>Model_Importer_AssetSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model_Importer_MaterialEditor.resx">
+      <DependentUpon>Model_Importer_MaterialEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Model_Importer_Preselect.resx">
       <DependentUpon>Model_Importer_Preselect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model_Importer_MaterialList.resx">
+      <DependentUpon>Model_Importer_MaterialList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

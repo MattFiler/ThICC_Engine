@@ -31,6 +31,7 @@ namespace EditorTool
         private void newMap_Click(object sender, EventArgs e)
         {
             Create_Map createMap = new Create_Map();
+            //needs to refresh
             createMap.Show();
         }
 

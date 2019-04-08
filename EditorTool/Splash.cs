@@ -214,5 +214,17 @@ namespace EditorTool
             Map_Manager mapManager = new Map_Manager();
             mapManager.Show();
         }
+
+        private void debug_button_Click(object sender, EventArgs e)
+        {
+            Model_Importer_AssetSelector test = new Model_Importer_AssetSelector(ModelType.MAP);
+            test.Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Model_Importer_MaterialList test2 = new Model_Importer_MaterialList("MKS_3");
+            test2.Show();
+        }
     }
 }
