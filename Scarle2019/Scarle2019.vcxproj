@@ -231,7 +231,6 @@
     <ClInclude Include="TrackSelectionState.h" />
     <ClInclude Include="TransFileVBGO.h" />
     <ClInclude Include="BlenderToDirectX.h" />
-    <ClInclude Include="TripleMushroom.h" />
     <ClInclude Include="VBCube.h" />
     <ClInclude Include="VBGO3D.h" />
     <ClInclude Include="VBSnail.h" />
@@ -293,7 +292,6 @@
     <ClCompile Include="TrackMagnet.cpp" />
     <ClCompile Include="TrackSelectionState.cpp" />
     <ClCompile Include="TransFileVBGO.cpp" />
-    <ClCompile Include="TripleMushroom.cpp" />
     <ClCompile Include="VBCube.cpp" />
     <ClCompile Include="VBGO3D.cpp" />
     <ClCompile Include="VBSnail.cpp" />

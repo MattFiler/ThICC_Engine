@@ -289,9 +289,6 @@
     <ClInclude Include="AnimationMesh.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TripleMushroom.h">
-      <Filter>GameObjects\Items</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -439,9 +436,6 @@
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
     <ClCompile Include="Explosion.cpp">
-      <Filter>GameObjects\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="TripleMushroom.cpp">
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>

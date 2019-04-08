@@ -5,8 +5,11 @@ using json = nlohmann::json;
 
 struct PhysModelData 
 {
-	float scale = 1.0f;
-	
+	float m_scale = 1.0f;
+
+	//Used if collider size > model size - such as item boxes
+	float m_additionalScale = 1.0f;
+
 	Vector3 m_localCentre;
 	Vector3 m_worldCentre;
 
