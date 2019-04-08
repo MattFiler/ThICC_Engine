@@ -65,6 +65,8 @@ private:
 
 	void EndDrift();
 
+	void RespawnLogic();
+
 	double m_timeTurning = 0;
 	float m_maxTurnRateMutliplier = 2.3f;
 	float m_maxDriftTurnMutliplier = 4.2f;
@@ -90,7 +92,7 @@ private:
 	Vector m_savedGravDir;
 	bool m_finished = false;
 
-	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th" };
+	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th"};
 
 	// Player items:
 	//	A player can have an ACTIVE item (e.g. holding a banana behind themselves) AND also an INVENTORY item.
@@ -101,7 +103,7 @@ private:
 	ItemType active_item = ItemType::NONE;
 	ItemType inventory_item = ItemType::NONE;
 	
-	Vector2 m_itemPos = Vector2(0, 0); //temp gpu fix 
+	Vector2 m_itemPos = Vector2(0, 0); // temp gpu fix 
 	ImageGO2D *m_imgItem = nullptr;
 
 	std::vector<Item*> m_trailingItems;
@@ -116,4 +118,9 @@ private:
 	Vector3 m_targetAnimPosOffset = Vector3::Zero;
 	Vector3 m_targetAnimRotOffset = Vector3::Zero;
 
+	std::queue<Matrix> m_posHistory;
+	float m_posHistoryInterval = 0.1f;
+	float m_posHistoryTimer = 0;
+	float m_posHistoryLength = 1;
+	float m_respawnDelay = 1.5f;
 };

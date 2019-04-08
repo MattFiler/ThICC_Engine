@@ -26,6 +26,11 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	m_displayedMesh = std::make_unique<AnimationMesh>(_filename);
 
 	m_targetAnimRotOffset = m_world.Forward();
+
+	for (int i = 0; i < (int)m_posHistoryLength / m_posHistoryInterval; i++)
+	{
+		m_posHistory.push(m_world);
+	}
 }
 
 Player::~Player()
@@ -70,6 +75,9 @@ void Player::Tick()
 {
 	movement();
 
+	RespawnLogic();
+	
+
 	// Debug code to save/load the players game state
 	if (m_keymindManager.keyPressed("Debug Save Matrix"))
 	{
@@ -85,7 +93,6 @@ void Player::Tick()
 		m_gravVel = m_savedGravVel;
 		m_velTotal = m_vel + m_savedGravVel;
 		m_gravDirection = m_savedGravDir;
-		Vector3 scale = Vector3::Zero;
 	}
 	else if (m_keymindManager.keyPressed("Spawn Banana"))
 	{
@@ -511,24 +518,35 @@ void Player::EndDrift()
 	{
 		m_vel = m_world.Forward() * m_vel.Length();
 	}
-	/*
-	if (m_timeTurning > m_timeForMaxDrift / 3)
-	{
-		m_acc += m_world.Forward() * (m_driftBoost);
-	}
-	else if (m_timeTurning > m_timeForMaxDrift / 1.5f)
-	{
-		m_acc += m_world.Forward() * (m_driftBoost * 1.5f);
-	}
-	else if (m_timeTurning >= m_timeForMaxDrift)
-	{
-		m_acc += m_world.Forward() * (m_driftBoost * 2);
-	}
-	*/
 	m_timeTurning = 0;
 }
 
 void Player::Animations()
 {
 	m_displayedMesh->Update(m_world ,m_targetAnimRotOffset);
+}
+
+void Player::RespawnLogic()
+{
+	m_posHistoryTimer += Locator::getGSD()->m_dt;
+	if (m_onTrack)
+	{
+		if (m_posHistoryTimer >= m_posHistoryInterval)
+		{
+			m_posHistoryTimer -= m_posHistoryInterval;
+			m_posHistory.push(m_world);
+			m_posHistory.pop();
+		}
+	}
+	else
+	{
+		if (m_posHistoryTimer >= m_respawnDelay)
+		{
+			m_posHistoryTimer = 0;
+			SetWorld(m_posHistory.front());
+			m_vel = Vector::Zero;
+			m_gravVel = Vector::Zero;
+			m_velTotal = Vector::Zero;
+		}
+	}
 }
