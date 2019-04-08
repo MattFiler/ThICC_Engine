@@ -41,11 +41,14 @@ Player::~Player()
 
 
 void Player::setActiveItem(ItemType _item) {
-	if (inventory_item == _item) {
+	if (m_InventoryItem == _item) {
 		active_item = _item;
 		m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 		m_imgItem->SetPos(m_itemPos);
-		inventory_item = ItemType::NONE;
+
+
+		m_InventoryItem = ItemType::NONE;
+		
 		std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
 	}
 	else
@@ -56,8 +59,8 @@ void Player::setActiveItem(ItemType _item) {
 };
 
 void Player::setItemInInventory(ItemType _item) {
-	if (inventory_item == ItemType::NONE) {
-		inventory_item = _item;
+	if (m_InventoryItem == ItemType::NONE) {
+		m_InventoryItem = _item;
 		m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
 		m_imgItem->SetPos(m_itemPos);
 		std::cout << "PLAYER " << m_playerID << " HAS ACQUIRED ITEM: " << _item << std::endl; //debug
@@ -132,11 +135,14 @@ void Player::TrailItems()
 	{
 		for (int i = 0; i < m_trailingItems.size(); i++)
 		{
-			Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
+			if (m_trailingItems[i]->GetMesh())
+			{
+				Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
 
-			m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-			m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
-			m_trailingItems[i]->GetMesh()->UpdateWorld();
+				m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+				m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
+				m_trailingItems[i]->GetMesh()->UpdateWorld();
+			}
 		}
 		
 	}
@@ -175,6 +181,7 @@ void Player::SpawnItems(ItemType type)
 			Bomb* bomb = static_cast<Bomb*>(CreateItem(BOMB));
 			m_trailingItems.push_back(bomb);
 			TrailItems();
+			break;
 		}
 
 		case BANANA_3X:
@@ -191,6 +198,23 @@ void Player::SpawnItems(ItemType type)
 			}
 
 			m_tripleItem = true;
+			break;
+		}
+
+		case MUSHROOM_3X:
+		{
+			//uses the first shroom
+			SpawnItems(MUSHROOM);
+
+			//creates subsequence shrooms
+			for (int i = 0; i < 2; i++)
+			{
+				Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(MUSHROOM));
+				m_trailingItems.push_back(mushroom);
+			}
+
+			m_tripleItem = true;
+			break;
 		}
 		default:
 			break;
@@ -201,18 +225,9 @@ void Player::ReleaseItem()
 {
 	if (!m_trailingItems.empty())
 	{
-		std::cout << "Release item" << std::endl;
-		if (m_trailingItems.size() > 1)
-		{
-			m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
-			m_trailingItems.pop_back();
-		}
-		else
-		{
-			m_trailingItems[0]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
-			m_trailingItems.erase(m_trailingItems.begin());
-		}
-
+		m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
+		m_trailingItems.pop_back();
+		
 		if (m_trailingItems.empty())
 		{
 			m_tripleItem = false;
@@ -438,9 +453,9 @@ void Player::movement()
 
 					if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
 					{
-						if (m_trailingItems.empty() && inventory_item != NONE)
+						if (m_trailingItems.empty() && m_InventoryItem != NONE)
 						{
-							SpawnItems(inventory_item);
+							SpawnItems(m_InventoryItem);
 						}
 						else if(!m_aPressed)
 						{
@@ -458,10 +473,10 @@ void Player::movement()
 				{
 					if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
 					{
-						if (m_trailingItems.empty() && inventory_item != NONE)
+						if (m_trailingItems.empty() && (m_InventoryItem != NONE))
 						{
-							SpawnItems(inventory_item);
-						}
+							SpawnItems(m_InventoryItem);
+						}					
 						else
 						{
 							TrailItems();

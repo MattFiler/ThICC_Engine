@@ -22,6 +22,7 @@ void GreenShell::HitByPlayer(Player* player)
 		return;
 	}
 
+	player->setVelocity(Vector3::Zero);
 	player->Jump(1.5f, 1);
 	player->Flip(1, 0.8f);
 	player->AddPos(player->GetWorld().Up() * 4);

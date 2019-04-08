@@ -45,6 +45,7 @@ protected:
 	float m_elapsedImmunityTime = 0;
 	float m_maxImmunityTime = 0;
 
+	//Vector of items that are immune to this items collisions - needed for triple banana
 	std::vector<Item*> m_immuneItems;
 
 	virtual bool ignorePlayerCollisions(Player* player);
