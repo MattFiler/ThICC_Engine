@@ -150,7 +150,12 @@ void Player::TrailItems()
 
 void Player::SpawnItems(ItemType type)
 {
-	setActiveItem(type);
+	//Triple mushrooms still in inventory after use
+	if (type != MUSHROOM_3X)
+	{
+		setActiveItem(type);
+	}
+
 	switch (type)
 	{
 		case BANANA:
@@ -232,6 +237,12 @@ void Player::ReleaseItem()
 		{
 			m_tripleItem = false;
 			active_item = NONE;
+
+			if (m_InventoryItem == MUSHROOM_3X)
+			{
+				setActiveItem(MUSHROOM_3X);
+				active_item = NONE;
+			}
 		}
 	}
 }
