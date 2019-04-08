@@ -33,6 +33,8 @@ public:
 private:
 	// Updates
 	void UpdateItems();
+	void DeleteItem(Item * item);
+	void DeleteThread(Item * item);
 
 	//State Stuff
 	bool m_isPaused;
@@ -42,6 +44,7 @@ private:
 	void pushBackObjects();
 
 	Item* CreateItem(ItemType type);
+	Explosion* CreateExplosion();
 
 	// Test objects
 	Track* track = nullptr;

@@ -170,8 +170,10 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationMesh.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Banana.h" />
+    <ClInclude Include="Bomb.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionManager.h" />
@@ -181,6 +183,8 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DebugMarker.h" />
     <ClInclude Include="DebugScene.h" />
+    <ClInclude Include="Explosion.h" />
+    <ClInclude Include="Deletable.h" />
     <ClInclude Include="fileVBGO.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameDebugToggles.h" />
@@ -190,12 +194,14 @@
     <ClInclude Include="GameObjectList.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameStateData.h" />
+    <ClInclude Include="GarbageCollector.h" />
     <ClInclude Include="GPGO3D.h" />
     <ClInclude Include="GreenShell.h" />
     <ClInclude Include="ImageGO2D.h" />
     <ClInclude Include="InputData.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemBox.h" />
+    <ClInclude Include="ItemCollision.h" />
     <ClInclude Include="ItemData.h" />
     <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="Light.h" />
@@ -235,13 +241,16 @@
     <ClInclude Include="WindowData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationMesh.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />
+    <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CharecterSelectionState.cpp" />
     <ClCompile Include="DebugMarker.cpp" />
     <ClCompile Include="DebugScene.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="fileVBGO.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject2D.cpp" />

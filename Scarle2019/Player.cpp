@@ -20,6 +20,17 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	m_textCountdown = new Text2D("3");
 	m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 	m_textFinishOrder = new Text2D("0" + m_orderIndicator[0]);
+
+	// Don't render this mesh, render a second one instead
+	m_shouldRender = false;
+	m_displayedMesh = std::make_unique<AnimationMesh>(_filename);
+
+	m_targetAnimRotOffset = m_world.Forward();
+
+	for (int i = 0; i < (int)m_posHistoryLength / m_posHistoryInterval; i++)
+	{
+		m_posHistory.push(m_world);
+	}
 }
 
 Player::~Player()
@@ -53,10 +64,19 @@ void Player::setItemInInventory(ItemType _item) {
 	}
 }
 
+void Player::Render()
+{
+	m_displayedMesh->Render();
+	SDKMeshGO3D::Render();
+}
+
 
 void Player::Tick()
 {
 	movement();
+
+	RespawnLogic();
+	
 
 	// Debug code to save/load the players game state
 	if (m_keymindManager.keyPressed("Debug Save Matrix"))
@@ -73,15 +93,14 @@ void Player::Tick()
 		m_gravVel = m_savedGravVel;
 		m_velTotal = m_vel + m_savedGravVel;
 		m_gravDirection = m_savedGravDir;
-		Vector3 scale = Vector3::Zero;
 	}
 	else if (m_keymindManager.keyPressed("Spawn Banana"))
 	{
-		SpawnItem(ItemType::GREEN_SHELL);
+		SpawnItems(ItemType::GREEN_SHELL);
 	}
 	else if (m_keymindManager.keyHeld("Spawn Banana"))
 	{
-		TrailItem();
+		TrailItems();
 	}
 	/*else
 	{
@@ -102,45 +121,77 @@ void Player::Tick()
 	}
 
 	//apply my base behaviour
-	//PhysModel::Tick();
+	TrackMagnet::Tick();
+
+	Animations();
 }
 
-void Player::TrailItem()
+void Player::TrailItems()
 {
-	m_isTrailing = true;
-	m_trailingItem->GetMesh()->SetWorld(m_world);
-	m_trailingItem->GetMesh()->AddPos(m_world.Backward() * 2.2);
-	m_trailingItem->GetMesh()->UpdateWorld();
+	if (!m_trailingItems.empty())
+	{
+		for (int i = 0; i < m_trailingItems.size(); i++)
+		{
+			Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
+
+			m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+			m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
+			m_trailingItems[i]->GetMesh()->UpdateWorld();
+		}
+		
+	}
 }
 
-void Player::SpawnItem(ItemType type)
+void Player::SpawnItems(ItemType type)
 {
 	setActiveItem(type);
 	switch (type)
 	{
 		case BANANA:
 		{
-			Banana * banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
-			m_trailingItem = banana;
-			TrailItem();
+			Banana * banana = static_cast<Banana*>(CreateItem(BANANA));
+			m_trailingItems.push_back(banana);
+			TrailItems();
 			break;
 		}
 
 		case MUSHROOM:
 		{
-			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
-			mushroom->Use(this);
+			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(MUSHROOM));
+			mushroom->Use(this, false);
 			break;
 		}
 
 		case GREEN_SHELL:
 		{
-			GreenShell* shell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
-			m_trailingItem = shell;
-			TrailItem();
+			GreenShell* shell = static_cast<GreenShell*>(CreateItem(GREEN_SHELL));
+			m_trailingItems.push_back(shell);
+			TrailItems();
 			break;
 		}
 
+		case BOMB:
+		{
+			Bomb* bomb = static_cast<Bomb*>(CreateItem(BOMB));
+			m_trailingItems.push_back(bomb);
+			TrailItems();
+		}
+
+		case BANANA_3X:
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				SpawnItems(BANANA);
+				TrailItems();
+			}
+
+			for (Item*& banana : m_trailingItems)
+			{
+				banana->addImmuneItems(m_trailingItems);
+			}
+
+			m_tripleItem = true;
+		}
 		default:
 			break;
 	}
@@ -148,12 +199,25 @@ void Player::SpawnItem(ItemType type)
 
 void Player::ReleaseItem()
 {
-	if (m_trailingItem)
+	if (!m_trailingItems.empty())
 	{
-		m_trailingItem->Use(this);
-		m_isTrailing = false;
-		m_trailingItem = nullptr;
-		active_item = NONE;
+		std::cout << "Release item" << std::endl;
+		if (m_trailingItems.size() > 1)
+		{
+			m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
+			m_trailingItems.pop_back();
+		}
+		else
+		{
+			m_trailingItems[0]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
+			m_trailingItems.erase(m_trailingItems.begin());
+		}
+
+		if (m_trailingItems.empty())
+		{
+			m_tripleItem = false;
+			active_item = NONE;
+		}
 	}
 }
 
@@ -164,9 +228,14 @@ void Player::setGamePad(bool _state)
 
 void Player::movement()
 {
+	bool isTurning = false;
 	//FORWARD BACK & STRAFE CONTROL HERE
 	Vector3 forwardMove = 25.0f * m_world.Forward();
-	Vector3 rightMove = 60.0f * m_world.Right();
+	Vector3 rightMove = 12.5f * m_world.Right();
+	Vector3 forwardComponent = Vector::Zero;
+	Vector3 turnComponent = Vector::Zero;
+	float driftMultiplier = 1;
+
 	Matrix rotMove = Matrix::CreateRotationY(m_yaw);
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
 	rightMove = Vector3::Transform(rightMove, rotMove);
@@ -176,19 +245,23 @@ void Player::movement()
 	{
 		if (m_keymindManager.keyHeld("Forward"))
 		{
-			m_acc += forwardMove;
+			//m_acc += forwardMove;
+			forwardComponent += forwardMove;
 		}
 		if (m_keymindManager.keyHeld("Backwards"))
 		{
-			m_acc -= forwardMove / 2;
+			//m_acc -= forwardMove / 2;
+			forwardComponent -= forwardMove / 2;
 		}
 		if (m_keymindManager.keyHeld("Left"))
 		{
 			m_acc -= rightMove;
+			isTurning = true;
 		}
 		if (m_keymindManager.keyHeld("Right"))
 		{
 			m_acc += rightMove;
+			isTurning = true;
 		}
 	}
 
@@ -204,60 +277,200 @@ void Player::movement()
 			}
 			else
 			{
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightShoulderPressed())
 				{
-					m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
-				{
-					m_acc -= forwardMove / 2; //* _GSD->m_gamePadState->triggers.left;
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
-				{
-					//m_acc -= rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-					if (m_vel.Length() < 1.0)
+					isTurning = true;
+					if (m_drifting == false)
 					{
-						m_acc -= rightMove / 1000;
-					}
-					else
-					{
-						m_acc -= rightMove;
-					}
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
-				{
-					//m_acc += rightMove;// *_GSD->m_gamePadState[m_playerID].buttons.leftStick;
-					if (m_vel.Length() < 1.0)
-					{
-						m_acc += rightMove / 1000;
-					}
-					else
-					{
-						m_acc += rightMove;
-					}
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
-				{
-					if (!m_isTrailing)
-					{
-						if (inventory_item != NONE) {
-							SpawnItem(inventory_item);
+						m_displayedMesh->Jump(0.5f, 0.25f);
+						Vector addVel = Vector::Zero;
+						m_drifting = true;
+						if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
+						{
+							m_driftingRight = false;
 						}
+						else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+						{
+							m_driftingRight = true;
+						}
+						else
+						{
+							isTurning = false;
+							m_drifting = false;
+						}
+						m_vel += addVel;
+					}
+					if (m_driftingRight)
+					{
+						m_targetAnimRotOffset = (m_world.Forward() * 2) + m_world.Right();
 					}
 					else
 					{
-						if (m_trailingItem != nullptr) {
-							TrailItem();
-						}
+						m_targetAnimRotOffset = (m_world.Forward() * 2) + m_world.Left();
 					}
 				}
 				else
 				{
-					ReleaseItem();
+					if (m_drifting)
+					{
+						EndDrift();
+					}
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
+				{
+					//m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
+					forwardComponent += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
+				{
+					//m_acc -= forwardMove / 2; //* _GSD->m_gamePadState->triggers.left;
+					forwardComponent -= forwardMove / 2;
+				}
+
+				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
+				{
+					m_targetAnimRotOffset = (m_world.Forward() * 2.5f) + m_world.Left();
+					if (m_drifting)
+					{
+						if (m_driftingRight)
+						{
+							m_targetAnimRotOffset = (m_world.Forward() * 3) + m_world.Right();
+							driftMultiplier = 0.1f;
+						}
+						else
+						{
+							m_targetAnimRotOffset = (m_world.Forward()) + m_world.Left();
+							driftMultiplier = 1.5f;
+						}
+					}
+					else
+					{
+						//m_acc -= rightMove;
+						turnComponent -= rightMove;
+					}
+					isTurning = true;
+				}
+				else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+				{
+					m_targetAnimRotOffset = (m_world.Forward() * 2.5f) + m_world.Right();
+					if (m_drifting)
+					{
+						if (m_driftingRight)
+						{
+							m_targetAnimRotOffset = (m_world.Forward()) + m_world.Right();
+							driftMultiplier = 2;
+						}
+						else
+						{
+							m_targetAnimRotOffset = (m_world.Forward() * 3) + m_world.Left();
+							driftMultiplier = 0.1f;
+						}
+					}
+					else
+					{
+						turnComponent += rightMove;
+					}
+					isTurning = true;
+				}
+				else
+				{
+					if (!m_drifting)
+					{
+						m_targetAnimRotOffset = m_world.Forward();
+					}
+				}
+
+
+				m_acc = forwardComponent;
+
+				if (isTurning)
+				{
+					if (m_drifting)
+					{
+						if (m_timeTurning > m_timeForMaxDrift)
+						{
+							m_timeTurning = m_timeForMaxDrift;
+						}
+						if (m_driftingRight)
+						{
+							turnComponent = rightMove;
+						}
+						else
+						{
+							turnComponent = -rightMove;
+						}
+
+						m_timeTurning += Locator::getGSD()->m_dt * driftMultiplier;
+						turnComponent *= 1 + ((m_timeTurning / m_timeForMaxDrift)  * m_maxDriftTurnMutliplier);
+						turnComponent *= 1 + (m_timeTurning / 1.3f);
+					}
+					else
+					{
+						if (m_timeTurning > m_timeForMaxTurn)
+						{
+							m_timeTurning = m_timeForMaxTurn;
+						}
+						m_timeTurning += Locator::getGSD()->m_dt;
+						turnComponent *= 1 + ((m_timeTurning / m_timeForMaxTurn)  * m_maxTurnRateMutliplier);
+						turnComponent *= 1 + (m_timeTurning / 1.3f);
+					}
+
+					float accLength = m_acc.Length();
+					if (turnComponent.LengthSquared() > 0)
+					{
+						accLength += turnComponent.Length() / 4;
+					}
+					m_acc += turnComponent;
+					m_acc.Normalize();
+					m_acc *= accLength;
+
+				}
+				else
+				{
+					EndDrift();
+				}
+
+				if (m_tripleItem)
+				{
+					TrailItems();
+
+					if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
+					{
+						if (m_trailingItems.empty() && inventory_item != NONE)
+						{
+							SpawnItems(inventory_item);
+						}
+						else if(!m_aPressed)
+						{
+							ReleaseItem();
+						}
+
+						m_aPressed = true;
+					}
+					else
+					{
+						m_aPressed = false;
+					}
+				}
+				else
+				{
+					if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
+					{
+						if (m_trailingItems.empty() && inventory_item != NONE)
+						{
+							SpawnItems(inventory_item);
+						}
+						else
+						{
+							TrailItems();
+						}
+					}
+					else
+					{
+						ReleaseItem();
+					}
 				}
 			}
 		}
@@ -296,9 +509,44 @@ void Player::movement()
 		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 	}
 
-	//apply my base behaviour
-	TrackMagnet::Tick();
-
 }
 
+void Player::EndDrift()
+{
+	m_drifting = false;
+	if (m_timeTurning > m_timeForMaxDrift / 3)
+	{
+		m_vel = m_world.Forward() * m_vel.Length();
+	}
+	m_timeTurning = 0;
+}
 
+void Player::Animations()
+{
+	m_displayedMesh->Update(m_world ,m_targetAnimRotOffset);
+}
+
+void Player::RespawnLogic()
+{
+	m_posHistoryTimer += Locator::getGSD()->m_dt;
+	if (m_onTrack)
+	{
+		if (m_posHistoryTimer >= m_posHistoryInterval)
+		{
+			m_posHistoryTimer -= m_posHistoryInterval;
+			m_posHistory.push(m_world);
+			m_posHistory.pop();
+		}
+	}
+	else
+	{
+		if (m_posHistoryTimer >= m_respawnDelay)
+		{
+			m_posHistoryTimer = 0;
+			SetWorld(m_posHistory.front());
+			m_vel = Vector::Zero;
+			m_gravVel = Vector::Zero;
+			m_velTotal = Vector::Zero;
+		}
+	}
+}
