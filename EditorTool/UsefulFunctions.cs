@@ -19,7 +19,7 @@ namespace EditorTool
 {
     /* Common functionality library */
     class UsefulFunctions
-    {        
+    {
         /*
          * 
          * Asset Previewing Functionality
@@ -29,6 +29,7 @@ namespace EditorTool
         /* Load an image preview from an asset list to a picture box */
         public bool loadImagePreview(ListBox assetList, PictureBox imagePreview)
         {
+            imagePreview.BackColor = Color.Transparent;
             if (assetList.SelectedIndex == -1)
             {
                 imagePreview.Image = null;
@@ -82,11 +83,27 @@ namespace EditorTool
             {
                 return;
             }
-            
+
             using (var tempPreviewImg = new Bitmap(path_to_mat))
             {
                 materialPreview.Image = new Bitmap(tempPreviewImg);
             }
+        }
+
+        /* Load colour preview of material properties */
+        public bool loadMaterialColourPreview(JToken material_config, string property, PictureBox preview)
+        {
+            if (material_config[property] != null)
+            {
+                string[] colour = material_config[property].Value<string>().Split(' ');
+                preview.BackColor = Color.FromArgb(
+                    255,
+                    Convert.ToInt32(Convert.ToDouble(colour[0]) * 255),
+                    Convert.ToInt32(Convert.ToDouble(colour[1]) * 255),
+                    Convert.ToInt32(Convert.ToDouble(colour[2]) * 255));
+                return true;
+            }
+            return false;
         }
 
         /* Load a model preview from asset list into a model viewer */
@@ -106,6 +123,7 @@ namespace EditorTool
         /* Load a font preview from asset list into a picture box */
         public bool loadFontPreview(ListBox assetList, PictureBox imagePreview)
         {
+            imagePreview.BackColor = Color.Black;
             if (assetList.SelectedIndex == -1)
             {
                 imagePreview.Image = null;
@@ -198,7 +216,7 @@ namespace EditorTool
 
         /* 
          * 
-         * File Location
+         * File/Colour Picker
          * 
          */
 
@@ -213,7 +231,19 @@ namespace EditorTool
             }
             return "";
         }
-        
+
+        /* Load a colour picker with default colour */
+        public void userChosenColour(PictureBox preview_window)
+        {
+            using (var colour_popup = new ColorDialog())
+            {
+                colour_popup.Color = preview_window.BackColor;
+                colour_popup.FullOpen = true;
+                colour_popup.ShowDialog();
+                preview_window.BackColor = colour_popup.Color;
+            }
+        }
+
         ///////////////////////////////////////////////
         ///////////////////////////////////////////////
 
