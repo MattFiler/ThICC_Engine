@@ -35,6 +35,13 @@ namespace EditorTool
                 materialList.Items.Add(material_object.Key);
                 material_tokens.Add(model_material_config[material_object.Key]);
             }
+
+            //Collision properties only visible for map
+            if (importer_common.getModelType() != ModelType.MAP)
+            {
+                configPreview.Visible = false;
+                editMaterial.Location = new Point(272, 125);
+            }
         }
 
         private void materialList_SelectedIndexChanged(object sender, EventArgs e)
@@ -65,7 +72,7 @@ namespace EditorTool
                 return;
             }
 
-            using (var editor = new Model_Importer_MaterialEditor(material_tokens.ElementAt(index)))
+            using (var editor = new Model_Importer_MaterialEditor(material_tokens.ElementAt(index), importer_common.getModelType()))
             {
                 editor.ShowDialog();
                 if (editor.DialogResult == DialogResult.OK)
@@ -150,7 +157,7 @@ namespace EditorTool
 
             //Done
             //File.Delete(importer_common.fileName(importer_file.CONFIG));
-            MessageBox.Show("Model import complete.");
+            MessageBox.Show("Model import complete.", "Imported.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
     }

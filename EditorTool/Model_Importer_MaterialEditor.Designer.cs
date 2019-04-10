@@ -35,15 +35,23 @@
             this.transparencySlider = new System.Windows.Forms.TrackBar();
             this.inPlayableArea = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.collisionGroup = new System.Windows.Forms.GroupBox();
             this.boostPad = new System.Windows.Forms.RadioButton();
             this.onTrack = new System.Windows.Forms.RadioButton();
             this.offTrack = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.illumModel = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.transparencyValue = new System.Windows.Forms.Label();
             this.specExValue = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.specExSlider = new System.Windows.Forms.TrackBar();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.emissiveColourBrowse = new System.Windows.Forms.Button();
@@ -70,25 +78,17 @@
             this.label7 = new System.Windows.Forms.Label();
             this.diffuseMapBrowse = new System.Windows.Forms.Button();
             this.diffuseMap = new System.Windows.Forms.TextBox();
-            this.transparencyValue = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.specExSlider = new System.Windows.Forms.TrackBar();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.illumModel = new System.Windows.Forms.ComboBox();
-            this.label17 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transparencySlider)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.collisionGroup.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.specExSlider)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.emissiveColour)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.specularColour)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ambientColour)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.diffuseColour)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.specExSlider)).BeginInit();
             this.SuspendLayout();
             // 
             // materialPreview
@@ -151,7 +151,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.groupBox4);
+            this.groupBox1.Controls.Add(this.collisionGroup);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.domainUpDown1);
             this.groupBox1.Controls.Add(this.label1);
@@ -163,18 +163,18 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Properties";
             // 
-            // groupBox4
+            // collisionGroup
             // 
-            this.groupBox4.Controls.Add(this.inPlayableArea);
-            this.groupBox4.Controls.Add(this.boostPad);
-            this.groupBox4.Controls.Add(this.onTrack);
-            this.groupBox4.Controls.Add(this.offTrack);
-            this.groupBox4.Location = new System.Drawing.Point(9, 62);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(285, 112);
-            this.groupBox4.TabIndex = 30;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Collision Config";
+            this.collisionGroup.Controls.Add(this.inPlayableArea);
+            this.collisionGroup.Controls.Add(this.boostPad);
+            this.collisionGroup.Controls.Add(this.onTrack);
+            this.collisionGroup.Controls.Add(this.offTrack);
+            this.collisionGroup.Location = new System.Drawing.Point(9, 62);
+            this.collisionGroup.Name = "collisionGroup";
+            this.collisionGroup.Size = new System.Drawing.Size(285, 112);
+            this.collisionGroup.TabIndex = 30;
+            this.collisionGroup.TabStop = false;
+            this.collisionGroup.Text = "Collision Config";
             // 
             // boostPad
             // 
@@ -247,6 +247,83 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Material Properties";
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(6, 160);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(91, 13);
+            this.label17.TabIndex = 32;
+            this.label17.Text = "Illumination Model";
+            // 
+            // illumModel
+            // 
+            this.illumModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.illumModel.FormattingEnabled = true;
+            this.illumModel.Items.AddRange(new object[] {
+            "Color on and Ambient off",
+            "Color on and Ambient on",
+            "Highlight on",
+            "Reflection on and Ray trace on",
+            "Transparency: Glass on, Reflection: Ray trace on",
+            "Reflection: Fresnel on and Ray trace on",
+            "Transparency: Refraction on, Reflection: Fresnel off and Ray trace on",
+            "Transparency: Refraction on, Reflection: Fresnel on and Ray trace on",
+            "Reflection on and Ray trace off",
+            "Transparency: Glass on, Reflection: Ray trace off",
+            "Casts shadows onto invisible surfaces"});
+            this.illumModel.Location = new System.Drawing.Point(9, 176);
+            this.illumModel.Name = "illumModel";
+            this.illumModel.Size = new System.Drawing.Size(285, 21);
+            this.illumModel.TabIndex = 31;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(244, 65);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(50, 13);
+            this.label16.TabIndex = 30;
+            this.label16.Text = "GLOSSY";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(206, 134);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(88, 13);
+            this.label15.TabIndex = 29;
+            this.label15.Text = "TRANSPARENT";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 134);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(52, 13);
+            this.label4.TabIndex = 28;
+            this.label4.Text = "OPAQUE";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 65);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(33, 13);
+            this.label5.TabIndex = 27;
+            this.label5.Text = "FLAT";
+            // 
+            // transparencyValue
+            // 
+            this.transparencyValue.AutoSize = true;
+            this.transparencyValue.Location = new System.Drawing.Point(272, 93);
+            this.transparencyValue.Name = "transparencyValue";
+            this.transparencyValue.Size = new System.Drawing.Size(22, 13);
+            this.transparencyValue.TabIndex = 26;
+            this.transparencyValue.Text = "0.0";
+            this.transparencyValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // specExValue
             // 
             this.specExValue.AutoSize = true;
@@ -267,6 +344,17 @@
             this.label6.Size = new System.Drawing.Size(97, 13);
             this.label6.TabIndex = 18;
             this.label6.Text = "Specular Exponent";
+            // 
+            // specExSlider
+            // 
+            this.specExSlider.LargeChange = 100;
+            this.specExSlider.Location = new System.Drawing.Point(9, 36);
+            this.specExSlider.Maximum = 1000;
+            this.specExSlider.Name = "specExSlider";
+            this.specExSlider.Size = new System.Drawing.Size(285, 45);
+            this.specExSlider.SmallChange = 100;
+            this.specExSlider.TabIndex = 20;
+            this.specExSlider.Scroll += new System.EventHandler(this.specExSlider_Scroll);
             // 
             // button1
             // 
@@ -527,94 +615,6 @@
             this.diffuseMap.Size = new System.Drawing.Size(204, 20);
             this.diffuseMap.TabIndex = 28;
             // 
-            // transparencyValue
-            // 
-            this.transparencyValue.AutoSize = true;
-            this.transparencyValue.Location = new System.Drawing.Point(272, 93);
-            this.transparencyValue.Name = "transparencyValue";
-            this.transparencyValue.Size = new System.Drawing.Size(22, 13);
-            this.transparencyValue.TabIndex = 26;
-            this.transparencyValue.Text = "0.0";
-            this.transparencyValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 65);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(33, 13);
-            this.label5.TabIndex = 27;
-            this.label5.Text = "FLAT";
-            // 
-            // specExSlider
-            // 
-            this.specExSlider.LargeChange = 100;
-            this.specExSlider.Location = new System.Drawing.Point(9, 36);
-            this.specExSlider.Maximum = 1000;
-            this.specExSlider.Name = "specExSlider";
-            this.specExSlider.Size = new System.Drawing.Size(285, 45);
-            this.specExSlider.SmallChange = 100;
-            this.specExSlider.TabIndex = 20;
-            this.specExSlider.Scroll += new System.EventHandler(this.specExSlider_Scroll);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 134);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 13);
-            this.label4.TabIndex = 28;
-            this.label4.Text = "OPAQUE";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(206, 134);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(88, 13);
-            this.label15.TabIndex = 29;
-            this.label15.Text = "TRANSPARENT";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(244, 65);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(50, 13);
-            this.label16.TabIndex = 30;
-            this.label16.Text = "GLOSSY";
-            // 
-            // illumModel
-            // 
-            this.illumModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.illumModel.FormattingEnabled = true;
-            this.illumModel.Items.AddRange(new object[] {
-            "Color on and Ambient off",
-            "Color on and Ambient on",
-            "Highlight on",
-            "Reflection on and Ray trace on",
-            "Transparency: Glass on, Reflection: Ray trace on",
-            "Reflection: Fresnel on and Ray trace on",
-            "Transparency: Refraction on, Reflection: Fresnel off and Ray trace on",
-            "Transparency: Refraction on, Reflection: Fresnel on and Ray trace on",
-            "Reflection on and Ray trace off",
-            "Transparency: Glass on, Reflection: Ray trace off",
-            "Casts shadows onto invisible surfaces"});
-            this.illumModel.Location = new System.Drawing.Point(9, 176);
-            this.illumModel.Name = "illumModel";
-            this.illumModel.Size = new System.Drawing.Size(285, 21);
-            this.illumModel.TabIndex = 31;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(6, 160);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(91, 13);
-            this.label17.TabIndex = 32;
-            this.label17.Text = "Illumination Model";
-            // 
             // Model_Importer_MaterialEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -634,17 +634,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.transparencySlider)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
+            this.collisionGroup.ResumeLayout(false);
+            this.collisionGroup.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.specExSlider)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.emissiveColour)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.specularColour)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ambientColour)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.diffuseColour)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.specExSlider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -692,7 +692,7 @@
         private System.Windows.Forms.RadioButton boostPad;
         private System.Windows.Forms.RadioButton offTrack;
         private System.Windows.Forms.RadioButton onTrack;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox collisionGroup;
         private System.Windows.Forms.Label transparencyValue;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label15;

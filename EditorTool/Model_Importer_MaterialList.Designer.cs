@@ -37,7 +37,9 @@
             this.isBoostPad = new System.Windows.Forms.CheckBox();
             this.isOffTrack = new System.Windows.Forms.CheckBox();
             this.shouldFlipUVs = new System.Windows.Forms.CheckBox();
+            this.configPreview = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
+            this.configPreview.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialList
@@ -51,7 +53,7 @@
             // 
             // editMaterial
             // 
-            this.editMaterial.Location = new System.Drawing.Point(272, 194);
+            this.editMaterial.Location = new System.Drawing.Point(272, 219);
             this.editMaterial.Name = "editMaterial";
             this.editMaterial.Size = new System.Drawing.Size(94, 36);
             this.editMaterial.TabIndex = 2;
@@ -91,7 +93,7 @@
             // 
             this.isTrack.AutoCheck = false;
             this.isTrack.AutoSize = true;
-            this.isTrack.Location = new System.Drawing.Point(272, 125);
+            this.isTrack.Location = new System.Drawing.Point(6, 19);
             this.isTrack.Name = "isTrack";
             this.isTrack.Size = new System.Drawing.Size(65, 17);
             this.isTrack.TabIndex = 15;
@@ -102,7 +104,7 @@
             // 
             this.isBoostPad.AutoCheck = false;
             this.isBoostPad.AutoSize = true;
-            this.isBoostPad.Location = new System.Drawing.Point(272, 171);
+            this.isBoostPad.Location = new System.Drawing.Point(6, 65);
             this.isBoostPad.Name = "isBoostPad";
             this.isBoostPad.Size = new System.Drawing.Size(86, 17);
             this.isBoostPad.TabIndex = 16;
@@ -113,7 +115,7 @@
             // 
             this.isOffTrack.AutoCheck = false;
             this.isOffTrack.AutoSize = true;
-            this.isOffTrack.Location = new System.Drawing.Point(272, 148);
+            this.isOffTrack.Location = new System.Drawing.Point(6, 42);
             this.isOffTrack.Name = "isOffTrack";
             this.isOffTrack.Size = new System.Drawing.Size(82, 17);
             this.isOffTrack.TabIndex = 17;
@@ -132,15 +134,25 @@
             this.shouldFlipUVs.Text = "Flip UVs";
             this.shouldFlipUVs.UseVisualStyleBackColor = true;
             // 
+            // configPreview
+            // 
+            this.configPreview.Controls.Add(this.isTrack);
+            this.configPreview.Controls.Add(this.isBoostPad);
+            this.configPreview.Controls.Add(this.isOffTrack);
+            this.configPreview.Location = new System.Drawing.Point(272, 125);
+            this.configPreview.Name = "configPreview";
+            this.configPreview.Size = new System.Drawing.Size(94, 88);
+            this.configPreview.TabIndex = 19;
+            this.configPreview.TabStop = false;
+            this.configPreview.Text = "Config";
+            // 
             // Model_Importer_MaterialList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(378, 411);
+            this.Controls.Add(this.configPreview);
             this.Controls.Add(this.shouldFlipUVs);
-            this.Controls.Add(this.isOffTrack);
-            this.Controls.Add(this.isBoostPad);
-            this.Controls.Add(this.isTrack);
             this.Controls.Add(this.materialPreview);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.SaveMaterials);
@@ -152,6 +164,8 @@
             this.Text = "Import Model";
             this.Load += new System.EventHandler(this.Model_Importer_pt2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).EndInit();
+            this.configPreview.ResumeLayout(false);
+            this.configPreview.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -168,5 +182,6 @@
         private System.Windows.Forms.CheckBox isBoostPad;
         private System.Windows.Forms.CheckBox isOffTrack;
         private System.Windows.Forms.CheckBox shouldFlipUVs;
+        private System.Windows.Forms.GroupBox configPreview;
     }
 }

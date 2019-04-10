@@ -16,20 +16,19 @@ namespace EditorTool
 {
     public partial class Model_Importer_AssetSelector : Form
     {
-        ModelType selected_model_type = ModelType.PROP;
         UsefulFunctions function_library = new UsefulFunctions();
         Model_Importer_Common importer_common = new Model_Importer_Common();
         bool generate_box_collider = false;
         public Model_Importer_AssetSelector(ModelType model_type)
         {
-            selected_model_type = model_type;
+            importer_common.setModelType(model_type);
             InitializeComponent();
         }
 
         /* Form changes depending on model type */
         private void Model_Importer_AssetSelector_Load(object sender, EventArgs e)
         {
-            if (selected_model_type == ModelType.MAP)
+            if (importer_common.getModelType() == ModelType.MAP)
             {
                 label3.Show();
                 trackConfig.Show();

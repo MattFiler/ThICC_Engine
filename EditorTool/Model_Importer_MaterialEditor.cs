@@ -15,33 +15,44 @@ namespace EditorTool
     {
         JToken material_config;
         UsefulFunctions common_functions = new UsefulFunctions();
-        public Model_Importer_MaterialEditor(JToken _config)
+        ModelType model_type;
+        public Model_Importer_MaterialEditor(JToken _config, ModelType _type)
         {
             material_config = _config;
+            model_type = _type;
             InitializeComponent();
         }
 
         private void Model_Importer_MaterialEditor_Load(object sender, EventArgs e)
         {
+            //Name and material preview
             materialName.Text = material_config["newmtl"].Value<string>();
             common_functions.loadMaterialPreview(material_config, materialPreview);
 
-            //Collision config
-            if (material_config["MARIOKART"]["is_on_track"].Value<bool>())
+            if (model_type == ModelType.MAP)
             {
-                onTrack.Checked = true;
-            }
-            else if (material_config["MARIOKART"]["is_off_track"].Value<bool>())
-            {
-                offTrack.Checked = true;
-            }
-            else if (material_config["MARIOKART"]["is_boost_pad"].Value<bool>())
-            {
-                boostPad.Checked = true;
+                //Collision config
+                if (material_config["MARIOKART"]["is_on_track"].Value<bool>())
+                {
+                    onTrack.Checked = true;
+                }
+                else if (material_config["MARIOKART"]["is_off_track"].Value<bool>())
+                {
+                    offTrack.Checked = true;
+                }
+                else if (material_config["MARIOKART"]["is_boost_pad"].Value<bool>())
+                {
+                    boostPad.Checked = true;
+                }
+                else
+                {
+                    inPlayableArea.Checked = false;
+                }
             }
             else
             {
-                inPlayableArea.Checked = false;
+                //Hide collision options for non-track models
+                collisionGroup.Visible = false;
             }
 
             //Ambient
@@ -186,6 +197,9 @@ namespace EditorTool
         private void button1_Click(object sender, EventArgs e)
         {
             //material_config
+
+            MessageBox.Show("Material edits saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Close();
         }
         
         /* Slider value to string for UI */

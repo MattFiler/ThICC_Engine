@@ -45,5 +45,18 @@ namespace EditorTool
             }
             return "";
         }
+
+        //----
+
+        private ModelType selected_model_type;
+
+        public void setModelType(ModelType _type)
+        {
+            selected_model_type = _type;
+        }
+        public ModelType getModelType()
+        {
+            return selected_model_type;
+        }
     }
 }
