@@ -13,8 +13,11 @@ public:
 	void Use(Player* _player, bool _altUse) override;
 
 private:
-	Player * m_player = nullptr;
+	//Player * m_player = nullptr;
 
-	double m_elapsedTime = 0;
-	double m_maxDuration = 20;
+	/*float m_elapsedTime = 0;
+	float m_maxDuration = 20;*/
+
+	/*float m_elapsedImmunityTime = 0;
+	float m_maxImmunityTume = 1.5;*/
 };

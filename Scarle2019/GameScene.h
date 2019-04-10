@@ -44,6 +44,7 @@ private:
 	void pushBackObjects();
 
 	Item* CreateItem(ItemType type);
+	Explosion* CreateExplosion();
 
 	// Test objects
 	Track* track = nullptr;

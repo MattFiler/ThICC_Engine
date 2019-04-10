@@ -2,6 +2,7 @@
 #include "CollisionManager.h"
 #include "AudioManager.h"
 #include "ItemBox.h"
+#include "Bomb.h"
 
 void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _physModels, std::vector<Item*> _items)
 {
@@ -22,14 +23,24 @@ void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _ph
 			{
 				ItemBoxCollision(collision.m_model1, collision.m_model2);
 			}
+			//Player x Explosion Collision
+			else if (dynamic_cast<Explosion*>(collision.m_model2))
+			{
+				ExplosionCollision(collision.m_model1, collision.m_model2);
+			}
 		}
 		else if (dynamic_cast<Player*>(collision.m_model2))
 		{
-			//Player x Item Box Collision
+			//Item Box x Player Collision
 			if (collision.m_model2->isVisible() && dynamic_cast<ItemBox*>(collision.m_model2))
 			{
 				ItemBoxCollision(collision.m_model2, collision.m_model1);
-			}		
+			}
+			//Explosion x Player Collision
+			else if (dynamic_cast<Explosion*>(collision.m_model1))
+			{
+				ExplosionCollision(collision.m_model2, collision.m_model1);
+			}
 		}
 	}
 
@@ -39,6 +50,11 @@ void CollisionManager::ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBo
 {
 	dynamic_cast<ItemBox*>(_itemBox)->hasCollided(dynamic_cast<Player*>(_player));
 	Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
+}
+
+void CollisionManager::ExplosionCollision(PhysModel *& _player, PhysModel *& _explosion)
+{
+	dynamic_cast<Explosion*>(_explosion)->HitByPlayer(dynamic_cast<Player*>(_player));
 }
 
 void CollisionManager::PlayerCollisions(Collision & collision)
@@ -134,8 +150,25 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 				//Item x Item Collision
 				for (Item* item2 : _items)
 				{
-					if (item1 != item2 && item2->GetMesh() && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
+					if (item1 != item2 && item2->GetMesh() && !CheckItemImmunity(item1, item2) && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
 					{
+						//Checking for bombs
+						Bomb* bomb1 = dynamic_cast<Bomb*>(item1);
+						Bomb* bomb2 = dynamic_cast<Bomb*>(item2);
+
+						if (bomb1)
+						{
+							bomb1->Detonate();
+							item2->FlagForDestoy();
+							break;
+						}
+						else if (bomb2)
+						{
+							item1->FlagForDestoy();
+							bomb2->Detonate();
+							break;
+						}
+
 						item1->FlagForDestoy();
 						item2->FlagForDestoy();
 						break;
@@ -145,6 +178,27 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 		}
 	}
 
+}
+
+bool CollisionManager::CheckItemImmunity(Item * _item1, Item * _item2)
+{
+	for (Item* item : _item1->GetImmuneItems())
+	{
+		if(item == _item2)
+		{
+			return true;
+		}
+	}
+
+	for (Item* item : _item2->GetImmuneItems())
+	{
+		if (item == _item1)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 Plane CollisionManager::getPlane(Vector3 _corner1, Vector3 _corner2, float _height)

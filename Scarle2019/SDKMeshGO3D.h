@@ -20,6 +20,8 @@ public:
 
 	void Reset() override;
 
+	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
+
 protected:
 	std::unique_ptr<DirectX::EffectTextureFactory> m_modelResources;
 	std::unique_ptr<DirectX::Model> m_model;
@@ -28,5 +30,6 @@ protected:
 	GameFilepaths m_filepath;
 
 	bool is_debug_mesh = false;
+	bool m_shouldRender = true;
 };
 
