@@ -80,9 +80,6 @@
     <Filter Include="GameObjects\Items">
       <UniqueIdentifier>{d8b65f5d-0325-4796-ad53-95b249933137}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObjects\MapObject">
-      <UniqueIdentifier>{6e4a8155-718f-44aa-bd92-1e85f7be04e5}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StepTimer.h">
@@ -280,8 +277,6 @@
     <ClInclude Include="GarbageCollector.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>GameObjects\MapObject</Filter>
     <ClInclude Include="Bomb.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
@@ -292,6 +287,9 @@
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
     <ClInclude Include="AnimationMesh.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -434,8 +432,6 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Game Base\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>GameObjects\MapObject</Filter>
     <ClCompile Include="AnimationMesh.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
@@ -444,6 +440,9 @@
     </ClCompile>
     <ClCompile Include="Explosion.cpp">
       <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
