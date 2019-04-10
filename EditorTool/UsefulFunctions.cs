@@ -305,6 +305,7 @@ namespace EditorTool
                     soundConverter.Arguments = "-i \"" + Path.GetFileName(asset_path_orig_ext) + "\" \"" + Path.GetFileName(asset_path) + "\"";
                     soundConverter.UseShellExecute = false;
                     soundConverter.RedirectStandardOutput = true;
+                    soundConverter.CreateNoWindow = true;
                     Process converterProcess = Process.Start(soundConverter);
                     StreamReader reader = converterProcess.StandardOutput;
                     converterProcess.WaitForExit();
@@ -374,6 +375,7 @@ namespace EditorTool
                 imageConverter.Arguments = "\"" + Path.GetFileName(asset_path_orig_ext) + "\"";
                 imageConverter.UseShellExecute = false;
                 imageConverter.RedirectStandardOutput = true;
+                imageConverter.CreateNoWindow = true;
                 Process converterProcess = Process.Start(imageConverter);
                 StreamReader reader = converterProcess.StandardOutput;
                 converterProcess.WaitForExit();
@@ -441,13 +443,14 @@ namespace EditorTool
             else
             {
                 //Convert font to SPRITEFONT
-                ProcessStartInfo imageConverter = new ProcessStartInfo();
-                imageConverter.WorkingDirectory = "DATA/FONTS";
-                imageConverter.FileName = "DATA/FONTS/MakeSpriteFont.exe";
-                imageConverter.Arguments = "\"" + selected_font.SelectedItem.ToString() + "\" \"" + selected_font.SelectedItem.ToString().ToUpper() + ".SPRITEFONT\" /FontSize:" + font_size + " /DebugOutputSpriteSheet:\"" + selected_font.SelectedItem.ToString().ToUpper() + ".BMP\"";
-                imageConverter.UseShellExecute = false;
-                imageConverter.RedirectStandardOutput = true;
-                Process converterProcess = Process.Start(imageConverter);
+                ProcessStartInfo fontImporter = new ProcessStartInfo();
+                fontImporter.WorkingDirectory = "DATA/FONTS";
+                fontImporter.FileName = "DATA/FONTS/MakeSpriteFont.exe";
+                fontImporter.Arguments = "\"" + selected_font.SelectedItem.ToString() + "\" \"" + selected_font.SelectedItem.ToString().ToUpper() + ".SPRITEFONT\" /FontSize:" + font_size + " /DebugOutputSpriteSheet:\"" + selected_font.SelectedItem.ToString().ToUpper() + ".BMP\"";
+                fontImporter.UseShellExecute = false;
+                fontImporter.RedirectStandardOutput = true;
+                fontImporter.CreateNoWindow = true;
+                Process converterProcess = Process.Start(fontImporter);
                 StreamReader reader = converterProcess.StandardOutput;
                 converterProcess.WaitForExit();
 

@@ -15,34 +15,33 @@ namespace EditorTool
     {
         JToken material_config;
         UsefulFunctions common_functions = new UsefulFunctions();
-        string material_name = "";
-        public Model_Importer_MaterialEditor(JToken _config, string _key)
+        public Model_Importer_MaterialEditor(JToken _config)
         {
             material_config = _config;
-            material_name = _key;
             InitializeComponent();
         }
 
         private void Model_Importer_MaterialEditor_Load(object sender, EventArgs e)
         {
-            materialName.Text = material_name;
+            materialName.Text = material_config["newmtl"].Value<string>();
             common_functions.loadMaterialPreview(material_config, materialPreview);
 
             //Collision config
-            if (material_config["MARIOKART"]["is_boost_pad"].Value<bool>())
+            if (material_config["MARIOKART"]["is_on_track"].Value<bool>())
             {
-                boostPad.Checked = true;
-                inPlayableArea.Checked = true;
+                onTrack.Checked = true;
+            }
+            else if (material_config["MARIOKART"]["is_off_track"].Value<bool>())
+            {
+                offTrack.Checked = true;
             }
             else if (material_config["MARIOKART"]["is_boost_pad"].Value<bool>())
             {
                 boostPad.Checked = true;
-                inPlayableArea.Checked = true;
             }
-            else if (material_config["MARIOKART"]["is_boost_pad"].Value<bool>())
+            else
             {
-                boostPad.Checked = true;
-                inPlayableArea.Checked = true;
+                inPlayableArea.Checked = false;
             }
 
             //Ambient
@@ -82,6 +81,38 @@ namespace EditorTool
 
             //Emissive
             common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour);
+
+            //Transparency
+            if (material_config["d"] != null)
+            {
+                transparencySlider.Value = Convert.ToInt32(material_config["d"].Value<float>() * 10);
+            }
+            else
+            {
+                transparencySlider.Value = 0;
+            }
+            transparencyValue.Text = sliderToString(transparencySlider, 10);
+
+            //Specular exponent
+            if (material_config["Ns"] != null)
+            {
+                specExSlider.Value = Convert.ToInt32(material_config["Ns"].Value<float>());
+            }
+            else
+            {
+                specExSlider.Value = 100;
+            }
+            specExValue.Text = sliderToString(specExSlider);
+
+            //Illumination model
+            if (material_config["illum"] != null)
+            {
+                illumModel.SelectedIndex = material_config["illum"].Value<int>();
+            }
+            else
+            {
+                illumModel.SelectedIndex = 2;
+            }
         }
 
         private void saveMaterial_Click(object sender, EventArgs e)
@@ -141,6 +172,28 @@ namespace EditorTool
             normalMap.Text = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
         }
 
+        /* Slider interaction */
+        private void transparencySlider_Scroll(object sender, EventArgs e)
+        {
+            transparencyValue.Text = sliderToString(transparencySlider, 10);
+        }
+        private void specExSlider_Scroll(object sender, EventArgs e)
+        {
+            specExValue.Text = sliderToString(specExSlider);
+        }
+
+        /* Save new config */
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //material_config
+        }
+        
+        /* Slider value to string for UI */
+        private string sliderToString(TrackBar slider, int modifier = 1)
+        {
+            return (Convert.ToDouble(slider.Value) / modifier).ToString("0.0");
+        }
+
 
 
         // stuff to be deleted
@@ -152,5 +205,6 @@ namespace EditorTool
         {
 
         }
+
     }
 }

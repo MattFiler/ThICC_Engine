@@ -36,6 +36,7 @@
             this.isTrack = new System.Windows.Forms.CheckBox();
             this.isBoostPad = new System.Windows.Forms.CheckBox();
             this.isOffTrack = new System.Windows.Forms.CheckBox();
+            this.shouldFlipUVs = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,6 +67,7 @@
             this.SaveMaterials.TabIndex = 3;
             this.SaveMaterials.Text = "Continue";
             this.SaveMaterials.UseVisualStyleBackColor = true;
+            this.SaveMaterials.Click += new System.EventHandler(this.SaveMaterials_Click);
             // 
             // label1
             // 
@@ -118,11 +120,24 @@
             this.isOffTrack.Text = "Is Off-Track";
             this.isOffTrack.UseVisualStyleBackColor = true;
             // 
+            // shouldFlipUVs
+            // 
+            this.shouldFlipUVs.AutoSize = true;
+            this.shouldFlipUVs.Checked = true;
+            this.shouldFlipUVs.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.shouldFlipUVs.Location = new System.Drawing.Point(272, 350);
+            this.shouldFlipUVs.Name = "shouldFlipUVs";
+            this.shouldFlipUVs.Size = new System.Drawing.Size(65, 17);
+            this.shouldFlipUVs.TabIndex = 18;
+            this.shouldFlipUVs.Text = "Flip UVs";
+            this.shouldFlipUVs.UseVisualStyleBackColor = true;
+            // 
             // Model_Importer_MaterialList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(378, 411);
+            this.Controls.Add(this.shouldFlipUVs);
             this.Controls.Add(this.isOffTrack);
             this.Controls.Add(this.isBoostPad);
             this.Controls.Add(this.isTrack);
@@ -152,5 +167,6 @@
         private System.Windows.Forms.CheckBox isTrack;
         private System.Windows.Forms.CheckBox isBoostPad;
         private System.Windows.Forms.CheckBox isOffTrack;
+        private System.Windows.Forms.CheckBox shouldFlipUVs;
     }
 }

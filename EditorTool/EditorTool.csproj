@@ -125,6 +125,7 @@
     <Compile Include="Model_Importer_AssetSelector.Designer.cs">
       <DependentUpon>Model_Importer_AssetSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model_Importer_Common.cs" />
     <Compile Include="Model_Importer_MaterialEditor.cs">
       <SubType>Form</SubType>
     </Compile>

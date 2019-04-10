@@ -223,7 +223,9 @@ namespace EditorTool
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Model_Importer_MaterialList test2 = new Model_Importer_MaterialList("MKS_3");
+            Model_Importer_Common common_importer = new Model_Importer_Common();
+            common_importer.configureAssetPaths("MKS_4");
+            Model_Importer_MaterialList test2 = new Model_Importer_MaterialList(common_importer);
             test2.Show();
         }
 
