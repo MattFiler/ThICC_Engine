@@ -30,6 +30,7 @@ public:
 	virtual void addImmuneItems(std::vector<Item*> _immuneItems) { m_immuneItems = _immuneItems; };
 	virtual std::vector<Item*> GetImmuneItems() { return m_immuneItems; };
 
+	Player* getPlayer() { return m_player; };
 protected:
 	TrackMagnet * m_mesh = nullptr;
 	Player* m_player = nullptr;
