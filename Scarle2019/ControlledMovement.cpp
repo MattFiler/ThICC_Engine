@@ -237,6 +237,6 @@ void ControlledMovement::TurnLeft(bool _flag)
 }
 void ControlledMovement::TurnRight(bool _flag)
 { 
-	m_left = _flag; 
+	m_right = _flag; 
 	m_isTurning = _flag;
 };

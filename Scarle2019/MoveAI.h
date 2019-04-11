@@ -12,9 +12,11 @@ public:
 
 private:
 	
+	int GetStepsForDirection(Track* _track, Vector3 _direction);
+
 	PhysModel* m_model = nullptr;
 	ControlledMovement* m_move = nullptr;
 
-	float m_aiPathStep = 0.2f;
-	int m_maxPathIterations = 6;
+	float m_aiPathStep = 5;
+	int m_maxPathIterations = 10;
 };
