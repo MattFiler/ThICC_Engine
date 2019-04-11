@@ -11,18 +11,17 @@ class Camera :
 	public GameObject3D
 {
 public:
+
 	enum class BEHAVIOUR : int
 	{
-		BEHIND = 0,
-		FRONT = 1,
-		LERP = 2,
+		FOLLOW = 0,
+		BACK_FACING = 1,
 		FIRST = 3,
-		INDEPENDENT_FIXED = 4,
-		INDEPENDENT_LERP = 5,
+		INDEPENDENT = 4,
 		ORBIT = 6,
 		CINEMATIC = 7,
-		DEBUG_CAM = 8,
-		START_RACE = 9,
+		DEBUG_CAM = 8,		
+		RACE_START = 9,
 	};
 
 	Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos);
@@ -89,7 +88,7 @@ protected:
 	std::vector<Vector3> look_points;
 	*/
 
-	BEHAVIOUR behav = BEHAVIOUR::LERP;
+	BEHAVIOUR behav;
 
 	KeybindManager m_keybinds;
 
