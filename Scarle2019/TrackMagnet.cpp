@@ -16,11 +16,22 @@ TrackMagnet::TrackMagnet(string _filename) : PhysModel(_filename)
 bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
 	Vector intersect;
+	Vector mid_intersect;
 	Matrix targetWorld = Matrix::Identity;
-	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height*30), m_pos + (m_world.Up() * (data.m_height/2)), intersect, tri, m_maxAngle);
+	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle);
+	mid_intersect = intersect;
+	if (!shouldStick)
+	{
+		shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Forward()), intersect, tri, m_maxAngle) ||
+			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Left()), intersect, tri, m_maxAngle) ||
+			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Right()), intersect, tri, m_maxAngle);
+	}
+
 	float modifiedMaxRotation = m_maxRotation;
 	if (shouldStick)
 	{
+		m_onTrack = true;
+
 		Vector adjustVel = m_vel;
 		// If velocity is opposite to direction, then the kart is reversing
 		if ((m_vel + m_world.Forward()).Length() < m_vel.Length())
@@ -34,7 +45,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 			// Turn gravity off when within the snapping zone, this smooths out movment
 			m_gravVel = Vector3::Zero;
 			m_gravDirection = Vector3::Zero;
-			Vector3 moveVector = intersect - m_pos;
+			Vector3 moveVector = mid_intersect - m_pos;
 			if (moveVector.Length() > m_maxSnapSnep* Locator::getGSD()->m_dt)
 			{
 				moveVector.Normalize();
@@ -44,7 +55,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		}
 		else if (dist > m_maxSnapDist)
 		{
-			modifiedMaxRotation /= 10;
+			modifiedMaxRotation /= 5;
 			m_gravDirection = m_world.Down() * gravityMultiplier;
 		}
 
@@ -63,7 +74,8 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	}
 	else
 	{
-		modifiedMaxRotation /= 10;
+		m_onTrack = false;
+		modifiedMaxRotation /= 5;
 		Vector forward = m_world.Forward();
 		forward.y = 0;
 		targetWorld = m_world.CreateWorld(m_pos, forward, Vector::Up);

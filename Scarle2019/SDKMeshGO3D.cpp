@@ -47,6 +47,8 @@ SDKMeshGO3D::SDKMeshGO3D(string _filename)
 
 	Locator::getRD()->m_fxFactory = std::make_unique<EffectFactory>(m_modelResources->Heap(), Locator::getRD()->m_states->Heap());
 
+	//Locator::getRD()->effect = std::make_unique<NormalMapEffect>(Locator::getRD()->m_d3dDevice.Get());
+
 	auto uploadResourcesFinished = resourceUpload.End(Locator::getRD()->m_commandQueue.Get());
 
 	uploadResourcesFinished.wait();
@@ -95,7 +97,7 @@ SDKMeshGO3D::~SDKMeshGO3D()
 
 void SDKMeshGO3D::Render()
 {
-	if (!isDebugMesh() || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
+	if (m_shouldRender && !isDebugMesh() || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
 		ID3D12DescriptorHeap* heaps[] = { m_modelResources->Heap(), Locator::getRD()->m_states->Heap() };
 		Locator::getRD()->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
