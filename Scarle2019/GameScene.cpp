@@ -183,6 +183,7 @@ void GameScene::Update()
 	// can introduce new objects, which causes some horrible errors
 	int end = m_3DObjects.size();
 	int delIndex = -1;
+
 	for (int i = 0; i < end; i++)
 	{
 		m_3DObjects[i]->Tick();
@@ -193,9 +194,37 @@ void GameScene::Update()
 	}
 	if (delIndex != -1)
 	{
-		//delete m_3DObjects[delIndex];
+		PhysModel* model = dynamic_cast<PhysModel*>(m_3DObjects[delIndex]);
+		if (model)
+		{
+			for (int j = 0; j < m_physModels.size(); ++j)
+			{
+				if (model == m_physModels[j])
+				{
+					m_physModels.erase(m_physModels.begin() + j);
+					break;
+				}
+			}
+		}
+
+		Locator::getGarbageCollector()->DeletePointer(m_3DObjects[delIndex]);
 		m_3DObjects.erase(m_3DObjects.begin() + delIndex);
 	}
+
+	/*end = m_physModels.size();
+	delIndex = -1;
+	for (int i = 0; i < end; i++)
+	{
+		if (m_physModels[i]->ShouldDestroy())
+		{
+			delIndex = i;
+		}
+	}
+	if (delIndex != -1)
+	{
+		Locator::getGarbageCollector()->DeletePointer(m_physModels[delIndex]);
+		m_physModels.erase(m_physModels.begin() + delIndex);
+	}*/
 
 	//Toggle debug mesh renders
 	if (m_keybinds.keyPressed("Debug Toggle"))
@@ -242,7 +271,7 @@ void GameScene::Update()
 		}
 	}
 
-	CollisionManager::collisionDetectionAndResponse(m_physModels);
+	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels);
 	//std::cout << " W: " << std::to_string(player[0]->getCollider().Orientation.w)
 	//	<< " X: " << std::to_string(player[0]->getCollider().Orientation.x)
 	//	<< " Y: " << std::to_string(player[0]->getCollider().Orientation.y)
@@ -262,19 +291,19 @@ void GameScene::UpdateItems()
 			m_itemModels[i]->GetMesh()->ShouldStickToTrack(*track);
 			m_itemModels[i]->GetMesh()->ResolveWallCollisions(*track);
 		}
-		for (int j = 0; j < game_config["player_count"]; ++j) {
+		/*for (int j = 0; j < game_config["player_count"]; ++j) {
 			if (m_itemModels[i]->GetMesh() && player[j]->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
 			{
 				m_itemModels[i]->HitByPlayer(player[j]);
 			}
-		}
+		}*/
 		m_itemModels[i]->Tick();
 		if (m_itemModels[i]->ShouldDestroy())
 		{
 			delIndex = i;
 		}
 
-		if (m_itemModels[i]->GetMesh())
+		/*if (m_itemModels[i]->GetMesh())
 		{
 			int end2 = m_itemModels.size();
 			for (int j = 0; j < end2; j++)
@@ -285,7 +314,7 @@ void GameScene::UpdateItems()
 					m_itemModels[j]->FlagForDestoy();
 				}
 			}
-		}
+		}*/
 	}
 	if (delIndex != -1)
 	{
@@ -419,9 +448,9 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 			//Render items
 			for (Item* obj : m_itemModels)
 			{
-				if (obj->GetMesh())
+				if (obj->GetRenderMesh())
 				{
-					obj->GetMesh()->Render();
+					obj->GetRenderMesh()->Render();
 				}
 			}
 			m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
@@ -469,7 +498,7 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				{
 					if (obj->GetMesh())
 					{
-						obj->GetMesh()->Render();
+						obj->GetRenderMesh()->Render();
 					}
 				}
 			}
@@ -524,7 +553,7 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 				{
 					if (obj->GetMesh())
 					{
-						obj->GetMesh()->Render();
+						obj->GetRenderMesh()->Render();
 					}
 				}
 			}
@@ -714,30 +743,43 @@ Item* GameScene::CreateItem(ItemType type)
 	{
 		Banana* banana = new Banana();
 		m_itemModels.push_back(banana);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(banana->GetMesh())->getDebugCollider());
 		return banana;
-		break;
 	}
 	case GREEN_SHELL:
 	{
 		GreenShell* greenShell = new GreenShell();
 		m_itemModels.push_back(greenShell);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(greenShell->GetMesh())->getDebugCollider());
+
 		return greenShell;
-		break;
 	}
-	case RED_SHELL:
-		break;
 	case MUSHROOM:
 	{
 		Mushroom * mushroom = new Mushroom();
 		m_itemModels.push_back(mushroom);
 		return mushroom;
-		break;
+	}
+	case BOMB:
+	{
+		Bomb* bomb = new Bomb(std::bind(&GameScene::CreateExplosion, this));
+		m_itemModels.push_back(bomb);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(bomb->GetMesh())->getDebugCollider());
+
+		return bomb;
 	}
 	default:
 		return nullptr;
-		break;
 	}
-	return nullptr;
+}
+
+Explosion * GameScene::CreateExplosion()
+{
+	Explosion* explosion = new Explosion();
+	m_3DObjects.push_back(explosion);
+	m_physModels.push_back(explosion);
+	m_3DObjects.push_back(dynamic_cast<PhysModel*>(explosion)->getDebugCollider());
+	return explosion;
 }
 
 void GameScene::DeleteItem(Item * item)

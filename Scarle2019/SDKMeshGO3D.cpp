@@ -95,7 +95,7 @@ SDKMeshGO3D::~SDKMeshGO3D()
 
 void SDKMeshGO3D::Render()
 {
-	if (!isDebugMesh() || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
+	if (m_shouldRender && !isDebugMesh() || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
 		ID3D12DescriptorHeap* heaps[] = { m_modelResources->Heap(), Locator::getRD()->m_states->Heap() };
 		Locator::getRD()->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
