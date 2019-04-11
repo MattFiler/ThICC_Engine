@@ -170,6 +170,7 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AIScheduler.h" />
     <ClInclude Include="AnimationMesh.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Banana.h" />
@@ -211,6 +212,7 @@
     <ClInclude Include="MarchCubes.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="MeshTri.h" />
+    <ClInclude Include="MoveAI.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
@@ -242,6 +244,7 @@
     <ClInclude Include="WindowData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AIScheduler.cpp" />
     <ClCompile Include="AnimationMesh.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />
@@ -273,6 +276,7 @@
     <ClCompile Include="MarchCubes.cpp" />
     <ClCompile Include="MeshTri.cpp" />
     <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="MoveAI.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

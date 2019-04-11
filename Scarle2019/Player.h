@@ -8,6 +8,7 @@
 #include "AnimationMesh.h"
 #include "Bomb.h"
 #include "ControlledMovement.h"
+#include "MoveAI.h"
 #include <functional>
 
 //=================================================================
@@ -104,7 +105,7 @@ private:
 	float lerp_speed = 1;
 
 	bool m_controlsActive = false;
-	ControlledMovement m_move;
+	std::unique_ptr<ControlledMovement> m_move = nullptr;
 	std::unique_ptr<AnimationMesh> m_displayedMesh = nullptr;
 
 	std::queue<Matrix> m_posHistory;
@@ -112,4 +113,6 @@ private:
 	float m_posHistoryTimer = 0;
 	float m_posHistoryLength = 1;
 	float m_respawnDelay = 1.5f;
+
+	std::unique_ptr<MoveAI> m_ai = nullptr;
 };

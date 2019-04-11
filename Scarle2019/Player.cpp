@@ -4,6 +4,7 @@
 #include "ServiceLocator.h"
 #include "InputData.h"
 #include "ItemData.h"
+#include "AIScheduler.h"
 #include <iostream>
 
 extern void ExitGame();
@@ -25,7 +26,7 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	m_shouldRender = false;
 	m_displayedMesh = std::make_unique<AnimationMesh>(_filename);
 
-	m_move = ControlledMovement(this, m_displayedMesh.get());
+	m_move = std::make_unique<ControlledMovement>(this, m_displayedMesh.get());
 
 	for (int i = 0; i < (int)m_posHistoryLength / m_posHistoryInterval; i++)
 	{
@@ -296,14 +297,22 @@ void Player::ReleaseItem()
 
 void Player::setGamePad(bool _state)
 {
-	m_move.SetGamepadActive(_state);
-	m_move.SetPlayerID(m_playerID);
+	m_move->SetGamepadActive(_state);
+	m_move->SetPlayerID(m_playerID);
 	m_controlsActive = _state;
+
+	// TEST CODE //
+	if (m_playerID == 0)
+	{
+		m_ai = std::make_unique<MoveAI>(this, m_move.get());
+		Locator::getAIScheduler()->AddAI(m_ai.get());
+	}
+	// TEST CODE //
 }
 
 void Player::movement()
 {
-	m_move.Tick();
+	m_move->Tick();
 
 	Locator::getID()->m_gamePad->SetVibration(m_playerID, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1);
 

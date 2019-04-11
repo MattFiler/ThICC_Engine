@@ -292,6 +292,10 @@
     <ClInclude Include="ControlledMovement.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="MoveAI.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="AIScheduler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -444,6 +448,10 @@
     <ClCompile Include="ControlledMovement.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
+    <ClCompile Include="MoveAI.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AIScheduler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">

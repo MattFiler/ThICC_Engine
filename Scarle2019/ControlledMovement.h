@@ -11,6 +11,11 @@ public:
 	void SetGamepadActive(bool _flag) { m_controlsActive = _flag;};
 	void SetPlayerID(bool _id) { m_playerID = _id;};
 
+	// Setters so that the AI can move the physObject
+	void setAcceleration(float _acc) { m_acceleration = _acc;};
+	void TurnLeft(bool _flag);
+	void TurnRight(bool _flag);
+
 private:
 	void GetControllerInput();
 	void ProcessInputFlags();
