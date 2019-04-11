@@ -38,6 +38,9 @@ ItemData::ItemData() {
 
 /* Get a random item based on the player position */
 ItemType ItemData::GetRandomItem(int _position) {
+
+	return BANANA;
+
 	float random_out_of_100 = (rand() % 101);
 
 	for (int i = 0; i < item_count-1; i++) {

@@ -160,7 +160,7 @@ void Player::CheckUseItem()
 	{
 		if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
 		{
-			if (m_trailingItems.empty() && (m_InventoryItem != NONE))
+			if (m_trailingItems.empty() && m_InventoryItem != NONE && !m_aPressed)
 			{
 				SpawnItems(m_InventoryItem);
 			}
@@ -168,10 +168,13 @@ void Player::CheckUseItem()
 			{
 				TrailItems();
 			}
+
+			m_aPressed = true;
 		}
 		else
 		{
 			ReleaseItem();
+			m_aPressed = false;
 		}
 	} 
 }
@@ -184,6 +187,12 @@ void Player::TrailItems()
 		{
 			if (m_trailingItems[i]->GetMesh())
 			{
+				if (m_trailingItems[i]->ShouldDestroy())
+				{
+					m_trailingItems.erase(m_trailingItems.begin() + i);
+					continue;
+				}
+
 				Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
 
 				m_trailingItems[i]->GetMesh()->SetWorld(m_world);
