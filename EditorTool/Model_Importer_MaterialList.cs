@@ -23,7 +23,7 @@ namespace EditorTool
         public Model_Importer_MaterialList(Model_Importer_Common _importer_conf)
         {
             importer_common = _importer_conf;
-            model_material_config = JObject.Parse(File.ReadAllText(importer_common.fileName(importer_file.CONFIG)));
+            model_material_config = JObject.Parse(File.ReadAllText(importer_common.fileName(importer_file.IMPORTER_CONFIG)));
             InitializeComponent();
         }
 
@@ -85,7 +85,7 @@ namespace EditorTool
         private void SaveMaterials_Click(object sender, EventArgs e)
         {
             //Save json config back
-            File.WriteAllText(importer_common.fileName(importer_file.CONFIG), model_material_config.ToString(Formatting.Indented));
+            File.WriteAllText(importer_common.fileName(importer_file.IMPORTER_CONFIG), model_material_config.ToString(Formatting.Indented));
 
             //------
 

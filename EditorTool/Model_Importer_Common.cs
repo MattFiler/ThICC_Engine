@@ -10,22 +10,29 @@ namespace EditorTool
     {
         MODEL,
         MATERIAL,
-        CONFIG
+        CONFIG,
+        IMPORTER_CONFIG
     }
 
     public class Model_Importer_Common
     {
-        private string import_directory = "DATA/MODELS/"; // + FOLDER + "/"
-        private string obj_file_name = /*import_directory +*/ "model.obj";
-        private string mtl_file_name = /*import_directory +*/ "model_materials.mtl";
-        private string config_file_name = /*import_directory +*/ "model_config.json";
+        private string import_directory = "";
+        private string obj_file_name = "";
+        private string mtl_file_name = "";
+        private string config_file_name = "";
+        private string importer_config_file_name = "";
+
+        private bool did_set_paths = false;
 
         public void configureAssetPaths(string _filename)
         {
-            import_directory += _filename + "/";
-            obj_file_name = import_directory + "model.obj";
-            mtl_file_name = import_directory + "model_materials.mtl";
-            config_file_name = import_directory + "model_config.json";
+            import_directory = "DATA/MODELS/" + _filename + "/";
+            obj_file_name = import_directory + _filename + ".obj";
+            mtl_file_name = import_directory + _filename + ".mtl";
+            config_file_name = import_directory + _filename + ".json";
+            importer_config_file_name = import_directory + "importer_config.json";
+
+            did_set_paths = true;
         }
 
         public string importDir()
@@ -34,6 +41,10 @@ namespace EditorTool
         }
         public string fileName(importer_file _file)
         {
+            if (!did_set_paths)
+            {
+                throw new InvalidOperationException("Didn't set asset paths before calling them!");
+            }
             switch (_file)
             {
                 case importer_file.MODEL: 
@@ -42,6 +53,8 @@ namespace EditorTool
                     return mtl_file_name;
                 case importer_file.CONFIG:
                     return config_file_name;
+                case importer_file.IMPORTER_CONFIG:
+                    return importer_config_file_name;
             }
             return "";
         }

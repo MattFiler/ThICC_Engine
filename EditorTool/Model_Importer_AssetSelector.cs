@@ -219,7 +219,7 @@ namespace EditorTool
                 material_config[referenced_materials[i]] = this_mat_jobject;
                 prop_index += prop_count;
             }
-            File.WriteAllText(importer_common.fileName(importer_file.CONFIG), material_config.ToString(Formatting.Indented));
+            File.WriteAllText(importer_common.fileName(importer_file.IMPORTER_CONFIG), material_config.ToString(Formatting.Indented));
 
             //------
 
