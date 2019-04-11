@@ -180,6 +180,7 @@
     <ClInclude Include="CharecterSelectionState.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="ControlledMovement.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DebugMarker.h" />
     <ClInclude Include="DebugScene.h" />
@@ -248,6 +249,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CharecterSelectionState.cpp" />
+    <ClCompile Include="ControlledMovement.cpp" />
     <ClCompile Include="DebugMarker.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="Explosion.cpp" />
