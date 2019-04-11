@@ -45,8 +45,10 @@ public:
 	/* Inventory Management */
 	ItemType getActiveItem() { return active_item; };
 	void setActiveItem(ItemType _item);
-	ItemType getItemInInventory() { return inventory_item; };
+	ItemType getItemInInventory() { return m_InventoryItem; };
 	void setItemInInventory(ItemType _item);
+
+	void CheckUseItem();
 	void TrailItems();
 	void SpawnItems(ItemType type);
 	void ReleaseItem();
@@ -90,7 +92,7 @@ private:
 	//	If there is an active item, the player can acquire one to their inventory.
 	//	When an item is used it should move from inventory to active (or be immediately used, etc - some items differ).
 	ItemType active_item = ItemType::NONE;
-	ItemType inventory_item = ItemType::NONE;
+	ItemType m_InventoryItem = ItemType::NONE;
 	
 	Vector2 m_itemPos = Vector2(0, 0); // temp gpu fix 
 	ImageGO2D *m_imgItem = nullptr;
@@ -101,6 +103,7 @@ private:
 	float lerp_percent = 1;
 	float lerp_speed = 1;
 
+	bool m_controlsActive = false;
 	ControlledMovement m_move;
 	std::unique_ptr<AnimationMesh> m_displayedMesh = nullptr;
 

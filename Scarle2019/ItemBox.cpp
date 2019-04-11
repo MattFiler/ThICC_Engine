@@ -10,6 +10,7 @@ ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("ITEM CUBE") 
 	SetPos(position);
 	SetRotation(rotation);
 
+	m_physData.m_additionalScale = 50;
 	std::cout << "CREATING ITEM BOX AT: (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
 }
 
@@ -26,6 +27,7 @@ void ItemBox::Tick() {
 			invisibility_timer = 0.0;
 		}
 	}
+
 
 	PhysModel::Tick();
 }
