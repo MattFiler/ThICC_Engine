@@ -96,11 +96,11 @@ void Player::Tick()
 	}
 	else if (m_keymindManager.keyPressed("Spawn Banana"))
 	{
-		SpawnItem(ItemType::GREEN_SHELL);
+		SpawnItems(ItemType::GREEN_SHELL);
 	}
 	else if (m_keymindManager.keyHeld("Spawn Banana"))
 	{
-		TrailItem();
+		TrailItems();
 	}
 	/*else
 	{
@@ -126,42 +126,72 @@ void Player::Tick()
 	Animations();
 }
 
-void Player::TrailItem()
+void Player::TrailItems()
 {
-	m_isTrailing = true;
-	m_trailingItem->GetMesh()->SetWorld(m_world);
-	m_trailingItem->GetMesh()->AddPos(m_world.Backward() * 2.2);
-	m_trailingItem->GetMesh()->UpdateWorld();
+	if (!m_trailingItems.empty())
+	{
+		for (int i = 0; i < m_trailingItems.size(); i++)
+		{
+			Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
+
+			m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+			m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
+			m_trailingItems[i]->GetMesh()->UpdateWorld();
+		}
+		
+	}
 }
 
-void Player::SpawnItem(ItemType type)
+void Player::SpawnItems(ItemType type)
 {
 	setActiveItem(type);
 	switch (type)
 	{
 		case BANANA:
 		{
-			Banana * banana = static_cast<Banana*>(CreateItem(ItemType::BANANA));
-			m_trailingItem = banana;
-			TrailItem();
+			Banana * banana = static_cast<Banana*>(CreateItem(BANANA));
+			m_trailingItems.push_back(banana);
+			TrailItems();
 			break;
 		}
 
 		case MUSHROOM:
 		{
-			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(ItemType::MUSHROOM));
+			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(MUSHROOM));
 			mushroom->Use(this, false);
 			break;
 		}
 
 		case GREEN_SHELL:
 		{
-			GreenShell* shell = static_cast<GreenShell*>(CreateItem(ItemType::GREEN_SHELL));
-			m_trailingItem = shell;
-			TrailItem();
+			GreenShell* shell = static_cast<GreenShell*>(CreateItem(GREEN_SHELL));
+			m_trailingItems.push_back(shell);
+			TrailItems();
 			break;
 		}
 
+		case BOMB:
+		{
+			Bomb* bomb = static_cast<Bomb*>(CreateItem(BOMB));
+			m_trailingItems.push_back(bomb);
+			TrailItems();
+		}
+
+		case BANANA_3X:
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				SpawnItems(BANANA);
+				TrailItems();
+			}
+
+			for (Item*& banana : m_trailingItems)
+			{
+				banana->addImmuneItems(m_trailingItems);
+			}
+
+			m_tripleItem = true;
+		}
 		default:
 			break;
 	}
@@ -169,12 +199,25 @@ void Player::SpawnItem(ItemType type)
 
 void Player::ReleaseItem()
 {
-	if (m_trailingItem)
+	if (!m_trailingItems.empty())
 	{
-		m_trailingItem->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
-		m_isTrailing = false;
-		m_trailingItem = nullptr;
-		active_item = NONE;
+		std::cout << "Release item" << std::endl;
+		if (m_trailingItems.size() > 1)
+		{
+			m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
+			m_trailingItems.pop_back();
+		}
+		else
+		{
+			m_trailingItems[0]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
+			m_trailingItems.erase(m_trailingItems.begin());
+		}
+
+		if (m_trailingItems.empty())
+		{
+			m_tripleItem = false;
+			active_item = NONE;
+		}
 	}
 }
 
@@ -374,8 +417,6 @@ void Player::movement()
 						turnComponent *= 1 + (m_timeTurning / 1.3f);
 					}
 
-
-
 					float accLength = m_acc.Length();
 					if (turnComponent.LengthSquared() > 0)
 					{
@@ -391,24 +432,45 @@ void Player::movement()
 					EndDrift();
 				}
 
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
+				if (m_tripleItem)
 				{
-					if (!m_isTrailing)
+					TrailItems();
+
+					if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
 					{
-						if (inventory_item != NONE) {
-							SpawnItem(inventory_item);
+						if (m_trailingItems.empty() && inventory_item != NONE)
+						{
+							SpawnItems(inventory_item);
 						}
+						else if(!m_aPressed)
+						{
+							ReleaseItem();
+						}
+
+						m_aPressed = true;
 					}
 					else
 					{
-						if (m_trailingItem != nullptr) {
-							TrailItem();
-						}
+						m_aPressed = false;
 					}
 				}
 				else
 				{
-					ReleaseItem();
+					if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
+					{
+						if (m_trailingItems.empty() && inventory_item != NONE)
+						{
+							SpawnItems(inventory_item);
+						}
+						else
+						{
+							TrailItems();
+						}
+					}
+					else
+					{
+						ReleaseItem();
+					}
 				}
 			}
 		}

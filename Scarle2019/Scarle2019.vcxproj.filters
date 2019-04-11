@@ -277,6 +277,12 @@
     <ClInclude Include="GarbageCollector.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
     <ClInclude Include="Deletable.h">
       <Filter>Game Base\Managers</Filter>
     </ClInclude>
@@ -425,6 +431,12 @@
     </ClCompile>
     <ClCompile Include="AnimationMesh.cpp">
       <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

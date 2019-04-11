@@ -6,6 +6,7 @@
 #include "Mushroom.h"
 #include "Constants.h"
 #include "AnimationMesh.h"
+#include "Bomb.h"
 #include <functional>
 
 //=================================================================
@@ -45,8 +46,8 @@ public:
 	void setActiveItem(ItemType _item);
 	ItemType getItemInInventory() { return inventory_item; };
 	void setItemInInventory(ItemType _item);
-	void TrailItem();
-	void SpawnItem(ItemType type);
+	void TrailItems();
+	void SpawnItems(ItemType type);
 	void ReleaseItem();
 
 	void Spin(int _revolutions, float _duration) { m_displayedMesh->Spin(_revolutions, _duration); };
@@ -59,6 +60,7 @@ protected:
 private:
 	void Animations();
 	std::function<Item*(ItemType)> CreateItem;
+
 	void movement();
 
 	void EndDrift();
@@ -104,8 +106,11 @@ private:
 	Vector2 m_itemPos = Vector2(0, 0); // temp gpu fix 
 	ImageGO2D *m_imgItem = nullptr;
 
-	Item* m_trailingItem = nullptr;
-	bool  m_isTrailing = false;
+	std::vector<Item*> m_trailingItems;
+	bool m_aPressed = true;
+	bool m_tripleItem = false;
+	float lerp_percent = 1;
+	float lerp_speed = 1;
 	
 	bool m_controlsActive = false;
 

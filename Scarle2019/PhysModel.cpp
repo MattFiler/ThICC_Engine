@@ -117,11 +117,12 @@ void PhysModel::updateCollider()
 
 		m_physData.m_worldCentre = Vector3::Transform(m_physData.m_localCentre, m_world);
 		m_collider.Center = m_physData.m_worldCentre;
+		m_collider.Extents = m_scale /** m_physData.scale*/;
 		Vector3 euler = MatrixDecomposeYawPitchRoll(m_rot);
 		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y , euler.x, euler.z));
 		//Updates the debug collider position and rotation
 		m_colliderDebug->SetPos(Vector3::Transform(Vector3(m_physData.m_localCentre.x, m_physData.m_localCentre.y - (m_physData.m_height / 2), m_physData.m_localCentre.z), m_world));
-		m_colliderDebug->SetScale(m_collider.Extents);	
+		m_colliderDebug->SetScale(m_physData.scale);
 		Quaternion test = Quaternion(m_collider.Orientation);
 		m_colliderDebug->SetYaw(euler.y);
 		m_colliderDebug->SetPitch(euler.x);
