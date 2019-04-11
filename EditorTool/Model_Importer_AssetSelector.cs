@@ -18,7 +18,6 @@ namespace EditorTool
     {
         UsefulFunctions function_library = new UsefulFunctions();
         Model_Importer_Common importer_common = new Model_Importer_Common();
-        bool generate_box_collider = false;
         public Model_Importer_AssetSelector(ModelType model_type)
         {
             importer_common.setModelType(model_type);
@@ -38,7 +37,6 @@ namespace EditorTool
             {
                 importModel.Location = new Point(15, 91);
                 this.Size = new Size(370, 166);
-                generate_box_collider = true; //Everything but track generates a box collider
             }
         }
 
@@ -57,8 +55,18 @@ namespace EditorTool
         /* Copy model files and continue */
         private void importModel_Click(object sender, EventArgs e)
         {
+            //Check for all inputs
+            if (assetName.Text == "" || modelPath.Text == "" || (importer_common.getModelType() == ModelType.MAP && trackConfig.Text == ""))
+            {
+                MessageBox.Show("Please fill out all inputs to continue!", "Required data missing.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            //------
+
             //Setup asset paths
             importer_common.configureAssetPaths(assetName.Text.ToUpper());
+            importer_common.setModelConfigPath(trackConfig.Text);
 
             //------
 
@@ -68,10 +76,10 @@ namespace EditorTool
 
             //Copy model and create directory
             Directory.CreateDirectory(importer_common.importDir());
-            File.Copy(modelPath.Text, importer_common.fileName(importer_file.MODEL));
+            File.Copy(modelPath.Text, importer_common.fileName(importer_file.OBJ_MODEL));
 
             //Calculate the number of materials for the OBJ & store names
-            string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.MODEL));
+            string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
             foreach (string line in obj_file)
             {
                 if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
@@ -91,7 +99,7 @@ namespace EditorTool
 
                     //Correct MTL name to what we'll be using
                     obj_file[i] = "mtllib " + Path.GetFileName(importer_common.fileName(importer_file.MATERIAL));
-                    File.WriteAllLines(importer_common.fileName(importer_file.MODEL), obj_file);
+                    File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
 
                     break;
                 }
@@ -199,7 +207,11 @@ namespace EditorTool
 
             //Rewrite MTL info as JSON
             JObject material_config = new JObject();
-            JObject mariokart_properties = JObject.Parse("{\"is_boost_pad\": false, \"is_on_track\": false, \"is_off_track\": false}");
+            JObject mariokart_properties = new JObject();
+            for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
+            {
+                mariokart_properties[i.ToString()] = false; //All collision off as default
+            }
             int prop_index = 0;
             for (int i = 0; i < referenced_materials.Count()-1; i++)
             {
@@ -215,7 +227,7 @@ namespace EditorTool
                     this_mat_jobject[mat_prop[0]] = mat_prop[1];
                 }
 
-                this_mat_jobject["MARIOKART"] = mariokart_properties; // Add in placeholders for our custom properties
+                this_mat_jobject["MARIOKART_COLLISION"] = mariokart_properties; // Add in placeholders for our custom properties
                 material_config[referenced_materials[i]] = this_mat_jobject;
                 prop_index += prop_count;
             }

@@ -81,14 +81,51 @@ Vector3 Track::getSuitableSpawnSpot() {
 void Track::LoadVertexList(string _vertex_list)
 {
 	/* TODO: Update toolchain to handle vertex data as float. */
+
+	//Open file stream
 	std::ifstream fin(_vertex_list, std::ios::binary);
 
+	//Get the number of collision groups
+	fin.seekg(0);
+	int number_of_coll_types = 0;
+	fin.read(reinterpret_cast<char*>(&number_of_coll_types), sizeof(int));
+
+	//Get the offsets for the vertex groups
+	int curr_pos = sizeof(int);
+	std::vector<int> length(number_of_coll_types);
+	for (int i = 0; i < number_of_coll_types; i++) {
+		fin.seekg(curr_pos);
+		fin.read(reinterpret_cast<char*>(&length[i]), sizeof(int));
+		curr_pos += sizeof(int);
+	}
+
+	//Read by offsets
+	std::vector<std::vector<double>> verts(number_of_coll_types);
+	int total_len = 0;
+	int iterator = 0;
+	for (int len : length) {
+		total_len += len;
+		verts.at(iterator) = std::vector<double>(len);
+		iterator++;
+	}
+	std::vector<double> data(total_len);
+	for (int i = 0; i < number_of_coll_types; i++) {
+		if (length.at(i) == 0) {
+			continue;
+		}
+		fin.seekg(curr_pos);
+		fin.read(reinterpret_cast<char*>(&verts[i][0]), length.at(i) * sizeof(double));
+		curr_pos += length.at(i) * sizeof(double);
+	}
+
+	/*
 	fin.seekg(0, std::ios::end);
 	const size_t num_elements = fin.tellg() / sizeof(double);
 	fin.seekg(0, std::ios::beg);
 
 	std::vector<double> data(num_elements);
 	fin.read(reinterpret_cast<char*>(&data[0]), num_elements * sizeof(double));
+	*/
 
 	double points_for_triangle[9];
 	int index = 0;

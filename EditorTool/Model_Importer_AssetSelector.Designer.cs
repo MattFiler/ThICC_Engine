@@ -140,7 +140,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Model_Importer_AssetSelector";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Model_Importer_AssetSelector";
+            this.Text = "Model Importer";
             this.Load += new System.EventHandler(this.Model_Importer_AssetSelector_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

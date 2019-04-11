@@ -32,15 +32,15 @@ namespace EditorTool
             if (model_type == ModelType.MAP)
             {
                 //Collision config
-                if (material_config["MARIOKART"]["is_on_track"].Value<bool>())
+                if (material_config["MARIOKART_COLLISION"]["0"].Value<bool>())
                 {
                     onTrack.Checked = true;
                 }
-                else if (material_config["MARIOKART"]["is_off_track"].Value<bool>())
+                else if (material_config["MARIOKART_COLLISION"]["1"].Value<bool>())
                 {
                     offTrack.Checked = true;
                 }
-                else if (material_config["MARIOKART"]["is_boost_pad"].Value<bool>())
+                else if (material_config["MARIOKART_COLLISION"]["2"].Value<bool>())
                 {
                     boostPad.Checked = true;
                 }
@@ -197,6 +197,20 @@ namespace EditorTool
         private void button1_Click(object sender, EventArgs e)
         {
             //material_config
+
+            //Collision config
+            if (inPlayableArea.Checked)
+            {
+                material_config["MARIOKART_COLLISION"]["0"] = onTrack.Checked;
+                material_config["MARIOKART_COLLISION"]["1"] = offTrack.Checked;
+                material_config["MARIOKART_COLLISION"]["2"] = boostPad.Checked;
+            }
+            else
+            {
+                material_config["MARIOKART_COLLISION"]["0"] = false;
+                material_config["MARIOKART_COLLISION"]["1"] = false;
+                material_config["MARIOKART_COLLISION"]["2"] = false;
+            }
 
             MessageBox.Show("Material edits saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();

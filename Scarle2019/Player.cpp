@@ -75,7 +75,7 @@ void Player::Tick()
 {
 	movement();
 
-	RespawnLogic();
+	//RespawnLogic();
 	
 
 	// Debug code to save/load the players game state

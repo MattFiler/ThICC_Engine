@@ -224,7 +224,9 @@ namespace EditorTool
         private void button1_Click(object sender, EventArgs e)
         {
             Model_Importer_Common common_importer = new Model_Importer_Common();
-            common_importer.configureAssetPaths("MKS_4");
+            common_importer.configureAssetPaths("MKS_TEST");
+            common_importer.setModelType(ModelType.MAP);
+            common_importer.setModelConfigPath("Maps Blender Files/Mario Kart Stadium/MarioKartStadium.json");
             Model_Importer_MaterialList test2 = new Model_Importer_MaterialList(common_importer);
             test2.Show();
         }

@@ -58,7 +58,7 @@ namespace EditorTool
                         var result = form.ShowDialog();
                         if (result == DialogResult.OK)
                         {
-                            Model_Importer modelimporter = new Model_Importer(form.selected_model_type);
+                            Model_Importer_AssetSelector modelimporter = new Model_Importer_AssetSelector(form.selected_model_type);
                             modelimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
                             modelimporter.Show();
                         }

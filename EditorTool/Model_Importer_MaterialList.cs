@@ -19,6 +19,7 @@ namespace EditorTool
         JObject model_material_config = new JObject();
         List<JToken> material_tokens = new List<JToken>();
         UsefulFunctions common_functions = new UsefulFunctions();
+        JToken extra_json = JToken.Parse("{}");
         Model_Importer_Common importer_common;
         public Model_Importer_MaterialList(Model_Importer_Common _importer_conf)
         {
@@ -55,9 +56,9 @@ namespace EditorTool
 
             //Update previews of config
             JToken this_token = material_tokens.ElementAt(index);
-            isTrack.Checked = this_token["MARIOKART"]["is_on_track"].Value<bool>();
-            isOffTrack.Checked = this_token["MARIOKART"]["is_off_track"].Value<bool>();
-            isBoostPad.Checked = this_token["MARIOKART"]["is_boost_pad"].Value<bool>();
+            isTrack.Checked = this_token["MARIOKART_COLLISION"]["0"].Value<bool>();
+            isOffTrack.Checked = this_token["MARIOKART_COLLISION"]["1"].Value<bool>();
+            isBoostPad.Checked = this_token["MARIOKART_COLLISION"]["2"].Value<bool>();
 
             //Try find and show our material preview.
             common_functions.loadMaterialPreview(this_token, materialPreview);
@@ -122,7 +123,7 @@ namespace EditorTool
             //------
 
             //Run the model converter to swap our OBJ into an SDKMESH
-            string conv_args = "\"" + Path.GetFileName(importer_common.fileName(importer_file.MODEL)) + "\" -sdkmesh -nodds -y";
+            string conv_args = "\"" + Path.GetFileName(importer_common.fileName(importer_file.OBJ_MODEL)) + "\" -sdkmesh -nodds -y";
             if (shouldFlipUVs.Checked)
             {
                 conv_args += " -flipv";
@@ -141,10 +142,8 @@ namespace EditorTool
             this.Cursor = Cursors.Default;
 
             //Capture write info from converter
-            string output = reader.ReadToEnd();
-            string[] outputArray = output.Split('\n');
             string writeInfo = "";
-            foreach (string line in outputArray)
+            foreach (string line in reader.ReadToEnd().Split('\n'))
             {
                 if (line.Contains("written"))
                 {
@@ -153,12 +152,317 @@ namespace EditorTool
                 }
             }
 
+            //Make sure our SDKMESH is in caps!
+            string lowercase_sdkmesh = importer_common.fileName(importer_file.SDK_MESH).Substring(0, importer_common.fileName(importer_file.SDK_MESH).Length - 7) + "sdkmesh";
+            if (File.Exists(lowercase_sdkmesh)) {
+                File.Move(lowercase_sdkmesh, importer_common.fileName(importer_file.SDK_MESH));
+            }
+
+            //Make sure the conversion succeeded
+            if (!File.Exists(importer_common.fileName(importer_file.SDK_MESH)))
+            {
+                //Failed! Show full output from DXTK converter if requested.
+                DialogResult showErrorInfo = MessageBox.Show("Model import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                if (showErrorInfo == DialogResult.Yes)
+                {
+                    MessageBox.Show(reader.ReadToEnd(), "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            //------
+
+            //Vertex operations
+            if (handleVertexOperations())
+            {
+                //Handle success of collision
+            }
+
+            //------
+
+            //Create JSON data
+            JToken asset_json = extra_json;
+            asset_json["asset_name"] = importer_common.modelName();
+            asset_json["asset_type"] = "Models";
+            asset_json["model_type"] = "Track";
+            asset_json["visible"] = true;
+            asset_json["start_x"] = 0;
+            asset_json["start_y"] = 0;
+            asset_json["start_z"] = 0;
+            asset_json["modelscale"] = 1.0;
+            asset_json["rot_x"] = 0;
+            asset_json["rot_y"] = 0;
+            asset_json["rot_z"] = 0;
+            asset_json["segment_size"] = 10;
+            asset_json["has_box_collider"] = false;
+
+            //If model type is track, parse config
+            if (importer_common.getModelType() == ModelType.MAP)
+            {
+                JArray camera_array = new JArray();
+                JArray waypoint_array = new JArray();
+                JArray spawnpoint_array = new JArray();
+                JArray finishline_array = new JArray();
+                JArray itembox_array = new JArray();
+                if (File.Exists(importer_common.getModelConfigPath()))
+                {
+                    JToken model_blender_data = JToken.Parse(File.ReadAllText(importer_common.getModelConfigPath()));
+                    foreach (JToken data in model_blender_data["cams"])
+                    {
+                        camera_array.Add(data);
+                    }
+                    foreach (JToken data in model_blender_data["waypoints"])
+                    {
+                        waypoint_array.Add(data["pos"]);
+                    }
+                    foreach (JToken data in model_blender_data["spawns"])
+                    {
+                        spawnpoint_array.Add(data["pos"]);
+                    }
+                    foreach (JToken data in model_blender_data["finish_line"])
+                    {
+                        finishline_array.Add(data);
+                    }
+                    foreach (JToken data in model_blender_data["item_boxes"])
+                    {
+                        itembox_array.Add(data);
+                    }
+                }
+                asset_json["map_cameras"] = camera_array;
+                asset_json["map_waypoints"] = waypoint_array;
+                asset_json["map_spawnpoints"] = spawnpoint_array;
+                asset_json["map_finishline"] = finishline_array;
+                asset_json["map_itemboxes"] = itembox_array;
+            }
+
+            //Save JSON data
+            File.WriteAllText(importer_common.fileName(importer_file.CONFIG), asset_json.ToString(Formatting.Indented));
+
             //------
 
             //Done
-            //File.Delete(importer_common.fileName(importer_file.CONFIG));
+            File.Delete(importer_common.fileName(importer_file.IMPORTER_CONFIG));
             MessageBox.Show("Model import complete.", "Imported.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
+        }
+
+
+        /* Vertex operations (collision) */
+        private bool handleVertexOperations()
+        {
+            int collision_fix_count = 0;
+
+            //Output face vertex data for generating our collmap
+            List<List<double>> model_vertices_raw = new List<List<double>>();
+            List<List<List<int>>> model_face_indexes = new List<List<List<int>>>();
+            List<string> final_collmap_data = new List<string>();
+            string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
+            for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
+            {
+                model_face_indexes.Add(new List<List<int>>());
+            }
+
+            //Use cases
+            bool collision_enabled = false;
+            CollisionType collision_type = (CollisionType)0;
+
+            //Grab all vertices and face vert indexes from our OBJ
+            foreach (string line in obj_file)
+            {
+                //Capture all vertices
+                if (line.Length > 2 && line.Substring(0, 2) == "v ")
+                {
+                    string[] vert_array = line.Substring(2).Split(' ');
+                    List<double> this_vertex = new List<double>();
+                    foreach (string vert in vert_array)
+                    {
+                        this_vertex.Add(Convert.ToDouble(vert));
+                    }
+                    model_vertices_raw.Add(this_vertex);
+                    continue;
+                }
+                //Check to see if we should start listening for faces
+                //This may seem odd, but as the OBJ is always written/read in a logical order, this should work 100% of the time
+                if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
+                {
+                    collision_enabled = false;
+                    try
+                    {
+                        JToken collision_config = model_material_config[line.Substring(7)]["MARIOKART_COLLISION"];
+                        for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
+                        {
+                            if (collision_config[i.ToString()].Value<bool>())
+                            {
+                                collision_enabled = true;
+                                collision_type = (CollisionType)i;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        //This will be hit if a material is missing in the JSON file.
+                        //Would be caused by an issue in the MTL to JSON script in the asset selector.
+                        int do_breakpoint_here = 0;
+                    }
+                }
+                //Capture face data per use case to link to vertices
+                if (line.Length > 2 && line.Substring(0, 2) == "f " && collision_enabled)
+                {
+                    string[] face_array = line.Substring(2).Split(' ');
+                    List<int> face_array_parsed = new List<int>();
+                    foreach (string face in face_array)
+                    {
+                        if (face != "")
+                        {
+                            string this_face = face;
+                            if (face.Contains('/'))
+                            {
+                                this_face = face.Split('/')[0]; //only want positional vertex data, not normals or other crap
+                            }
+                            face_array_parsed.Add(Convert.ToInt32(this_face)); //we now know this is an int, so can convert confidently
+                        }
+                    }
+                    if (collision_enabled)
+                    {
+                        model_face_indexes.ElementAt((int)collision_type).Add(face_array_parsed);
+                    }
+                    continue;
+                }
+            }
+
+            //Calculate box collider (applies to everything BUT maps)
+            if (importer_common.getModelType() != ModelType.MAP)
+            {
+                //Order the data
+                double[] biggest_vert = { 0, 0, 0 };
+                double[] smallest_vert = { 0, 0, 0 };
+                foreach (List<double> vertex in model_vertices_raw)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (biggest_vert[i] < vertex.ElementAt(i))
+                        {
+                            biggest_vert[i] = vertex.ElementAt(i);
+                        }
+                        if (smallest_vert[i] > vertex.ElementAt(i))
+                        {
+                            smallest_vert[i] = vertex.ElementAt(i);
+                        }
+                    }
+                }
+
+                //Write the data to a json token
+                JToken collision_info = JToken.Parse(
+                    "\"front_top_left\": [" + biggest_vert[0] + "," + biggest_vert[1] + "," + biggest_vert[2] + "], " +
+                    "\"front_top_right\": [" + smallest_vert[0] + "," + biggest_vert[1] + "," + biggest_vert[2] + "], " +
+                    "\"front_bottom_right\": [" + smallest_vert[0] + "," + smallest_vert[1] + "," + biggest_vert[2] + "], " +
+                    "\"front_bottom_left\": [" + biggest_vert[0] + "," + smallest_vert[1] + "," + biggest_vert[2] + "], " +
+                    "\"back_top_left\": [" + biggest_vert[0] + "," + biggest_vert[1] + "," + smallest_vert[2] + "], " +
+                    "\"back_top_right\": [" + smallest_vert[0] + "," + biggest_vert[1] + "," + smallest_vert[2] + "], " +
+                    "\"back_bottom_right\": [" + smallest_vert[0] + "," + smallest_vert[1] + "," + smallest_vert[2] + "], " +
+                    "\"back_bottom_left\": [" + biggest_vert[0] + "," + smallest_vert[1] + "," + smallest_vert[2] + "]");
+                extra_json["has_box_collider"] = true;
+                extra_json["collision_box"] = collision_info;
+
+                //Exit out here, it's box collider OR mesh collider!
+                return true;
+            }
+
+            //Build up total model verts for collmap reader from parsed data
+            List<List<double>> all_verts = new List<List<double>>();
+            for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
+            {
+                all_verts.Add(new List<double>());
+            }
+
+            //Compile collision data
+            int vert_index_i = 0;
+            foreach (List<List<int>> these_face_indexes in model_face_indexes)
+            {
+                foreach (List<int> vert_index_list in these_face_indexes)
+                {
+                    if (!parseVertices(vert_index_list, model_vertices_raw, collision_fix_count, all_verts.ElementAt(vert_index_i)))
+                    {
+                        //Model is not triangulated - exit here
+                        return false;
+                    }
+                }
+                vert_index_i++;
+            }
+
+            //Output vertex data as a binary file
+            using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.COLLMAP), FileMode.Create)))
+            {
+                writer.Write(all_verts.Count); //Number of collision types to split to
+                foreach (List<double> these_verts in all_verts)
+                {
+                    writer.Write(these_verts.Count); //Number of verts to expect
+                }
+                foreach (List<double> these_verts in all_verts)
+                { 
+                    foreach (double vert in these_verts)
+                    {
+                        writer.Write(vert); //Each bit of collision data
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        /* Here we split out our vertex positions to X,Y,Z lists and check for any degenerate triangles */
+        private bool parseVertices(List<int> vert_index_list, List<List<double>> model_vertices_raw, int collision_fix_count, List<double> all_verts)
+        {
+            //Split out verts into nicer X,Y,Z lists
+            int this_face_vert_count = 0;
+            List<double> vert_x_list = new List<double>();
+            List<double> vert_y_list = new List<double>();
+            List<double> vert_z_list = new List<double>();
+            foreach (int vert_index in vert_index_list)
+            {
+                vert_x_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(0));
+                vert_y_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(1));
+                vert_z_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(2));
+
+                this_face_vert_count++;
+            }
+            if (this_face_vert_count != 3)
+            {
+                //Model must be triangulated to generate collision map
+                return false;
+            }
+
+            //Fix conflicts if any are present
+            if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(1) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(1) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(1))
+            {
+                vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
+                vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
+                vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1;
+                collision_fix_count++;
+            }
+            if (vert_x_list.ElementAt(1) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(1) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(1) == vert_z_list.ElementAt(2))
+            {
+                vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1;
+                vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
+                vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                collision_fix_count++;
+            }
+            if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(2))
+            {
+                vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1;
+                vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1;
+                vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1;
+                collision_fix_count++;
+            }
+
+            //Compile for binary writing
+            for (int i = 0; i < this_face_vert_count; i++) // this_face_vert_count = 3
+            {
+                all_verts.Add(vert_x_list.ElementAt(i));
+                all_verts.Add(vert_y_list.ElementAt(i));
+                all_verts.Add(vert_z_list.ElementAt(i));
+            }
+
+            return true;
         }
     }
 }

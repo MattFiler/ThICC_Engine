@@ -8,9 +8,11 @@ namespace EditorTool
 {
     public enum importer_file
     {
-        MODEL,
+        OBJ_MODEL,
+        SDK_MESH,
         MATERIAL,
         CONFIG,
+        COLLMAP,
         IMPORTER_CONFIG
     }
 
@@ -18,19 +20,26 @@ namespace EditorTool
     {
         private string import_directory = "";
         private string obj_file_name = "";
+        private string sdkmesh_file_name = "";
         private string mtl_file_name = "";
         private string config_file_name = "";
+        private string collmap_file_name = "";
         private string importer_config_file_name = "";
+        private string asset_name = "";
 
         private bool did_set_paths = false;
 
         public void configureAssetPaths(string _filename)
         {
-            import_directory = "DATA/MODELS/" + _filename + "/";
-            obj_file_name = import_directory + _filename + ".obj";
-            mtl_file_name = import_directory + _filename + ".mtl";
-            config_file_name = import_directory + _filename + ".json";
-            importer_config_file_name = import_directory + "importer_config.json";
+            asset_name = _filename;
+            import_directory = "DATA/MODELS/" + asset_name + "/";
+            string file_prelude = import_directory + asset_name;
+            obj_file_name = file_prelude + ".OBJ";
+            sdkmesh_file_name = file_prelude + ".SDKMESH";
+            mtl_file_name = file_prelude + ".MTL";
+            config_file_name = file_prelude + ".JSON";
+            collmap_file_name = file_prelude + ".COLLMAP";
+            importer_config_file_name = import_directory + "IMPORTER_CONFIG.JSON";
 
             did_set_paths = true;
         }
@@ -47,16 +56,24 @@ namespace EditorTool
             }
             switch (_file)
             {
-                case importer_file.MODEL: 
+                case importer_file.OBJ_MODEL: 
                     return obj_file_name;
+                case importer_file.SDK_MESH:
+                    return sdkmesh_file_name;
                 case importer_file.MATERIAL:
                     return mtl_file_name;
                 case importer_file.CONFIG:
                     return config_file_name;
+                case importer_file.COLLMAP:
+                    return collmap_file_name;
                 case importer_file.IMPORTER_CONFIG:
                     return importer_config_file_name;
             }
             return "";
+        }
+        public string modelName()
+        {
+            return asset_name;
         }
 
         //----
@@ -70,6 +87,19 @@ namespace EditorTool
         public ModelType getModelType()
         {
             return selected_model_type;
+        }
+
+        //----
+
+        private string model_config_path = "";
+
+        public void setModelConfigPath(string _path)
+        {
+            model_config_path = _path;
+        }
+        public string getModelConfigPath()
+        {
+            return model_config_path;
         }
     }
 }
