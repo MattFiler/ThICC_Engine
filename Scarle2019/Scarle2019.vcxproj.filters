@@ -289,6 +289,9 @@
     <ClInclude Include="AnimationMesh.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ControlledMovement.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -437,6 +440,9 @@
     </ClCompile>
     <ClCompile Include="Explosion.cpp">
       <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlledMovement.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

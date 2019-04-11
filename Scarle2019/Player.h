@@ -7,6 +7,7 @@
 #include "Constants.h"
 #include "AnimationMesh.h"
 #include "Bomb.h"
+#include "ControlledMovement.h"
 #include <functional>
 
 //=================================================================
@@ -58,23 +59,11 @@ protected:
 	int m_playerID = 0;
 
 private:
-	void Animations();
 	std::function<Item*(ItemType)> CreateItem;
 
 	void movement();
 
-	void EndDrift();
-
 	void RespawnLogic();
-
-	double m_timeTurning = 0;
-	float m_maxTurnRateMutliplier = 2.3f;
-	float m_maxDriftTurnMutliplier = 4.2f;
-	double m_timeForMaxTurn = 4;
-	double m_timeForMaxDrift = 8;
-	bool m_drifting = false;
-	bool m_driftingRight = false;
-	float m_driftBoost = 300;
 
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;
@@ -111,12 +100,9 @@ private:
 	bool m_tripleItem = false;
 	float lerp_percent = 1;
 	float lerp_speed = 1;
-	
-	bool m_controlsActive = false;
 
+	ControlledMovement m_move;
 	std::unique_ptr<AnimationMesh> m_displayedMesh = nullptr;
-	Vector3 m_targetAnimPosOffset = Vector3::Zero;
-	Vector3 m_targetAnimRotOffset = Vector3::Zero;
 
 	std::queue<Matrix> m_posHistory;
 	float m_posHistoryInterval = 0.1f;

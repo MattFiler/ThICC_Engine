@@ -62,6 +62,8 @@ public:
 	float getMass() { return m_mass; };
 	Vector3 getVelocity() { return m_vel; };
 	Vector3 getVelocityTotal() { return m_velTotal; };
+	Vector3& getAcceleration() { return m_acc; };
+	void setAcceleration(Vector3 _acc) { m_acc = _acc; };
 	void setVelocity(Vector3 _vel) { m_vel = _vel; };
 	void setVelocityTotal(Vector3 _velTotal) { m_velTotal = _velTotal; };
 	void setGravVelocity(Vector3 _gravVel) { m_gravVel = _gravVel; };

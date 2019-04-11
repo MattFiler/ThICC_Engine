@@ -25,7 +25,7 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 	m_shouldRender = false;
 	m_displayedMesh = std::make_unique<AnimationMesh>(_filename);
 
-	m_targetAnimRotOffset = m_world.Forward();
+	m_move = ControlledMovement(this, m_displayedMesh.get());
 
 	for (int i = 0; i < (int)m_posHistoryLength / m_posHistoryInterval; i++)
 	{
@@ -122,8 +122,6 @@ void Player::Tick()
 
 	//apply my base behaviour
 	TrackMagnet::Tick();
-
-	Animations();
 }
 
 void Player::TrailItems()
@@ -223,267 +221,14 @@ void Player::ReleaseItem()
 
 void Player::setGamePad(bool _state)
 {
-	m_controlsActive = _state;
+	m_move.SetGamepadActive(_state);
+	m_move.SetPlayerID(m_playerID);
 }
 
 void Player::movement()
 {
-	bool isTurning = false;
-	//FORWARD BACK & STRAFE CONTROL HERE
-	Vector3 forwardMove = 25.0f * m_world.Forward();
-	Vector3 rightMove = 12.5f * m_world.Right();
-	Vector3 forwardComponent = Vector::Zero;
-	Vector3 turnComponent = Vector::Zero;
-	float driftMultiplier = 1;
+	m_move.Tick();
 
-	Matrix rotMove = Matrix::CreateRotationY(m_yaw);
-	forwardMove = Vector3::Transform(forwardMove, rotMove);
-	rightMove = Vector3::Transform(rightMove, rotMove);
-	//float rotSpeed = 0.05f;
-
-	if (m_playerID == 0)
-	{
-		if (m_keymindManager.keyHeld("Forward"))
-		{
-			//m_acc += forwardMove;
-			forwardComponent += forwardMove;
-		}
-		if (m_keymindManager.keyHeld("Backwards"))
-		{
-			//m_acc -= forwardMove / 2;
-			forwardComponent -= forwardMove / 2;
-		}
-		if (m_keymindManager.keyHeld("Left"))
-		{
-			m_acc -= rightMove;
-			isTurning = true;
-		}
-		if (m_keymindManager.keyHeld("Right"))
-		{
-			m_acc += rightMove;
-			isTurning = true;
-		}
-	}
-
-	if (m_controlsActive)
-	{
-		//GameController Movement
-
-		if (Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
-		{
-			if (Locator::getGSD()->m_gamePadState[m_playerID].IsViewPressed())
-			{
-				ExitGame();
-			}
-			else
-			{
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightShoulderPressed())
-				{
-					isTurning = true;
-					if (m_drifting == false)
-					{
-						m_displayedMesh->Jump(0.5f, 0.25f);
-						Vector addVel = Vector::Zero;
-						m_drifting = true;
-						if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
-						{
-							m_driftingRight = false;
-						}
-						else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
-						{
-							m_driftingRight = true;
-						}
-						else
-						{
-							isTurning = false;
-							m_drifting = false;
-						}
-						m_vel += addVel;
-					}
-					if (m_driftingRight)
-					{
-						m_targetAnimRotOffset = (m_world.Forward() * 2) + m_world.Right();
-					}
-					else
-					{
-						m_targetAnimRotOffset = (m_world.Forward() * 2) + m_world.Left();
-					}
-				}
-				else
-				{
-					if (m_drifting)
-					{
-						EndDrift();
-					}
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
-				{
-					//m_acc += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
-					forwardComponent += forwardMove * Locator::getGSD()->m_gamePadState[m_playerID].triggers.right;
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
-				{
-					//m_acc -= forwardMove / 2; //* _GSD->m_gamePadState->triggers.left;
-					forwardComponent -= forwardMove / 2;
-				}
-
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
-				{
-					m_targetAnimRotOffset = (m_world.Forward() * 2.5f) + m_world.Left();
-					if (m_drifting)
-					{
-						if (m_driftingRight)
-						{
-							m_targetAnimRotOffset = (m_world.Forward() * 3) + m_world.Right();
-							driftMultiplier = 0.1f;
-						}
-						else
-						{
-							m_targetAnimRotOffset = (m_world.Forward()) + m_world.Left();
-							driftMultiplier = 1.5f;
-						}
-					}
-					else
-					{
-						//m_acc -= rightMove;
-						turnComponent -= rightMove;
-					}
-					isTurning = true;
-				}
-				else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
-				{
-					m_targetAnimRotOffset = (m_world.Forward() * 2.5f) + m_world.Right();
-					if (m_drifting)
-					{
-						if (m_driftingRight)
-						{
-							m_targetAnimRotOffset = (m_world.Forward()) + m_world.Right();
-							driftMultiplier = 2;
-						}
-						else
-						{
-							m_targetAnimRotOffset = (m_world.Forward() * 3) + m_world.Left();
-							driftMultiplier = 0.1f;
-						}
-					}
-					else
-					{
-						turnComponent += rightMove;
-					}
-					isTurning = true;
-				}
-				else
-				{
-					if (!m_drifting)
-					{
-						m_targetAnimRotOffset = m_world.Forward();
-					}
-				}
-
-
-				m_acc = forwardComponent;
-
-				if (isTurning)
-				{
-					if (m_drifting)
-					{
-						if (m_timeTurning > m_timeForMaxDrift)
-						{
-							m_timeTurning = m_timeForMaxDrift;
-						}
-						if (m_driftingRight)
-						{
-							turnComponent = rightMove;
-						}
-						else
-						{
-							turnComponent = -rightMove;
-						}
-
-						m_timeTurning += Locator::getGSD()->m_dt * driftMultiplier;
-						turnComponent *= 1 + ((m_timeTurning / m_timeForMaxDrift)  * m_maxDriftTurnMutliplier);
-						turnComponent *= 1 + (m_timeTurning / 1.3f);
-					}
-					else
-					{
-						if (m_timeTurning > m_timeForMaxTurn)
-						{
-							m_timeTurning = m_timeForMaxTurn;
-						}
-						m_timeTurning += Locator::getGSD()->m_dt;
-						turnComponent *= 1 + ((m_timeTurning / m_timeForMaxTurn)  * m_maxTurnRateMutliplier);
-						turnComponent *= 1 + (m_timeTurning / 1.3f);
-					}
-
-					float accLength = m_acc.Length();
-					if (turnComponent.LengthSquared() > 0)
-					{
-						accLength += turnComponent.Length() / 4;
-					}
-					m_acc += turnComponent;
-					m_acc.Normalize();
-					m_acc *= accLength;
-
-				}
-				else
-				{
-					EndDrift();
-				}
-
-				if (m_tripleItem)
-				{
-					TrailItems();
-
-					if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
-					{
-						if (m_trailingItems.empty() && inventory_item != NONE)
-						{
-							SpawnItems(inventory_item);
-						}
-						else if(!m_aPressed)
-						{
-							ReleaseItem();
-						}
-
-						m_aPressed = true;
-					}
-					else
-					{
-						m_aPressed = false;
-					}
-				}
-				else
-				{
-					if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
-					{
-						if (m_trailingItems.empty() && inventory_item != NONE)
-						{
-							SpawnItems(inventory_item);
-						}
-						else
-						{
-							TrailItems();
-						}
-					}
-					else
-					{
-						ReleaseItem();
-					}
-				}
-			}
-		}
-	}
-
-	////change orinetation of player
-	//float rotSpeed = 0.001f;
-	////m_yaw -= rotSpeed * _GSD->m_mouseState.x;
-	////m_pitch -= rotSpeed * _GSD->m_mouseState.y;
-
-	//m_yaw -= rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightX;
-	//m_pitch += rotSpeed * Locator::getGSD()->m_gamePadState[m_playerID].thumbSticks.rightY;
-	//Car rumble
 	Locator::getID()->m_gamePad->SetVibration(m_playerID, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1);
 
 	// Debug code to save/load the players game state
@@ -509,21 +254,6 @@ void Player::movement()
 		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
 	}
 
-}
-
-void Player::EndDrift()
-{
-	m_drifting = false;
-	if (m_timeTurning > m_timeForMaxDrift / 3)
-	{
-		m_vel = m_world.Forward() * m_vel.Length();
-	}
-	m_timeTurning = 0;
-}
-
-void Player::Animations()
-{
-	m_displayedMesh->Update(m_world ,m_targetAnimRotOffset);
 }
 
 void Player::RespawnLogic()
