@@ -158,6 +158,7 @@ void GameScene::Update()
 	{
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
 	}
+#if DEBUG
 	if (m_keybinds.keyPressed("Matt"))
 	{
 		if (m_cam[0]->GetBehav() == Camera::BEHAVIOUR::DEBUG_CAM) {
@@ -166,6 +167,7 @@ void GameScene::Update()
 		}
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
 	}
+#endif
 
 
 	// sets the players waypoint

@@ -20,7 +20,7 @@ public:
 		INDEPENDENT = 4,
 		ORBIT = 6,
 		CINEMATIC = 7,
-		DEBUG_CAM = 8,
+		DEBUG_CAM = 8,		
 		RACE_START = 9,
 	};
 

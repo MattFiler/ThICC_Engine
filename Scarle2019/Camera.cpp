@@ -147,21 +147,20 @@ void Camera::Tick()
 		m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
 		if (m_targetObject)
 		{
-			if (timer < time_out)
-			{
-				orientation = m_targetObject->GetOri();
-				look_at_target = m_targetObject->GetPos();
-				up_transform = m_targetObject->GetWorld().Up();
-				target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3::Lerp(start_pos, m_dpos, timer / time_out), rotCam);
-			}
-			else
+			orientation = m_targetObject->GetOri();
+			look_at_target = m_targetObject->GetPos();
+			pos_lerp = 1.f;
+			rot_lerp = 0.2f;
+			up_transform = m_targetObject->GetWorld().Up();
+			target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3::Lerp(start_pos, m_dpos, timer / time_out), rotCam);
+			if (timer >= time_out)
 			{
 				timer = 0.0f;
 				behav = BEHAVIOUR::FOLLOW;
 			}
 		}
 	}
-#if DEBUG
+#if Debug
 	case BEHAVIOUR::DEBUG_CAM:
 	{
 		float cam_speed = 40.0f;
@@ -223,6 +222,7 @@ void Camera::Tick()
 		break;
 	}
 #endif
+	}
 
 	if (behav != BEHAVIOUR::DEBUG_CAM)
 	{
@@ -233,8 +233,6 @@ void Camera::Tick()
 		if (m_pos != target_pos)
 			m_pos = Vector3::Lerp(m_pos, target_pos, pos_lerp);
 	}
-	}
-
 	//std::cout << timer << std::endl;
 
 	//Debug output player location - useful for setting up spawns
