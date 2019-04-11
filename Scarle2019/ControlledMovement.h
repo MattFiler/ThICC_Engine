@@ -9,7 +9,7 @@ public:
 
 	void Tick();
 	void SetGamepadActive(bool _flag) { m_controlsActive = _flag;};
-	void SetPlayerID(bool _id) { m_playerID = _id;};
+	void SetPlayerID(int _id) { m_playerID = _id;};
 
 private:
 	void GetControllerInput();
