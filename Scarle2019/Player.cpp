@@ -193,14 +193,26 @@ void Player::TrailItems()
 					continue;
 				}
 
-				Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
+				//Trails behind the player
+				if (active_item != GREEN_SHELL_3X && active_item != RED_SHELL_3X)
+				{
+					Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
 
-				m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-				m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
-				m_trailingItems[i]->GetMesh()->UpdateWorld();
+					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+					m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
+					m_trailingItems[i]->GetMesh()->UpdateWorld();
+				}
+				//Spins around the player
+				else
+				{
+					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+					Vector3 m_dpos = Vector3{ 2, 0, 2 };
+					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + 6);
+					m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f) 
+						* m_dpos.x, m_dpos.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_dpos.z }, m_rot));
+				}
 			}
-		}
-		
+		}	
 	}
 }
 
@@ -250,7 +262,6 @@ void Player::SpawnItems(ItemType type)
 			for (int i = 0; i < 3; i++)
 			{
 				SpawnItems(BANANA);
-				TrailItems();
 			}
 
 			for (Item*& banana : m_trailingItems)
@@ -277,9 +288,32 @@ void Player::SpawnItems(ItemType type)
 			m_tripleItem = true;
 			break;
 		}
+
+		case GREEN_SHELL_3X:
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				SpawnItems(GREEN_SHELL);
+			}
+
+			for (int i = 0; i < 3; i++)
+			{
+				m_trailingItems[i]->addImmuneItems(m_trailingItems);
+				m_trailingItems[i]->setSpinAngle(120 * i);
+			}
+
+			m_tripleItem = true;
+			break;
+		}
 		default:
 			break;
 	}
+
+	for (Item*& item : m_trailingItems)
+	{
+		item->setPlayer(this);
+	}
+
 }
 
 void Player::ReleaseItem()

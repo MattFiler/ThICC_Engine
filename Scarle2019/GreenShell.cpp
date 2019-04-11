@@ -12,6 +12,7 @@ GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_S
 	m_displayedMesh->Spin(1000, 300);
 	m_maxDuration = 20;
 	m_maxImmunityTime = 0.5;
+
 }
 
 void GreenShell::HitByPlayer(Player* player)

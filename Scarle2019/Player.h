@@ -100,8 +100,6 @@ private:
 	std::vector<Item*> m_trailingItems;
 	bool m_aPressed = true;
 	bool m_tripleItem = false;
-	float lerp_percent = 1;
-	float lerp_speed = 1;
 
 	bool m_controlsActive = false;
 	ControlledMovement m_move;
