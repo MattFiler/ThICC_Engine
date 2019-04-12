@@ -62,7 +62,7 @@ namespace EditorTool
             isWall.Checked = this_token["MARIOKART_COLLISION"]["3"].Value<bool>();
 
             //Try find and show our material preview.
-            common_functions.loadMaterialPreview(this_token, materialPreview);
+            common_functions.loadMaterialPreview(this_token, materialPreview, importer_common.importDir());
         }
 
         private void editMaterial_Click(object sender, EventArgs e)
@@ -74,7 +74,7 @@ namespace EditorTool
                 return;
             }
 
-            using (var editor = new Model_Importer_MaterialEditor(material_tokens.ElementAt(index), importer_common.getModelType()))
+            using (var editor = new Model_Importer_MaterialEditor(material_tokens.ElementAt(index), importer_common.getModelType(), importer_common.importDir()))
             {
                 editor.ShowDialog();
                 if (editor.DialogResult == DialogResult.OK)
@@ -106,6 +106,11 @@ namespace EditorTool
                         if (material_prop.Name == "d" && material_prop.Value.Value<string>() == "1.000000")
                         {
                             material_prop.Value = "0.999999";
+                        }
+                        //Fix filepath issue
+                        if (material_prop.Name.Contains("map"))
+                        {
+                            material_prop.Value = Path.GetFileName(material_prop.Value.Value<string>());
                         }
                         //Write config to mtl list
                         new_mtl.Add(material_prop.Name + " " + material_prop.Value);

@@ -22,11 +22,13 @@ namespace EditorTool
 
         JToken material_config;
         UsefulFunctions common_functions = new UsefulFunctions();
+        string this_model_folder;
         ModelType model_type;
-        public Model_Importer_MaterialEditor(JToken _config, ModelType _type)
+        public Model_Importer_MaterialEditor(JToken _config, ModelType _type, string _folder)
         {
             material_config = _config;
             model_type = _type;
+            this_model_folder = _folder;
             InitializeComponent();
         }
 
@@ -34,7 +36,7 @@ namespace EditorTool
         {
             //Name and material preview
             materialName.Text = material_config["newmtl"].Value<string>();
-            common_functions.loadMaterialPreview(material_config, materialPreview);
+            common_functions.loadMaterialPreview(material_config, materialPreview, this_model_folder);
 
             if (model_type == ModelType.MAP)
             {

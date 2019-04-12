@@ -66,7 +66,7 @@ namespace EditorTool
             //------
 
             //Setup asset paths
-            importer_common.configureAssetPaths(assetName.Text.ToUpper());
+            importer_common.configureAssetPaths(assetName.Text.ToUpper().Replace(' ', '_'));
             importer_common.setModelConfigPath(trackConfig.Text);
 
             //------
