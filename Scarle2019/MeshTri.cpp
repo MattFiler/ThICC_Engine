@@ -2,7 +2,7 @@
 #include "pch.h"
 #include <iostream>
 
-MeshTri::MeshTri(Vector _a, Vector _b, Vector _c) : m_pointA(_a), m_pointB(_b), m_pointC(_c)
+MeshTri::MeshTri(Vector _a, Vector _b, Vector _c, int _type) : m_pointA(_a), m_pointB(_b), m_pointC(_c), m_type((CollisionType)_type)
 {
 	 m_plane = Plane(_a, _b, _c); 
 };

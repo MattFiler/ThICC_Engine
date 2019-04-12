@@ -590,9 +590,13 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 
 bool GameScene::Load()
 {
-	//Read in track config
+	//Read in game config
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
+
+	//Read in track config
+	//std::ifstream x(m_filepath.generateFilepath("MAP_CONFIG", m_filepath.CONFIG));
+	//track_config << x;
 	
 	create3DObjects();
 

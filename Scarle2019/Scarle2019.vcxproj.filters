@@ -296,6 +296,9 @@
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
     <ClInclude Include="AIScheduler.h" />
+    <ClInclude Include="Map.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -452,6 +455,9 @@
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
     <ClCompile Include="AIScheduler.cpp" />
+    <ClCompile Include="Map.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">

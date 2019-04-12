@@ -1,0 +1,13 @@
+{
+  "MARIO KART STADIUM": {
+    "menu_sprite": "MARIO KART STADIUM PREVIEW",
+    "friendly_name": "MAP_MKS",
+    "model": "MARIO KART STADIUM",
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
+  }
+}
