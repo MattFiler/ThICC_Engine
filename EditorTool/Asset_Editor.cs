@@ -277,6 +277,8 @@ namespace EditorTool
                         model_rot_z.Text = asset_json["rot_z"].Value<string>();
                         model_scale.Text = asset_json["modelscale"].Value<string>();
                         model_segmentsize.Value = asset_json["segment_size"].Value<decimal>();
+
+                        modelConfigs.Visible = true;
                     }
                     break;
                 case "Meshes":
@@ -313,6 +315,13 @@ namespace EditorTool
                     //Create importer resource & configure paths
                     Model_Importer_Common common_importer = new Model_Importer_Common();
                     common_importer.configureAssetPaths(assetList.SelectedItem.ToString());
+
+                    //Only continue if config is present
+                    if (!File.Exists(common_importer.fileName(importer_file.IMPORTER_CONFIG)))
+                    {
+                        MessageBox.Show("Cannot edit this file.\nIt was imported with an older version of the toolkit.", "Error.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
 
                     //Pull model type (this is forced)
                     JObject asset_json = JObject.Parse(File.ReadAllText(common_importer.fileName(importer_file.CONFIG)));
