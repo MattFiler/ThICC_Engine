@@ -242,9 +242,9 @@
             this.debug_btn.BackColor = System.Drawing.Color.DarkRed;
             this.debug_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.debug_btn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.debug_btn.Location = new System.Drawing.Point(53, 455);
+            this.debug_btn.Location = new System.Drawing.Point(12, 455);
             this.debug_btn.Name = "debug_btn";
-            this.debug_btn.Size = new System.Drawing.Size(199, 37);
+            this.debug_btn.Size = new System.Drawing.Size(281, 37);
             this.debug_btn.TabIndex = 34;
             this.debug_btn.Text = "Old Prop Importer";
             this.debug_btn.UseVisualStyleBackColor = false;

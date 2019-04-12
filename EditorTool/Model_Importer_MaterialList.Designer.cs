@@ -39,8 +39,8 @@
             this.isOffTrack = new System.Windows.Forms.CheckBox();
             this.shouldFlipUVs = new System.Windows.Forms.CheckBox();
             this.configPreview = new System.Windows.Forms.GroupBox();
-            this.autoDetect = new System.Windows.Forms.Button();
             this.isWall = new System.Windows.Forms.CheckBox();
+            this.autoDetect = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             this.configPreview.SuspendLayout();
             this.SuspendLayout();
@@ -130,7 +130,7 @@
             this.shouldFlipUVs.AutoSize = true;
             this.shouldFlipUVs.Checked = true;
             this.shouldFlipUVs.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.shouldFlipUVs.Location = new System.Drawing.Point(273, 322);
+            this.shouldFlipUVs.Location = new System.Drawing.Point(271, 353);
             this.shouldFlipUVs.Name = "shouldFlipUVs";
             this.shouldFlipUVs.Size = new System.Drawing.Size(65, 17);
             this.shouldFlipUVs.TabIndex = 18;
@@ -150,16 +150,6 @@
             this.configPreview.TabStop = false;
             this.configPreview.Text = "Config";
             // 
-            // autoDetect
-            // 
-            this.autoDetect.Location = new System.Drawing.Point(272, 345);
-            this.autoDetect.Name = "autoDetect";
-            this.autoDetect.Size = new System.Drawing.Size(94, 23);
-            this.autoDetect.TabIndex = 20;
-            this.autoDetect.Text = "Auto Detect";
-            this.autoDetect.UseVisualStyleBackColor = true;
-            this.autoDetect.Click += new System.EventHandler(this.autoDetect_Click);
-            // 
             // isWall
             // 
             this.isWall.AutoCheck = false;
@@ -170,6 +160,16 @@
             this.isWall.TabIndex = 18;
             this.isWall.Text = "Is Wall";
             this.isWall.UseVisualStyleBackColor = true;
+            // 
+            // autoDetect
+            // 
+            this.autoDetect.Location = new System.Drawing.Point(271, 324);
+            this.autoDetect.Name = "autoDetect";
+            this.autoDetect.Size = new System.Drawing.Size(94, 23);
+            this.autoDetect.TabIndex = 20;
+            this.autoDetect.Text = "Auto Detect";
+            this.autoDetect.UseVisualStyleBackColor = true;
+            this.autoDetect.Click += new System.EventHandler(this.autoDetect_Click);
             // 
             // Model_Importer_MaterialList
             // 

@@ -34,6 +34,12 @@ namespace EditorTool
         /* ON LOAD */
         private void Landing_Load(object sender, EventArgs e)
         {
+            //These should match up to the ModelType enum!
+            modelType.Items.Add("Map");
+            modelType.Items.Add("Item");
+            modelType.Items.Add("Player");
+            modelType.Items.Add("Prop");
+
             loadAssetType.SelectedIndex = (int)on_load;
         }
         
@@ -268,7 +274,16 @@ namespace EditorTool
                         //If preview loads properly, load config
                         getConfigPathForSelectedAsset();
                         JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
-                        modelType.SelectedItem = asset_json["model_type"].Value<string>();
+
+                        if (asset_json["model_type"].Type != JTokenType.Integer)
+                        {
+                            //Old config, don't enable editing
+                            modelConfigs.Visible = false;
+                            return;
+                        }
+
+                        //Fill up config
+                        modelType.SelectedIndex = asset_json["model_type"].Value<int>();
                         model_world_x.Text = asset_json["start_x"].Value<string>();
                         model_world_y.Text = asset_json["start_y"].Value<string>();
                         model_world_z.Text = asset_json["start_z"].Value<string>();
@@ -366,7 +381,7 @@ namespace EditorTool
             {
                 case "Models":
                     JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
-                    asset_json["model_type"] = modelType.SelectedItem.ToString();
+                    asset_json["model_type"] = modelType.SelectedIndex;
                     asset_json["start_x"] = Convert.ToDouble(model_world_x.Text);
                     asset_json["start_y"] = Convert.ToDouble(model_world_y.Text);
                     asset_json["start_z"] = Convert.ToDouble(model_world_z.Text);
