@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI_Editor));
             this.viewportGroup = new System.Windows.Forms.GroupBox();
             this.textElementControl = new System.Windows.Forms.GroupBox();
+            this.fontSize = new System.Windows.Forms.NumericUpDown();
+            this.label19 = new System.Windows.Forms.Label();
             this.elementColourA = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
             this.elementColourB = new System.Windows.Forms.NumericUpDown();
@@ -47,6 +50,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.elementList = new System.Windows.Forms.ListBox();
             this.addElement = new System.Windows.Forms.Button();
             this.elementType = new System.Windows.Forms.ComboBox();
             this.imageElementControl = new System.Windows.Forms.GroupBox();
@@ -63,10 +67,8 @@
             this.imagePosX = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.elementList = new System.Windows.Forms.ListBox();
-            this.fontSize = new System.Windows.Forms.NumericUpDown();
-            this.label19 = new System.Windows.Forms.Label();
             this.textElementControl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fontSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementColourA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementColourB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementColourG)).BeginInit();
@@ -79,7 +81,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.imageWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imagePosY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imagePosX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fontSize)).BeginInit();
             this.SuspendLayout();
             // 
             // viewportGroup
@@ -118,6 +119,28 @@
             this.textElementControl.TabStop = false;
             this.textElementControl.Text = "Manage Elements";
             this.textElementControl.Visible = false;
+            // 
+            // fontSize
+            // 
+            this.fontSize.Location = new System.Drawing.Point(215, 80);
+            this.fontSize.Name = "fontSize";
+            this.fontSize.Size = new System.Drawing.Size(54, 20);
+            this.fontSize.TabIndex = 16;
+            this.fontSize.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.fontSize.ValueChanged += new System.EventHandler(this.fontSize_ValueChanged);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(212, 64);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(51, 13);
+            this.label19.TabIndex = 17;
+            this.label19.Text = "Font Size";
             // 
             // elementColourA
             // 
@@ -261,6 +284,15 @@
             this.groupBox4.TabIndex = 2;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Elements";
+            // 
+            // elementList
+            // 
+            this.elementList.FormattingEnabled = true;
+            this.elementList.Location = new System.Drawing.Point(6, 46);
+            this.elementList.Name = "elementList";
+            this.elementList.Size = new System.Drawing.Size(315, 108);
+            this.elementList.TabIndex = 11;
+            this.elementList.SelectedIndexChanged += new System.EventHandler(this.elementList_SelectedIndexChanged);
             // 
             // addElement
             // 
@@ -416,37 +448,6 @@
             this.label10.TabIndex = 1;
             this.label10.Text = "Position";
             // 
-            // elementList
-            // 
-            this.elementList.FormattingEnabled = true;
-            this.elementList.Location = new System.Drawing.Point(6, 46);
-            this.elementList.Name = "elementList";
-            this.elementList.Size = new System.Drawing.Size(315, 108);
-            this.elementList.TabIndex = 11;
-            this.elementList.SelectedIndexChanged += new System.EventHandler(this.elementList_SelectedIndexChanged);
-            // 
-            // fontSize
-            // 
-            this.fontSize.Location = new System.Drawing.Point(215, 80);
-            this.fontSize.Name = "fontSize";
-            this.fontSize.Size = new System.Drawing.Size(54, 20);
-            this.fontSize.TabIndex = 16;
-            this.fontSize.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.fontSize.ValueChanged += new System.EventHandler(this.fontSize_ValueChanged);
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(212, 64);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(51, 13);
-            this.label19.TabIndex = 17;
-            this.label19.Text = "Font Size";
-            // 
             // UI_Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -457,12 +458,14 @@
             this.Controls.Add(this.viewportGroup);
             this.Controls.Add(this.imageElementControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "UI_Editor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "UI Editor";
             this.Load += new System.EventHandler(this.UI_Editor_Load);
             this.textElementControl.ResumeLayout(false);
             this.textElementControl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fontSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementColourA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementColourB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementColourG)).EndInit();
@@ -476,7 +479,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.imageWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imagePosY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imagePosX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fontSize)).EndInit();
             this.ResumeLayout(false);
 
         }

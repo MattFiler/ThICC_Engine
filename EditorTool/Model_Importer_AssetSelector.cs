@@ -17,9 +17,10 @@ namespace EditorTool
     public partial class Model_Importer_AssetSelector : Form
     {
         UsefulFunctions function_library = new UsefulFunctions();
-        Model_Importer_Common importer_common = new Model_Importer_Common();
+        public Model_Importer_Common importer_common { get; set; }
         public Model_Importer_AssetSelector(ModelType model_type)
         {
+            importer_common = new Model_Importer_Common();
             importer_common.setModelType(model_type);
             InitializeComponent();
         }

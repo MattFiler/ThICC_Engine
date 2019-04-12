@@ -7,15 +7,10 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/M_Kankyo_star.png
 map_Ka DATA/MODELS/RBR_TEST/M_Kankyo_star.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl M_Kankyo_star_ncl1_1.002
 Ns 9.803922
@@ -24,15 +19,10 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/M_Kankyo_star.png
 map_Ka DATA/MODELS/RBR_TEST/M_Kankyo_star.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl arrowShMrr.002
 Ns 9.803922
@@ -41,16 +31,11 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/arrowShMrr.png
 map_Ka DATA/MODELS/RBR_TEST/arrowShMrr.png
 map_d DATA/MODELS/RBR_TEST/arrowShMrr.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl ef_rainbowRed2.002
 Ns 9.803922
@@ -59,15 +44,10 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/ef_rainbowRed2.png
 map_Ka DATA/MODELS/RBR_TEST/ef_rainbowRed2.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl env01.002
 Ns 9.803922
@@ -76,15 +56,10 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/env01.png
 map_Ka DATA/MODELS/RBR_TEST/env01.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl luminous.002
 Ns 9.803922
@@ -98,11 +73,6 @@ illum 2
 map_Kd DATA/MODELS/RBR_TEST/luminous.png
 map_Ka DATA/MODELS/RBR_TEST/luminous.png
 map_d DATA/MODELS/RBR_TEST/luminous.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl luminous_ncl1_1.002
 Ns 9.803922
@@ -116,11 +86,6 @@ illum 2
 map_Kd DATA/MODELS/RBR_TEST/luminous.png
 map_Ka DATA/MODELS/RBR_TEST/luminous.png
 map_d DATA/MODELS/RBR_TEST/luminous.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl r_arrow03.002
 Ns 9.803922
@@ -129,16 +94,11 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/r_arrow03.png
 map_Ka DATA/MODELS/RBR_TEST/r_arrow03.png
 map_d DATA/MODELS/RBR_TEST/r_arrow03.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl r_earth02.002
 Ns 9.803922
@@ -147,15 +107,10 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/r_earth02.png
 map_Ka DATA/MODELS/RBR_TEST/r_earth02.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl r_ring01.002
 Ns 9.803922
@@ -169,11 +124,6 @@ illum 2
 map_Kd DATA/MODELS/RBR_TEST/r_ring01.png
 map_Ka DATA/MODELS/RBR_TEST/r_ring01.png
 map_d DATA/MODELS/RBR_TEST/r_ring01.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl r_road01.005
 Ns 9.803922
@@ -182,16 +132,11 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/r_road01.png
 map_Ka DATA/MODELS/RBR_TEST/r_road01.png
 refl r_warpgrad.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl r_road01_ncl1_1.004
 Ns 9.803922
@@ -200,16 +145,11 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/r_road01.png
 map_Ka DATA/MODELS/RBR_TEST/r_road01.png
 refl r_warpgrad.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl r_saku03.002
 Ns 9.803922
@@ -223,11 +163,6 @@ illum 2
 map_Kd DATA/MODELS/RBR_TEST/r_saku03.png
 map_Ka DATA/MODELS/RBR_TEST/r_saku03.png
 map_d DATA/MODELS/RBR_TEST/r_saku03.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl r_starling01g.002
 Ns 9.803922
@@ -236,15 +171,10 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/r_starling01g.png
 map_Ka DATA/MODELS/RBR_TEST/r_starling01g.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl r_warp_particle.002
 Ns 9.803922
@@ -258,11 +188,6 @@ illum 2
 map_Kd DATA/MODELS/RBR_TEST/r_warp_particle.png
 map_Ka DATA/MODELS/RBR_TEST/r_warp_particle.png
 map_d DATA/MODELS/RBR_TEST/r_warp_particle.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl r_warpgrad.002
 Ns 9.803922
@@ -271,16 +196,11 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/r_warpgrad.png
 map_Ka DATA/MODELS/RBR_TEST/r_warpgrad.png
 map_d DATA/MODELS/RBR_TEST/r_warpgrad.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl tex_set03.002
 Ns 9.803922
@@ -289,14 +209,9 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd DATA/MODELS/RBR_TEST/tex_set03.png
 map_Ka DATA/MODELS/RBR_TEST/tex_set03.png
 map_d DATA/MODELS/RBR_TEST/tex_set03.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 

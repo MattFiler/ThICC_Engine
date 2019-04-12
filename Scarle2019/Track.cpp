@@ -115,9 +115,9 @@ void Track::LoadVertexList(string _vertex_list)
 		fin.read(reinterpret_cast<char*>(&verts[i][0]), length.at(i) * sizeof(double));
 	}
 
+	//Create MeshTris for each collision type
 	double points_for_triangle[9];
 	int index = 0;
-
 	for (int x = 0; x < number_of_coll_types; x++) {
 		for (size_t i = 0; i < verts.at(x).size(); ++i)
 		{
@@ -142,6 +142,8 @@ void Track::LoadVertexList(string _vertex_list)
 		}
 	}
 
+	//Split triangles up into the grid
+	//Eventually this will be done at build time!
 	SplitTrisIntoGrid();
 }
 

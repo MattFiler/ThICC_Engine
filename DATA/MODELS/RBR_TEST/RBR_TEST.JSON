@@ -1,7 +1,7 @@
 {
-  "asset_name": "RAINBOW ROAD",
+  "asset_name": "RBR_TEST",
   "asset_type": "Models",
-  "model_type": "Track",
+  "model_type": 0,
   "has_box_collider": false,
   "visible": true,
   "start_x": -35.286,

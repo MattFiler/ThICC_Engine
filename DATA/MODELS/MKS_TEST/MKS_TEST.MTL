@@ -10,11 +10,6 @@ Ni 1.000000
 d 0.999999
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/debug_grid.jpg
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl ef_dashboard
 Ns 94.117647
@@ -27,11 +22,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ef_dashboard02_Alb.png
 map_d DATA/MODELS/MKS_TEST/ef_dashboard02_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": true
-}
 
 newmtl ef_glideboard
 Ns 94.117647
@@ -44,11 +34,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ef_glideboard02_Alb.png
 map_d DATA/MODELS/MKS_TEST/ef_glideboard02_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": true
-}
 
 newmtl ef_gravityboard
 Ns 94.117647
@@ -61,11 +46,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ef_GravityPanell_Alb2.png
 map_d DATA/MODELS/MKS_TEST/ef_GravityPanell_Alb2.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": true
-}
 
 newmtl fc_ColorRoad
 Ns 94.117647
@@ -78,11 +58,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_ColorRoad_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_ColorRoad_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_ConcreteOutside
 Ns 94.117647
@@ -95,11 +70,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_ConcreteOutside_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_ConcreteOutside_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_Enkei_Building_3D
 Ns 94.117647
@@ -112,11 +82,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_Enkei_Building_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_Enkei_Building_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_Enkei_Building_Plane
 Ns 94.117647
@@ -129,11 +94,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_Enkei_Building_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_Enkei_Building_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_Enkei_RedLight
 Ns 94.117647
@@ -146,11 +106,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_RedLight_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_RedLight_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_KabeShiro
 Ns 94.117647
@@ -163,11 +118,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_KabeShiro_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_KabeShiro_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_LightObj
 Ns 94.117647
@@ -180,11 +130,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_Light_1_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_Light_1_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_LightObj.002
 Ns 94.117647
@@ -197,11 +142,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_Light_1_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_Light_1_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_LightObj_NoBake
 Ns 94.117647
@@ -214,11 +154,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_Light_1_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_Light_1_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_MARIOKART
 Ns 94.117647
@@ -231,11 +166,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_MARIOKART_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_MARIOKART_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_MichiUra
 Ns 94.117647
@@ -248,11 +178,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_MichiUra_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_MichiUra_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_Obj_01
 Ns 94.117647
@@ -265,11 +190,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_obj_01_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_obj_01_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_PitYuka
 Ns 94.117647
@@ -282,11 +202,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_PitYuka_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_PitYuka_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_RoadOther
 Ns 94.117647
@@ -299,11 +214,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_RoadOther_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_RoadOther_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_RoadOther2
 Ns 94.117647
@@ -316,11 +226,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_RoadOther2_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_RoadOther2_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_RoadOther2.002
 Ns 94.117647
@@ -333,11 +238,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_RoadOther2_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_RoadOther2_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_RoadOther2_G
 Ns 94.117647
@@ -350,11 +250,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_RoadOther2_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_RoadOther2_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_RoofParts
 Ns 94.117647
@@ -367,11 +262,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_RoofParts_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_RoofParts_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_ScrollingLight
 Ns 94.117647
@@ -384,11 +274,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_ScrollingLight_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_ScrollingLight_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_SignPole
 Ns 94.117647
@@ -401,11 +286,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_SignPole_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_SignPole_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_StadiumLight
 Ns 94.117647
@@ -418,11 +298,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_StadiumLight_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_StadiumLight_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_StadiumLight_CubeMap
 Ns 94.117647
@@ -435,11 +310,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_StadiumLight_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_StadiumLight_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_StadiumRoof
 Ns 94.117647
@@ -452,11 +322,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_StadiumRoof_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_StadiumRoof_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_StadiumSignboard
 Ns 94.117647
@@ -469,11 +334,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_StadiumSignboard_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_StadiumSignboard_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_StartGate
 Ns 94.117647
@@ -486,11 +346,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_StartGate_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_StartGate_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_TV_MKTV
 Ns 94.117647
@@ -503,11 +358,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/MKTV.0.png
 map_d DATA/MODELS/MKS_TEST/MKTV.0.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_TV_capture
 Ns 94.117647
@@ -520,11 +370,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/Screen_Dummy.png
 map_d DATA/MODELS/MKS_TEST/Screen_Dummy.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_TeamLogo_nuki
 Ns 94.117647
@@ -537,11 +382,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_TeamLogo_nuki_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_TeamLogo_nuki_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_WhiteLine
 Ns 94.117647
@@ -554,11 +394,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_WhiteLine_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_WhiteLine_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_WhiteWall
 Ns 94.117647
@@ -571,11 +406,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_WhiteWall_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_WhiteWall_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_WhiteWall_Outside
 Ns 94.117647
@@ -588,11 +418,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_WhiteWall_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_WhiteWall_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_YellowWall
 Ns 94.117647
@@ -605,11 +430,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_YellowWall_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_YellowWall_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_bench
 Ns 94.117647
@@ -622,11 +442,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_bench_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_bench_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_bush_LeafBase
 Ns 94.117647
@@ -639,11 +454,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_bush_LeafBase_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_bush_LeafBase_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": true,
-  "2": false
-}
 
 newmtl fc_concrete_road
 Ns 94.117647
@@ -656,11 +466,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_concrete_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_concrete_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_flower
 Ns 94.117647
@@ -669,15 +474,10 @@ Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
+d 0.999999
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_flower_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_flower_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_grass_Outside
 Ns 94.117647
@@ -690,11 +490,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_siba_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_siba_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": true,
-  "2": false
-}
 
 newmtl fc_kyokyaku_1
 Ns 94.117647
@@ -707,11 +502,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_kyokyaku_1_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_kyokyaku_1_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_kyokyaku_2
 Ns 94.117647
@@ -724,11 +514,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_kyokyaku_2_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_kyokyaku_2_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_monument
 Ns 94.117647
@@ -741,11 +526,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_monument_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_monument_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_nuki_1
 Ns 94.117647
@@ -758,11 +538,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_nuki_1_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_nuki_1_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_nuki_2
 Ns 94.117647
@@ -775,11 +550,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_nuki_2_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_nuki_2_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_nuki_3
 Ns 94.117647
@@ -792,11 +562,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_nuki_3_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_nuki_3_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_nuki_4
 Ns 94.117647
@@ -809,11 +574,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_nuki_4_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_nuki_4_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_nuki_5
 Ns 94.117647
@@ -826,11 +586,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_nuki_5_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_nuki_5_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_obj_2
 Ns 94.117647
@@ -843,11 +598,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_obj_2_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_obj_2_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_obj_3
 Ns 94.117647
@@ -860,11 +610,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_obj_3_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_obj_3_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_obj_4
 Ns 94.117647
@@ -877,11 +622,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_obj_4_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_obj_4_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_pit
 Ns 94.117647
@@ -894,11 +634,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_pit_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_pit_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_road
 Ns 94.117647
@@ -911,11 +646,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_road_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_road_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_road_G
 Ns 94.117647
@@ -928,11 +658,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_road_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_road_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_road_MARIOKART
 Ns 94.117647
@@ -945,11 +670,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_road_MARIOKART_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_road_MARIOKART_Alb.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_road_WhiteLine
 Ns 94.117647
@@ -962,11 +682,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_road_Alb2.png
 map_d DATA/MODELS/MKS_TEST/ufc_road_Alb2.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_road_WhiteLine_G
 Ns 94.117647
@@ -979,11 +694,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_road_Alb2.png
 map_d DATA/MODELS/MKS_TEST/ufc_road_Alb2.png
-MARIOKART_COLLISION {
-  "0": true,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_saku
 Ns 94.117647
@@ -996,11 +706,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_saku_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_saku_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_shiba
 Ns 94.117647
@@ -1013,11 +718,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_siba_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_siba_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": true,
-  "2": false
-}
 
 newmtl fc_signboard
 Ns 94.117647
@@ -1030,11 +730,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_signboard_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_signboard_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_signboard_Emm
 Ns 94.117647
@@ -1047,11 +742,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_signboard_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_signboard_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_steps
 Ns 94.117647
@@ -1064,11 +754,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_steps_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_steps_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_suna
 Ns 94.117647
@@ -1081,11 +766,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_suna_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_suna_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": true,
-  "2": false
-}
 
 newmtl fc_tetukabe
 Ns 94.117647
@@ -1098,11 +778,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_tetukabe_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_tetukabe_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_truck
 Ns 94.117647
@@ -1115,11 +790,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_truck_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_truck_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_window_1
 Ns 94.117647
@@ -1132,11 +802,6 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_window_1_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_window_1_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 
 newmtl fc_window_2
 Ns 94.117647
@@ -1149,9 +814,4 @@ d 0.000000
 illum 2
 map_Kd DATA/MODELS/MKS_TEST/ufc_window_1_Alb.png
 map_d DATA/MODELS/MKS_TEST/ufc_window_1_Alb.png
-MARIOKART_COLLISION {
-  "0": false,
-  "1": false,
-  "2": false
-}
 

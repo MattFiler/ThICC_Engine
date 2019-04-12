@@ -91,6 +91,19 @@ namespace EditorTool
 
         //----
 
+        private bool in_edit_mode = false;
+
+        public void setEditMode(bool _editing)
+        {
+            in_edit_mode = _editing;
+        }
+        public bool getEditMode()
+        {
+            return in_edit_mode;
+        }
+
+        //----
+
         private string model_config_path = "";
 
         public void setModelConfigPath(string _path)

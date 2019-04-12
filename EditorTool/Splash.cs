@@ -135,6 +135,11 @@ namespace EditorTool
                         //A little manual override to stop original images in the IMAGES folder
                         continue;
                     }
+                    if (file.Name == "IMPORTER_CONFIG.JSON") //Check to see we're in MODELS?
+                    {
+                        //Another override to stop importer files getting copied
+                        continue;
+                    }
                     file.CopyTo(temppath, false);
                 }
             }

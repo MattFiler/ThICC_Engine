@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: 'RainbowRoadTest.blend'
 # www.blender.org
-mtllib RBR_TEST.MTL
+#mtllib RBR_TEST.MTL
 o course.005
 v 18.111410 15.980874 3.212503
 v 18.217194 16.254290 2.943897

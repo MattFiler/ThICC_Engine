@@ -9,6 +9,7 @@ enum CollisionType {
 	ON_TRACK,
 	OFF_TRACK,
 	BOOST_PAD,
+	WALL,
 
 	NUM_OF_TYPES //must be last
 };

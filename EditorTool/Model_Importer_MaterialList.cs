@@ -54,11 +54,12 @@ namespace EditorTool
                 return;
             }
 
-            //Update previews of config
+            //Update previews of config - this is kinda hard coded, needs to be updated if enum is changed (UI!)
             JToken this_token = material_tokens.ElementAt(index);
             isTrack.Checked = this_token["MARIOKART_COLLISION"]["0"].Value<bool>();
             isOffTrack.Checked = this_token["MARIOKART_COLLISION"]["1"].Value<bool>();
             isBoostPad.Checked = this_token["MARIOKART_COLLISION"]["2"].Value<bool>();
+            isWall.Checked = this_token["MARIOKART_COLLISION"]["3"].Value<bool>();
 
             //Try find and show our material preview.
             common_functions.loadMaterialPreview(this_token, materialPreview);
@@ -98,13 +99,8 @@ namespace EditorTool
             {
                 foreach (JProperty material_prop in model_material_config[this_material_config.Key])
                 {
-                    //MarioKart config
-                    if (material_prop.Name == "MARIOKART")
-                    {
-                        //add to some kind of array for getting trongle data
-                    }
-                    //Material config to write
-                    else
+                    //Ignore MarioKart config
+                    if (material_prop.Name != "MARIOKART_COLLISION")
                     {
                         //Fix transparency issue
                         if (material_prop.Name == "d" && material_prop.Value.Value<string>() == "1.000000")
@@ -119,6 +115,40 @@ namespace EditorTool
             }
             File.Delete(importer_common.fileName(importer_file.MATERIAL));
             File.WriteAllLines(importer_common.fileName(importer_file.MATERIAL), new_mtl);
+
+            //------
+
+            //Make sure our MTL is uncommented in the OBJ
+            int obj_index = 0;
+            string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
+            foreach (string line in obj_file)
+            {
+                if (line.Contains("mtllib"))
+                {
+                    if (line.Substring(0, 1) == "#")
+                    {
+                        obj_file[obj_index] = obj_file[obj_index].Substring(1);
+                    }
+                    break;
+                }
+                obj_index++;
+            }
+            File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
+
+            //------
+
+            //If we're in edit mode, delete the old files
+            if (importer_common.getEditMode())
+            {
+                if (File.Exists(importer_common.fileName(importer_file.COLLMAP)))
+                {
+                    File.Delete(importer_common.fileName(importer_file.COLLMAP));
+                }
+                if (File.Exists(importer_common.fileName(importer_file.SDK_MESH)))
+                {
+                    File.Delete(importer_common.fileName(importer_file.SDK_MESH));
+                }
+            }
 
             //------
 
@@ -183,7 +213,7 @@ namespace EditorTool
             JToken asset_json = extra_json;
             asset_json["asset_name"] = importer_common.modelName();
             asset_json["asset_type"] = "Models";
-            asset_json["model_type"] = "Track";
+            asset_json["model_type"] = (int)importer_common.getModelType();
             asset_json["visible"] = true;
             asset_json["start_x"] = 0;
             asset_json["start_y"] = 0;
@@ -234,13 +264,31 @@ namespace EditorTool
                 asset_json["map_itemboxes"] = itembox_array;
             }
 
-            //Save JSON data
-            File.WriteAllText(importer_common.fileName(importer_file.CONFIG), asset_json.ToString(Formatting.Indented));
+            //Save JSON data if not in edit mode
+            if (!importer_common.getEditMode())
+            {
+                File.WriteAllText(importer_common.fileName(importer_file.CONFIG), asset_json.ToString(Formatting.Indented));
+            }
+
+            //------
+            
+            //Comment out mtllib in OBJ for asset previewer
+            obj_index = 0;
+            foreach (string line in obj_file)
+            {
+                if (line.Contains("mtllib"))
+                {
+                    obj_file[obj_index] = "#" + obj_file[obj_index];
+                    break;
+                }
+                obj_index++;
+            }
+            File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
 
             //------
 
             //Done
-            File.Delete(importer_common.fileName(importer_file.IMPORTER_CONFIG));
+            //File.Delete(importer_common.fileName(importer_file.IMPORTER_CONFIG));
             MessageBox.Show("Model import complete.", "Imported.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
@@ -463,6 +511,71 @@ namespace EditorTool
             }
 
             return true;
+        }
+
+        /* Auto detect material names and base collision/transparency properties on that */
+        private void autoDetect_Click(object sender, EventArgs e)
+        {
+            //Confirmation
+            DialogResult areYouSure = MessageBox.Show("This process will auto-detect the best transparency and colision properties based on material metadata.\nThis will potentially overwrite existing configurations.\nAre you sure you wish to continue?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (areYouSure != DialogResult.Yes)
+            {
+                return;
+            }
+
+            //Loop through every material and base on name if we are transparent or collision
+            foreach (var this_material_config in model_material_config)
+            {
+                JToken this_token = model_material_config[this_material_config.Key];
+
+                //Materials starting with "ef_" are usually boost pads
+                if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_")
+                {
+                    setCollisionParam(CollisionType.BOOST_PAD, this_token);
+                }
+
+                //Materials containing "road" are usually road!
+                if (this_material_config.Key.ToUpper().Contains("ROAD"))
+                {
+                    setCollisionParam(CollisionType.ON_TRACK, this_token);
+                }
+
+                //Materials containing "wall" are usually road!
+                if (this_material_config.Key.ToUpper().Contains("WALL"))
+                {
+                    setCollisionParam(CollisionType.WALL, this_token);
+                }
+
+                //Materials containing "grass", "suna", or "shiba" are usually off-road!
+                if (this_material_config.Key.ToUpper().Contains("GRASS") || this_material_config.Key.ToUpper().Contains("SHIBA") || this_material_config.Key.ToUpper().Contains("SUNA"))
+                {
+                    setCollisionParam(CollisionType.OFF_TRACK, this_token);
+                }
+
+                //Materials containing "nuki" are usually transparent!
+                if (this_material_config.Key.ToUpper().Contains("NUKI"))
+                {
+                    this_token["d"] = "0.999999";
+                }
+                else
+                {
+                    this_token["d"] = "0.000000";
+                }
+            }
+        }
+
+        /* Set collision parameter in material config */
+        private void setCollisionParam(CollisionType _type, JToken _token)
+        {
+            for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
+            {
+                bool to_set = false;
+                if (i == (int)_type)
+                {
+                    to_set = true;
+                }
+                _token["MARIOKART_COLLISION"][i.ToString()] = to_set;
+            }
         }
     }
 }
