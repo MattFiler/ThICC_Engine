@@ -54,11 +54,12 @@ namespace EditorTool
                 return;
             }
 
-            //Update previews of config
+            //Update previews of config - this is kinda hard coded, needs to be updated if enum is changed (UI!)
             JToken this_token = material_tokens.ElementAt(index);
             isTrack.Checked = this_token["MARIOKART_COLLISION"]["0"].Value<bool>();
             isOffTrack.Checked = this_token["MARIOKART_COLLISION"]["1"].Value<bool>();
             isBoostPad.Checked = this_token["MARIOKART_COLLISION"]["2"].Value<bool>();
+            isWall.Checked = this_token["MARIOKART_COLLISION"]["3"].Value<bool>();
 
             //Try find and show our material preview.
             common_functions.loadMaterialPreview(this_token, materialPreview);

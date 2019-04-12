@@ -40,6 +40,7 @@
             this.shouldFlipUVs = new System.Windows.Forms.CheckBox();
             this.configPreview = new System.Windows.Forms.GroupBox();
             this.autoDetect = new System.Windows.Forms.Button();
+            this.isWall = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             this.configPreview.SuspendLayout();
             this.SuspendLayout();
@@ -55,7 +56,7 @@
             // 
             // editMaterial
             // 
-            this.editMaterial.Location = new System.Drawing.Point(272, 219);
+            this.editMaterial.Location = new System.Drawing.Point(272, 240);
             this.editMaterial.Name = "editMaterial";
             this.editMaterial.Size = new System.Drawing.Size(94, 36);
             this.editMaterial.TabIndex = 2;
@@ -138,12 +139,13 @@
             // 
             // configPreview
             // 
+            this.configPreview.Controls.Add(this.isWall);
             this.configPreview.Controls.Add(this.isTrack);
             this.configPreview.Controls.Add(this.isBoostPad);
             this.configPreview.Controls.Add(this.isOffTrack);
             this.configPreview.Location = new System.Drawing.Point(272, 125);
             this.configPreview.Name = "configPreview";
-            this.configPreview.Size = new System.Drawing.Size(94, 88);
+            this.configPreview.Size = new System.Drawing.Size(94, 109);
             this.configPreview.TabIndex = 19;
             this.configPreview.TabStop = false;
             this.configPreview.Text = "Config";
@@ -157,6 +159,17 @@
             this.autoDetect.Text = "Auto Detect";
             this.autoDetect.UseVisualStyleBackColor = true;
             this.autoDetect.Click += new System.EventHandler(this.autoDetect_Click);
+            // 
+            // isWall
+            // 
+            this.isWall.AutoCheck = false;
+            this.isWall.AutoSize = true;
+            this.isWall.Location = new System.Drawing.Point(6, 88);
+            this.isWall.Name = "isWall";
+            this.isWall.Size = new System.Drawing.Size(58, 17);
+            this.isWall.TabIndex = 18;
+            this.isWall.Text = "Is Wall";
+            this.isWall.UseVisualStyleBackColor = true;
             // 
             // Model_Importer_MaterialList
             // 
@@ -198,5 +211,6 @@
         private System.Windows.Forms.CheckBox shouldFlipUVs;
         private System.Windows.Forms.GroupBox configPreview;
         private System.Windows.Forms.Button autoDetect;
+        private System.Windows.Forms.CheckBox isWall;
     }
 }
