@@ -165,7 +165,7 @@ void Track::setWaypointBB()
 
 /* Checks through all triangles to see if this line intersects any of them.
    The point of intersecion is stored in _intersect */
-bool Track::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle)
+bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle)
 {
 	// Check to see if the position is within the grid
 	if (!IsPointInBounds(_startPos, m_smallest, m_largest))
@@ -328,7 +328,7 @@ Vector Track::GetAreaAtIndex(int _index)
 }
 
 /* Returns true if the passed point is inside the bounding box created by _lowerBound and _upperBound */
-bool Track::IsPointInBounds(Vector& _point, Vector& _lowerBound, Vector& _upperBound)
+bool Track::IsPointInBounds(const Vector& _point, const Vector& _lowerBound, const Vector& _upperBound)
 {
 	return (((_point.x >= _lowerBound.x) && (_point.x <= _upperBound.x)) &&
 		((_point.y >= _lowerBound.y) && (_point.y <= _upperBound.y)) &&

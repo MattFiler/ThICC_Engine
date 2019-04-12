@@ -16,7 +16,7 @@ enum CollisionType {
 struct MeshTri
 {
 	MeshTri(Vector _a, Vector _b, Vector _c, int _type);
-	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle);
+	bool DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle);
 	Vector GetUpperBound();
 	Vector GetLowerBound();
 	CollisionType GetType() { return m_type; };

@@ -69,7 +69,7 @@ public:
 		return debug_markers;
 	};
 
-	bool DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle);
+	bool DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle);
 
 private:
 	void LoadVertexList(string _vertex_list);
@@ -78,7 +78,7 @@ private:
 
 	void SplitTrisIntoGrid();
 	void SetAllTrisForIndex(int _index);
-	bool IsPointInBounds(Vector& _point, Vector& _lowerBound, Vector& _upperBound);
+	bool IsPointInBounds(const Vector& _point, const Vector& _lowerBound, const Vector& _upperBound);
 
 	Vector GetAreaAtIndex(int _index);
 	int GetIndexAtPoint(Vector point);
