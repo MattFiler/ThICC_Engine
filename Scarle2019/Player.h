@@ -100,6 +100,7 @@ private:
 	std::vector<Item*> m_trailingItems;
 	bool m_aPressed = true;
 	bool m_tripleItem = false;
+	const int m_maxItems = 3;
 
 	bool m_controlsActive = false;
 	ControlledMovement m_move;

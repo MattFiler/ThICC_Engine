@@ -40,6 +40,15 @@ void Item::Tick()
 	}
 }
 
+void Item::setSpinAngle(float _angle)
+{
+	m_spinAngle = _angle;
+	if (m_spinAngle > 360)
+	{
+		m_spinAngle -= 360;
+	}
+}
+
 bool Item::ignorePlayerCollisions(Player* player)
 {
 	return m_player == player /*&& m_trailingPlayerImmunity*/;

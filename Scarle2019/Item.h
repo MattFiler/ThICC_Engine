@@ -35,7 +35,7 @@ public:
 	virtual void setPlayer(Player* _player) { m_player = _player; };
 
 	virtual float getSpinAngle() { return m_spinAngle; };
-	virtual void setSpinAngle(float _angle) { m_spinAngle = _angle; };
+	virtual void setSpinAngle(float _angle);
 
 protected:
 	TrackMagnet * m_mesh = nullptr;

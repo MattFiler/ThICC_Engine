@@ -9,7 +9,6 @@ GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_S
 	m_mesh->SetPhysicsOn(true);
 	m_mesh->setDampenWallReflect(false);
 
-	m_displayedMesh->Spin(1000, 300);
 	m_maxDuration = 20;
 	m_maxImmunityTime = 0.5;
 
@@ -42,5 +41,6 @@ void GreenShell::Use(Player * player, bool _altUse)
 
 void GreenShell::Tick()
 {
+	m_displayedMesh->Spin(1, 0.7);
 	Item::Tick();
 }
