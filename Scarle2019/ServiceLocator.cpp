@@ -8,3 +8,4 @@ InputData* Locator::ref_ID = nullptr;
 ItemData* Locator::ref_ItemProbability = nullptr;
 AudioManager* Locator::ref_audio = nullptr;
 GarbageCollector* Locator::ref_GC = nullptr;
+AIScheduler* Locator::ref_AIS = nullptr;

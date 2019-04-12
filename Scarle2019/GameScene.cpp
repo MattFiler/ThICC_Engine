@@ -38,6 +38,7 @@ GameScene::~GameScene()
 
 void GameScene::Update()
 {
+	m_aiScheduler->Update();
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
 
@@ -109,7 +110,7 @@ void GameScene::Update()
 			timeout = 3.5f;
 			Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START)->SetVolume(0.7f);
 			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START);
-			for (int i = 0; i < 4; ++i)
+			for (int i = 0; i < game_config["player_count"]; ++i)
 			{
 				player[i]->setGamePad(true);
 			}
@@ -591,9 +592,13 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 
 bool GameScene::Load()
 {
-	//Read in track config
+	//Read in game config
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
+
+	//Read in track config
+	//std::ifstream x(m_filepath.generateFilepath("MAP_CONFIG", m_filepath.CONFIG));
+	//track_config << x;
 	
 	create3DObjects();
 
@@ -602,6 +607,9 @@ bool GameScene::Load()
 	VBGO3D::PushIBVB(); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
 	pushBackObjects();
+
+	m_aiScheduler = std::make_unique<AIScheduler>(track);
+	Locator::setupAIScheduler(m_aiScheduler.get());
 
 	return true;
 }

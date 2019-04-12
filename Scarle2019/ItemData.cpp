@@ -7,7 +7,7 @@
 
 /* Load config data for each item */
 ItemData::ItemData() {
-	std::ifstream i("DATA/ITEMS/ITEM_CONFIG.JSON");
+	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
 	complete_config << i;
 
 	ProcessConfig(GREEN_SHELL, "GREEN_SHELL");

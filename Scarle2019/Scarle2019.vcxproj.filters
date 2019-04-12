@@ -292,6 +292,13 @@
     <ClInclude Include="ControlledMovement.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="MoveAI.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="AIScheduler.h" />
+    <ClInclude Include="Map.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -442,6 +449,13 @@
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
     <ClCompile Include="ControlledMovement.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveAI.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AIScheduler.cpp" />
+    <ClCompile Include="Map.cpp">
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
   </ItemGroup>

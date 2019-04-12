@@ -7,6 +7,7 @@
 #include "Mushroom.h"
 #include "GreenShell.h"
 #include "CollisionManager.h"
+#include "AIScheduler.h"
 #include <vector>
 
 using std::vector;
@@ -65,6 +66,7 @@ private:
 	std::vector<PhysModel*> m_physModels;
 
 	json game_config;
+	json track_config;
 	LocalisationManager m_localiser;
 	GameFilepaths m_filepath;
 	SceneManager* m_scene_manager;
@@ -91,6 +93,8 @@ private:
 	bool final_lap_start = false;
 	bool final_lap = false;
 	int finished = 0;
+
+	std::unique_ptr<AIScheduler> m_aiScheduler = nullptr;
 
 };
 

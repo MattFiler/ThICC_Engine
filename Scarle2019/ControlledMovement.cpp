@@ -16,9 +16,9 @@ void ControlledMovement::GetControllerInput()
 	//FORWARD BACK & STRAFE CONTROL HERE
 
 	//float rotSpeed = 0.05f;
-	m_isTurning = false;
 	if (m_controlsActive && Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
 	{
+		m_isTurning = false;
 		//GameController Movement
 		if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightShoulderPressed())
 		{
@@ -229,3 +229,14 @@ void ControlledMovement::EndDrift()
 	m_endDrift = false;
 	m_drifting = false;
 }
+
+void ControlledMovement::TurnLeft(bool _flag)
+{ 
+	m_left = _flag;
+	m_isTurning = _flag;
+}
+void ControlledMovement::TurnRight(bool _flag)
+{ 
+	m_right = _flag; 
+	m_isTurning = _flag;
+};

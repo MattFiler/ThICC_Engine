@@ -18,8 +18,11 @@ namespace EditorTool
 {
     public partial class Model_Importer : Form
     {
-        public Model_Importer()
+        ModelType selected_model_type = ModelType.PROP;
+
+        public Model_Importer(ModelType model_type)
         {
+            selected_model_type = model_type;
             InitializeComponent();
         }
 
@@ -365,6 +368,9 @@ namespace EditorTool
                         }
                     }
 
+
+                    /* It would be nice to handle all this data as FLOAT rather than DOUBLE.
+                     * We don't really need the precision, and it would half the filesize of the collision map. */
                     if (File.Exists(import_directory + Path.GetFileNameWithoutExtension(modelPath.Text) + ".sdkmesh"))
                     {
                         string final_asset_path = import_directory + assetName.Text + ".sdkmesh";
@@ -503,17 +509,35 @@ namespace EditorTool
                                     //Compile this data now we know it is correct
                                     for (int i = 0; i < this_face_vert_count; i++) // this_face_vert_count = 3
                                     {
-                                        this_face_complete += "(" + vert_x_list.ElementAt(i) + ", " + vert_y_list.ElementAt(i) + ", " + vert_z_list.ElementAt(i) + "), ";
+                                        this_face_complete += vert_x_list.ElementAt(i) + "," + vert_y_list.ElementAt(i) + "," + vert_z_list.ElementAt(i) + ",";
                                     }
-                                    this_face_complete = this_face_complete.Substring(0, this_face_complete.Length - 2);
+                                    this_face_complete = this_face_complete.Substring(0, this_face_complete.Length - 1);
 
                                     final_collmap_data.Add(this_face_complete);
                                 }
                             }
                             if (shouldGenerateCollmap.Checked && model_supports_collision)
                             {
-                                //Output full collision map
-                                File.WriteAllLines(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".COLLMAP", final_collmap_data);
+                                //Output vertex data as a binary file, this is kinda tacked on right now and could do with some better working-in
+                                List<double> all_verts = new List<double>();
+                                foreach (string line in final_collmap_data)
+                                {
+                                    string[] split_by_comma = line.Split(',');
+                                    for (int i = 0; i < 9; i++)
+                                    {
+                                        if (split_by_comma[i] != "")
+                                        {
+                                            all_verts.Add(Convert.ToDouble(split_by_comma[i]));
+                                        }
+                                    }
+                                }
+                                using (BinaryWriter writer = new BinaryWriter(File.Open(import_directory + Path.GetFileNameWithoutExtension(final_asset_path) + ".COLLMAP", FileMode.Create)))
+                                {
+                                    foreach (double vert in all_verts)
+                                    {
+                                        writer.Write(vert);
+                                    }
+                                }
                             }
                             if (shouldCreateBoxCollider.Checked)
                             {

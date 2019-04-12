@@ -2,13 +2,13 @@
 #include "pch.h"
 #include <iostream>
 
-MeshTri::MeshTri(Vector _a, Vector _b, Vector _c) : m_pointA(_a), m_pointB(_b), m_pointC(_c)
+MeshTri::MeshTri(Vector _a, Vector _b, Vector _c, int _type) : m_pointA(_a), m_pointB(_b), m_pointC(_c), m_type((CollisionType)_type)
 {
 	 m_plane = Plane(_a, _b, _c); 
 };
 
 /* Returns true if the given vector, starting at the given position intersects this triangle*/
-bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle)
+bool MeshTri::DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle)
 {
 	float angle = acos((_direction*-1).Dot(m_plane.Normal()) / ((_direction*-1).Length() * m_plane.Normal().Length()));
 	if (angle > _maxAngle)
@@ -22,7 +22,7 @@ bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _in
 		//return false;
 	}
 	// If the normal is pointing away from the _starPos, ignore this tri
-	if (_maxAngle < 3 && _direction.Distance(Vector(0, 0, 0), m_plane.Normal() + _direction) > _direction.Distance(Vector(0, 0, 0), _direction))
+	if (_maxAngle < 3 && (m_plane.Normal() + _direction).LengthSquared() > _direction.LengthSquared())
 	{
 		return false;
 	}
@@ -51,8 +51,8 @@ bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _in
 	_intersect = d*_direction + _startPos;
 
 	// Check if the intersect is within range of the vector
-	float dist = Vector::Distance(_startPos, _intersect);
-	if (dist > _direction.Length())
+	float dist = Vector::DistanceSquared(_startPos, _intersect);
+	if (dist > _direction.LengthSquared())
 	{
 		return false;
 	}
