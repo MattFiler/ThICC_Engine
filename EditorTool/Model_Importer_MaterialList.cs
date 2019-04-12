@@ -229,7 +229,6 @@ namespace EditorTool
             asset_json["rot_y"] = 0;
             asset_json["rot_z"] = 0;
             asset_json["segment_size"] = 10;
-            asset_json["has_box_collider"] = false;
 
             //If model type is track, parse config
             if (importer_common.getModelType() == ModelType.MAP)
@@ -426,6 +425,7 @@ namespace EditorTool
                 {
                     File.Delete(importer_common.importDir() + debug_model);
                     File.Delete(importer_common.importDir() + debug_material);
+                    File.Delete(importer_common.importDir() + "collision_debug.png");
                 }
 
                 //Write out a model for debugging collision box
