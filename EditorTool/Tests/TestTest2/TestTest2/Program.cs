@@ -27,9 +27,9 @@ namespace TestTest2
             }
             using (BinaryWriter writer = new BinaryWriter(File.Open("bytes.bin", FileMode.Create)))
             {
+                writer.Write(1);
                 writer.Write(2);
-                writer.Write(100);
-                writer.Write(6969);
+                writer.Write(3);
                 foreach (float vert in all_verts)
                 {
                     writer.Write(vert);
@@ -51,8 +51,9 @@ namespace TestTest2
                 List<int> num = new List<int>();
                 for (int i = len; i > 0; i--)
                 {
-                    int number = reader.ReadInt32() / sizeof(double);
-                    Console.WriteLine(number * sizeof(double));
+                    int number = reader.ReadInt32();
+                    Console.WriteLine(number);
+                    number /= sizeof(double);
                     for (int x = 0; x < len - i; x++)
                     {
                         number += num.ElementAt(x);
@@ -80,14 +81,12 @@ namespace TestTest2
                         }
                         csv_line[index] = reader.ReadDouble();
                         index++;
-
-                        /*
+                        
                         if (i == num.ElementAt(reader_index))
                         {
                             csv_out_line.Add("---");
                             reader_index++;
                         }
-                        */
                     }
                 }
                 catch
