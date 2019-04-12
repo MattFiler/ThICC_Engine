@@ -79,6 +79,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.diffuseMapBrowse = new System.Windows.Forms.Button();
             this.diffuseMap = new System.Windows.Forms.TextBox();
+            this.isWall = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transparencySlider)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -166,13 +167,14 @@
             // 
             // collisionGroup
             // 
+            this.collisionGroup.Controls.Add(this.isWall);
             this.collisionGroup.Controls.Add(this.inPlayableArea);
             this.collisionGroup.Controls.Add(this.boostPad);
             this.collisionGroup.Controls.Add(this.onTrack);
             this.collisionGroup.Controls.Add(this.offTrack);
             this.collisionGroup.Location = new System.Drawing.Point(9, 62);
             this.collisionGroup.Name = "collisionGroup";
-            this.collisionGroup.Size = new System.Drawing.Size(285, 112);
+            this.collisionGroup.Size = new System.Drawing.Size(285, 133);
             this.collisionGroup.TabIndex = 30;
             this.collisionGroup.TabStop = false;
             this.collisionGroup.Text = "Collision Config";
@@ -616,6 +618,17 @@
             this.diffuseMap.Size = new System.Drawing.Size(204, 20);
             this.diffuseMap.TabIndex = 28;
             // 
+            // isWall
+            // 
+            this.isWall.AutoSize = true;
+            this.isWall.Location = new System.Drawing.Point(6, 110);
+            this.isWall.Name = "isWall";
+            this.isWall.Size = new System.Drawing.Size(46, 17);
+            this.isWall.TabIndex = 30;
+            this.isWall.TabStop = true;
+            this.isWall.Text = "Wall";
+            this.isWall.UseVisualStyleBackColor = true;
+            // 
             // Model_Importer_MaterialEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -703,5 +716,6 @@
         private System.Windows.Forms.TrackBar specExSlider;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.ComboBox illumModel;
+        private System.Windows.Forms.RadioButton isWall;
     }
 }

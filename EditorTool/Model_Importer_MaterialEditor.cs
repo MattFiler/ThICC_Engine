@@ -13,6 +13,13 @@ namespace EditorTool
 {
     public partial class Model_Importer_MaterialEditor : Form
     {
+        /*
+         * 
+         * The CollisionType stuff is hard-coded here for the UI, whereas the rest of the tool will scale to the UI.
+         * Don't forget to update this UI if changing CollisionTypes.
+         * 
+         */
+
         JToken material_config;
         UsefulFunctions common_functions = new UsefulFunctions();
         ModelType model_type;
@@ -43,6 +50,10 @@ namespace EditorTool
                 else if (material_config["MARIOKART_COLLISION"]["2"].Value<bool>())
                 {
                     boostPad.Checked = true;
+                }
+                else if (material_config["MARIOKART_COLLISION"]["3"].Value<bool>())
+                {
+                    isWall.Checked = true;
                 }
                 else
                 {
@@ -145,6 +156,8 @@ namespace EditorTool
             offTrack.Enabled = enabled;
             boostPad.Checked = false;
             boostPad.Enabled = enabled;
+            isWall.Checked = false;
+            isWall.Enabled = enabled;
         }
 
         /* Colour selection */
@@ -204,12 +217,14 @@ namespace EditorTool
                 material_config["MARIOKART_COLLISION"]["0"] = onTrack.Checked;
                 material_config["MARIOKART_COLLISION"]["1"] = offTrack.Checked;
                 material_config["MARIOKART_COLLISION"]["2"] = boostPad.Checked;
+                material_config["MARIOKART_COLLISION"]["3"] = isWall.Checked;
             }
             else
             {
                 material_config["MARIOKART_COLLISION"]["0"] = false;
                 material_config["MARIOKART_COLLISION"]["1"] = false;
                 material_config["MARIOKART_COLLISION"]["2"] = false;
+                material_config["MARIOKART_COLLISION"]["3"] = false;
             }
 
             MessageBox.Show("Material edits saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);

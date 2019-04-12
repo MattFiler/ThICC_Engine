@@ -13,7 +13,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "ef_dashboard": {
@@ -31,7 +32,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": true
+      "2": true,
+      "3": false
     }
   },
   "ef_glideboard": {
@@ -49,7 +51,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": true
+      "2": true,
+      "3": false
     }
   },
   "ef_gravityboard": {
@@ -67,7 +70,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": true
+      "2": true,
+      "3": false
     }
   },
   "fc_ColorRoad": {
@@ -85,7 +89,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_ConcreteOutside": {
@@ -103,7 +108,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_Enkei_Building_3D": {
@@ -121,7 +127,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_Enkei_Building_Plane": {
@@ -139,7 +146,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_Enkei_RedLight": {
@@ -157,7 +165,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_KabeShiro": {
@@ -175,7 +184,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_LightObj": {
@@ -193,7 +203,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_LightObj.002": {
@@ -211,7 +222,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_LightObj_NoBake": {
@@ -229,7 +241,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_MARIOKART": {
@@ -247,7 +260,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_MichiUra": {
@@ -265,7 +279,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_Obj_01": {
@@ -283,7 +298,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_PitYuka": {
@@ -301,7 +317,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_RoadOther": {
@@ -319,7 +336,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_RoadOther2": {
@@ -337,7 +355,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_RoadOther2.002": {
@@ -355,7 +374,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_RoadOther2_G": {
@@ -373,7 +393,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_RoofParts": {
@@ -391,7 +412,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_ScrollingLight": {
@@ -409,7 +431,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_SignPole": {
@@ -427,7 +450,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_StadiumLight": {
@@ -445,7 +469,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_StadiumLight_CubeMap": {
@@ -463,7 +488,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_StadiumRoof": {
@@ -481,7 +507,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_StadiumSignboard": {
@@ -499,7 +526,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_StartGate": {
@@ -517,7 +545,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_TV_MKTV": {
@@ -535,7 +564,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_TV_capture": {
@@ -553,7 +583,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_TeamLogo_nuki": {
@@ -571,7 +602,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_WhiteLine": {
@@ -589,7 +621,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_WhiteWall": {
@@ -607,7 +640,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_WhiteWall_Outside": {
@@ -625,7 +659,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_YellowWall": {
@@ -643,7 +678,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_bench": {
@@ -661,7 +697,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_bush_LeafBase": {
@@ -679,7 +716,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": true,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_concrete_road": {
@@ -697,7 +735,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_flower": {
@@ -715,7 +754,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_grass_Outside": {
@@ -733,7 +773,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": true,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_kyokyaku_1": {
@@ -751,7 +792,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_kyokyaku_2": {
@@ -769,7 +811,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_monument": {
@@ -787,7 +830,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_nuki_1": {
@@ -805,7 +849,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_nuki_2": {
@@ -823,7 +868,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_nuki_3": {
@@ -841,7 +887,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_nuki_4": {
@@ -859,7 +906,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_nuki_5": {
@@ -877,7 +925,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_obj_2": {
@@ -895,7 +944,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_obj_3": {
@@ -913,7 +963,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_obj_4": {
@@ -931,7 +982,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_pit": {
@@ -949,7 +1001,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_road": {
@@ -967,7 +1020,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_road_G": {
@@ -985,7 +1039,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_road_MARIOKART": {
@@ -1003,7 +1058,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_road_WhiteLine": {
@@ -1021,7 +1077,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_road_WhiteLine_G": {
@@ -1039,7 +1096,8 @@
     "MARIOKART_COLLISION": {
       "0": true,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_saku": {
@@ -1057,7 +1115,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_shiba": {
@@ -1075,7 +1134,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": true,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_signboard": {
@@ -1093,7 +1153,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_signboard_Emm": {
@@ -1111,7 +1172,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": true
     }
   },
   "fc_steps": {
@@ -1129,7 +1191,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_suna": {
@@ -1147,7 +1210,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": true,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_tetukabe": {
@@ -1165,7 +1229,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_truck": {
@@ -1183,7 +1248,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_window_1": {
@@ -1201,7 +1267,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   },
   "fc_window_2": {
@@ -1219,7 +1286,8 @@
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
-      "2": false
+      "2": false,
+      "3": false
     }
   }
 }

@@ -98,13 +98,8 @@ namespace EditorTool
             {
                 foreach (JProperty material_prop in model_material_config[this_material_config.Key])
                 {
-                    //MarioKart config
-                    if (material_prop.Name == "MARIOKART")
-                    {
-                        //add to some kind of array for getting trongle data
-                    }
-                    //Material config to write
-                    else
+                    //Ignore MarioKart config
+                    if (material_prop.Name != "MARIOKART_COLLISION")
                     {
                         //Fix transparency issue
                         if (material_prop.Name == "d" && material_prop.Value.Value<string>() == "1.000000")
@@ -119,6 +114,40 @@ namespace EditorTool
             }
             File.Delete(importer_common.fileName(importer_file.MATERIAL));
             File.WriteAllLines(importer_common.fileName(importer_file.MATERIAL), new_mtl);
+
+            //------
+
+            //Make sure our MTL is uncommented in the OBJ
+            int obj_index = 0;
+            string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
+            foreach (string line in obj_file)
+            {
+                if (line.Contains("mtllib"))
+                {
+                    if (line.Substring(0, 1) == "#")
+                    {
+                        obj_file[obj_index] = obj_file[obj_index].Substring(1);
+                    }
+                    break;
+                }
+                obj_index++;
+            }
+            File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
+
+            //------
+
+            //If we're in edit mode, delete the old files
+            if (importer_common.getEditMode())
+            {
+                if (File.Exists(importer_common.fileName(importer_file.COLLMAP)))
+                {
+                    File.Delete(importer_common.fileName(importer_file.COLLMAP));
+                }
+                if (File.Exists(importer_common.fileName(importer_file.SDK_MESH)))
+                {
+                    File.Delete(importer_common.fileName(importer_file.SDK_MESH));
+                }
+            }
 
             //------
 
@@ -183,7 +212,7 @@ namespace EditorTool
             JToken asset_json = extra_json;
             asset_json["asset_name"] = importer_common.modelName();
             asset_json["asset_type"] = "Models";
-            asset_json["model_type"] = "Track";
+            asset_json["model_type"] = (int)importer_common.getModelType();
             asset_json["visible"] = true;
             asset_json["start_x"] = 0;
             asset_json["start_y"] = 0;
@@ -234,14 +263,16 @@ namespace EditorTool
                 asset_json["map_itemboxes"] = itembox_array;
             }
 
-            //Save JSON data
-            File.WriteAllText(importer_common.fileName(importer_file.CONFIG), asset_json.ToString(Formatting.Indented));
+            //Save JSON data if not in edit mode
+            if (!importer_common.getEditMode())
+            {
+                File.WriteAllText(importer_common.fileName(importer_file.CONFIG), asset_json.ToString(Formatting.Indented));
+            }
 
             //------
             
             //Comment out mtllib in OBJ for asset previewer
-            int obj_index = 0;
-            string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
+            obj_index = 0;
             foreach (string line in obj_file)
             {
                 if (line.Contains("mtllib"))
@@ -251,6 +282,7 @@ namespace EditorTool
                 }
                 obj_index++;
             }
+            File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
 
             //------
 

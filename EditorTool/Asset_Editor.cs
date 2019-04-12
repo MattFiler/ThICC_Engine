@@ -53,13 +53,18 @@ namespace EditorTool
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
+                    /*
+                    Model_Importer_Wrapper modelImporter = new Model_Importer_Wrapper();
+                    modelImporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    modelImporter.Show();
+                    */
                     using (var form = new Model_Importer_Preselect())
                     {
                         var result = form.ShowDialog();
                         if (result == DialogResult.OK)
                         {
                             Model_Importer_AssetSelector modelimporter = new Model_Importer_AssetSelector(form.selected_model_type);
-                            modelimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                            modelimporter.FormClosed += new FormClosedEventHandler(refreshOnClose); //needs to use the wrapper, this closes too early
                             modelimporter.Show();
                         }
                     }
@@ -304,6 +309,23 @@ namespace EditorTool
             
             switch (loadAssetType.SelectedItem)
             {
+                case "Models":
+                    //Create importer resource & configure paths
+                    Model_Importer_Common common_importer = new Model_Importer_Common();
+                    common_importer.configureAssetPaths(assetList.SelectedItem.ToString());
+
+                    //Pull model type (this is forced)
+                    JObject asset_json = JObject.Parse(File.ReadAllText(common_importer.fileName(importer_file.CONFIG)));
+                    common_importer.setModelType((ModelType)asset_json["model_type"].Value<int>());
+
+                    //Set as edit mode - this ignores the track config requirement
+                    common_importer.setEditMode(true);
+
+                    //Load editor
+                    Model_Importer_MaterialList modelEditor = new Model_Importer_MaterialList(common_importer);
+                    modelEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    modelEditor.Show();
+                    break;
                 case "Strings":
                     Localisation_Editor stringEditor = new Localisation_Editor(assetList.SelectedItem.ToString());
                     stringEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
