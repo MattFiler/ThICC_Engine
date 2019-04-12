@@ -332,6 +332,7 @@ namespace EditorTool
                     stringEditor.Show();
                     break;
                 default:
+                    MessageBox.Show("This asset has no properties to edit.", "No properties to edit.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
             }
         }

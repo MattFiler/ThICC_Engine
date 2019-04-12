@@ -97,14 +97,11 @@ namespace EditorTool
                 if (obj_file[i].Contains("mtllib"))
                 {
                     old_mtl_path = obj_file[i].Substring(7);
-
-                    //Correct MTL name to what we'll be using
                     obj_file[i] = "mtllib " + Path.GetFileName(importer_common.fileName(importer_file.MATERIAL));
-                    File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
-
                     break;
                 }
             }
+            File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
 
             //------
 
@@ -163,7 +160,6 @@ namespace EditorTool
                     }
                     mat_start = mtl_index;
                     referenced_materials.Add(line.Substring(7));
-                    //Seems to miss last material?!
                 }
                 /* Material file */
                 else if (line.Contains("map"))
@@ -197,11 +193,23 @@ namespace EditorTool
                             //No idea where the file is
                             mat_couldnt_find++;
                             //Need to fail here as the game will crash =)
+
+                            //delete file
+                            //throw error
                         }
                     }
                 }
                 mtl_index++;
             }
+            //Final properties for last material in the list
+            int final_prop_count = mtl_index - mat_start;
+            for (int i = 0; i < final_prop_count; i++)
+            {
+                material_props.Add(mtl_file[mat_start + i]);
+            }
+            material_prop_count.Add(final_prop_count);
+
+            //Write out changes to material
             File.WriteAllLines(importer_common.fileName(importer_file.MATERIAL), mtl_file);
 
             //------
@@ -214,7 +222,7 @@ namespace EditorTool
                 mariokart_properties[i.ToString()] = false; //All collision off as default
             }
             int prop_index = 0;
-            for (int i = 0; i < referenced_materials.Count()-1; i++)
+            for (int i = 0; i < referenced_materials.Count(); i++)
             {
                 int prop_count = material_prop_count[i];
                 JObject this_mat_jobject = new JObject();
