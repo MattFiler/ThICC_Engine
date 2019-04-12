@@ -211,8 +211,8 @@ namespace EditorTool
         /* Save new config */
         private void button1_Click(object sender, EventArgs e)
         {
-            //material_config
-
+            //Illumination configuration
+            material_config["illum"] = illumModel.SelectedIndex;
 
             //Transparency
             material_config["d"] = (transparencySlider.Value / 10).ToString("0.000000");
