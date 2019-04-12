@@ -194,10 +194,6 @@ namespace EditorTool
             // 
             this.modelType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.modelType.FormattingEnabled = true;
-            this.modelType.Items.AddRange(new object[] {
-            "Track",
-            "Player",
-            "Prop"});
             this.modelType.Location = new System.Drawing.Point(10, 34);
             this.modelType.Name = "modelType";
             this.modelType.Size = new System.Drawing.Size(210, 21);
