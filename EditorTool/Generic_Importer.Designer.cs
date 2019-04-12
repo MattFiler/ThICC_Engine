@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Generic_Importer));
             this.assetNameText = new System.Windows.Forms.Label();
             this.assetName = new System.Windows.Forms.TextBox();
             this.importAsset = new System.Windows.Forms.Button();
@@ -129,6 +130,7 @@
             this.Controls.Add(this.filePath);
             this.Controls.Add(this.browseToFile);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Generic_Importer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.Generic_Importer_Load);

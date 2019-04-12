@@ -238,9 +238,24 @@ namespace EditorTool
             File.WriteAllText(importer_common.fileName(importer_file.CONFIG), asset_json.ToString(Formatting.Indented));
 
             //------
+            
+            //Comment out mtllib in OBJ for asset previewer
+            int obj_index = 0;
+            string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
+            foreach (string line in obj_file)
+            {
+                if (line.Contains("mtllib"))
+                {
+                    obj_file[obj_index] = "#" + obj_file[obj_index];
+                    break;
+                }
+                obj_index++;
+            }
+
+            //------
 
             //Done
-            File.Delete(importer_common.fileName(importer_file.IMPORTER_CONFIG));
+            //File.Delete(importer_common.fileName(importer_file.IMPORTER_CONFIG));
             MessageBox.Show("Model import complete.", "Imported.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }

@@ -28,14 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Asset_Browser));
             this.assetList = new System.Windows.Forms.ListBox();
             this.selectAsset = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.localisationPreview = new System.Windows.Forms.TextBox();
             this.playSoundPreview = new System.Windows.Forms.Button();
             this.modelPreview = new System.Windows.Forms.Integration.ElementHost();
             this.soundPreview = new NAudio.Gui.WaveViewer();
             this.imagePreview = new System.Windows.Forms.PictureBox();
-            this.localisationPreview = new System.Windows.Forms.TextBox();
             this.createNew = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).BeginInit();
@@ -73,6 +74,16 @@
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Asset Preview";
+            // 
+            // localisationPreview
+            // 
+            this.localisationPreview.Location = new System.Drawing.Point(6, 19);
+            this.localisationPreview.Multiline = true;
+            this.localisationPreview.Name = "localisationPreview";
+            this.localisationPreview.ReadOnly = true;
+            this.localisationPreview.Size = new System.Drawing.Size(287, 134);
+            this.localisationPreview.TabIndex = 19;
+            this.localisationPreview.Visible = false;
             // 
             // playSoundPreview
             // 
@@ -115,16 +126,6 @@
             this.imagePreview.TabStop = false;
             this.imagePreview.Visible = false;
             // 
-            // localisationPreview
-            // 
-            this.localisationPreview.Location = new System.Drawing.Point(6, 19);
-            this.localisationPreview.Multiline = true;
-            this.localisationPreview.Name = "localisationPreview";
-            this.localisationPreview.ReadOnly = true;
-            this.localisationPreview.Size = new System.Drawing.Size(287, 134);
-            this.localisationPreview.TabIndex = 19;
-            this.localisationPreview.Visible = false;
-            // 
             // createNew
             // 
             this.createNew.Location = new System.Drawing.Point(10, 527);
@@ -145,6 +146,7 @@
             this.Controls.Add(this.selectAsset);
             this.Controls.Add(this.assetList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Asset_Browser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Asset Browser";

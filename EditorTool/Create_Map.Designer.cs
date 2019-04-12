@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Create_Map));
             this.saveMap = new System.Windows.Forms.Button();
             this.mapPreviewImage = new System.Windows.Forms.TextBox();
             this.selectImageAsset = new System.Windows.Forms.Button();
@@ -49,9 +50,9 @@
             this.finalLapLoop = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.loadString = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.mapName = new System.Windows.Forms.TextBox();
-            this.loadString = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -267,6 +268,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Core Map Elements";
             // 
+            // loadString
+            // 
+            this.loadString.Location = new System.Drawing.Point(244, 33);
+            this.loadString.Name = "loadString";
+            this.loadString.Size = new System.Drawing.Size(75, 23);
+            this.loadString.TabIndex = 11;
+            this.loadString.Text = "Load";
+            this.loadString.UseVisualStyleBackColor = true;
+            this.loadString.Click += new System.EventHandler(this.loadString_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -284,16 +295,6 @@
             this.mapName.Size = new System.Drawing.Size(229, 20);
             this.mapName.TabIndex = 8;
             // 
-            // loadString
-            // 
-            this.loadString.Location = new System.Drawing.Point(244, 33);
-            this.loadString.Name = "loadString";
-            this.loadString.Size = new System.Drawing.Size(75, 23);
-            this.loadString.TabIndex = 11;
-            this.loadString.Text = "Load";
-            this.loadString.UseVisualStyleBackColor = true;
-            this.loadString.Click += new System.EventHandler(this.loadString_Click);
-            // 
             // Create_Map
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -303,6 +304,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.saveMap);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Create_Map";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create New Map";

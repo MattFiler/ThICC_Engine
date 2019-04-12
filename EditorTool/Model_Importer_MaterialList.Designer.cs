@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Model_Importer_MaterialList));
             this.materialList = new System.Windows.Forms.ListBox();
             this.editMaterial = new System.Windows.Forms.Button();
             this.SaveMaterials = new System.Windows.Forms.Button();
@@ -159,6 +160,7 @@
             this.Controls.Add(this.editMaterial);
             this.Controls.Add(this.materialList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Model_Importer_MaterialList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Import Model";
