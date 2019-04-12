@@ -7,6 +7,7 @@
 #include "Constants.h"
 #include "AnimationMesh.h"
 #include "Bomb.h"
+#include "FakeItemBox.h"
 #include "ControlledMovement.h"
 #include "MoveAI.h"
 #include <functional>

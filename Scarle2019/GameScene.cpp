@@ -778,6 +778,13 @@ Item* GameScene::CreateItem(ItemType type)
 
 		return bomb;
 	}
+	case FAKE_BOX:
+	{
+		FakeItemBox* box = new FakeItemBox();
+		m_itemModels.push_back(box);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(box->GetMesh())->getDebugCollider());
+		return box;
+	}
 	default:
 		return nullptr;
 	}

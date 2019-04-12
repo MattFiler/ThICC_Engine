@@ -307,6 +307,13 @@ void Player::SpawnItems(ItemType type)
 			m_multiItem = true;
 			break;
 		}
+
+		case FAKE_BOX:
+		{
+			FakeItemBox* box = static_cast<FakeItemBox*>(CreateItem(FAKE_BOX));
+			m_trailingItems.push_back(box);
+			TrailItems();
+		}
 		default:
 			break;
 	}

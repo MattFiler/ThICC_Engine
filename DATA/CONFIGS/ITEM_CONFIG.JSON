@@ -55,6 +55,7 @@
 	},
 	"FAKE_BOX": {
 		"ui_sprite": "ITEM_FAKEBOX",
+        "model": "ITEM_FAKEBOX",
 		"probabilities": {
 			"place_1": 17.5,
 			"place_2": 10,

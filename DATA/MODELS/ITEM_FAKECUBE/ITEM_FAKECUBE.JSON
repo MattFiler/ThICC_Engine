@@ -1,0 +1,57 @@
+{
+  "has_box_collider": false,
+  "collision_box": {
+    "front_top_left": [
+      2.2324,
+      2.2324,
+      2.2324
+    ],
+    "front_top_right": [
+      -2.2324,
+      2.2324,
+      2.2324
+    ],
+    "front_bottom_right": [
+      -2.2324,
+      -2.2324,
+      2.2324
+    ],
+    "front_bottom_left": [
+      2.2324,
+      -2.2324,
+      2.2324
+    ],
+    "back_top_left": [
+      2.2324,
+      2.2324,
+      -2.2324
+    ],
+    "back_top_right": [
+      -2.2324,
+      2.2324,
+      -2.2324
+    ],
+    "back_bottom_right": [
+      -2.2324,
+      -2.2324,
+      -2.2324
+    ],
+    "back_bottom_left": [
+      2.2324,
+      -2.2324,
+      -2.2324
+    ]
+  },
+  "asset_name": "ITEM_FAKECUBE",
+  "asset_type": "Models",
+  "model_type": 1,
+  "visible": true,
+  "start_x": 0,
+  "start_y": 0,
+  "start_z": 0,
+  "modelscale": 1.0,
+  "rot_x": 0,
+  "rot_y": 0,
+  "rot_z": 0,
+  "segment_size": 10
+}

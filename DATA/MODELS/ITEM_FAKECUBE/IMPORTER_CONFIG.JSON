@@ -1,0 +1,17 @@
+{
+  "lambert2SG": {
+    "newmtl": "lambert2SG",
+    "illum": "4",
+    "Kd": "0.00 0.00 0.00",
+    "Ka": "0.00 0.00 0.00",
+    "Tf": "1.00 1.00 1.00",
+    "map_Kd": "dott.png",
+    "Ni": "1.00",
+    "MARIOKART_COLLISION": {
+      "0": false,
+      "1": false,
+      "2": false,
+      "3": false
+    }
+  }
+}
