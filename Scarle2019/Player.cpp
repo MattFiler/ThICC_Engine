@@ -13,6 +13,7 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 {
 	m_RD = Locator::getRD();
 	SetDrag(0.7);
+	m_useGroundTypes = true;
 	SetPhysicsOn(true);
 	m_playerID = _playerID;
 	m_textRanking = new Text2D(std::to_string(m_ranking));
