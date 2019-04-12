@@ -143,7 +143,6 @@ namespace EditorTool
             List<string> referenced_materials = new List<string>();
             List<int> material_prop_count = new List<int>();
             List<string> material_props = new List<string>();
-            int mat_couldnt_find = 0;
             foreach (string line in mtl_file)
             {
                 /* Start of new material */
@@ -174,7 +173,7 @@ namespace EditorTool
                         {
                             File.Copy(material_path, import_path);
                         }
-                        mtl_file[mtl_index] = line_split[0] + " " + import_path;
+                        mtl_file[mtl_index] = line_split[0] + " " + Path.GetFileName(import_path);
                     }
                     else
                     {
@@ -186,16 +185,14 @@ namespace EditorTool
                             {
                                 File.Copy(material_path, import_path);
                             }
-                            mtl_file[mtl_index] = line_split[0] + " " + import_path;
+                            mtl_file[mtl_index] = line_split[0] + " " + Path.GetFileName(import_path);
                         }
                         else
                         {
-                            //No idea where the file is
-                            mat_couldnt_find++;
                             //Need to fail here as the game will crash =)
-
-                            //delete file
-                            //throw error
+                            Directory.Delete(importer_common.importDir(), true);
+                            MessageBox.Show("Could not find all materials!\nMake sure to export your model from Blender!", "Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
                         }
                     }
                 }

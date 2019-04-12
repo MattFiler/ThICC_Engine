@@ -400,14 +400,14 @@ namespace EditorTool
 
                 //Write the data to a json token
                 JToken collision_info = JToken.Parse(
-                    "\"front_top_left\": [" + biggest_vert[0] + "," + biggest_vert[1] + "," + biggest_vert[2] + "], " +
+                    "{\"front_top_left\": [" + biggest_vert[0] + "," + biggest_vert[1] + "," + biggest_vert[2] + "], " +
                     "\"front_top_right\": [" + smallest_vert[0] + "," + biggest_vert[1] + "," + biggest_vert[2] + "], " +
                     "\"front_bottom_right\": [" + smallest_vert[0] + "," + smallest_vert[1] + "," + biggest_vert[2] + "], " +
                     "\"front_bottom_left\": [" + biggest_vert[0] + "," + smallest_vert[1] + "," + biggest_vert[2] + "], " +
                     "\"back_top_left\": [" + biggest_vert[0] + "," + biggest_vert[1] + "," + smallest_vert[2] + "], " +
                     "\"back_top_right\": [" + smallest_vert[0] + "," + biggest_vert[1] + "," + smallest_vert[2] + "], " +
                     "\"back_bottom_right\": [" + smallest_vert[0] + "," + smallest_vert[1] + "," + smallest_vert[2] + "], " +
-                    "\"back_bottom_left\": [" + biggest_vert[0] + "," + smallest_vert[1] + "," + smallest_vert[2] + "]");
+                    "\"back_bottom_left\": [" + biggest_vert[0] + "," + smallest_vert[1] + "," + smallest_vert[2] + "]}");
                 extra_json["has_box_collider"] = true;
                 extra_json["collision_box"] = collision_info;
 
