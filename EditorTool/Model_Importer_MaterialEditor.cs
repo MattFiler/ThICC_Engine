@@ -211,6 +211,10 @@ namespace EditorTool
         {
             //material_config
 
+
+            //Transparency
+            material_config["d"] = (transparencySlider.Value / 10).ToString("0.000000");
+            
             //Collision config
             if (inPlayableArea.Checked)
             {
@@ -248,6 +252,9 @@ namespace EditorTool
         {
 
         }
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
 
+        }
     }
 }

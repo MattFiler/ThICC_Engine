@@ -37,6 +37,7 @@
             this.inPlayableArea = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.collisionGroup = new System.Windows.Forms.GroupBox();
+            this.isWall = new System.Windows.Forms.RadioButton();
             this.boostPad = new System.Windows.Forms.RadioButton();
             this.onTrack = new System.Windows.Forms.RadioButton();
             this.offTrack = new System.Windows.Forms.RadioButton();
@@ -79,7 +80,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.diffuseMapBrowse = new System.Windows.Forms.Button();
             this.diffuseMap = new System.Windows.Forms.TextBox();
-            this.isWall = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transparencySlider)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -179,6 +179,17 @@
             this.collisionGroup.TabStop = false;
             this.collisionGroup.Text = "Collision Config";
             // 
+            // isWall
+            // 
+            this.isWall.AutoSize = true;
+            this.isWall.Location = new System.Drawing.Point(6, 110);
+            this.isWall.Name = "isWall";
+            this.isWall.Size = new System.Drawing.Size(46, 17);
+            this.isWall.TabIndex = 30;
+            this.isWall.TabStop = true;
+            this.isWall.Text = "Wall";
+            this.isWall.UseVisualStyleBackColor = true;
+            // 
             // boostPad
             // 
             this.boostPad.AutoSize = true;
@@ -249,6 +260,7 @@
             this.groupBox2.TabIndex = 27;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Material Properties";
+            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // label17
             // 
@@ -617,17 +629,6 @@
             this.diffuseMap.ReadOnly = true;
             this.diffuseMap.Size = new System.Drawing.Size(204, 20);
             this.diffuseMap.TabIndex = 28;
-            // 
-            // isWall
-            // 
-            this.isWall.AutoSize = true;
-            this.isWall.Location = new System.Drawing.Point(6, 110);
-            this.isWall.Name = "isWall";
-            this.isWall.Size = new System.Drawing.Size(46, 17);
-            this.isWall.TabIndex = 30;
-            this.isWall.TabStop = true;
-            this.isWall.Text = "Wall";
-            this.isWall.UseVisualStyleBackColor = true;
             // 
             // Model_Importer_MaterialEditor
             // 

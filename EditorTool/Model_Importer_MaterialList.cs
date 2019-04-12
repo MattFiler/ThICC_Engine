@@ -511,5 +511,70 @@ namespace EditorTool
 
             return true;
         }
+
+        /* Auto detect material names and base collision/transparency properties on that */
+        private void autoDetect_Click(object sender, EventArgs e)
+        {
+            //Confirmation
+            DialogResult areYouSure = MessageBox.Show("This process will auto-detect the best transparency and colision properties based on material metadata.\nThis will potentially overwrite existing configurations.\nAre you sure you wish to continue?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (areYouSure != DialogResult.Yes)
+            {
+                return;
+            }
+
+            //Loop through every material and base on name if we are transparent or collision
+            foreach (var this_material_config in model_material_config)
+            {
+                JToken this_token = model_material_config[this_material_config.Key];
+
+                //Materials starting with "ef_" are usually boost pads
+                if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_")
+                {
+                    setCollisionParam(CollisionType.BOOST_PAD, this_token);
+                }
+
+                //Materials containing "road" are usually road!
+                if (this_material_config.Key.ToUpper().Contains("ROAD"))
+                {
+                    setCollisionParam(CollisionType.ON_TRACK, this_token);
+                }
+
+                //Materials containing "wall" are usually road!
+                if (this_material_config.Key.ToUpper().Contains("WALL"))
+                {
+                    setCollisionParam(CollisionType.WALL, this_token);
+                }
+
+                //Materials containing "grass", "suna", or "shiba" are usually off-road!
+                if (this_material_config.Key.ToUpper().Contains("GRASS") || this_material_config.Key.ToUpper().Contains("SHIBA") || this_material_config.Key.ToUpper().Contains("SUNA"))
+                {
+                    setCollisionParam(CollisionType.OFF_TRACK, this_token);
+                }
+
+                //Materials containing "nuki" are usually transparent!
+                if (this_material_config.Key.ToUpper().Contains("NUKI"))
+                {
+                    this_token["d"] = "0.999999";
+                }
+                else
+                {
+                    this_token["d"] = "0.000000";
+                }
+            }
+        }
+
+        /* Set collision parameter in material config */
+        private void setCollisionParam(CollisionType _type, JToken _token)
+        {
+            for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
+            {
+                bool to_set = false;
+                if (i == (int)_type)
+                {
+                    to_set = true;
+                }
+                _token["MARIOKART_COLLISION"][i.ToString()] = to_set;
+            }
+        }
     }
 }
