@@ -10,11 +10,7 @@ ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("ITEM CUBE") 
 	SetPos(position);
 	SetRotation(rotation);
 
-	//Item box needs a bigger hitbox
-	getColliderRef().Extents.x *= 5;
-	getColliderRef().Extents.y *= 5;
-	getColliderRef().Extents.z *= 5;
-
+	m_physData.m_additionalScale = 50;
 	std::cout << "CREATING ITEM BOX AT: (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
 }
 
@@ -31,6 +27,7 @@ void ItemBox::Tick() {
 			invisibility_timer = 0.0;
 		}
 	}
+
 
 	PhysModel::Tick();
 }

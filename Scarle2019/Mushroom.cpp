@@ -9,6 +9,7 @@ Mushroom::Mushroom()
 void Mushroom::Use(Player* player, bool _altUse)
 {
 	m_used = true;
+
 	m_player = player;
 }
 

@@ -170,6 +170,7 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AIScheduler.h" />
     <ClInclude Include="AnimationMesh.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Banana.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="CharecterSelectionState.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="ControlledMovement.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DebugMarker.h" />
     <ClInclude Include="DebugScene.h" />
@@ -211,6 +213,7 @@
     <ClInclude Include="MarchCubes.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="MeshTri.h" />
+    <ClInclude Include="MoveAI.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
@@ -242,6 +245,7 @@
     <ClInclude Include="WindowData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AIScheduler.cpp" />
     <ClCompile Include="AnimationMesh.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />
@@ -249,6 +253,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CharecterSelectionState.cpp" />
+    <ClCompile Include="ControlledMovement.cpp" />
     <ClCompile Include="DebugMarker.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="Explosion.cpp" />
@@ -273,6 +278,7 @@
     <ClCompile Include="MarchCubes.cpp" />
     <ClCompile Include="MeshTri.cpp" />
     <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="MoveAI.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

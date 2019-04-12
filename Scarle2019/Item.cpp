@@ -50,5 +50,4 @@ void Item::setItemInUse(Player* player)
 	m_itemUsed = true;
 	m_trailingPlayerImmunity = false;
 	m_player = player;
-	m_immuneItems.clear();
 }

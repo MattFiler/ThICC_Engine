@@ -16,8 +16,8 @@ PhysModel::PhysModel(string _filename) :SDKMeshGO3D(_filename)
 		model_data << i;
 		m_hasCollider = model_data["has_box_collider"];
 
-		m_physData.scale = model_data["modelscale"];
-		SetScale(m_physData.scale);
+		m_physData.m_scale = model_data["modelscale"];
+		SetScale(m_physData.m_scale);
 		/*
 		For whatever reason, setting this here will cause horrible collision errors...
 		SetPos(Vector3(model_data["start_x"], model_data["start_y"], model_data["start_z"]));
@@ -27,7 +27,7 @@ PhysModel::PhysModel(string _filename) :SDKMeshGO3D(_filename)
 		if (m_hasCollider)
 		{
 			m_colliderDebug = new SDKMeshGO3D(_filename + " DEBUG");
-			m_colliderDebug->SetScale(m_physData.scale);
+			m_colliderDebug->SetScale(m_physData.m_scale);
 			initCollider(model_data);
 
 		}
@@ -40,44 +40,43 @@ void PhysModel::initCollider(json &model_data)
 	and uses (currently) the top front left point to determine the extents (size) of the collider */
 	m_hasCollider = true;
 	float offest = 4;
-	m_physData.m_localFrontTopLeft = Vector3((float)model_data["collision_box"]["front_top_left"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["front_top_left"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["front_top_left"][2] * m_physData.scale);
+	m_physData.m_localFrontTopLeft = Vector3((float)model_data["collision_box"]["front_top_left"][0] * m_physData.m_scale,
+		(float)model_data["collision_box"]["front_top_left"][1] * m_physData.m_scale,
+		(float)model_data["collision_box"]["front_top_left"][2] * m_physData.m_scale);
 
-	m_physData.m_localFrontTopRight = Vector3((float)model_data["collision_box"]["front_top_right"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["front_top_right"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["front_top_right"][2] * m_physData.scale);
+	m_physData.m_localFrontTopRight = Vector3((float)model_data["collision_box"]["front_top_right"][0] * m_physData.m_scale,
+		(float)model_data["collision_box"]["front_top_right"][1] * m_physData.m_scale,
+		(float)model_data["collision_box"]["front_top_right"][2] * m_physData.m_scale);
 
-	m_physData.m_localFrontBottomLeft = Vector3((float)model_data["collision_box"]["front_bottom_left"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["front_bottom_left"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["front_bottom_left"][2] * m_physData.scale);
+	m_physData.m_localFrontBottomLeft = Vector3((float)model_data["collision_box"]["front_bottom_left"][0] * m_physData.m_scale,
+		(float)model_data["collision_box"]["front_bottom_left"][1] * m_physData.m_scale,
+		(float)model_data["collision_box"]["front_bottom_left"][2] * m_physData.m_scale);
 
-	m_physData.m_localFrontBottomRight = Vector3((float)model_data["collision_box"]["front_bottom_right"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["front_bottom_right"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["front_bottom_right"][2] * m_physData.scale);
+	m_physData.m_localFrontBottomRight = Vector3((float)model_data["collision_box"]["front_bottom_right"][0] * m_physData.m_scale,
+		(float)model_data["collision_box"]["front_bottom_right"][1] * m_physData.m_scale,
+		(float)model_data["collision_box"]["front_bottom_right"][2] * m_physData.m_scale);
 
-	m_physData.m_localBackTopLeft = Vector3((float)model_data["collision_box"]["back_top_left"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["back_top_left"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["back_top_left"][2] * m_physData.scale);
+	m_physData.m_localBackTopLeft = Vector3((float)model_data["collision_box"]["back_top_left"][0] * m_physData.m_scale,
+		(float)model_data["collision_box"]["back_top_left"][1] * m_physData.m_scale,
+		(float)model_data["collision_box"]["back_top_left"][2] * m_physData.m_scale);
 
-	m_physData.m_localBackTopRight = Vector3((float)model_data["collision_box"]["back_top_right"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["back_top_right"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["back_top_right"][2] * m_physData.scale);
+	m_physData.m_localBackTopRight = Vector3((float)model_data["collision_box"]["back_top_right"][0] * m_physData.m_scale,
+		(float)model_data["collision_box"]["back_top_right"][1] * m_physData.m_scale,
+		(float)model_data["collision_box"]["back_top_right"][2] * m_physData.m_scale);
 
-	m_physData.m_localBackBottomLeft = Vector3((float)model_data["collision_box"]["back_bottom_left"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["back_bottom_left"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["back_bottom_left"][2] * m_physData.scale);
+	m_physData.m_localBackBottomLeft = Vector3((float)model_data["collision_box"]["back_bottom_left"][0] * m_physData.m_scale,
+		(float)model_data["collision_box"]["back_bottom_left"][1] * m_physData.m_scale,
+		(float)model_data["collision_box"]["back_bottom_left"][2] * m_physData.m_scale);
 
-	m_physData.m_localBackBottomRight = Vector3((float)model_data["collision_box"]["back_bottom_right"][0] * m_physData.scale,
-		(float)model_data["collision_box"]["back_bottom_right"][1] * m_physData.scale,
-		(float)model_data["collision_box"]["back_bottom_right"][2] * m_physData.scale);
+	m_physData.m_localBackBottomRight = Vector3((float)model_data["collision_box"]["back_bottom_right"][0] * m_physData.m_scale,
+		(float)model_data["collision_box"]["back_bottom_right"][1] * m_physData.m_scale,
+		(float)model_data["collision_box"]["back_bottom_right"][2] * m_physData.m_scale);
 
 
 	m_physData.m_localCentre = Vector3((m_physData.m_localFrontTopLeft.x + m_physData.m_localFrontTopRight.x) / 2
 		, (m_physData.m_localFrontTopLeft.y + m_physData.m_localFrontBottomLeft.y) / 2, (m_physData.m_localFrontTopLeft.z + m_physData.m_localBackTopLeft.z) / 2);
 
 	updateCollider();
-	m_collider.Extents = Vector3(m_physData.scale, m_physData.scale,m_physData.scale);
 
 	m_physData.m_width = m_physData.m_globalFrontTopLeft.x - m_physData.m_globalFrontTopRight.x;
 	m_physData.m_height = m_physData.m_globalFrontTopLeft.y - m_physData.m_globalFrontBottomLeft.y;
@@ -117,12 +116,12 @@ void PhysModel::updateCollider()
 
 		m_physData.m_worldCentre = Vector3::Transform(m_physData.m_localCentre, m_world);
 		m_collider.Center = m_physData.m_worldCentre;
-		m_collider.Extents = m_scale /** m_physData.scale*/;
+		m_collider.Extents = m_scale * m_physData.m_additionalScale;
 		Vector3 euler = MatrixDecomposeYawPitchRoll(m_rot);
 		m_collider.Orientation = XMFLOAT4(Quaternion::CreateFromYawPitchRoll(euler.y , euler.x, euler.z));
 		//Updates the debug collider position and rotation
 		m_colliderDebug->SetPos(Vector3::Transform(Vector3(m_physData.m_localCentre.x, m_physData.m_localCentre.y - (m_physData.m_height / 2), m_physData.m_localCentre.z), m_world));
-		m_colliderDebug->SetScale(m_physData.scale);
+		m_colliderDebug->SetScale(m_physData.m_scale);
 		Quaternion test = Quaternion(m_collider.Orientation);
 		m_colliderDebug->SetYaw(euler.y);
 		m_colliderDebug->SetPitch(euler.x);
