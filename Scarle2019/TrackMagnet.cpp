@@ -30,6 +30,34 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	float modifiedMaxRotation = m_maxRotation;
 	if (shouldStick)
 	{
+		if (m_useGroundTypes)
+		{
+			colType = tri->GetType();
+			switch (tri->GetType())
+			{
+			case ON_TRACK:
+			{
+				m_drag = 0.7f;
+				break;
+			}
+			case OFF_TRACK:
+			{
+				m_drag = 3;
+				break;
+			}
+			case BOOST_PAD:
+			{
+				Vector vel = m_vel;
+				vel.Normalize();
+				vel *= 200 * Locator::getGSD()->m_dt;
+				m_vel += vel;
+				break;
+			}
+			default:
+				break;
+			}
+		}
+
 		m_onTrack = true;
 
 		Vector adjustVel = m_vel;
