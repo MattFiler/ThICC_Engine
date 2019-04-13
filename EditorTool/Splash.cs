@@ -16,6 +16,7 @@ namespace EditorTool
 {
     public partial class Splash : Form
     {
+        List<string> ignored_extensions = new List<string>();
         public Splash(bool shouldInitialiseGUI = true)
         {
             if (shouldInitialiseGUI)
@@ -23,6 +24,19 @@ namespace EditorTool
                 //Only create GUI if needed (auto-compile launches want no GUI)
                 InitializeComponent();
             }
+
+            //Create list of ignored extensions for asset compilation
+            ignored_extensions.Add(".vcxproj");
+            ignored_extensions.Add(".filters");
+            ignored_extensions.Add(".user");
+            ignored_extensions.Add(".exe");
+            ignored_extensions.Add(".obj");
+            ignored_extensions.Add(".mtl");
+            ignored_extensions.Add(".bmp");
+            ignored_extensions.Add(".config");
+            ignored_extensions.Add(".pdb");
+            ignored_extensions.Add(".xml");
+            ignored_extensions.Add(".dll");
         }
 
         /* Open Asset Manager */
@@ -58,24 +72,12 @@ namespace EditorTool
             {
                 Directory.Delete(output_directory, true);
             }
-            List<string> ignored_extensions = new List<string>();
-            ignored_extensions.Add(".vcxproj");
-            ignored_extensions.Add(".filters");
-            ignored_extensions.Add(".user");
-            ignored_extensions.Add(".exe");
-            ignored_extensions.Add(".obj");
-            ignored_extensions.Add(".mtl");
-            ignored_extensions.Add(".bmp");
-            ignored_extensions.Add(".config");
-            ignored_extensions.Add(".pdb");
-            ignored_extensions.Add(".xml");
-            ignored_extensions.Add(".dll");
-            DirectoryCopy(path_mod + "DATA/", output_directory, true, ignored_extensions);
+            DirectoryCopy(path_mod + "DATA/", output_directory, true);
         }
 
         /* Copy a Directory */
         //Modified from: https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
-        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, List<string> ignoreExtensions)
+        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
@@ -99,7 +101,7 @@ namespace EditorTool
             foreach (FileInfo file in files)
             {
                 bool should_copy = true;
-                foreach (string ignored_extension in ignoreExtensions)
+                foreach (string ignored_extension in ignored_extensions)
                 {
                     if (file.Extension.ToUpper() == ignored_extension.ToUpper())
                     {
@@ -133,7 +135,7 @@ namespace EditorTool
                 foreach (DirectoryInfo subdir in dirs)
                 {
                     string temppath = Path.Combine(destDirName, subdir.Name);
-                    DirectoryCopy(subdir.FullName, temppath, copySubDirs, ignoreExtensions);
+                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);
                 }
             }
         }
@@ -219,7 +221,11 @@ namespace EditorTool
             if (!Directory.Exists(path_mod + "CACHE"))
             {
                 Directory.CreateDirectory(path_mod + "CACHE");
-                File.WriteAllText(path_mod + "CACHE/DATA_CACHE.TXT", "0");
+                using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Create)))
+                {
+                    long placeholder = 0;
+                    writer.Write(placeholder);
+                }
             }
 
             try
@@ -249,16 +255,28 @@ namespace EditorTool
                 long total_size = 0;
                 foreach (var file in file_array)
                 {
-                    total_size += file.Length;
+                    foreach (string ignored_extension in ignored_extensions)
+                    {
+                        if (Path.GetExtension(file.Name) == ignored_extension)
+                        {
+                            total_size += file.Length;
+                        }
+                    }
                 }
-                string orig_size = File.ReadAllText(path_mod + "CACHE/DATA_CACHE.TXT");
-                string new_size = total_size.ToString();
-                if (orig_size == new_size)
+                long orig_size = 0;
+                using (BinaryReader reader = new BinaryReader(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Open)))
+                {
+                    orig_size = reader.ReadInt64();
+                }
+                if (orig_size == total_size)
                 {
                     return;
                 }
                 //We do need to copy, save new cache value
-                File.WriteAllText(path_mod + "CACHE/DATA_CACHE.TXT", total_size.ToString());
+                using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Create)))
+                {
+                    writer.Write(Convert.ToInt64(total_size));
+                }
             }
 
             //Copy all
