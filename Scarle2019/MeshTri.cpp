@@ -2,15 +2,15 @@
 #include "pch.h"
 #include <iostream>
 
-MeshTri::MeshTri(Vector _a, Vector _b, Vector _c) : m_pointA(_a), m_pointB(_b), m_pointC(_c)
+MeshTri::MeshTri(Vector _a, Vector _b, Vector _c, int _type) : m_pointA(_a), m_pointB(_b), m_pointC(_c), m_type((CollisionType)_type)
 {
 	 m_plane = Plane(_a, _b, _c); 
 };
 
 /* Returns true if the given vector, starting at the given position intersects this triangle*/
-bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _intersect, MeshTri*& _tri, float _maxAngle)
+bool MeshTri::DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle)
 {
-	float angle = acos((_direction*-1).Dot(m_plane.Normal()) / ((_direction*-1).Length() * m_plane.Normal().Length()));
+	angle = acos((_direction*-1).Dot(m_plane.Normal()) / ((_direction*-1).Length() * m_plane.Normal().Length()));
 	if (angle > _maxAngle)
 	{
 		return false;
@@ -22,7 +22,7 @@ bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _in
 		//return false;
 	}
 	// If the normal is pointing away from the _starPos, ignore this tri
-	if (_maxAngle < 3 && _direction.Distance(Vector(0, 0, 0), m_plane.Normal() + _direction) > _direction.Distance(Vector(0, 0, 0), _direction))
+	if (_maxAngle < 3 && (m_plane.Normal() + _direction).LengthSquared() > _direction.LengthSquared())
 	{
 		return false;
 	}
@@ -31,14 +31,14 @@ bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _in
 	// and the vector equasion for a line as p = dl + l0
 	// Substituting one into the other, and rearring to find d
 	// d = (p0 - l0).n / l.n
-	float numerator = m_plane.Normal().Dot((m_pointA - _startPos));
+	numerator = m_plane.Normal().Dot((m_pointA - _startPos));
 	// If the numerator is 0, then the line lies inside the plane
 	if (numerator == 0)
 	{
 		_intersect = _startPos;
 		return true;
 	}
-	float denominator = _direction.Dot(m_plane.Normal());
+	denominator = _direction.Dot(m_plane.Normal());
 	// If the denominator is 0, then the line is parralel
 	if (denominator == 0)
 	{
@@ -46,13 +46,13 @@ bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _in
 	}
 
 	// D here is the scalar for the vector, which determins where on the line is the intersect
-	float d = numerator / denominator;
+	d = numerator / denominator;
 
 	_intersect = d*_direction + _startPos;
 
 	// Check if the intersect is within range of the vector
-	float dist = Vector::Distance(_startPos, _intersect);
-	if (dist > _direction.Length())
+	dist = Vector::DistanceSquared(_startPos, _intersect);
+	if (dist > _direction.LengthSquared())
 	{
 		return false;
 	}
@@ -62,19 +62,19 @@ bool MeshTri::DoesLineIntersect(Vector _direction, Vector _startPos, Vector& _in
 	Wolfgang Heidrich, 2005, Computing the Barycentric Coordinates of a Projected Point, Journal of Graphics Tools, pp 9-12, 10(3).
 	I won't pretend that I understand this part at all. */
 	// u=P2−P1
-	Vector u = m_pointB - m_pointA;
+	u = m_pointB - m_pointA;
 	// v=P3−P1
-	Vector v = m_pointC - m_pointA;
+	v = m_pointC - m_pointA;
 	// n=u×v
-	Vector n = u.Cross(v);
+	n = u.Cross(v);
 	// w=P−P1
-	Vector w = _intersect - m_pointA;
+	w = _intersect - m_pointA;
 	// Barycentric coordinates of the projection P′of P onto T:
 	// γ=[(u×w)⋅n]/n²
-	float gamma = u.Cross(w).Dot(n) / n.Dot(n);
+	gamma = u.Cross(w).Dot(n) / n.Dot(n);
 	// β=[(w×v)⋅n]/n²
-	float beta = w.Cross(v).Dot(n) / n.Dot(n);
-	float alpha = 1 - gamma - beta;
+	beta = w.Cross(v).Dot(n) / n.Dot(n);
+	alpha = 1 - gamma - beta;
 	// The point P′ lies inside T if:
 
 	return ((0 <= alpha) && (alpha <= 1) &&

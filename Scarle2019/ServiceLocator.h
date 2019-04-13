@@ -9,6 +9,7 @@ class InputData;
 class ItemData;
 class AudioManager;
 class GarbageCollector;
+class AIScheduler;
 
 struct Locator {
 	static RenderData* getRD() {
@@ -54,6 +55,13 @@ struct Locator {
 		return ref_GC;
 	}
 
+	static AIScheduler* getAIScheduler() {
+		if (ref_AIS == nullptr) {
+			throw std::runtime_error("Call to AI Scheduler before initialisation.");
+		}
+		return ref_AIS;
+	}
+
 
 	static void setupRD(RenderData* inst_RD) {
 		ref_RD = inst_RD;
@@ -76,6 +84,9 @@ struct Locator {
 	static void setupGarbageCollector(GarbageCollector* inst_GC) {
 		ref_GC = inst_GC;
 	}
+	static void setupAIScheduler(AIScheduler* inst_AIS) {
+		ref_AIS = inst_AIS;
+	}
 
 private:
 	static RenderData* ref_RD;
@@ -85,4 +96,5 @@ private:
 	static ItemData* ref_ItemProbability;
 	static AudioManager* ref_audio;
 	static GarbageCollector* ref_GC;
+	static AIScheduler* ref_AIS;
 };

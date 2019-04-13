@@ -14,9 +14,27 @@ namespace EditorTool
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Landing());
+            if (Environment.GetCommandLineArgs().Count() >= 2 && Environment.GetCommandLineArgs().ElementAt(1).ToString().Substring(1) == "auto_compile")
+            {
+                //A launch to soley build assets
+                Splash splash_content = new Splash(false);
+                if (splash_content.autoCompileAssets("../")) //Working directory fix
+                {
+                    Console.WriteLine("Asset compile finished successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("Asset compile FAILED. Files may be open in another process.");
+                }
+                Application.Exit();
+            }
+            else
+            {
+                //A standard application launch
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Splash());
+            }
         }
     }
 }

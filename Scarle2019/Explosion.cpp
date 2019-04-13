@@ -12,8 +12,9 @@ Explosion::Explosion() : TrackMagnet("bomb_explosion")
 void Explosion::HitByPlayer(Player * _player)
 {
 	_player->setVelocity(Vector3::Zero);
-	_player->Jump(2, 1.6f);
+	_player->Jump(1.5f, 1);
 	_player->Flip(1, 0.8f);
+	_player->AddPos(_player->GetWorld().Up() * 4);
 }
 
 void Explosion::Tick()

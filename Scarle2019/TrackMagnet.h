@@ -11,8 +11,12 @@ public:
 
 	void setDampenWallReflect(bool _toggle) { m_dampenWallReflect = _toggle; };
 
+	void UseGroundTypes(bool _flag) { m_useGroundTypes = _flag; };
+
 protected:
 	bool m_onTrack = false;
+	bool m_useGroundTypes = false;
+	CollisionType colType = ON_TRACK;
 
 private:
 	void MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector& _down, MeshTri * _tri);

@@ -42,5 +42,6 @@ struct RenderData
 		m_resourceDescriptors.reset();
 		m_spriteBatch.reset();
 		m_GPeffect.reset();
+		//effect.reset(); - maybe?
 	}
 };

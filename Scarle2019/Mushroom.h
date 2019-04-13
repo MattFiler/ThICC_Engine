@@ -14,8 +14,11 @@ public:
 private:
 	Player * m_player = nullptr;
 	bool m_used = false;
+
+
 	double m_timeElapsed = 0;
 
 	float m_boostAmount = 40;
+	float m_minVelo = 50;
 	double m_boostDuration = 2;
 };

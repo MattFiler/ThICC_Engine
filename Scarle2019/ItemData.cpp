@@ -7,7 +7,7 @@
 
 /* Load config data for each item */
 ItemData::ItemData() {
-	std::ifstream i("DATA/ITEMS/ITEM_CONFIG.JSON");
+	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
 	complete_config << i;
 
 	ProcessConfig(GREEN_SHELL, "GREEN_SHELL");
@@ -38,6 +38,9 @@ ItemData::ItemData() {
 
 /* Get a random item based on the player position */
 ItemType ItemData::GetRandomItem(int _position) {
+
+	return FAKE_BOX;
+
 	float random_out_of_100 = (rand() % 101);
 
 	for (int i = 0; i < item_count-1; i++) {

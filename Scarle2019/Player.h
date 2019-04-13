@@ -7,6 +7,9 @@
 #include "Constants.h"
 #include "AnimationMesh.h"
 #include "Bomb.h"
+#include "FakeItemBox.h"
+#include "ControlledMovement.h"
+#include "MoveAI.h"
 #include <functional>
 
 //=================================================================
@@ -44,8 +47,10 @@ public:
 	/* Inventory Management */
 	ItemType getActiveItem() { return active_item; };
 	void setActiveItem(ItemType _item);
-	ItemType getItemInInventory() { return inventory_item; };
+	ItemType getItemInInventory() { return m_InventoryItem; };
 	void setItemInInventory(ItemType _item);
+
+	void CheckUseItem();
 	void TrailItems();
 	void SpawnItems(ItemType type);
 	void ReleaseItem();
@@ -58,23 +63,11 @@ protected:
 	int m_playerID = 0;
 
 private:
-	void Animations();
 	std::function<Item*(ItemType)> CreateItem;
 
 	void movement();
 
-	void EndDrift();
-
 	void RespawnLogic();
-
-	double m_timeTurning = 0;
-	float m_maxTurnRateMutliplier = 2.3f;
-	float m_maxDriftTurnMutliplier = 4.2f;
-	double m_timeForMaxTurn = 4;
-	double m_timeForMaxDrift = 8;
-	bool m_drifting = false;
-	bool m_driftingRight = false;
-	float m_driftBoost = 300;
 
 	RenderData* m_RD;
 	KeybindManager m_keymindManager;
@@ -101,26 +94,25 @@ private:
 	//	If there is an active item, the player can acquire one to their inventory.
 	//	When an item is used it should move from inventory to active (or be immediately used, etc - some items differ).
 	ItemType active_item = ItemType::NONE;
-	ItemType inventory_item = ItemType::NONE;
+	ItemType m_InventoryItem = ItemType::NONE;
 	
 	Vector2 m_itemPos = Vector2(0, 0); // temp gpu fix 
 	ImageGO2D *m_imgItem = nullptr;
 
 	std::vector<Item*> m_trailingItems;
 	bool m_aPressed = true;
-	bool m_tripleItem = false;
-	float lerp_percent = 1;
-	float lerp_speed = 1;
-	
-	bool m_controlsActive = false;
+	bool m_multiItem = false;
+	const int m_maxItems = 3;
 
+	bool m_controlsActive = false;
+	std::unique_ptr<ControlledMovement> m_move = nullptr;
 	std::unique_ptr<AnimationMesh> m_displayedMesh = nullptr;
-	Vector3 m_targetAnimPosOffset = Vector3::Zero;
-	Vector3 m_targetAnimRotOffset = Vector3::Zero;
 
 	std::queue<Matrix> m_posHistory;
 	float m_posHistoryInterval = 0.1f;
 	float m_posHistoryTimer = 0;
 	float m_posHistoryLength = 1;
 	float m_respawnDelay = 1.5f;
+
+	std::unique_ptr<MoveAI> m_ai = nullptr;
 };

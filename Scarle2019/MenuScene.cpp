@@ -144,7 +144,7 @@ void MenuScene::create3DObjects()
 
 		//Create a camera to follow the player
 		m_cam = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-		m_cam->SetBehav(Camera::BEHAVIOUR::LERP);
+		m_cam->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
 		m_3DObjects.push_back(m_cam);
 
 		//Create a viewport

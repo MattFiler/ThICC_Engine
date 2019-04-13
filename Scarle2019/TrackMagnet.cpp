@@ -18,7 +18,17 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	Vector intersect;
 	Vector mid_intersect;
 	Matrix targetWorld = Matrix::Identity;
-	bool shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle);
+	bool shouldStick = false;
+	if (tri)
+	{
+		shouldStick = tri->DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle) ||
+			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle);
+	}
+	else
+	{
+		bool shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle);
+	}
+
 	mid_intersect = intersect;
 	if (!shouldStick)
 	{
@@ -30,6 +40,34 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	float modifiedMaxRotation = m_maxRotation;
 	if (shouldStick)
 	{
+		if (m_useGroundTypes)
+		{
+			colType = tri->GetType();
+			switch (tri->GetType())
+			{
+			case ON_TRACK:
+			{
+				m_drag = 0.7f;
+				break;
+			}
+			case OFF_TRACK:
+			{
+				m_drag = 3;
+				break;
+			}
+			case BOOST_PAD:
+			{
+				Vector vel = m_vel;
+				vel.Normalize();
+				vel *= 200 * Locator::getGSD()->m_dt;
+				m_vel += vel;
+				break;
+			}
+			default:
+				break;
+			}
+		}
+
 		m_onTrack = true;
 
 		Vector adjustVel = m_vel;

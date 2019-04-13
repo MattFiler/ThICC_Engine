@@ -82,7 +82,7 @@ namespace Launcher
             //Launch game if requested (must do this AFTER saving config!)
             if (launch_game)
             {
-                Process.Start("Scarle2019.exe", "Launcher_Auth");
+                Process.Start("Mario Kart.exe", "Launcher_Auth");
             }
         }
 

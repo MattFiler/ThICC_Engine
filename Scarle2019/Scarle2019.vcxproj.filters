@@ -289,6 +289,19 @@
     <ClInclude Include="AnimationMesh.h">
       <Filter>GameObjects\3D\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ControlledMovement.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveAI.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="AIScheduler.h" />
+    <ClInclude Include="Map.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="FakeItemBox.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -436,6 +449,19 @@
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
     <ClCompile Include="Explosion.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlledMovement.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveAI.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AIScheduler.cpp" />
+    <ClCompile Include="Map.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FakeItemBox.cpp">
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>

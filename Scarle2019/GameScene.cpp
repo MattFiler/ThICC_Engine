@@ -38,6 +38,7 @@ GameScene::~GameScene()
 
 void GameScene::Update()
 {
+	m_aiScheduler->Update();
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
 
@@ -83,7 +84,7 @@ void GameScene::Update()
 			}
 			cine_cam->Tick();
 
-			if (m_cam[3]->GetBehav() == Camera::BEHAVIOUR::LERP)
+			if (m_cam[3]->GetBehav() == Camera::BEHAVIOUR::FOLLOW)
 			{
 				Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN)->SetVolume(0.7f);
 				Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN);
@@ -109,7 +110,7 @@ void GameScene::Update()
 			timeout = 3.5f;
 			Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START)->SetVolume(0.7f);
 			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START);
-			for (int i = 0; i < 4; ++i)
+			for (int i = 0; i < game_config["player_count"]; ++i)
 			{
 				player[i]->setGamePad(true);
 			}
@@ -152,20 +153,22 @@ void GameScene::Update()
 	}
 	if (m_keybinds.keyPressed("Orbit"))
 	{
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::ORBIT);
+		m_cam[0]->SetBehav(Camera::BEHAVIOUR::INDEPENDENT);
 	}
 	if (m_keybinds.keyPressed("Lerp"))
 	{
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
+		m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
 	}
+#if DEBUG
 	if (m_keybinds.keyPressed("Matt"))
 	{
 		if (m_cam[0]->GetBehav() == Camera::BEHAVIOUR::DEBUG_CAM) {
-			m_cam[0]->SetBehav(Camera::BEHAVIOUR::LERP);
+			m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
 			return;
 		}
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
 	}
+#endif
 
 
 	// sets the players waypoint
@@ -589,9 +592,13 @@ void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList1>&  m_co
 
 bool GameScene::Load()
 {
-	//Read in track config
+	//Read in game config
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
+
+	//Read in track config
+	//std::ifstream x(m_filepath.generateFilepath("MAP_CONFIG", m_filepath.CONFIG));
+	//track_config << x;
 	
 	create3DObjects();
 
@@ -600,6 +607,9 @@ bool GameScene::Load()
 	VBGO3D::PushIBVB(); //DO NOT REMOVE THIS EVEN IF THERE ARE NO VBGO3Ds
 
 	pushBackObjects();
+
+	m_aiScheduler = std::make_unique<AIScheduler>(track);
+	Locator::setupAIScheduler(m_aiScheduler.get());
 
 	return true;
 }
@@ -673,7 +683,7 @@ void GameScene::create3DObjects()
 
 		//Create a camera to follow the player
 		m_cam[i] = new Camera(Locator::getWD()->m_outputWidth, Locator::getWD()->m_outputHeight, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
-		m_cam[i]->SetBehav(Camera::BEHAVIOUR::START_RACE);
+		m_cam[i]->SetBehav(Camera::BEHAVIOUR::RACE_START);
 		//m_3DObjects.push_back(m_cam[i]);
 
 		//Create a viewport
@@ -767,6 +777,13 @@ Item* GameScene::CreateItem(ItemType type)
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(bomb->GetMesh())->getDebugCollider());
 
 		return bomb;
+	}
+	case FAKE_BOX:
+	{
+		FakeItemBox* box = new FakeItemBox();
+		m_itemModels.push_back(box);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(box->GetMesh())->getDebugCollider());
+		return box;
 	}
 	default:
 		return nullptr;
