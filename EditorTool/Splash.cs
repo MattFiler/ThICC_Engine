@@ -215,36 +215,61 @@ namespace EditorTool
         /* Compile assets */
         public bool autoCompileAssets(string path_mod = "")
         {
+            //Create cache directory if it doesn't exist
+            if (!Directory.Exists(path_mod + "CACHE"))
+            {
+                Directory.CreateDirectory(path_mod + "CACHE");
+                File.WriteAllText(path_mod + "CACHE/DATA_CACHE.TXT", "0");
+            }
+
             try
             {
                 //Copy to debug folder
-                if (Directory.Exists(path_mod + "Debug"))
-                {
-                    copyAssets(path_mod + "Debug/DATA/", path_mod);
-                    if (File.Exists(path_mod + "Debug/Mario Kart Launcher.exe"))
-                    {
-                        File.Delete(path_mod + "Debug/Mario Kart Launcher.exe");
-                    }
-                    File.Copy(path_mod + "DATA/MarioKartLauncher.exe", path_mod + "Debug/Mario Kart Launcher.exe");
-                }
+                buildAssets("Debug", path_mod);
 
                 //Copy to release folder
-                if (Directory.Exists(path_mod + "Release"))
-                {
-                    copyAssets(path_mod + "Release/DATA/", path_mod);
-                    if (File.Exists(path_mod + "Release/Mario Kart Launcher.exe"))
-                    {
-                        File.Delete(path_mod + "Release/Mario Kart Launcher.exe");
-                    }
-                    File.Copy(path_mod + "DATA/MarioKartLauncher.exe", path_mod + "Release/Mario Kart Launcher.exe");
-                }
+                buildAssets("Release", path_mod);
 
                 return true;
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
+        }
+
+        /* Build assets for... */
+        private void buildAssets(string output, string path_mod)
+        {
+            if (Directory.Exists(path_mod + output + "/DATA/"))
+            {
+                //Check to see if we need to copy...
+                DirectoryInfo existing_data = new DirectoryInfo(path_mod + "DATA/");
+                FileInfo[] file_array = existing_data.GetFiles();
+                long total_size = 0;
+                foreach (var file in file_array)
+                {
+                    total_size += file.Length;
+                }
+                string orig_size = File.ReadAllText(path_mod + "CACHE/DATA_CACHE.TXT");
+                string new_size = total_size.ToString();
+                if (orig_size == new_size)
+                {
+                    return;
+                }
+                //We do need to copy, save new cache value
+                File.WriteAllText(path_mod + "CACHE/DATA_CACHE.TXT", total_size.ToString());
+            }
+
+            //Copy all
+            copyAssets(path_mod + output + "/DATA/", path_mod);
+            if (File.Exists(path_mod + output + "/Mario Kart Launcher.exe"))
+            {
+                File.Delete(path_mod + output + "/Mario Kart Launcher.exe");
+            }
+            File.Copy(path_mod + "DATA/MarioKartLauncher.exe", path_mod + output + "/Mario Kart Launcher.exe");
+
+            return;
         }
 
         /* Fix VS config */

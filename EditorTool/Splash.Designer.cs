@@ -244,7 +244,7 @@
             this.groupBox5.Controls.Add(this.openProject);
             this.groupBox5.Location = new System.Drawing.Point(12, 455);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(281, 55);
+            this.groupBox5.Size = new System.Drawing.Size(281, 56);
             this.groupBox5.TabIndex = 8;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Code Editors";
