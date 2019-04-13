@@ -113,6 +113,11 @@ namespace EditorTool
                         {
                             material_prop.Value = Path.GetFileName(material_prop.Value.Value<string>());
                         }
+                        //Ignore blank props
+                        if (material_prop.Value.Value<string>() == "")
+                        {
+                            continue;
+                        }
                         //Write config to mtl list
                         new_mtl.Add(material_prop.Name + " " + material_prop.Value);
                     }
@@ -208,9 +213,10 @@ namespace EditorTool
             //------
 
             //Vertex operations
-            if (handleVertexOperations())
+            if (!handleVertexOperations())
             {
-                //Handle success of collision
+                //It would be nicer to handle this in Model_Importer_AssetSelector before we get this late into the import process.
+                MessageBox.Show("An error occured while generating collision data for this model.\nMake sure the mesh is triangulated.", "Collision error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             //------
@@ -293,8 +299,24 @@ namespace EditorTool
             //------
 
             //Done
-            //File.Delete(importer_common.fileName(importer_file.IMPORTER_CONFIG));
-            MessageBox.Show("Model import complete.", "Imported.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string final_confirmation = "Model imported with" + writeInfo + ".";
+            if (importer_common.import_stats.material_count > 0)
+            {
+                final_confirmation += "\nFound " + importer_common.import_stats.material_count + " material(s).";
+            }
+            if (importer_common.getModelType() != ModelType.MAP)
+            {
+                final_confirmation += "\nSuccessfully generated data for box collider.";
+            }
+            else
+            {
+                final_confirmation += "\nSuccessfully generated mesh collider with " + importer_common.import_stats.vertices + " vertices.";
+                if (importer_common.import_stats.collision_fix_count > 0)
+                {
+                    final_confirmation += "\nWARNING: Automatically fixed " + importer_common.import_stats.collision_fix_count + " mesh collision issues.";
+                }
+            }
+            MessageBox.Show(final_confirmation, "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
 
@@ -302,8 +324,6 @@ namespace EditorTool
         /* Vertex operations (collision) */
         private bool handleVertexOperations()
         {
-            int collision_fix_count = 0;
-
             //Output face vertex data for generating our collmap
             List<List<double>> model_vertices_raw = new List<List<double>>();
             List<List<List<int>>> model_face_indexes = new List<List<List<int>>>();
@@ -338,23 +358,14 @@ namespace EditorTool
                 if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
                 {
                     collision_enabled = false;
-                    try
+                    JToken collision_config = model_material_config[line.Substring(7)]["MARIOKART_COLLISION"];
+                    for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
                     {
-                        JToken collision_config = model_material_config[line.Substring(7)]["MARIOKART_COLLISION"];
-                        for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
+                        if (collision_config[i.ToString()].Value<bool>())
                         {
-                            if (collision_config[i.ToString()].Value<bool>())
-                            {
-                                collision_enabled = true;
-                                collision_type = (CollisionType)i;
-                            }
+                            collision_enabled = true;
+                            collision_type = (CollisionType)i;
                         }
-                    }
-                    catch
-                    {
-                        //This will be hit if a material is missing in the JSON file.
-                        //Would be caused by an issue in the MTL to JSON script in the asset selector.
-                        int do_breakpoint_here = 0;
                     }
                 }
                 //Capture face data per use case to link to vertices
@@ -381,6 +392,7 @@ namespace EditorTool
                     continue;
                 }
             }
+            importer_common.import_stats.vertices = model_vertices_raw.Count;
 
             //Calculate box collider (applies to everything BUT maps)
             if (importer_common.getModelType() != ModelType.MAP)
@@ -506,7 +518,7 @@ namespace EditorTool
             {
                 foreach (List<int> vert_index_list in these_face_indexes)
                 {
-                    if (!parseVertices(vert_index_list, model_vertices_raw, collision_fix_count, all_verts.ElementAt(vert_index_i)))
+                    if (!parseVertices(vert_index_list, model_vertices_raw, all_verts.ElementAt(vert_index_i)))
                     {
                         //Model is not triangulated - exit here
                         return false;
@@ -536,7 +548,7 @@ namespace EditorTool
         }
 
         /* Here we split out our vertex positions to X,Y,Z lists and check for any degenerate triangles */
-        private bool parseVertices(List<int> vert_index_list, List<List<double>> model_vertices_raw, int collision_fix_count, List<double> all_verts)
+        private bool parseVertices(List<int> vert_index_list, List<List<double>> model_vertices_raw, List<double> all_verts)
         {
             //Split out verts into nicer X,Y,Z lists
             int this_face_vert_count = 0;
@@ -563,21 +575,21 @@ namespace EditorTool
                 vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
                 vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
                 vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1;
-                collision_fix_count++;
+                importer_common.import_stats.collision_fix_count++;
             }
             if (vert_x_list.ElementAt(1) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(1) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(1) == vert_z_list.ElementAt(2))
             {
                 vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1;
                 vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
                 vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
-                collision_fix_count++;
+                importer_common.import_stats.collision_fix_count++;
             }
             if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(2))
             {
                 vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1;
                 vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1;
                 vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1;
-                collision_fix_count++;
+                importer_common.import_stats.collision_fix_count++;
             }
 
             //Compile for binary writing

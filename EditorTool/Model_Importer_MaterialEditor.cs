@@ -73,7 +73,10 @@ namespace EditorTool
             {
                 ambientMap.Text = material_config["map_Ka"].Value<string>();
             }
-            common_functions.loadMaterialColourPreview(material_config, "Ka", ambientColour);
+            if (!common_functions.loadMaterialColourPreview(material_config, "Ka", ambientColour))
+            {
+                ambientColour.BackColor = Color.White;
+            }
 
             //Diffuse
             if (material_config["map_Kd"] != null)
@@ -87,24 +90,33 @@ namespace EditorTool
                     diffuseMap.Text = material_config["map_d"].Value<string>();
                 }
             }
-            common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour);
+            if (!common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour))
+            {
+                diffuseColour.BackColor = Color.White;
+            }
 
             //Specular
             if (material_config["map_Ks"] != null)
             {
-                ambientMap.Text = material_config["map_Ks"].Value<string>();
+                specularMap.Text = material_config["map_Ks"].Value<string>();
             }
             else
             {
                 if (material_config["map_Ns"] != null)
                 {
-                    diffuseMap.Text = material_config["map_Ns"].Value<string>();
+                    specularMap.Text = material_config["map_Ns"].Value<string>();
                 }
             }
-            common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour);
+            if (!common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour))
+            {
+                specularColour.BackColor = Color.White;
+            }
 
             //Emissive
-            common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour);
+            if (!common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour))
+            {
+                emissiveColour.BackColor = Color.Black;
+            }
 
             //Transparency
             if (material_config["d"] != null)
@@ -137,12 +149,6 @@ namespace EditorTool
             {
                 illumModel.SelectedIndex = 2;
             }
-        }
-
-        private void saveMaterial_Click(object sender, EventArgs e)
-        {
-            //material_config
-            DialogResult = DialogResult.OK; //Forces main window to only refresh if we save
         }
 
         /* Collision selection */
@@ -211,6 +217,32 @@ namespace EditorTool
         /* Save new config */
         private void button1_Click(object sender, EventArgs e)
         {
+            if (diffuseMap.Text == "")
+            {
+                MessageBox.Show("All materials must have a diffuse map.", "Could not save changes.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            //Ambient
+            material_config["map_Ka"] = ambientMap.Text;
+            colourToJSON("Ka", ambientColour);
+
+            //Diffuse
+            material_config["map_Kd"] = diffuseMap.Text;
+            material_config["map_d"] = diffuseMap.Text;
+            colourToJSON("Kd", diffuseColour);
+
+            //Specular
+            material_config["map_Ks"] = specularMap.Text;
+            material_config["map_Ns"] = specularMap.Text;
+            colourToJSON("Ks", specularColour);
+
+            //Emissive
+            colourToJSON("Ke", emissiveColour);
+
+            //Specular exponent
+            material_config["Ns"] = specExSlider.Value.ToString("0.000000");
+            
             //Illumination configuration
             material_config["illum"] = illumModel.SelectedIndex;
 
@@ -234,6 +266,7 @@ namespace EditorTool
             }
 
             MessageBox.Show("Material edits saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DialogResult = DialogResult.OK; 
             this.Close();
         }
         
@@ -241,6 +274,12 @@ namespace EditorTool
         private string sliderToString(TrackBar slider, int modifier = 1)
         {
             return (Convert.ToDouble(slider.Value) / modifier).ToString("0.0");
+        }
+
+        /* Colour box to JSON data */
+        private void colourToJSON(string key, PictureBox colour)
+        {
+            material_config[key] = (colour.BackColor.R/255).ToString("0.000000") + " " + (colour.BackColor.G/255).ToString("0.000000") + " " + (colour.BackColor.B/255).ToString("0.000000");
         }
 
 
@@ -257,6 +296,9 @@ namespace EditorTool
         private void groupBox2_Enter(object sender, EventArgs e)
         {
 
+        }
+        private void saveMaterial_Click(object sender, EventArgs e)
+        {
         }
     }
 }
