@@ -42,37 +42,27 @@ void Camera::SetCinematicRot(std::vector<Vector3> _rotations)
 
 void Camera::Tick()
 {
+	Vector3 look_at_target;
+	Vector3 target_pos;
+	Vector up_transform;
+	Matrix orientation;
+	float rot_lerp;
+	float pos_lerp;
+
 	switch (behav)
 	{
-	case BEHAVIOUR::BEHIND:
-	{
-		if (m_targetObject)
-		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-			rotCam = m_targetObject->GetOri();
-			m_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
-		}
-		else
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-
-		break;
-	}
-	case BEHAVIOUR::LERP:
+	case BEHAVIOUR::FOLLOW:
 	{
 		m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
 		if (m_targetObject)
 		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-
-			if (rotCam != m_targetObject->GetOri())
-				rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.1);
-
-			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam))
-				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.25);
+			orientation = m_targetObject->GetOri();
+			rot_lerp = 0.1f;
+			pos_lerp = 0.25f;
+			look_at_target = m_targetObject->GetPos();
+			target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, orientation);
+			up_transform = m_targetObject->GetWorld().Up();
 		}
-		else
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-
 		break;
 	}
 	case BEHAVIOUR::ORBIT:
@@ -80,21 +70,15 @@ void Camera::Tick()
 		if (m_targetObject)
 		{
 			m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
-			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
+			orientation = m_targetObject->GetOri();
+			rot_lerp = 0.05f;
+			pos_lerp = 1.f;
+			look_at_target = m_targetObject->GetPos();
+			up_transform = m_targetObject->GetWorld().Up();
 			angle += 1.5f;
 
-			if (rotCam != m_targetObject->GetOri())
-				rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.1);
-
-			Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
-			Vector3 orbit_pos;
-
-			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
-			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
-			m_pos = (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam));
+			target_pos = m_targetObject->GetPos() + Vector3::Transform({ sin(angle / 57.2958f) * m_dpos.x, m_dpos.y, cos(angle / 57.2958f) * m_dpos.z }, orientation);
 		}
-		else
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
 		break;
 	}
 	case BEHAVIOUR::CINEMATIC:
@@ -105,15 +89,8 @@ void Camera::Tick()
 
 		if (cam_point < points.size())
 		{
-			m_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / time_out);
+			target_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / time_out);
 			m_targetPos = look_points[cam_point];
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-
-			/*
-			m_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / time_out);
-			Vector3 rotty = Vector3::Lerp(rotations[cam_point][0], rotations[cam_point][1], timer / time_out);
-			m_view = Matrix::CreateRotationZ(rotty.z) * Matrix::CreateRotationY(rotty.y) * Matrix::CreateRotationX(rotty.x);
-			*/
 
 			if (timer >= time_out)
 			{
@@ -121,41 +98,29 @@ void Camera::Tick()
 				cam_point++;
 			}
 		}
-
-
-		break;
-	}
-	case BEHAVIOUR::FRONT:
-	{
-		if (m_targetObject)
-		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-			rotCam = m_targetObject->GetOri();
-
-			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam))
-				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam), 0.2);
-
-		}
+		look_at_target = m_targetPos;
+		up_transform = Vector3::Up;
+		rot_lerp = 0.05f;
+		pos_lerp = 1.f;
 		break;
 	}
 	case BEHAVIOUR::FIRST:
 	{
 		if (m_targetObject)
 		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 0.0f, -10.0f }, rotCam), m_targetObject->GetWorld().Up());
-
-			if (rotCam != m_targetObject->GetOri())
-				rotCam = Matrix::Lerp(rotCam, m_targetObject->GetOri(), 0.08);
-			if (m_pos != m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam))
-				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 1.0f, -1.0f }, rotCam), 0.8);
+			orientation = m_targetObject->GetOri();
+			look_at_target = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 2.0f, -10.0f }, orientation);
+			up_transform = m_targetObject->GetWorld().Up();
+			pos_lerp = 1.f;
+			rot_lerp = 0.08;
+			target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 2.0f, -2.5f }, orientation);
 		}
 		else
 			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
 		break;
 	}
-	case BEHAVIOUR::INDEPENDENT_LERP:
+	case BEHAVIOUR::INDEPENDENT:
 	{
-		m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
 		if (Locator::getGSD()->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
 			angle -= 3.0f;
 
@@ -164,62 +129,38 @@ void Camera::Tick()
 
 		if (m_targetObject)
 		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-			rotCam = m_targetObject->GetOri();
-			Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
-			Vector3 orbit_pos;
-			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
-			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
-
-			if (m_pos != (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam)))
-				m_pos = Vector3::Lerp(m_pos, m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam), 0.2);
-		}
-		else
-		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-			rotCam = m_world;
-			Vector3 base_pos = m_targetPos + Vector3::Transform(m_dpos, rotCam);
-			Vector3 orbit_pos;
-			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetPos.x);
-			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetPos.z);
-			m_pos = m_targetPos + Vector3::Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam);
-
-			if (m_pos != m_targetPos + Vector3::Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam))
-				m_pos = Vector3::Lerp(m_pos, m_targetPos + Vector3::Transform(m_dpos, rotCam), 0.2);
+			m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
+			orientation = m_targetObject->GetOri();
+			rot_lerp = 0.2f;
+			pos_lerp = 1.f;
+			look_at_target = m_targetObject->GetPos();
+			up_transform = m_targetObject->GetWorld().Up();
+			target_pos = m_targetObject->GetPos() + Vector3::Transform({ sin(angle / 57.2958f) * m_dpos.x, m_dpos.y, cos(angle / 57.2958f) * m_dpos.z }, orientation);
 		}
 		break;
 	}
-	case BEHAVIOUR::INDEPENDENT_FIXED:
+	case BEHAVIOUR::RACE_START:
 	{
-		m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
-		if (Locator::getGSD()->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
-			angle -= 1.0f;
-
-		if (Locator::getGSD()->m_gamePadState[m_cameraID].IsRightThumbStickRight())
-			angle += 1.0f;
-
+		timer += Locator::getGSD()->m_dt;
+		time_out = 3.f;
+		Vector3 start_pos = { 5.0f, 1.0f, -5.0f };
+		m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
 		if (m_targetObject)
 		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-			rotCam = m_targetObject->GetOri();
-			Vector3 base_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, rotCam);
-			Vector3 orbit_pos;
-			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
-			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
-			m_pos = (m_targetObject->GetPos() + m_targetObject->GetPos().Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam));
+			orientation = m_targetObject->GetOri();
+			look_at_target = m_targetObject->GetPos();
+			pos_lerp = 1.f;
+			rot_lerp = 0.2f;
+			up_transform = m_targetObject->GetWorld().Up();
+			target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3::Lerp(start_pos, m_dpos, timer / time_out), rotCam);
+			if (timer >= time_out)
+			{
+				timer = 0.0f;
+				behav = BEHAVIOUR::FOLLOW;
+			}
 		}
-		else
-		{
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-			rotCam = m_world;
-			Vector3 base_pos = m_targetPos + Vector3::Transform(m_dpos, rotCam);
-			Vector3 orbit_pos;
-			orbit_pos.x = sin(angle / 57.2958f) * (base_pos.x - m_targetObject->GetPos().x);
-			orbit_pos.z = cos(angle / 57.2958f) * (base_pos.z - m_targetObject->GetPos().z);
-			m_pos = m_targetPos + Vector3::Transform({ orbit_pos.x, m_dpos.y, orbit_pos.z }, rotCam);
-		}
-		break;
 	}
+#if Debug
 	case BEHAVIOUR::DEBUG_CAM:
 	{
 		float cam_speed = 40.0f;
@@ -280,33 +221,20 @@ void Camera::Tick()
 
 		break;
 	}
-	case BEHAVIOUR::START_RACE:
-	{
-		timer += Locator::getGSD()->m_dt;
-		time_out = 3.f;
-		Vector3 start_pos = { 5.0f, 1.0f, -5.0f };
-		m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
-		if (m_targetObject)
-		{
-			if (timer < time_out)
-			{
-				m_view = Matrix::CreateLookAt(m_pos, m_targetObject->GetPos(), m_targetObject->GetWorld().Up());
-				rotCam = m_targetObject->GetOri();
-				m_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3::Lerp(start_pos, m_dpos, timer / time_out), rotCam);
-			}
-			else
-			{
-				timer = 0.0f;
-				behav = BEHAVIOUR::LERP;
-			}
-		}
-		else
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
-		break;
-	}
+#endif
 	}
 
+	if (behav != BEHAVIOUR::DEBUG_CAM)
+	{
+		m_view = Matrix::CreateLookAt(m_pos, look_at_target, up_transform);
+		if (rotCam != orientation)
+			rotCam = Matrix::Lerp(rotCam, orientation, rot_lerp);
+
+		if (m_pos != target_pos)
+			m_pos = Vector3::Lerp(m_pos, target_pos, pos_lerp);
+	}
 	//std::cout << timer << std::endl;
+
 	//Debug output player location - useful for setting up spawns
 	if (m_keybinds.keyPressed("Debug Print Camera Location")) {
 		std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;

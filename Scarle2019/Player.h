@@ -7,6 +7,7 @@
 #include "Constants.h"
 #include "AnimationMesh.h"
 #include "Bomb.h"
+#include "FakeItemBox.h"
 #include "ControlledMovement.h"
 #include "MoveAI.h"
 #include <functional>
@@ -100,9 +101,8 @@ private:
 
 	std::vector<Item*> m_trailingItems;
 	bool m_aPressed = true;
-	bool m_tripleItem = false;
-	float lerp_percent = 1;
-	float lerp_speed = 1;
+	bool m_multiItem = false;
+	const int m_maxItems = 3;
 
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;

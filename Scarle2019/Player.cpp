@@ -136,7 +136,7 @@ void Player::Tick()
 
 void Player::CheckUseItem()
 {
-	if (m_tripleItem)
+	if (m_multiItem)
 	{
 		TrailItems();
 
@@ -162,7 +162,7 @@ void Player::CheckUseItem()
 	{
 		if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
 		{
-			if (m_trailingItems.empty() && (m_InventoryItem != NONE))
+			if (m_trailingItems.empty() && m_InventoryItem != NONE && !m_aPressed)
 			{
 				SpawnItems(m_InventoryItem);
 			}
@@ -170,10 +170,13 @@ void Player::CheckUseItem()
 			{
 				TrailItems();
 			}
+
+			m_aPressed = true;
 		}
 		else
 		{
 			ReleaseItem();
+			m_aPressed = false;
 		}
 	} 
 }
@@ -186,14 +189,32 @@ void Player::TrailItems()
 		{
 			if (m_trailingItems[i]->GetMesh())
 			{
-				Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
+				if (m_trailingItems[i]->ShouldDestroy())
+				{
+					m_trailingItems.erase(m_trailingItems.begin() + i);
+					continue;
+				}
 
-				m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-				m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
-				m_trailingItems[i]->GetMesh()->UpdateWorld();
+				//Trails behind the player
+				if (active_item != GREEN_SHELL_3X && active_item != RED_SHELL_3X)
+				{
+					Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
+
+					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+					m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
+					m_trailingItems[i]->GetMesh()->UpdateWorld();
+				}
+				//Spins around the player
+				else
+				{
+					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+					Vector3 m_dpos = Vector3{ 2, 0, 2 };
+					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + 350 * Locator::getGSD()->m_dt);
+					m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f) 
+						* m_dpos.x, m_dpos.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_dpos.z }, m_rot));
+				}
 			}
-		}
-		
+		}	
 	}
 }
 
@@ -240,10 +261,9 @@ void Player::SpawnItems(ItemType type)
 
 		case BANANA_3X:
 		{
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < m_maxItems; i++)
 			{
 				SpawnItems(BANANA);
-				TrailItems();
 			}
 
 			for (Item*& banana : m_trailingItems)
@@ -251,7 +271,7 @@ void Player::SpawnItems(ItemType type)
 				banana->addImmuneItems(m_trailingItems);
 			}
 
-			m_tripleItem = true;
+			m_multiItem = true;
 			break;
 		}
 
@@ -261,18 +281,48 @@ void Player::SpawnItems(ItemType type)
 			SpawnItems(MUSHROOM);
 
 			//creates subsequence shrooms
-			for (int i = 0; i < 2; i++)
+			for (int i = 0; i < m_maxItems - 1; i++)
 			{
 				Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(MUSHROOM));
 				m_trailingItems.push_back(mushroom);
 			}
 
-			m_tripleItem = true;
+			m_multiItem = true;
 			break;
+		}
+
+		case GREEN_SHELL_3X:
+		{
+			for (int i = 0; i < m_maxItems; i++)
+			{
+				SpawnItems(GREEN_SHELL);
+			}
+
+			for (int i = 0; i < m_maxItems; i++)
+			{
+				m_trailingItems[i]->addImmuneItems(m_trailingItems);
+				m_trailingItems[i]->setSpinAngle((360/ m_trailingItems.size()) * i);
+			}
+
+			m_multiItem = true;
+			break;
+		}
+
+		case FAKE_BOX:
+		{
+			FakeItemBox* box = static_cast<FakeItemBox*>(CreateItem(FAKE_BOX));
+			m_trailingItems.push_back(box);
+			TrailItems();
 		}
 		default:
 			break;
 	}
+
+	for (Item*& item : m_trailingItems)
+	{
+		item->setPlayer(this);
+	}
+
 }
 
 void Player::ReleaseItem()
@@ -284,7 +334,7 @@ void Player::ReleaseItem()
 		
 		if (m_trailingItems.empty())
 		{
-			m_tripleItem = false;
+			m_multiItem = false;
 			active_item = NONE;
 
 			if (m_InventoryItem == MUSHROOM_3X)
