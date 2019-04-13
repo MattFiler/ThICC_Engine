@@ -325,7 +325,7 @@ namespace EditorTool
         private bool handleVertexOperations()
         {
             //Output face vertex data for generating our collmap
-            List<List<double>> model_vertices_raw = new List<List<double>>();
+            List<List<float>> model_vertices_raw = new List<List<float>>();
             List<List<List<int>>> model_face_indexes = new List<List<List<int>>>();
             List<string> final_collmap_data = new List<string>();
             string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
@@ -345,10 +345,10 @@ namespace EditorTool
                 if (line.Length > 2 && line.Substring(0, 2) == "v ")
                 {
                     string[] vert_array = line.Substring(2).Split(' ');
-                    List<double> this_vertex = new List<double>();
+                    List<float> this_vertex = new List<float>();
                     foreach (string vert in vert_array)
                     {
-                        this_vertex.Add(Convert.ToDouble(vert));
+                        this_vertex.Add(Convert.ToSingle(vert));
                     }
                     model_vertices_raw.Add(this_vertex);
                     continue;
@@ -398,9 +398,9 @@ namespace EditorTool
             if (importer_common.getModelType() != ModelType.MAP)
             {
                 //Order the data
-                double[] biggest_vert = { 0, 0, 0 };
-                double[] smallest_vert = { 0, 0, 0 };
-                foreach (List<double> vertex in model_vertices_raw)
+                float[] biggest_vert = { 0, 0, 0 };
+                float[] smallest_vert = { 0, 0, 0 };
+                foreach (List<float> vertex in model_vertices_raw)
                 {
                     for (int i = 0; i < 3; i++)
                     {
@@ -506,10 +506,10 @@ namespace EditorTool
             }
 
             //Build up total model verts for collmap reader from parsed data
-            List<List<double>> all_verts = new List<List<double>>();
+            List<List<float>> all_verts = new List<List<float>>();
             for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
             {
-                all_verts.Add(new List<double>());
+                all_verts.Add(new List<float>());
             }
 
             //Compile collision data
@@ -531,13 +531,13 @@ namespace EditorTool
             using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.COLLMAP), FileMode.Create)))
             {
                 writer.Write(all_verts.Count); //Number of collision types to split to
-                foreach (List<double> these_verts in all_verts)
+                foreach (List<float> these_verts in all_verts)
                 {
                     writer.Write(these_verts.Count); //Number of verts to expect
                 }
-                foreach (List<double> these_verts in all_verts)
+                foreach (List<float> these_verts in all_verts)
                 { 
-                    foreach (double vert in these_verts)
+                    foreach (float vert in these_verts)
                     {
                         writer.Write(vert); //Each bit of collision data
                     }
@@ -548,13 +548,13 @@ namespace EditorTool
         }
 
         /* Here we split out our vertex positions to X,Y,Z lists and check for any degenerate triangles */
-        private bool parseVertices(List<int> vert_index_list, List<List<double>> model_vertices_raw, List<double> all_verts)
+        private bool parseVertices(List<int> vert_index_list, List<List<float>> model_vertices_raw, List<float> all_verts)
         {
             //Split out verts into nicer X,Y,Z lists
             int this_face_vert_count = 0;
-            List<double> vert_x_list = new List<double>();
-            List<double> vert_y_list = new List<double>();
-            List<double> vert_z_list = new List<double>();
+            List<float> vert_x_list = new List<float>();
+            List<float> vert_y_list = new List<float>();
+            List<float> vert_z_list = new List<float>();
             foreach (int vert_index in vert_index_list)
             {
                 vert_x_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(0));
@@ -572,23 +572,23 @@ namespace EditorTool
             //Fix conflicts if any are present
             if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(1) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(1) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(1))
             {
-                vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
-                vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
-                vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1;
+                vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1f;
+                vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1f;
+                vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1f;
                 importer_common.import_stats.collision_fix_count++;
             }
             if (vert_x_list.ElementAt(1) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(1) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(1) == vert_z_list.ElementAt(2))
             {
-                vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1;
-                vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
-                vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1f;
+                vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1f;
+                vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1f;
                 importer_common.import_stats.collision_fix_count++;
             }
             if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(2))
             {
-                vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1;
-                vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1;
-                vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1;
+                vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1f;
+                vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1f;
+                vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1f;
                 importer_common.import_stats.collision_fix_count++;
             }
 

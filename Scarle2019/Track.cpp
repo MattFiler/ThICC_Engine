@@ -91,32 +91,25 @@ void Track::LoadVertexList(string _vertex_list)
 	fin.read(reinterpret_cast<char*>(&number_of_coll_types), sizeof(int));
 
 	//Get the offsets for the vertex groups
-	int curr_pos = sizeof(int);
 	std::vector<int> length(number_of_coll_types);
 	for (int i = 0; i < number_of_coll_types; i++) {
-		//fin.seekg(curr_pos);
 		fin.read(reinterpret_cast<char*>(&length[i]), sizeof(int));
-		curr_pos += sizeof(int);
 	}
 
 	//Read by offsets
-	std::vector<std::vector<double>> verts(number_of_coll_types);
-	int total_len = 0;
+	std::vector<std::vector<float>> verts(number_of_coll_types);
 	int iterator = 0;
 	for (int len : length) {
-		total_len += len;
-		verts.at(iterator) = std::vector<double>(len);
-		iterator++;
-	}
-	for (int i = 0; i < number_of_coll_types; i++) {
-		if (length.at(i) == 0) {
+		if (len == 0) {
 			continue;
 		}
-		fin.read(reinterpret_cast<char*>(&verts[i][0]), length.at(i) * sizeof(double));
+		verts.at(iterator) = std::vector<float>(len);
+		fin.read(reinterpret_cast<char*>(&verts[iterator][0]), len * sizeof(float));
+		iterator++;
 	}
 
 	//Create MeshTris for each collision type
-	double points_for_triangle[9];
+	float points_for_triangle[9];
 	int index = 0;
 	for (int x = 0; x < number_of_coll_types; x++) {
 		for (size_t i = 0; i < verts.at(x).size(); ++i)
