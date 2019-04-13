@@ -7,11 +7,11 @@
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "1.000000",
+    "d": "0.000000",
     "illum": "2",
     "map_Kd": "debug_grid.jpg",
     "MARIOKART_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": false,
       "3": false
@@ -106,7 +106,7 @@
     "map_Kd": "ufc_ConcreteOutside_Alb.png",
     "map_d": "ufc_ConcreteOutside_Alb.png",
     "MARIOKART_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": false,
       "3": false
@@ -204,7 +204,7 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false
     }
   },
   "fc_LightObj.002": {
@@ -223,7 +223,7 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false
     }
   },
   "fc_LightObj_NoBake": {
@@ -242,7 +242,7 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false
     }
   },
   "fc_MARIOKART": {
@@ -299,7 +299,7 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false
     }
   },
   "fc_PitYuka": {
@@ -315,7 +315,7 @@
     "map_Kd": "ufc_PitYuka_Alb.png",
     "map_d": "ufc_PitYuka_Alb.png",
     "MARIOKART_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": false,
       "3": false
@@ -546,7 +546,7 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false
     }
   },
   "fc_TV_MKTV": {
@@ -595,7 +595,7 @@
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "0.000000",
+    "d": "0.999999",
     "illum": "2",
     "map_Kd": "ufc_TeamLogo_nuki_Alb.png",
     "map_d": "ufc_TeamLogo_nuki_Alb.png",
@@ -715,7 +715,7 @@
     "map_d": "ufc_bush_LeafBase_Alb.png",
     "MARIOKART_COLLISION": {
       "0": false,
-      "1": true,
+      "1": false,
       "2": false,
       "3": false
     }
@@ -747,7 +747,7 @@
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "1.000000",
+    "d": "0.000000",
     "illum": "2",
     "map_Kd": "ufc_flower_Alb.png",
     "map_d": "ufc_flower_Alb.png",
@@ -842,7 +842,7 @@
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "0.000000",
+    "d": "0.999999",
     "illum": "2",
     "map_Kd": "ufc_nuki_1_Alb.png",
     "map_d": "ufc_nuki_1_Alb.png",
@@ -861,7 +861,7 @@
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "0.000000",
+    "d": "0.999999",
     "illum": "2",
     "map_Kd": "ufc_nuki_2_Alb.png",
     "map_d": "ufc_nuki_2_Alb.png",
@@ -880,7 +880,7 @@
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "0.000000",
+    "d": "0.999999",
     "illum": "2",
     "map_Kd": "ufc_nuki_3_Alb.png",
     "map_d": "ufc_nuki_3_Alb.png",
@@ -899,7 +899,7 @@
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "0.000000",
+    "d": "0.999999",
     "illum": "2",
     "map_Kd": "ufc_nuki_4_Alb.png",
     "map_d": "ufc_nuki_4_Alb.png",
@@ -918,7 +918,7 @@
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "0.000000",
+    "d": "0.999999",
     "illum": "2",
     "map_Kd": "ufc_nuki_5_Alb.png",
     "map_d": "ufc_nuki_5_Alb.png",
@@ -1116,7 +1116,7 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false
     }
   },
   "fc_shiba": {
@@ -1154,7 +1154,7 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false
     }
   },
   "fc_signboard_Emm": {
@@ -1173,7 +1173,7 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false
     }
   },
   "fc_steps": {
@@ -1283,6 +1283,25 @@
     "illum": "2",
     "map_Kd": "ufc_window_1_Alb.png",
     "map_d": "ufc_window_1_Alb.png",
+    "MARIOKART_COLLISION": {
+      "0": false,
+      "1": false,
+      "2": false,
+      "3": false
+    }
+  },
+  "fc_yane": {
+    "newmtl": "fc_yane",
+    "Ns": "94.117647",
+    "Ka": "0.000000 0.000000 0.000000",
+    "Kd": "0.640000 0.640000 0.640000",
+    "Ks": "0.000000 0.000000 0.000000",
+    "Ke": "0.000000 0.000000 0.000000",
+    "Ni": "1.000000",
+    "d": "0.000000",
+    "illum": "2",
+    "map_Kd": "ufc_yane_Alb.png",
+    "map_d": "ufc_yane_Alb.png",
     "MARIOKART_COLLISION": {
       "0": false,
       "1": false,
