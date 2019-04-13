@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -15,9 +16,13 @@ namespace EditorTool
 {
     public partial class Splash : Form
     {
-        public Splash()
+        public Splash(bool shouldInitialiseGUI = true)
         {
-            InitializeComponent();
+            if (shouldInitialiseGUI)
+            {
+                //Only create GUI if needed (auto-compile launches want no GUI)
+                InitializeComponent();
+            }
         }
 
         /* Open Asset Manager */
@@ -31,45 +36,23 @@ namespace EditorTool
         private void compileAssets_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            try
-            {
-                //Fix VS debugging directory config
-                File.WriteAllText("Scarle2019/Scarle2019.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup></Project>");
 
-                //Copy to debug folder
-                if (Directory.Exists("Debug"))
-                {
-                    copyAssets("Debug/DATA/");
-                    if (File.Exists("Debug/Launcher.exe"))
-                    {
-                        File.Delete("Debug/Launcher.exe");
-                    }
-                    File.Copy("DATA/MarioKartLauncher.exe", "Debug/Launcher.exe");
-                }
+            //Fix VS debugging directory config
+            File.WriteAllText("Scarle2019/Scarle2019.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup></Project>");
 
-                //Copy to release folder
-                if (Directory.Exists("Release"))
-                {
-                    copyAssets("Release/DATA/");
-                    if (File.Exists("Release/Launcher.exe"))
-                    {
-                        File.Delete("Release/Launcher.exe");
-                    }
-                    File.Copy("DATA/MarioKartLauncher.exe", "Release/Launcher.exe");
-                }
-
-                Cursor.Current = Cursors.Default;
-                MessageBox.Show("Assets successfully compiled.", "Compiled assets.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch
+            if (!autoCompileAssets())
             {
                 Cursor.Current = Cursors.Default;
                 MessageBox.Show("An error occured while compiling assets.\nMake sure that the game is closed and no files are open.", "Asset compile failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+
+            Cursor.Current = Cursors.Default;
+            MessageBox.Show("Assets successfully compiled.", "Compiled assets.", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         /* Copy All Asssets To Folder */
-        void copyAssets(string output_directory)
+        void copyAssets(string output_directory, string path_mod)
         {
             if (Directory.Exists(output_directory))
             {
@@ -87,7 +70,7 @@ namespace EditorTool
             ignored_extensions.Add(".pdb");
             ignored_extensions.Add(".xml");
             ignored_extensions.Add(".dll");
-            DirectoryCopy("DATA/", output_directory, true, ignored_extensions);
+            DirectoryCopy(path_mod + "DATA/", output_directory, true, ignored_extensions);
         }
 
         /* Copy a Directory */
@@ -220,6 +203,54 @@ namespace EditorTool
         {
             Map_Manager mapManager = new Map_Manager();
             mapManager.Show();
+        }
+
+        /* Open VS Project */
+        private void openProject_Click(object sender, EventArgs e)
+        {
+            fixVS();
+            Process.Start("Scarle2019.sln");
+        }
+
+        /* Compile assets */
+        public bool autoCompileAssets(string path_mod = "")
+        {
+            try
+            {
+                //Copy to debug folder
+                if (Directory.Exists(path_mod + "Debug"))
+                {
+                    copyAssets(path_mod + "Debug/DATA/", path_mod);
+                    if (File.Exists(path_mod + "Debug/Mario Kart Launcher.exe"))
+                    {
+                        File.Delete(path_mod + "Debug/Mario Kart Launcher.exe");
+                    }
+                    File.Copy(path_mod + "DATA/MarioKartLauncher.exe", path_mod + "Debug/Mario Kart Launcher.exe");
+                }
+
+                //Copy to release folder
+                if (Directory.Exists(path_mod + "Release"))
+                {
+                    copyAssets(path_mod + "Release/DATA/", path_mod);
+                    if (File.Exists(path_mod + "Release/Mario Kart Launcher.exe"))
+                    {
+                        File.Delete(path_mod + "Release/Mario Kart Launcher.exe");
+                    }
+                    File.Copy(path_mod + "DATA/MarioKartLauncher.exe", path_mod + "Release/Mario Kart Launcher.exe");
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        /* Fix VS config */
+        public void fixVS()
+        {
+            File.WriteAllText("Scarle2019/Scarle2019.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup></Project>");
         }
 
 

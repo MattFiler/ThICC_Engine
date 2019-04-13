@@ -75,6 +75,9 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)nlohmann;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <CustomBuildAfterTargets>
+    </CustomBuildAfterTargets>
+    <TargetName>Mario Kart</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -83,6 +86,9 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)nlohmann;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <CustomBuildAfterTargets>
+    </CustomBuildAfterTargets>
+    <TargetName>Mario Kart</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -105,6 +111,18 @@
     <FXCompile>
       <ShaderModel>5.1</ShaderModel>
     </FXCompile>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)Mario Kart Toolkit.exe" -auto_compile</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Auto-compiling assets...</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -146,6 +164,18 @@
     <FXCompile>
       <ShaderModel>5.1</ShaderModel>
     </FXCompile>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)Mario Kart Toolkit.exe" -auto_compile</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Auto-compiling assets...</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

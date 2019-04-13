@@ -45,12 +45,14 @@
             this.DEBUG_SAVE = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.DEBUG_DEFAULTTRACK = new System.Windows.Forms.ComboBox();
-            this.debug_btn = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.openProject = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DEBUG_PLAYERCOUNT)).BeginInit();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // openMapManager
@@ -237,25 +239,32 @@
             this.DEBUG_DEFAULTTRACK.Size = new System.Drawing.Size(268, 21);
             this.DEBUG_DEFAULTTRACK.TabIndex = 16;
             // 
-            // debug_btn
+            // groupBox5
             // 
-            this.debug_btn.BackColor = System.Drawing.Color.DarkRed;
-            this.debug_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.debug_btn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.debug_btn.Location = new System.Drawing.Point(12, 455);
-            this.debug_btn.Name = "debug_btn";
-            this.debug_btn.Size = new System.Drawing.Size(281, 37);
-            this.debug_btn.TabIndex = 34;
-            this.debug_btn.Text = "Old Prop Importer";
-            this.debug_btn.UseVisualStyleBackColor = false;
-            this.debug_btn.Click += new System.EventHandler(this.debug_btn_Click);
+            this.groupBox5.Controls.Add(this.openProject);
+            this.groupBox5.Location = new System.Drawing.Point(12, 455);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(281, 55);
+            this.groupBox5.TabIndex = 8;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Code Editors";
+            // 
+            // openProject
+            // 
+            this.openProject.Location = new System.Drawing.Point(6, 19);
+            this.openProject.Name = "openProject";
+            this.openProject.Size = new System.Drawing.Size(270, 31);
+            this.openProject.TabIndex = 2;
+            this.openProject.Text = "Open Project";
+            this.openProject.UseVisualStyleBackColor = true;
+            this.openProject.Click += new System.EventHandler(this.openProject_Click);
             // 
             // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(304, 499);
-            this.Controls.Add(this.debug_btn);
+            this.ClientSize = new System.Drawing.Size(304, 519);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -272,6 +281,7 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DEBUG_PLAYERCOUNT)).EndInit();
+            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -294,6 +304,7 @@
         private System.Windows.Forms.NumericUpDown DEBUG_PLAYERCOUNT;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Button DEBUG_SAVE;
-        private System.Windows.Forms.Button debug_btn;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button openProject;
     }
 }
