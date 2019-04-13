@@ -247,46 +247,48 @@ namespace EditorTool
         /* Build assets for... */
         private void buildAssets(string output, string path_mod)
         {
-            if (Directory.Exists(path_mod + output + "/DATA/"))
+            if (Directory.Exists(path_mod + output))
             {
-                //Check to see if we need to copy...
-                DirectoryInfo existing_data = new DirectoryInfo(path_mod + "DATA/");
-                FileInfo[] file_array = existing_data.GetFiles();
-                long total_size = 0;
-                foreach (var file in file_array)
+                if (Directory.Exists(path_mod + output + "/DATA/"))
                 {
-                    foreach (string ignored_extension in ignored_extensions)
+                    //Check to see if we need to copy...
+                    DirectoryInfo existing_data = new DirectoryInfo(path_mod + "DATA/");
+                    FileInfo[] file_array = existing_data.GetFiles();
+                    long total_size = 0;
+                    foreach (var file in file_array)
                     {
-                        if (Path.GetExtension(file.Name) == ignored_extension)
+                        foreach (string ignored_extension in ignored_extensions)
                         {
-                            total_size += file.Length;
+                            if (Path.GetExtension(file.Name) == ignored_extension)
+                            {
+                                total_size += file.Length;
+                            }
                         }
                     }
+                    long orig_size = 0;
+                    using (BinaryReader reader = new BinaryReader(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Open)))
+                    {
+                        orig_size = reader.ReadInt64();
+                    }
+                    if (orig_size == total_size)
+                    {
+                        return;
+                    }
+                    //We do need to copy, save new cache value
+                    using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Create)))
+                    {
+                        writer.Write(Convert.ToInt64(total_size));
+                    }
                 }
-                long orig_size = 0;
-                using (BinaryReader reader = new BinaryReader(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Open)))
-                {
-                    orig_size = reader.ReadInt64();
-                }
-                if (orig_size == total_size)
-                {
-                    return;
-                }
-                //We do need to copy, save new cache value
-                using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Create)))
-                {
-                    writer.Write(Convert.ToInt64(total_size));
-                }
-            }
 
-            //Copy all
-            copyAssets(path_mod + output + "/DATA/", path_mod);
-            if (File.Exists(path_mod + output + "/Mario Kart Launcher.exe"))
-            {
-                File.Delete(path_mod + output + "/Mario Kart Launcher.exe");
+                //Copy all
+                copyAssets(path_mod + output + "/DATA/", path_mod);
+                if (File.Exists(path_mod + output + "/Mario Kart Launcher.exe"))
+                {
+                    File.Delete(path_mod + output + "/Mario Kart Launcher.exe");
+                }
+                File.Copy(path_mod + "DATA/MarioKartLauncher.exe", path_mod + output + "/Mario Kart Launcher.exe");
             }
-            File.Copy(path_mod + "DATA/MarioKartLauncher.exe", path_mod + output + "/Mario Kart Launcher.exe");
-
             return;
         }
 
