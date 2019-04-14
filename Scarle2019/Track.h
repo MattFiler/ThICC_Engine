@@ -10,6 +10,7 @@ using json = nlohmann::json;
 
 struct TrackData {
 	float scale = 1.0f;
+	Vector3 origin = Vector3(0, 0, 0);
 	Vector3 spawn_pos = Vector3(0, 0, 0);
 	Vector3 start_rot = Vector3(0, 0, 0);
 };

@@ -37,6 +37,7 @@ namespace EditorTool
             ignored_extensions.Add(".pdb");
             ignored_extensions.Add(".xml");
             ignored_extensions.Add(".dll");
+            /* We can now also ignore JPG/JPEG/PNG, but older models still use this format. Begin to depreciate it immediately! */
         }
 
         /* Open Asset Manager */
@@ -172,6 +173,11 @@ namespace EditorTool
         /* SAVE DEBUG CONFIG */
         private void DEBUG_SAVE_Click(object sender, EventArgs e)
         {
+            if (DEBUG_DEFAULTTRACK.SelectedIndex == -1)
+            {
+                MessageBox.Show("No track selected!", "Cannot save.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             JToken game_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/GAME_CORE.JSON"));
             game_config["default_track"] = DEBUG_DEFAULTTRACK.SelectedItem.ToString();
             game_config["player_count"] = DEBUG_PLAYERCOUNT.Value;
@@ -217,8 +223,8 @@ namespace EditorTool
         /* Compile assets */
         public bool autoCompileAssets(string path_mod = "")
         {
-            //Create cache directory if it doesn't exist
-            if (!Directory.Exists(path_mod + "CACHE"))
+            //Create cache directory/file if it doesn't exist
+            if (!Directory.Exists(path_mod + "CACHE") || !File.Exists(path_mod + "CACHE/DATA_CACHE.BIN"))
             {
                 Directory.CreateDirectory(path_mod + "CACHE");
                 using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Create)))
@@ -253,16 +259,21 @@ namespace EditorTool
                 {
                     //Check to see if we need to copy...
                     DirectoryInfo existing_data = new DirectoryInfo(path_mod + "DATA/");
-                    FileInfo[] file_array = existing_data.GetFiles();
+                    FileInfo[] file_array = existing_data.GetFiles("*.*", SearchOption.AllDirectories);
                     long total_size = 0;
                     foreach (var file in file_array)
                     {
+                        bool can_copy = true;
                         foreach (string ignored_extension in ignored_extensions)
                         {
                             if (Path.GetExtension(file.Name) == ignored_extension)
                             {
-                                total_size += file.Length;
+                                can_copy = false;
                             }
+                        }
+                        if (can_copy)
+                        {
+                            total_size += file.Length;
                         }
                     }
                     long orig_size = 0;
@@ -303,6 +314,11 @@ namespace EditorTool
         {
             Model_Importer importer = new Model_Importer(ModelType.PROP);
             importer.Show();
+        }
+
+        private void reloadDebugList_Click(object sender, EventArgs e)
+        {
+            REFRESH_DEBUG_LIST();
         }
 
 

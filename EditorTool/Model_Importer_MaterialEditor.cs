@@ -90,10 +90,7 @@ namespace EditorTool
                     diffuseMap.Text = material_config["map_d"].Value<string>();
                 }
             }
-            if (!common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour))
-            {
-                diffuseColour.BackColor = Color.White;
-            }
+            common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour);
 
             //Specular
             if (material_config["map_Ks"] != null)
@@ -107,48 +104,21 @@ namespace EditorTool
                     specularMap.Text = material_config["map_Ns"].Value<string>();
                 }
             }
-            if (!common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour))
-            {
-                specularColour.BackColor = Color.White;
-            }
+            common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour);
 
             //Emissive
-            if (!common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour))
-            {
-                emissiveColour.BackColor = Color.Black;
-            }
+            common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour);
 
             //Transparency
-            if (material_config["d"] != null)
-            {
-                transparencySlider.Value = Convert.ToInt32(material_config["d"].Value<float>() * 10);
-            }
-            else
-            {
-                transparencySlider.Value = 0;
-            }
+            transparencySlider.Value = Convert.ToInt32(material_config["d"].Value<float>() * 10);
             transparencyValue.Text = sliderToString(transparencySlider, 10);
 
             //Specular exponent
-            if (material_config["Ns"] != null)
-            {
-                specExSlider.Value = Convert.ToInt32(material_config["Ns"].Value<float>());
-            }
-            else
-            {
-                specExSlider.Value = 100;
-            }
+            specExSlider.Value = Convert.ToInt32(material_config["Ns"].Value<float>());
             specExValue.Text = sliderToString(specExSlider);
 
             //Illumination model
-            if (material_config["illum"] != null)
-            {
-                illumModel.SelectedIndex = material_config["illum"].Value<int>();
-            }
-            else
-            {
-                illumModel.SelectedIndex = 2;
-            }
+            illumModel.SelectedIndex = material_config["illum"].Value<int>();
         }
 
         /* Collision selection */

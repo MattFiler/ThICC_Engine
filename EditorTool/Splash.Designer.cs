@@ -47,6 +47,7 @@
             this.DEBUG_DEFAULTTRACK = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.openProject = new System.Windows.Forms.Button();
+            this.reloadDebugList = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -161,6 +162,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.reloadDebugList);
             this.groupBox4.Controls.Add(this.label14);
             this.groupBox4.Controls.Add(this.DEBUG_PLAYERCOUNT);
             this.groupBox4.Controls.Add(this.DEBUG_SAVE);
@@ -236,7 +238,7 @@
             "Fonts"});
             this.DEBUG_DEFAULTTRACK.Location = new System.Drawing.Point(7, 35);
             this.DEBUG_DEFAULTTRACK.Name = "DEBUG_DEFAULTTRACK";
-            this.DEBUG_DEFAULTTRACK.Size = new System.Drawing.Size(268, 21);
+            this.DEBUG_DEFAULTTRACK.Size = new System.Drawing.Size(209, 21);
             this.DEBUG_DEFAULTTRACK.TabIndex = 16;
             // 
             // groupBox5
@@ -258,6 +260,16 @@
             this.openProject.Text = "Open Project";
             this.openProject.UseVisualStyleBackColor = true;
             this.openProject.Click += new System.EventHandler(this.openProject_Click);
+            // 
+            // reloadDebugList
+            // 
+            this.reloadDebugList.Location = new System.Drawing.Point(222, 34);
+            this.reloadDebugList.Name = "reloadDebugList";
+            this.reloadDebugList.Size = new System.Drawing.Size(53, 23);
+            this.reloadDebugList.TabIndex = 34;
+            this.reloadDebugList.Text = "Reload";
+            this.reloadDebugList.UseVisualStyleBackColor = true;
+            this.reloadDebugList.Click += new System.EventHandler(this.reloadDebugList_Click);
             // 
             // Splash
             // 
@@ -306,5 +318,6 @@
         private System.Windows.Forms.Button DEBUG_SAVE;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button openProject;
+        private System.Windows.Forms.Button reloadDebugList;
     }
 }

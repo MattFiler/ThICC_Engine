@@ -264,6 +264,7 @@ namespace EditorTool
 
             //Hide all configs
             modelConfigs.Visible = false;
+            depreciationWarning.Visible = false;
 
             //Act appropriately for selected asset type
             switch (loadAssetType.SelectedItem)
@@ -279,6 +280,7 @@ namespace EditorTool
                         {
                             //Old config, don't enable editing
                             modelConfigs.Visible = false;
+                            depreciationWarning.Visible = true;
                             return;
                         }
 
@@ -381,7 +383,7 @@ namespace EditorTool
             {
                 case "Models":
                     JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
-                    asset_json["model_type"] = modelType.SelectedIndex;
+                    asset_json["model_type"] = modelType.SelectedIndex; //For this change to actually take effect, the model will need to be "edited" - improvement needed here
                     asset_json["start_x"] = Convert.ToDouble(model_world_x.Text);
                     asset_json["start_y"] = Convert.ToDouble(model_world_y.Text);
                     asset_json["start_z"] = Convert.ToDouble(model_world_z.Text);
