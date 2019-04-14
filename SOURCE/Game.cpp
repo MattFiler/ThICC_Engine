@@ -24,24 +24,13 @@ namespace
 }
 
 Game::Game() noexcept(false) :
-	m_gridScale(10.f),
 	m_fov(XM_PI / 4.f),
 	m_zoom(1.f),
 	m_distance(10.f),
 	m_farPlane(10000.f),
 	m_sensitivity(1.f),
-	m_gridDivs(20),
-	m_ibl(0),
-	m_showHud(true),
-	m_showCross(true),
-	m_showGrid(false),
-	m_usingGamepad(false),
-	m_wireframe(false),
-	m_ccw(false),
 	m_reloadModel(false),
-	m_lhcoords(false),
-	m_fpscamera(false),
-	m_toneMapMode(ToneMapPostProcess::Reinhard),
+	m_toneMapMode(ToneMapPostProcess::ACESFilmic),
 	m_selectFile(0),
 	m_firstFile(0)
 {
@@ -50,9 +39,6 @@ Game::Game() noexcept(false) :
 	m_deviceResources->RegisterDeviceNotify(this);
 
 	m_hdrScene = std::make_unique<DX::RenderTexture>(DXGI_FORMAT_R16G16B16A16_FLOAT);
-
-	m_clearColor = Colors::Black.v;
-	m_uiColor = Colors::Yellow;
 
 	*m_szModelName = 0;
 	*m_szStatus = 0;
@@ -104,13 +90,9 @@ void Game::Update(DX::StepTimer const& timer)
 
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
-	float handed = (m_lhcoords) ? 1.f : -1.f;
-
 	auto gpad = m_gamepad->GetState(0);
 	if (gpad.IsConnected())
 	{
-		m_usingGamepad = true;
-
 		m_gamepadButtonTracker.Update(gpad);
 
 		if (!m_fileNames.empty())
@@ -145,16 +127,8 @@ void Game::Update(DX::StepTimer const& timer)
 			// Translate camera
 			Vector3 move;
 
-			if (m_fpscamera)
-			{
-				move.x = gpad.thumbSticks.leftX;
-				move.z = gpad.thumbSticks.leftY * handed;
-			}
-			else
-			{
-				m_zoom -= gpad.thumbSticks.leftY * elapsedTime * m_sensitivity;
-				m_zoom = std::max(m_zoom, 0.01f);
-			}
+			m_zoom -= gpad.thumbSticks.leftY * elapsedTime * m_sensitivity;
+			m_zoom = std::max(m_zoom, 0.01f);
 
 			if (gpad.IsDPadUpPressed())
 			{
@@ -179,27 +153,13 @@ void Game::Update(DX::StepTimer const& timer)
 			move = Vector3::TransformNormal(move, im);
 
 			// Rotate camera
-			if (m_fpscamera)
-			{
-				Vector3 spin(gpad.thumbSticks.rightX, gpad.thumbSticks.rightY, 0);
-				spin *= elapsedTime * m_sensitivity;
+			Vector3 orbit(gpad.thumbSticks.rightX, gpad.thumbSticks.rightY, gpad.thumbSticks.leftX);
+			orbit *= elapsedTime * m_sensitivity;
 
-				Quaternion q = Quaternion::CreateFromAxisAngle(Vector3::Right, spin.y * handed);
-				q *= Quaternion::CreateFromAxisAngle(Vector3::Up, -spin.x * handed);
-				q.Normalize();
-
-				RotateView(q);
-			}
-			else
-			{
-				Vector3 orbit(gpad.thumbSticks.rightX, gpad.thumbSticks.rightY, gpad.thumbSticks.leftX);
-				orbit *= elapsedTime * m_sensitivity;
-
-				m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Right(), orbit.y * handed);
-				m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Up(), -orbit.x * handed);
-				m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Forward(), orbit.z);
-				m_cameraRot.Normalize();
-			}
+			m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Right(), orbit.y);
+			m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Up(), -orbit.x);
+			m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Forward(), orbit.z);
+			m_cameraRot.Normalize();
 
 			m_cameraFocus += move * m_distance * elapsedTime * m_sensitivity;
 
@@ -239,61 +199,15 @@ void Game::Update(DX::StepTimer const& timer)
 				PostMessage(m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
 			}
 
-			if (m_gamepadButtonTracker.menu == GamePad::ButtonStateTracker::PRESSED)
-			{
-				CycleToneMapOperator();
-			}
-
-			if (m_gamepadButtonTracker.b == GamePad::ButtonStateTracker::PRESSED)
-			{
-				int value = ((int)m_ccw << 1) | ((int)m_wireframe);
-
-				value = value + 1;
-				if (value >= 3) value = 0;
-
-				m_wireframe = (value & 0x1) != 0;
-				m_ccw = (value & 0x2) != 0;
-			}
-
-			if (m_gamepadButtonTracker.x == GamePad::ButtonStateTracker::PRESSED)
-			{
-				int value = ((int)m_showGrid << 2) | ((int)m_showHud << 1) | ((int)m_showCross);
-
-				value = (value + 1) & 0x7;
-
-				m_showCross = (value & 0x1) != 0;
-				m_showHud = (value & 0x2) != 0;
-				m_showGrid = (value & 0x4) != 0;
-			}
-
-			if (m_gamepadButtonTracker.y == GamePad::ButtonStateTracker::PRESSED)
-			{
-				CycleBackgroundColor();
-			}
-
-			if (m_gamepadButtonTracker.a == GamePad::ButtonStateTracker::PRESSED)
-			{
-				m_fpscamera = !m_fpscamera;
-			}
-
 			if (m_gamepadButtonTracker.leftStick == GamePad::ButtonStateTracker::PRESSED)
 			{
 				CameraHome();
 				m_modelRot = Quaternion::Identity;
 			}
-
-			if (!m_fpscamera && m_gamepadButtonTracker.rightStick == GamePad::ButtonStateTracker::PRESSED)
-			{
-				m_cameraRot = m_modelRot = Quaternion::Identity;
-			}
-
-			// TODO - m_ibl
 		}
 	}
 	else
 	{
-		m_usingGamepad = false;
-
 		m_gamepadButtonTracker.Reset();
 
 		auto kb = m_keyboard->GetState();
@@ -318,18 +232,10 @@ void Game::Update(DX::StepTimer const& timer)
 			move.x -= scale;
 
 		if (kb.PageUp || kb.W)
-			move.z += scale * handed;
+			move.z += scale;
 
 		if (kb.PageDown || kb.S)
-			move.z -= scale * handed;
-
-		if (kb.Q || kb.E)
-		{
-			float flip = (kb.Q) ? 1.f : -1.f;
-			Quaternion q = Quaternion::CreateFromAxisAngle(Vector3::Up, handed * elapsedTime * flip);
-
-			RotateView(q);
-		}
+			move.z -= scale;
 
 		Matrix im;
 		m_view.Invert(im);
@@ -361,62 +267,11 @@ void Game::Update(DX::StepTimer const& timer)
 			m_modelRot = Quaternion::Identity;
 		}
 
-		if (m_showGrid)
-		{
-			if (kb.OemPlus)
-			{
-				m_gridScale += 2.f * elapsedTime;
-			}
-			else if (kb.OemMinus)
-			{
-				m_gridScale -= 2.f * elapsedTime;
-				if (m_gridScale < 1.f)
-					m_gridScale = 1.f;
-			}
-		}
-
 		m_keyboardTracker.Update(kb);
-
-		if (m_keyboardTracker.pressed.J)
-			m_showCross = !m_showCross;
-
-		if (m_keyboardTracker.pressed.G)
-			m_showGrid = !m_showGrid;
-
-		if (m_keyboardTracker.pressed.R)
-			m_wireframe = !m_wireframe;
-
-		if (m_keyboardTracker.pressed.B && !m_wireframe)
-			m_ccw = !m_ccw;
-
-		if (m_keyboardTracker.pressed.H)
-			m_showHud = !m_showHud;
-
-		if (m_keyboardTracker.pressed.C)
-			CycleBackgroundColor();
-
-		if (m_keyboardTracker.pressed.T)
-			CycleToneMapOperator();
 
 		if (m_keyboardTracker.pressed.O)
 		{
 			PostMessage(m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
-		}
-
-		if (m_keyboardTracker.IsKeyPressed(Keyboard::Enter) && !kb.LeftAlt && !kb.RightAlt)
-		{
-			++m_ibl;
-			if (m_ibl >= s_nIBL)
-			{
-				m_ibl = 0;
-			}
-		}
-		else if (m_keyboardTracker.IsKeyPressed(Keyboard::Back))
-		{
-			if (!m_ibl)
-				m_ibl = s_nIBL - 1;
-			else
-				--m_ibl;
 		}
 
 		// Mouse controls
@@ -430,7 +285,7 @@ void Game::Update(DX::StepTimer const& timer)
 			Vector3 delta;
 			if (kb.LeftShift || kb.RightShift)
 			{
-				delta = Vector3(0.f, 0.f, -float(mouse.y) * handed) * m_distance * elapsedTime;
+				delta = Vector3(0.f, 0.f, -float(mouse.y)) * m_distance * elapsedTime;
 			}
 			else
 			{
@@ -488,19 +343,12 @@ void Game::Update(DX::StepTimer const& timer)
 	}
 
 	// Update camera
-	Vector3 dir = Vector3::Transform((m_lhcoords) ? Vector3::Forward : Vector3::Backward, m_cameraRot);
+	Vector3 dir = Vector3::Transform(Vector3::Backward, m_cameraRot);
 	Vector3 up = Vector3::Transform(Vector3::Up, m_cameraRot);
 
 	m_lastCameraPos = m_cameraFocus + (m_distance * m_zoom) * dir;
 
-	if (m_lhcoords)
-	{
-		m_view = XMMatrixLookAtLH(m_lastCameraPos, m_cameraFocus, up);
-	}
-	else
-	{
-		m_view = Matrix::CreateLookAt(m_lastCameraPos, m_cameraFocus, up);
-	}
+	m_view = Matrix::CreateLookAt(m_lastCameraPos, m_cameraFocus, up);
 
 	m_world = Matrix::CreateFromQuaternion(m_modelRot);
 }
@@ -527,173 +375,25 @@ void Game::Render()
 	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), m_states->Heap() };
 	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
-	RECT size = m_deviceResources->GetOutputSize();
-
-	if (!m_fileNames.empty())
+	if (m_fileNames.empty() && m_model) 
 	{
-		m_spriteBatch->Begin(commandList);
-
-		RECT rct = Viewport::ComputeTitleSafeArea(size.right, size.bottom);
-
-		float spacing = m_fontComic->GetLineSpacing();
-
-		int maxl = static_cast<int>(float(rct.bottom - rct.top + spacing) / spacing);
-
-		if (m_selectFile < m_firstFile)
-			m_firstFile = m_selectFile;
-
-		if (m_selectFile > (m_firstFile + maxl))
-			m_firstFile = m_selectFile;
-
-		float y = float(rct.top);
-		for (int j = m_firstFile; j < int(m_fileNames.size()); ++j)
 		{
-			XMVECTOR hicolor = m_uiColor;
-			m_fontComic->DrawString(m_spriteBatch.get(), m_fileNames[j].c_str(), XMFLOAT2(float(rct.left), y), (m_selectFile == j) ? hicolor : c_Gray);
-			y += spacing;
-		}
+			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1);
+			auto diffuseDesc = m_radianceIBL[0]->GetDesc();
+			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::IrradianceIBL1);
 
-		m_spriteBatch->End();
-	}
-	else
-	{
-		if (m_showGrid)
-		{
-			DrawGrid(commandList);
-		}
-
-		if (m_showCross)
-		{
-			DrawCross(commandList);
-		}
-
-		if (!m_model)
-		{
-			m_spriteBatch->Begin(commandList);
-
-			if (*m_szError)
+			for (auto& it : m_modelClockwise)
 			{
-				m_fontComic->DrawString(m_spriteBatch.get(), m_szError, XMFLOAT2(100, 100), Colors::Red);
-			}
-			else
-			{
-				m_fontComic->DrawString(m_spriteBatch.get(), L"No model is loaded\n", XMFLOAT2(100, 100), Colors::Red);
-			}
-
-			m_spriteBatch->End();
-		}
-		else
-		{
-			{
-				auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1 + m_ibl);
-
-				auto diffuseDesc = m_radianceIBL[0]->GetDesc();
-
-				auto irradianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::IrradianceIBL1 + m_ibl);
-
-				for (auto& it : m_modelWireframe)
+				auto pbr = dynamic_cast<PBREffect*>(it.get());
+				if (pbr)
 				{
-					auto pbr = dynamic_cast<PBREffect*>(it.get());
-					if (pbr)
-					{
-						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, m_states->AnisotropicClamp());
-					}
-				}
-				for (auto& it : m_modelCounterClockwise)
-				{
-					auto pbr = dynamic_cast<PBREffect*>(it.get());
-					if (pbr)
-					{
-						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, m_states->AnisotropicClamp());
-					}
-				}
-				for (auto& it : m_modelClockwise)
-				{
-					auto pbr = dynamic_cast<PBREffect*>(it.get());
-					if (pbr)
-					{
-						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, m_states->AnisotropicClamp());
-					}
+					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, m_states->AnisotropicClamp());
 				}
 			}
-
-			if (m_wireframe)
-			{
-				Model::UpdateEffectMatrices(m_modelWireframe, m_world, m_view, m_proj);
-
-				m_model->Draw(commandList, m_modelWireframe.cbegin());
-			}
-			else if (m_ccw)
-			{
-				Model::UpdateEffectMatrices(m_modelCounterClockwise, m_world, m_view, m_proj);
-
-				m_model->Draw(commandList, m_modelCounterClockwise.cbegin());
-			}
-			else
-			{
-				Model::UpdateEffectMatrices(m_modelClockwise, m_world, m_view, m_proj);
-
-				m_model->Draw(commandList, m_modelClockwise.cbegin());
-			}
-
-			if (*m_szStatus && m_showHud)
-			{
-				m_spriteBatch->Begin(commandList);
-
-				Vector3 up = Vector3::TransformNormal(Vector3::Up, m_view);
-
-				wchar_t szCamera[256] = {};
-				swprintf_s(szCamera, L"Camera: (%8.4f,%8.4f,%8.4f) Look At: (%8.4f,%8.4f,%8.4f) Up: (%8.4f,%8.4f,%8.4f) FOV: %8.4f",
-					m_lastCameraPos.x, m_lastCameraPos.y, m_lastCameraPos.z,
-					m_cameraFocus.x, m_cameraFocus.y, m_cameraFocus.z,
-					up.x, up.y, up.z, XMConvertToDegrees(m_fov));
-
-				const wchar_t* mode = m_ccw ? L"Counter clockwise" : L"Clockwise";
-				if (m_wireframe)
-					mode = L"Wireframe";
-
-				const wchar_t* toneMap = L"*UNKNOWN*";
-				switch (m_deviceResources->GetColorSpace())
-				{
-				default:
-					switch (m_toneMapMode)
-					{
-					case ToneMapPostProcess::Saturate: toneMap = L"None"; break;
-					case ToneMapPostProcess::Reinhard: toneMap = L"Reinhard"; break;
-					case ToneMapPostProcess::ACESFilmic: toneMap = L"ACES Filmic"; break;
-					}
-					break;
-
-				case DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020:
-					toneMap = L"HDR10";
-					break;
-
-				case DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709:
-					toneMap = L"Linear";
-					break;
-				}
-
-				wchar_t szState[128] = {};
-				swprintf_s(szState, L"%ls    Tone-mapping operator: %ls", mode, toneMap);
-
-				wchar_t szMode[64] = {};
-				swprintf_s(szMode, L" %ls (Sensitivity: %8.4f)", (m_fpscamera) ? L"  FPS" : L"Orbit", m_sensitivity);
-
-				Vector2 modeLen = m_fontConsolas->MeasureString(szMode);
-
-				float spacing = m_fontConsolas->GetLineSpacing();
-
-				m_fontConsolas->DrawString(m_spriteBatch.get(), m_szStatus, XMFLOAT2(0, 10), m_uiColor);
-				m_fontConsolas->DrawString(m_spriteBatch.get(), szCamera, XMFLOAT2(0, 10 + spacing), m_uiColor);
-				m_fontConsolas->DrawString(m_spriteBatch.get(), szState, XMFLOAT2(0, 10 + spacing * 2.f), m_uiColor);
-				if (m_usingGamepad)
-				{
-					m_fontConsolas->DrawString(m_spriteBatch.get(), szMode, XMFLOAT2(size.right - modeLen.x, size.bottom - modeLen.y), m_uiColor);
-				}
-
-				m_spriteBatch->End();
-			}
 		}
+
+		Model::UpdateEffectMatrices(m_modelClockwise, m_world, m_view, m_proj);
+		m_model->Draw(commandList, m_modelClockwise.cbegin());
 	}
 
 	m_hdrScene->EndScene(commandList);
@@ -701,25 +401,7 @@ void Game::Render()
 	auto rtvDescriptor = m_deviceResources->GetRenderTargetView();
 	commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, nullptr);
 
-	switch (m_deviceResources->GetColorSpace())
-	{
-	default:
-		switch (m_toneMapMode)
-		{
-		case ToneMapPostProcess::Reinhard:      m_toneMapReinhard->Process(commandList); break;
-		case ToneMapPostProcess::ACESFilmic:    m_toneMapACESFilmic->Process(commandList); break;
-		default:                                m_toneMapSaturate->Process(commandList); break;
-		}
-		break;
-
-	case DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020:
-		m_toneMapHDR10->Process(commandList);
-		break;
-
-	case DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709:
-		m_toneMapLinear->Process(commandList);
-		break;
-	}
+	m_toneMapACESFilmic->Process(commandList);
 
 	// Show the new frame.
 	m_deviceResources->Present();
@@ -736,7 +418,7 @@ void Game::Clear()
 	auto dsvDescriptor = m_deviceResources->GetDepthStencilView();
 
 	commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
-	commandList->ClearRenderTargetView(rtvDescriptor, m_clearColor, 0, nullptr);
+	commandList->ClearRenderTargetView(rtvDescriptor, c_CornflowerBlue, 0, nullptr);
 	commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	// Set the viewport and scissor rect.
@@ -830,19 +512,8 @@ void Game::CreateDeviceDependentResources()
 
 	RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
 
-	m_toneMapSaturate = std::make_unique<ToneMapPostProcess>(device, rtState, ToneMapPostProcess::Saturate, ToneMapPostProcess::SRGB);
-	m_toneMapReinhard = std::make_unique<ToneMapPostProcess>(device, rtState, ToneMapPostProcess::Reinhard, ToneMapPostProcess::SRGB);
 	m_toneMapACESFilmic = std::make_unique<ToneMapPostProcess>(device, rtState, ToneMapPostProcess::ACESFilmic, ToneMapPostProcess::SRGB);
-
-	m_toneMapSaturate->SetHDRSourceTexture(m_resourceDescriptors->GetGpuHandle(Descriptors::SceneTex));
-	m_toneMapReinhard->SetHDRSourceTexture(m_resourceDescriptors->GetGpuHandle(Descriptors::SceneTex));
 	m_toneMapACESFilmic->SetHDRSourceTexture(m_resourceDescriptors->GetGpuHandle(Descriptors::SceneTex));
-
-	m_toneMapLinear = std::make_unique<ToneMapPostProcess>(device, rtState, ToneMapPostProcess::None, ToneMapPostProcess::Linear);
-	m_toneMapLinear->SetHDRSourceTexture(m_resourceDescriptors->GetGpuHandle(Descriptors::SceneTex));
-
-	m_toneMapHDR10 = std::make_unique<ToneMapPostProcess>(device, rtState, ToneMapPostProcess::None, ToneMapPostProcess::ST2084);
-	m_toneMapHDR10->SetHDRSourceTexture(m_resourceDescriptors->GetGpuHandle(Descriptors::SceneTex));
 
 	RenderTargetState hdrState(m_hdrScene->GetFormat(), m_deviceResources->GetDepthBufferFormat());
 
@@ -863,7 +534,6 @@ void Game::CreateDeviceDependentResources()
 
 	{
 		SpriteBatchPipelineStateDescription pd(hdrState);
-		m_spriteBatch = std::make_unique<SpriteBatch>(device, resourceUpload, pd);
 	}
 
 	static const wchar_t* s_radianceIBL[s_nIBL] =
@@ -925,22 +595,12 @@ void Game::CreateWindowSizeDependentResources()
 	DX::FindMediaFile(consolasFont, _MAX_PATH, (size.bottom > 1200) ? L"DATA/IMPORTED/consolas4k.spritefont" : L"DATA/IMPORTED/consolas.spritefont");
 	DX::FindMediaFile(comicFont, _MAX_PATH, (size.bottom > 1200) ? L"DATA/IMPORTED/comic4k.spritefont" : L"DATA/IMPORTED/comic.spritefont");
 
-	m_fontConsolas = std::make_unique<SpriteFont>(device, resourceUpload, consolasFont,
-		m_resourceDescriptors->GetCpuHandle(Descriptors::ConsolasFont),
-		m_resourceDescriptors->GetGpuHandle(Descriptors::ConsolasFont));
-
-	m_fontComic = std::make_unique<SpriteFont>(device, resourceUpload, comicFont,
-		m_resourceDescriptors->GetCpuHandle(Descriptors::ComicFont),
-		m_resourceDescriptors->GetGpuHandle(Descriptors::ComicFont));
 
 	m_deviceResources->WaitForGpu();
 
 	auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
 
 	uploadResourcesFinished.wait();
-
-	auto viewport = m_deviceResources->GetScreenViewport();
-	m_spriteBatch->SetViewport(viewport);
 
 	m_hdrScene->SetWindow(size);
 
@@ -952,29 +612,18 @@ void Game::CreateWindowSizeDependentResources()
 
 void Game::OnDeviceLost()
 {
-	m_spriteBatch.reset();
-	m_fontConsolas.reset();
-	m_fontComic.reset();
-
 	m_fxFactory.reset();
 	m_pbrFXFactory.reset();
 	m_modelResources.reset();
 	m_model.reset();
 	m_modelClockwise.clear();
-	m_modelCounterClockwise.clear();
-	m_modelWireframe.clear();
 
 	m_lineEffect.reset();
 	m_lineBatch.reset();
 
 	m_states.reset();
 
-	m_toneMapSaturate.reset();
-	m_toneMapReinhard.reset();
 	m_toneMapACESFilmic.reset();
-
-	m_toneMapLinear.reset();
-	m_toneMapHDR10.reset();
 
 	m_resourceDescriptors.reset();
 	m_renderDescriptors.reset();
@@ -995,8 +644,6 @@ void Game::OnDeviceRestored()
 void Game::LoadModel()
 {
 	m_modelClockwise.clear();
-	m_modelCounterClockwise.clear();
-	m_modelWireframe.clear();
 	m_modelResources.reset();
 	m_model.reset();
 	m_fxFactory.reset();
@@ -1053,8 +700,6 @@ void Game::LoadModel()
 		m_model.reset();
 		*m_szStatus = 0;
 	}
-
-	m_wireframe = false;
 
 	if (m_model)
 	{
@@ -1122,18 +767,6 @@ void Game::LoadModel()
 				auto effect = std::make_shared<BasicEffect>(device, EffectFlags::Lighting, pd);
 				effect->EnableDefaultLighting();
 				m_modelClockwise.push_back(effect);
-
-				pd.rasterizerDesc = CommonStates::CullCounterClockwise;
-
-				effect = std::make_shared<BasicEffect>(device, EffectFlags::Lighting, pd);
-				effect->EnableDefaultLighting();
-				m_modelCounterClockwise.push_back(effect);
-
-				pd.rasterizerDesc = CommonStates::Wireframe;
-
-				effect = std::make_shared<BasicEffect>(device, EffectFlags::Lighting, pd);
-				effect->EnableDefaultLighting();
-				m_modelWireframe.push_back(effect);
 			}
 			else
 			{
@@ -1152,53 +785,6 @@ void Game::LoadModel()
 					hdrState);
 
 				m_modelClockwise = m_model->CreateEffects(*fxFactory, pd, pdAlpha, txtOffset);
-
-				pd.rasterizerDesc = CommonStates::CullCounterClockwise;
-				pdAlpha.rasterizerDesc = CommonStates::CullCounterClockwise;
-
-				m_modelCounterClockwise = m_model->CreateEffects(*fxFactory, pd, pdAlpha, txtOffset);
-
-				pd.rasterizerDesc = CommonStates::Wireframe;
-				pdAlpha.rasterizerDesc = CommonStates::Wireframe;
-
-				m_modelWireframe = m_model->CreateEffects(*fxFactory, pd, pdAlpha, txtOffset);
-			}
-
-			// Compute mesh stats
-			size_t nmeshes = 0;
-			size_t nverts = 0;
-			size_t nfaces = 0;
-			size_t nsubsets = 0;
-
-			std::set<void*> vbs;
-			for (auto it = m_model->meshes.cbegin(); it != m_model->meshes.cend(); ++it)
-			{
-				for (auto mit = (*it)->opaqueMeshParts.cbegin(); mit != (*it)->opaqueMeshParts.cend(); ++mit)
-				{
-					++nsubsets;
-
-					nfaces += ((*mit)->indexCount / 3);
-
-					size_t vertexStride = (*mit)->vertexStride;
-
-					void *mem = (*mit)->vertexBuffer.Memory();
-
-					if ((*mit)->vertexBuffer && (vertexStride > 0) && vbs.find(mem) == vbs.end())
-					{
-						nverts += ((*mit)->vertexBuffer.Size() / vertexStride);
-						vbs.insert(mem);
-					}
-				}
-				++nmeshes;
-			}
-
-			if (nmeshes > 1)
-			{
-				swprintf_s(m_szStatus, L"Meshes: %6Iu   Verts: %6Iu   Faces: %6Iu   Subsets: %6Iu", nmeshes, nverts, nfaces, nsubsets);
-			}
-			else
-			{
-				swprintf_s(m_szStatus, L"Verts: %6Iu   Faces: %6Iu   Subsets: %6Iu", nverts, nfaces, nsubsets);
 			}
 		}
 
@@ -1210,81 +796,6 @@ void Game::LoadModel()
 	}
 
 	CameraHome();
-}
-
-void Game::DrawGrid(ID3D12GraphicsCommandList *commandList)
-{
-	m_lineEffect->SetView(m_view);
-
-	m_lineEffect->Apply(commandList);
-
-	m_lineBatch->Begin(commandList);
-
-	Vector3 xaxis(m_gridScale, 0.f, 0.f);
-	Vector3 yaxis(0.f, 0.f, m_gridScale);
-	Vector3 origin = Vector3::Zero;
-
-	XMVECTOR color = m_uiColor;
-
-	for (size_t i = 0; i <= m_gridDivs; ++i)
-	{
-		float fPercent = float(i) / float(m_gridDivs);
-		fPercent = (fPercent * 2.0f) - 1.0f;
-
-		Vector3 scale = xaxis * fPercent + origin;
-
-		VertexPositionColor v1(scale - yaxis, color);
-		VertexPositionColor v2(scale + yaxis, color);
-		m_lineBatch->DrawLine(v1, v2);
-	}
-
-	for (size_t i = 0; i <= m_gridDivs; i++)
-	{
-		float fPercent = float(i) / float(m_gridDivs);
-		fPercent = (fPercent * 2.0f) - 1.0f;
-
-		Vector3 scale = yaxis * fPercent + origin;
-
-		VertexPositionColor v1(scale - xaxis, color);
-		VertexPositionColor v2(scale + xaxis, color);
-		m_lineBatch->DrawLine(v1, v2);
-	}
-
-	m_lineBatch->End();
-}
-
-void Game::DrawCross(ID3D12GraphicsCommandList *commandList)
-{
-	m_lineEffect->SetView(m_view);
-
-	m_lineEffect->Apply(commandList);
-
-	XMVECTOR color = m_uiColor;
-
-	m_lineBatch->Begin(commandList);
-
-	float cross = m_distance / 100.f;
-
-	Vector3 xaxis(cross, 0.f, 0.f);
-	Vector3 yaxis(0.f, cross, 0.f);
-	Vector3 zaxis(0.f, 0.f, cross);
-
-	VertexPositionColor v1(m_cameraFocus - xaxis, color);
-	VertexPositionColor v2(m_cameraFocus + xaxis, color);
-
-	m_lineBatch->DrawLine(v1, v2);
-
-	VertexPositionColor v3(m_cameraFocus - yaxis, color);
-	VertexPositionColor v4(m_cameraFocus + yaxis, color);
-
-	m_lineBatch->DrawLine(v3, v4);
-
-	VertexPositionColor v5(m_cameraFocus - zaxis, color);
-	VertexPositionColor v6(m_cameraFocus + zaxis, color);
-
-	m_lineBatch->DrawLine(v5, v6);
-
-	m_lineBatch->End();
 }
 
 void Game::CameraHome()
@@ -1299,7 +810,6 @@ void Game::CameraHome()
 	{
 		m_cameraFocus = Vector3::Zero;
 		m_distance = 10.f;
-		m_gridScale = 1.f;
 	}
 	else
 	{
@@ -1332,69 +842,21 @@ void Game::CameraHome()
 			sphere.Radius = 10.f;
 		}
 
-		m_gridScale = sphere.Radius;
-
 		m_distance = sphere.Radius * 2;
 
 		m_cameraFocus = sphere.Center;
 	}
 
-	Vector3 dir = Vector3::Transform((m_lhcoords) ? Vector3::Forward : Vector3::Backward, m_cameraRot);
+	Vector3 dir = Vector3::Transform(Vector3::Backward, m_cameraRot);
 	Vector3 up = Vector3::Transform(Vector3::Up, m_cameraRot);
 
 	m_lastCameraPos = m_cameraFocus + (m_distance * m_zoom) * dir;
-}
-
-void Game::CycleBackgroundColor()
-{
-	if (m_clearColor == Vector4(c_CornflowerBlue.v))
-	{
-		m_clearColor = Colors::Black.v;
-		m_uiColor = Colors::Yellow;
-	}
-	else if (m_clearColor == Vector4(Colors::Black.v))
-	{
-		m_clearColor = Colors::White.v;
-		m_uiColor = Colors::Black.v;
-	}
-	else
-	{
-		m_clearColor = c_CornflowerBlue.v;
-		m_uiColor = Colors::White.v;
-	}
-}
-
-void Game::CycleToneMapOperator()
-{
-	if (m_deviceResources->GetColorSpace() != DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709)
-		return;
-
-	m_toneMapMode += 1;
-
-	if (m_toneMapMode >= ToneMapPostProcess::Operator_Max)
-	{
-		m_toneMapMode = ToneMapPostProcess::Saturate;
-	}
 }
 
 void Game::CreateProjection()
 {
 	auto size = m_deviceResources->GetOutputSize();
 
-	if (m_lhcoords)
-	{
-		m_proj = XMMatrixPerspectiveFovLH(m_fov, float(size.right) / float(size.bottom), 0.1f, m_farPlane);
-	}
-	else
-	{
-		m_proj = Matrix::CreatePerspectiveFieldOfView(m_fov, float(size.right) / float(size.bottom), 0.1f, m_farPlane);
-	}
-
+	m_proj = Matrix::CreatePerspectiveFieldOfView(m_fov, float(size.right) / float(size.bottom), 0.1f, m_farPlane);
 	m_lineEffect->SetProjection(m_proj);
-}
-
-void Game::RotateView(Quaternion& q)
-{
-	UNREFERENCED_PARAMETER(q);
-	// TODO -
 }

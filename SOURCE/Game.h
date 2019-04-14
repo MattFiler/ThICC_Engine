@@ -58,17 +58,10 @@ private:
 	void CreateWindowSizeDependentResources();
 
 	void LoadModel();
-	void DrawGrid(ID3D12GraphicsCommandList *commandList);
-	void DrawCross(ID3D12GraphicsCommandList *commandList);
 
 	void CameraHome();
 
-	void CycleBackgroundColor();
-	void CycleToneMapOperator();
-
 	void CreateProjection();
-
-	void RotateView(DirectX::SimpleMath::Quaternion& q);
 
 	// Device resources.
 	std::unique_ptr<DX::DeviceResources>            m_deviceResources;
@@ -85,23 +78,13 @@ private:
 	std::unique_ptr<DirectX::BasicEffect>                                   m_lineEffect;
 	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>>  m_lineBatch;
 
-	std::unique_ptr<DirectX::ToneMapPostProcess>    m_toneMapSaturate;
-	std::unique_ptr<DirectX::ToneMapPostProcess>    m_toneMapReinhard;
 	std::unique_ptr<DirectX::ToneMapPostProcess>    m_toneMapACESFilmic;
-	std::unique_ptr<DirectX::ToneMapPostProcess>    m_toneMapLinear;
-	std::unique_ptr<DirectX::ToneMapPostProcess>    m_toneMapHDR10;
 
 	std::unique_ptr<DirectX::EffectFactory>         m_fxFactory;
 	std::unique_ptr<DirectX::PBREffectFactory>      m_pbrFXFactory;
 	std::unique_ptr<DirectX::EffectTextureFactory>  m_modelResources;
 	std::unique_ptr<DirectX::Model>                 m_model;
 	std::vector<std::shared_ptr<DirectX::IEffect>>  m_modelClockwise;
-	std::vector<std::shared_ptr<DirectX::IEffect>>  m_modelCounterClockwise;
-	std::vector<std::shared_ptr<DirectX::IEffect>>  m_modelWireframe;
-
-	std::unique_ptr<DirectX::SpriteBatch>           m_spriteBatch;
-	std::unique_ptr<DirectX::SpriteFont>            m_fontConsolas;
-	std::unique_ptr<DirectX::SpriteFont>            m_fontComic;
 
 	static const size_t s_nIBL = 3;
 
@@ -145,29 +128,16 @@ private:
 	DirectX::SimpleMath::Vector3                    m_lastCameraPos;
 	DirectX::SimpleMath::Quaternion                 m_cameraRot;
 	DirectX::SimpleMath::Quaternion                 m_viewRot;
-	DirectX::SimpleMath::Color                      m_clearColor;
-	DirectX::SimpleMath::Color                      m_uiColor;
 
 	DirectX::SimpleMath::Quaternion                 m_modelRot;
 
-	float                                           m_gridScale;
 	float                                           m_fov;
 	float                                           m_zoom;
 	float                                           m_distance;
 	float                                           m_farPlane;
 	float                                           m_sensitivity;
-	size_t                                          m_gridDivs;
-	uint32_t                                        m_ibl;
 
-	bool                                            m_showHud;
-	bool                                            m_showCross;
-	bool                                            m_showGrid;
-	bool                                            m_usingGamepad;
-	bool                                            m_wireframe;
-	bool                                            m_ccw;
 	bool                                            m_reloadModel;
-	bool                                            m_lhcoords;
-	bool                                            m_fpscamera;
 
 	int                                             m_toneMapMode;
 
