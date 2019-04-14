@@ -37,9 +37,9 @@ Game::Game() noexcept(false) :
 	m_showGrid(false),
 	m_usingGamepad(false),
 	m_wireframe(false),
-	m_ccw(true),
+	m_ccw(false),
 	m_reloadModel(false),
-	m_lhcoords(true),
+	m_lhcoords(false),
 	m_fpscamera(false),
 	m_toneMapMode(ToneMapPostProcess::Reinhard),
 	m_selectFile(0),
@@ -524,8 +524,6 @@ void Game::Render()
 
 	Clear();
 
-	PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
-
 	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), m_states->Heap() };
 	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
@@ -700,10 +698,6 @@ void Game::Render()
 
 	m_hdrScene->EndScene(commandList);
 
-	PIXEndEvent(commandList);
-
-	PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"ToneMap");
-
 	auto rtvDescriptor = m_deviceResources->GetRenderTargetView();
 	commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, nullptr);
 
@@ -727,20 +721,15 @@ void Game::Render()
 		break;
 	}
 
-	PIXEndEvent(commandList);
-
 	// Show the new frame.
-	PIXBeginEvent(m_deviceResources->GetCommandQueue(), PIX_COLOR_DEFAULT, L"Present");
 	m_deviceResources->Present();
 	m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
-	PIXEndEvent(m_deviceResources->GetCommandQueue());
 }
 
 // Helper method to clear the back buffers.
 void Game::Clear()
 {
 	auto commandList = m_deviceResources->GetCommandList();
-	PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Clear");
 
 	// Clear the views.
 	auto rtvDescriptor = m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene);
@@ -755,8 +744,6 @@ void Game::Clear()
 	auto scissorRect = m_deviceResources->GetScissorRect();
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
-
-	PIXEndEvent(commandList);
 }
 #pragma endregion
 
@@ -881,15 +868,15 @@ void Game::CreateDeviceDependentResources()
 
 	static const wchar_t* s_radianceIBL[s_nIBL] =
 	{
-		L"Atrium_diffuseIBL.dds",
-		L"Garage_diffuseIBL.dds",
-		L"SunSubMixer_diffuseIBL.dds",
+		L"DATA/IMPORTED/Atrium_diffuseIBL.dds",
+		L"DATA/IMPORTED/Garage_diffuseIBL.dds",
+		L"DATA/IMPORTED/SunSubMixer_diffuseIBL.dds",
 	};
 	static const wchar_t* s_irradianceIBL[s_nIBL] =
 	{
-		L"Atrium_specularIBL.dds",
-		L"Garage_specularIBL.dds",
-		L"SunSubMixer_specularIBL.dds",
+		L"DATA/IMPORTED/Atrium_specularIBL.dds",
+		L"DATA/IMPORTED/Garage_specularIBL.dds",
+		L"DATA/IMPORTED/SunSubMixer_specularIBL.dds",
 	};
 
 	static_assert(_countof(s_radianceIBL) == _countof(s_irradianceIBL), "IBL array mismatch");
@@ -935,8 +922,8 @@ void Game::CreateWindowSizeDependentResources()
 	wchar_t consolasFont[_MAX_PATH] = {};
 	wchar_t comicFont[_MAX_PATH] = {};
 
-	DX::FindMediaFile(consolasFont, _MAX_PATH, (size.bottom > 1200) ? L"consolas4k.spritefont" : L"consolas.spritefont");
-	DX::FindMediaFile(comicFont, _MAX_PATH, (size.bottom > 1200) ? L"comic4k.spritefont" : L"comic.spritefont");
+	DX::FindMediaFile(consolasFont, _MAX_PATH, (size.bottom > 1200) ? L"DATA/IMPORTED/consolas4k.spritefont" : L"DATA/IMPORTED/consolas.spritefont");
+	DX::FindMediaFile(comicFont, _MAX_PATH, (size.bottom > 1200) ? L"DATA/IMPORTED/comic4k.spritefont" : L"DATA/IMPORTED/comic.spritefont");
 
 	m_fontConsolas = std::make_unique<SpriteFont>(device, resourceUpload, consolasFont,
 		m_resourceDescriptors->GetCpuHandle(Descriptors::ConsolasFont),
