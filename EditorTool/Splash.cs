@@ -237,10 +237,10 @@ namespace EditorTool
             try
             {
                 //Copy to debug folder
-                buildAssets("Debug", path_mod);
+                buildAssets("BUILDS/Debug", path_mod);
 
                 //Copy to release folder
-                buildAssets("Release", path_mod);
+                buildAssets("BUILDS/Release", path_mod);
 
                 return true;
             }

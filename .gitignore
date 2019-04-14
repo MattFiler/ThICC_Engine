@@ -338,3 +338,4 @@ Newtonsoft.Json.dll
 Newtonsoft.Json.pdb
 Newtonsoft.Json.xml
 CACHE/*
+BUILDS/*
