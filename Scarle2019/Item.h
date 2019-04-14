@@ -37,6 +37,9 @@ public:
 	virtual float getSpinAngle() { return m_spinAngle; };
 	virtual void setSpinAngle(float _angle);
 
+	virtual bool isTrailing() { return m_trailing; };
+	virtual void setTrailing(bool _trailing) { m_trailing = _trailing; };
+
 protected:
 	TrackMagnet * m_mesh = nullptr;
 	Player* m_player = nullptr;
@@ -45,6 +48,7 @@ protected:
 	bool m_shouldDestroy = false;
 	bool m_itemUsed = false;
 	bool m_trailingPlayerImmunity = true;
+	bool m_trailing = false;
 
 	//Despawn Time
 	float m_elapsedTime = 0;

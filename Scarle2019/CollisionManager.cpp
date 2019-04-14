@@ -151,23 +151,15 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 				for (Item* item2 : _items)
 				{
 					if (item1 != item2 && item2->GetMesh() && !CheckItemImmunity(item1, item2) && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
-					{
+					{	
 						//Checking for bombs
-						Bomb* bomb1 = dynamic_cast<Bomb*>(item1);
-						Bomb* bomb2 = dynamic_cast<Bomb*>(item2);
+						if (bombResponse(item1, item2))
+						{
+							continue;
+						}
 
-						if (bomb1)
-						{
-							bomb1->Detonate();
-							item2->FlagForDestoy();
-							break;
-						}
-						else if (bomb2)
-						{
-							item1->FlagForDestoy();
-							bomb2->Detonate();
-							break;
-						}
+						//Checking for fake item boxes
+						fakeBoxResponse(item1, item2);
 
 						item1->FlagForDestoy();
 						item2->FlagForDestoy();
@@ -178,6 +170,40 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 		}
 	}
 
+}
+
+bool CollisionManager::bombResponse(Item * item1, Item * item2)
+{
+	Bomb* bomb1 = dynamic_cast<Bomb*>(item1);
+	Bomb* bomb2 = dynamic_cast<Bomb*>(item2);
+
+	if (bomb1)
+	{
+		bomb1->Detonate();
+		item2->FlagForDestoy();
+	}
+	else if (bomb2)
+	{
+		item1->FlagForDestoy();
+		bomb2->Detonate();
+	}
+
+	return bomb1 || bomb2;
+}
+
+void CollisionManager::fakeBoxResponse(Item * item1, Item * item2)
+{
+	FakeItemBox* box1 = dynamic_cast<FakeItemBox*>(item1);
+	FakeItemBox* box2 = dynamic_cast<FakeItemBox*>(item2);
+
+	if (box1 && box1->isTrailing())
+	{
+		box1->HitByPlayer(box1->getPlayer());
+	}
+	else if (box2 && box2->isTrailing())
+	{
+		box2->HitByPlayer(box2->getPlayer());
+	}
 }
 
 bool CollisionManager::CheckItemImmunity(Item * _item1, Item * _item2)
@@ -208,6 +234,3 @@ Plane CollisionManager::getPlane(Vector3 _corner1, Vector3 _corner2, float _heig
 	Vector3 distance = Vector3(_corner1.x, _corner1.y + _height, _corner1.z);
 	return Plane(_corner1, endPoint, distance);
 }
-
-
-

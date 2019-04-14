@@ -214,6 +214,8 @@ void Player::TrailItems()
 						* m_dpos.x, m_dpos.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_dpos.z }, m_rot));
 				}
 			}
+
+			m_trailingItems[i]->setTrailing(true);
 		}	
 	}
 }
@@ -330,6 +332,7 @@ void Player::ReleaseItem()
 	if (!m_trailingItems.empty())
 	{
 		m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
+		m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
 		m_trailingItems.pop_back();
 		
 		if (m_trailingItems.empty())
