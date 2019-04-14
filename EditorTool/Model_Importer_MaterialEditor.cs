@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -195,16 +196,19 @@ namespace EditorTool
 
             //Ambient
             material_config["map_Ka"] = ambientMap.Text;
+            copyNewMat(ambientMap.Text);
             colourToJSON("Ka", ambientColour);
 
             //Diffuse
             material_config["map_Kd"] = diffuseMap.Text;
             material_config["map_d"] = diffuseMap.Text;
+            copyNewMat(diffuseMap.Text);
             colourToJSON("Kd", diffuseColour);
 
             //Specular
             material_config["map_Ks"] = specularMap.Text;
             material_config["map_Ns"] = specularMap.Text;
+            copyNewMat(specularMap.Text);
             colourToJSON("Ks", specularColour);
 
             //Emissive
@@ -250,6 +254,20 @@ namespace EditorTool
         private void colourToJSON(string key, PictureBox colour)
         {
             material_config[key] = (colour.BackColor.R/255).ToString("0.000000") + " " + (colour.BackColor.G/255).ToString("0.000000") + " " + (colour.BackColor.B/255).ToString("0.000000");
+        }
+        
+        /* Copy new material to our model's directory */
+        private void copyNewMat(string file_path)
+        {
+            if (file_path != "")
+            {
+                string copy_to = this_model_folder + Path.GetFileName(file_path);
+                if (File.Exists(copy_to))
+                {
+                    File.Delete(copy_to);
+                }
+                File.Copy(file_path, copy_to);
+            }
         }
 
 
