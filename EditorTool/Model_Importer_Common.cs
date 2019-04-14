@@ -18,6 +18,8 @@ namespace EditorTool
 
     public class Model_Importer_Common
     {
+        /* File Paths */
+
         private string import_directory = "";
         private string obj_file_name = "";
         private string sdkmesh_file_name = "";
@@ -56,7 +58,7 @@ namespace EditorTool
             }
             switch (_file)
             {
-                case importer_file.OBJ_MODEL: 
+                case importer_file.OBJ_MODEL:
                     return obj_file_name;
                 case importer_file.SDK_MESH:
                     return sdkmesh_file_name;
@@ -77,6 +79,7 @@ namespace EditorTool
         }
 
         //----
+        /* Model Type */
 
         private ModelType selected_model_type;
 
@@ -90,6 +93,7 @@ namespace EditorTool
         }
 
         //----
+        /* Edit or New Import? */
 
         private bool in_edit_mode = false;
 
@@ -103,6 +107,7 @@ namespace EditorTool
         }
 
         //----
+        /* Path to Map Config */
 
         private string model_config_path = "";
 
@@ -114,5 +119,16 @@ namespace EditorTool
         {
             return model_config_path;
         }
+
+        //----
+        /* Fun Facts! */
+
+        public struct FunFacts
+        {
+            public int material_count;
+            public int collision_fix_count;
+            public int vertices;
+        };
+        public FunFacts import_stats;
     }
 }

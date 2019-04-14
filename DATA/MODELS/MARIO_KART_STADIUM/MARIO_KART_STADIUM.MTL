@@ -7,7 +7,7 @@ Kd 0.800000 0.800000 0.800000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd debug_grid.jpg
 
@@ -378,7 +378,7 @@ Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
+d 0.999999
 illum 2
 map_Kd ufc_TeamLogo_nuki_Alb.png
 map_d ufc_TeamLogo_nuki_Alb.png
@@ -474,7 +474,7 @@ Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.999999
+d 0.000000
 illum 2
 map_Kd ufc_flower_Alb.png
 map_d ufc_flower_Alb.png
@@ -534,7 +534,7 @@ Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
+d 0.999999
 illum 2
 map_Kd ufc_nuki_1_Alb.png
 map_d ufc_nuki_1_Alb.png
@@ -546,7 +546,7 @@ Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
+d 0.999999
 illum 2
 map_Kd ufc_nuki_2_Alb.png
 map_d ufc_nuki_2_Alb.png
@@ -558,7 +558,7 @@ Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
+d 0.999999
 illum 2
 map_Kd ufc_nuki_3_Alb.png
 map_d ufc_nuki_3_Alb.png
@@ -570,7 +570,7 @@ Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
+d 0.999999
 illum 2
 map_Kd ufc_nuki_4_Alb.png
 map_d ufc_nuki_4_Alb.png
@@ -582,7 +582,7 @@ Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
+d 0.999999
 illum 2
 map_Kd ufc_nuki_5_Alb.png
 map_d ufc_nuki_5_Alb.png
@@ -814,4 +814,16 @@ d 0.000000
 illum 2
 map_Kd ufc_window_1_Alb.png
 map_d ufc_window_1_Alb.png
+
+newmtl fc_yane
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ufc_yane_Alb.png
+map_d ufc_yane_Alb.png
 
