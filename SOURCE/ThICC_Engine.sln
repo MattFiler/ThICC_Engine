@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThICC_Engine", "DirectXTKModelViewer_Desktop_2017_Win10.vcxproj", "{8D6AA92B-B106-4A67-9B1E-B93443577920}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThICC_Engine", "ThICC_Engine.vcxproj", "{8D6AA92B-B106-4A67-9B1E-B93443577920}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTK12", "DirectXTK12\DirectXTK_Desktop_2017_Win10.vcxproj", "{3E0E8608-CD9B-4C76-AF33-29CA38F2C9F0}"
 EndProject
