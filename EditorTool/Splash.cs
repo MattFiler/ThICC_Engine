@@ -217,7 +217,7 @@ namespace EditorTool
         private void openProject_Click(object sender, EventArgs e)
         {
             fixVS();
-            Process.Start("Scarle2019.sln");
+            Process.Start("SOURCE/ThICC_Engine/ThICC_Engine.sln");
         }
 
         /* Compile assets */
@@ -306,7 +306,7 @@ namespace EditorTool
         /* Fix VS config */
         public void fixVS()
         {
-            File.WriteAllText("Scarle2019/Scarle2019.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup></Project>");
+            File.WriteAllText("SOURCE/ThICC_Engine/ThICC_Engine.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup></Project>");
         }
 
 
