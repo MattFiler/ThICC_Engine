@@ -40,6 +40,7 @@
             this.compileAssets = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.reloadDebugList = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
             this.DEBUG_PLAYERCOUNT = new System.Windows.Forms.NumericUpDown();
             this.DEBUG_SAVE = new System.Windows.Forms.Button();
@@ -47,7 +48,6 @@
             this.DEBUG_DEFAULTTRACK = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.openProject = new System.Windows.Forms.Button();
-            this.reloadDebugList = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -176,6 +176,16 @@
             this.groupBox4.Text = "Debug Configurations";
             this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
             // 
+            // reloadDebugList
+            // 
+            this.reloadDebugList.Location = new System.Drawing.Point(222, 34);
+            this.reloadDebugList.Name = "reloadDebugList";
+            this.reloadDebugList.Size = new System.Drawing.Size(53, 23);
+            this.reloadDebugList.TabIndex = 34;
+            this.reloadDebugList.Text = "Reload";
+            this.reloadDebugList.UseVisualStyleBackColor = true;
+            this.reloadDebugList.Click += new System.EventHandler(this.reloadDebugList_Click);
+            // 
             // label14
             // 
             this.label14.AutoSize = true;
@@ -261,16 +271,6 @@
             this.openProject.UseVisualStyleBackColor = true;
             this.openProject.Click += new System.EventHandler(this.openProject_Click);
             // 
-            // reloadDebugList
-            // 
-            this.reloadDebugList.Location = new System.Drawing.Point(222, 34);
-            this.reloadDebugList.Name = "reloadDebugList";
-            this.reloadDebugList.Size = new System.Drawing.Size(53, 23);
-            this.reloadDebugList.TabIndex = 34;
-            this.reloadDebugList.Text = "Reload";
-            this.reloadDebugList.UseVisualStyleBackColor = true;
-            this.reloadDebugList.Click += new System.EventHandler(this.reloadDebugList_Click);
-            // 
             // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -285,7 +285,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Splash";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Mario Kart Toolkit";
+            this.Text = "ThICC Toolkit";
             this.Load += new System.EventHandler(this.Splash_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);

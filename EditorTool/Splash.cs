@@ -217,7 +217,7 @@ namespace EditorTool
         private void openProject_Click(object sender, EventArgs e)
         {
             fixVS();
-            Process.Start("SOURCE/ThICC_Engine.sln");
+            Process.Start(Directory.GetCurrentDirectory() + "/SOURCE/ThICC_Engine.sln");
         }
 
         /* Compile assets */
@@ -306,7 +306,7 @@ namespace EditorTool
         /* Fix VS config */
         public void fixVS()
         {
-            File.WriteAllText("SOURCE/ThICC_Engine.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup></Project>");
+            File.WriteAllText(Directory.GetCurrentDirectory() + "/SOURCE/ThICC_Engine.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)..\\BUILDS\\$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerWorkingDirectory>$(SolutionDir)..\\BUILDS\\$(Configuration)\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments></PropertyGroup></Project>");
         }
 
 

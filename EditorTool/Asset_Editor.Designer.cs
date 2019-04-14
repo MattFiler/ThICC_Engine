@@ -38,7 +38,6 @@ namespace EditorTool
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.editAsset = new System.Windows.Forms.Button();
             this.modelConfigs = new System.Windows.Forms.GroupBox();
-            this.depreciationWarning = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.modelType = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
@@ -62,6 +61,7 @@ namespace EditorTool
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.depreciationWarning = new System.Windows.Forms.Label();
             this.modelPreview = new System.Windows.Forms.Integration.ElementHost();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.localisationPreview = new System.Windows.Forms.TextBox();
@@ -178,18 +178,6 @@ namespace EditorTool
             this.modelConfigs.TabStop = false;
             this.modelConfigs.Text = "Model Configuration";
             this.modelConfigs.Visible = false;
-            // 
-            // depreciationWarning
-            // 
-            this.depreciationWarning.AutoSize = true;
-            this.depreciationWarning.Location = new System.Drawing.Point(231, 220);
-            this.depreciationWarning.Name = "depreciationWarning";
-            this.depreciationWarning.Size = new System.Drawing.Size(223, 117);
-            this.depreciationWarning.TabIndex = 14;
-            this.depreciationWarning.Text = "WARNING!\r\n\r\nTHIS MODEL WAS IMPORTED WITH\r\nAN OLDER VERSION OF THE ENGINE\r\nTOOLKIT" +
-    " AND DOES NOT SUPPORT\r\nUPDATED FEATURES.\r\n\r\nPLEASE RE-IMPORT THE MODEL BEFORE\r\nI" +
-    "T BECOMES DEPRECIATED.";
-            this.depreciationWarning.Visible = false;
             // 
             // label16
             // 
@@ -424,6 +412,18 @@ namespace EditorTool
             this.label9.Size = new System.Drawing.Size(17, 13);
             this.label9.TabIndex = 24;
             this.label9.Text = "X:";
+            // 
+            // depreciationWarning
+            // 
+            this.depreciationWarning.AutoSize = true;
+            this.depreciationWarning.Location = new System.Drawing.Point(231, 220);
+            this.depreciationWarning.Name = "depreciationWarning";
+            this.depreciationWarning.Size = new System.Drawing.Size(223, 117);
+            this.depreciationWarning.TabIndex = 14;
+            this.depreciationWarning.Text = "WARNING!\r\n\r\nTHIS MODEL WAS IMPORTED WITH\r\nAN OLDER VERSION OF THE ENGINE\r\nTOOLKIT" +
+    " AND DOES NOT SUPPORT\r\nUPDATED FEATURES.\r\n\r\nPLEASE RE-IMPORT THE MODEL BEFORE\r\nI" +
+    "T BECOMES DEPRECIATED.";
+            this.depreciationWarning.Visible = false;
             // 
             // modelPreview
             // 

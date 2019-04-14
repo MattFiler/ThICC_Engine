@@ -131,7 +131,7 @@
       <ShaderModel>5.1</ShaderModel>
     </FXCompile>
     <PostBuildEvent>
-      <Command>"$(SolutionDir)..\Mario Kart Toolkit.exe" -auto_compile</Command>
+      <Command>"$(SolutionDir)..\ThICC Toolkit.exe" -auto_compile</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Auto-compiling assets...</Message>
@@ -188,7 +188,7 @@
       <ShaderModel>5.1</ShaderModel>
     </FXCompile>
     <PostBuildEvent>
-      <Command>"$(SolutionDir)..\Mario Kart Toolkit.exe" -auto_compile</Command>
+      <Command>"$(SolutionDir)..\ThICC Toolkit.exe" -auto_compile</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Auto-compiling assets...</Message>
@@ -221,30 +221,12 @@
     <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Atrium_diffuseIBL.dds" />
-    <Image Include="Atrium_specularIBL.dds" />
-    <Image Include="directx.ico" />
-    <Image Include="Garage_diffuseIBL.dds" />
-    <Image Include="Garage_specularIBL.dds" />
-    <Image Include="SunSubMixer_diffuseIBL.dds" />
-    <Image Include="SunSubMixer_specularIBL.dds" />
-  </ItemGroup>
-  <ItemGroup>
     <Manifest Include="settings.manifest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTK12\DirectXTK_Desktop_2017_Win10.vcxproj">
       <Project>{3e0e8608-cd9b-4c76-af33-29ca38f2c9f0}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="comic.spritefont" />
-    <None Include="comic4k.spritefont" />
-    <None Include="consolas.spritefont" />
-    <None Include="consolas4k.spritefont" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

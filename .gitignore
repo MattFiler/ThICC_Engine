@@ -329,9 +329,9 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 
-!Mario Kart Toolkit.exe
-Mario Kart Toolkit.exe.config
-Mario Kart Toolkit.pdb
+!ThICC Toolkit.exe
+ThICC Toolkit.exe.config
+ThICC Toolkit.pdb
 Costura.dll
 Costura.xml
 Newtonsoft.Json.dll
