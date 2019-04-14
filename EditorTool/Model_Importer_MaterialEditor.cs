@@ -262,11 +262,10 @@ namespace EditorTool
             if (file_path != "")
             {
                 string copy_to = this_model_folder + Path.GetFileName(file_path);
-                if (File.Exists(copy_to))
+                if (!File.Exists(copy_to))
                 {
-                    File.Delete(copy_to);
+                    File.Copy(file_path, copy_to);
                 }
-                File.Copy(file_path, copy_to);
             }
         }
 
