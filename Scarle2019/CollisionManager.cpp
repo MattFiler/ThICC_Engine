@@ -137,7 +137,7 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 			for (PhysModel* model : _physModels)
 			{
 				Player* player = dynamic_cast<Player*>(model);
-				if (player && item1->GetMesh()->getCollider().Intersects(player->getCollider()))
+				if (player && player != item1->getPlayer() && item1->GetMesh()->getCollider().Intersects(player->getCollider()))
 				{
 					item1->HitByPlayer(player);
 					hit_player = true;

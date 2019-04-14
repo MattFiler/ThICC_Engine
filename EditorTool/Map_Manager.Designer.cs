@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Map_Manager));
             this.assetList = new System.Windows.Forms.ListBox();
             this.newMap = new System.Windows.Forms.Button();
             this.deleteMap = new System.Windows.Forms.Button();
@@ -95,6 +96,7 @@
             this.Controls.Add(this.newMap);
             this.Controls.Add(this.assetList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Map_Manager";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mario Kart Map Manager";

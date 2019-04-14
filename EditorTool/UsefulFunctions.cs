@@ -64,7 +64,7 @@ namespace EditorTool
         }
 
         /* Try find our material preview, show it if we find it */
-        public void loadMaterialPreview(JToken this_token, PictureBox materialPreview)
+        public void loadMaterialPreview(JToken this_token, PictureBox materialPreview, string model_path = "")
         {
             string[] map_types = { "map_Ka", "map_Kd", "map_Ks", "map_Ns", "map_d" };
             string path_to_mat = "";
@@ -79,9 +79,14 @@ namespace EditorTool
                     path_to_mat = this_token[map_type].Value<string>();
                 }
             }
-            if (path_to_mat == "" || !File.Exists(path_to_mat))
+
+            if (path_to_mat == "" || (!File.Exists(path_to_mat) && !File.Exists(model_path + path_to_mat)))
             {
                 return;
+            }
+            if (!File.Exists(path_to_mat))
+            {
+                path_to_mat = model_path + path_to_mat;
             }
 
             using (var tempPreviewImg = new Bitmap(path_to_mat))

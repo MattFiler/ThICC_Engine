@@ -34,6 +34,12 @@ namespace EditorTool
         /* ON LOAD */
         private void Landing_Load(object sender, EventArgs e)
         {
+            //These should match up to the ModelType enum!
+            modelType.Items.Add("Map");
+            modelType.Items.Add("Item");
+            modelType.Items.Add("Player");
+            modelType.Items.Add("Prop");
+
             loadAssetType.SelectedIndex = (int)on_load;
         }
         
@@ -53,13 +59,18 @@ namespace EditorTool
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
+                    /*
+                    Model_Importer_Wrapper modelImporter = new Model_Importer_Wrapper();
+                    modelImporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    modelImporter.Show();
+                    */
                     using (var form = new Model_Importer_Preselect())
                     {
                         var result = form.ShowDialog();
                         if (result == DialogResult.OK)
                         {
                             Model_Importer_AssetSelector modelimporter = new Model_Importer_AssetSelector(form.selected_model_type);
-                            modelimporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                            modelimporter.FormClosed += new FormClosedEventHandler(refreshOnClose); //needs to use the wrapper, this closes too early
                             modelimporter.Show();
                         }
                     }
@@ -253,6 +264,7 @@ namespace EditorTool
 
             //Hide all configs
             modelConfigs.Visible = false;
+            depreciationWarning.Visible = false;
 
             //Act appropriately for selected asset type
             switch (loadAssetType.SelectedItem)
@@ -263,7 +275,17 @@ namespace EditorTool
                         //If preview loads properly, load config
                         getConfigPathForSelectedAsset();
                         JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
-                        modelType.SelectedItem = asset_json["model_type"].Value<string>();
+
+                        if (asset_json["model_type"].Type != JTokenType.Integer)
+                        {
+                            //Old config, don't enable editing
+                            modelConfigs.Visible = false;
+                            depreciationWarning.Visible = true;
+                            return;
+                        }
+
+                        //Fill up config
+                        modelType.SelectedIndex = asset_json["model_type"].Value<int>();
                         model_world_x.Text = asset_json["start_x"].Value<string>();
                         model_world_y.Text = asset_json["start_y"].Value<string>();
                         model_world_z.Text = asset_json["start_z"].Value<string>();
@@ -272,6 +294,8 @@ namespace EditorTool
                         model_rot_z.Text = asset_json["rot_z"].Value<string>();
                         model_scale.Text = asset_json["modelscale"].Value<string>();
                         model_segmentsize.Value = asset_json["segment_size"].Value<decimal>();
+
+                        modelConfigs.Visible = true;
                     }
                     break;
                 case "Meshes":
@@ -304,12 +328,37 @@ namespace EditorTool
             
             switch (loadAssetType.SelectedItem)
             {
+                case "Models":
+                    //Create importer resource & configure paths
+                    Model_Importer_Common common_importer = new Model_Importer_Common();
+                    common_importer.configureAssetPaths(assetList.SelectedItem.ToString());
+
+                    //Only continue if config is present
+                    if (!File.Exists(common_importer.fileName(importer_file.IMPORTER_CONFIG)))
+                    {
+                        MessageBox.Show("Cannot edit this file.\nIt was imported with an older version of the toolkit.", "Error.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    //Pull model type (this is forced)
+                    JObject asset_json = JObject.Parse(File.ReadAllText(common_importer.fileName(importer_file.CONFIG)));
+                    common_importer.setModelType((ModelType)asset_json["model_type"].Value<int>());
+
+                    //Set as edit mode - this ignores the track config requirement
+                    common_importer.setEditMode(true);
+
+                    //Load editor
+                    Model_Importer_MaterialList modelEditor = new Model_Importer_MaterialList(common_importer);
+                    modelEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    modelEditor.Show();
+                    break;
                 case "Strings":
                     Localisation_Editor stringEditor = new Localisation_Editor(assetList.SelectedItem.ToString());
                     stringEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
                     stringEditor.Show();
                     break;
                 default:
+                    MessageBox.Show("This asset has no properties to edit.", "No properties to edit.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
             }
         }
@@ -334,7 +383,7 @@ namespace EditorTool
             {
                 case "Models":
                     JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
-                    asset_json["model_type"] = modelType.SelectedItem.ToString();
+                    asset_json["model_type"] = modelType.SelectedIndex; //For this change to actually take effect, the model will need to be "edited" - improvement needed here
                     asset_json["start_x"] = Convert.ToDouble(model_world_x.Text);
                     asset_json["start_y"] = Convert.ToDouble(model_world_y.Text);
                     asset_json["start_z"] = Convert.ToDouble(model_world_z.Text);

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Model_Importer_MaterialEditor));
             this.materialPreview = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.materialName = new System.Windows.Forms.TextBox();
@@ -36,6 +37,7 @@
             this.inPlayableArea = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.collisionGroup = new System.Windows.Forms.GroupBox();
+            this.isWall = new System.Windows.Forms.RadioButton();
             this.boostPad = new System.Windows.Forms.RadioButton();
             this.onTrack = new System.Windows.Forms.RadioButton();
             this.offTrack = new System.Windows.Forms.RadioButton();
@@ -165,16 +167,28 @@
             // 
             // collisionGroup
             // 
+            this.collisionGroup.Controls.Add(this.isWall);
             this.collisionGroup.Controls.Add(this.inPlayableArea);
             this.collisionGroup.Controls.Add(this.boostPad);
             this.collisionGroup.Controls.Add(this.onTrack);
             this.collisionGroup.Controls.Add(this.offTrack);
             this.collisionGroup.Location = new System.Drawing.Point(9, 62);
             this.collisionGroup.Name = "collisionGroup";
-            this.collisionGroup.Size = new System.Drawing.Size(285, 112);
+            this.collisionGroup.Size = new System.Drawing.Size(285, 133);
             this.collisionGroup.TabIndex = 30;
             this.collisionGroup.TabStop = false;
             this.collisionGroup.Text = "Collision Config";
+            // 
+            // isWall
+            // 
+            this.isWall.AutoSize = true;
+            this.isWall.Location = new System.Drawing.Point(6, 110);
+            this.isWall.Name = "isWall";
+            this.isWall.Size = new System.Drawing.Size(46, 17);
+            this.isWall.TabIndex = 30;
+            this.isWall.TabStop = true;
+            this.isWall.Text = "Wall";
+            this.isWall.UseVisualStyleBackColor = true;
             // 
             // boostPad
             // 
@@ -246,6 +260,7 @@
             this.groupBox2.TabIndex = 27;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Material Properties";
+            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // label17
             // 
@@ -518,6 +533,7 @@
             // 
             // normalMapBrowse
             // 
+            this.normalMapBrowse.Enabled = false;
             this.normalMapBrowse.Location = new System.Drawing.Point(219, 275);
             this.normalMapBrowse.Name = "normalMapBrowse";
             this.normalMapBrowse.Size = new System.Drawing.Size(75, 22);
@@ -626,6 +642,7 @@
             this.Controls.Add(this.materialPreview);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Model_Importer_MaterialEditor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Material Editor";
@@ -701,5 +718,6 @@
         private System.Windows.Forms.TrackBar specExSlider;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.ComboBox illumModel;
+        private System.Windows.Forms.RadioButton isWall;
     }
 }

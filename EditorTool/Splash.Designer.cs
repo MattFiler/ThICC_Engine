@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Splash));
             this.openMapManager = new System.Windows.Forms.Button();
             this.openAssetManager = new System.Windows.Forms.Button();
             this.openUiEditor = new System.Windows.Forms.Button();
@@ -44,12 +45,15 @@
             this.DEBUG_SAVE = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.DEBUG_DEFAULTTRACK = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.openProject = new System.Windows.Forms.Button();
+            this.reloadDebugList = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DEBUG_PLAYERCOUNT)).BeginInit();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // openMapManager
@@ -158,6 +162,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.reloadDebugList);
             this.groupBox4.Controls.Add(this.label14);
             this.groupBox4.Controls.Add(this.DEBUG_PLAYERCOUNT);
             this.groupBox4.Controls.Add(this.DEBUG_SAVE);
@@ -233,33 +238,51 @@
             "Fonts"});
             this.DEBUG_DEFAULTTRACK.Location = new System.Drawing.Point(7, 35);
             this.DEBUG_DEFAULTTRACK.Name = "DEBUG_DEFAULTTRACK";
-            this.DEBUG_DEFAULTTRACK.Size = new System.Drawing.Size(268, 21);
+            this.DEBUG_DEFAULTTRACK.Size = new System.Drawing.Size(209, 21);
             this.DEBUG_DEFAULTTRACK.TabIndex = 16;
             // 
-            // button1
+            // groupBox5
             // 
-            this.button1.BackColor = System.Drawing.Color.Maroon;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.ForeColor = System.Drawing.SystemColors.Window;
-            this.button1.Location = new System.Drawing.Point(89, 463);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(133, 37);
-            this.button1.TabIndex = 36;
-            this.button1.Text = "MKS_TEST MATERIAL WINDOW";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.groupBox5.Controls.Add(this.openProject);
+            this.groupBox5.Location = new System.Drawing.Point(12, 455);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(281, 56);
+            this.groupBox5.TabIndex = 8;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Code Editors";
+            // 
+            // openProject
+            // 
+            this.openProject.Location = new System.Drawing.Point(6, 19);
+            this.openProject.Name = "openProject";
+            this.openProject.Size = new System.Drawing.Size(270, 31);
+            this.openProject.TabIndex = 2;
+            this.openProject.Text = "Open Project";
+            this.openProject.UseVisualStyleBackColor = true;
+            this.openProject.Click += new System.EventHandler(this.openProject_Click);
+            // 
+            // reloadDebugList
+            // 
+            this.reloadDebugList.Location = new System.Drawing.Point(222, 34);
+            this.reloadDebugList.Name = "reloadDebugList";
+            this.reloadDebugList.Size = new System.Drawing.Size(53, 23);
+            this.reloadDebugList.TabIndex = 34;
+            this.reloadDebugList.Text = "Reload";
+            this.reloadDebugList.UseVisualStyleBackColor = true;
+            this.reloadDebugList.Click += new System.EventHandler(this.reloadDebugList_Click);
             // 
             // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(304, 512);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(304, 519);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Splash";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mario Kart Toolkit";
@@ -270,6 +293,7 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DEBUG_PLAYERCOUNT)).EndInit();
+            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -292,6 +316,8 @@
         private System.Windows.Forms.NumericUpDown DEBUG_PLAYERCOUNT;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Button DEBUG_SAVE;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button openProject;
+        private System.Windows.Forms.Button reloadDebugList;
     }
 }

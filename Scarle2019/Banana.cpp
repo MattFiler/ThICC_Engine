@@ -7,6 +7,7 @@ Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BANANA))
 {
 	m_mesh->SetDrag(0.9f);
 	m_mesh->SetPhysicsOn(true);
+	m_maxImmunityTime = 0.5f;
 }
 
 void Banana::Use(Player * _player, bool _altUse)

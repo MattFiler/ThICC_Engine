@@ -2,7 +2,7 @@
 #include "Item.h"
 #include <fstream>
 
-Item::Item(const std::string& item_type) 
+Item::Item(const std::string& item_type)
 {
 	//Set model name
 	m_mesh = new TrackMagnet(item_type);
@@ -28,7 +28,7 @@ void Item::Tick()
 		}
 
 		//Player immunity time
-		if (m_player)
+		if (m_player && !m_trailingPlayerImmunity)
 		{
 			std::cout << std::to_string(m_elapsedImmunityTime) << std::endl;
 			m_elapsedImmunityTime += Locator::getGSD()->m_dt;
@@ -40,9 +40,18 @@ void Item::Tick()
 	}
 }
 
+void Item::setSpinAngle(float _angle)
+{
+	m_spinAngle = _angle;
+	if (m_spinAngle > 360)
+	{
+		m_spinAngle -= 360;
+	}
+}
+
 bool Item::ignorePlayerCollisions(Player* player)
 {
-	return (m_player && player == m_player) || m_trailingPlayerImmunity;	
+	return m_player == player /*&& m_trailingPlayerImmunity*/;
 }
 
 void Item::setItemInUse(Player* player)

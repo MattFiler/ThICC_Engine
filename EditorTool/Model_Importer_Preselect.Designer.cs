@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Model_Importer_Preselect));
             this.isMap = new System.Windows.Forms.Button();
             this.isProp = new System.Windows.Forms.Button();
             this.isItem = new System.Windows.Forms.Button();
@@ -88,6 +89,7 @@
             this.Controls.Add(this.isProp);
             this.Controls.Add(this.isMap);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Model_Importer_Preselect";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Import as...";

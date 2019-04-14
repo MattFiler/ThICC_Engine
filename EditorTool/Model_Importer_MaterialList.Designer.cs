@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Model_Importer_MaterialList));
             this.materialList = new System.Windows.Forms.ListBox();
             this.editMaterial = new System.Windows.Forms.Button();
             this.SaveMaterials = new System.Windows.Forms.Button();
@@ -38,6 +39,8 @@
             this.isOffTrack = new System.Windows.Forms.CheckBox();
             this.shouldFlipUVs = new System.Windows.Forms.CheckBox();
             this.configPreview = new System.Windows.Forms.GroupBox();
+            this.isWall = new System.Windows.Forms.CheckBox();
+            this.autoDetect = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             this.configPreview.SuspendLayout();
             this.SuspendLayout();
@@ -53,7 +56,7 @@
             // 
             // editMaterial
             // 
-            this.editMaterial.Location = new System.Drawing.Point(272, 219);
+            this.editMaterial.Location = new System.Drawing.Point(272, 240);
             this.editMaterial.Name = "editMaterial";
             this.editMaterial.Size = new System.Drawing.Size(94, 36);
             this.editMaterial.TabIndex = 2;
@@ -127,7 +130,7 @@
             this.shouldFlipUVs.AutoSize = true;
             this.shouldFlipUVs.Checked = true;
             this.shouldFlipUVs.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.shouldFlipUVs.Location = new System.Drawing.Point(272, 350);
+            this.shouldFlipUVs.Location = new System.Drawing.Point(271, 353);
             this.shouldFlipUVs.Name = "shouldFlipUVs";
             this.shouldFlipUVs.Size = new System.Drawing.Size(65, 17);
             this.shouldFlipUVs.TabIndex = 18;
@@ -136,21 +139,44 @@
             // 
             // configPreview
             // 
+            this.configPreview.Controls.Add(this.isWall);
             this.configPreview.Controls.Add(this.isTrack);
             this.configPreview.Controls.Add(this.isBoostPad);
             this.configPreview.Controls.Add(this.isOffTrack);
             this.configPreview.Location = new System.Drawing.Point(272, 125);
             this.configPreview.Name = "configPreview";
-            this.configPreview.Size = new System.Drawing.Size(94, 88);
+            this.configPreview.Size = new System.Drawing.Size(94, 109);
             this.configPreview.TabIndex = 19;
             this.configPreview.TabStop = false;
             this.configPreview.Text = "Config";
+            // 
+            // isWall
+            // 
+            this.isWall.AutoCheck = false;
+            this.isWall.AutoSize = true;
+            this.isWall.Location = new System.Drawing.Point(6, 88);
+            this.isWall.Name = "isWall";
+            this.isWall.Size = new System.Drawing.Size(58, 17);
+            this.isWall.TabIndex = 18;
+            this.isWall.Text = "Is Wall";
+            this.isWall.UseVisualStyleBackColor = true;
+            // 
+            // autoDetect
+            // 
+            this.autoDetect.Location = new System.Drawing.Point(271, 324);
+            this.autoDetect.Name = "autoDetect";
+            this.autoDetect.Size = new System.Drawing.Size(94, 23);
+            this.autoDetect.TabIndex = 20;
+            this.autoDetect.Text = "Auto Detect";
+            this.autoDetect.UseVisualStyleBackColor = true;
+            this.autoDetect.Click += new System.EventHandler(this.autoDetect_Click);
             // 
             // Model_Importer_MaterialList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(378, 411);
+            this.Controls.Add(this.autoDetect);
             this.Controls.Add(this.configPreview);
             this.Controls.Add(this.shouldFlipUVs);
             this.Controls.Add(this.materialPreview);
@@ -159,6 +185,7 @@
             this.Controls.Add(this.editMaterial);
             this.Controls.Add(this.materialList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Model_Importer_MaterialList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Import Model";
@@ -183,5 +210,7 @@
         private System.Windows.Forms.CheckBox isOffTrack;
         private System.Windows.Forms.CheckBox shouldFlipUVs;
         private System.Windows.Forms.GroupBox configPreview;
+        private System.Windows.Forms.Button autoDetect;
+        private System.Windows.Forms.CheckBox isWall;
     }
 }

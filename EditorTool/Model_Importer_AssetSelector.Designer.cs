@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Model_Importer_AssetSelector));
             this.trackConfig = new System.Windows.Forms.TextBox();
             this.locateTrackConfig = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -138,6 +139,7 @@
             this.Controls.Add(this.modelPath);
             this.Controls.Add(this.browseToModel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Model_Importer_AssetSelector";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Model Importer";

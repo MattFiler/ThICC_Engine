@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Keybind_Editor));
             this.label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.saveKeybinds = new System.Windows.Forms.Button();
@@ -96,12 +97,14 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.saveKeybinds);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Keybind_Editor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Keybind Editor";
             this.Load += new System.EventHandler(this.Keybind_Editor_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

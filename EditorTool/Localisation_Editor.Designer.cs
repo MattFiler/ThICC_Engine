@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Localisation_Editor));
             this.label2 = new System.Windows.Forms.Label();
             this.stringIdentifier = new System.Windows.Forms.TextBox();
             this.createNewString = new System.Windows.Forms.Button();
@@ -90,6 +91,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.stringContent);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Localisation_Editor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "New String";
