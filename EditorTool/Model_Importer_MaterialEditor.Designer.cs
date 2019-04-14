@@ -533,6 +533,7 @@
             // 
             // normalMapBrowse
             // 
+            this.normalMapBrowse.Enabled = false;
             this.normalMapBrowse.Location = new System.Drawing.Point(219, 275);
             this.normalMapBrowse.Name = "normalMapBrowse";
             this.normalMapBrowse.Size = new System.Drawing.Size(75, 22);

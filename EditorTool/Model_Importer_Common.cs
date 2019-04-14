@@ -9,7 +9,7 @@ namespace EditorTool
     public enum importer_file
     {
         OBJ_MODEL,
-        SDK_MESH,
+        ENGINE_MESH,
         MATERIAL,
         CONFIG,
         COLLMAP,
@@ -60,7 +60,7 @@ namespace EditorTool
             {
                 case importer_file.OBJ_MODEL:
                     return obj_file_name;
-                case importer_file.SDK_MESH:
+                case importer_file.ENGINE_MESH:
                     return sdkmesh_file_name;
                 case importer_file.MATERIAL:
                     return mtl_file_name;

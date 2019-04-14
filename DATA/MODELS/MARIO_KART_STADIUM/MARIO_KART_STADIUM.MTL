@@ -468,16 +468,18 @@ map_Kd ufc_concrete_Alb.png
 map_d ufc_concrete_Alb.png
 
 newmtl fc_flower
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.000000 0.000000 0.000000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
+d 0.999999
 illum 2
 map_Kd ufc_flower_Alb.png
 map_d ufc_flower_Alb.png
+map_Ks ufc_flower_spm.png
+map_Ns ufc_flower_spm.png
 
 newmtl fc_grass_Outside
 Ns 94.117647

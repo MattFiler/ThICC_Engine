@@ -271,7 +271,21 @@
       ]
     }
   ],
-  "spawns": [],
+  "spawns": [
+    {
+      "name": "Kart Spawn Position",
+      "pos": [
+        4.707764148712158,
+        -7.068515300750732,
+        27.36625862121582
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
   "waypoints": [
     {
       "name": "Track Waypoint",

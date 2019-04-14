@@ -155,16 +155,19 @@ namespace EditorTool
                 {
                     File.Delete(importer_common.fileName(importer_file.COLLMAP));
                 }
-                if (File.Exists(importer_common.fileName(importer_file.SDK_MESH)))
+                if (File.Exists(importer_common.fileName(importer_file.ENGINE_MESH)))
                 {
-                    File.Delete(importer_common.fileName(importer_file.SDK_MESH));
+                    File.Delete(importer_common.fileName(importer_file.ENGINE_MESH));
                 }
             }
 
             //------
 
-            //Run the model converter to swap our OBJ into an SDKMESH
-            string conv_args = "\"" + Path.GetFileName(importer_common.fileName(importer_file.OBJ_MODEL)) + "\" -sdkmesh -nodds -y";
+            //Delete old DDS materials and convert new ones
+            convertMaterials();
+
+            //Run the model converter to swap our OBJ into our engine's format
+            string conv_args = "\"" + Path.GetFileName(importer_common.fileName(importer_file.OBJ_MODEL)) + "\" -sdkmesh -y -c -op"; //I wanna move to sdkmesh2
             if (shouldFlipUVs.Checked)
             {
                 conv_args += " -flipv";
@@ -183,30 +186,31 @@ namespace EditorTool
             this.Cursor = Cursors.Default;
 
             //Capture write info from converter
-            string writeInfo = "";
-            foreach (string line in reader.ReadToEnd().Split('\n'))
+            string[] writeInfo = { "", "" };
+            string readerOutput = reader.ReadToEnd();
+            foreach (string line in readerOutput.Split('\n'))
             {
                 if (line.Contains("written"))
                 {
-                    writeInfo = line.Substring(0, line.Length - 2);
+                    writeInfo = line.Substring(0, line.Length - 2).Split(new string[] { "  " }, StringSplitOptions.None);
                     break;
                 }
             }
 
             //Make sure our SDKMESH is in caps!
-            string lowercase_sdkmesh = importer_common.fileName(importer_file.SDK_MESH).Substring(0, importer_common.fileName(importer_file.SDK_MESH).Length - 7) + "sdkmesh";
+            string lowercase_sdkmesh = importer_common.fileName(importer_file.ENGINE_MESH).Substring(0, importer_common.fileName(importer_file.ENGINE_MESH).Length - 7) + "sdkmesh";
             if (File.Exists(lowercase_sdkmesh)) {
-                File.Move(lowercase_sdkmesh, importer_common.fileName(importer_file.SDK_MESH));
+                File.Move(lowercase_sdkmesh, importer_common.fileName(importer_file.ENGINE_MESH));
             }
 
             //Make sure the conversion succeeded
-            if (!File.Exists(importer_common.fileName(importer_file.SDK_MESH)))
+            if (!File.Exists(importer_common.fileName(importer_file.ENGINE_MESH)))
             {
                 //Failed! Show full output from DXTK converter if requested.
                 DialogResult showErrorInfo = MessageBox.Show("Model import failed!\nWould you like error info?", "Import failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                 if (showErrorInfo == DialogResult.Yes)
                 {
-                    MessageBox.Show(reader.ReadToEnd(), "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(readerOutput, "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -299,7 +303,7 @@ namespace EditorTool
             //------
 
             //Done
-            string final_confirmation = "Model imported with" + writeInfo + ".";
+            string final_confirmation = "Model imported with " + writeInfo[1] + ".";
             if (importer_common.import_stats.material_count > 0)
             {
                 final_confirmation += "\nFound " + importer_common.import_stats.material_count + " material(s).";
@@ -325,7 +329,7 @@ namespace EditorTool
         private bool handleVertexOperations()
         {
             //Output face vertex data for generating our collmap
-            List<List<double>> model_vertices_raw = new List<List<double>>();
+            List<List<float>> model_vertices_raw = new List<List<float>>();
             List<List<List<int>>> model_face_indexes = new List<List<List<int>>>();
             List<string> final_collmap_data = new List<string>();
             string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
@@ -336,6 +340,7 @@ namespace EditorTool
 
             //Use cases
             bool collision_enabled = false;
+            extra_json["has_box_collider"] = false;
             CollisionType collision_type = (CollisionType)0;
 
             //Grab all vertices and face vert indexes from our OBJ
@@ -345,10 +350,10 @@ namespace EditorTool
                 if (line.Length > 2 && line.Substring(0, 2) == "v ")
                 {
                     string[] vert_array = line.Substring(2).Split(' ');
-                    List<double> this_vertex = new List<double>();
+                    List<float> this_vertex = new List<float>();
                     foreach (string vert in vert_array)
                     {
-                        this_vertex.Add(Convert.ToDouble(vert));
+                        this_vertex.Add(Convert.ToSingle(vert));
                     }
                     model_vertices_raw.Add(this_vertex);
                     continue;
@@ -392,15 +397,14 @@ namespace EditorTool
                     continue;
                 }
             }
-            importer_common.import_stats.vertices = model_vertices_raw.Count;
 
             //Calculate box collider (applies to everything BUT maps)
             if (importer_common.getModelType() != ModelType.MAP)
             {
                 //Order the data
-                double[] biggest_vert = { 0, 0, 0 };
-                double[] smallest_vert = { 0, 0, 0 };
-                foreach (List<double> vertex in model_vertices_raw)
+                float[] biggest_vert = { 0, 0, 0 };
+                float[] smallest_vert = { 0, 0, 0 };
+                foreach (List<float> vertex in model_vertices_raw)
                 {
                     for (int i = 0; i < 3; i++)
                     {
@@ -435,9 +439,10 @@ namespace EditorTool
                 //Clear up old debug box
                 if (importer_common.getEditMode())
                 {
-                    File.Delete(importer_common.importDir() + debug_model);
-                    File.Delete(importer_common.importDir() + debug_material);
-                    File.Delete(importer_common.importDir() + "collision_debug.png");
+                    deleteIfExists(importer_common.importDir() + debug_model);
+                    deleteIfExists(importer_common.importDir() + debug_material);
+                    deleteIfExists(importer_common.importDir() + "collision_debug.png");
+                    deleteIfExists(importer_common.importDir() + "collision_debug.DDS");
                 }
 
                 //Write out a model for debugging collision box
@@ -481,12 +486,13 @@ namespace EditorTool
                 box_collider_mesh.Add("map_Kd collision_debug.png");
                 File.WriteAllLines(importer_common.importDir() + debug_material, box_collider_mesh);
                 File.Copy(importer_common.importDir() + "../collision_debug.png", importer_common.importDir() + "collision_debug.png");
+                convertMaterial("collision_debug.png");
 
-                //Convert debug box to SDKMESH
+                //Convert debug box to a format for our engine
                 ProcessStartInfo meshConverter2 = new ProcessStartInfo();
                 meshConverter2.WorkingDirectory = importer_common.importDir();
                 meshConverter2.FileName = "DATA/MODELS/meshconvert.exe";
-                meshConverter2.Arguments = "\"" + debug_model + "\" -sdkmesh -nodds -y";
+                meshConverter2.Arguments = "\"" + debug_model + "\" -sdkmesh -y -c -op";  //I wanna move to sdkmesh2
                 meshConverter2.UseShellExecute = false;
                 meshConverter2.RedirectStandardOutput = true;
                 Process converterProcess2 = Process.Start(meshConverter2);
@@ -506,10 +512,10 @@ namespace EditorTool
             }
 
             //Build up total model verts for collmap reader from parsed data
-            List<List<double>> all_verts = new List<List<double>>();
+            List<List<float>> all_verts = new List<List<float>>();
             for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
             {
-                all_verts.Add(new List<double>());
+                all_verts.Add(new List<float>());
             }
 
             //Compile collision data
@@ -531,13 +537,14 @@ namespace EditorTool
             using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.COLLMAP), FileMode.Create)))
             {
                 writer.Write(all_verts.Count); //Number of collision types to split to
-                foreach (List<double> these_verts in all_verts)
+                foreach (List<float> these_verts in all_verts)
                 {
                     writer.Write(these_verts.Count); //Number of verts to expect
+                    importer_common.import_stats.vertices += these_verts.Count;
                 }
-                foreach (List<double> these_verts in all_verts)
+                foreach (List<float> these_verts in all_verts)
                 { 
-                    foreach (double vert in these_verts)
+                    foreach (float vert in these_verts)
                     {
                         writer.Write(vert); //Each bit of collision data
                     }
@@ -548,13 +555,13 @@ namespace EditorTool
         }
 
         /* Here we split out our vertex positions to X,Y,Z lists and check for any degenerate triangles */
-        private bool parseVertices(List<int> vert_index_list, List<List<double>> model_vertices_raw, List<double> all_verts)
+        private bool parseVertices(List<int> vert_index_list, List<List<float>> model_vertices_raw, List<float> all_verts)
         {
             //Split out verts into nicer X,Y,Z lists
             int this_face_vert_count = 0;
-            List<double> vert_x_list = new List<double>();
-            List<double> vert_y_list = new List<double>();
-            List<double> vert_z_list = new List<double>();
+            List<float> vert_x_list = new List<float>();
+            List<float> vert_y_list = new List<float>();
+            List<float> vert_z_list = new List<float>();
             foreach (int vert_index in vert_index_list)
             {
                 vert_x_list.Add(model_vertices_raw.ElementAt(vert_index - 1).ElementAt(0));
@@ -572,23 +579,23 @@ namespace EditorTool
             //Fix conflicts if any are present
             if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(1) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(1) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(1))
             {
-                vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1;
-                vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1;
-                vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1;
+                vert_x_list[0] = vert_x_list.ElementAt(0) + 0.1f;
+                vert_y_list[0] = vert_y_list.ElementAt(0) + 0.1f;
+                vert_z_list[0] = vert_z_list.ElementAt(0) + 0.1f;
                 importer_common.import_stats.collision_fix_count++;
             }
             if (vert_x_list.ElementAt(1) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(1) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(1) == vert_z_list.ElementAt(2))
             {
-                vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1;
-                vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1;
-                vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1;
+                vert_x_list[1] = vert_x_list.ElementAt(1) + 0.1f;
+                vert_y_list[1] = vert_y_list.ElementAt(1) + 0.1f;
+                vert_z_list[1] = vert_z_list.ElementAt(1) + 0.1f;
                 importer_common.import_stats.collision_fix_count++;
             }
             if (vert_x_list.ElementAt(0) == vert_x_list.ElementAt(2) && vert_y_list.ElementAt(0) == vert_y_list.ElementAt(2) && vert_z_list.ElementAt(0) == vert_z_list.ElementAt(2))
             {
-                vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1;
-                vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1;
-                vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1;
+                vert_x_list[2] = vert_x_list.ElementAt(2) + 0.1f;
+                vert_y_list[2] = vert_y_list.ElementAt(2) + 0.1f;
+                vert_z_list[2] = vert_z_list.ElementAt(2) + 0.1f;
                 importer_common.import_stats.collision_fix_count++;
             }
 
@@ -617,6 +624,9 @@ namespace EditorTool
             foreach (var this_material_config in model_material_config)
             {
                 JToken this_token = model_material_config[this_material_config.Key];
+
+                //All materials typically work best when we can see them :)
+                this_token["Kd"] = "1.000000 1.000000 1.000000";
 
                 //Materials starting with "ef_" are usually boost pads
                 if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_")
@@ -654,6 +664,40 @@ namespace EditorTool
             }
         }
 
+        /* Delete old DDS materials and convert new ones */
+        private void convertMaterials()
+        {
+            DirectoryInfo materials = new DirectoryInfo(importer_common.importDir());
+            FileInfo[] file_array = materials.GetFiles();
+            foreach (var file in file_array)
+            {
+                if (file.Extension.ToUpper() == ".DDS")
+                {
+                    file.Delete();
+                }
+            }
+            foreach (var file in file_array)
+            {
+                if (file.Extension.ToUpper() == ".JPG" || file.Extension.ToUpper() == ".PNG" || file.Extension.ToUpper() == ".JPEG")
+                {
+                    convertMaterial(Path.GetFileName(file.FullName));
+                }
+            }
+        }
+
+        private void convertMaterial(string filename)
+        {
+            ProcessStartInfo texConv = new ProcessStartInfo();
+            texConv.WorkingDirectory = importer_common.importDir();
+            texConv.FileName = "DATA/IMAGES/texconv.exe";
+            texConv.Arguments = "\"" + filename + "\"";
+            texConv.UseShellExecute = false;
+            texConv.RedirectStandardOutput = true;
+            texConv.CreateNoWindow = true;
+            Process converterProcess = Process.Start(texConv);
+            converterProcess.WaitForExit();
+        }
+
         /* Set collision parameter in material config */
         private void setCollisionParam(CollisionType _type, JToken _token)
         {
@@ -665,6 +709,14 @@ namespace EditorTool
                     to_set = true;
                 }
                 _token["MARIOKART_COLLISION"][i.ToString()] = to_set;
+            }
+        }
+
+        private void deleteIfExists(string file)
+        {
+            if (File.Exists(file))
+            {
+                File.Delete(file);
             }
         }
     }

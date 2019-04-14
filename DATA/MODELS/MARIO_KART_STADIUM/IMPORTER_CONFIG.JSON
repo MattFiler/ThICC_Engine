@@ -741,14 +741,14 @@
   },
   "fc_flower": {
     "newmtl": "fc_flower",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "0.000000 0.000000 0.000000",
-    "Kd": "0.640000 0.640000 0.640000",
+    "Kd": "0.000000 0.000000 0.000000",
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "0.000000",
-    "illum": "2",
+    "d": "1.000000",
+    "illum": 2,
     "map_Kd": "ufc_flower_Alb.png",
     "map_d": "ufc_flower_Alb.png",
     "MARIOKART_COLLISION": {
@@ -756,7 +756,10 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "map_Ka": "",
+    "map_Ks": "F:\\Github Repos\\GEP-2019-WorkingAI\\Maps Blender Files\\Mario Kart Stadium\\ufc_flower_spm.png",
+    "map_Ns": "F:\\Github Repos\\GEP-2019-WorkingAI\\Maps Blender Files\\Mario Kart Stadium\\ufc_flower_spm.png"
   },
   "fc_grass_Outside": {
     "newmtl": "fc_grass_Outside",

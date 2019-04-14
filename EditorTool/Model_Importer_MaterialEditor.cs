@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,10 +91,7 @@ namespace EditorTool
                     diffuseMap.Text = material_config["map_d"].Value<string>();
                 }
             }
-            if (!common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour))
-            {
-                diffuseColour.BackColor = Color.White;
-            }
+            common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour);
 
             //Specular
             if (material_config["map_Ks"] != null)
@@ -107,48 +105,21 @@ namespace EditorTool
                     specularMap.Text = material_config["map_Ns"].Value<string>();
                 }
             }
-            if (!common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour))
-            {
-                specularColour.BackColor = Color.White;
-            }
+            common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour);
 
             //Emissive
-            if (!common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour))
-            {
-                emissiveColour.BackColor = Color.Black;
-            }
+            common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour);
 
             //Transparency
-            if (material_config["d"] != null)
-            {
-                transparencySlider.Value = Convert.ToInt32(material_config["d"].Value<float>() * 10);
-            }
-            else
-            {
-                transparencySlider.Value = 0;
-            }
+            transparencySlider.Value = Convert.ToInt32(material_config["d"].Value<float>() * 10);
             transparencyValue.Text = sliderToString(transparencySlider, 10);
 
             //Specular exponent
-            if (material_config["Ns"] != null)
-            {
-                specExSlider.Value = Convert.ToInt32(material_config["Ns"].Value<float>());
-            }
-            else
-            {
-                specExSlider.Value = 100;
-            }
+            specExSlider.Value = Convert.ToInt32(material_config["Ns"].Value<float>());
             specExValue.Text = sliderToString(specExSlider);
 
             //Illumination model
-            if (material_config["illum"] != null)
-            {
-                illumModel.SelectedIndex = material_config["illum"].Value<int>();
-            }
-            else
-            {
-                illumModel.SelectedIndex = 2;
-            }
+            illumModel.SelectedIndex = material_config["illum"].Value<int>();
         }
 
         /* Collision selection */
@@ -225,16 +196,19 @@ namespace EditorTool
 
             //Ambient
             material_config["map_Ka"] = ambientMap.Text;
+            copyNewMat(ambientMap.Text);
             colourToJSON("Ka", ambientColour);
 
             //Diffuse
             material_config["map_Kd"] = diffuseMap.Text;
             material_config["map_d"] = diffuseMap.Text;
+            copyNewMat(diffuseMap.Text);
             colourToJSON("Kd", diffuseColour);
 
             //Specular
             material_config["map_Ks"] = specularMap.Text;
             material_config["map_Ns"] = specularMap.Text;
+            copyNewMat(specularMap.Text);
             colourToJSON("Ks", specularColour);
 
             //Emissive
@@ -280,6 +254,19 @@ namespace EditorTool
         private void colourToJSON(string key, PictureBox colour)
         {
             material_config[key] = (colour.BackColor.R/255).ToString("0.000000") + " " + (colour.BackColor.G/255).ToString("0.000000") + " " + (colour.BackColor.B/255).ToString("0.000000");
+        }
+        
+        /* Copy new material to our model's directory */
+        private void copyNewMat(string file_path)
+        {
+            if (file_path != "")
+            {
+                string copy_to = this_model_folder + Path.GetFileName(file_path);
+                if (!File.Exists(copy_to))
+                {
+                    File.Copy(file_path, copy_to);
+                }
+            }
         }
 
 
