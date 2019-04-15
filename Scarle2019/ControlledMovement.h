@@ -15,6 +15,7 @@ public:
 	void setAcceleration(float _acc) { m_acceleration = _acc;};
 	void TurnLeft(bool _flag);
 	void TurnRight(bool _flag);
+	void Drift(bool _flag);
 
 private:
 	void GetControllerInput();

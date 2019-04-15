@@ -10,6 +10,7 @@ public:
 
 	void Update(Track* _track);
 
+	void UseDrift(bool _flag) { m_useDrift = _flag;};
 private:
 	
 	int GetStepsForDirection(Track* _track, Vector3 _direction);
@@ -18,5 +19,8 @@ private:
 	ControlledMovement* m_move = nullptr;
 
 	float m_aiPathStep = 5;
-	int m_maxPathIterations = 10;
+	int m_maxPathIterations = 15;
+	bool m_offTrack = false;
+
+	bool m_useDrift = false;
 };

@@ -78,6 +78,13 @@ Track::Track(string _filename) : PhysModel(_filename)
 	//Load track vertex list for generating our collmap
 	LoadVertexList(m_filepath.generateFilepath(_filename, m_filepath.MODEL_COLLMAP));
 
+	// Populate the collsion map
+	using pair = std::pair<CollisionType, bool>;
+	m_validCollisions.insert(pair(CollisionType::BOOST_PAD, true));
+	m_validCollisions.insert(pair(CollisionType::OFF_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::ON_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::WALL, true));
+
 }
 
 /* Returns a suitable spawn location for a player in this map */
@@ -198,7 +205,7 @@ bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos,
 			{
 				for (MeshTri* tri : m_triGrid[index + k])
 				{
-					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
+					if (m_validCollisions[tri->GetType()] && tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
 					{
 						float dist = Vector::Distance(_startPos, _intersect);
 						if (dist < bestDist)
@@ -371,4 +378,12 @@ void Track::Clamp(float& _num, float _min, float _max)
 	{
 		_num = _max;
 	}
+}
+
+void Track::SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall)
+{
+	m_validCollisions[CollisionType::BOOST_PAD] = _boost;
+	m_validCollisions[CollisionType::OFF_TRACK] = _off;
+	m_validCollisions[CollisionType::ON_TRACK] = _on;
+	m_validCollisions[CollisionType::WALL] = _wall;
 }
