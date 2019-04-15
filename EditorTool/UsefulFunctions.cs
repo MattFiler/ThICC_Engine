@@ -77,6 +77,7 @@ namespace EditorTool
                 if (this_token[map_type].Type == JTokenType.String)
                 {
                     path_to_mat = this_token[map_type].Value<string>();
+                    break;
                 }
             }
 
