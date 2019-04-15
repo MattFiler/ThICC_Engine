@@ -206,13 +206,13 @@ namespace EditorTool
             this.Cursor = Cursors.Default;
 
             //Capture write info from converter
-            string[] writeInfo = { "", "" };
+            string writeInfo = "";
             string readerOutput = reader.ReadToEnd();
             foreach (string line in readerOutput.Split('\n'))
             {
                 if (line.Contains("written"))
                 {
-                    writeInfo = line.Substring(0, line.Length - 2).Split(new string[] { "  " }, StringSplitOptions.None);
+                    writeInfo = line.Substring(0, line.Length - 2);
                     break;
                 }
             }
@@ -323,7 +323,7 @@ namespace EditorTool
             //------
 
             //Done
-            string final_confirmation = "Model imported with " + writeInfo[1] + ".";
+            string final_confirmation = "Model imported with" + writeInfo + ".";
             if (importer_common.import_stats.material_count > 0)
             {
                 final_confirmation += "\nFound " + importer_common.import_stats.material_count + " material(s).";
@@ -672,7 +672,7 @@ namespace EditorTool
                     setCollisionParam(CollisionType.OFF_TRACK, this_token);
                 }
 
-                //Materials containing "nuki" are usually transparent!
+                //Materials containing "nuki" usually have alpha
                 if (this_material_config.Key.ToUpper().Contains("NUKI"))
                 {
                     this_token["d"] = "0.999999";
@@ -681,6 +681,9 @@ namespace EditorTool
                 {
                     this_token["d"] = "0.000000";
                 }
+
+                //Make everything opaque
+                this_token["Tr"] = "0.000000"; //Does this screw up our alpha?
             }
         }
 

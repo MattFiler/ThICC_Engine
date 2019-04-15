@@ -617,7 +617,6 @@ void Game::LoadModel(std::string filename)
 	std::wstring fullpath_wstring = std::wstring(fullpath.begin(), fullpath.end());
 	const wchar_t* fullpath_wchar = fullpath_wstring.c_str();
 
-	bool isvbo = false;
 	bool issdkmesh2 = false;
 	try
 	{
@@ -703,37 +702,21 @@ void Game::LoadModel(std::string filename)
 
 			RenderTargetState hdrState(m_hdrScene->GetFormat(), m_deviceResources->GetDepthBufferFormat());
 
-			if (isvbo)
-			{
-				EffectPipelineStateDescription pd(
-					&VertexPositionNormalTexture::InputLayout,
-					CommonStates::Opaque,
-					CommonStates::DepthDefault,
-					CommonStates::CullClockwise,
-					hdrState);
+			EffectPipelineStateDescription pd(
+				nullptr,
+				CommonStates::Opaque,
+				CommonStates::DepthDefault,
+				CommonStates::CullClockwise,
+				hdrState);
 
-				auto effect = std::make_shared<BasicEffect>(device, EffectFlags::Lighting, pd);
-				effect->EnableDefaultLighting();
-				m_modelClockwise.push_back(effect);
-			}
-			else
-			{
-				EffectPipelineStateDescription pd(
-					nullptr,
-					CommonStates::Opaque,
-					CommonStates::DepthDefault,
-					CommonStates::CullClockwise,
-					hdrState);
+			EffectPipelineStateDescription pdAlpha(
+				nullptr,
+				CommonStates::AlphaBlend,
+				CommonStates::DepthDefault,
+				CommonStates::CullClockwise,
+				hdrState);
 
-				EffectPipelineStateDescription pdAlpha(
-					nullptr,
-					CommonStates::AlphaBlend,
-					CommonStates::DepthDefault,
-					CommonStates::CullClockwise,
-					hdrState);
-
-				m_modelClockwise = m_model->CreateEffects(*fxFactory, pd, pdAlpha, txtOffset);
-			}
+			m_modelClockwise = m_model->CreateEffects(*fxFactory, pd, pdAlpha, txtOffset);
 		}
 
 		auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());

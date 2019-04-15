@@ -79,8 +79,8 @@ private:
 
 	std::unique_ptr<DirectX::ToneMapPostProcess>    m_toneMapACESFilmic;
 
-	std::unique_ptr<DirectX::EffectFactory>         m_fxFactory;
-	std::unique_ptr<DirectX::PBREffectFactory>      m_pbrFXFactory;
+	std::unique_ptr<DirectX::EffectFactory>         m_fxFactory; //SDKMESH1
+	std::unique_ptr<DirectX::PBREffectFactory>      m_pbrFXFactory; //SDKMESH2
 	std::unique_ptr<DirectX::EffectTextureFactory>  m_modelResources;
 	std::unique_ptr<DirectX::Model>                 m_model;
 	std::vector<std::shared_ptr<DirectX::IEffect>>  m_modelClockwise;

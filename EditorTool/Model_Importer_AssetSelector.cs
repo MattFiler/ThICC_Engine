@@ -170,6 +170,7 @@ namespace EditorTool
             List<string> referenced_materials = new List<string>();
             List<int> material_prop_count = new List<int>();
             List<string> material_props = new List<string>();
+            string map_Kd = "";
             foreach (string line in mtl_file)
             {
                 /* Start of new material */
@@ -177,10 +178,53 @@ namespace EditorTool
                 {
                     if (referenced_materials.Count != 0)
                     {
+                        //Copy all found props across
                         int prop_count = mtl_index - mat_start;
+                        bool has_spm = false;
+                        bool has_nrm = false;
+                        bool has_emm = false;
                         for (int i = 0; i < prop_count; i++)
                         {
                             material_props.Add(mtl_file[mat_start + i]);
+
+                            string prop = mtl_file[mat_start + i];
+                            string[] prop_split = prop.Split(new[] { ' ' }, 2);
+                            if (prop_split[0] == "map_Ks") { has_spm = true; }
+                            if (prop_split[0] == "map_Kn" || prop_split[0] == "norm") { has_nrm = true; }
+                            if (prop_split[0] == "map_Ke" || prop_split[0] == "map_emissive") { has_emm = true; }
+                        }
+                        //Try and find some of our own using common names
+                        if (!has_spm)
+                        {
+                            //Specular map
+                            string copied_to = findAndCopyMatVariant("spm", map_Kd);
+                            if (copied_to != "")
+                            {
+                                material_props.Add("map_Ks " + Path.GetFileName(copied_to));
+                                prop_count++;
+                            }
+                        }
+                        if (!has_nrm)
+                        {
+                            //Normal map
+                            string copied_to = findAndCopyMatVariant("nrm", map_Kd);
+                            if (copied_to != "")
+                            {
+                                material_props.Add("map_Kn " + Path.GetFileName(copied_to));
+                                material_props.Add("norm " + Path.GetFileName(copied_to));
+                                prop_count += 2;
+                            }
+                        }
+                        if (!has_emm)
+                        {
+                            //Emissive map
+                            string copied_to = findAndCopyMatVariant("emm", map_Kd);
+                            if (copied_to != "")
+                            {
+                                material_props.Add("map_Ke " + Path.GetFileName(copied_to));
+                                material_props.Add("map_emissive " + Path.GetFileName(copied_to));
+                                prop_count += 2;
+                            }
                         }
                         material_prop_count.Add(prop_count);
                     }
@@ -200,6 +244,10 @@ namespace EditorTool
                         {
                             File.Copy(material_path, import_path);
                         }
+                        if (line_split[0] == "map_Kd" || line_split[0] == "map_d")
+                        {
+                            map_Kd = material_path;
+                        }
                         mtl_file[mtl_index] = line_split[0] + " " + Path.GetFileName(import_path);
                     }
                     else
@@ -211,6 +259,10 @@ namespace EditorTool
                             if (!File.Exists(import_path))
                             {
                                 File.Copy(material_path, import_path);
+                            }
+                            if (line_split[0] == "map_Kd" || line_split[0] == "map_d")
+                            {
+                                map_Kd = material_path;
                             }
                             mtl_file[mtl_index] = line_split[0] + " " + Path.GetFileName(import_path);
                         }
@@ -318,6 +370,23 @@ namespace EditorTool
             {
                 prop_json[prop_name] = prop_val;
             }
+        }
+
+        /* Try to find a material variant using common naming conventions */
+        private string findAndCopyMatVariant(string variant, string map_Kd)
+        {
+            string mat_template = map_Kd.Substring(0, map_Kd.Length - Path.GetExtension(map_Kd).Length - 3);
+            string proposed_file = mat_template + variant + Path.GetExtension(map_Kd);
+            if (File.Exists(proposed_file))
+            {
+                string copy_to = importer_common.importDir() + Path.GetFileName(proposed_file).Replace(' ', '_');
+                if (!File.Exists(copy_to))
+                {
+                    File.Copy(proposed_file, copy_to);
+                    return copy_to;
+                }
+            }
+            return "";
         }
     }
 }
