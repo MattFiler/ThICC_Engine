@@ -302,6 +302,9 @@
     <ClInclude Include="FakeItemBox.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="GoldenMushroom.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -462,6 +465,9 @@
       <Filter>GameObjects\3D\Source</Filter>
     </ClCompile>
     <ClCompile Include="FakeItemBox.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="GoldenMushroom.cpp">
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>

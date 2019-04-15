@@ -31,14 +31,14 @@ public:
 	virtual std::vector<Item*> GetImmuneItems() { return m_immuneItems; };
 	virtual void setTrailingPlayerImmunity(bool _immunity) { m_trailingPlayerImmunity = _immunity; };
 
-	virtual Player* getPlayer() { return m_player; };
-	virtual void setPlayer(Player* _player) { m_player = _player; };
+	Player* getPlayer() { return m_player; };
+	void setPlayer(Player* _player) { m_player = _player; };
 
-	virtual float getSpinAngle() { return m_spinAngle; };
-	virtual void setSpinAngle(float _angle);
+	float getSpinAngle() { return m_spinAngle; };
+	void setSpinAngle(float _angle);
 
-	virtual bool isTrailing() { return m_trailing; };
-	virtual void setTrailing(bool _trailing) { m_trailing = _trailing; };
+	bool isTrailing() { return m_trailing; };
+	void setTrailing(bool _trailing) { m_trailing = _trailing; };
 
 protected:
 	TrackMagnet * m_mesh = nullptr;
@@ -61,7 +61,7 @@ protected:
 	//Angle of orbit around player
 	float m_spinAngle = 0;
 
-	//Vector of items that are immune to this items collisions - needed for triple banana
+	//Vector of items that are immune to this items collisions - needed for triple items
 	std::vector<Item*> m_immuneItems;
 
 	virtual bool ignorePlayerCollisions(Player* player);

@@ -785,6 +785,12 @@ Item* GameScene::CreateItem(ItemType type)
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(box->GetMesh())->getDebugCollider());
 		return box;
 	}
+	case MUSHROOM_UNLIMITED:
+	{
+		GoldenMushroom * mushroom = new GoldenMushroom();
+		m_itemModels.push_back(mushroom);
+		return mushroom;
+	}
 	default:
 		return nullptr;
 	}

@@ -187,14 +187,21 @@ void Player::TrailItems()
 	{
 		for (int i = 0; i < m_trailingItems.size(); i++)
 		{
-			if (m_trailingItems[i]->GetMesh())
+			if (m_trailingItems[i]->ShouldDestroy())
 			{
-				if (m_trailingItems[i]->ShouldDestroy())
+				m_trailingItems.erase(m_trailingItems.begin() + i);
+
+				if (m_InventoryItem == MUSHROOM_UNLIMITED)
 				{
-					m_trailingItems.erase(m_trailingItems.begin() + i);
-					continue;
+					setActiveItem(MUSHROOM_UNLIMITED);
+					active_item = NONE;
 				}
 
+				continue;
+			}
+
+			if (m_trailingItems[i]->GetMesh())
+			{
 				//Trails behind the player
 				if (active_item != GREEN_SHELL_3X && active_item != RED_SHELL_3X)
 				{
@@ -222,8 +229,8 @@ void Player::TrailItems()
 
 void Player::SpawnItems(ItemType type)
 {
-	//Triple mushrooms still in inventory after use
-	if (type != MUSHROOM_3X)
+	//Triple mushrooms and Golden Mushroom still in inventory after use
+	if (type != MUSHROOM_3X && type != MUSHROOM_UNLIMITED)
 	{
 		setActiveItem(type);
 	}
@@ -316,6 +323,14 @@ void Player::SpawnItems(ItemType type)
 			m_trailingItems.push_back(box);
 			TrailItems();
 		}
+
+		case MUSHROOM_UNLIMITED:
+		{
+			GoldenMushroom* mushroom = static_cast<GoldenMushroom*>(CreateItem(MUSHROOM_UNLIMITED));
+			mushroom->Use(this, false);		
+			m_trailingItems.push_back(mushroom);
+			m_multiItem = true;
+		}
 		default:
 			break;
 	}
@@ -333,7 +348,11 @@ void Player::ReleaseItem()
 	{
 		m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
 		m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
-		m_trailingItems.pop_back();
+
+		if (m_InventoryItem == MUSHROOM_UNLIMITED)
+		{
+			m_trailingItems.pop_back();
+		}
 		
 		if (m_trailingItems.empty())
 		{

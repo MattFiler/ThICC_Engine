@@ -10,6 +10,7 @@
 #include "FakeItemBox.h"
 #include "ControlledMovement.h"
 #include "MoveAI.h"
+#include "GoldenMushroom.h"
 #include <functional>
 
 //=================================================================
