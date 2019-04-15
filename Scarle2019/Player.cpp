@@ -73,6 +73,11 @@ void Player::Render()
 {
 	m_displayedMesh->Render();
 	SDKMeshGO3D::Render();
+
+	if (m_ai)
+	{
+		m_ai->DebugRender();
+	}
 }
 
 
