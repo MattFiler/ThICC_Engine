@@ -12,6 +12,7 @@
 #include "MoveAI.h"
 #include "GoldenMushroom.h"
 #include "Star.h"
+#include "GiantMushroom.h"
 #include <functional>
 
 //=================================================================

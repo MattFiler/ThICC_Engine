@@ -308,6 +308,9 @@
     <ClInclude Include="Star.h">
       <Filter>GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="GiantMushroom.h">
+      <Filter>GameObjects\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -474,6 +477,9 @@
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
     <ClCompile Include="Star.cpp">
+      <Filter>GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="GiantMushroom.cpp">
       <Filter>GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>

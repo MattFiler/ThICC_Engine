@@ -228,6 +228,7 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameStateData.h" />
     <ClInclude Include="GarbageCollector.h" />
+    <ClInclude Include="GiantMushroom.h" />
     <ClInclude Include="GoldenMushroom.h" />
     <ClInclude Include="GPGO3D.h" />
     <ClInclude Include="GreenShell.h" />
@@ -297,6 +298,7 @@
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Game_backend.cpp" />
+    <ClCompile Include="GiantMushroom.cpp" />
     <ClCompile Include="GoldenMushroom.cpp" />
     <ClCompile Include="GPGO3D.cpp" />
     <ClCompile Include="GreenShell.cpp" />

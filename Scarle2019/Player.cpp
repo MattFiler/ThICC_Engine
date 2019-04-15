@@ -340,6 +340,12 @@ void Player::SpawnItems(ItemType type)
 			star->Use(this, false);
 			break;
 		}
+
+		case MUSHROOM_GIANT:
+		{
+			GiantMushroom* mushroom = static_cast<GiantMushroom*>(CreateItem(MUSHROOM_GIANT));
+			mushroom->Use(this, false);
+		}
 		default:
 			break;
 	}

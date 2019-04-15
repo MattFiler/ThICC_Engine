@@ -797,6 +797,12 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(star);
 		return star;
 	}
+	case MUSHROOM_GIANT:
+	{
+		GiantMushroom* mushroom = new GiantMushroom();
+		m_itemModels.push_back(mushroom);
+		return mushroom;
+	}
 	default:
 		return nullptr;
 	}
