@@ -324,7 +324,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_RoadOther
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -332,18 +332,18 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_RoadOther_Alb.png
-map_Ks ufc_RoadOther_spm.png
-map_Kn ufc_RoadOther_nrm.png
-norm ufc_RoadOther_nrm.png
+map_Kd ufc_roadother_alb.png
+map_Ks ufc_roadother_spm.png
+map_Kn ufc_roadother_nrm.png
+norm ufc_roadother_nrm.png
 Tr 0.000000
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ke ufc_roadother_spm.png
+map_emissive ufc_roadother_spm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_RoadOther2
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -355,14 +355,14 @@ map_Kd ufc_RoadOther2_Alb.png
 map_Ks ufc_RoadOther2_spm.png
 map_Kn ufc_RoadOther2_nrm.png
 norm ufc_RoadOther2_nrm.png
-map_Ke ufc_RoadOther2_emm.png
-map_emissive ufc_RoadOther2_emm.png
+map_Ke ufc_roadother2_emm.png
+map_emissive ufc_roadother2_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_RoadOther2.002
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -370,18 +370,18 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_RoadOther2_Alb.png
+map_Kd ufc_roadother2_alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ks ufc_roadother2_spm.png
+map_Kn ufc_roadother2_nrm.png
+norm ufc_roadother2_nrm.png
+map_Ke ufc_roadother2_emm.png
+map_emissive ufc_roadother2_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_RoadOther2_G
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -389,13 +389,13 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_RoadOther2_Alb.png
+map_Kd ufc_roadother2_alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ks ufc_roadother2_spm.png
+map_Kn ufc_roadother2_nrm.png
+norm ufc_roadother2_nrm.png
+map_Ke ufc_roadother2_emm.png
+map_emissive ufc_roadother2_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -533,7 +533,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_StartGate
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -599,7 +599,7 @@ Ni 1.000000
 d 0.999999
 illum 2
 map_Kd ufc_TeamLogo_nuki_Alb.png
-Tr 1.000000
+Tr 0.000001
 map_Ks spec_placeholder.png
 map_Kn norm_placeholder.png
 norm norm_placeholder.png
@@ -849,7 +849,7 @@ map_Kd ufc_nuki_1_Alb.png
 map_Ks ufc_nuki_1_spm.png
 map_Kn ufc_nuki_1_nrm.png
 norm ufc_nuki_1_nrm.png
-Tr 1.000000
+Tr 0.000001
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
@@ -870,7 +870,7 @@ map_Kn ufc_nuki_2_nrm.png
 norm ufc_nuki_2_nrm.png
 map_Ke ufc_nuki_2_emm.png
 map_emissive ufc_nuki_2_emm.png
-Tr 1.000000
+Tr 0.000001
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -889,7 +889,7 @@ map_Kn ufc_nuki_3_nrm.png
 norm ufc_nuki_3_nrm.png
 map_Ke ufc_nuki_3_emm.png
 map_emissive ufc_nuki_3_emm.png
-Tr 1.000000
+Tr 0.000001
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -906,7 +906,7 @@ map_Kd ufc_nuki_4_Alb.png
 map_Ks ufc_nuki_4_spm.png
 map_Kn ufc_nuki_4_nrm.png
 norm ufc_nuki_4_nrm.png
-Tr 1.000000
+Tr 0.000001
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
@@ -925,7 +925,7 @@ map_Kd ufc_nuki_5_Alb.png
 map_Ks ufc_nuki_5_spm.png
 map_Kn ufc_nuki_5_nrm.png
 norm ufc_nuki_5_nrm.png
-Tr 1.000000
+Tr 0.000001
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
@@ -1008,7 +1008,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_road
-Ns 94.117647
+Ns 0.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1016,7 +1016,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_road_Alb.png
+map_Kd ufc_road_alb.png
 map_Ks ufc_road_spm.png
 map_Kn ufc_road_nrm.png
 norm ufc_road_nrm.png
@@ -1027,7 +1027,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_road_G
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1035,13 +1035,13 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_road_Alb.png
+map_Kd ufc_road_alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ks ufc_road_spm.png
+map_Kn ufc_road_mariokart_nrm.png
+norm ufc_road_mariokart_nrm.png
+map_Ke ufc_road_emm.png
+map_emissive ufc_road_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -1065,7 +1065,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_road_WhiteLine
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1073,18 +1073,18 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_road_Alb2.png
+map_Kd ufc_road_alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ks ufc_road_spm.png
+map_Kn ufc_road_mariokart_nrm.png
+norm ufc_road_mariokart_nrm.png
+map_Ke ufc_road_emm.png
+map_emissive ufc_road_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_road_WhiteLine_G
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1092,13 +1092,13 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_road_Alb2.png
+map_Kd ufc_road_alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ks ufc_road_spm.png
+map_Kn ufc_road_mariokart_nrm.png
+norm ufc_road_mariokart_nrm.png
+map_Ke ufc_road_emm.png
+map_emissive ufc_road_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -1122,19 +1122,19 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_shiba
-Ns 94.117647
+Ns 0.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
-illum 2
-map_Kd ufc_siba_Alb.png
+illum 0
+map_Kd ufc_siba_alb.png
 Tr 0.000000
 map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
+map_Kn ufc_siba_nrm.png
+norm ufc_siba_nrm.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
@@ -1198,7 +1198,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_suna
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1210,9 +1210,9 @@ map_Kd ufc_suna_Alb.png
 map_Kn ufc_suna_nrm.png
 norm ufc_suna_nrm.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ks ufc_suna_alb.png
+map_Ke ufc_suna_alb.png
+map_emissive ufc_suna_alb.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 

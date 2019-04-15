@@ -676,14 +676,16 @@ namespace EditorTool
                 if (this_material_config.Key.ToUpper().Contains("NUKI"))
                 {
                     this_token["d"] = "0.999999";
+                    this_token["Tr"] = "0.000001";
                 }
                 else
                 {
                     this_token["d"] = "0.000000";
+                    this_token["Tr"] = "0.000000";
                 }
 
                 //Make everything opaque
-                this_token["Tr"] = "0.000000"; //Does this screw up our alpha?
+                //this_token["Tr"] = "0.000001"; //Does this screw up our alpha?
             }
         }
 
@@ -696,7 +698,7 @@ namespace EditorTool
             {
                 if (file.Extension.ToUpper() == ".DDS")
                 {
-                    file.Delete();
+                    //file.Delete();
                 }
             }
             foreach (var file in file_array)

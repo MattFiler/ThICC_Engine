@@ -212,6 +212,9 @@ namespace EditorTool
             //Emissive Colour (RGB)
             colourToJSON("Ke", emissiveColour);
 
+            /* Some more work needs to be done to work out the effects of transparency config and its issue with alphas */
+            /* Maybe just resort back to how the auto-detect button handles this? */
+
             //Alpha (0.5+ = has alpha)
             material_config["d"] = (hasAlpha.Checked ? "0.999999" : "0.000000");
 

@@ -37,7 +37,9 @@ namespace EditorTool
             ignored_extensions.Add(".pdb");
             ignored_extensions.Add(".xml");
             ignored_extensions.Add(".dll");
-            /* We can now also ignore JPG/JPEG/PNG, but older models still use this format. Begin to depreciate it immediately! */
+            ignored_extensions.Add(".jpg");
+            ignored_extensions.Add(".jpeg");
+            ignored_extensions.Add(".png");
         }
 
         /* Open Asset Manager */
