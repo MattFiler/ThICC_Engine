@@ -791,6 +791,12 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(mushroom);
 		return mushroom;
 	}
+	case STAR:
+	{
+		Star* star = new Star();
+		m_itemModels.push_back(star);
+		return star;
+	}
 	default:
 		return nullptr;
 	}

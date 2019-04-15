@@ -322,6 +322,7 @@ void Player::SpawnItems(ItemType type)
 			FakeItemBox* box = static_cast<FakeItemBox*>(CreateItem(FAKE_BOX));
 			m_trailingItems.push_back(box);
 			TrailItems();
+			break;
 		}
 
 		case MUSHROOM_UNLIMITED:
@@ -330,6 +331,14 @@ void Player::SpawnItems(ItemType type)
 			mushroom->Use(this, false);		
 			m_trailingItems.push_back(mushroom);
 			m_multiItem = true;
+			break;
+		}
+
+		case STAR:
+		{
+			Star* star = static_cast<Star*>(CreateItem(STAR));
+			star->Use(this, false);
+			break;
 		}
 		default:
 			break;
@@ -349,7 +358,7 @@ void Player::ReleaseItem()
 		m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
 		m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
 
-		if (m_InventoryItem == MUSHROOM_UNLIMITED)
+		if (m_InventoryItem != MUSHROOM_UNLIMITED)
 		{
 			m_trailingItems.pop_back();
 		}

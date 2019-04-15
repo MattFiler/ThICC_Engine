@@ -257,6 +257,7 @@
     <ClInclude Include="SDKMeshGO3D.h" />
     <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="Star.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StepTimer.h" />
@@ -327,6 +328,7 @@
     <ClCompile Include="SDKMeshGO3D.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="Star.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TestSound.cpp" />
     <ClCompile Include="Text2D.cpp" />

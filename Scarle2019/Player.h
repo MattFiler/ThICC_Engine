@@ -11,6 +11,7 @@
 #include "ControlledMovement.h"
 #include "MoveAI.h"
 #include "GoldenMushroom.h"
+#include "Star.h"
 #include <functional>
 
 //=================================================================
@@ -60,6 +61,9 @@ public:
 	void Flip(int _revolutions, float _duration) { m_displayedMesh->Flip(_revolutions, _duration); };
 	void Jump(float _jumpHeight, float _duration) { m_displayedMesh->Jump(_jumpHeight, _duration); };
 
+	bool isInvincible() { return m_invincible; };
+	void setInvicible(bool _invincible) { m_invincible = _invincible; };
+
 protected:
 	int m_playerID = 0;
 
@@ -104,6 +108,7 @@ private:
 	bool m_aPressed = true;
 	bool m_multiItem = false;
 	const int m_maxItems = 3;
+	bool m_invincible = false;
 
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;

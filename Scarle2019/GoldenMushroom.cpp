@@ -3,7 +3,6 @@
 
 GoldenMushroom::GoldenMushroom()
 {
-	m_trailingPlayerImmunity = true;
 	m_maxDuration = 7.5;
 }
 

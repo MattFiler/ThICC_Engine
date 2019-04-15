@@ -16,7 +16,7 @@ void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _ph
 			//Player x Player Collision
 			if (dynamic_cast<Player*>(collision.m_model2))
 			{
-				PlayerCollisions(collision);
+				PlayerCollisions(collision.m_model1, collision.m_model2, collision.m_collisionNormal);
 			}
 			//Player x Item Box Collision
 			else if (collision.m_model2->isVisible() && dynamic_cast<ItemBox*>(collision.m_model2))
@@ -54,27 +54,48 @@ void CollisionManager::ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBo
 
 void CollisionManager::ExplosionCollision(PhysModel *& _player, PhysModel *& _explosion)
 {
-	dynamic_cast<Explosion*>(_explosion)->HitByPlayer(dynamic_cast<Player*>(_player));
+	if (!dynamic_cast<Player*>(_player)->isInvincible())
+	{
+		dynamic_cast<Explosion*>(_explosion)->HitByPlayer(dynamic_cast<Player*>(_player));
+	}
 }
 
-void CollisionManager::PlayerCollisions(Collision & collision)
+void CollisionManager::PlayerCollisions(PhysModel*& _player1, PhysModel*& _player2, Vector3 _collisionNormal)
 {
-	Vector3 rv = collision.m_model2->getVelocity() - collision.m_model1->getVelocity();
-	float contactVel = rv.Dot(collision.m_collisionNormal);
+	Player* player1 = dynamic_cast<Player*>(_player1);
+	Player* player2 = dynamic_cast<Player*>(_player2);
 
-	if (contactVel > 0)
+	if (player1->isInvincible() && !player2->isInvincible())
 	{
-		return;
+		player2->Jump(1.5f, 1);
+		player2->Flip(1, 0.8f);
+		player2->AddPos(player2->GetWorld().Up() * 4);
 	}
+	else if (player2->isInvincible() && !player1->isInvincible())
+	{
+		player1->Jump(1.5f, 1);
+		player1->Flip(1, 0.8f);
+		player1->AddPos(player1->GetWorld().Up() * 4);
+	}
+	else
+	{
+		Vector3 rv = _player2->getVelocity() - _player1->getVelocity();
+		float contactVel = rv.Dot(_collisionNormal);
 
-	float e = 1;
-	float j = -(1.0f + e) * contactVel;
-	j /= 1 / collision.m_model1->getMass() + 1 / collision.m_model2->getMass();
+		if (contactVel > 0)
+		{
+			return;
+		}
 
-	Vector3 impulse = j * collision.m_collisionNormal;
+		float e = 1;
+		float j = -(1.0f + e) * contactVel;
+		j /= 1 / _player1->getMass() + 1 / _player2->getMass();
 
-	collision.m_model1->setVelocity(collision.m_model1->getVelocity() - impulse * (1.0f / collision.m_model1->getMass()));
-	collision.m_model2->setVelocity(collision.m_model2->getVelocity() + impulse * (1.0f / collision.m_model2->getMass()));
+		Vector3 impulse = j * _collisionNormal;
+
+		_player1->setVelocity(_player1->getVelocity() - impulse * (1.0f / _player1->getMass()));
+		_player2->setVelocity(_player2->getVelocity() + impulse * (1.0f / _player2->getMass()));
+	}
 }
 
 /*Checks all physModels in the vector to see if they're inside one another. 
@@ -139,7 +160,15 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 				Player* player = dynamic_cast<Player*>(model);
 				if (player && player != item1->getPlayer() && item1->GetMesh()->getCollider().Intersects(player->getCollider()))
 				{
-					item1->HitByPlayer(player);
+					if(player->isInvincible())
+					{ 
+						item1->FlagForDestoy();
+					}
+					else
+					{
+						item1->HitByPlayer(player);
+					}
+
 					hit_player = true;
 					break;
 				}
