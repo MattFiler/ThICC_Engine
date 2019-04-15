@@ -20,15 +20,6 @@
     <ClCompile Include="Game.cpp">
       <Filter>Game Core</Filter>
     </ClCompile>
-    <ClCompile Include="ServiceLocator.cpp">
-      <Filter>Engine Core\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ThICC_Model.cpp">
-      <Filter>Engine Core\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicsResources.cpp">
-      <Filter>Engine Core\Resources</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -62,18 +53,6 @@
     <ClInclude Include="Game.h">
       <Filter>Game Core</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsResources.h">
-      <Filter>Engine Core\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelResources.h">
-      <Filter>Engine Core\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="ServiceLocator.h">
-      <Filter>Engine Core\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ThICC_Model.h">
-      <Filter>Engine Core\Utilities</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -90,9 +69,6 @@
     </Filter>
     <Filter Include="Game Core">
       <UniqueIdentifier>{9ed7f449-3b2b-404f-9dd9-d51576049267}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine Core\Resources">
-      <UniqueIdentifier>{c34a7e87-8c93-4420-8ebb-cb17099711a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
