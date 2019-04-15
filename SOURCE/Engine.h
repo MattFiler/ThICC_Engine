@@ -92,8 +92,6 @@ private:
 
 	enum Descriptors
 	{
-		ConsolasFont,
-		ComicFont,
 		SceneTex,
 		RadianceIBL1,
 		RadianceIBL2,

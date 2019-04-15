@@ -4,9 +4,6 @@
     <Manifest Include="settings.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp">
-      <Filter>Engine Core</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Engine Core</Filter>
     </ClCompile>
@@ -17,11 +14,11 @@
     <ClCompile Include="RenderTexture.cpp">
       <Filter>Engine Core\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
-      <Filter>Engine Core</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="d3dx12.h">
       <Filter>Engine Core\Common</Filter>
@@ -46,6 +43,9 @@
     </ClInclude>
     <ClInclude Include="AssetFilepaths.h">
       <Filter>Engine Core\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

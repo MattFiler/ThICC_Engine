@@ -200,7 +200,7 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DeviceResourcesPC.h" />
     <ClInclude Include="FindMedia.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="Engine.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReadData.h" />
     <ClInclude Include="RenderTexture.h" />
@@ -208,7 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeviceResourcesPC.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
