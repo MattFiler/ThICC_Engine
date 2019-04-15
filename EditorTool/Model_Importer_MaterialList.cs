@@ -187,7 +187,7 @@ namespace EditorTool
             convertMaterials();
 
             //Run the model converter to swap our OBJ into our engine's format
-            string conv_args = "\"" + Path.GetFileName(importer_common.fileName(importer_file.OBJ_MODEL)) + "\" -sdkmesh2 -y -c -op";
+            string conv_args = "\"" + Path.GetFileName(importer_common.fileName(importer_file.OBJ_MODEL)) + "\" -sdkmesh2 -y";
             if (shouldFlipUVs.Checked)
             {
                 conv_args += " -flipv";
@@ -512,7 +512,7 @@ namespace EditorTool
                 ProcessStartInfo meshConverter2 = new ProcessStartInfo();
                 meshConverter2.WorkingDirectory = importer_common.importDir();
                 meshConverter2.FileName = "DATA/MODELS/meshconvert.exe";
-                meshConverter2.Arguments = "\"" + debug_model + "\" -sdkmesh2 -y -c -op";
+                meshConverter2.Arguments = "\"" + debug_model + "\" -sdkmesh2 -y";
                 meshConverter2.UseShellExecute = false;
                 meshConverter2.RedirectStandardOutput = true;
                 Process converterProcess2 = Process.Start(meshConverter2);

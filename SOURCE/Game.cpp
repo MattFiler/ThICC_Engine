@@ -12,6 +12,9 @@
 #include "ReadData.h"
 #include "SDKMesh.h"
 
+#include "AssetFilepaths.h"
+#include <experimental/filesystem>
+
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
@@ -29,20 +32,13 @@ Game::Game() noexcept(false) :
 	m_distance(10.f),
 	m_farPlane(10000.f),
 	m_sensitivity(1.f),
-	m_reloadModel(false),
-	m_toneMapMode(ToneMapPostProcess::ACESFilmic),
-	m_selectFile(0),
-	m_firstFile(0)
+	m_reloadModel(false)
 {
 	m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_R10G10B10A2_UNORM, DXGI_FORMAT_D32_FLOAT, 2,
 		D3D_FEATURE_LEVEL_11_0, DX::DeviceResources::c_EnableHDR);
 	m_deviceResources->RegisterDeviceNotify(this);
 
 	m_hdrScene = std::make_unique<DX::RenderTexture>(DXGI_FORMAT_R16G16B16A16_FLOAT);
-
-	*m_szModelName = 0;
-	*m_szStatus = 0;
-	*m_szError = 0;
 }
 
 Game::~Game()
@@ -86,7 +82,7 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& timer)
 {
 	if (m_reloadModel)
-		LoadModel();
+		LoadModel("MARIOKARTSTADIUM");
 
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
@@ -95,115 +91,86 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		m_gamepadButtonTracker.Update(gpad);
 
-		if (!m_fileNames.empty())
+		// Translate camera
+		Vector3 move;
+
+		m_zoom -= gpad.thumbSticks.leftY * elapsedTime * m_sensitivity;
+		m_zoom = std::max(m_zoom, 0.01f);
+
+		if (gpad.IsDPadUpPressed())
 		{
-			if (m_gamepadButtonTracker.dpadUp == GamePad::ButtonStateTracker::PRESSED)
-			{
-				--m_selectFile;
-				if (m_selectFile < 0)
-					m_selectFile = int(m_fileNames.size()) - 1;
-			}
-			else if (m_gamepadButtonTracker.dpadDown == GamePad::ButtonStateTracker::PRESSED)
-			{
-				++m_selectFile;
-				if (m_selectFile >= int(m_fileNames.size()))
-					m_selectFile = 0;
-			}
-			else if (gpad.IsAPressed())
-			{
-				swprintf_s(m_szModelName, L"D:\\%ls", m_fileNames[m_selectFile].c_str());
-				m_selectFile = m_firstFile = 0;
-				m_fileNames.clear();
-				LoadModel();
-			}
-			else if (gpad.IsBPressed())
-			{
-				m_selectFile = m_firstFile = 0;
-				m_fileNames.clear();
-			}
+			move.y += 1.f;
+		}
+		else if (gpad.IsDPadDownPressed())
+		{
+			move.y -= 1.f;
+		}
+
+		if (gpad.IsDPadLeftPressed())
+		{
+			move.x -= 1.f;
+		}
+		else if (gpad.IsDPadRightPressed())
+		{
+			move.x += 1.f;
+		}
+
+		Matrix im;
+		m_view.Invert(im);
+		move = Vector3::TransformNormal(move, im);
+
+		// Rotate camera
+		Vector3 orbit(gpad.thumbSticks.rightX, gpad.thumbSticks.rightY, gpad.thumbSticks.leftX);
+		orbit *= elapsedTime * m_sensitivity;
+
+		m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Right(), orbit.y);
+		m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Up(), -orbit.x);
+		m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Forward(), orbit.z);
+		m_cameraRot.Normalize();
+
+		m_cameraFocus += move * m_distance * elapsedTime * m_sensitivity;
+
+		// FOV camera
+		if (gpad.triggers.right > 0 || gpad.triggers.left > 0)
+		{
+			m_fov += (gpad.triggers.right - gpad.triggers.left) * elapsedTime * m_sensitivity;
+			m_fov = std::min(XM_PI / 2.f, std::max(m_fov, XM_PI / 10.f));
+
+			CreateProjection();
+		}
+
+		// Other controls
+		if (m_gamepadButtonTracker.leftShoulder == GamePad::ButtonStateTracker::PRESSED
+			&& m_gamepadButtonTracker.rightShoulder == GamePad::ButtonStateTracker::PRESSED)
+		{
+			m_sensitivity = 1.f;
 		}
 		else
 		{
-			// Translate camera
-			Vector3 move;
-
-			m_zoom -= gpad.thumbSticks.leftY * elapsedTime * m_sensitivity;
-			m_zoom = std::max(m_zoom, 0.01f);
-
-			if (gpad.IsDPadUpPressed())
+			if (gpad.IsRightShoulderPressed())
 			{
-				move.y += 1.f;
+				m_sensitivity += 0.01f;
+				if (m_sensitivity > 10.f)
+					m_sensitivity = 10.f;
 			}
-			else if (gpad.IsDPadDownPressed())
+			else if (gpad.IsLeftShoulderPressed())
 			{
-				move.y -= 1.f;
+				m_sensitivity -= 0.01f;
+				if (m_sensitivity < 0.01f)
+					m_sensitivity = 0.01f;
 			}
+		}
 
-			if (gpad.IsDPadLeftPressed())
-			{
-				move.x -= 1.f;
-			}
-			else if (gpad.IsDPadRightPressed())
-			{
-				move.x += 1.f;
-			}
+		if (gpad.IsViewPressed())
+		{
+			//PostMessage(m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
+			m_reloadModel = true;
+		}
 
-			Matrix im;
-			m_view.Invert(im);
-			move = Vector3::TransformNormal(move, im);
-
-			// Rotate camera
-			Vector3 orbit(gpad.thumbSticks.rightX, gpad.thumbSticks.rightY, gpad.thumbSticks.leftX);
-			orbit *= elapsedTime * m_sensitivity;
-
-			m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Right(), orbit.y);
-			m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Up(), -orbit.x);
-			m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Forward(), orbit.z);
-			m_cameraRot.Normalize();
-
-			m_cameraFocus += move * m_distance * elapsedTime * m_sensitivity;
-
-			// FOV camera
-			if (gpad.triggers.right > 0 || gpad.triggers.left > 0)
-			{
-				m_fov += (gpad.triggers.right - gpad.triggers.left) * elapsedTime * m_sensitivity;
-				m_fov = std::min(XM_PI / 2.f, std::max(m_fov, XM_PI / 10.f));
-
-				CreateProjection();
-			}
-
-			// Other controls
-			if (m_gamepadButtonTracker.leftShoulder == GamePad::ButtonStateTracker::PRESSED
-				&& m_gamepadButtonTracker.rightShoulder == GamePad::ButtonStateTracker::PRESSED)
-			{
-				m_sensitivity = 1.f;
-			}
-			else
-			{
-				if (gpad.IsRightShoulderPressed())
-				{
-					m_sensitivity += 0.01f;
-					if (m_sensitivity > 10.f)
-						m_sensitivity = 10.f;
-				}
-				else if (gpad.IsLeftShoulderPressed())
-				{
-					m_sensitivity -= 0.01f;
-					if (m_sensitivity < 0.01f)
-						m_sensitivity = 0.01f;
-				}
-			}
-
-			if (gpad.IsViewPressed())
-			{
-				PostMessage(m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
-			}
-
-			if (m_gamepadButtonTracker.leftStick == GamePad::ButtonStateTracker::PRESSED)
-			{
-				CameraHome();
-				m_modelRot = Quaternion::Identity;
-			}
+		if (m_gamepadButtonTracker.leftStick == GamePad::ButtonStateTracker::PRESSED)
+		{
+			CameraHome();
+			m_modelRot = Quaternion::Identity;
 		}
 	}
 	else
@@ -271,7 +238,8 @@ void Game::Update(DX::StepTimer const& timer)
 
 		if (m_keyboardTracker.pressed.O)
 		{
-			PostMessage(m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
+			//PostMessage(m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
+			m_reloadModel = true;
 		}
 
 		// Mouse controls
@@ -375,7 +343,7 @@ void Game::Render()
 	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), m_states->Heap() };
 	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
-	if (m_fileNames.empty() && m_model) 
+	if (m_model) 
 	{
 		{
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1);
@@ -466,15 +434,6 @@ void Game::OnWindowSizeChanged(int width, int height)
 		return;
 
 	CreateWindowSizeDependentResources();
-}
-
-void Game::OnFileOpen(const wchar_t* filename)
-{
-	if (!filename)
-		return;
-
-	wcscpy_s(m_szModelName, filename);
-	m_reloadModel = true;
 }
 
 // Properties
@@ -641,7 +600,7 @@ void Game::OnDeviceRestored()
 }
 #pragma endregion
 
-void Game::LoadModel()
+void Game::LoadModel(std::string filename)
 {
 	m_modelClockwise.clear();
 	m_modelResources.reset();
@@ -649,56 +608,37 @@ void Game::LoadModel()
 	m_fxFactory.reset();
 	m_pbrFXFactory.reset();
 
-	*m_szStatus = 0;
-	*m_szError = 0;
 	m_reloadModel = false;
 	m_modelRot = Quaternion::Identity;
 
-	if (!*m_szModelName)
-		return;
+	AssetFilepaths m_filepath;
 
-	wchar_t drive[_MAX_DRIVE] = {};
-	wchar_t path[MAX_PATH] = {};
-	wchar_t ext[_MAX_EXT] = {};
-	wchar_t fname[_MAX_FNAME] = {};
-	_wsplitpath_s(m_szModelName, drive, _MAX_DRIVE, path, MAX_PATH, fname, _MAX_FNAME, ext, _MAX_EXT);
+	std::string fullpath = m_filepath.generateFilepath(filename, m_filepath.MODEL);
+	std::wstring fullpath_wstring = std::wstring(fullpath.begin(), fullpath.end());
+	const wchar_t* fullpath_wchar = fullpath_wstring.c_str();
 
 	bool isvbo = false;
 	bool issdkmesh2 = false;
 	try
 	{
-		if (_wcsicmp(ext, L".sdkmesh") == 0)
-		{
-			auto modelBin = DX::ReadData(m_szModelName);
+		auto modelBin = DX::ReadData(fullpath_wchar);
 
-			if (modelBin.size() >= sizeof(DXUT::SDKMESH_HEADER))
+		if (modelBin.size() >= sizeof(DXUT::SDKMESH_HEADER))
+		{
+			auto hdr = reinterpret_cast<const DXUT::SDKMESH_HEADER*>(modelBin.data());
+			if (hdr->Version >= 200)
 			{
-				auto hdr = reinterpret_cast<const DXUT::SDKMESH_HEADER*>(modelBin.data());
-				if (hdr->Version >= 200)
-				{
-					issdkmesh2 = true;
-				}
+				issdkmesh2 = true;
 			}
+		}
 
-			m_model = Model::CreateFromSDKMESH(modelBin.data(), modelBin.size());
-		}
-		else if (_wcsicmp(ext, L".vbo") == 0)
-		{
-			isvbo = true;
-			m_model = Model::CreateFromVBO(m_szModelName);
-		}
-		else
-		{
-			swprintf_s(m_szError, L"Unknown file type %ls", ext);
-			m_model.reset();
-			*m_szStatus = 0;
-		}
+		m_model = Model::CreateFromSDKMESH(modelBin.data(), modelBin.size());
 	}
 	catch (...)
 	{
-		swprintf_s(m_szError, L"Error loading model %ls%ls\n", fname, ext);
+		//Ideally show some kind of nicer error here
+		throw std::exception("Error Loading Model");
 		m_model.reset();
-		*m_szStatus = 0;
 	}
 
 	if (m_model)
@@ -718,12 +658,20 @@ void Game::LoadModel()
 			m_modelResources->EnableForceSRGB(true);
 		}
 
-		if (*drive || *path)
-		{
-			wchar_t dir[MAX_PATH] = {};
-			_wmakepath_s(dir, drive, path, nullptr, nullptr);
-			m_modelResources->SetDirectory(dir);
+		//Get current directory (this is currently hacky and needs a fix - is VS giving us the wrong working dir?)
+		std::string curr_dir = std::experimental::filesystem::current_path().string();
+		if (curr_dir.substr(curr_dir.length() - 6) == "SOURCE") {
+			curr_dir = curr_dir.substr(0, curr_dir.length() - 7);
 		}
+		std::string dirpath = curr_dir + "/" + m_filepath.getFolder(m_filepath.MODEL) + filename + "/";
+		if (dirpath.length() > 7 && dirpath.substr(dirpath.length() - 6) == "DEBUG/") {
+			dirpath = dirpath.substr(0, dirpath.length() - 7) + "/";
+			//is_debug_mesh = true;
+		}
+		std::wstring dirpath_wstring = std::wstring(dirpath.begin(), dirpath.end());
+		const wchar_t* dirpath_wchar = dirpath_wstring.c_str();
+
+		m_modelResources->SetDirectory(dirpath_wchar);
 
 		int txtOffset = Descriptors::Reserve;
 
@@ -733,10 +681,10 @@ void Game::LoadModel()
 		}
 		catch (...)
 		{
-			swprintf_s(m_szError, L"Error loading textures for model %ls%ls\n", fname, ext);
+			//Ideally show some kind of nicer error here
+			throw std::exception("Error Loading Materials");
 			m_model.reset();
 			m_modelResources.reset();
-			*m_szStatus = 0;
 		}
 
 		if (m_model)

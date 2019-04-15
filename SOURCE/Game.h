@@ -41,7 +41,6 @@ public:
 	void OnResuming();
 	void OnWindowMoved();
 	void OnWindowSizeChanged(int width, int height);
-	void OnFileOpen(const wchar_t* filename);
 
 	// Properties
 	void GetDefaultSize(int& width, int& height) const;
@@ -57,7 +56,7 @@ private:
 	void CreateDeviceDependentResources();
 	void CreateWindowSizeDependentResources();
 
-	void LoadModel();
+	void LoadModel(std::string filename);
 
 	void CameraHome();
 
@@ -139,16 +138,6 @@ private:
 
 	bool                                            m_reloadModel;
 
-	int                                             m_toneMapMode;
-
-	wchar_t                                         m_szModelName[MAX_PATH];
-	wchar_t                                         m_szStatus[512];
-	wchar_t                                         m_szError[512];
-
 	ArcBall                                         m_ballCamera;
 	ArcBall                                         m_ballModel;
-
-	int                                             m_selectFile;
-	int                                             m_firstFile;
-	std::vector<std::wstring>                       m_fileNames;
 };
