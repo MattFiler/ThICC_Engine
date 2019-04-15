@@ -66,11 +66,11 @@ namespace EditorTool
         /* Try find our material preview, show it if we find it */
         public void loadMaterialPreview(JToken this_token, PictureBox materialPreview, string model_path = "")
         {
-            string[] map_types = { "map_Ka", "map_Kd", "map_Ks", "map_Ns", "map_d" };
+            string[] map_types = { "map_Kd", "map_Ks", "map_Kn", "norm", "map_Ke", "map_emissive" };
             string path_to_mat = "";
             foreach (string map_type in map_types)
             {
-                if (this_token[map_type] == null)
+                if (this_token[map_type].Value<string>() == "")
                 {
                     continue;
                 }

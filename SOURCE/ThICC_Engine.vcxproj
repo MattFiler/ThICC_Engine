@@ -196,6 +196,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArcBall.h" />
+    <ClInclude Include="AssetFilepaths.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DeviceResourcesPC.h" />
     <ClInclude Include="FindMedia.h" />

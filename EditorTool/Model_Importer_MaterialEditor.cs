@@ -38,23 +38,77 @@ namespace EditorTool
             //Name and material preview
             materialName.Text = material_config["newmtl"].Value<string>();
             common_functions.loadMaterialPreview(material_config, materialPreview, this_model_folder);
+            
+            //Ambient Colour (RGB)
+            common_functions.loadMaterialColourPreview(material_config, "Ka", ambientColour);
 
+            //Diffuse Colour (RGB)
+            common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour);
+            
+            //Specular Colour (RGB)
+            common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour);
+
+            //Emissive Colour (RGB)
+            common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour);
+
+            //Alpha (0.5+ = has alpha)
+            hasAlpha.Checked = (material_config["d"].Value<float>() > 0.5f);
+
+            //Transparency (1 = completely invisible)
+            transparencySlider.Value = Convert.ToInt32(material_config["Tr"].Value<float>() * 10);
+            transparencyValue.Text = sliderToString(transparencySlider, 10);
+
+            //Shininess (0-1000)
+            specExSlider.Value = Convert.ToInt32(material_config["Ns"].Value<float>());
+            specExValue.Text = sliderToString(specExSlider);
+
+            //Specular on/off
+            hasSpec.Checked = (material_config["illum"].Value<int>() == 2);
+            
+            //Diffuse Texture
+            diffuseMap.Text = material_config["map_Kd"].Value<string>();
+
+            //Specular Texture
+            specularMap.Text = material_config["map_Ks"].Value<string>();
+
+            //Normal Texture
+            normalMap.Text = material_config["map_Kn"].Value<string>();
+            if (normalMap.Text == "")
+            {
+                normalMap.Text = material_config["norm"].Value<string>();
+            }
+
+            //Emissive Texture
+            emissiveMap.Text = material_config["map_Ke"].Value<string>();
+            if (emissiveMap.Text == "")
+            {
+                emissiveMap.Text = material_config["map_emissive"].Value<string>();
+            }
+
+            //RMA Texture
+            RMAMap.Text = material_config["map_RMA"].Value<string>();
+            if (RMAMap.Text == "")
+            {
+                RMAMap.Text = material_config["map_occlusionRoughnessMetallic"].Value<string>();
+            }
+
+            /* Engine Config */
             if (model_type == ModelType.MAP)
             {
                 //Collision config
-                if (material_config["MARIOKART_COLLISION"]["0"].Value<bool>())
+                if (material_config["ThICC_COLLISION"]["0"].Value<bool>())
                 {
                     onTrack.Checked = true;
                 }
-                else if (material_config["MARIOKART_COLLISION"]["1"].Value<bool>())
+                else if (material_config["ThICC_COLLISION"]["1"].Value<bool>())
                 {
                     offTrack.Checked = true;
                 }
-                else if (material_config["MARIOKART_COLLISION"]["2"].Value<bool>())
+                else if (material_config["ThICC_COLLISION"]["2"].Value<bool>())
                 {
                     boostPad.Checked = true;
                 }
-                else if (material_config["MARIOKART_COLLISION"]["3"].Value<bool>())
+                else if (material_config["ThICC_COLLISION"]["3"].Value<bool>())
                 {
                     isWall.Checked = true;
                 }
@@ -68,58 +122,6 @@ namespace EditorTool
                 //Hide collision options for non-track models
                 collisionGroup.Visible = false;
             }
-
-            //Ambient
-            if (material_config["map_Ka"] != null)
-            {
-                ambientMap.Text = material_config["map_Ka"].Value<string>();
-            }
-            if (!common_functions.loadMaterialColourPreview(material_config, "Ka", ambientColour))
-            {
-                ambientColour.BackColor = Color.White;
-            }
-
-            //Diffuse
-            if (material_config["map_Kd"] != null)
-            {
-                diffuseMap.Text = material_config["map_Kd"].Value<string>();
-            }
-            else
-            {
-                if (material_config["map_d"] != null)
-                {
-                    diffuseMap.Text = material_config["map_d"].Value<string>();
-                }
-            }
-            common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour);
-
-            //Specular
-            if (material_config["map_Ks"] != null)
-            {
-                specularMap.Text = material_config["map_Ks"].Value<string>();
-            }
-            else
-            {
-                if (material_config["map_Ns"] != null)
-                {
-                    specularMap.Text = material_config["map_Ns"].Value<string>();
-                }
-            }
-            common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour);
-
-            //Emissive
-            common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour);
-
-            //Transparency
-            transparencySlider.Value = Convert.ToInt32(material_config["d"].Value<float>() * 10);
-            transparencyValue.Text = sliderToString(transparencySlider, 10);
-
-            //Specular exponent
-            specExSlider.Value = Convert.ToInt32(material_config["Ns"].Value<float>());
-            specExValue.Text = sliderToString(specExSlider);
-
-            //Illumination model
-            illumModel.SelectedIndex = material_config["illum"].Value<int>();
         }
 
         /* Collision selection */
@@ -164,7 +166,7 @@ namespace EditorTool
         }
         private void ambientMapBrowse_Click(object sender, EventArgs e)
         {
-            ambientMap.Text = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
+            emissiveMap.Text = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
         }
         private void specularMapBrowse_Click(object sender, EventArgs e)
         {
@@ -173,6 +175,10 @@ namespace EditorTool
         private void normalMapBrowse_Click(object sender, EventArgs e)
         {
             normalMap.Text = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
+        }
+        private void RMAMapBrowse_Click(object sender, EventArgs e)
+        {
+            RMAMap.Text = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
         }
 
         /* Slider interaction */
@@ -194,50 +200,58 @@ namespace EditorTool
                 return;
             }
 
-            //Ambient
-            material_config["map_Ka"] = ambientMap.Text;
-            copyNewMat(ambientMap.Text);
+            //Ambient Colour (RGB)
             colourToJSON("Ka", ambientColour);
 
-            //Diffuse
-            material_config["map_Kd"] = diffuseMap.Text;
-            material_config["map_d"] = diffuseMap.Text;
-            copyNewMat(diffuseMap.Text);
+            //Diffuse Colour (RGB)
             colourToJSON("Kd", diffuseColour);
 
-            //Specular
-            material_config["map_Ks"] = specularMap.Text;
-            material_config["map_Ns"] = specularMap.Text;
-            copyNewMat(specularMap.Text);
+            //Specular Colour (RGB)
             colourToJSON("Ks", specularColour);
 
-            //Emissive
+            //Emissive Colour (RGB)
             colourToJSON("Ke", emissiveColour);
 
-            //Specular exponent
-            material_config["Ns"] = specExSlider.Value.ToString("0.000000");
-            
-            //Illumination configuration
-            material_config["illum"] = illumModel.SelectedIndex;
+            //Alpha (0.5+ = has alpha)
+            material_config["d"] = (hasAlpha.Checked ? "0.999999" : "0.000000");
 
-            //Transparency
-            material_config["d"] = (transparencySlider.Value / 10).ToString("0.000000");
+            //Transparency (1 = completely invisible)
+            material_config["Tr"] = (transparencySlider.Value / 10).ToString("0.000000");
+
+            //Shininess (0-1000)
+            material_config["Ns"] = specExSlider.Value.ToString("0.000000");
+
+            //Specular on/off (2=on)
+            material_config["illum"] = (hasSpec.Checked ? "2" : "0");
+
+            //Diffuse Texture
+            material_config["map_Kd"] = Path.GetFileName(diffuseMap.Text);
+            copyNewMat(diffuseMap.Text);
+
+            //Specular Texture
+            material_config["map_Ks"] = Path.GetFileName(specularMap.Text);
+            copyNewMat(specularMap.Text);
+
+            //Normal Texture
+            material_config["map_Kn"] = Path.GetFileName(normalMap.Text);
+            material_config["norm"] = Path.GetFileName(normalMap.Text);
+            copyNewMat(normalMap.Text);
             
+            //Emissive Texture
+            material_config["map_Ke"] = Path.GetFileName(emissiveMap.Text);
+            material_config["map_emissive"] = Path.GetFileName(emissiveMap.Text);
+            copyNewMat(emissiveMap.Text);
+
+            //RMA Texture
+            material_config["map_RMA"] = Path.GetFileName(RMAMap.Text);
+            material_config["map_occlusionRoughnessMetallic"] = Path.GetFileName(RMAMap.Text);
+            copyNewMat(RMAMap.Text);
+
             //Collision config
-            if (inPlayableArea.Checked)
-            {
-                material_config["MARIOKART_COLLISION"]["0"] = onTrack.Checked;
-                material_config["MARIOKART_COLLISION"]["1"] = offTrack.Checked;
-                material_config["MARIOKART_COLLISION"]["2"] = boostPad.Checked;
-                material_config["MARIOKART_COLLISION"]["3"] = isWall.Checked;
-            }
-            else
-            {
-                material_config["MARIOKART_COLLISION"]["0"] = false;
-                material_config["MARIOKART_COLLISION"]["1"] = false;
-                material_config["MARIOKART_COLLISION"]["2"] = false;
-                material_config["MARIOKART_COLLISION"]["3"] = false;
-            }
+            material_config["ThICC_COLLISION"]["0"] = (inPlayableArea.Checked ? onTrack.Checked : false);
+            material_config["ThICC_COLLISION"]["1"] = (inPlayableArea.Checked ? offTrack.Checked : false);
+            material_config["ThICC_COLLISION"]["2"] = (inPlayableArea.Checked ? boostPad.Checked : false);
+            material_config["ThICC_COLLISION"]["3"] = (inPlayableArea.Checked ? isWall.Checked : false);
 
             MessageBox.Show("Material edits saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             DialogResult = DialogResult.OK; 
@@ -287,5 +301,6 @@ namespace EditorTool
         private void saveMaterial_Click(object sender, EventArgs e)
         {
         }
+
     }
 }

@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "..\Launcher\Lau
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeSpriteFont", "..\TOOLS\MakeSpriteFont\MakeSpriteFont.csproj", "{7329B02D-C504-482A-A156-181D48CE493C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelDebug", "..\TOOLS\ModelDebug\ModelDebug.vcxproj", "{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,16 @@ Global
 		{7329B02D-C504-482A-A156-181D48CE493C}.Release|x64.Build.0 = Release|Any CPU
 		{7329B02D-C504-482A-A156-181D48CE493C}.Release|x86.ActiveCfg = Release|Any CPU
 		{7329B02D-C504-482A-A156-181D48CE493C}.Release|x86.Build.0 = Release|Any CPU
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}.Debug|x64.ActiveCfg = Debug|x64
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}.Debug|x64.Build.0 = Debug|x64
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}.Debug|x86.ActiveCfg = Debug|Win32
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}.Debug|x86.Build.0 = Debug|Win32
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}.Release|Any CPU.ActiveCfg = Release|Win32
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}.Release|x64.ActiveCfg = Release|x64
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}.Release|x64.Build.0 = Release|x64
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}.Release|x86.ActiveCfg = Release|Win32
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +105,7 @@ Global
 		{DBBA8CF1-FD88-4E14-8BD2-97331F29416A} = {92F2D81C-BD2F-43C8-8B10-344C6182C6A9}
 		{0D6B4382-6BD9-43C2-A3E0-BB25A9C897F1} = {92F2D81C-BD2F-43C8-8B10-344C6182C6A9}
 		{7329B02D-C504-482A-A156-181D48CE493C} = {92F2D81C-BD2F-43C8-8B10-344C6182C6A9}
+		{D306E64D-5D0A-4481-A33C-6F1F5DEDBB8B} = {92F2D81C-BD2F-43C8-8B10-344C6182C6A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {20E67921-5C05-49B3-94F6-7BFE58B35BA5}

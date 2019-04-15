@@ -57,10 +57,10 @@ namespace EditorTool
 
             //Update previews of config - this is kinda hard coded, needs to be updated if enum is changed (UI!)
             JToken this_token = material_tokens.ElementAt(index);
-            isTrack.Checked = this_token["MARIOKART_COLLISION"]["0"].Value<bool>();
-            isOffTrack.Checked = this_token["MARIOKART_COLLISION"]["1"].Value<bool>();
-            isBoostPad.Checked = this_token["MARIOKART_COLLISION"]["2"].Value<bool>();
-            isWall.Checked = this_token["MARIOKART_COLLISION"]["3"].Value<bool>();
+            isTrack.Checked = this_token["ThICC_COLLISION"]["0"].Value<bool>();
+            isOffTrack.Checked = this_token["ThICC_COLLISION"]["1"].Value<bool>();
+            isBoostPad.Checked = this_token["ThICC_COLLISION"]["2"].Value<bool>();
+            isWall.Checked = this_token["ThICC_COLLISION"]["3"].Value<bool>();
 
             //Try find and show our material preview.
             common_functions.loadMaterialPreview(this_token, materialPreview, importer_common.importDir());
@@ -94,16 +94,16 @@ namespace EditorTool
 
             //Rewrite MTL from json
             List<string> new_mtl = new List<string>();
-            new_mtl.Add("### CREATED BY THE MARIO KART TOOLKIT ###");
+            new_mtl.Add("### CREATED BY THE ThICC TOOLKIT ###");
             new_mtl.Add("");
             foreach (var this_material_config in model_material_config)
             {
                 foreach (JProperty material_prop in model_material_config[this_material_config.Key])
                 {
-                    //Ignore MarioKart config
-                    if (material_prop.Name != "MARIOKART_COLLISION")
+                    //Ignore engine config
+                    if (material_prop.Name != "ThICC_COLLISION")
                     {
-                        //Fix transparency issue
+                        //Fix alpha issue if it has somehow come up
                         if (material_prop.Name == "d" && material_prop.Value.Value<string>() == "1.000000")
                         {
                             material_prop.Value = "0.999999";
@@ -112,6 +112,26 @@ namespace EditorTool
                         if (material_prop.Name.Contains("map"))
                         {
                             material_prop.Value = Path.GetFileName(material_prop.Value.Value<string>());
+                        }
+                        //Include specular placeholder for all blank specular entries
+                        if ((material_prop.Name == "map_Ks") && material_prop.Value.Value<string>() == "")
+                        {
+                            material_prop.Value = "spec_placeholder.png";
+                        }
+                        //Include normal placeholder for all blank normal entries
+                        if ((material_prop.Name == "map_Kn" || material_prop.Name == "norm") && material_prop.Value.Value<string>() == "")
+                        {
+                            material_prop.Value = "norm_placeholder.png";
+                        }
+                        //Include emissive placeholder for all blank emissive entries
+                        if ((material_prop.Name == "map_Ke" || material_prop.Name == "map_emissive") && material_prop.Value.Value<string>() == "")
+                        {
+                            material_prop.Value = "emm_placeholder.png";
+                        }
+                        //Include RMA placeholder for all blank RMA entries
+                        if ((material_prop.Name == "map_RMA" || material_prop.Name == "map_occlusionRoughnessMetallic") && material_prop.Value.Value<string>() == "")
+                        {
+                            material_prop.Value = "rma_placeholder.png";
                         }
                         //Ignore blank props
                         if (material_prop.Value.Value<string>() == "")
@@ -167,7 +187,7 @@ namespace EditorTool
             convertMaterials();
 
             //Run the model converter to swap our OBJ into our engine's format
-            string conv_args = "\"" + Path.GetFileName(importer_common.fileName(importer_file.OBJ_MODEL)) + "\" -sdkmesh -y -c -op"; //I wanna move to sdkmesh2
+            string conv_args = "\"" + Path.GetFileName(importer_common.fileName(importer_file.OBJ_MODEL)) + "\" -sdkmesh2 -y -c -op";
             if (shouldFlipUVs.Checked)
             {
                 conv_args += " -flipv";
@@ -363,7 +383,7 @@ namespace EditorTool
                 if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
                 {
                     collision_enabled = false;
-                    JToken collision_config = model_material_config[line.Substring(7)]["MARIOKART_COLLISION"];
+                    JToken collision_config = model_material_config[line.Substring(7)]["ThICC_COLLISION"];
                     for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
                     {
                         if (collision_config[i.ToString()].Value<bool>())
@@ -492,7 +512,7 @@ namespace EditorTool
                 ProcessStartInfo meshConverter2 = new ProcessStartInfo();
                 meshConverter2.WorkingDirectory = importer_common.importDir();
                 meshConverter2.FileName = "DATA/MODELS/meshconvert.exe";
-                meshConverter2.Arguments = "\"" + debug_model + "\" -sdkmesh -y -c -op";  //I wanna move to sdkmesh2
+                meshConverter2.Arguments = "\"" + debug_model + "\" -sdkmesh2 -y -c -op";
                 meshConverter2.UseShellExecute = false;
                 meshConverter2.RedirectStandardOutput = true;
                 Process converterProcess2 = Process.Start(meshConverter2);
@@ -708,7 +728,7 @@ namespace EditorTool
                 {
                     to_set = true;
                 }
-                _token["MARIOKART_COLLISION"][i.ToString()] = to_set;
+                _token["ThICC_COLLISION"][i.ToString()] = to_set;
             }
         }
 

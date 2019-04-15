@@ -44,6 +44,9 @@
     <ClInclude Include="FindMedia.h">
       <Filter>Engine Core\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="AssetFilepaths.h">
+      <Filter>Engine Core\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

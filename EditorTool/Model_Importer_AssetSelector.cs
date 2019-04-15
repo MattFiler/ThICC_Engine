@@ -238,6 +238,12 @@ namespace EditorTool
             //Write out changes to material
             File.WriteAllLines(importer_common.fileName(importer_file.MATERIAL), mtl_file);
 
+            //Copy placeholder materials (PBR IS FUN!)
+            File.Copy(importer_common.importDir() + "../rma_placeholder.png", importer_common.importDir() + "rma_placeholder.png"); //RMA
+            File.Copy(importer_common.importDir() + "../emm_placeholder.png", importer_common.importDir() + "emm_placeholder.png"); //Emissive
+            File.Copy(importer_common.importDir() + "../spec_placeholder.png", importer_common.importDir() + "spec_placeholder.png"); //Specular
+            File.Copy(importer_common.importDir() + "../norm_placeholder.png", importer_common.importDir() + "norm_placeholder.png"); //Normals
+
             //------
 
             //Rewrite MTL info as JSON for us
@@ -262,25 +268,35 @@ namespace EditorTool
                         continue;
                     }
                     string[] mat_prop = material_props[x].Split(new[] { ' ' }, 2);
+                    if (mat_prop[0] == "map_d")
+                    {
+                        mat_prop[0] = "map_Kd"; //"map_d" is unsupported, but often used instead of "map_Kd" - correct that
+                    }
                     this_mat_jobject[mat_prop[0]] = mat_prop[1];
                     props.Add(mat_prop[0]);
                 }
 
-                //Add our required material info if it doesn't exist already
-                //This allows us to handle models from multiple editors, although Blender is the typical workflow
-                //Most of these should already exist, but just in case!
-                addPropIfNotAlready("Ns", "100.000000", this_mat_jobject, props);
-                addPropIfNotAlready("Ka", "1.000000 1.000000 1.000000", this_mat_jobject, props);
-                addPropIfNotAlready("Kd", "0.800000 0.800000 0.800000", this_mat_jobject, props);
-                addPropIfNotAlready("Ks", "0.000000 0.000000 0.000000", this_mat_jobject, props);
-                addPropIfNotAlready("Ke", "0.000000 0.000000 0.000000", this_mat_jobject, props);
-                addPropIfNotAlready("Ni", "1.000000", this_mat_jobject, props);
-                addPropIfNotAlready("d", "1.000000", this_mat_jobject, props);
-                addPropIfNotAlready("illum", "2", this_mat_jobject, props);
-                //Add in a default map too?
+                //Below are all default (and handled) material definitions
+                //We'll add them all if they don't exist!
+                addPropIfNotAlready("Ka", "1.000000 1.000000 1.000000", this_mat_jobject, props); //Ambient Colour (RGB)
+                addPropIfNotAlready("Kd", "1.000000 1.000000 1.000000", this_mat_jobject, props); //Diffuse Colour (RGB)
+                addPropIfNotAlready("Ks", "1.000000 1.000000 1.000000", this_mat_jobject, props); //Specular Colour (RGB)
+                addPropIfNotAlready("Ke", "0.000000 0.000000 0.000000", this_mat_jobject, props); //Emissive Colour (RGB)
+                addPropIfNotAlready("d", "1.000000", this_mat_jobject, props); //Alpha (0.5+ = has alpha)
+                addPropIfNotAlready("Tr", "0.000000", this_mat_jobject, props); //Transparency (1 = completely invisible)
+                addPropIfNotAlready("Ns", "100.000000", this_mat_jobject, props); //Shininess (0-1000)
+                addPropIfNotAlready("illum", "2", this_mat_jobject, props); //Specular on/off (2=on)
+                addPropIfNotAlready("map_Kd", "", this_mat_jobject, props); //Diffuse Texture
+                addPropIfNotAlready("map_Ks", "", this_mat_jobject, props); //Specular Texture
+                addPropIfNotAlready("map_Kn", "", this_mat_jobject, props); //Normal Texture
+                addPropIfNotAlready("norm", "", this_mat_jobject, props); //Normal Texture (alt def)
+                addPropIfNotAlready("map_Ke", "", this_mat_jobject, props); //Emissive Texture
+                addPropIfNotAlready("map_emissive", "", this_mat_jobject, props); //Emissive Texture (alt def)
+                addPropIfNotAlready("map_RMA", "", this_mat_jobject, props); //RMA Texture
+                addPropIfNotAlready("map_occlusionRoughnessMetallic", "", this_mat_jobject, props); //RMA Texture (alt def)
 
                 // Add in placeholders for our custom properties
-                this_mat_jobject["MARIOKART_COLLISION"] = mariokart_properties; 
+                this_mat_jobject["ThICC_COLLISION"] = mariokart_properties; 
 
                 material_config[referenced_materials[i]] = this_mat_jobject;
                 prop_index += prop_count;
@@ -298,7 +314,7 @@ namespace EditorTool
         /* Add material property if it doesn't already exist */
         private void addPropIfNotAlready(string prop_name, string prop_val, JObject prop_json, List<string> props)
         {
-            if (!props.Contains("Ns"))
+            if (!props.Contains(prop_name))
             {
                 prop_json[prop_name] = prop_val;
             }

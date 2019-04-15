@@ -44,8 +44,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.illumModel = new System.Windows.Forms.ComboBox();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -75,11 +73,17 @@
             this.specularMapBrowse = new System.Windows.Forms.Button();
             this.specularMap = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.ambientMapBrowse = new System.Windows.Forms.Button();
-            this.ambientMap = new System.Windows.Forms.TextBox();
+            this.emissiveMapBrowse = new System.Windows.Forms.Button();
+            this.emissiveMap = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.diffuseMapBrowse = new System.Windows.Forms.Button();
             this.diffuseMap = new System.Windows.Forms.TextBox();
+            this.hasAlpha = new System.Windows.Forms.CheckBox();
+            this.hasSpec = new System.Windows.Forms.CheckBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.RMAMapBrowse = new System.Windows.Forms.Button();
+            this.RMAMap = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transparencySlider)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -243,7 +247,10 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label17);
-            this.groupBox2.Controls.Add(this.illumModel);
+            this.groupBox2.Controls.Add(this.RMAMapBrowse);
+            this.groupBox2.Controls.Add(this.RMAMap);
+            this.groupBox2.Controls.Add(this.hasSpec);
+            this.groupBox2.Controls.Add(this.hasAlpha);
             this.groupBox2.Controls.Add(this.label16);
             this.groupBox2.Controls.Add(this.label15);
             this.groupBox2.Controls.Add(this.label4);
@@ -261,37 +268,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Material Properties";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(6, 160);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(91, 13);
-            this.label17.TabIndex = 32;
-            this.label17.Text = "Illumination Model";
-            // 
-            // illumModel
-            // 
-            this.illumModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.illumModel.FormattingEnabled = true;
-            this.illumModel.Items.AddRange(new object[] {
-            "Color on and Ambient off",
-            "Color on and Ambient on",
-            "Highlight on",
-            "Reflection on and Ray trace on",
-            "Transparency: Glass on, Reflection: Ray trace on",
-            "Reflection: Fresnel on and Ray trace on",
-            "Transparency: Refraction on, Reflection: Fresnel off and Ray trace on",
-            "Transparency: Refraction on, Reflection: Fresnel on and Ray trace on",
-            "Reflection on and Ray trace off",
-            "Transparency: Glass on, Reflection: Ray trace off",
-            "Casts shadows onto invisible surfaces"});
-            this.illumModel.Location = new System.Drawing.Point(9, 176);
-            this.illumModel.Name = "illumModel";
-            this.illumModel.Size = new System.Drawing.Size(285, 21);
-            this.illumModel.TabIndex = 31;
             // 
             // label16
             // 
@@ -396,14 +372,14 @@
             this.groupBox3.Controls.Add(this.label11);
             this.groupBox3.Controls.Add(this.diffuseColour);
             this.groupBox3.Controls.Add(this.label10);
-            this.groupBox3.Controls.Add(this.normalMapBrowse);
-            this.groupBox3.Controls.Add(this.normalMap);
             this.groupBox3.Controls.Add(this.label9);
+            this.groupBox3.Controls.Add(this.normalMap);
+            this.groupBox3.Controls.Add(this.normalMapBrowse);
             this.groupBox3.Controls.Add(this.specularMapBrowse);
             this.groupBox3.Controls.Add(this.specularMap);
             this.groupBox3.Controls.Add(this.label8);
-            this.groupBox3.Controls.Add(this.ambientMapBrowse);
-            this.groupBox3.Controls.Add(this.ambientMap);
+            this.groupBox3.Controls.Add(this.emissiveMapBrowse);
+            this.groupBox3.Controls.Add(this.emissiveMap);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.diffuseMapBrowse);
             this.groupBox3.Controls.Add(this.diffuseMap);
@@ -525,7 +501,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 260);
+            this.label10.Location = new System.Drawing.Point(6, 100);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(64, 13);
             this.label10.TabIndex = 36;
@@ -533,8 +509,7 @@
             // 
             // normalMapBrowse
             // 
-            this.normalMapBrowse.Enabled = false;
-            this.normalMapBrowse.Location = new System.Drawing.Point(219, 275);
+            this.normalMapBrowse.Location = new System.Drawing.Point(219, 115);
             this.normalMapBrowse.Name = "normalMapBrowse";
             this.normalMapBrowse.Size = new System.Drawing.Size(75, 22);
             this.normalMapBrowse.TabIndex = 35;
@@ -544,7 +519,7 @@
             // 
             // normalMap
             // 
-            this.normalMap.Location = new System.Drawing.Point(9, 276);
+            this.normalMap.Location = new System.Drawing.Point(9, 116);
             this.normalMap.Name = "normalMap";
             this.normalMap.ReadOnly = true;
             this.normalMap.Size = new System.Drawing.Size(204, 20);
@@ -580,29 +555,29 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 100);
+            this.label8.Location = new System.Drawing.Point(6, 260);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(69, 13);
+            this.label8.Size = new System.Drawing.Size(72, 13);
             this.label8.TabIndex = 30;
-            this.label8.Text = "Ambient Map";
+            this.label8.Text = "Emissive Map";
             // 
-            // ambientMapBrowse
+            // emissiveMapBrowse
             // 
-            this.ambientMapBrowse.Location = new System.Drawing.Point(219, 115);
-            this.ambientMapBrowse.Name = "ambientMapBrowse";
-            this.ambientMapBrowse.Size = new System.Drawing.Size(75, 22);
-            this.ambientMapBrowse.TabIndex = 29;
-            this.ambientMapBrowse.Text = "Browse";
-            this.ambientMapBrowse.UseVisualStyleBackColor = true;
-            this.ambientMapBrowse.Click += new System.EventHandler(this.ambientMapBrowse_Click);
+            this.emissiveMapBrowse.Location = new System.Drawing.Point(219, 275);
+            this.emissiveMapBrowse.Name = "emissiveMapBrowse";
+            this.emissiveMapBrowse.Size = new System.Drawing.Size(75, 22);
+            this.emissiveMapBrowse.TabIndex = 29;
+            this.emissiveMapBrowse.Text = "Browse";
+            this.emissiveMapBrowse.UseVisualStyleBackColor = true;
+            this.emissiveMapBrowse.Click += new System.EventHandler(this.ambientMapBrowse_Click);
             // 
-            // ambientMap
+            // emissiveMap
             // 
-            this.ambientMap.Location = new System.Drawing.Point(9, 116);
-            this.ambientMap.Name = "ambientMap";
-            this.ambientMap.ReadOnly = true;
-            this.ambientMap.Size = new System.Drawing.Size(204, 20);
-            this.ambientMap.TabIndex = 31;
+            this.emissiveMap.Location = new System.Drawing.Point(9, 276);
+            this.emissiveMap.Name = "emissiveMap";
+            this.emissiveMap.ReadOnly = true;
+            this.emissiveMap.Size = new System.Drawing.Size(204, 20);
+            this.emissiveMap.TabIndex = 31;
             // 
             // label7
             // 
@@ -631,11 +606,68 @@
             this.diffuseMap.Size = new System.Drawing.Size(204, 20);
             this.diffuseMap.TabIndex = 28;
             // 
+            // hasAlpha
+            // 
+            this.hasAlpha.AutoSize = true;
+            this.hasAlpha.Location = new System.Drawing.Point(28, 180);
+            this.hasAlpha.Name = "hasAlpha";
+            this.hasAlpha.Size = new System.Drawing.Size(75, 17);
+            this.hasAlpha.TabIndex = 33;
+            this.hasAlpha.Text = "Has Alpha";
+            this.hasAlpha.UseVisualStyleBackColor = true;
+            // 
+            // hasSpec
+            // 
+            this.hasSpec.AutoSize = true;
+            this.hasSpec.Location = new System.Drawing.Point(28, 203);
+            this.hasSpec.Name = "hasSpec";
+            this.hasSpec.Size = new System.Drawing.Size(90, 17);
+            this.hasSpec.TabIndex = 34;
+            this.hasSpec.Text = "Has Specular";
+            this.hasSpec.UseVisualStyleBackColor = true;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(3, 244);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(55, 13);
+            this.label17.TabIndex = 36;
+            this.label17.Text = "RMA Map";
+            // 
+            // RMAMapBrowse
+            // 
+            this.RMAMapBrowse.Location = new System.Drawing.Point(216, 259);
+            this.RMAMapBrowse.Name = "RMAMapBrowse";
+            this.RMAMapBrowse.Size = new System.Drawing.Size(75, 22);
+            this.RMAMapBrowse.TabIndex = 35;
+            this.RMAMapBrowse.Text = "Browse";
+            this.RMAMapBrowse.UseVisualStyleBackColor = true;
+            this.RMAMapBrowse.Click += new System.EventHandler(this.RMAMapBrowse_Click);
+            // 
+            // RMAMap
+            // 
+            this.RMAMap.Location = new System.Drawing.Point(6, 260);
+            this.RMAMap.Name = "RMAMap";
+            this.RMAMap.ReadOnly = true;
+            this.RMAMap.Size = new System.Drawing.Size(204, 20);
+            this.RMAMap.TabIndex = 37;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(81, 678);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(275, 13);
+            this.label18.TabIndex = 29;
+            this.label18.Text = "This UI is a work in progress, but everything is functional!";
+            // 
             // Model_Importer_MaterialEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(627, 707);
+            this.Controls.Add(this.label18);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -663,6 +695,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ambientColour)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.diffuseColour)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -701,8 +734,8 @@
         private System.Windows.Forms.Button specularMapBrowse;
         private System.Windows.Forms.TextBox specularMap;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button ambientMapBrowse;
-        private System.Windows.Forms.TextBox ambientMap;
+        private System.Windows.Forms.Button emissiveMapBrowse;
+        private System.Windows.Forms.TextBox emissiveMap;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button diffuseMapBrowse;
         private System.Windows.Forms.TextBox diffuseMap;
@@ -716,8 +749,12 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TrackBar specExSlider;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.ComboBox illumModel;
         private System.Windows.Forms.RadioButton isWall;
+        private System.Windows.Forms.CheckBox hasSpec;
+        private System.Windows.Forms.CheckBox hasAlpha;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Button RMAMapBrowse;
+        private System.Windows.Forms.TextBox RMAMap;
+        private System.Windows.Forms.Label label18;
     }
 }
