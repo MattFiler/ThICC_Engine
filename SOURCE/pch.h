@@ -118,3 +118,7 @@ namespace DX
 #include <SpriteBatch.h>
 #include <SpriteFont.h>
 #include <VertexTypes.h>
+
+
+#include "GraphicsResources.h"
+#include "ModelResources.h"

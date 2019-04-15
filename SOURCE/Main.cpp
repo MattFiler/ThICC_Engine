@@ -14,7 +14,7 @@ using namespace DirectX;
 
 namespace
 {
-    std::unique_ptr<Game> g_game;
+    std::unique_ptr<ThICC_Engine> g_game;
 };
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -39,7 +39,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     if (FAILED(hr))
         return 1;
 
-    g_game = std::make_unique<Game>();
+    g_game = std::make_unique<ThICC_Engine>();
 
     // Register class and create window
     {
@@ -115,7 +115,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static bool s_minimized = false;
     static bool s_fullscreen = false;
 
-    auto game = reinterpret_cast<Game*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+    auto game = reinterpret_cast<ThICC_Engine*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
     switch (message)
     {

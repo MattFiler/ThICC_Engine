@@ -26,63 +26,77 @@ namespace
 	const XMVECTORF32 c_CornflowerBlue = { 0.127438f, 0.300544f, 0.846873f, 1.f };
 }
 
-Game::Game() noexcept(false) :
+ThICC_Engine::ThICC_Engine() noexcept(false) :
 	m_fov(XM_PI / 4.f),
 	m_zoom(1.f),
 	m_distance(10.f),
 	m_farPlane(10000.f),
 	m_sensitivity(1.f),
+	m_deleteModel(false),
 	m_reloadModel(false)
 {
-	m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_R10G10B10A2_UNORM, DXGI_FORMAT_D32_FLOAT, 2,
-		D3D_FEATURE_LEVEL_11_0, DX::DeviceResources::c_EnableHDR);
-	m_deviceResources->RegisterDeviceNotify(this);
+	Locator::setGraphicsResources(&m_graphics_resources);
+	//Locator::setModelResources(&m_model_resources);
 
-	m_hdrScene = std::make_unique<DX::RenderTexture>(DXGI_FORMAT_R16G16B16A16_FLOAT);
+	m_graphics_resources.m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_R10G10B10A2_UNORM, DXGI_FORMAT_D32_FLOAT, 2,
+		D3D_FEATURE_LEVEL_11_0, DX::DeviceResources::c_EnableHDR);
+	m_graphics_resources.m_deviceResources->RegisterDeviceNotify(this);
+
+	m_graphics_resources.m_hdrScene = std::make_unique<DX::RenderTexture>(DXGI_FORMAT_R16G16B16A16_FLOAT);
 }
 
-Game::~Game()
+ThICC_Engine::~ThICC_Engine()
 {
-	if (m_deviceResources)
+	if (m_graphics_resources.m_deviceResources)
 	{
-		m_deviceResources->WaitForGpu();
+		m_graphics_resources.m_deviceResources->WaitForGpu();
 	}
 }
 
 // Initialize the Direct3D resources required to run.
-void Game::Initialize(HWND window, int width, int height)
+void ThICC_Engine::Initialize(HWND window, int width, int height)
 {
 	m_gamepad = std::make_unique<GamePad>();
 	m_keyboard = std::make_unique<Keyboard>();
 	m_mouse = std::make_unique<Mouse>();
 
-	m_deviceResources->SetWindow(window, width, height);
+	m_graphics_resources.m_deviceResources->SetWindow(window, width, height);
 	m_mouse->SetWindow(window);
 
-	m_deviceResources->CreateDeviceResources();
+	m_graphics_resources.m_deviceResources->CreateDeviceResources();
 	CreateDeviceDependentResources();
 
-	m_deviceResources->CreateWindowSizeDependentResources();
+	m_graphics_resources.m_deviceResources->CreateWindowSizeDependentResources();
 	CreateWindowSizeDependentResources();
 }
 
 #pragma region Frame Update
 // Executes the basic game loop.
-void Game::Tick()
+void ThICC_Engine::Tick()
 {
 	m_timer.Tick([&]()
 	{
 		Update(m_timer);
+		m_game_instance.Update(m_timer);
 	});
 
 	Render();
+	m_game_instance.Render();
 }
 
 // Updates the world.
-void Game::Update(DX::StepTimer const& timer)
+void ThICC_Engine::Update(DX::StepTimer const& timer)
 {
+	if (m_deleteModel) {
+		m_model_test.reset();
+
+		m_deleteModel = false;
+	}
 	if (m_reloadModel)
-		LoadModel("MARIOKARTSTADIUM");
+	{
+		m_model_test.load("MARIOKARTSTADIUM");
+		m_reloadModel = false;
+	}
 
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
@@ -116,7 +130,7 @@ void Game::Update(DX::StepTimer const& timer)
 		}
 
 		Matrix im;
-		m_view.Invert(im);
+		m_graphics_resources.m_view.Invert(im);
 		move = Vector3::TransformNormal(move, im);
 
 		// Rotate camera
@@ -205,7 +219,7 @@ void Game::Update(DX::StepTimer const& timer)
 			move.z -= scale;
 
 		Matrix im;
-		m_view.Invert(im);
+		m_graphics_resources.m_view.Invert(im);
 		move = Vector3::TransformNormal(move, im);
 
 		m_cameraFocus += move * elapsedTime;
@@ -240,6 +254,10 @@ void Game::Update(DX::StepTimer const& timer)
 		{
 			//PostMessage(m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
 			m_reloadModel = true;
+		}
+		if (m_keyboardTracker.pressed.D)
+		{
+			m_deleteModel = true;
 		}
 
 		// Mouse controls
@@ -316,15 +334,15 @@ void Game::Update(DX::StepTimer const& timer)
 
 	m_lastCameraPos = m_cameraFocus + (m_distance * m_zoom) * dir;
 
-	m_view = Matrix::CreateLookAt(m_lastCameraPos, m_cameraFocus, up);
+	Locator::getGraphicsResources()->m_view = Matrix::CreateLookAt(m_lastCameraPos, m_cameraFocus, up);
 
-	m_world = Matrix::CreateFromQuaternion(m_modelRot);
+	Locator::getGraphicsResources()->m_world = Matrix::CreateFromQuaternion(m_modelRot);
 }
 #pragma endregion
 
 #pragma region Frame Render
 // Draws the scene.
-void Game::Render()
+void ThICC_Engine::Render()
 {
 	// Don't try to render anything before the first Update.
 	if (m_timer.GetFrameCount() == 0)
@@ -333,65 +351,46 @@ void Game::Render()
 	}
 
 	// Prepare the command list to render a new frame.
-	m_deviceResources->Prepare();
+	m_graphics_resources.m_deviceResources->Prepare();
 
-	auto commandList = m_deviceResources->GetCommandList();
-	m_hdrScene->BeginScene(commandList);
+	auto commandList = m_graphics_resources.m_deviceResources->GetCommandList();
+	m_graphics_resources.m_hdrScene->BeginScene(commandList);
 
 	Clear();
 
-	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), m_states->Heap() };
+	ID3D12DescriptorHeap* heaps[] = { m_graphics_resources.m_resourceDescriptors->Heap(), m_graphics_resources.m_states->Heap() };
 	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
-	if (m_model) 
-	{
-		{
-			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1);
-			auto diffuseDesc = m_radianceIBL[0]->GetDesc();
-			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::IrradianceIBL1);
+	m_model_test.render();
 
-			for (auto& it : m_modelClockwise)
-			{
-				auto pbr = dynamic_cast<PBREffect*>(it.get());
-				if (pbr)
-				{
-					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, m_states->AnisotropicClamp());
-				}
-			}
-		}
+	m_graphics_resources.m_hdrScene->EndScene(commandList);
 
-		Model::UpdateEffectMatrices(m_modelClockwise, m_world, m_view, m_proj);
-		m_model->Draw(commandList, m_modelClockwise.cbegin());
-	}
-
-	m_hdrScene->EndScene(commandList);
-
-	auto rtvDescriptor = m_deviceResources->GetRenderTargetView();
+	auto rtvDescriptor = m_graphics_resources.m_deviceResources->GetRenderTargetView();
 	commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, nullptr);
 
-	m_toneMapACESFilmic->Process(commandList);
+	m_graphics_resources.m_toneMapACESFilmic->Process(commandList);
 
 	// Show the new frame.
-	m_deviceResources->Present();
-	m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
+	m_graphics_resources.m_deviceResources->Present();
+	m_graphics_resources.m_graphicsMemory->Commit(m_graphics_resources.m_deviceResources->GetCommandQueue());
 }
 
 // Helper method to clear the back buffers.
-void Game::Clear()
+void ThICC_Engine::Clear()
 {
-	auto commandList = m_deviceResources->GetCommandList();
+	auto commandList = m_graphics_resources.m_deviceResources->GetCommandList();
 
 	// Clear the views.
-	auto rtvDescriptor = m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene);
-	auto dsvDescriptor = m_deviceResources->GetDepthStencilView();
+	auto rtvDescriptor = m_graphics_resources.m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene);
+	auto dsvDescriptor = m_graphics_resources.m_deviceResources->GetDepthStencilView();
 
 	commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
 	commandList->ClearRenderTargetView(rtvDescriptor, c_CornflowerBlue, 0, nullptr);
 	commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	// Set the viewport and scissor rect.
-	auto viewport = m_deviceResources->GetScreenViewport();
-	auto scissorRect = m_deviceResources->GetScissorRect();
+	auto viewport = m_graphics_resources.m_deviceResources->GetScreenViewport();
+	auto scissorRect = m_graphics_resources.m_deviceResources->GetScissorRect();
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
 }
@@ -399,22 +398,22 @@ void Game::Clear()
 
 #pragma region Message Handlers
 // Message handlers
-void Game::OnActivated()
+void ThICC_Engine::OnActivated()
 {
 	m_keyboardTracker.Reset();
 	m_mouseButtonTracker.Reset();
 	m_gamepadButtonTracker.Reset();
 }
 
-void Game::OnDeactivated()
+void ThICC_Engine::OnDeactivated()
 {
 }
 
-void Game::OnSuspending()
+void ThICC_Engine::OnSuspending()
 {
 }
 
-void Game::OnResuming()
+void ThICC_Engine::OnResuming()
 {
 	m_timer.ResetElapsedTime();
 	m_keyboardTracker.Reset();
@@ -422,22 +421,22 @@ void Game::OnResuming()
 	m_gamepadButtonTracker.Reset();
 }
 
-void Game::OnWindowMoved()
+void ThICC_Engine::OnWindowMoved()
 {
-	auto r = m_deviceResources->GetOutputSize();
-	m_deviceResources->WindowSizeChanged(r.right, r.bottom);
+	auto r = m_graphics_resources.m_deviceResources->GetOutputSize();
+	m_graphics_resources.m_deviceResources->WindowSizeChanged(r.right, r.bottom);
 }
 
-void Game::OnWindowSizeChanged(int width, int height)
+void ThICC_Engine::OnWindowSizeChanged(int width, int height)
 {
-	if (!m_deviceResources->WindowSizeChanged(width, height))
+	if (!m_graphics_resources.m_deviceResources->WindowSizeChanged(width, height))
 		return;
 
 	CreateWindowSizeDependentResources();
 }
 
 // Properties
-void Game::GetDefaultSize(int& width, int& height) const
+void ThICC_Engine::GetDefaultSize(int& width, int& height) const
 {
 	width = 1280;
 	height = 720;
@@ -446,35 +445,38 @@ void Game::GetDefaultSize(int& width, int& height) const
 
 #pragma region Direct3D Resources
 // These are the resources that depend on the device.
-void Game::CreateDeviceDependentResources()
+void ThICC_Engine::CreateDeviceDependentResources()
 {
-	auto device = m_deviceResources->GetD3DDevice();
+	auto device = m_graphics_resources.m_deviceResources->GetD3DDevice();
 
-	m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
+	m_graphics_resources.m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 
-	m_resourceDescriptors = std::make_unique<DescriptorPile>(device,
+	m_graphics_resources.m_resourceDescriptors = std::make_unique<DescriptorPile>(device,
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
 		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
-		Descriptors::Count,
-		Descriptors::Reserve);
+		Locator::getGraphicsResources()->Descriptors::Count,
+		Locator::getGraphicsResources()->Descriptors::Reserve);
 
-	m_renderDescriptors = std::make_unique<DescriptorHeap>(device,
+	m_graphics_resources.m_renderDescriptors = std::make_unique<DescriptorHeap>(device,
 		D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
 		D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
 		RTVDescriptors::RTVCount);
 
-	m_hdrScene->SetDevice(device, m_resourceDescriptors->GetCpuHandle(Descriptors::SceneTex), m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene));
+	m_graphics_resources.m_hdrScene->SetDevice(
+		device, m_graphics_resources.m_resourceDescriptors->GetCpuHandle(Locator::getGraphicsResources()->Descriptors::SceneTex), 
+		m_graphics_resources.m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene)
+	);
 
-	m_states = std::make_unique<CommonStates>(device);
+	m_graphics_resources.m_states = std::make_unique<CommonStates>(device);
 
-	m_lineBatch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(device);
+	m_graphics_resources.m_lineBatch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(device);
 
-	RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
+	RenderTargetState rtState(m_graphics_resources.m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
 
-	m_toneMapACESFilmic = std::make_unique<ToneMapPostProcess>(device, rtState, ToneMapPostProcess::ACESFilmic, ToneMapPostProcess::SRGB);
-	m_toneMapACESFilmic->SetHDRSourceTexture(m_resourceDescriptors->GetGpuHandle(Descriptors::SceneTex));
+	m_graphics_resources.m_toneMapACESFilmic = std::make_unique<ToneMapPostProcess>(device, rtState, ToneMapPostProcess::ACESFilmic, ToneMapPostProcess::SRGB);
+	m_graphics_resources.m_toneMapACESFilmic->SetHDRSourceTexture(m_graphics_resources.m_resourceDescriptors->GetGpuHandle(Locator::getGraphicsResources()->Descriptors::SceneTex));
 
-	RenderTargetState hdrState(m_hdrScene->GetFormat(), m_deviceResources->GetDepthBufferFormat());
+	RenderTargetState hdrState(m_graphics_resources.m_hdrScene->GetFormat(), m_graphics_resources.m_deviceResources->GetDepthBufferFormat());
 
 	{
 		EffectPipelineStateDescription pd(
@@ -484,7 +486,7 @@ void Game::CreateDeviceDependentResources()
 			CommonStates::CullNone,
 			hdrState, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
 
-		m_lineEffect = std::make_unique<BasicEffect>(device, EffectFlags::VertexColor, pd);
+		m_graphics_resources.m_lineEffect = std::make_unique<BasicEffect>(device, EffectFlags::VertexColor, pd);
 	}
 
 	ResourceUploadBatch resourceUpload(device);
@@ -495,54 +497,39 @@ void Game::CreateDeviceDependentResources()
 		SpriteBatchPipelineStateDescription pd(hdrState);
 	}
 
-	static const wchar_t* s_radianceIBL[s_nIBL] =
-	{
-		L"DATA/IMPORTED/Atrium_diffuseIBL.dds",
-		L"DATA/IMPORTED/Garage_diffuseIBL.dds",
-		L"DATA/IMPORTED/SunSubMixer_diffuseIBL.dds",
-	};
-	static const wchar_t* s_irradianceIBL[s_nIBL] =
-	{
-		L"DATA/IMPORTED/Atrium_specularIBL.dds",
-		L"DATA/IMPORTED/Garage_specularIBL.dds",
-		L"DATA/IMPORTED/SunSubMixer_specularIBL.dds",
-	};
-
-	static_assert(_countof(s_radianceIBL) == _countof(s_irradianceIBL), "IBL array mismatch");
-
-	for (size_t j = 0; j < s_nIBL; ++j)
+	for (size_t j = 0; j < m_graphics_resources.hdr_count; ++j)
 	{
 		wchar_t radiance[_MAX_PATH] = {};
 		wchar_t irradiance[_MAX_PATH] = {};
 
-		DX::FindMediaFile(radiance, _MAX_PATH, s_radianceIBL[j]);
-		DX::FindMediaFile(irradiance, _MAX_PATH, s_irradianceIBL[j]);
+		DX::FindMediaFile(radiance, _MAX_PATH, m_graphics_resources.s_radianceIBL[j]);
+		DX::FindMediaFile(irradiance, _MAX_PATH, m_graphics_resources.s_irradianceIBL[j]);
 
 		DX::ThrowIfFailed(
-			CreateDDSTextureFromFile(device, resourceUpload, radiance, m_radianceIBL[j].ReleaseAndGetAddressOf())
+			CreateDDSTextureFromFile(device, resourceUpload, radiance, m_graphics_resources.m_radianceIBL[j].ReleaseAndGetAddressOf())
 		);
 
 		DX::ThrowIfFailed(
-			CreateDDSTextureFromFile(device, resourceUpload, irradiance, m_irradianceIBL[j].ReleaseAndGetAddressOf())
+			CreateDDSTextureFromFile(device, resourceUpload, irradiance, m_graphics_resources.m_irradianceIBL[j].ReleaseAndGetAddressOf())
 		);
 
-		CreateShaderResourceView(device, m_radianceIBL[j].Get(), m_resourceDescriptors->GetCpuHandle(Descriptors::RadianceIBL1 + j), true);
-		CreateShaderResourceView(device, m_irradianceIBL[j].Get(), m_resourceDescriptors->GetCpuHandle(Descriptors::IrradianceIBL1 + j), true);
+		CreateShaderResourceView(device, m_graphics_resources.m_radianceIBL[j].Get(), m_graphics_resources.m_resourceDescriptors->GetCpuHandle(m_graphics_resources.Descriptors::RadianceIBL1 + j), true);
+		CreateShaderResourceView(device, m_graphics_resources.m_irradianceIBL[j].Get(), m_graphics_resources.m_resourceDescriptors->GetCpuHandle(m_graphics_resources.Descriptors::IrradianceIBL1 + j), true);
 	}
 
-	auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
+	auto uploadResourcesFinished = resourceUpload.End(m_graphics_resources.m_deviceResources->GetCommandQueue());
 
-	m_deviceResources->WaitForGpu();
+	m_graphics_resources.m_deviceResources->WaitForGpu();
 
 	uploadResourcesFinished.wait();
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
-void Game::CreateWindowSizeDependentResources()
+void ThICC_Engine::CreateWindowSizeDependentResources()
 {
-	auto device = m_deviceResources->GetD3DDevice();
+	auto device = m_graphics_resources.m_deviceResources->GetD3DDevice();
 
-	auto size = m_deviceResources->GetOutputSize();
+	auto size = m_graphics_resources.m_deviceResources->GetOutputSize();
 
 	ResourceUploadBatch resourceUpload(device);
 
@@ -555,13 +542,13 @@ void Game::CreateWindowSizeDependentResources()
 	DX::FindMediaFile(comicFont, _MAX_PATH, (size.bottom > 1200) ? L"DATA/IMPORTED/comic4k.spritefont" : L"DATA/IMPORTED/comic.spritefont");
 
 
-	m_deviceResources->WaitForGpu();
+	m_graphics_resources.m_deviceResources->WaitForGpu();
 
-	auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
+	auto uploadResourcesFinished = resourceUpload.End(m_graphics_resources.m_deviceResources->GetCommandQueue());
 
 	uploadResourcesFinished.wait();
 
-	m_hdrScene->SetWindow(size);
+	m_graphics_resources.m_hdrScene->SetWindow(size);
 
 	m_ballCamera.SetWindow(size.right, size.bottom);
 	m_ballModel.SetWindow(size.right, size.bottom);
@@ -569,30 +556,26 @@ void Game::CreateWindowSizeDependentResources()
 	CreateProjection();
 }
 
-void Game::OnDeviceLost()
+void ThICC_Engine::OnDeviceLost()
 {
-	m_fxFactory.reset();
-	m_pbrFXFactory.reset();
-	m_modelResources.reset();
-	m_model.reset();
-	m_modelClockwise.clear();
+	m_model_test.reset();
 
-	m_lineEffect.reset();
-	m_lineBatch.reset();
+	m_graphics_resources.m_lineEffect.reset();
+	m_graphics_resources.m_lineBatch.reset();
 
-	m_states.reset();
+	m_graphics_resources.m_states.reset();
 
-	m_toneMapACESFilmic.reset();
+	m_graphics_resources.m_toneMapACESFilmic.reset();
 
-	m_resourceDescriptors.reset();
-	m_renderDescriptors.reset();
+	m_graphics_resources.m_resourceDescriptors.reset();
+	m_graphics_resources.m_renderDescriptors.reset();
 
-	m_hdrScene->ReleaseDevice();
+	m_graphics_resources.m_hdrScene->ReleaseDevice();
 
-	m_graphicsMemory.reset();
+	m_graphics_resources.m_graphicsMemory.reset();
 }
 
-void Game::OnDeviceRestored()
+void ThICC_Engine::OnDeviceRestored()
 {
 	CreateDeviceDependentResources();
 
@@ -600,136 +583,7 @@ void Game::OnDeviceRestored()
 }
 #pragma endregion
 
-void Game::LoadModel(std::string filename)
-{
-	m_modelClockwise.clear();
-	m_modelResources.reset();
-	m_model.reset();
-	m_fxFactory.reset();
-	m_pbrFXFactory.reset();
-
-	m_reloadModel = false;
-	m_modelRot = Quaternion::Identity;
-
-	AssetFilepaths m_filepath;
-
-	std::string fullpath = m_filepath.generateFilepath(filename, m_filepath.MODEL);
-	std::wstring fullpath_wstring = std::wstring(fullpath.begin(), fullpath.end());
-	const wchar_t* fullpath_wchar = fullpath_wstring.c_str();
-
-	bool issdkmesh2 = false;
-	try
-	{
-		auto modelBin = DX::ReadData(fullpath_wchar);
-
-		if (modelBin.size() >= sizeof(DXUT::SDKMESH_HEADER))
-		{
-			auto hdr = reinterpret_cast<const DXUT::SDKMESH_HEADER*>(modelBin.data());
-			if (hdr->Version >= 200)
-			{
-				issdkmesh2 = true;
-			}
-		}
-
-		m_model = Model::CreateFromSDKMESH(modelBin.data(), modelBin.size());
-	}
-	catch (...)
-	{
-		//Ideally show some kind of nicer error here
-		throw std::exception("Error Loading Model");
-		m_model.reset();
-	}
-
-	if (m_model)
-	{
-		auto device = m_deviceResources->GetD3DDevice();
-
-		ResourceUploadBatch resourceUpload(device);
-
-		resourceUpload.Begin();
-
-		m_model->LoadStaticBuffers(device, resourceUpload, true);
-
-		m_modelResources = std::make_unique<EffectTextureFactory>(device, resourceUpload, m_resourceDescriptors->Heap());
-
-		if (!issdkmesh2)
-		{
-			m_modelResources->EnableForceSRGB(true);
-		}
-
-		//Get current directory (this is currently hacky and needs a fix - is VS giving us the wrong working dir?)
-		std::string curr_dir = std::experimental::filesystem::current_path().string();
-		if (curr_dir.substr(curr_dir.length() - 6) == "SOURCE") {
-			curr_dir = curr_dir.substr(0, curr_dir.length() - 7);
-		}
-		std::string dirpath = curr_dir + "/" + m_filepath.getFolder(m_filepath.MODEL) + filename + "/";
-		if (dirpath.length() > 7 && dirpath.substr(dirpath.length() - 6) == "DEBUG/") {
-			dirpath = dirpath.substr(0, dirpath.length() - 7) + "/";
-			//is_debug_mesh = true;
-		}
-		std::wstring dirpath_wstring = std::wstring(dirpath.begin(), dirpath.end());
-		const wchar_t* dirpath_wchar = dirpath_wstring.c_str();
-
-		m_modelResources->SetDirectory(dirpath_wchar);
-
-		int txtOffset = Descriptors::Reserve;
-
-		try
-		{
-			(void)m_model->LoadTextures(*m_modelResources, txtOffset);
-		}
-		catch (...)
-		{
-			//Ideally show some kind of nicer error here
-			throw std::exception("Error Loading Materials");
-			m_model.reset();
-			m_modelResources.reset();
-		}
-
-		if (m_model)
-		{
-			IEffectFactory *fxFactory = nullptr;
-			if (issdkmesh2)
-			{
-				m_pbrFXFactory = std::make_unique<PBREffectFactory>(m_modelResources->Heap(), m_states->Heap());
-				fxFactory = m_pbrFXFactory.get();
-			}
-			else
-			{
-				m_fxFactory = std::make_unique<EffectFactory>(m_modelResources->Heap(), m_states->Heap());
-				fxFactory = m_fxFactory.get();
-			}
-
-			RenderTargetState hdrState(m_hdrScene->GetFormat(), m_deviceResources->GetDepthBufferFormat());
-
-			EffectPipelineStateDescription pd(
-				nullptr,
-				CommonStates::Opaque,
-				CommonStates::DepthDefault,
-				CommonStates::CullClockwise,
-				hdrState);
-
-			EffectPipelineStateDescription pdAlpha(
-				nullptr,
-				CommonStates::AlphaBlend,
-				CommonStates::DepthDefault,
-				CommonStates::CullClockwise,
-				hdrState);
-
-			m_modelClockwise = m_model->CreateEffects(*fxFactory, pd, pdAlpha, txtOffset);
-		}
-
-		auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
-
-		m_deviceResources->WaitForGpu();
-
-		uploadResourcesFinished.wait();
-	}
-
-	CameraHome();
-}
-
-void Game::CameraHome()
+void ThICC_Engine::CameraHome()
 {
 	m_mouse->ResetScrollWheelValue();
 	m_zoom = 1.f;
@@ -737,46 +591,8 @@ void Game::CameraHome()
 	m_cameraRot = Quaternion::Identity;
 	m_ballCamera.Reset();
 
-	if (!m_model)
-	{
-		m_cameraFocus = Vector3::Zero;
-		m_distance = 10.f;
-	}
-	else
-	{
-		BoundingSphere sphere;
-		BoundingBox box;
-
-		for (auto it = m_model->meshes.cbegin(); it != m_model->meshes.cend(); ++it)
-		{
-			if (it == m_model->meshes.cbegin())
-			{
-				sphere = (*it)->boundingSphere;
-				box = (*it)->boundingBox;
-			}
-			else
-			{
-				BoundingSphere::CreateMerged(sphere, sphere, (*it)->boundingSphere);
-				BoundingBox::CreateMerged(box, box, (*it)->boundingBox);
-			}
-		}
-
-		if (sphere.Radius < 1.f)
-		{
-			sphere.Center = box.Center;
-			sphere.Radius = std::max(box.Extents.x, std::max(box.Extents.y, box.Extents.z));
-		}
-
-		if (sphere.Radius < 1.f)
-		{
-			sphere.Center = XMFLOAT3(0.f, 0.f, 0.f);
-			sphere.Radius = 10.f;
-		}
-
-		m_distance = sphere.Radius * 2;
-
-		m_cameraFocus = sphere.Center;
-	}
+	m_cameraFocus = Vector3::Zero;
+	m_distance = 10.f;
 
 	Vector3 dir = Vector3::Transform(Vector3::Backward, m_cameraRot);
 	Vector3 up = Vector3::Transform(Vector3::Up, m_cameraRot);
@@ -784,10 +600,10 @@ void Game::CameraHome()
 	m_lastCameraPos = m_cameraFocus + (m_distance * m_zoom) * dir;
 }
 
-void Game::CreateProjection()
+void ThICC_Engine::CreateProjection()
 {
-	auto size = m_deviceResources->GetOutputSize();
+	auto size = m_graphics_resources.m_deviceResources->GetOutputSize();
 
-	m_proj = Matrix::CreatePerspectiveFieldOfView(m_fov, float(size.right) / float(size.bottom), 0.1f, m_farPlane);
-	m_lineEffect->SetProjection(m_proj);
+	m_graphics_resources.m_proj = Matrix::CreatePerspectiveFieldOfView(m_fov, float(size.right) / float(size.bottom), 0.1f, m_farPlane);
+	m_graphics_resources.m_lineEffect->SetProjection(m_graphics_resources.m_proj);
 }
