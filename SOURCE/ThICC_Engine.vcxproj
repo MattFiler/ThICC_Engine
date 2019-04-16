@@ -202,6 +202,8 @@
     <ClInclude Include="Banana.h" />
     <ClInclude Include="BlenderToDirectX.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ControlledMovement.h" />
     <ClInclude Include="DebugMarker.h" />
@@ -256,6 +258,7 @@
     <ClCompile Include="Banana.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="ControlledMovement.cpp" />
     <ClCompile Include="DebugMarker.cpp" />

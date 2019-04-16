@@ -3,6 +3,10 @@
 #include <codecvt>
 #include "RenderData.h"
 #include "GameDebugToggles.h"
+#include "ReadData.h"
+#include "SDKMesh.h"
+#include "DeviceData.h"
+#include <experimental/filesystem>
 //#include <wrl.h>
 //#include <d3d11.h>
 
@@ -11,80 +15,111 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 {
 	m_type = GO3D_RT_SDK;
 
+	m_resourceDescriptors = std::make_unique<DescriptorPile>(Locator::getDD()->m_deviceResources->GetD3DDevice(),
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
+		1024,
+		9);
+
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	std::string fullpath = m_filepath.generateFilepath(_filename, m_filepath.MODEL);
 	std::wstring wFilename = converter.from_bytes(fullpath.c_str());
 
-	/*
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> defaultTex;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> cubeMap;
-
-	auto effect = std::make_shared<EnvironmentMapEffect>(Locator::getRD()->m_d3dDevice.Get());
-	effect->EnableDefaultLighting();
-	effect->SetTexture(defaultTex.Get());
-	effect->SetEnvironmentMap(cubeMap.Get());
-	*/
-
-	//A crash here means that the model file wasn't loaded properly.
-	//Have you got the correct file name?
-	m_model = Model::CreateFromSDKMESH(wFilename.c_str());
-
-	ResourceUploadBatch resourceUpload(Locator::getRD()->m_d3dDevice.Get());
-
-	resourceUpload.Begin();
-
-	std::string dirpath = m_filepath.getFolder(m_filepath.MODEL) + _filename + "/";
-	if (dirpath.length() > 7 && dirpath.substr(dirpath.length() - 6) == "DEBUG/") {
-		dirpath = dirpath.substr(0, dirpath.length() - 7) + "/";
-		is_debug_mesh = true;
-	}
-	std::wstring dirpath_wstring = std::wstring(dirpath.begin(), dirpath.end());
-	const wchar_t* dirpath_wchar = dirpath_wstring.c_str();
-
-	//A crash here means that the material texture file wasn't loaded properly.
-	//Did you utilise my brilliant toolkit properly?
-	m_modelResources = m_model->LoadTextures(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, dirpath_wchar);
-
-	Locator::getRD()->m_fxFactory = std::make_unique<EffectFactory>(m_modelResources->Heap(), Locator::getRD()->m_states->Heap());
-
-	//Locator::getRD()->effect = std::make_unique<NormalMapEffect>(Locator::getRD()->m_d3dDevice.Get());
-
-	auto uploadResourcesFinished = resourceUpload.End(Locator::getRD()->m_commandQueue.Get());
-
-	uploadResourcesFinished.wait();
-
-	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
-
-	static EffectPipelineStateDescription pd(
-		nullptr,
-		CommonStates::Opaque,
-		CommonStates::DepthDefault,
-		CommonStates::CullClockwise,
-		rtState);
-
-	static EffectPipelineStateDescription pdAlpha(
-		nullptr,
-		CommonStates::AlphaBlend,
-		CommonStates::DepthDefault,
-		CommonStates::CullClockwise,
-		rtState);
-
-	Locator::getRD()->m_fxFactory->EnablePerPixelLighting(true);
-	Locator::getRD()->m_fxFactory->EnableNormalMapEffect(true);
-	m_modelNormal = m_model->CreateEffects(*Locator::getRD()->m_fxFactory, pd, pdAlpha);
-
-	for (auto& effect : m_modelNormal)
+	try
 	{
-		auto lights = dynamic_cast<IEffectLights*>(effect.get());
-		if (lights)
+		//Load model binary data
+		auto modelBin = DX::ReadData(wFilename.c_str());
+
+		//Check SDKMESH version
+		if (modelBin.size() >= sizeof(DXUT::SDKMESH_HEADER))
 		{
-			lights->SetLightEnabled(0, true);
-			lights->SetLightDiffuseColor(0, Colors::White);
-			//lights->SetLightDiffuseColor(0, Colors::Gold);
-			//lights->SetLightDirection(0, Vector3(0, 0, 0));
-			lights->SetLightEnabled(1, false);
-			lights->SetLightEnabled(2, false);
+			auto hdr = reinterpret_cast<const DXUT::SDKMESH_HEADER*>(modelBin.data());
+			if (!(hdr->Version >= 200))
+			{
+				std::cout << "ASSET DOES NOT COMPLY: " << fullpath << std::endl;
+				//throw std::exception("SDKMESH is not V2! Model must've been imported with old toolkit.");
+			}
 		}
+
+		//Load as SDKMESH
+		m_model = Model::CreateFromSDKMESH(modelBin.data(), modelBin.size());
+	}
+	catch (...)
+	{
+		throw std::exception("Could not load model.");
+		m_model.reset();
+	}
+
+	if (m_model) {
+		auto device = Locator::getDD()->m_deviceResources->GetD3DDevice();
+
+		ResourceUploadBatch resourceUpload(device);
+		resourceUpload.Begin();
+
+		m_model->LoadStaticBuffers(device, resourceUpload, true);
+
+		m_modelResources = std::make_unique<EffectTextureFactory>(device, resourceUpload, m_resourceDescriptors->Heap());
+	
+		//Get current directory (this is currently hacky and needs a fix - is VS giving us the wrong working dir?)
+		std::string curr_dir = std::experimental::filesystem::current_path().string();
+		if (curr_dir.substr(curr_dir.length() - 6) == "SOURCE") {
+			curr_dir = curr_dir.substr(0, curr_dir.length() - 7);
+		}
+		std::string dirpath = curr_dir + "/" + m_filepath.getFolder(m_filepath.MODEL) + _filename + "/";
+		if (dirpath.length() > 7 && dirpath.substr(dirpath.length() - 6) == "DEBUG/") {
+			dirpath = dirpath.substr(0, dirpath.length() - 7) + "/";
+			//is_debug_mesh = true;
+		}
+		std::wstring dirpath_wstring = std::wstring(dirpath.begin(), dirpath.end());
+		const wchar_t* dirpath_wchar = dirpath_wstring.c_str();
+
+		m_modelResources->SetDirectory(dirpath_wchar);
+
+
+		int txtOffset = 9;
+		try
+		{
+			//Load materials
+			(void)m_model->LoadTextures(*m_modelResources, txtOffset);
+		}
+		catch (...)
+		{
+			throw std::exception("Could not load model's materials.");
+			m_model.reset();
+			m_modelResources.reset();
+		}
+
+		if (m_model)
+		{
+			//Create effect factory
+			IEffectFactory *fxFactory = nullptr;
+			Locator::getRD()->m_fxFactoryPBR = std::make_unique<PBREffectFactory>(m_modelResources->Heap(), Locator::getRD()->m_states->Heap());
+			fxFactory = Locator::getRD()->m_fxFactoryPBR.get();
+
+			RenderTargetState hdrState(Locator::getDD()->m_hdrScene->GetFormat(), Locator::getDD()->m_deviceResources->GetDepthBufferFormat());
+
+			EffectPipelineStateDescription pd(
+				nullptr,
+				CommonStates::Opaque,
+				CommonStates::DepthDefault,
+				CommonStates::CullClockwise,
+				hdrState);
+
+			EffectPipelineStateDescription pdAlpha(
+				nullptr,
+				CommonStates::AlphaBlend,
+				CommonStates::DepthDefault,
+				CommonStates::CullClockwise,
+				hdrState);
+
+			m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, txtOffset);
+		}
+
+		auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
+
+		Locator::getDD()->m_deviceResources->WaitForGpu();
+
+		uploadResourcesFinished.wait();
 	}
 }
 
@@ -98,8 +133,31 @@ SDKMeshGO3D::~SDKMeshGO3D()
 void SDKMeshGO3D::Render()
 {
 	if (m_shouldRender && !isDebugMesh() || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
-		ID3D12DescriptorHeap* heaps[] = { m_modelResources->Heap(), Locator::getRD()->m_states->Heap() };
+		/*
+		ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
 		Locator::getRD()->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+
+		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
+		m_model->Draw(Locator::getRD()->m_commandList.Get(), m_modelNormal.cbegin());
+		*/
+
+		ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
+		Locator::getRD()->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+
+		{
+			auto radianceTex = m_resourceDescriptors->GetGpuHandle(3);
+			auto diffuseDesc = Locator::getRD()->m_radianceIBL[0]->GetDesc();
+			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(6);
+
+			for (auto& it : m_modelNormal)
+			{
+				auto pbr = dynamic_cast<PBREffect*>(it.get());
+				if (pbr)
+				{
+					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+				}
+			}
+		}
 
 		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
 		m_model->Draw(Locator::getRD()->m_commandList.Get(), m_modelNormal.cbegin());

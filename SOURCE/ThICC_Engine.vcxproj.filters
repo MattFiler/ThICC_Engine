@@ -128,6 +128,7 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -285,6 +286,10 @@
       <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Collision.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
   </ItemGroup>

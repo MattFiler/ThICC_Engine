@@ -64,7 +64,9 @@ struct ItemBoxConfig {
 };
 
 
-
+enum class NUM_OF_ENV_MAPS : int {
+	ENV_MAP_COUNT = 3
+};
 
 // sound
 // sound catergories

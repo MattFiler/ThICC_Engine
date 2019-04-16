@@ -504,6 +504,10 @@ namespace EditorTool
                 box_collider_mesh.Add("d 0.400000");
                 box_collider_mesh.Add("illum 2");
                 box_collider_mesh.Add("map_Kd collision_debug.png");
+                box_collider_mesh.Add("map_Ks spec_placeholder.png");
+                box_collider_mesh.Add("norm norm_placeholder.png");
+                box_collider_mesh.Add("map_Ke emm_placeholder.png");
+                box_collider_mesh.Add("map_RMA rma_placeholder.png");
                 File.WriteAllLines(importer_common.importDir() + debug_material, box_collider_mesh);
                 File.Copy(importer_common.importDir() + "../collision_debug.png", importer_common.importDir() + "collision_debug.png");
                 convertMaterial("collision_debug.png");

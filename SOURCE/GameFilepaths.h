@@ -2,6 +2,12 @@
 #include <algorithm>
 #include <string>
 
+/*
+
+Following the new tool update, all spaces in filenames should be converted to underscores!
+
+*/
+
 // Filepaths to our assets - these may change during production,
 // so nicer to reference from somewhere easier to modify.
 struct GameFilepaths {

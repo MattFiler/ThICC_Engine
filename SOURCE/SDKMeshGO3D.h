@@ -26,6 +26,7 @@ protected:
 	std::unique_ptr<DirectX::EffectTextureFactory> m_modelResources;
 	std::unique_ptr<DirectX::Model> m_model;
 	std::vector<std::shared_ptr<DirectX::IEffect>> m_modelNormal;
+	std::unique_ptr<DirectX::DescriptorPile>        m_resourceDescriptors;
 
 	GameFilepaths m_filepath;
 

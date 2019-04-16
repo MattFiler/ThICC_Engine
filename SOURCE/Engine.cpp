@@ -208,7 +208,7 @@ void ThICC_Engine::Render()
 	{
 		{
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1 + m_ibl);
-			auto diffuseDesc = m_radianceIBL[0]->GetDesc();
+			auto diffuseDesc = Locator::getRD()->m_radianceIBL[0]->GetDesc();
 			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::IrradianceIBL1 + m_ibl);
 
 			for (auto& it : m_gameMapEffects)
@@ -350,13 +350,13 @@ void ThICC_Engine::CreateDeviceDependentResources()
 		SpriteBatchPipelineStateDescription pd(hdrState);
 	}
 
-	static const wchar_t* s_radianceIBL[s_nIBL] =
+	static const wchar_t* s_radianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT] =
 	{
 		L"DATA/IMPORTED/Atrium_diffuseIBL.dds",
 		L"DATA/IMPORTED/Garage_diffuseIBL.dds",
 		L"DATA/IMPORTED/SunSubMixer_diffuseIBL.dds",
 	};
-	static const wchar_t* s_irradianceIBL[s_nIBL] =
+	static const wchar_t* s_irradianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT] =
 	{
 		L"DATA/IMPORTED/Atrium_specularIBL.dds",
 		L"DATA/IMPORTED/Garage_specularIBL.dds",
@@ -365,7 +365,7 @@ void ThICC_Engine::CreateDeviceDependentResources()
 
 	static_assert(_countof(s_radianceIBL) == _countof(s_irradianceIBL), "IBL array mismatch");
 
-	for (size_t j = 0; j < s_nIBL; ++j)
+	for (size_t j = 0; j < (unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT; ++j)
 	{
 		wchar_t radiance[_MAX_PATH] = {};
 		wchar_t irradiance[_MAX_PATH] = {};
@@ -374,15 +374,15 @@ void ThICC_Engine::CreateDeviceDependentResources()
 		DX::FindMediaFile(irradiance, _MAX_PATH, s_irradianceIBL[j]);
 
 		DX::ThrowIfFailed(
-			CreateDDSTextureFromFile(device, resourceUpload, radiance, m_radianceIBL[j].ReleaseAndGetAddressOf())
+			CreateDDSTextureFromFile(device, resourceUpload, radiance, Locator::getRD()->m_radianceIBL[j].ReleaseAndGetAddressOf())
 		);
 
 		DX::ThrowIfFailed(
-			CreateDDSTextureFromFile(device, resourceUpload, irradiance, m_irradianceIBL[j].ReleaseAndGetAddressOf())
+			CreateDDSTextureFromFile(device, resourceUpload, irradiance, Locator::getRD()->m_irradianceIBL[j].ReleaseAndGetAddressOf())
 		);
 
-		CreateShaderResourceView(device, m_radianceIBL[j].Get(), m_resourceDescriptors->GetCpuHandle(Descriptors::RadianceIBL1 + j), true);
-		CreateShaderResourceView(device, m_irradianceIBL[j].Get(), m_resourceDescriptors->GetCpuHandle(Descriptors::IrradianceIBL1 + j), true);
+		CreateShaderResourceView(device, Locator::getRD()->m_radianceIBL[j].Get(), m_resourceDescriptors->GetCpuHandle(Descriptors::RadianceIBL1 + j), true);
+		CreateShaderResourceView(device, Locator::getRD()->m_irradianceIBL[j].Get(), m_resourceDescriptors->GetCpuHandle(Descriptors::IrradianceIBL1 + j), true);
 	}
 
 	auto uploadResourcesFinished = resourceUpload.End(m_device_data.m_deviceResources->GetCommandQueue());
@@ -427,7 +427,7 @@ void ThICC_Engine::CreateWindowSizeDependentResources()
 /* When we lose our device, reset everything. */
 void ThICC_Engine::OnDeviceLost()
 {
-	Locator::getRD()->m_gameMapPBRFactory.reset();
+	Locator::getRD()->m_fxFactoryPBR.reset();
 	m_gameMapResources.reset();
 	m_gameMap.reset();
 	m_gameMapEffects.clear();
@@ -462,7 +462,7 @@ void ThICC_Engine::LoadModel(std::string filename)
 	m_gameMapEffects.clear();
 	m_gameMapResources.reset();
 	m_gameMap.reset();
-	Locator::getRD()->m_gameMapPBRFactory.reset();
+	Locator::getRD()->m_fxFactoryPBR.reset();
 
 	m_device_data.m_deviceResources->WaitForGpu();
 
@@ -542,8 +542,8 @@ void ThICC_Engine::LoadModel(std::string filename)
 		{
 			//Create effect factory
 			IEffectFactory *fxFactory = nullptr;
-			Locator::getRD()->m_gameMapPBRFactory = std::make_unique<PBREffectFactory>(m_gameMapResources->Heap(), Locator::getRD()->m_states->Heap());
-			fxFactory = Locator::getRD()->m_gameMapPBRFactory.get();
+			Locator::getRD()->m_fxFactoryPBR = std::make_unique<PBREffectFactory>(m_gameMapResources->Heap(), Locator::getRD()->m_states->Heap());
+			fxFactory = Locator::getRD()->m_fxFactoryPBR.get();
 
 			RenderTargetState hdrState(m_device_data.m_hdrScene->GetFormat(), m_device_data.m_deviceResources->GetDepthBufferFormat());
 

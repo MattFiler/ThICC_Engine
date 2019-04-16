@@ -7,10 +7,10 @@
 
 /* Perform initialisation */
 void ThICC_Game::Initialize() {
-	m_scene_manager.addScene(new MenuScene(), Scenes::MENUSCENE);
-	//m_scene_manager.addScene(new GameScene(), Scenes::GAMESCENE);
+	//m_scene_manager.addScene(new MenuScene(), Scenes::MENUSCENE);
+	m_scene_manager.addScene(new GameScene(), Scenes::GAMESCENE);
 	//m_sceneManager.addScene(new DebugScene(), Scenes::DEBUGSCENE);
-	m_scene_manager.setCurrentScene(Scenes::MENUSCENE);
+	m_scene_manager.setCurrentScene(Scenes::GAMESCENE);
 }
 
 /* Update loop */

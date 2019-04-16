@@ -3,10 +3,11 @@
 #include "pch.h"
 #include "Camera.h"
 #include "RenderTexture.h"
+#include "Constants.h"
 
 struct ThICC_RenderData {
 	std::unique_ptr<DirectX::CommonStates>          m_states;
-	std::unique_ptr<DirectX::PBREffectFactory>      m_gameMapPBRFactory; //m_fxFactory
+	std::unique_ptr<DirectX::PBREffectFactory>      m_fxFactoryPBR; //m_fxFactory
 
 	static const size_t MAX_BACK_BUFFER_COUNT = 3;
 
@@ -58,6 +59,8 @@ struct ThICC_RenderData {
 	int m_window_height;
 
 
+	Microsoft::WRL::ComPtr<ID3D12Resource>          m_radianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT];
+	Microsoft::WRL::ComPtr<ID3D12Resource>          m_irradianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT];
 
 
 

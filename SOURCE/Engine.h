@@ -111,11 +111,6 @@ private:
 	std::unique_ptr<DirectX::Model>                 m_gameMap;
 	std::vector<std::shared_ptr<DirectX::IEffect>>  m_gameMapEffects;
 
-	static const size_t s_nIBL = 3;
-
-	Microsoft::WRL::ComPtr<ID3D12Resource>          m_radianceIBL[s_nIBL];
-	Microsoft::WRL::ComPtr<ID3D12Resource>          m_irradianceIBL[s_nIBL];
-
 	enum Descriptors
 	{
 		ConsolasFont,
