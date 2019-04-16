@@ -54,7 +54,8 @@ struct ThICC_RenderData {
 	// DeviceResources options (see flags above)
 	unsigned int                                        m_options;
 
-
+	int m_window_width;
+	int m_window_height;
 
 
 

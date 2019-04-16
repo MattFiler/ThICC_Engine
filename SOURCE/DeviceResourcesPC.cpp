@@ -238,6 +238,12 @@ void DeviceResources::CreateDeviceResources()
     {
         throw std::exception("CreateEvent");
     }
+
+	//Fill out our resource descriptor
+	Locator::getRD()->m_resourceDescriptors = std::make_unique<DescriptorHeap>(m_rd.m_d3dDevice.Get(),
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
+		100);
 }
 
 // These resources need to be recreated every time the window size is changed.

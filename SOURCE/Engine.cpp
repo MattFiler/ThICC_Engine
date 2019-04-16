@@ -91,6 +91,7 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	Locator::setupID(&m_input_data);
 	Locator::setupDD(&m_device_data);
 	Locator::setupGSD(&m_gamestate_data);
+	Locator::setupAudio(&m_AM);
 
 	//Setup itembox respawn time
 	ItemBoxConfig::respawn_time = m_game_config["itembox_respawn_time"];
@@ -113,9 +114,16 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	//Setup keybinds
 	m_keybinds.setup(&m_input_data);
 
+	//Save our window size config
+	Locator::getRD()->m_window_height = height;
+	Locator::getRD()->m_window_width = width;
+
+	//Set our default font
+	SetDefaultFont("NeueHaasGroteskDisp Pro BD");
+
 	//Setup item data
-	//m_probabilities = new ItemData();
-	//Locator::setupItemData(m_probabilities);
+	m_probabilities = new ItemData();
+	Locator::setupItemData(m_probabilities);
 
 	//Initialise anything we need in our game
 	m_game_inst.Initialize();
@@ -562,6 +570,30 @@ void ThICC_Engine::LoadModel(std::string filename)
 
 		uploadResourcesFinished.wait();
 	}
+}
+
+/* Set the default font */
+void ThICC_Engine::SetDefaultFont(std::string _default_font)
+{
+	////GEP: Set up Sprite batch for drawing textures also loads the font for text
+	Locator::getRD()->m_states = std::make_unique<CommonStates>(Locator::getRD()->m_d3dDevice.Get());
+	ResourceUploadBatch resourceUpload(Locator::getRD()->m_d3dDevice.Get());
+
+	resourceUpload.Begin();
+	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
+	SpriteBatchPipelineStateDescription pd(rtState);
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	string font_path = m_filepath.generateFilepath(_default_font, m_filepath.FONT);
+	std::wstring w_font_path = converter.from_bytes(font_path.c_str());
+	pd.blendDesc = Locator::getRD()->m_states->NonPremultiplied;
+	Locator::getRD()->m_spriteBatch = std::make_unique<SpriteBatch>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, pd);
+	//This will throw an exception in <memory> if we try to load a non-existant font.
+	Locator::getRD()->m_font = std::make_unique<SpriteFont>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload,
+		w_font_path.c_str(),
+		Locator::getRD()->m_resourceDescriptors->GetCpuHandle(Locator::getRD()->m_resourceCount),
+		Locator::getRD()->m_resourceDescriptors->GetGpuHandle(Locator::getRD()->m_resourceCount));
+	Locator::getRD()->m_resourceCount++;
+	auto uploadResourcesFinished = resourceUpload.End(Locator::getRD()->m_commandQueue.Get());
 }
 
 /* Create a projection for our view */

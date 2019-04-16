@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StepTimer.h"
+#include "SceneManager.h"
 
 class ThICC_Game {
 public:
@@ -10,4 +11,7 @@ public:
 	void Initialize();
 	void Update(DX::StepTimer const& timer);
 	void Render();
+
+private:
+	SceneManager m_scene_manager;
 };

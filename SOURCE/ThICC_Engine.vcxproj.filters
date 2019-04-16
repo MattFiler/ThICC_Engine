@@ -119,6 +119,15 @@
     <ClCompile Include="LocalisationManager.cpp">
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Engine Backend\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -266,6 +275,18 @@
     <ClInclude Include="DeviceData.h">
       <Filter>Engine Backend\Shared</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -327,6 +348,9 @@
     </Filter>
     <Filter Include="Game\Components\Game Objects\Audio">
       <UniqueIdentifier>{38deb851-3adc-427f-9ab6-65f5b4340688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scenes">
+      <UniqueIdentifier>{548f9388-7aee-467a-9829-97617e463cc0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -71,12 +71,14 @@ private:
 	void CreateWindowSizeDependentResources();
 
 	void LoadModel(std::string filename);
+	void SetDefaultFont(std::string _default_font);
 
 	void CreateProjection();
 
 	GameFilepaths m_filepath;
 	LocalisationManager m_localiser;
 	KeybindManager m_keybinds;
+	AudioManager m_AM;
 	
 	ThICC_Game m_game_inst;
 	ThICC_InputData m_input_data;

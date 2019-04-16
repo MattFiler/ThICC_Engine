@@ -55,7 +55,9 @@ void ImageGO2D::InternalSpriteUpdate(string _filename) {
 			m_texture.ReleaseAndGetAddressOf()));
 
 
-	CreateShaderResourceView(Locator::getRD()->m_d3dDevice.Get(), m_texture.Get(),
+	CreateShaderResourceView(
+		Locator::getRD()->m_d3dDevice.Get(),
+		m_texture.Get(),
 		Locator::getRD()->m_resourceDescriptors->GetCpuHandle(m_resourceNum = Locator::getRD()->m_resourceCount++));
 
 	size = GetTextureSize(m_texture.Get());

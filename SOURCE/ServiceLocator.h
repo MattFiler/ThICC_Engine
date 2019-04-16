@@ -8,6 +8,7 @@ struct ThICC_RenderData;
 struct ThICC_GameStateData;
 class ItemData;
 class AIScheduler;
+class AudioManager;
 
 struct Locator {
 	static ThICC_InputData* getID() {
@@ -46,6 +47,12 @@ struct Locator {
 		}
 		return ref_AIS;
 	}
+	static AudioManager* getAudio() {
+		if (ref_audio == nullptr) {
+			throw std::runtime_error("Call to audio before initialisation.");
+		}
+		return ref_audio;
+	}
 
 	static void setupID(ThICC_InputData* inst_ID) {
 		ref_ID = inst_ID;
@@ -65,6 +72,9 @@ struct Locator {
 	static void setupAIScheduler(AIScheduler* inst_AIS) {
 		ref_AIS = inst_AIS;
 	}
+	static void setupAudio(AudioManager* inst_audio) {
+		ref_audio = inst_audio;
+	}
 
 private:
 	static ThICC_InputData* ref_ID;
@@ -73,4 +83,5 @@ private:
 	static ThICC_GameStateData* ref_GSD;
 	static ItemData* ref_ItemProbability;
 	static AIScheduler* ref_AIS;
+	static AudioManager* ref_audio;
 };
