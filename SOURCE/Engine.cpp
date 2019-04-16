@@ -137,7 +137,7 @@ void ThICC_Engine::Render()
 
 	Clear();
 
-	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), m_states->Heap() };
+	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), m_render_data.m_states->Heap() };
 	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
 	// Render game map if active
@@ -153,7 +153,7 @@ void ThICC_Engine::Render()
 				auto pbr = dynamic_cast<PBREffect*>(it.get());
 				if (pbr)
 				{
-					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, m_states->AnisotropicClamp());
+					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, m_render_data.m_states->AnisotropicClamp());
 				}
 			}
 		}
@@ -265,7 +265,7 @@ void ThICC_Engine::CreateDeviceDependentResources()
 
 	m_hdrScene->SetDevice(device, m_resourceDescriptors->GetCpuHandle(Descriptors::SceneTex), m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene));
 
-	m_states = std::make_unique<CommonStates>(device);
+	m_render_data.m_states = std::make_unique<CommonStates>(device);
 
 	m_lineBatch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(device);
 
@@ -371,7 +371,7 @@ void ThICC_Engine::CreateWindowSizeDependentResources()
 
 void ThICC_Engine::OnDeviceLost()
 {
-	m_gameMapPBRFactory.reset();
+	m_render_data.m_gameMapPBRFactory.reset();
 	m_gameMapResources.reset();
 	m_gameMap.reset();
 	m_gameMapEffects.clear();
@@ -379,7 +379,7 @@ void ThICC_Engine::OnDeviceLost()
 	m_lineEffect.reset();
 	m_lineBatch.reset();
 
-	m_states.reset();
+	m_render_data.m_states.reset();
 
 	m_toneMapACESFilmic.reset();
 
@@ -405,7 +405,7 @@ void ThICC_Engine::LoadModel(std::string filename)
 	m_gameMapEffects.clear();
 	m_gameMapResources.reset();
 	m_gameMap.reset();
-	m_gameMapPBRFactory.reset();
+	m_render_data.m_gameMapPBRFactory.reset();
 
 	m_deviceResources->WaitForGpu();
 
@@ -485,8 +485,8 @@ void ThICC_Engine::LoadModel(std::string filename)
 		{
 			//Create effect factory
 			IEffectFactory *fxFactory = nullptr;
-			m_gameMapPBRFactory = std::make_unique<PBREffectFactory>(m_gameMapResources->Heap(), m_states->Heap());
-			fxFactory = m_gameMapPBRFactory.get();
+			m_render_data.m_gameMapPBRFactory = std::make_unique<PBREffectFactory>(m_gameMapResources->Heap(), m_render_data.m_states->Heap());
+			fxFactory = m_render_data.m_gameMapPBRFactory.get();
 
 			RenderTargetState hdrState(m_hdrScene->GetFormat(), m_deviceResources->GetDepthBufferFormat());
 

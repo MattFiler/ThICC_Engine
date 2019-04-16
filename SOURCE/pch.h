@@ -118,3 +118,6 @@ namespace DX
 #include <SpriteBatch.h>
 #include <SpriteFont.h>
 #include <VertexTypes.h>
+#include <DirectXColors.h>
+
+#include "ServiceLocator.h"

@@ -13,11 +13,12 @@
 
 #include "DeviceResourcesPC.h"
 
-#include "AssetFilepaths.h"
+#include "GameFilepaths.h"
+#include "RenderData.h"
 
 #include "Game.h"
 
-#include "SharedInputData.h"
+#include "InputData.h"
 
 
 // A basic game implementation that creates a D3D12 device and
@@ -68,9 +69,10 @@ private:
 
 	void CreateProjection();
 
-	AssetFilepaths m_filepath;
+	GameFilepaths m_filepath;
 	ThICC_Game m_game_inst;
 	ThICC_InputData m_input_data;
+	ThICC_RenderData m_render_data;
 
 	// Device resources.
 	std::unique_ptr<DX::DeviceResources>            m_deviceResources;
@@ -84,14 +86,12 @@ private:
 	std::unique_ptr<DirectX::GraphicsMemory>        m_graphicsMemory;
 	std::unique_ptr<DirectX::DescriptorPile>        m_resourceDescriptors;
 	std::unique_ptr<DirectX::DescriptorHeap>        m_renderDescriptors;
-	std::unique_ptr<DirectX::CommonStates>          m_states;
 
 	std::unique_ptr<DirectX::BasicEffect>                                   m_lineEffect;
 	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>>  m_lineBatch;
 
 	std::unique_ptr<DirectX::ToneMapPostProcess>    m_toneMapACESFilmic;
 
-	std::unique_ptr<DirectX::PBREffectFactory>      m_gameMapPBRFactory;
 	std::unique_ptr<DirectX::EffectTextureFactory>  m_gameMapResources;
 	std::unique_ptr<DirectX::Model>                 m_gameMap;
 	std::vector<std::shared_ptr<DirectX::IEffect>>  m_gameMapEffects;

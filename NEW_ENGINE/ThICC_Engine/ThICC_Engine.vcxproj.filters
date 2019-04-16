@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Windows Assets">
+      <UniqueIdentifier>6927cd6b-7dff-438e-9fe3-681fd8c4cf38</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Base Application">
+      <UniqueIdentifier>f5f5bdc9-0513-4100-8ab2-060c5097b62f</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects">
+      <UniqueIdentifier>{2d8ebe99-2d8c-4460-b902-e736637277b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\2D">
+      <UniqueIdentifier>{68756411-3a98-4ab8-9573-c6271e27b42f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\3D">
+      <UniqueIdentifier>{85380513-8473-4b5f-a229-138231bb4812}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\2D\Headers">
+      <UniqueIdentifier>{8748c263-1797-4f5d-b1df-071cd34d3ae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\2D\Source">
+      <UniqueIdentifier>{074edea5-153c-4aab-893f-436332cc59f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\3D\Headers">
+      <UniqueIdentifier>{1340e8fd-1aa9-4787-afba-1c0ef93fcadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\3D\Source">
+      <UniqueIdentifier>{f1825a79-1aba-4d04-ab30-b8095f9bed11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base">
+      <UniqueIdentifier>{fb863ecb-f98b-4c5f-ac90-9203935286df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\Headers">
+      <UniqueIdentifier>{517b29de-af25-4c20-bece-9cab03b307fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Base\Source">
+      <UniqueIdentifier>{6d58267e-de6c-4746-8481-f2b2483959fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\Sound">
+      <UniqueIdentifier>{d8b8d159-4fd2-4327-97be-7dd66a68a081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\Sound\Headers">
+      <UniqueIdentifier>{e4de1900-2bee-490a-a428-a71d825a3fb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\Sound\Source">
+      <UniqueIdentifier>{cf7c9487-ac49-48f8-877a-b2aaab84a6b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\VBGO">
+      <UniqueIdentifier>{ee7ad5ac-6b72-4f7c-ba66-2cc5494db2ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\VBGO\Headers">
+      <UniqueIdentifier>{c6439af2-85df-4bd9-9664-334e62aa0640}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\VBGO\Source">
+      <UniqueIdentifier>{5d4e5a53-3698-4d23-84a6-575677e63aae}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StepTimer.h">
+      <Filter>Base Application</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>Base Application</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Base Application</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject2D.h">
+      <Filter>GameObjects\2D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageGO2D.h">
+      <Filter>GameObjects\2D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderData.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectList.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateData.h">
+      <Filter>Game Base\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Text2D.h">
+      <Filter>GameObjects\2D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject3D.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GPGO3D.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDKMeshGO3D.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Loop.h">
+      <Filter>GameObjects\Sound\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>GameObjects\Sound\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TestSound.h">
+      <Filter>GameObjects\Sound\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TPSCamera.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysModel.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="VBGO3D.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="vertex.h">
+      <Filter>GameObjects\VBGO</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>GameObjects\VBGO</Filter>
+    </ClInclude>
+    <ClInclude Include="VBCube.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="VBspiral.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="VBSpiked.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>GameObjects\3D\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MarchCubes.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="fileVBGO.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="VBSnail.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TransFileVBGO.h">
+      <Filter>GameObjects\VBGO\Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Base Application</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base Application</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject2D.cpp">
+      <Filter>GameObjects\2D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageGO2D.cpp">
+      <Filter>GameObjects\2D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Text2D.cpp">
+      <Filter>GameObjects\2D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject3D.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GPGO3D.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SDKMeshGO3D.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Loop.cpp">
+      <Filter>GameObjects\Sound\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>GameObjects\Sound\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TestSound.cpp">
+      <Filter>GameObjects\Sound\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TPSCamera.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysModel.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="VBGO3D.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="VBCube.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="light.cpp">
+      <Filter>GameObjects\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MarchCubes.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="fileVBGO.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="VBSnail.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TransFileVBGO.cpp">
+      <Filter>GameObjects\VBGO\Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="directx.ico">
+      <Filter>Windows Assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="settings.manifest">
+      <Filter>Windows Assets</Filter>
+    </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc">
+      <Filter>Windows Assets</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
