@@ -133,18 +133,12 @@ SDKMeshGO3D::~SDKMeshGO3D()
 void SDKMeshGO3D::Render()
 {
 	if (m_shouldRender && !isDebugMesh() || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
-		/*
-		ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
-		Locator::getRD()->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-
-		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
-		m_model->Draw(Locator::getRD()->m_commandList.Get(), m_modelNormal.cbegin());
-		*/
-
 		ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
 		Locator::getRD()->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
 		{
+			/* This is wrong and what is contributing to the gross visual output. We're getting the GPU handles for the model's materials, not where the env maps are stored :) */
+			/* The 2D sprites also don't work due to a similar issue - we're allocating sprites to the wrong descriptor causing memory issues. */
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(3);
 			auto diffuseDesc = Locator::getRD()->m_radianceIBL[0]->GetDesc();
 			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(6);
