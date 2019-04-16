@@ -13,6 +13,12 @@
 
 #include "DeviceResourcesPC.h"
 
+#include "AssetFilepaths.h"
+
+#include "Game.h"
+
+#include "SharedInputData.h"
+
 
 // A basic game implementation that creates a D3D12 device and
 // provides a game loop.
@@ -41,7 +47,6 @@ public:
 	void OnResuming();
 	void OnWindowMoved();
 	void OnWindowSizeChanged(int width, int height);
-	void OnFileOpen(const wchar_t* filename);
 
 	// Properties
 	void GetDefaultSize(int& width, int& height) const;
@@ -57,11 +62,15 @@ private:
 	void CreateDeviceDependentResources();
 	void CreateWindowSizeDependentResources();
 
-	void LoadModel();
+	void LoadModel(std::string filename);
 
 	void CameraHome();
 
 	void CreateProjection();
+
+	AssetFilepaths m_filepath;
+	ThICC_Game m_game_inst;
+	ThICC_InputData m_input_data;
 
 	// Device resources.
 	std::unique_ptr<DX::DeviceResources>            m_deviceResources;
@@ -69,6 +78,8 @@ private:
 
 	// Rendering loop timer.
 	DX::StepTimer                                   m_timer;
+
+	uint32_t                                        m_ibl;
 
 	std::unique_ptr<DirectX::GraphicsMemory>        m_graphicsMemory;
 	std::unique_ptr<DirectX::DescriptorPile>        m_resourceDescriptors;
@@ -80,11 +91,10 @@ private:
 
 	std::unique_ptr<DirectX::ToneMapPostProcess>    m_toneMapACESFilmic;
 
-	std::unique_ptr<DirectX::EffectFactory>         m_fxFactory;
-	std::unique_ptr<DirectX::PBREffectFactory>      m_pbrFXFactory;
-	std::unique_ptr<DirectX::EffectTextureFactory>  m_modelResources;
-	std::unique_ptr<DirectX::Model>                 m_model;
-	std::vector<std::shared_ptr<DirectX::IEffect>>  m_modelClockwise;
+	std::unique_ptr<DirectX::PBREffectFactory>      m_gameMapPBRFactory;
+	std::unique_ptr<DirectX::EffectTextureFactory>  m_gameMapResources;
+	std::unique_ptr<DirectX::Model>                 m_gameMap;
+	std::vector<std::shared_ptr<DirectX::IEffect>>  m_gameMapEffects;
 
 	static const size_t s_nIBL = 3;
 
@@ -112,14 +122,6 @@ private:
 		RTVCount
 	};
 
-	std::unique_ptr<DirectX::GamePad>               m_gamepad;
-	std::unique_ptr<DirectX::Keyboard>              m_keyboard;
-	std::unique_ptr<DirectX::Mouse>                 m_mouse;
-
-	DirectX::Keyboard::KeyboardStateTracker         m_keyboardTracker;
-	DirectX::Mouse::ButtonStateTracker              m_mouseButtonTracker;
-	DirectX::GamePad::ButtonStateTracker            m_gamepadButtonTracker;
-
 	DirectX::SimpleMath::Matrix                     m_world;
 	DirectX::SimpleMath::Matrix                     m_view;
 	DirectX::SimpleMath::Matrix                     m_proj;
@@ -141,14 +143,6 @@ private:
 
 	int                                             m_toneMapMode;
 
-	wchar_t                                         m_szModelName[MAX_PATH];
-	wchar_t                                         m_szStatus[512];
-	wchar_t                                         m_szError[512];
-
 	ArcBall                                         m_ballCamera;
 	ArcBall                                         m_ballModel;
-
-	int                                             m_selectFile;
-	int                                             m_firstFile;
-	std::vector<std::wstring>                       m_fileNames;
 };

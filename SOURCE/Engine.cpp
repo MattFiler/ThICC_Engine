@@ -12,6 +12,10 @@
 #include "ReadData.h"
 #include "SDKMesh.h"
 
+#include "ServiceLocator.h"
+
+#include <experimental/filesystem>
+
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
@@ -29,20 +33,15 @@ ThICC_Engine::ThICC_Engine() noexcept(false) :
 	m_distance(10.f),
 	m_farPlane(10000.f),
 	m_sensitivity(1.f),
+	m_ibl(0),
 	m_reloadModel(false),
-	m_toneMapMode(ToneMapPostProcess::ACESFilmic),
-	m_selectFile(0),
-	m_firstFile(0)
+	m_toneMapMode(ToneMapPostProcess::ACESFilmic)
 {
 	m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_R10G10B10A2_UNORM, DXGI_FORMAT_D32_FLOAT, 2,
 		D3D_FEATURE_LEVEL_11_0, DX::DeviceResources::c_EnableHDR);
 	m_deviceResources->RegisterDeviceNotify(this);
 
 	m_hdrScene = std::make_unique<DX::RenderTexture>(DXGI_FORMAT_R16G16B16A16_FLOAT);
-
-	*m_szModelName = 0;
-	*m_szStatus = 0;
-	*m_szError = 0;
 }
 
 ThICC_Engine::~ThICC_Engine()
@@ -56,12 +55,14 @@ ThICC_Engine::~ThICC_Engine()
 // Initialize the Direct3D resources required to run.
 void ThICC_Engine::Initialize(HWND window, int width, int height)
 {
-	m_gamepad = std::make_unique<GamePad>();
-	m_keyboard = std::make_unique<Keyboard>();
-	m_mouse = std::make_unique<Mouse>();
+	m_input_data.m_gamepad = std::make_unique<GamePad>();
+	m_input_data.m_keyboard = std::make_unique<Keyboard>();
+	m_input_data.m_mouse = std::make_unique<Mouse>();
+
+	Locator::setupID(&m_input_data);
 
 	m_deviceResources->SetWindow(window, width, height);
-	m_mouse->SetWindow(window);
+	m_input_data.m_mouse->SetWindow(window);
 
 	m_deviceResources->CreateDeviceResources();
 	CreateDeviceDependentResources();
@@ -86,271 +87,35 @@ void ThICC_Engine::Tick()
 void ThICC_Engine::Update(DX::StepTimer const& timer)
 {
 	if (m_reloadModel)
-		LoadModel();
+		LoadModel("MARIOKARTSTADIUM");
 
-	float elapsedTime = float(timer.GetElapsedSeconds());
-
-	auto gpad = m_gamepad->GetState(0);
+	DirectX::GamePad::State gpad = m_input_data.m_gamepad->GetState(0);
 	if (gpad.IsConnected())
 	{
-		m_gamepadButtonTracker.Update(gpad);
+		m_input_data.m_gamepadButtonTracker.Update(gpad);
 
-		if (!m_fileNames.empty())
-		{
-			if (m_gamepadButtonTracker.dpadUp == GamePad::ButtonStateTracker::PRESSED)
-			{
-				--m_selectFile;
-				if (m_selectFile < 0)
-					m_selectFile = int(m_fileNames.size()) - 1;
-			}
-			else if (m_gamepadButtonTracker.dpadDown == GamePad::ButtonStateTracker::PRESSED)
-			{
-				++m_selectFile;
-				if (m_selectFile >= int(m_fileNames.size()))
-					m_selectFile = 0;
-			}
-			else if (gpad.IsAPressed())
-			{
-				swprintf_s(m_szModelName, L"D:\\%ls", m_fileNames[m_selectFile].c_str());
-				m_selectFile = m_firstFile = 0;
-				m_fileNames.clear();
-				LoadModel();
-			}
-			else if (gpad.IsBPressed())
-			{
-				m_selectFile = m_firstFile = 0;
-				m_fileNames.clear();
-			}
-		}
-		else
-		{
-			// Translate camera
-			Vector3 move;
-
-			m_zoom -= gpad.thumbSticks.leftY * elapsedTime * m_sensitivity;
-			m_zoom = std::max(m_zoom, 0.01f);
-
-			if (gpad.IsDPadUpPressed())
-			{
-				move.y += 1.f;
-			}
-			else if (gpad.IsDPadDownPressed())
-			{
-				move.y -= 1.f;
-			}
-
-			if (gpad.IsDPadLeftPressed())
-			{
-				move.x -= 1.f;
-			}
-			else if (gpad.IsDPadRightPressed())
-			{
-				move.x += 1.f;
-			}
-
-			Matrix im;
-			m_view.Invert(im);
-			move = Vector3::TransformNormal(move, im);
-
-			// Rotate camera
-			Vector3 orbit(gpad.thumbSticks.rightX, gpad.thumbSticks.rightY, gpad.thumbSticks.leftX);
-			orbit *= elapsedTime * m_sensitivity;
-
-			m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Right(), orbit.y);
-			m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Up(), -orbit.x);
-			m_cameraRot *= Quaternion::CreateFromAxisAngle(im.Forward(), orbit.z);
-			m_cameraRot.Normalize();
-
-			m_cameraFocus += move * m_distance * elapsedTime * m_sensitivity;
-
-			// FOV camera
-			if (gpad.triggers.right > 0 || gpad.triggers.left > 0)
-			{
-				m_fov += (gpad.triggers.right - gpad.triggers.left) * elapsedTime * m_sensitivity;
-				m_fov = std::min(XM_PI / 2.f, std::max(m_fov, XM_PI / 10.f));
-
-				CreateProjection();
-			}
-
-			// Other controls
-			if (m_gamepadButtonTracker.leftShoulder == GamePad::ButtonStateTracker::PRESSED
-				&& m_gamepadButtonTracker.rightShoulder == GamePad::ButtonStateTracker::PRESSED)
-			{
-				m_sensitivity = 1.f;
-			}
-			else
-			{
-				if (gpad.IsRightShoulderPressed())
-				{
-					m_sensitivity += 0.01f;
-					if (m_sensitivity > 10.f)
-						m_sensitivity = 10.f;
-				}
-				else if (gpad.IsLeftShoulderPressed())
-				{
-					m_sensitivity -= 0.01f;
-					if (m_sensitivity < 0.01f)
-						m_sensitivity = 0.01f;
-				}
-			}
-
-			if (gpad.IsViewPressed())
-			{
-				PostMessage(m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
-			}
-
-			if (m_gamepadButtonTracker.leftStick == GamePad::ButtonStateTracker::PRESSED)
-			{
-				CameraHome();
-				m_modelRot = Quaternion::Identity;
-			}
-		}
+		m_game_inst.InputHandler(gpad);
 	}
 	else
 	{
-		m_gamepadButtonTracker.Reset();
+		m_input_data.m_gamepadButtonTracker.Reset();
 
-		auto kb = m_keyboard->GetState();
+		DirectX::Keyboard::State kb = m_input_data.m_keyboard->GetState();
+		DirectX::Mouse::State mouse = m_input_data.m_mouse->GetState();
 
-		// Camera movement
-		Vector3 move = Vector3::Zero;
+		m_input_data.m_keyboardTracker.Update(kb);
+		m_input_data.m_mouseButtonTracker.Update(mouse);
 
-		float scale = m_distance;
-		if (kb.LeftShift || kb.RightShift)
-			scale *= 0.5f;
+		m_game_inst.InputHandler(kb, mouse);
 
-		if (kb.Up)
-			move.y += scale;
-
-		if (kb.Down)
-			move.y -= scale;
-
-		if (kb.Right || kb.D)
-			move.x += scale;
-
-		if (kb.Left || kb.A)
-			move.x -= scale;
-
-		if (kb.PageUp || kb.W)
-			move.z += scale;
-
-		if (kb.PageDown || kb.S)
-			move.z -= scale;
-
-		Matrix im;
-		m_view.Invert(im);
-		move = Vector3::TransformNormal(move, im);
-
-		m_cameraFocus += move * elapsedTime;
-
-		// FOV camera
-		if (kb.OemOpenBrackets || kb.OemCloseBrackets)
+		if (m_input_data.m_keyboardTracker.pressed.O)
 		{
-			if (kb.OemOpenBrackets)
-				m_fov += elapsedTime;
-			else if (kb.OemCloseBrackets)
-				m_fov -= elapsedTime;
-
-			m_fov = std::min(XM_PI / 2.f, std::max(m_fov, XM_PI / 10.f));
-
-			CreateProjection();
-		}
-
-		// Other keyboard controls
-		if (kb.Home)
-		{
-			CameraHome();
-		}
-
-		if (kb.End)
-		{
-			m_modelRot = Quaternion::Identity;
-		}
-
-		m_keyboardTracker.Update(kb);
-
-		if (m_keyboardTracker.pressed.O)
-		{
-			PostMessage(m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
-		}
-
-		// Mouse controls
-		auto mouse = m_mouse->GetState();
-
-		m_mouseButtonTracker.Update(mouse);
-
-		if (mouse.positionMode == Mouse::MODE_RELATIVE)
-		{
-			// Translate camera
-			Vector3 delta;
-			if (kb.LeftShift || kb.RightShift)
-			{
-				delta = Vector3(0.f, 0.f, -float(mouse.y)) * m_distance * elapsedTime;
-			}
-			else
-			{
-				delta = Vector3(-float(mouse.x), float(mouse.y), 0.f) * m_distance * elapsedTime;
-			}
-
-			delta = Vector3::TransformNormal(delta, im);
-
-			m_cameraFocus += delta * elapsedTime;
-		}
-		else if (m_ballModel.IsDragging())
-		{
-			// Rotate model
-			m_ballModel.OnMove(mouse.x, mouse.y);
-			m_modelRot = m_ballModel.GetQuat();
-		}
-		else if (m_ballCamera.IsDragging())
-		{
-			// Rotate camera
-			m_ballCamera.OnMove(mouse.x, mouse.y);
-			Quaternion q = m_ballCamera.GetQuat();
-			q.Inverse(m_cameraRot);
-		}
-		else
-		{
-			// Zoom with scroll wheel
-			m_zoom = 1.f + float(mouse.scrollWheelValue) / float(120 * 10);
-			m_zoom = std::max(m_zoom, 0.01f);
-		}
-
-		if (!m_ballModel.IsDragging() && !m_ballCamera.IsDragging())
-		{
-			if (m_mouseButtonTracker.rightButton == Mouse::ButtonStateTracker::PRESSED)
-				m_mouse->SetMode(Mouse::MODE_RELATIVE);
-			else if (m_mouseButtonTracker.rightButton == Mouse::ButtonStateTracker::RELEASED)
-				m_mouse->SetMode(Mouse::MODE_ABSOLUTE);
-
-			if (m_mouseButtonTracker.leftButton == Mouse::ButtonStateTracker::PRESSED)
-			{
-				if (kb.LeftShift || kb.RightShift)
-				{
-					m_ballModel.OnBegin(mouse.x, mouse.y);
-				}
-				else
-				{
-					m_ballCamera.OnBegin(mouse.x, mouse.y);
-				}
-			}
-		}
-		else if (m_mouseButtonTracker.leftButton == Mouse::ButtonStateTracker::RELEASED)
-		{
-			m_ballCamera.OnEnd();
-			m_ballModel.OnEnd();
+			//PostMessage(m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
+			m_reloadModel = true;
 		}
 	}
 
-	// Update camera
-	Vector3 dir = Vector3::Transform(Vector3::Backward, m_cameraRot);
-	Vector3 up = Vector3::Transform(Vector3::Up, m_cameraRot);
-
-	m_lastCameraPos = m_cameraFocus + (m_distance * m_zoom) * dir;
-
-	m_view = Matrix::CreateLookAt(m_lastCameraPos, m_cameraFocus, up);
-
-	m_world = Matrix::CreateFromQuaternion(m_modelRot);
+	m_game_inst.Update(timer);
 }
 #pragma endregion
 
@@ -375,14 +140,15 @@ void ThICC_Engine::Render()
 	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), m_states->Heap() };
 	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
-	if (m_fileNames.empty() && m_model)
+	// Render game map if active
+	if (m_gameMap)
 	{
 		{
-			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1);
+			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1 + m_ibl);
 			auto diffuseDesc = m_radianceIBL[0]->GetDesc();
-			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::IrradianceIBL1);
+			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::IrradianceIBL1 + m_ibl);
 
-			for (auto& it : m_modelClockwise)
+			for (auto& it : m_gameMapEffects)
 			{
 				auto pbr = dynamic_cast<PBREffect*>(it.get());
 				if (pbr)
@@ -392,9 +158,11 @@ void ThICC_Engine::Render()
 			}
 		}
 
-		Model::UpdateEffectMatrices(m_modelClockwise, m_world, m_view, m_proj);
-		m_model->Draw(commandList, m_modelClockwise.cbegin());
+		Model::UpdateEffectMatrices(m_gameMapEffects, m_world, m_view, m_proj);
+		m_gameMap->Draw(commandList, m_gameMapEffects.cbegin());
 	}
+
+	m_game_inst.Render();
 
 	m_hdrScene->EndScene(commandList);
 
@@ -433,9 +201,9 @@ void ThICC_Engine::Clear()
 // Message handlers
 void ThICC_Engine::OnActivated()
 {
-	m_keyboardTracker.Reset();
-	m_mouseButtonTracker.Reset();
-	m_gamepadButtonTracker.Reset();
+	m_input_data.m_keyboardTracker.Reset();
+	m_input_data.m_mouseButtonTracker.Reset();
+	m_input_data.m_gamepadButtonTracker.Reset();
 }
 
 void ThICC_Engine::OnDeactivated()
@@ -449,9 +217,9 @@ void ThICC_Engine::OnSuspending()
 void ThICC_Engine::OnResuming()
 {
 	m_timer.ResetElapsedTime();
-	m_keyboardTracker.Reset();
-	m_mouseButtonTracker.Reset();
-	m_gamepadButtonTracker.Reset();
+	m_input_data.m_keyboardTracker.Reset();
+	m_input_data.m_mouseButtonTracker.Reset();
+	m_input_data.m_gamepadButtonTracker.Reset();
 }
 
 void ThICC_Engine::OnWindowMoved()
@@ -466,15 +234,6 @@ void ThICC_Engine::OnWindowSizeChanged(int width, int height)
 		return;
 
 	CreateWindowSizeDependentResources();
-}
-
-void ThICC_Engine::OnFileOpen(const wchar_t* filename)
-{
-	if (!filename)
-		return;
-
-	wcscpy_s(m_szModelName, filename);
-	m_reloadModel = true;
 }
 
 // Properties
@@ -612,11 +371,10 @@ void ThICC_Engine::CreateWindowSizeDependentResources()
 
 void ThICC_Engine::OnDeviceLost()
 {
-	m_fxFactory.reset();
-	m_pbrFXFactory.reset();
-	m_modelResources.reset();
-	m_model.reset();
-	m_modelClockwise.clear();
+	m_gameMapPBRFactory.reset();
+	m_gameMapResources.reset();
+	m_gameMap.reset();
+	m_gameMapEffects.clear();
 
 	m_lineEffect.reset();
 	m_lineBatch.reset();
@@ -641,151 +399,112 @@ void ThICC_Engine::OnDeviceRestored()
 }
 #pragma endregion
 
-void ThICC_Engine::LoadModel()
+void ThICC_Engine::LoadModel(std::string filename)
 {
-	m_modelClockwise.clear();
-	m_modelResources.reset();
-	m_model.reset();
-	m_fxFactory.reset();
-	m_pbrFXFactory.reset();
+	//Clear out existing data
+	m_gameMapEffects.clear();
+	m_gameMapResources.reset();
+	m_gameMap.reset();
+	m_gameMapPBRFactory.reset();
 
-	*m_szStatus = 0;
-	*m_szError = 0;
+	m_deviceResources->WaitForGpu();
+
 	m_reloadModel = false;
 	m_modelRot = Quaternion::Identity;
 
-	if (!*m_szModelName)
-		return;
+	//Get path to SDKMESH
+	std::string fullpath = m_filepath.generateFilepath(filename, m_filepath.MODEL);
+	std::wstring fullpath_wstring = std::wstring(fullpath.begin(), fullpath.end());
+	const wchar_t* fullpath_wchar = fullpath_wstring.c_str();
 
-	wchar_t drive[_MAX_DRIVE] = {};
-	wchar_t path[MAX_PATH] = {};
-	wchar_t ext[_MAX_EXT] = {};
-	wchar_t fname[_MAX_FNAME] = {};
-	_wsplitpath_s(m_szModelName, drive, _MAX_DRIVE, path, MAX_PATH, fname, _MAX_FNAME, ext, _MAX_EXT);
-
-	bool isvbo = false;
-	bool issdkmesh2 = false;
 	try
 	{
-		if (_wcsicmp(ext, L".sdkmesh") == 0)
-		{
-			auto modelBin = DX::ReadData(m_szModelName);
+		//Load model binary data
+		auto modelBin = DX::ReadData(fullpath_wchar);
 
-			if (modelBin.size() >= sizeof(DXUT::SDKMESH_HEADER))
+		//Check SDKMESH version
+		if (modelBin.size() >= sizeof(DXUT::SDKMESH_HEADER))
+		{
+			auto hdr = reinterpret_cast<const DXUT::SDKMESH_HEADER*>(modelBin.data());
+			if (!(hdr->Version >= 200))
 			{
-				auto hdr = reinterpret_cast<const DXUT::SDKMESH_HEADER*>(modelBin.data());
-				if (hdr->Version >= 200)
-				{
-					issdkmesh2 = true;
-				}
+				throw std::exception("SDKMESH is not V2! Model must've been imported with old toolkit.");
 			}
+		}
 
-			m_model = Model::CreateFromSDKMESH(modelBin.data(), modelBin.size());
-		}
-		else if (_wcsicmp(ext, L".vbo") == 0)
-		{
-			isvbo = true;
-			m_model = Model::CreateFromVBO(m_szModelName);
-		}
-		else
-		{
-			swprintf_s(m_szError, L"Unknown file type %ls", ext);
-			m_model.reset();
-			*m_szStatus = 0;
-		}
+		//Load as SDKMESH
+		m_gameMap = Model::CreateFromSDKMESH(modelBin.data(), modelBin.size());
 	}
 	catch (...)
 	{
-		swprintf_s(m_szError, L"Error loading model %ls%ls\n", fname, ext);
-		m_model.reset();
-		*m_szStatus = 0;
+		throw std::exception("Could not load model.");
+		m_gameMap.reset();
 	}
 
-	if (m_model)
+	if (m_gameMap)
 	{
 		auto device = m_deviceResources->GetD3DDevice();
 
 		ResourceUploadBatch resourceUpload(device);
-
 		resourceUpload.Begin();
 
-		m_model->LoadStaticBuffers(device, resourceUpload, true);
+		m_gameMap->LoadStaticBuffers(device, resourceUpload, true);
 
-		m_modelResources = std::make_unique<EffectTextureFactory>(device, resourceUpload, m_resourceDescriptors->Heap());
-
-		if (!issdkmesh2)
-		{
-			m_modelResources->EnableForceSRGB(true);
+		m_gameMapResources = std::make_unique<EffectTextureFactory>(device, resourceUpload, m_resourceDescriptors->Heap());
+		
+		//Get current directory (this is currently hacky and needs a fix - is VS giving us the wrong working dir?)
+		std::string curr_dir = std::experimental::filesystem::current_path().string();
+		if (curr_dir.substr(curr_dir.length() - 6) == "SOURCE") {
+			curr_dir = curr_dir.substr(0, curr_dir.length() - 7);
 		}
-
-		if (*drive || *path)
-		{
-			wchar_t dir[MAX_PATH] = {};
-			_wmakepath_s(dir, drive, path, nullptr, nullptr);
-			m_modelResources->SetDirectory(dir);
+		std::string dirpath = curr_dir + "/" + m_filepath.getFolder(m_filepath.MODEL) + filename + "/";
+		if (dirpath.length() > 7 && dirpath.substr(dirpath.length() - 6) == "DEBUG/") {
+			dirpath = dirpath.substr(0, dirpath.length() - 7) + "/";
+			//is_debug_mesh = true;
 		}
+		std::wstring dirpath_wstring = std::wstring(dirpath.begin(), dirpath.end());
+		const wchar_t* dirpath_wchar = dirpath_wstring.c_str();
+
+		m_gameMapResources->SetDirectory(dirpath_wchar);
+
 
 		int txtOffset = Descriptors::Reserve;
-
 		try
 		{
-			(void)m_model->LoadTextures(*m_modelResources, txtOffset);
+			//Load materials
+			(void)m_gameMap->LoadTextures(*m_gameMapResources, txtOffset);
 		}
 		catch (...)
 		{
-			swprintf_s(m_szError, L"Error loading textures for model %ls%ls\n", fname, ext);
-			m_model.reset();
-			m_modelResources.reset();
-			*m_szStatus = 0;
+			throw std::exception("Could not load model's materials.");
+			m_gameMap.reset();
+			m_gameMapResources.reset();
 		}
 
-		if (m_model)
+		if (m_gameMap)
 		{
+			//Create effect factory
 			IEffectFactory *fxFactory = nullptr;
-			if (issdkmesh2)
-			{
-				m_pbrFXFactory = std::make_unique<PBREffectFactory>(m_modelResources->Heap(), m_states->Heap());
-				fxFactory = m_pbrFXFactory.get();
-			}
-			else
-			{
-				m_fxFactory = std::make_unique<EffectFactory>(m_modelResources->Heap(), m_states->Heap());
-				fxFactory = m_fxFactory.get();
-			}
+			m_gameMapPBRFactory = std::make_unique<PBREffectFactory>(m_gameMapResources->Heap(), m_states->Heap());
+			fxFactory = m_gameMapPBRFactory.get();
 
 			RenderTargetState hdrState(m_hdrScene->GetFormat(), m_deviceResources->GetDepthBufferFormat());
 
-			if (isvbo)
-			{
-				EffectPipelineStateDescription pd(
-					&VertexPositionNormalTexture::InputLayout,
-					CommonStates::Opaque,
-					CommonStates::DepthDefault,
-					CommonStates::CullClockwise,
-					hdrState);
+			EffectPipelineStateDescription pd(
+				nullptr,
+				CommonStates::Opaque,
+				CommonStates::DepthDefault,
+				CommonStates::CullClockwise,
+				hdrState);
 
-				auto effect = std::make_shared<BasicEffect>(device, EffectFlags::Lighting, pd);
-				effect->EnableDefaultLighting();
-				m_modelClockwise.push_back(effect);
-			}
-			else
-			{
-				EffectPipelineStateDescription pd(
-					nullptr,
-					CommonStates::Opaque,
-					CommonStates::DepthDefault,
-					CommonStates::CullClockwise,
-					hdrState);
+			EffectPipelineStateDescription pdAlpha(
+				nullptr,
+				CommonStates::AlphaBlend,
+				CommonStates::DepthDefault,
+				CommonStates::CullClockwise,
+				hdrState);
 
-				EffectPipelineStateDescription pdAlpha(
-					nullptr,
-					CommonStates::AlphaBlend,
-					CommonStates::DepthDefault,
-					CommonStates::CullClockwise,
-					hdrState);
-
-				m_modelClockwise = m_model->CreateEffects(*fxFactory, pd, pdAlpha, txtOffset);
-			}
+			m_gameMapEffects = m_gameMap->CreateEffects(*fxFactory, pd, pdAlpha, txtOffset);
 		}
 
 		auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
@@ -800,13 +519,13 @@ void ThICC_Engine::LoadModel()
 
 void ThICC_Engine::CameraHome()
 {
-	m_mouse->ResetScrollWheelValue();
+	m_input_data.m_mouse->ResetScrollWheelValue();
 	m_zoom = 1.f;
 	m_fov = XM_PI / 4.f;
 	m_cameraRot = Quaternion::Identity;
 	m_ballCamera.Reset();
 
-	if (!m_model)
+	if (!m_gameMap)
 	{
 		m_cameraFocus = Vector3::Zero;
 		m_distance = 10.f;
@@ -816,9 +535,9 @@ void ThICC_Engine::CameraHome()
 		BoundingSphere sphere;
 		BoundingBox box;
 
-		for (auto it = m_model->meshes.cbegin(); it != m_model->meshes.cend(); ++it)
+		for (auto it = m_gameMap->meshes.cbegin(); it != m_gameMap->meshes.cend(); ++it)
 		{
-			if (it == m_model->meshes.cbegin())
+			if (it == m_gameMap->meshes.cbegin())
 			{
 				sphere = (*it)->boundingSphere;
 				box = (*it)->boundingBox;

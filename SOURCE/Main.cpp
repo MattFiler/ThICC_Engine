@@ -286,25 +286,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         return MAKELRESULT(0, MNC_CLOSE);
 
     case WM_USER:
-		if (game)
-		{
-			static DWORD s_filterIndex = 1;
-
-			WCHAR szFile[MAX_PATH] = {};
-			OPENFILENAME ofn = {};
-			ofn.lStructSize = sizeof(OPENFILENAME);
-			ofn.lpstrFile = szFile;
-			ofn.lpstrFile[0] = 0;
-			ofn.nMaxFile = MAX_PATH;
-			ofn.lpstrFilter = L"DirectX SDK Mesh (SDKMESH)\0*.sdkmesh\0Vertex Buffer Object (VBO)\0*.vbo\0All Files\0*.*\0";
-			ofn.nFilterIndex = s_filterIndex;
-			ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-			if (GetOpenFileName(&ofn))
-			{
-				s_filterIndex = ofn.nFilterIndex;
-				game->OnFileOpen(szFile);
-			}
-		}
 		break;
     }
 
