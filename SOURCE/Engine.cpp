@@ -232,6 +232,7 @@ void ThICC_Engine::Render()
 	auto rtvDescriptor = m_device_data.m_deviceResources->GetRenderTargetView();
 	commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, nullptr);
 
+	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 	m_toneMapACESFilmic->Process(commandList);
 
 	// Show the new frame.

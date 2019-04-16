@@ -21,5 +21,5 @@ void ThICC_Game::Update(DX::StepTimer const& timer) {
 
 /* Render loop */
 void ThICC_Game::Render() {
-	//m_scene_manager.Render(Locator::getRD()->m_commandList);
+	m_scene_manager.Render(Locator::getRD()->m_commandList);
 }
