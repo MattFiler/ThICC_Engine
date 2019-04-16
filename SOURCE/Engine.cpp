@@ -14,6 +14,10 @@
 
 #include "ServiceLocator.h"
 
+#include "Constants.h"
+#include "ItemData.h"
+#include "WaitForGPU.h"
+
 #include <experimental/filesystem>
 
 using namespace DirectX;
@@ -27,6 +31,7 @@ namespace
 	const XMVECTORF32 c_CornflowerBlue = { 0.127438f, 0.300544f, 0.846873f, 1.f };
 }
 
+/* Create! */
 ThICC_Engine::ThICC_Engine() noexcept(false) :
 	m_fov(XM_PI / 4.f),
 	m_zoom(1.f),
@@ -37,44 +42,84 @@ ThICC_Engine::ThICC_Engine() noexcept(false) :
 	m_reloadModel(false),
 	m_toneMapMode(ToneMapPostProcess::ACESFilmic)
 {
+	//Read in track config
+	std::string filepath = m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG);
+	std::ifstream i(filepath);
+	game_config << i;
+
+	//We don't support more than 4 players
+	if (game_config["player_count"] > 4) {
+		throw std::exception("CANNOT HAVE MORE THAN FOUR PLAYERS");
+	}
+
+	//Initialise srand
+	srand(std::time(NULL));
+
+	//Initialise our device resources
 	m_render_data.m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_R10G10B10A2_UNORM, DXGI_FORMAT_D32_FLOAT, 2,
 		D3D_FEATURE_LEVEL_11_0, DX::DeviceResources::c_EnableHDR);
 	m_render_data.m_deviceResources->RegisterDeviceNotify(this);
 
+	//Initialise our HDR scene
 	m_render_data.m_hdrScene = std::make_unique<DX::RenderTexture>(DXGI_FORMAT_R16G16B16A16_FLOAT);
 }
 
+/* Destroy! */
 ThICC_Engine::~ThICC_Engine()
 {
+	//Destroy our audio engine
+	if (m_audEngine)
+	{
+		m_audEngine->Suspend();
+	}
+
+	//Wait for our GPU process to finish before exiting
 	if (m_render_data.m_deviceResources)
 	{
 		m_render_data.m_deviceResources->WaitForGpu();
 	}
 }
 
-// Initialize the Direct3D resources required to run.
+/* Initialize the Direct3D resources required to run. */
 void ThICC_Engine::Initialize(HWND window, int width, int height)
 {
+	//Initialise inputs
 	m_input_data.m_gamepad = std::make_unique<GamePad>();
 	m_input_data.m_keyboard = std::make_unique<Keyboard>();
 	m_input_data.m_mouse = std::make_unique<Mouse>();
 
+	//Pass out stuff to our service locator
 	Locator::setupID(&m_input_data);
 	Locator::setupRD(&m_render_data);
 	Locator::setupGSD(&m_gamestate_data);
 
+	//Setup itembox respawn time
+	ItemBoxConfig::respawn_time = game_config["itembox_respawn_time"];
+
+	//Set window info & configure our mouse's window settings
 	m_render_data.m_deviceResources->SetWindow(window, width, height);
 	m_input_data.m_mouse->SetWindow(window);
 
+	//Create resources
 	m_render_data.m_deviceResources->CreateDeviceResources();
 	CreateDeviceDependentResources();
 
+	//Create window-size specific resources
 	m_render_data.m_deviceResources->CreateWindowSizeDependentResources();
 	CreateWindowSizeDependentResources();
+
+	//Configure localisation
+	m_localiser.configure(game_config["language"]);
+
+	//Setup keybinds
+	m_keybinds.setup(&m_input_data);
+
+	//Setup item data
+	//m_probabilities = new ItemData();
+	//Locator::setupItemData(m_probabilities);
 }
 
-#pragma region Frame Update
-// Executes the basic game loop.
+/* The game update, split it out to update and render :) */
 void ThICC_Engine::Tick()
 {
 	m_timer.Tick([&]()
@@ -85,59 +130,50 @@ void ThICC_Engine::Tick()
 	Render();
 }
 
-// Updates the world.
+/* Update the scene */
 void ThICC_Engine::Update(DX::StepTimer const& timer)
 {
+	//Wait if requested
+	if (WaitForGPU::should_wait) {
+		/* This can be massively refactored now, since WaitForGpu is available in our service locator, which is a more efficient implementation. */
+		std::cout << "CALL TO WaitForGPU - THIS WILL SOON BE DEPRECIATED!";
+		//--
+		m_render_data.m_deviceResources->WaitForGpu();
+		WaitForGPU::should_wait = false;
+	}
+
 	if (m_reloadModel)
 		LoadModel("MARIOKARTSTADIUM");
 
-	/*
-	
-	Set...
+	//Get keyboard and mouse state
+	m_input_data.m_prevKeyboardState = m_input_data.m_keyboardState; // keep previous state for just pressed logic
+	m_input_data.m_keyboardState = m_input_data.m_keyboard->GetState();
+	m_input_data.m_mouseState = m_input_data.m_mouse->GetState();
 
-	//DirectX::Keyboard::State m_prevKeyboardState;
-	DirectX::Keyboard::State m_keyboardState;
-	DirectX::Mouse::State m_mouseState;
-	DirectX::GamePad::State m_gamePadState[4];
+	//Update trackers - this would be a nice system to move across to with the new keybind manager
+	m_input_data.m_keyboardTracker.Update(m_input_data.m_keyboardState);
+	m_input_data.m_mouseButtonTracker.Update(m_input_data.m_mouseState);
 
-	in InputData
-
-	...here
-	
-	*/
-
-	DirectX::GamePad::State gpad = m_input_data.m_gamepad->GetState(0);
-	if (gpad.IsConnected())
+	//Get controller state for each player
+	for (int i = 0; i < game_config["player_count"]; ++i)
 	{
-		m_input_data.m_gamepadButtonTracker.Update(gpad);
-
-		m_game_inst.InputHandler(gpad);
-	}
-	else
-	{
-		m_input_data.m_gamepadButtonTracker.Reset();
-
-		DirectX::Keyboard::State kb = m_input_data.m_keyboard->GetState();
-		DirectX::Mouse::State mouse = m_input_data.m_mouse->GetState();
-
-		m_input_data.m_keyboardTracker.Update(kb);
-		m_input_data.m_mouseButtonTracker.Update(mouse);
-
-		m_game_inst.InputHandler(kb, mouse);
-
-		if (m_input_data.m_keyboardTracker.pressed.O)
-		{
-			//PostMessage(m_render_data.m_deviceResources->GetWindowHandle(), WM_USER, 0, 0);
-			m_reloadModel = true;
-		}
+		m_input_data.m_gamePadState[i] = m_input_data.m_gamepad->GetState(i); //set game controllers state[s]
 	}
 
+	//Delta time
+	m_gamestate_data.m_dt = float(timer.GetElapsedSeconds());
+
+	//Pass off to our game now we've done our engine-y stuff
 	m_game_inst.Update(timer);
-}
-#pragma endregion
 
-#pragma region Frame Render
-// Draws the scene.
+	/* DEBUG: LOAD MODEL ON PRESS OF "O" */
+	if (m_input_data.m_keyboardTracker.pressed.O)
+	{
+		m_reloadModel = true;
+	}
+}
+
+/* Render the scene */
 void ThICC_Engine::Render()
 {
 	// Don't try to render anything before the first Update.
@@ -214,23 +250,19 @@ void ThICC_Engine::Clear()
 }
 #pragma endregion
 
-#pragma region Message Handlers
-// Message handlers
+/* Message handlers */
 void ThICC_Engine::OnActivated()
 {
 	m_input_data.m_keyboardTracker.Reset();
 	m_input_data.m_mouseButtonTracker.Reset();
 	m_input_data.m_gamepadButtonTracker.Reset();
 }
-
 void ThICC_Engine::OnDeactivated()
 {
 }
-
 void ThICC_Engine::OnSuspending()
 {
 }
-
 void ThICC_Engine::OnResuming()
 {
 	m_timer.ResetElapsedTime();
@@ -238,13 +270,11 @@ void ThICC_Engine::OnResuming()
 	m_input_data.m_mouseButtonTracker.Reset();
 	m_input_data.m_gamepadButtonTracker.Reset();
 }
-
 void ThICC_Engine::OnWindowMoved()
 {
 	auto r = m_render_data.m_deviceResources->GetOutputSize();
 	m_render_data.m_deviceResources->WindowSizeChanged(r.right, r.bottom);
 }
-
 void ThICC_Engine::OnWindowSizeChanged(int width, int height)
 {
 	if (!m_render_data.m_deviceResources->WindowSizeChanged(width, height))
@@ -253,16 +283,14 @@ void ThICC_Engine::OnWindowSizeChanged(int width, int height)
 	CreateWindowSizeDependentResources();
 }
 
-// Properties
+/* Window properties */
 void ThICC_Engine::GetDefaultSize(int& width, int& height) const
 {
-	width = 1280;
-	height = 720;
+	width = game_config["window_width"];
+	height = game_config["window_height"];
 }
-#pragma endregion
 
-#pragma region Direct3D Resources
-// These are the resources that depend on the device.
+/* These are the resources that depend on the device. */
 void ThICC_Engine::CreateDeviceDependentResources()
 {
 	auto device = m_render_data.m_deviceResources->GetD3DDevice();
@@ -354,7 +382,7 @@ void ThICC_Engine::CreateDeviceDependentResources()
 	uploadResourcesFinished.wait();
 }
 
-// Allocate all memory resources that change on a window SizeChanged event.
+/* Allocate all memory resources that change on a window SizeChanged event. */
 void ThICC_Engine::CreateWindowSizeDependentResources()
 {
 	auto device = m_render_data.m_deviceResources->GetD3DDevice();
@@ -386,6 +414,7 @@ void ThICC_Engine::CreateWindowSizeDependentResources()
 	CreateProjection();
 }
 
+/* When we lose our device, reset everything. */
 void ThICC_Engine::OnDeviceLost()
 {
 	m_render_data.m_gameMapPBRFactory.reset();
@@ -408,14 +437,15 @@ void ThICC_Engine::OnDeviceLost()
 	m_graphicsMemory.reset();
 }
 
+/* If the device comes back, create everything again! */
 void ThICC_Engine::OnDeviceRestored()
 {
 	CreateDeviceDependentResources();
 
 	CreateWindowSizeDependentResources();
 }
-#pragma endregion
 
+/* Load a model */
 void ThICC_Engine::LoadModel(std::string filename)
 {
 	//Clear out existing data
@@ -530,65 +560,9 @@ void ThICC_Engine::LoadModel(std::string filename)
 
 		uploadResourcesFinished.wait();
 	}
-
-	CameraHome();
 }
 
-void ThICC_Engine::CameraHome()
-{
-	m_input_data.m_mouse->ResetScrollWheelValue();
-	m_zoom = 1.f;
-	m_fov = XM_PI / 4.f;
-	m_cameraRot = Quaternion::Identity;
-	m_ballCamera.Reset();
-
-	if (!m_gameMap)
-	{
-		m_cameraFocus = Vector3::Zero;
-		m_distance = 10.f;
-	}
-	else
-	{
-		BoundingSphere sphere;
-		BoundingBox box;
-
-		for (auto it = m_gameMap->meshes.cbegin(); it != m_gameMap->meshes.cend(); ++it)
-		{
-			if (it == m_gameMap->meshes.cbegin())
-			{
-				sphere = (*it)->boundingSphere;
-				box = (*it)->boundingBox;
-			}
-			else
-			{
-				BoundingSphere::CreateMerged(sphere, sphere, (*it)->boundingSphere);
-				BoundingBox::CreateMerged(box, box, (*it)->boundingBox);
-			}
-		}
-
-		if (sphere.Radius < 1.f)
-		{
-			sphere.Center = box.Center;
-			sphere.Radius = std::max(box.Extents.x, std::max(box.Extents.y, box.Extents.z));
-		}
-
-		if (sphere.Radius < 1.f)
-		{
-			sphere.Center = XMFLOAT3(0.f, 0.f, 0.f);
-			sphere.Radius = 10.f;
-		}
-
-		m_distance = sphere.Radius * 2;
-
-		m_cameraFocus = sphere.Center;
-	}
-
-	Vector3 dir = Vector3::Transform(Vector3::Backward, m_cameraRot);
-	Vector3 up = Vector3::Transform(Vector3::Up, m_cameraRot);
-
-	m_lastCameraPos = m_cameraFocus + (m_distance * m_zoom) * dir;
-}
-
+/* Create a projection for our view */
 void ThICC_Engine::CreateProjection()
 {
 	auto size = m_render_data.m_deviceResources->GetOutputSize();

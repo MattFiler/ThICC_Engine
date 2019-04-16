@@ -112,6 +112,13 @@
     <ClCompile Include="Constants.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Engine Backend\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="LocalisationManager.cpp">
+      <Filter>Engine Backend\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -249,6 +256,13 @@
     <ClInclude Include="Mushroom.h">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="LocalisationManager.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -307,6 +321,9 @@
     </Filter>
     <Filter Include="Game\Components\Game Objects\2D">
       <UniqueIdentifier>{35d9589c-cadc-42f5-8894-5951a9615d2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Game Objects\Audio">
+      <UniqueIdentifier>{38deb851-3adc-427f-9ab6-65f5b4340688}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

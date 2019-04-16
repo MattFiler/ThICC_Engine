@@ -16,10 +16,15 @@
 #include "GameFilepaths.h"
 #include "RenderData.h"
 #include "GameStateData.h"
+#include "LocalisationManager.h"
 
 #include "Game.h"
 
 #include "InputData.h"
+#include "AudioManager.h"
+
+#include <json.hpp>
+using json = nlohmann::json;
 
 
 // A basic game implementation that creates a D3D12 device and
@@ -66,16 +71,24 @@ private:
 
 	void LoadModel(std::string filename);
 
-	void CameraHome();
-
 	void CreateProjection();
 
 	GameFilepaths m_filepath;
+	LocalisationManager m_localiser;
+	KeybindManager m_keybinds;
 
 	ThICC_Game m_game_inst;
 	ThICC_InputData m_input_data;
 	ThICC_RenderData m_render_data;
 	ThICC_GameStateData m_gamestate_data;
+
+	json game_config;
+	ItemData* m_probabilities = nullptr;
+
+	//audio system
+	//This uses a simple system, but a better pipeline can be used using Wave Banks
+	//See here: https://github.com/Microsoft/DirectXTK/wiki/Creating-and-playing-sounds Using wave banks Section
+	std::unique_ptr<DirectX::AudioEngine> m_audEngine;
 
 	// Rendering loop timer.
 	DX::StepTimer                                   m_timer;
