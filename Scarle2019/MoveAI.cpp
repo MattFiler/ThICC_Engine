@@ -28,13 +28,35 @@ void MoveAI::Update(Track* _track)
 	Vector3 direction = world.Forward();
 	int iterations = 0;
 
-	FindRoute(_track, world, pos, direction, iterations, 1);
+	std::cout << m_move->GetWaypoint();
 
-	for (int i = 0; i < m_route.size(); i++)
+	if (m_move->GetWaypoint() == _track->getWaypoints().size() - 1)
 	{
-		m_debugCups[i]->SetPos(m_route[i]);
-		m_debugCups[i]->UpdateWorld();
+		m_waypointPos = _track->getWaypoints()[0];
 	}
+	else
+	{
+		m_waypointPos = _track->getWaypoints()[m_move->GetWaypoint()+1];
+	}
+
+	if (FindRoute(_track, world, pos, direction, iterations, 1))
+	{
+		for (int i = 0; i < m_route.size(); i++)
+		{
+			m_debugCups[i]->SetPos(m_route[i]);
+			m_debugCups[i]->UpdateWorld();
+		}
+	}
+	else
+	{
+		m_route.clear();
+		Vector3 waypointDir = m_waypointPos - pos;
+		waypointDir.Normalize();
+		FindWorld(_track, world, world, pos, pos, waypointDir, 1);
+		m_route.push_back(pos);
+	}
+
+
 
 	/*
 	Vector3 left = m_model->GetWorld().Forward() + m_model->GetWorld().Left();
@@ -167,6 +189,12 @@ bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _d
 int MoveAI::FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorld, const Vector3& _startPos, Vector3& _endPos, Vector3 _direction, const int& _steps)
 {
 	_direction *= m_aiPathStep;
+
+	// Check to see if this direction diverges from the waypoint
+	if (Vector3::DistanceSquared(_startPos, m_waypointPos) < Vector3::DistanceSquared(_startPos + _direction, m_waypointPos))
+	{
+		return 0;
+	}
 
 	Vector3 intersect = Vector3::Zero;
 	MeshTri* tri = nullptr;

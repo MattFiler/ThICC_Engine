@@ -17,6 +17,9 @@ public:
 	void TurnRight(bool _flag);
 	void Drift(bool _flag);
 
+	void SetWaypoint(int _waypoint) { m_waypoint = _waypoint; };
+	int GetWaypoint() { return m_waypoint; };
+
 private:
 	void GetControllerInput();
 	void ProcessInputFlags();
@@ -47,5 +50,7 @@ private:
 
 	bool m_controlsActive = false;
 	int m_playerID = 0;
+
+	int m_waypoint = 0;
 
 };

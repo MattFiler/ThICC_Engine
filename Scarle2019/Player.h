@@ -38,7 +38,7 @@ public:
 	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
 	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
 
-	void SetWaypoint(int _waypoint) { m_waypoint = _waypoint; }
+	void SetWaypoint(int _waypoint);
 	void SetLap(int _lap) { m_lap = _lap; }
 	void SetRanking(int _position) { m_ranking = _position; }
 	void setGamePad(bool _state);

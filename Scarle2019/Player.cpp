@@ -422,3 +422,9 @@ void Player::RespawnLogic()
 		}
 	}
 }
+
+void Player::SetWaypoint(int _waypoint)
+{
+	m_move->SetWaypoint(_waypoint);
+	m_waypoint = _waypoint;
+}

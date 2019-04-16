@@ -27,6 +27,7 @@ private:
 
 	bool m_useDrift = false;
 
+	Vector3 m_waypointPos = Vector3::Zero;
 	std::vector<Vector3> m_route;
 	std::vector<SDKMeshGO3D*> m_debugCups;
 	int m_minFrontSpace = 10; // The minimum number of m_aiPathStep iterations required to be in front of the object, after which the AI turns
