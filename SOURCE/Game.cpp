@@ -1,19 +1,14 @@
 #include "pch.h"
 #include "Game.h"
 
+/* Perform initialisation */
+void ThICC_Game::Initialize() {
+
+}
+
 /* Update loop */
 void ThICC_Game::Update(DX::StepTimer const& timer) {
 	float elapsedTime = float(timer.GetElapsedSeconds());
-
-}
-
-/* Gamepad input handler */
-void ThICC_Game::InputHandler(DirectX::GamePad::State gpad) {
-
-}
-
-/* Keyboard/mouse input handler */
-void ThICC_Game::InputHandler(DirectX::Keyboard::State kb, DirectX::Mouse::State mouse) {
 
 }
 

@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 struct ThICC_InputData;
+struct ThICC_DeviceData;
 struct ThICC_RenderData;
 struct ThICC_GameStateData;
 class ItemData;
@@ -14,6 +15,12 @@ struct Locator {
 			throw std::runtime_error("Call to input data before initialisation.");
 		}
 		return ref_ID;
+	}
+	static ThICC_DeviceData* getDD() {
+		if (ref_DD == nullptr) {
+			throw std::runtime_error("Call to device data before initialisation.");
+		}
+		return ref_DD;
 	}
 	static ThICC_RenderData* getRD() {
 		if (ref_RD == nullptr) {
@@ -43,6 +50,9 @@ struct Locator {
 	static void setupID(ThICC_InputData* inst_ID) {
 		ref_ID = inst_ID;
 	}
+	static void setupDD(ThICC_DeviceData* inst_DD) {
+		ref_DD = inst_DD;
+	}
 	static void setupRD(ThICC_RenderData* inst_RD) {
 		ref_RD = inst_RD;
 	}
@@ -58,6 +68,7 @@ struct Locator {
 
 private:
 	static ThICC_InputData* ref_ID;
+	static ThICC_DeviceData* ref_DD;
 	static ThICC_RenderData* ref_RD;
 	static ThICC_GameStateData* ref_GSD;
 	static ItemData* ref_ItemProbability;

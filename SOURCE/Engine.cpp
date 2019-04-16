@@ -43,12 +43,11 @@ ThICC_Engine::ThICC_Engine() noexcept(false) :
 	m_toneMapMode(ToneMapPostProcess::ACESFilmic)
 {
 	//Read in track config
-	std::string filepath = m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG);
-	std::ifstream i(filepath);
-	game_config << i;
+	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
+	m_game_config << i;
 
 	//We don't support more than 4 players
-	if (game_config["player_count"] > 4) {
+	if (m_game_config["player_count"] > 4) {
 		throw std::exception("CANNOT HAVE MORE THAN FOUR PLAYERS");
 	}
 
@@ -56,12 +55,12 @@ ThICC_Engine::ThICC_Engine() noexcept(false) :
 	srand(std::time(NULL));
 
 	//Initialise our device resources
-	m_render_data.m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_R10G10B10A2_UNORM, DXGI_FORMAT_D32_FLOAT, 2,
+	m_device_data.m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_R10G10B10A2_UNORM, DXGI_FORMAT_D32_FLOAT, 2,
 		D3D_FEATURE_LEVEL_11_0, DX::DeviceResources::c_EnableHDR);
-	m_render_data.m_deviceResources->RegisterDeviceNotify(this);
+	m_device_data.m_deviceResources->RegisterDeviceNotify(this);
 
 	//Initialise our HDR scene
-	m_render_data.m_hdrScene = std::make_unique<DX::RenderTexture>(DXGI_FORMAT_R16G16B16A16_FLOAT);
+	m_device_data.m_hdrScene = std::make_unique<DX::RenderTexture>(DXGI_FORMAT_R16G16B16A16_FLOAT);
 }
 
 /* Destroy! */
@@ -74,9 +73,9 @@ ThICC_Engine::~ThICC_Engine()
 	}
 
 	//Wait for our GPU process to finish before exiting
-	if (m_render_data.m_deviceResources)
+	if (m_device_data.m_deviceResources)
 	{
-		m_render_data.m_deviceResources->WaitForGpu();
+		m_device_data.m_deviceResources->WaitForGpu();
 	}
 }
 
@@ -90,26 +89,26 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 
 	//Pass out stuff to our service locator
 	Locator::setupID(&m_input_data);
-	Locator::setupRD(&m_render_data);
+	Locator::setupDD(&m_device_data);
 	Locator::setupGSD(&m_gamestate_data);
 
 	//Setup itembox respawn time
-	ItemBoxConfig::respawn_time = game_config["itembox_respawn_time"];
+	ItemBoxConfig::respawn_time = m_game_config["itembox_respawn_time"];
 
 	//Set window info & configure our mouse's window settings
-	m_render_data.m_deviceResources->SetWindow(window, width, height);
+	m_device_data.m_deviceResources->SetWindow(window, width, height);
 	m_input_data.m_mouse->SetWindow(window);
 
 	//Create resources
-	m_render_data.m_deviceResources->CreateDeviceResources();
+	m_device_data.m_deviceResources->CreateDeviceResources();
 	CreateDeviceDependentResources();
 
 	//Create window-size specific resources
-	m_render_data.m_deviceResources->CreateWindowSizeDependentResources();
+	m_device_data.m_deviceResources->CreateWindowSizeDependentResources();
 	CreateWindowSizeDependentResources();
 
 	//Configure localisation
-	m_localiser.configure(game_config["language"]);
+	m_localiser.configure(m_game_config["language"]);
 
 	//Setup keybinds
 	m_keybinds.setup(&m_input_data);
@@ -117,6 +116,9 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	//Setup item data
 	//m_probabilities = new ItemData();
 	//Locator::setupItemData(m_probabilities);
+
+	//Initialise anything we need in our game
+	m_game_inst.Initialize();
 }
 
 /* The game update, split it out to update and render :) */
@@ -138,7 +140,7 @@ void ThICC_Engine::Update(DX::StepTimer const& timer)
 		/* This can be massively refactored now, since WaitForGpu is available in our service locator, which is a more efficient implementation. */
 		std::cout << "CALL TO WaitForGPU - THIS WILL SOON BE DEPRECIATED!";
 		//--
-		m_render_data.m_deviceResources->WaitForGpu();
+		m_device_data.m_deviceResources->WaitForGpu();
 		WaitForGPU::should_wait = false;
 	}
 
@@ -155,7 +157,7 @@ void ThICC_Engine::Update(DX::StepTimer const& timer)
 	m_input_data.m_mouseButtonTracker.Update(m_input_data.m_mouseState);
 
 	//Get controller state for each player
-	for (int i = 0; i < game_config["player_count"]; ++i)
+	for (int i = 0; i < m_game_config["player_count"]; ++i)
 	{
 		m_input_data.m_gamePadState[i] = m_input_data.m_gamepad->GetState(i); //set game controllers state[s]
 	}
@@ -183,14 +185,14 @@ void ThICC_Engine::Render()
 	}
 
 	// Prepare the command list to render a new frame.
-	m_render_data.m_deviceResources->Prepare();
+	m_device_data.m_deviceResources->Prepare();
 
-	auto commandList = m_render_data.m_deviceResources->GetCommandList();
-	m_render_data.m_hdrScene->BeginScene(commandList);
+	auto commandList = m_device_data.m_deviceResources->GetCommandList();
+	m_device_data.m_hdrScene->BeginScene(commandList);
 
 	Clear();
 
-	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), m_render_data.m_states->Heap() };
+	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
 	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
 	// Render game map if active
@@ -206,7 +208,7 @@ void ThICC_Engine::Render()
 				auto pbr = dynamic_cast<PBREffect*>(it.get());
 				if (pbr)
 				{
-					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, m_render_data.m_states->AnisotropicClamp());
+					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, Locator::getRD()->m_states->AnisotropicClamp());
 				}
 			}
 		}
@@ -217,34 +219,34 @@ void ThICC_Engine::Render()
 
 	m_game_inst.Render();
 
-	m_render_data.m_hdrScene->EndScene(commandList);
+	m_device_data.m_hdrScene->EndScene(commandList);
 
-	auto rtvDescriptor = m_render_data.m_deviceResources->GetRenderTargetView();
+	auto rtvDescriptor = m_device_data.m_deviceResources->GetRenderTargetView();
 	commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, nullptr);
 
 	m_toneMapACESFilmic->Process(commandList);
 
 	// Show the new frame.
-	m_render_data.m_deviceResources->Present();
-	m_graphicsMemory->Commit(m_render_data.m_deviceResources->GetCommandQueue());
+	m_device_data.m_deviceResources->Present();
+	m_graphicsMemory->Commit(m_device_data.m_deviceResources->GetCommandQueue());
 }
 
 // Helper method to clear the back buffers.
 void ThICC_Engine::Clear()
 {
-	auto commandList = m_render_data.m_deviceResources->GetCommandList();
+	auto commandList = m_device_data.m_deviceResources->GetCommandList();
 
 	// Clear the views.
 	auto rtvDescriptor = m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene);
-	auto dsvDescriptor = m_render_data.m_deviceResources->GetDepthStencilView();
+	auto dsvDescriptor = m_device_data.m_deviceResources->GetDepthStencilView();
 
 	commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
 	commandList->ClearRenderTargetView(rtvDescriptor, c_CornflowerBlue, 0, nullptr);
 	commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	// Set the viewport and scissor rect.
-	auto viewport = m_render_data.m_deviceResources->GetScreenViewport();
-	auto scissorRect = m_render_data.m_deviceResources->GetScissorRect();
+	auto viewport = m_device_data.m_deviceResources->GetScreenViewport();
+	auto scissorRect = m_device_data.m_deviceResources->GetScissorRect();
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
 }
@@ -272,12 +274,12 @@ void ThICC_Engine::OnResuming()
 }
 void ThICC_Engine::OnWindowMoved()
 {
-	auto r = m_render_data.m_deviceResources->GetOutputSize();
-	m_render_data.m_deviceResources->WindowSizeChanged(r.right, r.bottom);
+	auto r = m_device_data.m_deviceResources->GetOutputSize();
+	m_device_data.m_deviceResources->WindowSizeChanged(r.right, r.bottom);
 }
 void ThICC_Engine::OnWindowSizeChanged(int width, int height)
 {
-	if (!m_render_data.m_deviceResources->WindowSizeChanged(width, height))
+	if (!m_device_data.m_deviceResources->WindowSizeChanged(width, height))
 		return;
 
 	CreateWindowSizeDependentResources();
@@ -286,14 +288,14 @@ void ThICC_Engine::OnWindowSizeChanged(int width, int height)
 /* Window properties */
 void ThICC_Engine::GetDefaultSize(int& width, int& height) const
 {
-	width = game_config["window_width"];
-	height = game_config["window_height"];
+	width = m_game_config["window_width"];
+	height = m_game_config["window_height"];
 }
 
 /* These are the resources that depend on the device. */
 void ThICC_Engine::CreateDeviceDependentResources()
 {
-	auto device = m_render_data.m_deviceResources->GetD3DDevice();
+	auto device = m_device_data.m_deviceResources->GetD3DDevice();
 
 	m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 
@@ -308,18 +310,18 @@ void ThICC_Engine::CreateDeviceDependentResources()
 		D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
 		RTVDescriptors::RTVCount);
 
-	m_render_data.m_hdrScene->SetDevice(device, m_resourceDescriptors->GetCpuHandle(Descriptors::SceneTex), m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene));
+	m_device_data.m_hdrScene->SetDevice(device, m_resourceDescriptors->GetCpuHandle(Descriptors::SceneTex), m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene));
 
-	m_render_data.m_states = std::make_unique<CommonStates>(device);
+	Locator::getRD()->m_states = std::make_unique<CommonStates>(device);
 
 	m_lineBatch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(device);
 
-	RenderTargetState rtState(m_render_data.m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
+	RenderTargetState rtState(m_device_data.m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
 
 	m_toneMapACESFilmic = std::make_unique<ToneMapPostProcess>(device, rtState, ToneMapPostProcess::ACESFilmic, ToneMapPostProcess::SRGB);
 	m_toneMapACESFilmic->SetHDRSourceTexture(m_resourceDescriptors->GetGpuHandle(Descriptors::SceneTex));
 
-	RenderTargetState hdrState(m_render_data.m_hdrScene->GetFormat(), m_render_data.m_deviceResources->GetDepthBufferFormat());
+	RenderTargetState hdrState(m_device_data.m_hdrScene->GetFormat(), m_device_data.m_deviceResources->GetDepthBufferFormat());
 
 	{
 		EffectPipelineStateDescription pd(
@@ -375,9 +377,9 @@ void ThICC_Engine::CreateDeviceDependentResources()
 		CreateShaderResourceView(device, m_irradianceIBL[j].Get(), m_resourceDescriptors->GetCpuHandle(Descriptors::IrradianceIBL1 + j), true);
 	}
 
-	auto uploadResourcesFinished = resourceUpload.End(m_render_data.m_deviceResources->GetCommandQueue());
+	auto uploadResourcesFinished = resourceUpload.End(m_device_data.m_deviceResources->GetCommandQueue());
 
-	m_render_data.m_deviceResources->WaitForGpu();
+	m_device_data.m_deviceResources->WaitForGpu();
 
 	uploadResourcesFinished.wait();
 }
@@ -385,9 +387,9 @@ void ThICC_Engine::CreateDeviceDependentResources()
 /* Allocate all memory resources that change on a window SizeChanged event. */
 void ThICC_Engine::CreateWindowSizeDependentResources()
 {
-	auto device = m_render_data.m_deviceResources->GetD3DDevice();
+	auto device = m_device_data.m_deviceResources->GetD3DDevice();
 
-	auto size = m_render_data.m_deviceResources->GetOutputSize();
+	auto size = m_device_data.m_deviceResources->GetOutputSize();
 
 	ResourceUploadBatch resourceUpload(device);
 
@@ -400,13 +402,13 @@ void ThICC_Engine::CreateWindowSizeDependentResources()
 	DX::FindMediaFile(comicFont, _MAX_PATH, (size.bottom > 1200) ? L"DATA/IMPORTED/comic4k.spritefont" : L"DATA/IMPORTED/comic.spritefont");
 
 
-	m_render_data.m_deviceResources->WaitForGpu();
+	m_device_data.m_deviceResources->WaitForGpu();
 
-	auto uploadResourcesFinished = resourceUpload.End(m_render_data.m_deviceResources->GetCommandQueue());
+	auto uploadResourcesFinished = resourceUpload.End(m_device_data.m_deviceResources->GetCommandQueue());
 
 	uploadResourcesFinished.wait();
 
-	m_render_data.m_hdrScene->SetWindow(size);
+	m_device_data.m_hdrScene->SetWindow(size);
 
 	m_ballCamera.SetWindow(size.right, size.bottom);
 	m_ballModel.SetWindow(size.right, size.bottom);
@@ -417,7 +419,7 @@ void ThICC_Engine::CreateWindowSizeDependentResources()
 /* When we lose our device, reset everything. */
 void ThICC_Engine::OnDeviceLost()
 {
-	m_render_data.m_gameMapPBRFactory.reset();
+	Locator::getRD()->m_gameMapPBRFactory.reset();
 	m_gameMapResources.reset();
 	m_gameMap.reset();
 	m_gameMapEffects.clear();
@@ -425,14 +427,14 @@ void ThICC_Engine::OnDeviceLost()
 	m_lineEffect.reset();
 	m_lineBatch.reset();
 
-	m_render_data.m_states.reset();
+	Locator::getRD()->m_states.reset();
 
 	m_toneMapACESFilmic.reset();
 
 	m_resourceDescriptors.reset();
 	m_renderDescriptors.reset();
 
-	m_render_data.m_hdrScene->ReleaseDevice();
+	m_device_data.m_hdrScene->ReleaseDevice();
 
 	m_graphicsMemory.reset();
 }
@@ -452,9 +454,9 @@ void ThICC_Engine::LoadModel(std::string filename)
 	m_gameMapEffects.clear();
 	m_gameMapResources.reset();
 	m_gameMap.reset();
-	m_render_data.m_gameMapPBRFactory.reset();
+	Locator::getRD()->m_gameMapPBRFactory.reset();
 
-	m_render_data.m_deviceResources->WaitForGpu();
+	m_device_data.m_deviceResources->WaitForGpu();
 
 	m_reloadModel = false;
 	m_modelRot = Quaternion::Identity;
@@ -490,7 +492,7 @@ void ThICC_Engine::LoadModel(std::string filename)
 
 	if (m_gameMap)
 	{
-		auto device = m_render_data.m_deviceResources->GetD3DDevice();
+		auto device = m_device_data.m_deviceResources->GetD3DDevice();
 
 		ResourceUploadBatch resourceUpload(device);
 		resourceUpload.Begin();
@@ -532,10 +534,10 @@ void ThICC_Engine::LoadModel(std::string filename)
 		{
 			//Create effect factory
 			IEffectFactory *fxFactory = nullptr;
-			m_render_data.m_gameMapPBRFactory = std::make_unique<PBREffectFactory>(m_gameMapResources->Heap(), m_render_data.m_states->Heap());
-			fxFactory = m_render_data.m_gameMapPBRFactory.get();
+			Locator::getRD()->m_gameMapPBRFactory = std::make_unique<PBREffectFactory>(m_gameMapResources->Heap(), Locator::getRD()->m_states->Heap());
+			fxFactory = Locator::getRD()->m_gameMapPBRFactory.get();
 
-			RenderTargetState hdrState(m_render_data.m_hdrScene->GetFormat(), m_render_data.m_deviceResources->GetDepthBufferFormat());
+			RenderTargetState hdrState(m_device_data.m_hdrScene->GetFormat(), m_device_data.m_deviceResources->GetDepthBufferFormat());
 
 			EffectPipelineStateDescription pd(
 				nullptr,
@@ -554,9 +556,9 @@ void ThICC_Engine::LoadModel(std::string filename)
 			m_gameMapEffects = m_gameMap->CreateEffects(*fxFactory, pd, pdAlpha, txtOffset);
 		}
 
-		auto uploadResourcesFinished = resourceUpload.End(m_render_data.m_deviceResources->GetCommandQueue());
+		auto uploadResourcesFinished = resourceUpload.End(m_device_data.m_deviceResources->GetCommandQueue());
 
-		m_render_data.m_deviceResources->WaitForGpu();
+		m_device_data.m_deviceResources->WaitForGpu();
 
 		uploadResourcesFinished.wait();
 	}
@@ -565,7 +567,7 @@ void ThICC_Engine::LoadModel(std::string filename)
 /* Create a projection for our view */
 void ThICC_Engine::CreateProjection()
 {
-	auto size = m_render_data.m_deviceResources->GetOutputSize();
+	auto size = m_device_data.m_deviceResources->GetOutputSize();
 
 	m_proj = Matrix::CreatePerspectiveFieldOfView(m_fov, float(size.right) / float(size.bottom), 0.1f, m_farPlane);
 	m_lineEffect->SetProjection(m_proj);

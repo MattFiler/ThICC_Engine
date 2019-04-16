@@ -15,6 +15,7 @@
 
 #include "GameFilepaths.h"
 #include "RenderData.h"
+#include "DeviceData.h"
 #include "GameStateData.h"
 #include "LocalisationManager.h"
 
@@ -57,7 +58,7 @@ public:
 
 	// Properties
 	void GetDefaultSize(int& width, int& height) const;
-	bool RequestHDRMode() const { return m_render_data.m_deviceResources ? (m_render_data.m_deviceResources->GetDeviceOptions() & DX::DeviceResources::c_EnableHDR) != 0 : false; }
+	bool RequestHDRMode() const { return m_device_data.m_deviceResources ? (m_device_data.m_deviceResources->GetDeviceOptions() & DX::DeviceResources::c_EnableHDR) != 0 : false; }
 
 private:
 
@@ -76,13 +77,13 @@ private:
 	GameFilepaths m_filepath;
 	LocalisationManager m_localiser;
 	KeybindManager m_keybinds;
-
+	
 	ThICC_Game m_game_inst;
 	ThICC_InputData m_input_data;
-	ThICC_RenderData m_render_data;
+	ThICC_DeviceData m_device_data;
 	ThICC_GameStateData m_gamestate_data;
 
-	json game_config;
+	json m_game_config;
 	ItemData* m_probabilities = nullptr;
 
 	//audio system

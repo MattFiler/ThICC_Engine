@@ -263,6 +263,9 @@
     <ClInclude Include="LocalisationManager.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
+    <ClInclude Include="DeviceData.h">
+      <Filter>Engine Backend\Shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

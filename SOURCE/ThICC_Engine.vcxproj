@@ -205,6 +205,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ControlledMovement.h" />
     <ClInclude Include="DebugMarker.h" />
+    <ClInclude Include="DeviceData.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FakeItemBox.h" />
     <ClInclude Include="GameDebugToggles.h" />

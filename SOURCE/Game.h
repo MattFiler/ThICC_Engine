@@ -7,8 +7,7 @@ public:
 	ThICC_Game() = default;
 	~ThICC_Game() = default;
 
+	void Initialize();
 	void Update(DX::StepTimer const& timer);
-	void InputHandler(DirectX::GamePad::State gpad);
-	void InputHandler(DirectX::Keyboard::State kb, DirectX::Mouse::State mouse);
 	void Render();
 };
