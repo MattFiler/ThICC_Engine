@@ -140,7 +140,7 @@ void Player::CheckUseItem()
 	{
 		TrailItems();
 
-		if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
+		if (Locator::getID()->m_gamePadState[m_playerID].IsAPressed())
 		{
 			if (m_trailingItems.empty() && m_InventoryItem != NONE)
 			{
@@ -160,7 +160,7 @@ void Player::CheckUseItem()
 	}
 	else
 	{
-		if (Locator::getGSD()->m_gamePadState[m_playerID].IsAPressed())
+		if (Locator::getID()->m_gamePadState[m_playerID].IsAPressed())
 		{
 			if (m_trailingItems.empty() && m_InventoryItem != NONE && !m_aPressed)
 			{
@@ -329,7 +329,7 @@ void Player::ReleaseItem()
 {
 	if (!m_trailingItems.empty())
 	{
-		m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getGSD()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
+		m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getID()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
 		m_trailingItems.pop_back();
 
 		if (m_trailingItems.empty())
@@ -365,7 +365,7 @@ void Player::movement()
 {
 	m_move->Tick();
 
-	Locator::getID()->m_gamepad->SetVibration(m_playerID, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getGSD()->m_gamePadState[m_playerID].triggers.right * 0.1);
+	Locator::getID()->m_gamepad->SetVibration(m_playerID, Locator::getID()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getID()->m_gamePadState[m_playerID].triggers.right * 0.1);
 
 	// Debug code to save/load the players game state
 	if (m_keymindManager.keyPressed("Debug Save Matrix"))

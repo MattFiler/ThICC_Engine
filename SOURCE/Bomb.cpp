@@ -2,6 +2,7 @@
 #include "Bomb.h"
 #include "Player.h"
 #include "Explosion.h"
+#include "GameStateData.h"
 
 Bomb::Bomb(std::function<Explosion*()> _CreateExplosionFunciton) : Item(Locator::getItemData()->GetItemModelName(BOMB)), CreateExplosion(_CreateExplosionFunciton)
 {

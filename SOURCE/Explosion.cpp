@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Explosion.h"
+#include "GameStateData.h"
 
 Explosion::Explosion() : TrackMagnet("bomb_explosion")
 {

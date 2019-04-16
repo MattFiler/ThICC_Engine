@@ -10,4 +10,9 @@ struct ThICC_InputData {
 	DirectX::Keyboard::KeyboardStateTracker         m_keyboardTracker;
 	DirectX::Mouse::ButtonStateTracker              m_mouseButtonTracker;
 	DirectX::GamePad::ButtonStateTracker            m_gamepadButtonTracker;
+
+	DirectX::Keyboard::State m_prevKeyboardState;
+	DirectX::Keyboard::State m_keyboardState;
+	DirectX::Mouse::State m_mouseState;
+	DirectX::GamePad::State m_gamePadState[4];
 };

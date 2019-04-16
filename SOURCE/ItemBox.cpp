@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "ItemData.h"
 #include "Constants.h"
+#include "GameStateData.h"
 
 //Todo: replace "Default Item" with item box model
 ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("ITEM CUBE") {

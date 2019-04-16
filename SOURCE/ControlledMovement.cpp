@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ControlledMovement.h"
+#include "InputData.h"
 #include "GameStateData.h"
 
 ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh) : m_physModel(_physModel), m_animMesh(_animMesh)
@@ -17,22 +18,22 @@ void ControlledMovement::GetControllerInput()
 	//FORWARD BACK & STRAFE CONTROL HERE
 
 	//float rotSpeed = 0.05f;
-	if (m_controlsActive && Locator::getGSD()->m_gamePadState[m_playerID].IsConnected())
+	if (m_controlsActive && Locator::getID()->m_gamePadState[m_playerID].IsConnected())
 	{
 		m_isTurning = false;
 		//GameController Movement
-		if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightShoulderPressed())
+		if (Locator::getID()->m_gamePadState[m_playerID].IsRightShoulderPressed())
 		{
 			m_isTurning = true;
 			if (m_drifting == false)
 			{
 				m_startDrift = true;
 				m_drifting = true;
-				if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
+				if (Locator::getID()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
 				{
 					m_driftingRight = false;
 				}
-				else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+				else if (Locator::getID()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
 				{
 					m_driftingRight = true;
 				}
@@ -51,11 +52,11 @@ void ControlledMovement::GetControllerInput()
 			}
 		}
 
-		if (Locator::getGSD()->m_gamePadState[m_playerID].IsRightTriggerPressed())
+		if (Locator::getID()->m_gamePadState[m_playerID].IsRightTriggerPressed())
 		{
 			m_acceleration = 1;
 		}
-		else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
+		else if (Locator::getID()->m_gamePadState[m_playerID].IsLeftTriggerPressed())
 		{
 			m_acceleration = -0.5f;
 		}
@@ -64,13 +65,13 @@ void ControlledMovement::GetControllerInput()
 			m_acceleration = 0;
 		}
 
-		if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
+		if (Locator::getID()->m_gamePadState[m_playerID].IsLeftThumbStickLeft())
 		{
 			m_left = true;
 			m_right = false;
 			m_isTurning = true;
 		}
-		else if (Locator::getGSD()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
+		else if (Locator::getID()->m_gamePadState[m_playerID].IsLeftThumbStickRight())
 		{
 			m_right = true;
 			m_left = false;

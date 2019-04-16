@@ -15,6 +15,7 @@
 
 #include "GameFilepaths.h"
 #include "RenderData.h"
+#include "GameStateData.h"
 
 #include "Game.h"
 
@@ -51,7 +52,7 @@ public:
 
 	// Properties
 	void GetDefaultSize(int& width, int& height) const;
-	bool RequestHDRMode() const { return m_deviceResources ? (m_deviceResources->GetDeviceOptions() & DX::DeviceResources::c_EnableHDR) != 0 : false; }
+	bool RequestHDRMode() const { return m_render_data.m_deviceResources ? (m_render_data.m_deviceResources->GetDeviceOptions() & DX::DeviceResources::c_EnableHDR) != 0 : false; }
 
 private:
 
@@ -70,13 +71,11 @@ private:
 	void CreateProjection();
 
 	GameFilepaths m_filepath;
+
 	ThICC_Game m_game_inst;
 	ThICC_InputData m_input_data;
 	ThICC_RenderData m_render_data;
-
-	// Device resources.
-	std::unique_ptr<DX::DeviceResources>            m_deviceResources;
-	std::unique_ptr<DX::RenderTexture>              m_hdrScene;
+	ThICC_GameStateData m_gamestate_data;
 
 	// Rendering loop timer.
 	DX::StepTimer                                   m_timer;

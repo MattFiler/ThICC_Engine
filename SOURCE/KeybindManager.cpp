@@ -2,4 +2,4 @@
 #include "KeybindManager.h"
 
 json KeybindManager::config = "";
-ThICC_GameStateData* KeybindManager::m_GSD = nullptr;
+ThICC_InputData* KeybindManager::m_ID = nullptr;

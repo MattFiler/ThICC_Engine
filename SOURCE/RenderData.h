@@ -2,10 +2,19 @@
 
 #include "pch.h"
 #include "Camera.h"
+#include "RenderTexture.h"
+#include "DeviceResourcesPC.h"
 
 struct ThICC_RenderData {
 	std::unique_ptr<DirectX::CommonStates>          m_states;
 	std::unique_ptr<DirectX::PBREffectFactory>      m_gameMapPBRFactory; //m_fxFactory
+
+
+
+
+	std::unique_ptr<DX::DeviceResources>            m_deviceResources;
+	std::unique_ptr<DX::RenderTexture>              m_hdrScene;
+
 
 
 
