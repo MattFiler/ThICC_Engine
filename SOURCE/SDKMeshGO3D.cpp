@@ -55,8 +55,8 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 		wchar_t radiance[_MAX_PATH] = {};
 		wchar_t irradiance[_MAX_PATH] = {};
 
-		DX::FindMediaFile(radiance, _MAX_PATH, s_radianceIBL[0]);
-		DX::FindMediaFile(irradiance, _MAX_PATH, s_irradianceIBL[0]);
+		DX::FindMediaFile(radiance, _MAX_PATH, s_radianceIBL[j]);
+		DX::FindMediaFile(irradiance, _MAX_PATH, s_irradianceIBL[j]);
 
 		DX::ThrowIfFailed(
 			CreateDDSTextureFromFile(device, resourceUpload, radiance, m_radianceIBL[j].ReleaseAndGetAddressOf())
@@ -200,7 +200,7 @@ void SDKMeshGO3D::Render()
 			/* This is wrong and what is contributing to the gross visual output. We're getting the GPU handles for the model's materials, not where the env maps are stored :) */
 			/* The 2D sprites also don't work due to a similar issue - we're allocating sprites to the wrong descriptor causing memory issues. */
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Locator::getRD()->m_ibl);
-			auto diffuseDesc = m_radianceIBL[0]->GetDesc();
+			auto diffuseDesc = m_radianceIBL[Locator::getRD()->m_ibl]->GetDesc();
 			auto irradianceTex = m_resourceDescriptors->GetGpuHandle((int)NUM_OF_ENV_MAPS::ENV_MAP_COUNT + Locator::getRD()->m_ibl);
 
 			for (auto& it : m_modelNormal)

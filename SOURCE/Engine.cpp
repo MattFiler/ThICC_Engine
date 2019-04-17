@@ -217,7 +217,7 @@ void ThICC_Engine::Render()
 	{
 		{
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1 + Locator::getRD()->m_ibl);
-			auto diffuseDesc = Locator::getRD()->m_radianceIBL[0]->GetDesc();
+			auto diffuseDesc = Locator::getRD()->m_radianceIBL[Locator::getRD()->m_ibl]->GetDesc();
 			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::IrradianceIBL1 + Locator::getRD()->m_ibl);
 
 			for (auto& it : m_gameMapEffects)
