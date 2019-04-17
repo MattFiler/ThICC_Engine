@@ -96,8 +96,6 @@ private:
 	// Rendering loop timer.
 	DX::StepTimer                                   m_timer;
 
-	uint32_t                                        m_ibl;
-
 	std::unique_ptr<DirectX::GraphicsMemory>        m_graphicsMemory;
 	std::unique_ptr<DirectX::DescriptorPile>        m_resourceDescriptors;
 	std::unique_ptr<DirectX::DescriptorHeap>        m_renderDescriptors;

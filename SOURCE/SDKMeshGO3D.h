@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject3D.h"
 #include "GameFilepaths.h"
+#include "Constants.h"
 #include <string>
 struct RenderData;
 
@@ -27,8 +28,12 @@ protected:
 	std::unique_ptr<DirectX::Model> m_model;
 	std::vector<std::shared_ptr<DirectX::IEffect>> m_modelNormal;
 	std::unique_ptr<DirectX::DescriptorPile>        m_resourceDescriptors;
+	Microsoft::WRL::ComPtr<ID3D12Resource>          m_radianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT];
+	Microsoft::WRL::ComPtr<ID3D12Resource>          m_irradianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT];
 
 	GameFilepaths m_filepath;
+
+	int resourceDescriptorOffset = 0;
 
 	bool is_debug_mesh = false;
 	bool m_shouldRender = true;

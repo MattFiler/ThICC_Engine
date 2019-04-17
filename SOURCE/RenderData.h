@@ -63,6 +63,8 @@ struct ThICC_RenderData {
 	Microsoft::WRL::ComPtr<ID3D12Resource>          m_irradianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT];
 
 
+	uint32_t m_ibl = 0;
+
 
 	/* IMPORTED */
 

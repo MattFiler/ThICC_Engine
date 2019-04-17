@@ -38,7 +38,6 @@ ThICC_Engine::ThICC_Engine() noexcept(false) :
 	m_distance(10.f),
 	m_farPlane(10000.f),
 	m_sensitivity(1.f),
-	m_ibl(0),
 	m_reloadModel(false),
 	m_toneMapMode(ToneMapPostProcess::ACESFilmic)
 {
@@ -181,6 +180,16 @@ void ThICC_Engine::Update(DX::StepTimer const& timer)
 	{
 		m_reloadModel = true;
 	}
+
+	/* DEBUG: CHANGE ENV MAPS ON ENTER PRESS*/
+	if (m_input_data.m_keyboardTracker.IsKeyPressed(Keyboard::Enter))
+	{
+		++Locator::getRD()->m_ibl;
+		if (Locator::getRD()->m_ibl >= (int)NUM_OF_ENV_MAPS::ENV_MAP_COUNT)
+		{
+			Locator::getRD()->m_ibl = 0;
+		}
+	}
 }
 
 /* Render the scene */
@@ -207,9 +216,9 @@ void ThICC_Engine::Render()
 	if (m_gameMap)
 	{
 		{
-			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1 + m_ibl);
+			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1 + Locator::getRD()->m_ibl);
 			auto diffuseDesc = Locator::getRD()->m_radianceIBL[0]->GetDesc();
-			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::IrradianceIBL1 + m_ibl);
+			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::IrradianceIBL1 + Locator::getRD()->m_ibl);
 
 			for (auto& it : m_gameMapEffects)
 			{
@@ -224,10 +233,9 @@ void ThICC_Engine::Render()
 		Model::UpdateEffectMatrices(m_gameMapEffects, m_world, m_view, m_proj);
 		m_gameMap->Draw(commandList, m_gameMapEffects.cbegin());
 	}
+	m_device_data.m_hdrScene->EndScene(commandList);
 
 	m_game_inst.Render();
-
-	m_device_data.m_hdrScene->EndScene(commandList);
 
 	auto rtvDescriptor = m_device_data.m_deviceResources->GetRenderTargetView();
 	commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, nullptr);
