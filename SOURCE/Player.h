@@ -39,7 +39,7 @@ public:
 	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
 	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
 
-	void SetWaypoint(int _waypoint) { m_waypoint = _waypoint; }
+	void SetWaypoint(int _waypoint);
 	void SetLap(int _lap) { m_lap = _lap; }
 	void SetRanking(int _position) { m_ranking = _position; }
 	void setGamePad(bool _state);
@@ -96,7 +96,7 @@ private:
 	//	When an item is used it should move from inventory to active (or be immediately used, etc - some items differ).
 	ItemType active_item = ItemType::NONE;
 	ItemType m_InventoryItem = ItemType::NONE;
-
+	
 	Vector2 m_itemPos = Vector2(0, 0); // temp gpu fix 
 	ImageGO2D *m_imgItem = nullptr;
 

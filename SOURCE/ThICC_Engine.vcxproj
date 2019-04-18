@@ -70,8 +70,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>Bin\Desktop_2017_Win10\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>Bin\Desktop_2017_Win10\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\BUILDS\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -80,8 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>Bin\Desktop_2017_Win10\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>Bin\Desktop_2017_Win10\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\BUILDS\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -97,7 +97,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann;</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -109,6 +109,12 @@
     <FXCompile>
       <ShaderModel>5.1</ShaderModel>
     </FXCompile>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)..\ThICC Toolkit.exe" -auto_compile</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Auto-compiling assets...</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -118,7 +124,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann;</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -148,7 +154,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann;</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -162,6 +168,12 @@
     <FXCompile>
       <ShaderModel>5.1</ShaderModel>
     </FXCompile>
+    <PostBuildEvent>
+      <Command>"$(SolutionDir)..\ThICC Toolkit.exe" -auto_compile</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Auto-compiling assets...</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -173,7 +185,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann;</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>

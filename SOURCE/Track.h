@@ -6,6 +6,7 @@
 #include "DebugMarker.h"
 #include "BlenderToDirectX.h"
 #include <json.hpp>
+#include <map>
 using json = nlohmann::json;
 
 struct TrackData {
@@ -71,6 +72,7 @@ public:
 	};
 
 	bool DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle);
+	void SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall);
 
 private:
 	void LoadVertexList(std::string _vertex_list);
@@ -131,4 +133,6 @@ private:
 	int m_triGridY = 0;
 	int m_triGridZ = 0;
 	int m_triGridYX = 0; // Set to m_triGridY * m_triGridX as this number is used lots
+
+	std::map<CollisionType, bool> m_validCollisions;
 };

@@ -37,15 +37,15 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 
 	static const wchar_t* s_radianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT] =
 	{
+		L"DATA/IMPORTED/SunSubMixer_diffuseIBL.dds",
 		L"DATA/IMPORTED/Atrium_diffuseIBL.dds",
 		L"DATA/IMPORTED/Garage_diffuseIBL.dds",
-		L"DATA/IMPORTED/SunSubMixer_diffuseIBL.dds",
 	};
 	static const wchar_t* s_irradianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT] =
 	{
+		L"DATA/IMPORTED/SunSubMixer_specularIBL.dds",
 		L"DATA/IMPORTED/Atrium_specularIBL.dds",
 		L"DATA/IMPORTED/Garage_specularIBL.dds",
-		L"DATA/IMPORTED/SunSubMixer_specularIBL.dds",
 	};
 
 	for (size_t j = 0; j < (unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT; ++j)

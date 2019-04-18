@@ -79,6 +79,13 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	//Load track vertex list for generating our collmap
 	LoadVertexList(m_filepath.generateFilepath(_filename, m_filepath.MODEL_COLLMAP));
 
+	// Populate the collsion map
+	using pair = std::pair<CollisionType, bool>;
+	m_validCollisions.insert(pair(CollisionType::BOOST_PAD, true));
+	m_validCollisions.insert(pair(CollisionType::OFF_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::ON_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::WALL, true));
+
 }
 
 /* Returns a suitable spawn location for a player in this map */
@@ -199,7 +206,7 @@ bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos,
 			{
 				for (MeshTri* tri : m_triGrid[index + k])
 				{
-					if (tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
+					if (m_validCollisions[tri->GetType()] && tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
 					{
 						float dist = Vector::Distance(_startPos, _intersect);
 						if (dist < bestDist)
@@ -259,7 +266,7 @@ void Track::CompareVectorToMinimum(Vector& _vect)
 	}
 }
 
-/* Takes the vector of triangles and creates a vector of vectors of references that are
+/* Takes the vector of triangles and creates a vector of vectors of references that are 
 ordered by position and grouped into a grid space (defined by m_triSegSize) */
 void Track::SplitTrisIntoGrid()
 {
@@ -268,9 +275,9 @@ void Track::SplitTrisIntoGrid()
 	m_triGridX = static_cast<int>(ceilf(trackSize.x / m_triSegSize));
 	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
 	m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
-	m_triGridYX = m_triGridY * m_triGridX;
-	m_triGrid.reserve((m_triGridX + 1)*(m_triGridY + 1)*(m_triGridZ + 1));
-
+	m_triGridYX = m_triGridY*m_triGridX;
+	m_triGrid.reserve((m_triGridX+1)*(m_triGridY + 1)*(m_triGridZ + 1));
+	
 	for (int i = 0; i < m_triGrid.capacity(); i++)
 	{
 		std::vector<MeshTri*> vec;
@@ -296,7 +303,7 @@ void Track::SplitTrisIntoGrid()
 		}
 	}
 
-	std::cout << "Track tri map created with " << m_triGridX * m_triGridY*m_triGridZ << " segments" << std::endl;
+	std::cout << "Track tri map created with " << m_triGridX*m_triGridY*m_triGridZ << " segments" << std::endl;
 }
 
 /* Loops though the m_trianges vector and finds every tri that falls within the area at _index  */
@@ -348,7 +355,7 @@ int Track::GetIndexAtPoint(Vector point)
 	return static_cast<int>((point.z * m_triGridYX) + (point.y * m_triGridX) + point.x);
 }
 
-/* Similar to GetIndexAtPoint but instead returns the x,y and z indicies as if it were a 3D vector
+/* Similar to GetIndexAtPoint but instead returns the x,y and z indicies as if it were a 3D vector 
    (used in calculating where tri's go in the grid) */
 void Track::GetXYZIndexAtPoint(Vector& _point)
 {
@@ -372,4 +379,12 @@ void Track::Clamp(float& _num, float _min, float _max)
 	{
 		_num = _max;
 	}
+}
+
+void Track::SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall)
+{
+	m_validCollisions[CollisionType::BOOST_PAD] = _boost;
+	m_validCollisions[CollisionType::OFF_TRACK] = _off;
+	m_validCollisions[CollisionType::ON_TRACK] = _on;
+	m_validCollisions[CollisionType::WALL] = _wall;
 }

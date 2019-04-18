@@ -15,8 +15,6 @@ void ControlledMovement::Tick()
 
 void ControlledMovement::GetControllerInput()
 {
-	//FORWARD BACK & STRAFE CONTROL HERE
-
 	//float rotSpeed = 0.05f;
 	if (m_controlsActive && Locator::getID()->m_gamePadState[m_playerID].IsConnected())
 	{
@@ -233,12 +231,34 @@ void ControlledMovement::EndDrift()
 }
 
 void ControlledMovement::TurnLeft(bool _flag)
-{
+{ 
 	m_left = _flag;
 	m_isTurning = _flag;
 }
 void ControlledMovement::TurnRight(bool _flag)
-{
-	m_right = _flag;
+{ 
+	m_right = _flag; 
 	m_isTurning = _flag;
 };
+
+void ControlledMovement::Drift(bool _flag)
+{
+	if (!_flag)
+	{
+		EndDrift();
+		m_drifting = false;
+	}
+	else if (!m_drifting)
+	{
+		m_drifting = true;
+		m_startDrift = true;
+		if (m_left)
+		{
+			m_driftingRight = false;
+		}
+		else
+		{
+			m_driftingRight = true;
+		}
+	}
+}
