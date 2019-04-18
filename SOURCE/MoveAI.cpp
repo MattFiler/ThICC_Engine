@@ -30,7 +30,7 @@ void MoveAI::Update(Track* _track)
 	Vector3 direction = world.Forward();
 	int iterations = 0;
 
-	std::cout << m_move->GetWaypoint();
+	DebugText::print("AI DEBUG, CURRENT WAYPOINT: " + std::to_string(m_move->GetWaypoint()));
 
 	if (m_move->GetWaypoint() == _track->getWaypoints().size() - 1)
 	{
@@ -58,8 +58,6 @@ void MoveAI::Update(Track* _track)
 		m_route.push_back(pos);
 	}
 
-
-
 	/*
 	Vector3 left = m_model->GetWorld().Forward() + m_model->GetWorld().Left();
 	left.Normalize();
@@ -70,7 +68,7 @@ void MoveAI::Update(Track* _track)
 	int leftCount = GetStepsForDirection(_track, left * m_aiPathStep);
 	int rightCount = GetStepsForDirection(_track, right * m_aiPathStep);
 
-	std::cout << forwardCount << ", " << leftCount << ", " << rightCount << std::endl;
+	DebugText::print("AI DEBUG, FORWARD: " + std::to_string(forwardCount) + ", LEFT: " + std::to_string(leftCount) + ", RIGHT: " + std::to_string(rightCount));
 
 	// If off the track and every direction is 0, check hard left/right to get back on the track
 	if (m_offTrack && !forwardCount && !leftCount && !rightCount)

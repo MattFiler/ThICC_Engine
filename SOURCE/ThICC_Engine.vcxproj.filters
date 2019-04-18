@@ -283,6 +283,9 @@
     <ClInclude Include="Collision.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
+    <ClInclude Include="DebugText.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

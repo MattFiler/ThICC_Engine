@@ -99,7 +99,7 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 			if (!(hdr->Version >= 200))
 			{
 				//The SDKMESH isn't V2 - we can't load it! This should never happen by the time we get to ship :)
-				std::cout << "TRIED TO LOAD '" << _filename << "' WHICH IS DEPRECIATED (V1) - UPDATE YOUR MODELS FFS!" << std::endl;
+				DebugText::print("TRIED TO LOAD '" + _filename + "' WHICH IS DEPRECIATED (V1) - UPDATE YOUR MODELS FFS!");
 				return;
 			}
 		}
@@ -109,8 +109,8 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 	}
 	catch (...)
 	{
-		//Couldn't load model - not good!
-		std::cout << "TRIED TO LOAD '" << _filename << "' BUT IT FAILED. IS IT A SDKMESH?" << std::endl;
+		//Couldn't load model - not good! Might be trying to load a non-sdkmesh, or have the wrong filepath.
+		DebugText::print("TRIED TO LOAD '" + _filename + "' BUT IT FAILED. IS IT A SDKMESH?");
 		m_model.reset();
 		return;
 	}
@@ -150,7 +150,7 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 		catch (...)
 		{
 			//Couldn't load model's materials - again not good! We might have the wrong working directory.
-			std::cout << "COULDN'T LOAD MATERIALS FOR MODEL '" << _filename << "' - IS THE FILE PATH CORRECT?" << std::endl;
+			DebugText::print("COULDN'T LOAD MATERIALS FOR MODEL '" + _filename + "' - IS THE FILE PATH CORRECT?");
 			m_model.reset();
 			m_modelResources.reset();
 			return;

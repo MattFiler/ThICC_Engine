@@ -51,12 +51,12 @@ void Player::setActiveItem(ItemType _item) {
 
 		m_InventoryItem = ItemType::NONE;
 		
-		std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
+		DebugText::print("PLAYER " + std::to_string(m_playerID) + " HAS ACTIVATED ITEM: " + std::to_string(_item));
 	}
 	else
 	{
 		//We should never get here
-		std::cout << "Player tried to use an item that they did not have. This should never be requested!" << std::endl;
+		DebugText::print("PLAYER TRIED TO USE AN ITEM THEY DON'T HAVE - THIS SHOULD NEVER BE REQUESTED!");
 	}
 };
 
@@ -65,7 +65,7 @@ void Player::setItemInInventory(ItemType _item) {
 		m_InventoryItem = _item;
 		m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
 		m_imgItem->SetPos(m_itemPos);
-		std::cout << "PLAYER " << m_playerID << " HAS ACQUIRED ITEM: " << _item << std::endl; //debug
+		DebugText::print("PLAYER " + std::to_string(m_playerID) + " HAS ACQUIRED ITEM: " + std::to_string(_item));
 	}
 }
 
@@ -124,7 +124,7 @@ void Player::Tick()
 
 	//Debug output player location - useful for setting up spawns
 	if (m_keymindManager.keyPressed("Debug Print Player Location")) {
-		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+		DebugText::print("PLAYER POSITION: (" + std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + ")");
 	}
 
 	//Update UI
@@ -395,7 +395,7 @@ void Player::movement()
 
 	//Debug output player location - useful for setting up spawns
 	if (m_keymindManager.keyPressed("Debug Print Player Location")) {
-		std::cout << "PLAYER POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+		DebugText::print("PLAYER POSITION: (" + std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + ")");
 	}
 
 }

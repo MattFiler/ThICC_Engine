@@ -231,11 +231,11 @@ void Camera::Tick()
 		if (m_pos != target_pos)
 			m_pos = Vector3::Lerp(m_pos, target_pos, pos_lerp);
 	}
-	//std::cout << timer << std::endl;
+	//DebugText::print(std::to_string(timer));
 
 	//Debug output player location - useful for setting up spawns
 	if (m_keybinds.keyPressed("Debug Print Camera Location")) {
-		std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+		DebugText::print("CAMERA POSITION: (" + std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + ")");
 	}
 
 	GameObject3D::Tick();

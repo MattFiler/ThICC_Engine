@@ -73,8 +73,8 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	SetRotationInDegrees(m_track_data.start_rot);
 
 	//Debug output
-	std::cout << "Loaded track data: " << m_track_data_j["asset_name"] << std::endl;
-	std::cout << "Suitable spawn spot: " << m_track_data.spawn_pos.x << ", " << m_track_data.spawn_pos.y << ", " << m_track_data.spawn_pos.z << std::endl;
+	DebugText::print("Loaded track: " + _filename);
+	DebugText::print("Suitable spawn spot: (" + std::to_string(m_track_data.spawn_pos.x) + ", " + std::to_string(m_track_data.spawn_pos.y) + ", " + std::to_string(m_track_data.spawn_pos.z) + ")");
 
 	//Load track vertex list for generating our collmap
 	LoadVertexList(m_filepath.generateFilepath(_filename, m_filepath.MODEL_COLLMAP));
@@ -303,7 +303,7 @@ void Track::SplitTrisIntoGrid()
 		}
 	}
 
-	std::cout << "Track tri map created with " << m_triGridX*m_triGridY*m_triGridZ << " segments" << std::endl;
+	DebugText::print("Track tri map created with " + std::to_string(m_triGridX * m_triGridY * m_triGridZ) + " segments!");
 }
 
 /* Loops though the m_trianges vector and finds every tri that falls within the area at _index  */

@@ -129,10 +129,12 @@ void PhysModel::updateCollider()
 
 		if (debug_print)
 		{
-			std::cout << "Mesh Centre: X: " << std::to_string(m_physData.m_worldCentre.x) << " Y: " << std::to_string(m_physData.m_worldCentre.y) << " Z: " << std::to_string(m_physData.m_worldCentre.z) << std::endl;
-			std::cout << "Position: X: " << std::to_string(m_pos.x) << " Y: " << std::to_string(m_pos.y) << " Z: " << std::to_string(m_pos.z) << std::endl;
+			DebugText::print("START OF PHYSMODEL INFO DUMP");
+			DebugText::print("Mesh Centre: (" + std::to_string(m_physData.m_worldCentre.x) + ", " + std::to_string(m_physData.m_worldCentre.y) + ", " + std::to_string(m_physData.m_worldCentre.z) + ")");
+			DebugText::print("Position: (" + std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + ")");
 			Vector3 diff = m_physData.m_worldCentre - m_pos;
-			std::cout << "Diff: X: " << std::to_string(diff.x) << " Y: " << std::to_string(diff.y) << " Z: " << std::to_string(diff.z) << std::endl;
+			DebugText::print("Diff: (" + std::to_string(diff.x) + ", " + std::to_string(diff.y) + ", " + std::to_string(diff.z) + ")");
+			DebugText::print("END OF PHYSMODEL INFO DUMP");
 		}
 	}
 }

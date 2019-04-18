@@ -5,5 +5,5 @@ DebugMarker::DebugMarker(Vector3 position, Vector3 rotation) : PhysModel("Defaul
 	SetPos(position);
 	SetRotation(rotation);
 
-	std::cout << "CREATING DEBUG MARKER AT: (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
+	DebugText::print("CREATING DEBUG MARKER AT: (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ", " + std::to_string(position.z) + ")");
 }

@@ -163,6 +163,8 @@ void ThICC_Engine::Update(DX::StepTimer const& timer)
 		{
 			Locator::getRD()->m_ibl = 0;
 		}
+		DebugText::print("Changing to environment map " + std::to_string(Locator::getRD()->m_ibl));
+		DebugText::print("THIS FUNCTIONALITY NEEDS TO BE REMOVED :)");
 	}
 }
 

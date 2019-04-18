@@ -272,10 +272,6 @@ void GameScene::Update()
 	}
 
 	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels);
-	//std::cout << " W: " << std::to_string(player[0]->getCollider().Orientation.w)
-	//	<< " X: " << std::to_string(player[0]->getCollider().Orientation.x)
-	//	<< " Y: " << std::to_string(player[0]->getCollider().Orientation.y)
-	//	<< " Z: " << std::to_string(player[0]->getCollider().Orientation.z) << std::endl;
 
 	UpdateItems();
 }

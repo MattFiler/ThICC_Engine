@@ -72,7 +72,8 @@ void AnimationMesh::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
 		}
 		}
 
-		//std::cout << m_rotOffset.x << ", " << m_rotOffset.y << ", " << m_rotOffset.z << std::endl;
+		//DebugText::print(std::to_string(m_rotOffset.x) + ",  " + std::to_string(m_rotOffset.y) + ", " + std::to_string(m_rotOffset.z));
+
 	}
 	else
 	{

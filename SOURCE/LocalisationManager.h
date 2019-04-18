@@ -23,7 +23,7 @@ struct LocalisationManager
 			return language_config[id];
 		}
 		//Instead of a throw, fail nicely by logging and printing the requested string id.
-		std::cout << "COULDN'T FIND A LOCALISATION FOR '#" + id + "'" << std::endl;
+		DebugText::print("COULDN'T FIND A LOCALISATION FOR '#" + id + "'");
 		return "#" + id;
 	}
 	std::string getLanguage() {
