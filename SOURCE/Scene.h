@@ -18,7 +18,7 @@ public:
 	virtual bool Load() = 0;
 
 	//Create objects in the scene
-	virtual void create2DObjects();
-	virtual void create3DObjects();
-	virtual void pushBackObjects();
+	virtual void create2DObjects() = 0;
+	virtual void create3DObjects() = 0;
+	virtual void pushBackObjects() = 0;
 };
