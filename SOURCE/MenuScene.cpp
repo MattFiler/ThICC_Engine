@@ -23,11 +23,11 @@ MenuScene::~MenuScene()
 
 void MenuScene::Update()
 {
-	if (m_key.keyPressed("Quit"))
+	if (m_keybinds.keyPressed("Quit"))
 	{
 		//ExitGame();
 	}
-	else if (Locator::getID()->m_keyboardState.Enter || Locator::getID()->m_gamePadState[0].IsStartPressed())
+	else if (Locator::getID()->m_keybindsboardState.Enter || Locator::getID()->m_gamePadState[0].IsStartPressed())
 	{
 		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
 		Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
@@ -75,7 +75,7 @@ void MenuScene::Update()
 		(*it)->Tick();
 	}
 
-	if (m_key.keyPressed("Load Debug Scene"))
+	if (m_keybinds.keyPressed("Load Debug Scene"))
 	{
 		m_scene_manager->setCurrentScene(Scenes::DEBUGSCENE);
 	}

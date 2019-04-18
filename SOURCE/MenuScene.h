@@ -24,45 +24,41 @@ public:
 	MenuScene();
 	~MenuScene();
 
+	//Core update/render/load functions
 	void Update() override;
 	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
 	bool Load() override;
 
 private:
+	//Create the scene's objects
+	void create2DObjects() override;
+	void create3DObjects() override;
+	void pushBackObjects() override;
 
-	void create2DObjects();
-	void create3DObjects();
-	void pushBackObjects();
+	//Handle players in the "lobby"
 	void enterPlayerLobby();
 	void playerJoin();
 	void initCharecterImages();
 	void resetCharecterImagePos();
 
-	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
-	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
-	Camera*												m_cam;
-	//Light*												m_light;
-
+	//The scene's camera
+	Camera* m_cam;
 	int num_of_cam = 1;
 
-	std::vector<PhysModel*> m_physModels;
-
+	//Referenced stuff
 	json game_config;
-	LocalisationManager m_localiser;
-	GameFilepaths m_filepath;
-	KeybindManager m_key;
+
+	//lol wtf
 	SceneManager* m_scene_manager;
-	States m_menu_state = States::NOSTATE;
 
 	//Charecter Images
 	ImageGO2D* m_charecter_images[4][4]; //[player][charecter]
 
-	//Timeout for charecter selection
+	//States and timings
 	float m_charTimeout[4] = { 0.0f,0.0f,0.0f,0.0f };
-
 	float timeout = 1.2f;
 	bool intro_music_start = true;
 	bool game_start = true;
-
+	States m_menu_state = States::NOSTATE;
 };
 

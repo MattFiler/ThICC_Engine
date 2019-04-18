@@ -26,13 +26,16 @@ public:
 	GameScene();
 	~GameScene();
 
+	//Core update/render/load functions
 	void Update() override;
 	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
 	bool Load() override;
+
+private:
+	//Handle player's waypoints and placements
 	void SetPlayersWaypoint();
 	void SetPlayerRanking();
 
-private:
 	// Updates
 	void UpdateItems();
 	void DeleteItem(Item * item);
@@ -41,44 +44,39 @@ private:
 	//State Stuff
 	bool m_isPaused;
 
+	//Item creation
 	void create2DObjects();
 	void create3DObjects();
 	void pushBackObjects();
 
+	//Item objects
 	Item* CreateItem(ItemType type);
 	Explosion* CreateExplosion();
 
-	// Test objects
+	//Game objects (and test crap)
 	Track* track = nullptr;
 	Player* player[4] = { nullptr };
 	PhysModel* test_model = nullptr;
 	SDKMeshGO3D* debug_cups[8] = { nullptr };
-
-	vector<GameObject2D*>								m_2DObjects; //data structure for all 2D Objects
-	vector<GameObject3D*>								m_3DObjects; //data structure for all 3D Objects
-
-	Camera*												m_cam[4];
-	Camera*												cine_cam;
-	//Light*												m_light;
-
-	KeybindManager m_keybinds;
 	std::vector<Item*> m_itemModels;
-
-	std::vector<PhysModel*> m_physModels;
-
-	json game_config;
-	json track_config;
-	LocalisationManager m_localiser;
-	GameFilepaths m_filepath;
-	SceneManager* m_scene_manager;
-
-	RenderData* m_RD;
-	bool m_playerControls = false;
-
 	Text2D* countdown_text = nullptr;
 
+	//Cameras
+	Camera* m_cam[4];
+	Camera*	cine_cam;
+
+	//Referenced stuff
+	json game_config;
+	json track_config;
+	RenderData* m_RD;
+
+	//lol wtf
+	SceneManager* m_scene_manager;
+
+	//Timing
 	float timeout = 12.f;
 
+	//Game states
 	enum States {
 		START = 0,
 		OPENING = 1,
@@ -87,14 +85,14 @@ private:
 		PLAY = 4,
 		END = 5
 	};
-
 	States state = START;
-
+	bool m_playerControls = false;
 	bool track_music_start = true;
 	bool final_lap_start = false;
 	bool final_lap = false;
 	int finished = 0;
 
+	//AI
 	std::unique_ptr<AIScheduler> m_aiScheduler = nullptr;
 
 };
