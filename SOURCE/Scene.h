@@ -9,7 +9,7 @@ class Scene
 {
 public:
 	Scene() {};
-	~Scene() {};
+	virtual ~Scene() {};
 
 	virtual void Update() = 0;
 	virtual void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) = 0;

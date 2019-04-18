@@ -22,7 +22,7 @@ class MenuScene : public Scene
 {
 public:
 	MenuScene();
-	~MenuScene();
+	~MenuScene() override;
 
 	//Core update/render/load functions
 	void Update() override;

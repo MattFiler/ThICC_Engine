@@ -24,7 +24,7 @@ class GameScene : public Scene
 {
 public:
 	GameScene(std::string _track_name);
-	~GameScene();
+	~GameScene() override;
 
 	//Core update/render/load functions
 	void Update() override;
