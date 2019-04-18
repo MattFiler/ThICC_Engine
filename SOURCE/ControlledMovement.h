@@ -9,13 +9,17 @@ public:
 	ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh = nullptr);
 
 	void Tick();
-	void SetGamepadActive(bool _flag) { m_controlsActive = _flag; };
-	void SetPlayerID(int _id) { m_playerID = _id; };
+	void SetGamepadActive(bool _flag) { m_controlsActive = _flag;};
+	void SetPlayerID(int _id) { m_playerID = _id;};
 
 	// Setters so that the AI can move the physObject
-	void setAcceleration(float _acc) { m_acceleration = _acc; };
+	void setAcceleration(float _acc) { m_acceleration = _acc;};
 	void TurnLeft(bool _flag);
 	void TurnRight(bool _flag);
+	void Drift(bool _flag);
+
+	void SetWaypoint(int _waypoint) { m_waypoint = _waypoint; };
+	int GetWaypoint() { return m_waypoint; };
 
 private:
 	void GetControllerInput();
@@ -47,5 +51,7 @@ private:
 
 	bool m_controlsActive = false;
 	int m_playerID = 0;
+
+	int m_waypoint = 0;
 
 };

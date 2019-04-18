@@ -50,7 +50,7 @@ void Player::setActiveItem(ItemType _item) {
 
 
 		m_InventoryItem = ItemType::NONE;
-
+		
 		std::cout << "PLAYER " << m_playerID << " HAS ACTIVATED ITEM: " << _item << std::endl; //debug
 	}
 	else
@@ -73,6 +73,11 @@ void Player::Render()
 {
 	m_displayedMesh->Render();
 	SDKMeshGO3D::Render();
+
+	if (m_ai)
+	{
+		m_ai->DebugRender();
+	}
 }
 
 
@@ -86,7 +91,7 @@ void Player::Tick()
 	{
 		CheckUseItem();
 	}
-
+	
 
 	// Debug code to save/load the players game state
 	if (m_keymindManager.keyPressed("Debug Save Matrix"))
@@ -178,7 +183,7 @@ void Player::CheckUseItem()
 			ReleaseItem();
 			m_aPressed = false;
 		}
-	}
+	} 
 }
 
 void Player::TrailItems()
@@ -210,11 +215,11 @@ void Player::TrailItems()
 					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
 					Vector3 m_dpos = Vector3{ 2, 0, 2 };
 					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + 350 * Locator::getGSD()->m_dt);
-					m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f)
+					m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f) 
 						* m_dpos.x, m_dpos.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_dpos.z }, m_rot));
 				}
 			}
-		}
+		}	
 	}
 }
 
@@ -228,94 +233,94 @@ void Player::SpawnItems(ItemType type)
 
 	switch (type)
 	{
-	case BANANA:
-	{
-		Banana * banana = static_cast<Banana*>(CreateItem(BANANA));
-		m_trailingItems.push_back(banana);
-		TrailItems();
-		break;
-	}
-
-	case MUSHROOM:
-	{
-		Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(MUSHROOM));
-		mushroom->Use(this, false);
-		break;
-	}
-
-	case GREEN_SHELL:
-	{
-		GreenShell* shell = static_cast<GreenShell*>(CreateItem(GREEN_SHELL));
-		m_trailingItems.push_back(shell);
-		TrailItems();
-		break;
-	}
-
-	case BOMB:
-	{
-		Bomb* bomb = static_cast<Bomb*>(CreateItem(BOMB));
-		m_trailingItems.push_back(bomb);
-		TrailItems();
-		break;
-	}
-
-	case BANANA_3X:
-	{
-		for (int i = 0; i < m_maxItems; i++)
+		case BANANA:
 		{
-			SpawnItems(BANANA);
+			Banana * banana = static_cast<Banana*>(CreateItem(BANANA));
+			m_trailingItems.push_back(banana);
+			TrailItems();
+			break;
 		}
 
-		for (Item*& banana : m_trailingItems)
-		{
-			banana->addImmuneItems(m_trailingItems);
-		}
-
-		m_multiItem = true;
-		break;
-	}
-
-	case MUSHROOM_3X:
-	{
-		//uses the first shroom
-		SpawnItems(MUSHROOM);
-
-		//creates subsequence shrooms
-		for (int i = 0; i < m_maxItems - 1; i++)
+		case MUSHROOM:
 		{
 			Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(MUSHROOM));
-			m_trailingItems.push_back(mushroom);
+			mushroom->Use(this, false);
+			break;
 		}
 
-		m_multiItem = true;
-		break;
-	}
-
-	case GREEN_SHELL_3X:
-	{
-		for (int i = 0; i < m_maxItems; i++)
+		case GREEN_SHELL:
 		{
-			SpawnItems(GREEN_SHELL);
+			GreenShell* shell = static_cast<GreenShell*>(CreateItem(GREEN_SHELL));
+			m_trailingItems.push_back(shell);
+			TrailItems();
+			break;
 		}
 
-		for (int i = 0; i < m_maxItems; i++)
+		case BOMB:
 		{
-			m_trailingItems[i]->addImmuneItems(m_trailingItems);
-			m_trailingItems[i]->setSpinAngle((360 / m_trailingItems.size()) * i);
+			Bomb* bomb = static_cast<Bomb*>(CreateItem(BOMB));
+			m_trailingItems.push_back(bomb);
+			TrailItems();
+			break;
 		}
 
-		m_multiItem = true;
-		break;
-	}
+		case BANANA_3X:
+		{
+			for (int i = 0; i < m_maxItems; i++)
+			{
+				SpawnItems(BANANA);
+			}
 
-	case FAKE_BOX:
-	{
-		FakeItemBox* box = static_cast<FakeItemBox*>(CreateItem(FAKE_BOX));
-		m_trailingItems.push_back(box);
-		TrailItems();
-	}
-	default:
-		break;
+			for (Item*& banana : m_trailingItems)
+			{
+				banana->addImmuneItems(m_trailingItems);
+			}
+
+			m_multiItem = true;
+			break;
+		}
+
+		case MUSHROOM_3X:
+		{
+			//uses the first shroom
+			SpawnItems(MUSHROOM);
+
+			//creates subsequence shrooms
+			for (int i = 0; i < m_maxItems - 1; i++)
+			{
+				Mushroom* mushroom = static_cast<Mushroom*>(CreateItem(MUSHROOM));
+				m_trailingItems.push_back(mushroom);
+			}
+
+			m_multiItem = true;
+			break;
+		}
+
+		case GREEN_SHELL_3X:
+		{
+			for (int i = 0; i < m_maxItems; i++)
+			{
+				SpawnItems(GREEN_SHELL);
+			}
+
+			for (int i = 0; i < m_maxItems; i++)
+			{
+				m_trailingItems[i]->addImmuneItems(m_trailingItems);
+				m_trailingItems[i]->setSpinAngle((360/ m_trailingItems.size()) * i);
+			}
+
+			m_multiItem = true;
+			break;
+		}
+
+		case FAKE_BOX:
+		{
+			FakeItemBox* box = static_cast<FakeItemBox*>(CreateItem(FAKE_BOX));
+			m_trailingItems.push_back(box);
+			TrailItems();
+		}
+		default:
+			break;
 	}
 
 	for (Item*& item : m_trailingItems)
@@ -331,7 +336,7 @@ void Player::ReleaseItem()
 	{
 		m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getID()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
 		m_trailingItems.pop_back();
-
+		
 		if (m_trailingItems.empty())
 		{
 			m_multiItem = false;
@@ -356,6 +361,7 @@ void Player::setGamePad(bool _state)
 	if (m_playerID == 0)
 	{
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
+		m_ai->UseDrift(true);
 		Locator::getAIScheduler()->AddAI(m_ai.get());
 	}
 	// TEST CODE //
@@ -415,4 +421,10 @@ void Player::RespawnLogic()
 			m_velTotal = Vector::Zero;
 		}
 	}
+}
+
+void Player::SetWaypoint(int _waypoint)
+{
+	m_move->SetWaypoint(_waypoint);
+	m_waypoint = _waypoint;
 }

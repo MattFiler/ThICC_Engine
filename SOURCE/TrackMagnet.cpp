@@ -15,6 +15,8 @@ TrackMagnet::TrackMagnet(std::string _filename) : PhysModel(_filename)
 /* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
 bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
+	track.SetValidCollision(true, true, true, false);
+
 	Vector intersect;
 	Vector mid_intersect;
 	Matrix targetWorld = Matrix::Identity;
@@ -87,7 +89,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 			if (moveVector.Length() > m_maxSnapSnep* Locator::getGSD()->m_dt)
 			{
 				moveVector.Normalize();
-				moveVector *= m_maxSnapSnep * Locator::getGSD()->m_dt;
+				moveVector *= m_maxSnapSnep* Locator::getGSD()->m_dt;
 			}
 			SetPos(m_pos + moveVector);
 		}
@@ -133,9 +135,9 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	{
 		lerpDelta = 1;
 	}
-
+	
 	// Lerp the rotation by the calculated amount
-
+	
 	m_quatRot = Quaternion::Slerp(m_quatRot, rot, lerpDelta);
 
 	// Rebuild m_world
@@ -147,7 +149,8 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 
 void TrackMagnet::ResolveWallCollisions(Track& walls)
 {
-	Vector leftSide = data.m_globalBackTopLeft - data.m_globalFrontTopLeft + (m_world.Down() * 1);
+	walls.SetValidCollision(true, true, true, true);
+	Vector leftSide = data.m_globalBackTopLeft - data.m_globalFrontTopLeft + (m_world.Down() *1);
 	Vector rightSide = data.m_globalBackTopRight - data.m_globalFrontTopRight + (m_world.Down() * 1);
 	Vector frontSide = data.m_globalFrontTopRight - data.m_globalFrontTopLeft + (m_world.Down() * 1);
 	Vector backSide = data.m_globalBackTopRight - data.m_globalBackTopLeft + (m_world.Down() * 1);
