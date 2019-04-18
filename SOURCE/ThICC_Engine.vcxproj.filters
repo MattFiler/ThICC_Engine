@@ -67,9 +67,6 @@
     <ClCompile Include="ImageGO2D.cpp">
       <Filter>Game\Components\Game Objects\2D</Filter>
     </ClCompile>
-    <ClCompile Include="WaitForGPU.cpp">
-      <Filter>Engine Backend\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject2D.cpp">
       <Filter>Game\Components\Game Objects\2D</Filter>
     </ClCompile>
@@ -139,9 +136,6 @@
     </ClInclude>
     <ClInclude Include="StepTimer.h">
       <Filter>Engine Backend\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="ArcBall.h">
-      <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="ReadData.h">
       <Filter>Engine Backend\Utilities</Filter>
@@ -223,9 +217,6 @@
     </ClInclude>
     <ClInclude Include="ImageGO2D.h">
       <Filter>Game\Components\Game Objects\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="WaitForGPU.h">
-      <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="GameObject2D.h">
       <Filter>Game\Components\Game Objects\2D</Filter>

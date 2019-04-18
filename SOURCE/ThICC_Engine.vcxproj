@@ -209,7 +209,6 @@
   <ItemGroup>
     <ClInclude Include="AIScheduler.h" />
     <ClInclude Include="AnimationMesh.h" />
-    <ClInclude Include="ArcBall.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Banana.h" />
     <ClInclude Include="BlenderToDirectX.h" />
@@ -261,7 +260,6 @@
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Track.h" />
     <ClInclude Include="TrackMagnet.h" />
-    <ClInclude Include="WaitForGPU.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AIScheduler.cpp" />
@@ -311,7 +309,6 @@
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="TrackMagnet.cpp" />
-    <ClCompile Include="WaitForGPU.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

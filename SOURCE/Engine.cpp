@@ -16,7 +16,6 @@
 
 #include "Constants.h"
 #include "ItemData.h"
-#include "WaitForGPU.h"
 
 #include <experimental/filesystem>
 
@@ -32,8 +31,7 @@ namespace
 }
 
 /* Create! */
-ThICC_Engine::ThICC_Engine() noexcept(false) :
-	m_toneMapMode(ToneMapPostProcess::ACESFilmic)
+ThICC_Engine::ThICC_Engine() noexcept(false)
 {
 	//Read in track config
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
@@ -136,15 +134,6 @@ void ThICC_Engine::Tick()
 /* Update the scene */
 void ThICC_Engine::Update(DX::StepTimer const& timer)
 {
-	//Wait if requested
-	if (WaitForGPU::should_wait) {
-		/* This can be massively refactored now, since WaitForGpu is available in our service locator, which is a more efficient implementation. */
-		std::cout << "CALL TO WaitForGPU - THIS WILL SOON BE DEPRECIATED!";
-		//--
-		m_device_data.m_deviceResources->WaitForGpu();
-		WaitForGPU::should_wait = false;
-	}
-
 	//Get keyboard and mouse state
 	m_input_data.m_prevKeyboardState = m_input_data.m_keyboardState; // keep previous state for just pressed logic
 	m_input_data.m_keyboardState = m_input_data.m_keyboard->GetState();

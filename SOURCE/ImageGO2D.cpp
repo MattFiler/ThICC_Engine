@@ -2,7 +2,6 @@
 #include "ImageGO2D.h"
 #include <codecvt>
 #include "RenderData.h" 
-#include "WaitForGPU.h"
 
 ImageGO2D::ImageGO2D(string _filename)
 {
@@ -35,7 +34,6 @@ void ImageGO2D::CentreOrigin()
 }
 
 void ImageGO2D::UpdateSprite(string _filename) {
-	//WaitForGPU::should_wait = true;
 	new_filepath = _filename;
 }
 

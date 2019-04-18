@@ -8,7 +8,6 @@
 #include "AudioManager.h"
 #include "DebugMarker.h"
 #include "Explosion.h"
-#include "WaitForGPU.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
