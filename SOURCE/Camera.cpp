@@ -240,3 +240,12 @@ void Camera::Tick()
 
 	GameObject3D::Tick();
 }
+
+/* reset */
+void Camera::Reset() {
+	angle = 0.0f;
+	cam_point = 0;
+	time_out = 3.0f;
+	timer = 0.0f;
+	m_cameraID = 0;
+}

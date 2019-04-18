@@ -76,13 +76,34 @@ void GameScene::ExpensiveLoad() {
 
 /* Unpopulate the expensive things. */
 void GameScene::ExpensiveUnload() {
+	Vector3 suitable_spawn = Vector3(0, 0, 0);
+
 	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
 		(*it)->Reset();
 		if (dynamic_cast<Track*>(*it)) {
 			dynamic_cast<Track*>(*it)->UnloadCollision();
+			suitable_spawn = dynamic_cast<Track*>(*it)->getSuitableSpawnSpot();
 		}
 	}
+
+	//Reset player positions & camera mode
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		m_cam[i]->Reset();
+		m_cam[i]->SetBehav(Camera::BEHAVIOUR::RACE_START);
+	}
+	cine_cam->Reset();
+	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
+
+	//We'll probably need to reset more stuff here, like race timers, etc
+	timeout = 12.f;
+	state = START;
+	m_playerControls = false;
+	track_music_start = true;
+	final_lap_start = false;
+	final_lap = false;
+	finished = 0;
 }
 
 /* Create all 2D objects for the scene */
@@ -881,11 +902,13 @@ Explosion * GameScene::CreateExplosion()
 	return explosion;
 }
 
-/* Other crap which I don't think we use anymore */
+/* Delete item (this is a mixup of old and new stuff - for the record, you just need to call Reset() on models to delete them - none of this threading crap.) */
 void GameScene::DeleteItem(Item * item)
 {
+	item->GetMesh()->Reset();
+	/*
 	std::thread thread(&GameScene::DeleteThread, this, item);
-	thread.detach();
+	thread.detach();*/
 }
 void GameScene::DeleteThread(Item * item)
 {

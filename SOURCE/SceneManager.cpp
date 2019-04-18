@@ -39,7 +39,6 @@ void SceneManager::setCurrentScene(Scenes _scene_name, bool _first_load) {
 	}
 
 	//Set the current scene to render/update and load in our expensive stuff
-
 	int index = 0;
 	for (Scenes this_sceneDescriptor : m_sceneDescriptors) {
 		if (this_sceneDescriptor == _scene_name) {
@@ -64,6 +63,11 @@ void SceneManager::Update() {
 			m_prev_scene->ExpensiveUnload();
 			needs_delete = false;
 			delete_counter = 0;
+			/*
+			It'd be real nice to ACTUALLY delete the scene here, 
+			but doing so gives us a GXDI_DEVICE_REMOVED error which I can't solve.
+			So, this is the solution!
+			*/
 		}
 	}
 

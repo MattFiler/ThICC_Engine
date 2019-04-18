@@ -45,6 +45,7 @@ public:
 	virtual void Tick();
 	virtual void Render() {};
 
+	void Reset();
 
 	//Timer debug
 	float getTimer() { return timer; };
