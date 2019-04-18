@@ -149,7 +149,7 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 
 		if (m_model)
 		{
-			//Create effect factory
+			//Create effect factory - shouldn't this be per model?!
 			IEffectFactory *fxFactory = nullptr;
 			Locator::getRD()->m_fxFactoryPBR = std::make_unique<PBREffectFactory>(m_modelResources->Heap(), Locator::getRD()->m_states->Heap());
 			fxFactory = Locator::getRD()->m_fxFactoryPBR.get();
