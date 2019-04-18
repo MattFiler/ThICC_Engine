@@ -8,24 +8,129 @@
 #include <iostream>
 #include <experimental/filesystem>
 
-//extern void ExitGame();
+extern void ExitGame();
 
+/* Create! */
 MenuScene::MenuScene()
 {
-	m_scene_manager = new SceneManager();
+	//Get a ref to the scene manager for swapping scenes
+	m_scene_manager = Locator::getSM();
 }
 
+/* Destroy! */
 MenuScene::~MenuScene()
 {
 	m_2DObjects.clear();
 	m_3DObjects.clear();
 }
 
+/* Load inexpensive things and create the objects for expensive things we will populate when required */
+bool MenuScene::Load()
+{
+	create2DObjects();
+	create3DObjects();
+	pushBackObjects();
+
+	return true;
+}
+
+/* Populate the expensive things! */
+void MenuScene::ExpensiveLoad() {
+	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	{
+		(*it)->Load();
+	}
+}
+
+/* Unpopulate the expensive things. */
+void MenuScene::ExpensiveUnload() {
+	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	{
+		(*it)->Reset();
+	}
+
+	//Will also wanna reset player positions and race data here
+}
+
+/* Create all 2D objects for the scene */
+void MenuScene::create2DObjects()
+{
+	//test text
+	//Text2D* m_enterMenu = new Text2D("Lewis is not cool.");
+	//m_2DObjects.push_back(m_enterMenu);
+
+	ImageGO2D* splash_screen = new ImageGO2D("cbc04-jdryd");
+	m_2DObjects.push_back(splash_screen);
+
+	ImageGO2D* lobby_screen = new ImageGO2D("lobby");
+	lobby_screen->SetPos(Vector2(0, -720));
+	m_2DObjects.push_back(lobby_screen);
+
+	//Charecter images
+	initCharecterImages();
+}
+
+/* Create all 3D objects in the scene. */
+void MenuScene::create3DObjects()
+{
+	for (int i = 0; i < num_of_cam; i++) {
+		//Create a player and position on track
+		//player[i] = new Player(_RD, "Standard Kart", i, *_ID->m_gamePad.get());
+		//player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		//m_3DObjects.push_back(player[i]);
+
+		//Create a camera to follow the player
+		m_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+		m_cam->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
+		m_3DObjects.push_back(m_cam);
+
+		//Create a viewport
+		float width_mod = 0.5f;
+		float height_mod = 0.5f;
+		switch (i) {
+		case 0: {
+			*&Locator::getRD()->m_screenViewport = { 0.0f, 0.0f, static_cast<float>(Locator::getRD()->m_window_width), static_cast<float>(Locator::getRD()->m_window_height), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+			*&Locator::getRD()->m_scissorRect = { 0,0,(int)(Locator::getRD()->m_window_width),(int)(Locator::getRD()->m_window_height) };
+			break;
+		}
+				//case 1: {
+				//	_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(*&_WD->m_outputWidth)* 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+				//	_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(_WD->m_outputHeight * 0.5f) };
+				//	break;
+				//}
+				//case 2: {
+				//	*&_WD->m_viewport[i] = { 0.0f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+				//	*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight) };
+				//	break;
+				//}
+				//case 3: {
+				//	*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+				//	*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
+				//	break;
+				//}
+		}
+	}
+}
+
+/* Push objects back to their associated arrays */
+void MenuScene::pushBackObjects()
+{
+	for (int i = 0; i < m_3DObjects.size(); i++)
+	{
+		if (dynamic_cast<PhysModel*>(m_3DObjects[i]) && dynamic_cast<PhysModel*>(m_3DObjects[i])->hasCollider())
+		{
+			m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
+			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
+		}
+	}
+}
+
+/* Update the scene */
 void MenuScene::Update()
 {
 	if (m_keybinds.keyPressed("Quit"))
 	{
-		//ExitGame();
+		ExitGame();
 	}
 	else if (Locator::getID()->m_keyboardState.Enter || Locator::getID()->m_gamePadState[0].IsStartPressed())
 	{
@@ -81,6 +186,7 @@ void MenuScene::Update()
 	}
 }
 
+/* Render the scene */
 void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
 	m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
@@ -91,6 +197,10 @@ void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_com
 	{
 		(*it)->Render();
 	}
+	/*
+
+	rendering 2d stuff is still fucked
+
 
 	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_resourceDescriptors->Heap() };
 	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
@@ -106,87 +216,10 @@ void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_com
 		(*it)->Render();
 	}
 	Locator::getRD()->m_spriteBatch->End();
+	*/
 }
 
-bool MenuScene::Load()
-{
-	create2DObjects();
-	create3DObjects();
-	pushBackObjects();
-
-	return true;
-}
-
-void MenuScene::create2DObjects()
-{
-	//test text
-	//Text2D* m_enterMenu = new Text2D("Lewis is not cool.");
-	//m_2DObjects.push_back(m_enterMenu);
-
-	ImageGO2D* splash_screen = new ImageGO2D("cbc04-jdryd");
-	m_2DObjects.push_back(splash_screen);
-
-	ImageGO2D* lobby_screen = new ImageGO2D("lobby");
-	lobby_screen->SetPos(Vector2(0, -720));
-	m_2DObjects.push_back(lobby_screen);
-
-	//Charecter images
-	initCharecterImages();
-}
-
-void MenuScene::create3DObjects()
-{
-	for (int i = 0; i < num_of_cam; i++) {
-		//Create a player and position on track
-		//player[i] = new Player(_RD, "Standard Kart", i, *_ID->m_gamePad.get());
-		//player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
-		//m_3DObjects.push_back(player[i]);
-
-		//Create a camera to follow the player
-		m_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-		m_cam->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
-		m_3DObjects.push_back(m_cam);
-
-		//Create a viewport
-		float width_mod = 0.5f;
-		float height_mod = 0.5f;
-		switch (i) {
-		case 0: {
-			*&Locator::getRD()->m_screenViewport = { 0.0f, 0.0f, static_cast<float>(Locator::getRD()->m_window_width), static_cast<float>(Locator::getRD()->m_window_height), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&Locator::getRD()->m_scissorRect = { 0,0,(int)(Locator::getRD()->m_window_width),(int)(Locator::getRD()->m_window_height) };
-			break;
-		}
-				//case 1: {
-				//	_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(*&_WD->m_outputWidth)* 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-				//	_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(_WD->m_outputHeight * 0.5f) };
-				//	break;
-				//}
-				//case 2: {
-				//	*&_WD->m_viewport[i] = { 0.0f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-				//	*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight) };
-				//	break;
-				//}
-				//case 3: {
-				//	*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-				//	*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
-				//	break;
-				//}
-		}
-	}
-}
-
-void MenuScene::pushBackObjects()
-{
-	for (int i = 0; i < m_3DObjects.size(); i++)
-	{
-		if (dynamic_cast<PhysModel*>(m_3DObjects[i]) && dynamic_cast<PhysModel*>(m_3DObjects[i])->hasCollider())
-		{
-			m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
-			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
-		}
-	}
-}
-
+/* Player enters into the "lobby" */
 void MenuScene::enterPlayerLobby()
 {
 	if (Locator::getID()->m_gamePadState[0].IsConnected())
@@ -215,6 +248,7 @@ void MenuScene::enterPlayerLobby()
 	}
 }
 
+/* Player joins the "lobby" */
 void MenuScene::playerJoin()
 {
 	for (int i = 0; i < 4; ++i)
@@ -261,6 +295,7 @@ void MenuScene::playerJoin()
 	}
 }
 
+/* Initialise the images for each character */
 void MenuScene::initCharecterImages()
 {
 	for (int i = 0; i < 4; ++i)
@@ -284,6 +319,7 @@ void MenuScene::initCharecterImages()
 	}
 }
 
+/* reset the position of each character image */
 void MenuScene::resetCharecterImagePos()
 {
 	for (int i = 0; i < 4; ++i)

@@ -9,9 +9,63 @@
 #include "FindMedia.h"
 #include <experimental/filesystem>
 
-/* Load model */
+/* Create object */
 SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 {
+	filename = _filename;
+}
+
+/* Destroy everything */
+SDKMeshGO3D::~SDKMeshGO3D()
+{
+	m_modelResources.reset();
+	m_model.reset();
+}
+
+/* Render the model if it exists */
+void SDKMeshGO3D::Render()
+{
+	if (!m_model) {
+		DebugText::print("Call to render non-loaded model: " + filename);
+		return; //model doesn't exist, we're probably in the process of deleting
+	}
+	if (m_shouldRender && !isDebugMesh() || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
+
+		auto commandList = Locator::getDD()->m_deviceResources->GetCommandList();
+		Locator::getDD()->m_hdrScene->BeginScene(commandList);
+
+		ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
+		commandList->SetDescriptorHeaps(_countof(heaps), heaps);
+
+		{
+			/* This is wrong and what is contributing to the gross visual output. We're getting the GPU handles for the model's materials, not where the env maps are stored :) */
+			/* The 2D sprites also don't work due to a similar issue - we're allocating sprites to the wrong descriptor causing memory issues. */
+			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Locator::getRD()->m_ibl);
+			auto diffuseDesc = m_radianceIBL[Locator::getRD()->m_ibl]->GetDesc();
+			auto irradianceTex = m_resourceDescriptors->GetGpuHandle((int)NUM_OF_ENV_MAPS::ENV_MAP_COUNT + Locator::getRD()->m_ibl);
+
+			for (auto& it : m_modelNormal)
+			{
+				auto pbr = dynamic_cast<PBREffect*>(it.get());
+				if (pbr)
+				{
+					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+				}
+			}
+		}
+
+		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
+		m_model->Draw(commandList, m_modelNormal.cbegin());
+
+		Locator::getDD()->m_hdrScene->EndScene(commandList);
+	}
+}
+
+/* Load the model */
+void SDKMeshGO3D::Load()
+{
+	DebugText::print("LOADING MODEL '" + filename + "'!");
+
 	//Our D3D device
 	auto device = Locator::getDD()->m_deviceResources->GetD3DDevice();
 
@@ -83,7 +137,7 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 
 	//Work out the filepath to our model
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	std::string fullpath = m_filepath.generateFilepath(_filename, m_filepath.MODEL);
+	std::string fullpath = m_filepath.generateFilepath(filename, m_filepath.MODEL);
 	std::wstring wFilename = converter.from_bytes(fullpath.c_str());
 
 	//Try load model
@@ -99,7 +153,7 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 			if (!(hdr->Version >= 200))
 			{
 				//The SDKMESH isn't V2 - we can't load it! This should never happen by the time we get to ship :)
-				DebugText::print("TRIED TO LOAD '" + _filename + "' WHICH IS DEPRECIATED (V1) - UPDATE YOUR MODELS FFS!");
+				DebugText::print("TRIED TO LOAD '" + filename + "' WHICH IS DEPRECIATED (V1) - UPDATE YOUR MODELS FFS!");
 				return;
 			}
 		}
@@ -110,13 +164,13 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 	catch (...)
 	{
 		//Couldn't load model - not good! Might be trying to load a non-sdkmesh, or have the wrong filepath.
-		DebugText::print("TRIED TO LOAD '" + _filename + "' BUT IT FAILED. IS IT A SDKMESH?");
+		DebugText::print("TRIED TO LOAD '" + filename + "' BUT IT FAILED. IS IT A SDKMESH?");
 		m_model.reset();
 		return;
 	}
 
 	//Only continue if we loaded our model
-	if (m_model) 
+	if (m_model)
 	{
 		//Create another resource upload
 		ResourceUploadBatch resourceUpload(device);
@@ -125,13 +179,13 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 		//Static buffers and create TextureEffectFactory
 		m_model->LoadStaticBuffers(device, resourceUpload, true);
 		m_modelResources = std::make_unique<EffectTextureFactory>(device, resourceUpload, m_resourceDescriptors->Heap());
-	
+
 		//Get current directory (this is currently hacky and needs a fix - is VS giving us the wrong working dir?)
 		std::string curr_dir = std::experimental::filesystem::current_path().string();
 		if (curr_dir.substr(curr_dir.length() - 6) == "SOURCE") {
 			curr_dir = curr_dir.substr(0, curr_dir.length() - 7);
 		}
-		std::string dirpath = curr_dir + "/" + m_filepath.getFolder(m_filepath.MODEL) + _filename + "/";
+		std::string dirpath = curr_dir + "/" + m_filepath.getFolder(m_filepath.MODEL) + filename + "/";
 		if (dirpath.length() > 7 && dirpath.substr(dirpath.length() - 6) == "DEBUG/") {
 			dirpath = dirpath.substr(0, dirpath.length() - 7) + "/";
 			//is_debug_mesh = true;
@@ -150,7 +204,7 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 		catch (...)
 		{
 			//Couldn't load model's materials - again not good! We might have the wrong working directory.
-			DebugText::print("COULDN'T LOAD MATERIALS FOR MODEL '" + _filename + "' - IS THE FILE PATH CORRECT?");
+			DebugText::print("COULDN'T LOAD MATERIALS FOR MODEL '" + filename + "' - IS THE FILE PATH CORRECT?");
 			m_model.reset();
 			m_modelResources.reset();
 			return;
@@ -187,61 +241,25 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 		auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
 		Locator::getDD()->m_deviceResources->WaitForGpu();
 		uploadResourcesFinished.wait();
-	}
-}
 
-/* Destroy! */
-SDKMeshGO3D::~SDKMeshGO3D()
-{
-	m_modelResources.reset();
-	m_model.reset();
-}
-
-/* Render the model if it exists */
-void SDKMeshGO3D::Render()
-{
-	if (!m_model) {
-		return; //model doesn't exist, we're probably in the process of deleting
-	}
-	if (m_shouldRender && !isDebugMesh() || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
-
-		auto commandList = Locator::getDD()->m_deviceResources->GetCommandList();
-		Locator::getDD()->m_hdrScene->BeginScene(commandList);
-
-		ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
-		commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-
-		{
-			/* This is wrong and what is contributing to the gross visual output. We're getting the GPU handles for the model's materials, not where the env maps are stored :) */
-			/* The 2D sprites also don't work due to a similar issue - we're allocating sprites to the wrong descriptor causing memory issues. */
-			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Locator::getRD()->m_ibl);
-			auto diffuseDesc = m_radianceIBL[Locator::getRD()->m_ibl]->GetDesc();
-			auto irradianceTex = m_resourceDescriptors->GetGpuHandle((int)NUM_OF_ENV_MAPS::ENV_MAP_COUNT + Locator::getRD()->m_ibl);
-
-			for (auto& it : m_modelNormal)
-			{
-				auto pbr = dynamic_cast<PBREffect*>(it.get());
-				if (pbr)
-				{
-					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, Locator::getRD()->m_states->AnisotropicClamp());
-				}
-			}
+		if (m_model) {
+			DebugText::print("LOADED MODEL '" + filename + "'!");
 		}
-
-		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
-		m_model->Draw(commandList, m_modelNormal.cbegin());
-
-		Locator::getDD()->m_hdrScene->EndScene(commandList);
 	}
 }
 
 /* Reset all resources */
 void SDKMeshGO3D::Reset()
 {
-	//This is what I'm probably gonna use for the deletion process - double check it resets everything properly and doesn't leave any lingering resources
+	DebugText::print("UN-LOADING MODEL '" + filename + "'!");
+	Locator::getDD()->m_deviceResources->WaitForGpu();
 	m_modelResources.reset();
 	m_model.reset();
 	m_modelNormal.clear();
+	m_resourceDescriptors.reset();
+	m_radianceIBL->Reset(); //eek?
+	m_irradianceIBL->Reset(); //eek?
+	resourceDescriptorOffset = 0;
 }
 
 /* Update */

@@ -19,6 +19,7 @@ public:
 
 	bool isDebugMesh() { return is_debug_mesh; }
 
+	void Load() override;
 	void Reset() override;
 
 	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
@@ -32,6 +33,8 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource>          m_irradianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT];
 
 	GameFilepaths m_filepath;
+
+	std::string filename;
 
 	int resourceDescriptorOffset = 0;
 

@@ -23,13 +23,17 @@ class SceneManager;
 class GameScene : public Scene
 {
 public:
-	GameScene();
+	GameScene(std::string _track_name);
 	~GameScene();
 
 	//Core update/render/load functions
 	void Update() override;
 	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
 	bool Load() override;
+
+	//Load/unload the expensive objects in the scene (only keep expensive stuff in memory if we're active)
+	void ExpensiveLoad() override;
+	void ExpensiveUnload() override;
 
 private:
 	//Handle player's waypoints and placements
@@ -80,7 +84,7 @@ private:
 	json track_config;
 	RenderData* m_RD;
 
-	//lol wtf
+	//Our scene manager instance
 	SceneManager* m_scene_manager;
 
 	//Timing
@@ -101,6 +105,7 @@ private:
 	bool final_lap_start = false;
 	bool final_lap = false;
 	int finished = 0;
+	std::string track_name = "";
 
 	//AI
 	std::unique_ptr<AIScheduler> m_aiScheduler = nullptr;

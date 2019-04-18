@@ -14,4 +14,6 @@ public:
 
 private:
 	SceneManager m_scene_manager;
+	json game_config;
+	GameFilepaths m_filepath;
 };

@@ -3,20 +3,19 @@
 #include "Scene.h"
 #include "StepTimer.h"
 #include "Constants.h"
+#include <vector>
+
 #include "MenuScene.h"
 #include "GameScene.h"
-#include <vector>
 
 class SceneManager
 {
 public:
-
 	SceneManager();
 	~SceneManager();
 
 	void addScene(Scene* _scene, Scenes _scene_name);
-	void setCurrentScene(Scenes _scene_name);
-	Scenes getCurrentScene();
+	void setCurrentScene(Scenes _scene_name, bool _first_load = false);
 
 	void Update();
 	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList);
@@ -26,7 +25,14 @@ private:
 	GameStateData* m_GSD;
 	InputData* m_ID;
 
-	Scene** m_scenes = nullptr;
-	static Scenes m_curr_scene;
+	Scene* m_curr_scene = nullptr;
+	Scene* m_prev_scene = nullptr;
+
+	std::vector<Scene*> m_scenes;
+	std::vector<Scenes> m_sceneDescriptors;
+
+	int delete_counter = 0;
+	bool needs_delete = false;
+	int scene_to_delete = 0;
 };
 

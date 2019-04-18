@@ -301,3 +301,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
+
+// Exit helper
+void ExitGame()
+{
+	PostQuitMessage(0);
+}

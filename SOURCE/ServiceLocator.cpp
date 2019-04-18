@@ -8,3 +8,4 @@ ThICC_GameStateData* Locator::ref_GSD = nullptr;
 ItemData* Locator::ref_ItemProbability = nullptr;
 AIScheduler* Locator::ref_AIS = nullptr;
 AudioManager* Locator::ref_audio = nullptr;
+SceneManager* Locator::ref_SM = nullptr;

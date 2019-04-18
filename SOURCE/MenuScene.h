@@ -29,6 +29,10 @@ public:
 	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
 	bool Load() override;
 
+	//Load/unload the expensive objects in the scene (only keep expensive stuff in memory if we're active)
+	void ExpensiveLoad() override;
+	void ExpensiveUnload() override;
+
 private:
 	//Create the scene's objects
 	void create2DObjects() override;
