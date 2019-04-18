@@ -155,8 +155,8 @@ void ThICC_Engine::Update(DX::StepTimer const& timer)
 	//Pass off to our game now we've done our engine-y stuff
 	m_game_inst.Update(timer);
 
-	/* DEBUG: CHANGE ENV MAPS ON ENTER PRESS*/
-	if (m_input_data.m_keyboardTracker.IsKeyPressed(Keyboard::Enter))
+	/* DEBUG: CHANGE ENV MAPS ON X PRESS */
+	if (m_input_data.m_keyboardTracker.IsKeyPressed(Keyboard::X))
 	{
 		++Locator::getRD()->m_ibl;
 		if (Locator::getRD()->m_ibl >= (int)NUM_OF_ENV_MAPS::ENV_MAP_COUNT)

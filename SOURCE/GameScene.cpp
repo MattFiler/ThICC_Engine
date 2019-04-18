@@ -65,6 +65,12 @@ void GameScene::ExpensiveLoad() {
 	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
 		(*it)->Load();
+		if (dynamic_cast<Player*>(*it)) {
+			dynamic_cast<Player*>(*it)->GetAnimationMesh()->Load();
+		}
+		if (dynamic_cast<Track*>(*it)) {
+			dynamic_cast<Track*>(*it)->LoadCollision();
+		}
 	}
 }
 
@@ -73,6 +79,9 @@ void GameScene::ExpensiveUnload() {
 	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
 		(*it)->Reset();
+		if (dynamic_cast<Track*>(*it)) {
+			dynamic_cast<Track*>(*it)->UnloadCollision();
+		}
 	}
 }
 

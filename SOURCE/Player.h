@@ -39,6 +39,10 @@ public:
 	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
 	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
 
+	AnimationMesh* GetAnimationMesh() {
+		return m_displayedMesh.get();
+	};
+
 	void SetWaypoint(int _waypoint);
 	void SetLap(int _lap) { m_lap = _lap; }
 	void SetRanking(int _position) { m_ranking = _position; }
