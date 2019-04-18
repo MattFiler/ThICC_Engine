@@ -27,7 +27,7 @@
   },
   "dr_Bridge": {
     "newmtl": "dr_Bridge",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -45,7 +45,7 @@
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
       "3": false
@@ -261,7 +261,7 @@
   },
   "dr_DragonParts1": {
     "newmtl": "dr_DragonParts1",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -279,7 +279,7 @@
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
       "3": false
@@ -287,7 +287,7 @@
   },
   "dr_DragonParts2": {
     "newmtl": "dr_DragonParts2",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -305,7 +305,7 @@
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
       "3": false
@@ -313,7 +313,7 @@
   },
   "dr_DragonParts3": {
     "newmtl": "dr_DragonParts3",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -334,7 +334,7 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": true
     }
   },
   "dr_DragonParts3_OutSide": {
@@ -1119,7 +1119,7 @@
   },
   "dr_Sebire": {
     "newmtl": "dr_Sebire",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1140,7 +1140,7 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": true
     }
   },
   "dr_Sebire_Back": {
@@ -1197,7 +1197,7 @@
   },
   "dr_StartParts": {
     "newmtl": "dr_StartParts",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1215,7 +1215,7 @@
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
       "3": false
