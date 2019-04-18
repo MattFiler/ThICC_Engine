@@ -98,9 +98,9 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 			auto hdr = reinterpret_cast<const DXUT::SDKMESH_HEADER*>(modelBin.data());
 			if (!(hdr->Version >= 200))
 			{
-				//The SDKMESH isn't version 2 - this is a FATAL issue and we'll crash. A better handler here would be nice :)
-				std::cout << "ASSET DOES NOT COMPLY: " << fullpath << std::endl;
-				//throw std::exception("SDKMESH is not V2! Model must've been imported with old toolkit.");
+				//The SDKMESH isn't V2 - we can't load it! This should never happen by the time we get to ship :)
+				std::cout << "TRIED TO LOAD '" << _filename << "' WHICH IS DEPRECIATED (V1) - UPDATE YOUR MODELS FFS!" << std::endl;
+				return;
 			}
 		}
 
@@ -109,9 +109,10 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 	}
 	catch (...)
 	{
-		//Couldn't load model. This exception needs working on to make it a little nicer
-		throw std::exception("Could not load model.");
+		//Couldn't load model - not good!
+		std::cout << "TRIED TO LOAD '" << _filename << "' BUT IT FAILED. IS IT A SDKMESH?" << std::endl;
 		m_model.reset();
+		return;
 	}
 
 	//Only continue if we loaded our model
@@ -148,10 +149,11 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 		}
 		catch (...)
 		{
-			//This again is fatal, but we can handle it nicer. resetting the resources is a good first step - some kind of console warning would be cool :)
-			throw std::exception("Could not load model's materials.");
+			//Couldn't load model's materials - again not good! We might have the wrong working directory.
+			std::cout << "COULDN'T LOAD MATERIALS FOR MODEL '" << _filename << "' - IS THE FILE PATH CORRECT?" << std::endl;
 			m_model.reset();
 			m_modelResources.reset();
+			return;
 		}
 
 		if (m_model)
