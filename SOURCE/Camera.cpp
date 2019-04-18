@@ -160,7 +160,6 @@ void Camera::Tick()
 			}
 		}
 	}
-#if Debug
 	case BEHAVIOUR::DEBUG_CAM:
 	{
 		float cam_speed = 40.0f;
@@ -181,8 +180,8 @@ void Camera::Tick()
 		upMove = Vector3::Transform(upMove, rotMove);
 		m_targetPos = m_pos + forwardMove;
 
-		m_yaw -= cam_rot_speed * Locator::getGSD()->m_mouseState.x;
-		m_pitch -= cam_rot_speed * Locator::getGSD()->m_mouseState.y;
+		m_yaw -= cam_rot_speed * Locator::getID()->m_mouseState.x;
+		m_pitch -= cam_rot_speed * Locator::getID()->m_mouseState.y;
 
 		if (m_keybinds.keyHeld("DebugCamFor"))
 		{
@@ -221,7 +220,6 @@ void Camera::Tick()
 
 		break;
 	}
-#endif
 	}
 
 	if (behav != BEHAVIOUR::DEBUG_CAM)
