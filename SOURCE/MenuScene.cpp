@@ -27,7 +27,7 @@ void MenuScene::Update()
 	{
 		//ExitGame();
 	}
-	else if (Locator::getID()->m_keybindsboardState.Enter || Locator::getID()->m_gamePadState[0].IsStartPressed())
+	else if (Locator::getID()->m_keyboardState.Enter || Locator::getID()->m_gamePadState[0].IsStartPressed())
 	{
 		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
 		Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();

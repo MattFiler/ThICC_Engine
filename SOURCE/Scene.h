@@ -21,15 +21,4 @@ public:
 	virtual void create2DObjects();
 	virtual void create3DObjects();
 	virtual void pushBackObjects();
-
-protected:
-	//Structures for the scene's objects
-	vector<GameObject2D*> m_2DObjects;
-	vector<GameObject3D*> m_3DObjects;
-	std::vector<PhysModel*> m_physModels;
-
-	//Common engine components
-	LocalisationManager m_localiser;
-	KeybindManager m_keybinds;
-	GameFilepaths m_filepath;
 };
