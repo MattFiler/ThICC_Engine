@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{CE2410
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{92F2D81C-BD2F-43C8-8B10-344C6182C6A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorTool", "..\EditorTool\EditorTool.csproj", "{DBBA8CF1-FD88-4E14-8BD2-97331F29416A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorTool", "..\TOOLS\EditorTool\EditorTool.csproj", "{DBBA8CF1-FD88-4E14-8BD2-97331F29416A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "..\Launcher\Launcher.csproj", "{0D6B4382-6BD9-43C2-A3E0-BB25A9C897F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "..\TOOLS\Launcher\Launcher.csproj", "{0D6B4382-6BD9-43C2-A3E0-BB25A9C897F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeSpriteFont", "..\TOOLS\MakeSpriteFont\MakeSpriteFont.csproj", "{7329B02D-C504-482A-A156-181D48CE493C}"
 EndProject
