@@ -409,6 +409,7 @@ void GameScene::Update()
 	if (m_keybinds.keyPressed("Debug Toggle"))
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
+		DebugText::print("show_debug_meshes: " + std::to_string((int)GameDebugToggles::show_debug_meshes));
 	}
 	if (m_keybinds.keyPressed("Debug Toggle World Render")) {
 		GameDebugToggles::render_level = !GameDebugToggles::render_level;

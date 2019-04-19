@@ -131,56 +131,56 @@ void ThICC_Engine::SetupSplitscreenViewports() {
 				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
 					0.0f,
 					0.0f,
-					static_cast<float>(Locator::getRD()->m_window_width) * 0.5f,
-					static_cast<float>(Locator::getRD()->m_window_height) * 0.5f,
-					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-				};
-				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
-					0,
-					0,
-					(int)(Locator::getRD()->m_window_width * 0.5f),
-					(int)(Locator::getRD()->m_window_height * 0.5f)
-				};
-				break;
-			}
-			case 1: {
-				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					static_cast<float>(Locator::getRD()->m_window_width) * 0.5f,
 					0.0f,
-					static_cast<float>(Locator::getRD()->m_window_width)* 0.5f,
-					static_cast<float>(Locator::getRD()->m_window_height) * 0.5f,
+					0.0f,
 					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
 				};
 				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
 					0,
 					0,
 					(int)(Locator::getRD()->m_window_width),
-					(int)(Locator::getRD()->m_window_height * 0.5f)
+					(int)(Locator::getRD()->m_window_height)
+				};
+				break;
+			}
+			case 1: {
+				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
+					0.0f,
+					0.0f,
+					0.0f,
+					0.0f,
+					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
+				};
+				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
+					0,
+					0,
+					(int)(Locator::getRD()->m_window_width),
+					(int)(Locator::getRD()->m_window_height)
 				};
 				break;
 			}
 			case 2: {
 				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
 					0.0f,
-					static_cast<float>(Locator::getRD()->m_window_height) * 0.5f,
-					static_cast<float>(Locator::getRD()->m_window_width) * 0.5f,
-					static_cast<float>(Locator::getRD()->m_window_height) * 0.5f,
+					0.0f,
+					0.0f,
+					0.0f,
 					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
 				};
 				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
 					0,
 					0,
-					(int)(Locator::getRD()->m_window_width * 0.5f),
+					(int)(Locator::getRD()->m_window_width),
 					(int)(Locator::getRD()->m_window_height)
 				};
 				break;
 			}
 			case 3: {
 				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					static_cast<float>(Locator::getRD()->m_window_width) * 0.5f,
-					static_cast<float>(Locator::getRD()->m_window_height) * 0.5f,
-					static_cast<float>(Locator::getRD()->m_window_width) * 0.5f,
-					static_cast<float>(*&Locator::getRD()->m_window_height) * 0.5f,
+					0.0f,
+					0.0f,
+					(float)(Locator::getRD()->m_window_width),
+					(float)(Locator::getRD()->m_window_height),
 					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
 				};
 				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
@@ -262,6 +262,7 @@ void ThICC_Engine::Render()
 	m_device_data.m_hdrScene->EndScene(commandList);
 
 	// Render the game
+	SetupSplitscreenViewports();
 	m_game_inst.Render();
 
 	// Set render targets

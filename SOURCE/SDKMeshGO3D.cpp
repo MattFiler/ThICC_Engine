@@ -29,7 +29,7 @@ void SDKMeshGO3D::Render()
 		DebugText::print("Call to render non-loaded model: " + filename);
 		return; //model doesn't exist, we're probably in the process of deleting
 	}
-	if (m_shouldRender && !isDebugMesh() || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
+	if ((m_shouldRender && !isDebugMesh()) || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
 
 		auto commandList = Locator::getDD()->m_deviceResources->GetCommandList();
 		Locator::getDD()->m_hdrScene->BeginScene(commandList);
@@ -188,7 +188,8 @@ void SDKMeshGO3D::Load()
 		std::string dirpath = curr_dir + "/" + m_filepath.getFolder(m_filepath.MODEL) + filename + "/";
 		if (dirpath.length() > 7 && dirpath.substr(dirpath.length() - 6) == "DEBUG/") {
 			dirpath = dirpath.substr(0, dirpath.length() - 7) + "/";
-			//is_debug_mesh = true;
+			is_debug_mesh = true;
+			DebugText::print("'" + filename + "' IS A DEBUG MESH!");
 		}
 		std::wstring dirpath_wstring = std::wstring(dirpath.begin(), dirpath.end());
 		const wchar_t* dirpath_wchar = dirpath_wstring.c_str();
@@ -241,10 +242,6 @@ void SDKMeshGO3D::Load()
 		auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
 		Locator::getDD()->m_deviceResources->WaitForGpu();
 		uploadResourcesFinished.wait();
-
-		if (m_model) {
-			DebugText::print("LOADED MODEL '" + filename + "'!");
-		}
 	}
 }
 
