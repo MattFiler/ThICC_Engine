@@ -110,15 +110,10 @@ void GameScene::ExpensiveUnload() {
 /* Create all 2D objects for the scene */
 void GameScene::create2DObjects()
 {
-	//These widths and heights might be wrong, I dunno :)
-	*&Locator::getRD()->m_screenViewport = { 0.0f, 0.0f, static_cast<float>(Locator::getRD()->m_window_width), static_cast<float>(Locator::getRD()->m_window_height), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	*&Locator::getRD()->m_scissorRect = { 0,0,(int)(Locator::getRD()->m_window_width),(int)(Locator::getRD()->m_window_height) };
-
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
 		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
-		//test->CentreOrigin();
 		m_2DObjects.push_back(player[i]->GetItemImg());
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
@@ -422,37 +417,6 @@ void GameScene::Update()
 	{
 		timeout = 2.999999f;
 		state = COUNTDOWN;
-	}
-
-	for (int i = 0; i < 8; i++)
-	{
-		switch (i)
-		{
-			//case 0:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopLeft);
-			//	break;
-			//case 1:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopRight);
-			//	break;
-			//case 2:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomLeft);
-			//	break;
-			//case 3:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomRight);
-			//	break;
-			//case 4:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalBackTopLeft);
-			//	break;
-			//case 5:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalBackTopRight);
-			//	break;
-			//case 6:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomLeft);
-			//	break;
-			//case 7:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomRight);
-			//	break;
-		}
 	}
 
 	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels);

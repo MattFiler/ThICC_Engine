@@ -68,12 +68,15 @@ namespace EditorTool
             this.imagePreview = new System.Windows.Forms.PictureBox();
             this.playSoundPreview = new System.Windows.Forms.Button();
             this.soundPreview = new NAudio.Gui.WaveViewer();
+            this.assetUseageGroup = new System.Windows.Forms.GroupBox();
+            this.assetUseages = new System.Windows.Forms.ListBox();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.model_scale)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).BeginInit();
+            this.assetUseageGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // loadAssetType
@@ -97,13 +100,13 @@ namespace EditorTool
             this.assetList.FormattingEnabled = true;
             this.assetList.Location = new System.Drawing.Point(6, 46);
             this.assetList.Name = "assetList";
-            this.assetList.Size = new System.Drawing.Size(202, 303);
+            this.assetList.Size = new System.Drawing.Size(202, 368);
             this.assetList.TabIndex = 3;
             this.assetList.SelectedIndexChanged += new System.EventHandler(this.assetList_SelectedIndexChanged);
             // 
             // deleteAsset
             // 
-            this.deleteAsset.Location = new System.Drawing.Point(108, 355);
+            this.deleteAsset.Location = new System.Drawing.Point(108, 418);
             this.deleteAsset.Name = "deleteAsset";
             this.deleteAsset.Size = new System.Drawing.Size(100, 23);
             this.deleteAsset.TabIndex = 4;
@@ -113,7 +116,7 @@ namespace EditorTool
             // 
             // importAsset
             // 
-            this.importAsset.Location = new System.Drawing.Point(6, 355);
+            this.importAsset.Location = new System.Drawing.Point(6, 418);
             this.importAsset.Name = "importAsset";
             this.importAsset.Size = new System.Drawing.Size(100, 23);
             this.importAsset.TabIndex = 5;
@@ -130,14 +133,14 @@ namespace EditorTool
             this.groupBox2.Controls.Add(this.importAsset);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(215, 409);
+            this.groupBox2.Size = new System.Drawing.Size(215, 472);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Asset Browser";
             // 
             // editAsset
             // 
-            this.editAsset.Location = new System.Drawing.Point(6, 380);
+            this.editAsset.Location = new System.Drawing.Point(6, 443);
             this.editAsset.Name = "editAsset";
             this.editAsset.Size = new System.Drawing.Size(202, 23);
             this.editAsset.TabIndex = 6;
@@ -170,7 +173,7 @@ namespace EditorTool
             this.modelConfigs.Controls.Add(this.label3);
             this.modelConfigs.Controls.Add(this.label2);
             this.modelConfigs.Controls.Add(this.label9);
-            this.modelConfigs.Location = new System.Drawing.Point(233, 177);
+            this.modelConfigs.Location = new System.Drawing.Point(233, 234);
             this.modelConfigs.Name = "modelConfigs";
             this.modelConfigs.Size = new System.Drawing.Size(226, 250);
             this.modelConfigs.TabIndex = 11;
@@ -416,7 +419,7 @@ namespace EditorTool
             // 
             this.depreciationWarning.AutoSize = true;
             this.depreciationWarning.ForeColor = System.Drawing.Color.OrangeRed;
-            this.depreciationWarning.Location = new System.Drawing.Point(231, 220);
+            this.depreciationWarning.Location = new System.Drawing.Point(247, 277);
             this.depreciationWarning.Name = "depreciationWarning";
             this.depreciationWarning.Size = new System.Drawing.Size(199, 117);
             this.depreciationWarning.TabIndex = 14;
@@ -490,11 +493,31 @@ namespace EditorTool
             this.soundPreview.Visible = false;
             this.soundPreview.WaveStream = null;
             // 
+            // assetUseageGroup
+            // 
+            this.assetUseageGroup.Controls.Add(this.assetUseages);
+            this.assetUseageGroup.Location = new System.Drawing.Point(233, 177);
+            this.assetUseageGroup.Name = "assetUseageGroup";
+            this.assetUseageGroup.Size = new System.Drawing.Size(226, 51);
+            this.assetUseageGroup.TabIndex = 15;
+            this.assetUseageGroup.TabStop = false;
+            this.assetUseageGroup.Text = "Asset Useages";
+            this.assetUseageGroup.Visible = false;
+            // 
+            // assetUseages
+            // 
+            this.assetUseages.FormattingEnabled = true;
+            this.assetUseages.Location = new System.Drawing.Point(6, 16);
+            this.assetUseages.Name = "assetUseages";
+            this.assetUseages.Size = new System.Drawing.Size(214, 30);
+            this.assetUseages.TabIndex = 0;
+            // 
             // Asset_Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(469, 437);
+            this.ClientSize = new System.Drawing.Size(469, 493);
+            this.Controls.Add(this.assetUseageGroup);
             this.Controls.Add(this.depreciationWarning);
             this.Controls.Add(this.modelConfigs);
             this.Controls.Add(this.groupBox2);
@@ -505,7 +528,6 @@ namespace EditorTool
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mario Kart Asset Manager";
             this.Load += new System.EventHandler(this.Landing_Load);
-            this.FormClosing += this.Landing_Close;
             this.groupBox2.ResumeLayout(false);
             this.modelConfigs.ResumeLayout(false);
             this.modelConfigs.PerformLayout();
@@ -514,6 +536,7 @@ namespace EditorTool
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).EndInit();
+            this.assetUseageGroup.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -557,5 +580,7 @@ namespace EditorTool
         private Button editAsset;
         private TextBox localisationPreview;
         private Label depreciationWarning;
+        private GroupBox assetUseageGroup;
+        private ListBox assetUseages;
     }
 }

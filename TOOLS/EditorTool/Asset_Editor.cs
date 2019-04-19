@@ -300,11 +300,35 @@ namespace EditorTool
             //Hide all configs
             modelConfigs.Visible = false;
             depreciationWarning.Visible = false;
+            assetUseageGroup.Visible = false;
 
-            //Act appropriately for selected asset type
+            //Get type
+            AssetType selected_type;
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
+                    selected_type = AssetType.MODEL;
+                    break;
+                case "Fonts":
+                    selected_type = AssetType.FONT;
+                    break;
+                case "Images":
+                    selected_type = AssetType.IMAGE;
+                    break;
+                case "Strings":
+                    selected_type = AssetType.STRING;
+                    break;
+                case "Sounds":
+                    selected_type = AssetType.SOUND;
+                    break;
+                default:
+                    return;
+            }
+
+            //Act appropriately for selected asset type
+            switch (selected_type)
+            {
+                case AssetType.MODEL:
                     if (function_libary.loadModelPreview(assetList, modelPreview))
                     {
                         //If preview loads properly, load config
@@ -333,19 +357,34 @@ namespace EditorTool
                         modelConfigs.Visible = true;
                     }
                     break;
-                case "Images":
+                case AssetType.IMAGE:
                     function_libary.loadImagePreview(assetList, imagePreview);
                     break;
-                case "Sounds":
+                case AssetType.SOUND:
                     function_libary.loadSoundPreview(assetList, sound_player, soundPreview, playSoundPreview);
                     break;
-                case "Fonts":
+                case AssetType.FONT:
                     function_libary.loadFontPreview(assetList, imagePreview);
                     break;
-                case "Strings":
+                case AssetType.STRING:
                     function_libary.loadStringPreview(assetList, localisationPreview, localisation_config);
                     break;
+                default:
+                    return;
             }
+            if (assetList.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            //List useages
+            assetUseages.Items.Clear();
+            foreach (string useage in function_libary.getUseages(selected_type, assetList.SelectedItem.ToString()))
+            {
+                assetUseages.Items.Add(useage);
+            }
+            assetUseageGroup.Visible = true;
+
             Cursor.Current = Cursors.Default;
         }
 

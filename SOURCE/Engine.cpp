@@ -384,6 +384,8 @@ void ThICC_Engine::CreateWindowSizeDependentResources()
 {
 	auto size = m_device_data.m_deviceResources->GetOutputSize();
 	m_device_data.m_hdrScene->SetWindow(size);
+
+	SetupSplitscreenViewports();
 }
 
 /* When we lose our device, reset everything. */
