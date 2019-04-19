@@ -182,7 +182,7 @@ void MenuScene::Update()
 
 	if (m_keybinds.keyPressed("Load Debug Scene"))
 	{
-		m_scene_manager->setCurrentScene(Scenes::DEBUGSCENE);
+		m_scene_manager->setCurrentScene(Scenes::GAMESCENE+1);
 	}
 }
 

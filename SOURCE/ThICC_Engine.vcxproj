@@ -241,6 +241,7 @@
     <ClInclude Include="ItemData.h" />
     <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="LocalisationManager.h" />
+    <ClInclude Include="MapInfo.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="MeshTri.h" />
     <ClInclude Include="MoveAI.h" />

@@ -17,7 +17,7 @@ SceneManager::~SceneManager() {
 }
 
 /* Add a scene to the manager*/
-void SceneManager::addScene(Scene* _scene, Scenes _scene_name) {
+void SceneManager::addScene(Scene* _scene, int _scene_name) {
 	//Perform an inexpensive load of the scene's components and save it to our scene array
 	_scene->Load();
 	m_scenes.push_back(_scene);
@@ -25,7 +25,7 @@ void SceneManager::addScene(Scene* _scene, Scenes _scene_name) {
 }
 
 /* Set the current scene */
-void SceneManager::setCurrentScene(Scenes _scene_name, bool _first_load) {
+void SceneManager::setCurrentScene(int _scene_name, bool _first_load) {
 	//If we already have an unload queued we cannot change scene
 	if (needs_delete) {
 		DebugText::print("Requested a scene change, but it CANNOT happen! We're still queued up to remove the old scene. Try again later.");
@@ -40,7 +40,7 @@ void SceneManager::setCurrentScene(Scenes _scene_name, bool _first_load) {
 
 	//Set the current scene to render/update and load in our expensive stuff
 	int index = 0;
-	for (Scenes this_sceneDescriptor : m_sceneDescriptors) {
+	for (int this_sceneDescriptor : m_sceneDescriptors) {
 		if (this_sceneDescriptor == _scene_name) {
 			m_curr_scene = m_scenes.at(index);
 			m_curr_scene->ExpensiveLoad();
@@ -49,7 +49,7 @@ void SceneManager::setCurrentScene(Scenes _scene_name, bool _first_load) {
 		index++;
 	}
 
-	DebugText::print("FAILED to find the requested scene (" + std::to_string((int)_scene_name) + ").");
+	DebugText::print("FAILED to find the requested scene (" + std::to_string(_scene_name) + ").");
 }
 
 /* Update the current scene */

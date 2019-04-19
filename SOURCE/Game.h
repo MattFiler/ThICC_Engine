@@ -2,6 +2,10 @@
 
 #include "StepTimer.h"
 #include "SceneManager.h"
+#include "LocalisationManager.h"
+#include "ImageGO2D.h"
+#include "MapInfo.h"
+#include <vector>
 
 class ThICC_Game {
 public:
@@ -14,6 +18,10 @@ public:
 
 private:
 	SceneManager m_scene_manager;
-	json game_config;
 	GameFilepaths m_filepath;
+	LocalisationManager m_localiser;
+
+	json game_config;
+	json map_config;
+	std::vector<MapInfo> map_instances;
 };

@@ -9,7 +9,10 @@
 #include "CollisionManager.h"
 #include "Camera.h"
 #include "AIScheduler.h"
+#include "MapInfo.h"
 #include <vector>
+#include <json.hpp>
+using json = nlohmann::json;
 
 using std::vector;
 
@@ -23,7 +26,7 @@ class SceneManager;
 class GameScene : public Scene
 {
 public:
-	GameScene(std::string _track_name);
+	GameScene(MapInfo _track);
 	~GameScene() override;
 
 	//Core update/render/load functions
@@ -79,9 +82,12 @@ private:
 	Camera* m_cam[4];
 	Camera*	cine_cam;
 
-	//Referenced stuff
+	//Random data stores
 	json game_config;
 	json track_config;
+	MapInfo map_info;
+
+	//Referenced stuff
 	RenderData* m_RD;
 
 	//Our scene manager instance
@@ -105,7 +111,6 @@ private:
 	bool final_lap_start = false;
 	bool final_lap = false;
 	int finished = 0;
-	std::string track_name = "";
 
 	//AI
 	std::unique_ptr<AIScheduler> m_aiScheduler = nullptr;

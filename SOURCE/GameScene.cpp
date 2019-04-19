@@ -16,13 +16,12 @@
 extern void ExitGame();
 
 /* Create! */
-GameScene::GameScene(std::string _track_name)
-{
+GameScene::GameScene(MapInfo _track) {
 	//Get a ref to the scene manager for swapping scenes
 	m_scene_manager = Locator::getSM();
 	
-	//Work out what track to load
-	track_name = _track_name;
+	//Our map's info
+	map_info = _track; //Use this to load the audio in ExpensiveLoad!
 }
 
 /* Destroy! */
@@ -72,6 +71,8 @@ void GameScene::ExpensiveLoad() {
 			dynamic_cast<Track*>(*it)->LoadCollision();
 		}
 	}
+
+	//Load the map's audio here using map_info's data
 }
 
 /* Unpopulate the expensive things. */
@@ -180,7 +181,7 @@ void GameScene::create3DObjects()
 	*/
 
 	//Load in a track
-	track = new Track(track_name);
+	track = new Track(map_info.model);
 	track->setWaypointBB();
 	m_3DObjects.push_back(track);
 

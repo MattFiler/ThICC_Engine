@@ -286,6 +286,9 @@
     <ClInclude Include="DebugText.h">
       <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="MapInfo.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
