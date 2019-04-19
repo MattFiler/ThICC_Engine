@@ -49,7 +49,7 @@ namespace EditorTool
         /* Browse to asset file */
         private void browseToFile_Click(object sender, EventArgs e)
         {
-            function_library.userLocatedFile(asset_picker_filter);
+            filePath.Text = function_library.userLocatedFile(asset_picker_filter);
         }
 
         /* Import asset if valid */

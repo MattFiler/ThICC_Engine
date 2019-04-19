@@ -505,6 +505,7 @@ namespace EditorTool
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mario Kart Asset Manager";
             this.Load += new System.EventHandler(this.Landing_Load);
+            this.FormClosing += this.Landing_Close;
             this.groupBox2.ResumeLayout(false);
             this.modelConfigs.ResumeLayout(false);
             this.modelConfigs.PerformLayout();

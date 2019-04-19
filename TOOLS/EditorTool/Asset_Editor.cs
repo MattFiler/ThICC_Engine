@@ -42,7 +42,13 @@ namespace EditorTool
 
             loadAssetType.SelectedIndex = (int)on_load;
         }
-        
+
+        /* When closing, clear any lingering stuff */
+        private void Landing_Close(object sender, EventArgs e)
+        {
+            function_libary.closeLingeringSoundStreams();
+        }
+
         private void DEBUG_SAVE_Click(object sender, EventArgs e)
         {
         }

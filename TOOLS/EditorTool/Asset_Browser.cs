@@ -75,6 +75,12 @@ namespace EditorTool
             pre_selected_option = existing_option;
         }
 
+        /* When closing, clear any lingering stuff */
+        private void Asset_Browser_Close(object sender, EventArgs e)
+        {
+            function_libary.closeLingeringSoundStreams();
+        }
+
         /* Fetch asset list on form load */
         private void Asset_Browser_Load(object sender, EventArgs e)
         {

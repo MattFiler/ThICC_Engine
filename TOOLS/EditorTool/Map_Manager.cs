@@ -92,12 +92,24 @@ namespace EditorTool
                 return;
             }
 
+            //Confirm
             DialogResult showErrorInfo = MessageBox.Show("Are you sure you want to delete this map?", "About to delete selected map...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (showErrorInfo != DialogResult.Yes)
             {
                 return;
             }
 
+            //Remove useage tags
+            JToken data_block = maps_json_config[assetList.SelectedItem.ToString()];
+            common_functions.removeUseageTag(AssetType.STRING, data_block["friendly_name"].Value<string>(), "map_config");
+            common_functions.removeUseageTag(AssetType.IMAGE, data_block["menu_sprite"].Value<string>(), "map_config");
+            common_functions.removeUseageTag(AssetType.MODEL, data_block["model"].Value<string>(), "map_config");
+            common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["background_start"].Value<string>(), "map_config");
+            common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["background"].Value<string>(), "map_config");
+            common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["final_lap_start"].Value<string>(), "map_config");
+            common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["final_lap"].Value<string>(), "map_config");
+
+            //Remove JToken from config
             maps_json_config.Remove(assetList.SelectedItem.ToString());
             File.WriteAllText("DATA/CONFIGS/MAP_CONFIG.JSON", maps_json_config.ToString(Formatting.Indented));
             MessageBox.Show("Map successfully deleted!", "Deleted.", MessageBoxButtons.OK, MessageBoxIcon.Information);

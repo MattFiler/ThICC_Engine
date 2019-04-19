@@ -1,5 +1,5 @@
 {
-  "asset_name": "MARIO KART STADIUM PREVIEW",
+  "asset_name": "DRAGON_DRIFTWAY_PREVIEW",
   "asset_type": "Images",
   "visible": true,
   "is_2d": true,
@@ -7,5 +7,7 @@
   "res_y": 162,
   "x_pos": 0,
   "y_pos": 0,
-  "in_use_in": []
+  "in_use_in": [
+    "map_config"
+  ]
 }

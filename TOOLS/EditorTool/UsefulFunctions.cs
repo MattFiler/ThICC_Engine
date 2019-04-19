@@ -17,6 +17,14 @@ using System.Windows.Forms.Integration;
 
 namespace EditorTool
 {
+    /* A struct for storing a queue of assets to modify the useage tags on */
+    public struct UseageQueue
+    {
+        public bool removing; //true if removing / false if adding
+        public AssetType asset_type;
+        public string asset_name;
+    }
+
     /* Common functionality library */
     class UsefulFunctions
     {
@@ -266,6 +274,29 @@ namespace EditorTool
             return string_config[language][request].Value<string>();
         }
 
+        /* Add something to the useage queue to batch delete */
+        List<UseageQueue> useage_queue = new List<UseageQueue>();
+        public void pushToUseageQueue(UseageQueue new_item)
+        {
+            useage_queue.Add(new_item);
+        }
+
+        /* Batch handle the queue */
+        public void executeUseageQueueForTag(string tag)
+        {
+            foreach (UseageQueue useage in useage_queue)
+            {
+                if (useage.removing)
+                {
+                    removeUseageTag(useage.asset_type, useage.asset_name, tag);
+                }
+                else
+                {
+                    addUseageTag(useage.asset_type, useage.asset_name, tag);
+                }
+            }
+        }
+
         /* Get the useages for the asset */
         public List<string> getUseages(AssetType type, string asset_name)
         {
@@ -351,7 +382,12 @@ namespace EditorTool
                 if (form.DialogResult == DialogResult.OK)
                 {
                     asset_name = form.selected_asset;
-                    addUseageTag(asset_type, form.selected_asset, "map_config");
+
+                    UseageQueue new_queue_item = new UseageQueue();
+                    new_queue_item.asset_name = form.selected_asset;
+                    new_queue_item.asset_type = asset_type;
+                    new_queue_item.removing = false;
+                    useage_queue.Add(new_queue_item);
                 }
             }
             return asset_name;
@@ -362,9 +398,18 @@ namespace EditorTool
         {
             if (textbox.Text != "")
             {
-                removeUseageTag(type, textbox.Text, "map_config");
+                UseageQueue new_queue_item = new UseageQueue();
+                new_queue_item.asset_name = textbox.Text;
+                new_queue_item.asset_type = type;
+                new_queue_item.removing = true;
+                useage_queue.Add(new_queue_item);
             }
-            textbox.Text = selectAsset(type, textbox.Text);
+            string selection = selectAsset(type, textbox.Text);
+            if (selection == "")
+            {
+                return;
+            }
+            textbox.Text = selection;
         }
 
         ///////////////////////////////////////////////

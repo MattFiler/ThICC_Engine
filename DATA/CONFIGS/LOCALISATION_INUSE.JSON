@@ -9,11 +9,14 @@
     "in_use_in": []
   },
   "MAP_MKS": {
-    "in_use_in": [
-      "map_config"
-    ]
+    "in_use_in": []
   },
   "TEST": {
     "in_use_in": []
+  },
+  "MAP_DRIFTWAY": {
+    "in_use_in": [
+      "map_config"
+    ]
   }
 }

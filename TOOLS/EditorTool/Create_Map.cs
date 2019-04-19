@@ -90,6 +90,9 @@ namespace EditorTool
                 return;
             }
 
+            //Update tags
+            function_libary.executeUseageQueueForTag("map_config");
+
             //Remove old json config or load existing (depends on mode)
             if (edit_mode)
             {
