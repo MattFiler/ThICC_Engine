@@ -118,6 +118,81 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 
 	//Initialise anything we need in our game
 	m_game_inst.Initialize();
+
+	//Setup viewports for splitscreen mode
+	SetupSplitscreenViewports();
+}
+
+/* Setup our splitscreen viewport sizes */
+void ThICC_Engine::SetupSplitscreenViewports() {
+	for (int i = 0; i < m_game_config["player_count"]; i++) {
+		switch (i) {
+			case 0: {
+				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
+					0.0f,
+					0.0f,
+					static_cast<float>(Locator::getRD()->m_window_width) * 0.5f,
+					static_cast<float>(Locator::getRD()->m_window_height) * 0.5f,
+					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
+				};
+				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
+					0,
+					0,
+					(int)(Locator::getRD()->m_window_width * 0.5f),
+					(int)(Locator::getRD()->m_window_height * 0.5f)
+				};
+				break;
+			}
+			case 1: {
+				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
+					static_cast<float>(Locator::getRD()->m_window_width) * 0.5f,
+					0.0f,
+					static_cast<float>(Locator::getRD()->m_window_width)* 0.5f,
+					static_cast<float>(Locator::getRD()->m_window_height) * 0.5f,
+					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
+				};
+				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
+					0,
+					0,
+					(int)(Locator::getRD()->m_window_width),
+					(int)(Locator::getRD()->m_window_height * 0.5f)
+				};
+				break;
+			}
+			case 2: {
+				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
+					0.0f,
+					static_cast<float>(Locator::getRD()->m_window_height) * 0.5f,
+					static_cast<float>(Locator::getRD()->m_window_width) * 0.5f,
+					static_cast<float>(Locator::getRD()->m_window_height) * 0.5f,
+					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
+				};
+				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
+					0,
+					0,
+					(int)(Locator::getRD()->m_window_width * 0.5f),
+					(int)(Locator::getRD()->m_window_height)
+				};
+				break;
+			}
+			case 3: {
+				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
+					static_cast<float>(Locator::getRD()->m_window_width) * 0.5f,
+					static_cast<float>(Locator::getRD()->m_window_height) * 0.5f,
+					static_cast<float>(Locator::getRD()->m_window_width) * 0.5f,
+					static_cast<float>(*&Locator::getRD()->m_window_height) * 0.5f,
+					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
+				};
+				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
+					0,
+					0,
+					(int)(Locator::getRD()->m_window_width),
+					(int)(Locator::getRD()->m_window_height)
+				};
+				break;
+			}
+		}
+	}
 }
 
 /* The game update, split it out to update and render :) */
@@ -339,23 +414,26 @@ void ThICC_Engine::OnDeviceRestored()
 /* Set the default font */
 void ThICC_Engine::SetDefaultFont(std::string _default_font)
 {
-	////GEP: Set up Sprite batch for drawing textures also loads the font for text
 	Locator::getRD()->m_states = std::make_unique<CommonStates>(Locator::getRD()->m_d3dDevice.Get());
 	ResourceUploadBatch resourceUpload(Locator::getRD()->m_d3dDevice.Get());
 
 	resourceUpload.Begin();
-	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
+
+	RenderTargetState rtState(m_device_data.m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
 	SpriteBatchPipelineStateDescription pd(rtState);
+
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	string font_path = m_filepath.generateFilepath(_default_font, m_filepath.FONT);
 	std::wstring w_font_path = converter.from_bytes(font_path.c_str());
 	pd.blendDesc = Locator::getRD()->m_states->NonPremultiplied;
 	Locator::getRD()->m_spriteBatch = std::make_unique<SpriteBatch>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, pd);
-	//This will throw an exception in <memory> if we try to load a non-existant font.
 	Locator::getRD()->m_font = std::make_unique<SpriteFont>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload,
 		w_font_path.c_str(),
 		Locator::getRD()->m_resourceDescriptors->GetCpuHandle(Locator::getRD()->m_resourceCount),
 		Locator::getRD()->m_resourceDescriptors->GetGpuHandle(Locator::getRD()->m_resourceCount));
 	Locator::getRD()->m_resourceCount++;
-	auto uploadResourcesFinished = resourceUpload.End(Locator::getRD()->m_commandQueue.Get());
+
+	auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
+	Locator::getDD()->m_deviceResources->WaitForGpu();
+	uploadResourcesFinished.wait();
 }

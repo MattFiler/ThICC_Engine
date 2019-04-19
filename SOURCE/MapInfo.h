@@ -13,7 +13,7 @@ struct MapInfo {
 
 		name = m_localiser.getString(_element["friendly_name"]);
 		model = _element["model"];
-		preview_sprite = new ImageGO2D(_element["menu_sprite"]);
+		//preview_sprite = new ImageGO2D(_element["menu_sprite"]);
 		scene_index = _index;
 
 		audio_background_start = _element["audio"]["background_start"];
@@ -22,7 +22,7 @@ struct MapInfo {
 		audio_final_lap = _element["audio"]["final_lap"];
 	};
 
-	ImageGO2D* preview_sprite = nullptr;
+	//ImageGO2D* preview_sprite = nullptr;
 	std::string name = "";
 	std::string model = "";
 	int scene_index = -1;

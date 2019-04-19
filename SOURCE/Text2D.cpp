@@ -2,6 +2,7 @@
 #include "Text2D.h"
 #include "renderdata.h"
 #include <codecvt>
+#include "DeviceData.h"
 
 
 Text2D::Text2D(std::string _text)
@@ -29,6 +30,9 @@ void Text2D::CentreOrigin()
 
 void Text2D::Render()
 {
+	RenderTargetState rtState(Locator::getDD()->m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
+	SpriteBatchPipelineStateDescription pd(rtState);
+
 	if (m_dirtyOrigin)
 	{
 		//needs to be done here as requires the font being used

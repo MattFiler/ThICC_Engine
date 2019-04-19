@@ -56,8 +56,8 @@ void MenuScene::ExpensiveUnload() {
 void MenuScene::create2DObjects()
 {
 	//test text
-	//Text2D* m_enterMenu = new Text2D("Lewis is not cool.");
-	//m_2DObjects.push_back(m_enterMenu);
+	Text2D* m_enterMenu = new Text2D("Lewis is not cool.");
+	m_2DObjects.push_back(m_enterMenu);
 
 	ImageGO2D* splash_screen = new ImageGO2D("cbc04-jdryd");
 	m_2DObjects.push_back(splash_screen);
@@ -83,32 +83,6 @@ void MenuScene::create3DObjects()
 		m_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 		m_cam->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
 		m_3DObjects.push_back(m_cam);
-
-		//Create a viewport
-		float width_mod = 0.5f;
-		float height_mod = 0.5f;
-		switch (i) {
-		case 0: {
-			*&Locator::getRD()->m_screenViewport = { 0.0f, 0.0f, static_cast<float>(Locator::getRD()->m_window_width), static_cast<float>(Locator::getRD()->m_window_height), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&Locator::getRD()->m_scissorRect = { 0,0,(int)(Locator::getRD()->m_window_width),(int)(Locator::getRD()->m_window_height) };
-			break;
-		}
-				//case 1: {
-				//	_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(*&_WD->m_outputWidth)* 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-				//	_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(_WD->m_outputHeight * 0.5f) };
-				//	break;
-				//}
-				//case 2: {
-				//	*&_WD->m_viewport[i] = { 0.0f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-				//	*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth * 0.5f),(int)(*&_WD->m_outputHeight) };
-				//	break;
-				//}
-				//case 3: {
-				//	*&_WD->m_viewport[i] = { static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, static_cast<float>(*&_WD->m_outputWidth) * 0.5f, static_cast<float>(*&_WD->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-				//	*&_WD->m_scissorRect[i] = { 0,0,(int)(*&_WD->m_outputWidth),(int)(*&_WD->m_outputHeight) };
-				//	break;
-				//}
-		}
 	}
 }
 
@@ -198,10 +172,6 @@ void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_com
 		(*it)->Render();
 	}
 	/*
-
-	rendering 2d stuff is still fucked
-
-
 	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_resourceDescriptors->Heap() };
 	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
@@ -215,8 +185,8 @@ void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_com
 	{
 		(*it)->Render();
 	}
-	Locator::getRD()->m_spriteBatch->End();
-	*/
+
+	Locator::getRD()->m_spriteBatch->End();*/
 }
 
 /* Player enters into the "lobby" */

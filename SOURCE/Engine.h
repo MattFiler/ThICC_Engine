@@ -57,6 +57,9 @@ private:
 	void Update(DX::StepTimer const& timer);
 	void Render();
 
+	//Create splitscreen viewports
+	void SetupSplitscreenViewports();
+
 	//Render clear
 	void Clear();
 

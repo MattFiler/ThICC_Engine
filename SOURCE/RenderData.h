@@ -34,8 +34,12 @@ struct ThICC_RenderData {
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>        m_rtvDescriptorHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>        m_dsvDescriptorHeap;
 	UINT                                                m_rtvDescriptorSize;
-	D3D12_VIEWPORT                                      m_screenViewport;
-	D3D12_RECT                                          m_scissorRect;
+
+	//Viewports
+	D3D12_VIEWPORT m_screenViewport;
+	D3D12_RECT m_scissorRect;
+	D3D12_VIEWPORT m_screenViewportSplitscreen[4];
+	D3D12_RECT m_scissorRectSplitscreen[4];
 
 	// Direct3D properties.
 	DXGI_FORMAT                                         m_backBufferFormat;
@@ -55,14 +59,11 @@ struct ThICC_RenderData {
 	// DeviceResources options (see flags above)
 	unsigned int                                        m_options;
 
+	//Window size (is this correct? what if window resizes, do we update these?)
 	int m_window_width;
 	int m_window_height;
 
-
-	Microsoft::WRL::ComPtr<ID3D12Resource>          m_radianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT];
-	Microsoft::WRL::ComPtr<ID3D12Resource>          m_irradianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT];
-
-
+	//The current env map index
 	uint32_t m_ibl = 0;
 
 
@@ -76,6 +77,6 @@ struct ThICC_RenderData {
 	std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch = NULL;
 	std::unique_ptr<DirectX::BasicEffect> m_GPeffect = NULL;
 
+	//The active camera
 	Camera* m_cam = NULL;
-	//Light* m_light = NULL;
 };

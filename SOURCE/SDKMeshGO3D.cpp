@@ -69,7 +69,7 @@ void SDKMeshGO3D::Load()
 	//Our D3D device
 	auto device = Locator::getDD()->m_deviceResources->GetD3DDevice();
 
-	//Set the HDR state (does this need to be done every time? we do it in our core engine render call)
+	//Set the RenderTargetState state to our HDR scene config
 	RenderTargetState hdrState(Locator::getDD()->m_hdrScene->GetFormat(), Locator::getDD()->m_deviceResources->GetDepthBufferFormat());
 
 	//Begin the resource upload

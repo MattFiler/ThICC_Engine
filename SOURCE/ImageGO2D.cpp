@@ -2,6 +2,7 @@
 #include "ImageGO2D.h"
 #include <codecvt>
 #include "RenderData.h" 
+#include "DeviceData.h"
 
 ImageGO2D::ImageGO2D(string _filename)
 {
@@ -47,6 +48,9 @@ void ImageGO2D::InternalSpriteUpdate(string _filename) {
 	ResourceUploadBatch resourceUpload(Locator::getRD()->m_d3dDevice.Get());
 
 	resourceUpload.Begin();
+
+	RenderTargetState rtState(Locator::getDD()->m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
+	SpriteBatchPipelineStateDescription pd(rtState);
 
 	DX::ThrowIfFailed(
 		CreateDDSTextureFromFile(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, wFilename.c_str(),
