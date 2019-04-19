@@ -1,7 +1,7 @@
 {
   "MARIO KART STADIUM": {
-    "menu_sprite": "MARIO KART STADIUM PREVIEW",
     "friendly_name": "MAP_MKS",
+    "menu_sprite": "MARIO KART STADIUM PREVIEW",
     "model": "MARIOKARTSTADIUM",
     "audio": {
       "background_start": "MKS START MUSIC",

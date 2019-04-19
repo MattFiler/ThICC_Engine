@@ -82,7 +82,6 @@ namespace EditorTool
             this.loadAssetType.FormattingEnabled = true;
             this.loadAssetType.Items.AddRange(new object[] {
             "Models",
-            "Meshes",
             "Images",
             "Sounds",
             "Fonts",
@@ -416,13 +415,14 @@ namespace EditorTool
             // depreciationWarning
             // 
             this.depreciationWarning.AutoSize = true;
+            this.depreciationWarning.ForeColor = System.Drawing.Color.OrangeRed;
             this.depreciationWarning.Location = new System.Drawing.Point(231, 220);
             this.depreciationWarning.Name = "depreciationWarning";
-            this.depreciationWarning.Size = new System.Drawing.Size(223, 117);
+            this.depreciationWarning.Size = new System.Drawing.Size(199, 117);
             this.depreciationWarning.TabIndex = 14;
             this.depreciationWarning.Text = "WARNING!\r\n\r\nTHIS MODEL WAS IMPORTED WITH\r\nAN OLDER VERSION OF THE ENGINE\r\nTOOLKIT" +
-    " AND DOES NOT SUPPORT\r\nUPDATED FEATURES.\r\n\r\nPLEASE RE-IMPORT THE MODEL BEFORE\r\nI" +
-    "T BECOMES DEPRECIATED.";
+    " AND DOES NOT SUPPORT\r\nNEWLY UPDATED FEATURES.\r\n\r\nIT IS DEPRECIATED AND WILL NOT" +
+    "\r\nBE LOADED BY THE ENGINE.";
             this.depreciationWarning.Visible = false;
             // 
             // modelPreview

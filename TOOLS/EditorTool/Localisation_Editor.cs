@@ -41,8 +41,16 @@ namespace EditorTool
         /* Save new string */
         private void createNewString_Click(object sender, EventArgs e)
         {
+            //Save to localisation config
             localisation_config["ENGLISH"][stringIdentifier.Text] = stringContent.Text;
             File.WriteAllText("DATA/CONFIGS/LOCALISATION.JSON", localisation_config.ToString(Formatting.Indented));
+
+            //Save to inuse config
+            JObject inuse_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/LOCALISATION_INUSE.JSON"));
+            inuse_config[stringIdentifier.Text] = JObject.Parse("{\"in_use_in\": []}");
+            File.WriteAllText("DATA/CONFIGS/LOCALISATION_INUSE.JSON", inuse_config.ToString(Formatting.Indented));
+
+            //Done
             MessageBox.Show(success_message, "Created!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }

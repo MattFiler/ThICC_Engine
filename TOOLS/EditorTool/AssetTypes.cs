@@ -4,7 +4,7 @@
     public enum AssetType
     {
         MODEL,
-        MESH,
+        //MESH, - now depreciated
         IMAGE,
         SOUND,
         FONT,

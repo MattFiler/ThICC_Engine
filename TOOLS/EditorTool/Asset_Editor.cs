@@ -75,14 +75,6 @@ namespace EditorTool
                         }
                     }
                     break;
-                case "Meshes":
-                    MessageBox.Show("This functionality is coming soon.");
-                    /*
-                    Mesh_Creator meshcreator = new Mesh_Creator();
-                    meshcreator.FormClosed += new FormClosedEventHandler(refreshOnClose);
-                    meshcreator.Show();
-                    */
-                    break;
                 case "Images":
                 case "Sounds":
                 case "Fonts":
@@ -112,23 +104,19 @@ namespace EditorTool
             switch (loadAssetType.SelectedItem)
             {
                 case "Models":
-                    path = "DATA/MODELS/";
+                    path = function_libary.getFolder(AssetType.MODEL);
                     extension = "*.SDKMESH";
                     break;
-                case "Meshes":
-                    path = "DATA/MODELS/";
-                    extension = "*.TXTMESH";
-                    break;
                 case "Images":
-                    path = "DATA/IMAGES/";
+                    path = function_libary.getFolder(AssetType.IMAGE);
                     extension = "*.DDS";
                     break;
                 case "Sounds":
-                    path = "DATA/SOUNDS/";
+                    path = function_libary.getFolder(AssetType.SOUND);
                     extension = "*.WAV";
                     break;
                 case "Fonts":
-                    path = "DATA/FONTS/";
+                    path = function_libary.getFolder(AssetType.FONT);
                     extension = "*.SPRITEFONT";
                     break;
                 case "Strings":
@@ -186,7 +174,8 @@ namespace EditorTool
                 MessageBox.Show("Please select an asset to delete!", "No asset selected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
+            
+            //Get name
             string selected_file_name = "";
             if (loadAssetType.SelectedItem.ToString() != "Strings")
             {
@@ -196,9 +185,47 @@ namespace EditorTool
             {
                 selected_file_name = assetList.SelectedItem.ToString();
             }
-            assetList.SelectedIndex = -1; //Clear any item preview so we can delete it
+
+            //Get type
+            AssetType selected_type;
+            switch (loadAssetType.SelectedItem)
+            {
+                case "Models":
+                    selected_type = AssetType.MODEL;
+                    break;
+                case "Fonts":
+                    selected_type = AssetType.FONT;
+                    break;
+                case "Images":
+                    selected_type = AssetType.IMAGE;
+                    break;
+                case "Strings":
+                    selected_type = AssetType.STRING;
+                    break;
+                default:
+                    selected_type = AssetType.SOUND;
+                    break;
+            }
+
+            //Check to see if asset is in use somewhere
+            List<string> useages = function_libary.getUseages(selected_type, assetList.SelectedItem.ToString());
+            if (useages.Count > 0)
+            {
+                string message = "Cannot delete! In use in: ";
+                foreach (string use in useages)
+                {
+                    message += use + ", ";
+                }
+                message = message.Substring(0, message.Length - 2);
+                MessageBox.Show(message + ".", "Asset is in use!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            //Clear any item preview so we can delete it
+            assetList.SelectedIndex = -1; 
             function_libary.closeLingeringSoundStreams();
 
+            //Confirmation
             DialogResult showErrorInfo = MessageBox.Show("Are you sure you want to delete this asset?", "About to delete selected asset...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (showErrorInfo != DialogResult.Yes)
             {
@@ -206,13 +233,12 @@ namespace EditorTool
             }
 
             //Delete selected asset
-            switch (loadAssetType.SelectedItem)
+            switch (selected_type)
             {
-                case "Models":
-                case "Meshes":
+                case AssetType.MODEL:
                     Directory.Delete(Path.GetDirectoryName(selected_file_name), true);
                     break;
-                case "Fonts":
+                case AssetType.FONT:
                     File.Delete(selected_file_name);
                     try
                     {
@@ -221,8 +247,8 @@ namespace EditorTool
                     }
                     catch { }
                     break;
-                case "Images":
-                    string[] files = Directory.GetFiles("DATA/IMAGES/", "*", SearchOption.AllDirectories);
+                case AssetType.IMAGE:
+                    string[] files = Directory.GetFiles(function_libary.getFolder(AssetType.IMAGE), "*", SearchOption.AllDirectories);
                     foreach (string file in files)
                     {
                         if (Path.GetFileNameWithoutExtension(file) == Path.GetFileNameWithoutExtension(selected_file_name))
@@ -231,9 +257,12 @@ namespace EditorTool
                         }
                     }
                     break;
-                case "Strings":
+                case AssetType.STRING:
                     localisation_config["ENGLISH"][selected_file_name].Parent.Remove();
                     File.WriteAllText("DATA/CONFIGS/LOCALISATION.JSON", localisation_config.ToString(Formatting.Indented));
+                    JObject inuse_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/LOCALISATION_INUSE.JSON"));
+                    inuse_config[selected_file_name].Parent.Remove();
+                    File.WriteAllText("DATA/CONFIGS/LOCALISATION_INUSE.JSON", inuse_config.ToString(Formatting.Indented));
                     break;
                 default:
                     File.Delete(selected_file_name);
@@ -297,9 +326,6 @@ namespace EditorTool
 
                         modelConfigs.Visible = true;
                     }
-                    break;
-                case "Meshes":
-                    //WIP
                     break;
                 case "Images":
                     function_libary.loadImagePreview(assetList, imagePreview);

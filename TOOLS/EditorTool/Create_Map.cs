@@ -36,6 +36,8 @@ namespace EditorTool
             if (edit_mode)
             {
                 // If in edit mode, load existing config
+                mapCodename.Text = map_json_key;
+                mapCodename.ReadOnly = true;
                 mapName.Text = maps_json_config[map_json_key]["friendly_name"].Value<string>();
                 mapPreviewImage.Text = maps_json_config[map_json_key]["menu_sprite"].Value<string>();
                 mapModelAsset.Text = maps_json_config[map_json_key]["model"].Value<string>();
@@ -46,51 +48,48 @@ namespace EditorTool
             }
         }
 
-        /* Launch asset selector */
-        string selectAsset(AssetType asset_type, string existing_option = "")
-        {
-            string asset_path = "";
-            using (var form = new Asset_Browser(asset_type, existing_option))
-            {
-                form.ShowDialog();
-                asset_path = form.selected_file_path;
-            }
-            return asset_path;
-        }
-
         /* Select assets */
         private void selectImageAsset_Click(object sender, EventArgs e)
         {
-            mapPreviewImage.Text = selectAsset(AssetType.IMAGE, mapPreviewImage.Text);
+            function_libary.assetSelectHandler(mapPreviewImage, AssetType.IMAGE);
         }
         private void selectMapModel_Click(object sender, EventArgs e)
         {
-            mapModelAsset.Text = selectAsset(AssetType.MODEL, mapModelAsset.Text);
+            function_libary.assetSelectHandler(mapModelAsset, AssetType.MODEL);
         }
         private void selectSoundtrackIntro_Click(object sender, EventArgs e)
         {
-            soundtrackIntro.Text = selectAsset(AssetType.SOUND, soundtrackIntro.Text);
+            function_libary.assetSelectHandler(soundtrackIntro, AssetType.SOUND);
         }
         private void selectSoundtrackLoop_Click(object sender, EventArgs e)
         {
-            soundtrackIntroLoop.Text = selectAsset(AssetType.SOUND, soundtrackIntroLoop.Text);
+            function_libary.assetSelectHandler(soundtrackIntroLoop, AssetType.SOUND);
         }
         private void selectFinalLapIntro_Click(object sender, EventArgs e)
         {
-            finalLapIntro.Text = selectAsset(AssetType.SOUND, finalLapIntro.Text);
+            function_libary.assetSelectHandler(finalLapIntro, AssetType.SOUND);
         }
         private void selectFinalLapLoop_Click(object sender, EventArgs e)
         {
-            finalLapLoop.Text = selectAsset(AssetType.SOUND, finalLapLoop.Text);
+            function_libary.assetSelectHandler(finalLapLoop, AssetType.SOUND);
         }
         private void loadString_Click(object sender, EventArgs e)
         {
-            mapName.Text = selectAsset(AssetType.STRING, mapName.Text);
+            function_libary.assetSelectHandler(mapName, AssetType.STRING);
         }
 
         /* Save map to config */
         private void saveMap_Click(object sender, EventArgs e)
         {
+            //All inputs required
+            if (mapCodename.Text == "" || mapName.Text == "" || mapPreviewImage.Text == "" || 
+                mapModelAsset.Text == "" || soundtrackIntro.Text == "" || soundtrackIntroLoop.Text == "" || 
+                finalLapIntro.Text == "" || finalLapLoop.Text == "")
+            {
+                MessageBox.Show("Please complete all fields before trying to save.", "Can't save.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             //Remove old json config or load existing (depends on mode)
             if (edit_mode)
             {
@@ -101,12 +100,14 @@ namespace EditorTool
                 maps_json_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/MAP_CONFIG.JSON"));
             }
 
-            string map_name = function_libary.getLocalisedString(mapName.Text);
+            string map_name = mapCodename.Text;
 
             //Add map to config
+            maps_json_config[map_name] = JObject.Parse("{}");
             maps_json_config[map_name]["friendly_name"] = mapName.Text;
             maps_json_config[map_name]["menu_sprite"] = mapPreviewImage.Text;
             maps_json_config[map_name]["model"] = mapModelAsset.Text;
+            maps_json_config[map_name]["audio"] = JObject.Parse("{}");
             maps_json_config[map_name]["audio"]["background_start"] = soundtrackIntro.Text;
             maps_json_config[map_name]["audio"]["background"] = soundtrackIntroLoop.Text;
             maps_json_config[map_name]["audio"]["final_lap_start"] = finalLapIntro.Text;
@@ -114,6 +115,10 @@ namespace EditorTool
 
             //Save back out
             File.WriteAllText("DATA/CONFIGS/MAP_CONFIG.JSON", maps_json_config.ToString(Formatting.Indented));
+
+            //Done
+            MessageBox.Show("Saved map configuration!", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Close();
         }
     }
 }

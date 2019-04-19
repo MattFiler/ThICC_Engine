@@ -12,6 +12,8 @@ namespace EditorTool
 {
     public partial class UI_Editor : Form
     {
+        UsefulFunctions common_functions = new UsefulFunctions();
+
         List<PictureBox> all_images = new List<PictureBox>();
         List<Label> all_texts = new List<Label>();
         PictureBox background;
@@ -24,7 +26,7 @@ namespace EditorTool
         private void UI_Editor_Load(object sender, EventArgs e)
         {
             background = new PictureBox();
-            background.Image = loadBMP("DATA/IMAGES/BLANK_UI_CANVAS.JPG");
+            background.Image = loadBMP(common_functions.getFolder(AssetType.IMAGE) + "BLANK_UI_CANVAS.JPG");
             background.Location = new Point(0, 0);
             background.Size = new Size(1280, 720);
             viewportGroup.Controls.Add(background);

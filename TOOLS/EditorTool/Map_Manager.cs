@@ -15,6 +15,7 @@ namespace EditorTool
 {
     public partial class Map_Manager : Form
     {
+        UsefulFunctions common_functions = new UsefulFunctions();
         JObject maps_json_config;
         public Map_Manager()
         {
@@ -43,7 +44,7 @@ namespace EditorTool
                 return;
             }
 
-            string file_path_without_extension = "DATA/IMAGES/" + maps_json_config[assetList.SelectedItem.ToString()]["menu_sprite"].Value<string>() + ".";
+            string file_path_without_extension = common_functions.getFolder(AssetType.IMAGE) + maps_json_config[assetList.SelectedItem.ToString()]["menu_sprite"].Value<string>() + ".";
             string file_path_with_extension = "";
             if (File.Exists(file_path_without_extension + "PNG"))
             {

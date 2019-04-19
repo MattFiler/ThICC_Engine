@@ -6,5 +6,6 @@
   "res_x": 64,
   "res_y": 68,
   "x_pos": 0,
-  "y_pos": 0
+  "y_pos": 0,
+  "in_use_in": []
 }

@@ -6,14 +6,6 @@
     "MAP_MKS": "Mario Kart Stadium",
     "TEST": "testing string"
   },
-  "SPANISH": {
-    "PLACEHOLDER": "SPANISH placeholder",
-    "DEMO2": "TESTING SPANISH",
-    "DEBUG_TEXT": "Ejemplo de cadena cargada como espanol."
-  },
-  "FRENCH": {
-    "PLACEHOLDER": "FRENCH placeholder",
-    "DEMO2": "TESTING FRENCH",
-    "DEBUG_TEXT": "Exemple de chaine chargee en francais."
-  }
+  "SPANISH": {},
+  "FRENCH": {}
 }

@@ -6,5 +6,8 @@
   "res_x": 288,
   "res_y": 162,
   "x_pos": 0,
-  "y_pos": 0
+  "y_pos": 0,
+  "in_use_in": [
+    "map_config"
+  ]
 }
