@@ -31,7 +31,7 @@ GameScene::~GameScene()
 	m_3DObjects.clear();
 	delete cine_cam;
 	cine_cam = nullptr;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		delete m_cam[i];
 		m_cam[i] = nullptr;
@@ -625,7 +625,7 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			{
 				player[i]->GetRankingText()->Render();
 				player[i]->GetLapText()->Render();
-				//player[i]->GetItemImg()->Render();
+				player[i]->GetItemImg()->Render();
 			}
 		}
 		break;
