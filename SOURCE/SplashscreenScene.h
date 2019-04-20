@@ -7,7 +7,6 @@
 #include "PhysModel.h"
 #include "ImageGO2D.h"
 #include "Text2D.h"
-#include "LocalisationManager.h"
 #include <vector>
 
 class SplashscreenScene : public Scene
@@ -34,6 +33,9 @@ private:
 
 	//Structures for the scene's objects
 	std::vector<GameObject2D*> m_2DObjects;
+
+	//Engine features
+	KeybindManager m_keybinds;
 
 	//References
 	SceneManager* m_scene_manager;

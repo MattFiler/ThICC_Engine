@@ -33,10 +33,10 @@ bool MenuScene::Load()
 /* Create all 2D objects for the scene */
 void MenuScene::create2DObjects()
 {
-	ImageGO2D* splash_screen = new ImageGO2D("cbc04-jdryd");
+	ImageGO2D* splash_screen = new ImageGO2D("MENU_SPLASHSCREEN");
 	m_2DObjects.push_back(splash_screen);
 
-	//ImageGO2D* lobby_screen = new ImageGO2D("lobby");
+	//ImageGO2D* lobby_screen = new ImageGO2D("MENU_LOBBY");
 	//lobby_screen->SetPos(Vector2(0, -720));
 	//m_2DObjects.push_back(lobby_screen);
 
@@ -44,7 +44,8 @@ void MenuScene::create2DObjects()
 	//initCharacterImages();
 
 	//debug text
-	Text2D* m_enterMenu = new Text2D("PRESS ENTER FOR DRAGON DRIFTWAY / D FOR MARIO KART STADIUM");
+	Text2D* m_enterMenu = new Text2D("CHARACTER SELECT DISABLED!");
+	m_enterMenu->SetColour(Colors::Black);
 	m_2DObjects.push_back(m_enterMenu);
 }
 
@@ -57,10 +58,11 @@ void MenuScene::Update(DX::StepTimer const& timer)
 	}
 	else if (Locator::getID()->m_keyboardState.Enter || Locator::getID()->m_gamePadState[0].IsStartPressed())
 	{
-		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
 		Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
+		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
 	}
 
+	/*
 	if (game_start)
 	{
 		Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TITLE_START);
@@ -91,7 +93,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 		}
 		playerJoin();
-	}
+	}*/
 
 	for (std::vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
@@ -100,6 +102,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 
 	if (m_keybinds.keyPressed("Load Debug Scene"))
 	{
+		Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
 		m_scene_manager->setCurrentScene(Scenes::GAMESCENE+1);
 	}
 }
@@ -194,13 +197,13 @@ void MenuScene::initCharacterImages()
 {
 	for (int i = 0; i < 4; ++i)
 	{
-		m_character_images[i][0] = new ImageGO2D("MARIO");
+		m_character_images[i][0] = new ImageGO2D("CHARACTER_MARIO");
 		m_character_images[i][0]->SetPos(Vector2(0, -500));
-		m_character_images[i][1] = new ImageGO2D("BOWSER");
+		m_character_images[i][1] = new ImageGO2D("CHARACTER_BOWSER");
 		m_character_images[i][1]->SetPos(Vector2(0, -500));
-		m_character_images[i][2] = new ImageGO2D("PEACH");
+		m_character_images[i][2] = new ImageGO2D("CHARACTER_PEACH");
 		m_character_images[i][2]->SetPos(Vector2(0, -500));
-		m_character_images[i][3] = new ImageGO2D("WALUIGI");
+		m_character_images[i][3] = new ImageGO2D("CHARACTER_WALUIGI");
 		m_character_images[i][3]->SetPos(Vector2(0, -500));
 	}
 

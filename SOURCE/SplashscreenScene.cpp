@@ -46,6 +46,11 @@ void SplashscreenScene::Update(DX::StepTimer const& timer)
 	if (m_timer > m_timeout) {
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
+
+	if (m_keybinds.keyPressed("Activate"))
+	{
+		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
+	}
 }
 
 /* Render the 2D scene */
