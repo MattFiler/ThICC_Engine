@@ -67,9 +67,6 @@
     <ClCompile Include="ImageGO2D.cpp">
       <Filter>Game\Components\Game Objects\2D</Filter>
     </ClCompile>
-    <ClCompile Include="WaitForGPU.cpp">
-      <Filter>Engine Backend\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject2D.cpp">
       <Filter>Game\Components\Game Objects\2D</Filter>
     </ClCompile>
@@ -129,6 +126,9 @@
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="SplashscreenScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -139,9 +139,6 @@
     </ClInclude>
     <ClInclude Include="StepTimer.h">
       <Filter>Engine Backend\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="ArcBall.h">
-      <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="ReadData.h">
       <Filter>Engine Backend\Utilities</Filter>
@@ -224,9 +221,6 @@
     <ClInclude Include="ImageGO2D.h">
       <Filter>Game\Components\Game Objects\2D</Filter>
     </ClInclude>
-    <ClInclude Include="WaitForGPU.h">
-      <Filter>Engine Backend\Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject2D.h">
       <Filter>Game\Components\Game Objects\2D</Filter>
     </ClInclude>
@@ -292,6 +286,27 @@
     <ClInclude Include="Collision.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
+    <ClInclude Include="DebugText.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="MapInfo.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterInfo.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="VehicleInfo.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetCompPch.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetComp.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="SplashscreenScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -356,6 +371,9 @@
     </Filter>
     <Filter Include="Game\Scenes">
       <UniqueIdentifier>{548f9388-7aee-467a-9829-97617e463cc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Backend\AssetComps">
+      <UniqueIdentifier>{dac50347-06e1-4c26-b494-aec2d5739cc3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

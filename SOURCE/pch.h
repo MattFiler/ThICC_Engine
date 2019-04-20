@@ -121,3 +121,4 @@ namespace DX
 #include <DirectXColors.h>
 
 #include "ServiceLocator.h"
+#include "DebugText.h"

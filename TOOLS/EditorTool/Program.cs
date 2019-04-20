@@ -18,7 +18,7 @@ namespace EditorTool
             {
                 //A launch to soley build assets
                 Splash splash_content = new Splash(false);
-                if (splash_content.autoCompileAssets("../")) //Working directory fix
+                if (splash_content.autoCompileAssets(false, "../")) //Working directory fix
                 {
                     Console.WriteLine("Asset compile finished successfully.");
                 }

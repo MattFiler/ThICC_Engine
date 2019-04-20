@@ -8,7 +8,6 @@
 #include "AudioManager.h"
 #include "DebugMarker.h"
 #include "Explosion.h"
-#include "WaitForGPU.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
@@ -16,13 +15,16 @@
 
 extern void ExitGame();
 
-
-GameScene::GameScene()
-{
-	m_scene_manager = new SceneManager();
+/* Create! */
+GameScene::GameScene(MapInfo _track) {
+	//Get a ref to the scene manager for swapping scenes
+	m_scene_manager = Locator::getSM();
+	
+	//Our map's info
+	map_info = _track; //Use this to load the audio in ExpensiveLoad!
 }
 
-
+/* Destroy! */
 GameScene::~GameScene()
 {
 	m_2DObjects.clear();
@@ -36,7 +38,183 @@ GameScene::~GameScene()
 	}
 }
 
-void GameScene::Update()
+/* Load inexpensive things and create the objects for expensive things we will populate when required */
+bool GameScene::Load()
+{
+	//Read in game config
+	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
+	game_config << i;
+
+	//Read in track config
+	//std::ifstream x(m_filepath.generateFilepath("MAP_CONFIG", m_filepath.CONFIG));
+	//track_config << x;
+
+	create3DObjects();
+	create2DObjects();
+	pushBackObjects();
+
+	m_aiScheduler = std::make_unique<AIScheduler>(track);
+	Locator::setupAIScheduler(m_aiScheduler.get());
+
+	return true;
+}
+
+/* Populate the expensive things! */
+void GameScene::ExpensiveLoad() {
+	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	{
+		(*it)->Load();
+		if (dynamic_cast<Player*>(*it)) {
+			dynamic_cast<Player*>(*it)->GetAnimationMesh()->Load();
+		}
+		if (dynamic_cast<Track*>(*it)) {
+			dynamic_cast<Track*>(*it)->LoadCollision();
+		}
+	}
+
+	//Load the map's audio here using map_info's data
+}
+
+/* Unpopulate the expensive things. */
+void GameScene::ExpensiveUnload() {
+	Vector3 suitable_spawn = Vector3(0, 0, 0);
+
+	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	{
+		(*it)->Reset();
+		if (dynamic_cast<Track*>(*it)) {
+			dynamic_cast<Track*>(*it)->UnloadCollision();
+			suitable_spawn = dynamic_cast<Track*>(*it)->getSuitableSpawnSpot();
+		}
+	}
+
+	//Reset player positions & camera mode
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		m_cam[i]->Reset();
+		m_cam[i]->SetBehav(Camera::BEHAVIOUR::RACE_START);
+	}
+	cine_cam->Reset();
+	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
+
+	//We'll probably need to reset more stuff here, like race timers, etc
+	timeout = 12.f;
+	state = START;
+	m_playerControls = false;
+	track_music_start = true;
+	final_lap_start = false;
+	final_lap = false;
+	finished = 0;
+}
+
+/* Create all 2D objects for the scene */
+void GameScene::create2DObjects()
+{
+	for (int i = 0; i < game_config["player_count"]; i++)
+	{
+		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
+		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
+		m_2DObjects.push_back(player[i]->GetItemImg());
+
+		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
+		float text_pos_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
+		float text_pos_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetRankingText()->GetSize().y;
+		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
+		//m_2DObjects.push_back(player[i]->GetRankingText());
+
+		float text_lap_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
+		float text_lap_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetLapText()->GetSize().y;
+		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
+		//m_2DObjects.push_back(player[i]->GetLapText());
+	}
+
+
+	// player countdown text
+	for (int i = 0; i < game_config["player_count"]; i++)
+	{
+		player[i]->GetCountdown()->SetPos({
+			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 ,
+			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2 
+		});
+		player[i]->GetFinishOrder()->SetPos({ 
+			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetFinishOrder()->GetSize().x / 2 ,
+			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height / 2 - player[i]->GetFinishOrder()->GetSize().y / 2
+		});
+	}
+}
+
+/* Create all 3D objects in the scene. */
+void GameScene::create3DObjects()
+{
+	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
+	// e.g. for 60 FPS fixed timestep update logic, call:
+	/*
+	m_timer.SetFixedTimeStep(true);
+	m_timer.SetTargetElapsedSeconds(1.0 / 60);
+	*/
+
+	//Load in a track
+	track = new Track(map_info.model);
+	track->setWaypointBB();
+	m_3DObjects.push_back(track);
+
+	//Add all track item boxes to 3D object update array
+	for (ItemBox* this_item_box : track->GetItemBoxes()) {
+		m_3DObjects.push_back(this_item_box);
+	}
+
+	//Add all debug markers
+	for (DebugMarker* this_debug_marker : track->GetDebugMarkers()) {
+		m_3DObjects.push_back(this_debug_marker);
+	}
+
+	DebugText::print("Width: " + std::to_string(Locator::getRD()->m_window_width));
+	DebugText::print("Height: " + std::to_string(Locator::getRD()->m_window_height));
+
+	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
+	for (int i = 0; i < game_config["player_count"]; i++) {
+
+		//Create a player and position on track
+		using std::placeholders::_1;
+		player[i] = new Player("Knuckles_Kart", i, std::bind(&GameScene::CreateItem, this, _1));
+		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		player[i]->setMass(10);
+		m_3DObjects.push_back(player[i]);
+
+		//Create a camera to follow the player
+		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
+		m_cam[i]->SetBehav(Camera::BEHAVIOUR::RACE_START);
+	}
+
+	/*
+	for (SDKMeshGO3D*& cup : debug_cups)
+	{
+		cup = new SDKMeshGO3D("Cup");
+		m_3DObjects.push_back(cup);
+	}*/
+
+
+	//Cinematic cam
+	cine_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
+}
+
+/* Push objects back to their associated arrays */
+void GameScene::pushBackObjects()
+{
+	//Add all 3D game objects with a collider to the collision manager's list
+	for (int i = 0; i < m_3DObjects.size(); i++)
+	{
+		if (dynamic_cast<PhysModel*>(m_3DObjects[i]) && dynamic_cast<PhysModel*>(m_3DObjects[i])->hasCollider())
+		{
+			m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
+			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
+		}
+	}
+}
+
+/* Update the scene */
+void GameScene::Update(DX::StepTimer const& timer)
 {
 	m_aiScheduler->Update();
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
@@ -159,7 +337,6 @@ void GameScene::Update()
 	{
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
 	}
-#if DEBUG
 	if (m_keybinds.keyPressed("Matt"))
 	{
 		if (m_cam[0]->GetBehav() == Camera::BEHAVIOUR::DEBUG_CAM) {
@@ -168,7 +345,6 @@ void GameScene::Update()
 		}
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
 	}
-#endif
 
 
 	// sets the players waypoint
@@ -177,7 +353,7 @@ void GameScene::Update()
 	// Sets the current position of the player on teh leaderboard
 	SetPlayerRanking();
 
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+	for (std::vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
 		(*it)->Tick();
 	}
@@ -233,6 +409,7 @@ void GameScene::Update()
 	if (m_keybinds.keyPressed("Debug Toggle"))
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
+		DebugText::print("show_debug_meshes: " + std::to_string((int)GameDebugToggles::show_debug_meshes));
 	}
 	if (m_keybinds.keyPressed("Debug Toggle World Render")) {
 		GameDebugToggles::render_level = !GameDebugToggles::render_level;
@@ -243,46 +420,12 @@ void GameScene::Update()
 		state = COUNTDOWN;
 	}
 
-	for (int i = 0; i < 8; i++)
-	{
-		switch (i)
-		{
-			//case 0:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopLeft);
-			//	break;
-			//case 1:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontTopRight);
-			//	break;
-			//case 2:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomLeft);
-			//	break;
-			//case 3:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalFrontBottomRight);
-			//	break;
-			//case 4:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalBackTopLeft);
-			//	break;
-			//case 5:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalBackTopRight);
-			//	break;
-			//case 6:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomLeft);
-			//	break;
-			//case 7:
-			//	debug_cups[i]->SetPos(player[0]->data.m_globalBackBottomRight);
-			//	break;
-		}
-	}
-
 	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels);
-	//std::cout << " W: " << std::to_string(player[0]->getCollider().Orientation.w)
-	//	<< " X: " << std::to_string(player[0]->getCollider().Orientation.x)
-	//	<< " Y: " << std::to_string(player[0]->getCollider().Orientation.y)
-	//	<< " Z: " << std::to_string(player[0]->getCollider().Orientation.z) << std::endl;
 
 	UpdateItems();
 }
 
+/* Update the items in the scene specifically */
 void GameScene::UpdateItems()
 {
 	int delIndex = -1;
@@ -326,6 +469,170 @@ void GameScene::UpdateItems()
 	}
 }
 
+/* Render the 3D scene */
+void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
+{
+	switch (state)
+	{
+	case OPENING:
+		//Configure viewport
+		m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
+		m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
+		Locator::getRD()->m_cam = cine_cam;
+
+		//Render 3D objects
+		for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+		{
+			if ((*it)->isVisible()) {
+				if (dynamic_cast<Track*>(*it)) //debugging only
+				{
+					if (GameDebugToggles::render_level) {
+						(*it)->Render();
+					}
+				}
+				else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+					if (GameDebugToggles::show_debug_meshes) {
+						(*it)->Render();
+					}
+				}
+				else
+				{
+					(*it)->Render();
+				}
+			}
+		}
+
+		//Render items
+		for (Item* obj : m_itemModels)
+		{
+			if (obj->GetRenderMesh())
+			{
+				obj->GetRenderMesh()->Render();
+			}
+		}
+
+		break;
+	case CAM_OPEN:
+	case COUNTDOWN:
+		for (int i = 0; i < game_config["player_count"]; ++i)
+		{
+			//Configure viewports
+			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[i]);
+			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[i]);
+			Locator::getRD()->m_cam = m_cam[i];
+
+			//Render 3D objects
+			for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+			{
+				if ((*it)->isVisible()) {
+					if (dynamic_cast<Track*>(*it)) //debugging only
+					{
+						if (GameDebugToggles::render_level) {
+							(*it)->Render();
+						}
+					}
+					else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+						if (GameDebugToggles::show_debug_meshes) {
+							(*it)->Render();
+						}
+					}
+					else
+					{
+						(*it)->Render();
+					}
+				}
+			}
+
+			//Render items
+			for (Item* obj : m_itemModels)
+			{
+				if (obj->GetMesh())
+				{
+					obj->GetRenderMesh()->Render();
+				}
+			}
+		}
+		break;
+	case PLAY:
+		for (int i = 0; i < game_config["player_count"]; ++i)
+		{
+			//Setup viewport
+			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[i]);
+			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[i]);
+			Locator::getRD()->m_cam = m_cam[i];
+
+			//Render 3D objects
+			for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+			{
+				if ((*it)->isVisible()) {
+					if (dynamic_cast<Track*>(*it)) //debugging only
+					{
+						if (GameDebugToggles::render_level) {
+							(*it)->Render();
+						}
+					}
+					else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+						if (GameDebugToggles::show_debug_meshes) {
+							(*it)->Render();
+						}
+					}
+					else
+					{
+						(*it)->Render();
+					}
+				}
+			}
+
+			//Render items
+			for (Item* obj : m_itemModels)
+			{
+				if (obj->GetMesh())
+				{
+					obj->GetRenderMesh()->Render();
+				}
+			}
+		}
+		break;
+	}
+}
+
+/* Render the 2D scene */
+void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
+{
+	switch (state)
+	{
+	case COUNTDOWN:
+		//Render countdown in screen centre
+		for (int i = 0; i < game_config["player_count"]; i++)
+		{
+			player[i]->GetCountdown()->Render();
+		}
+		break;
+	case PLAY:
+		/*
+		for (std::vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
+		{
+			(*it)->Render();
+		}*/
+
+		for (int i = 0; i < game_config["player_count"]; i++)
+		{
+			if (player[i]->GetFinished())
+			{
+				player[i]->GetFinishOrder()->Render();
+			}
+			else if (!player[i]->GetFinished())
+			{
+				player[i]->GetRankingText()->Render();
+				player[i]->GetLapText()->Render();
+				//player[i]->GetItemImg()->Render();
+			}
+		}
+		break;
+	}
+}
+
+/* Set the player's current waypoint */
 void GameScene::SetPlayersWaypoint()
 {
 	for (int i = 0; i < game_config["player_count"]; i++) {
@@ -364,6 +671,7 @@ void GameScene::SetPlayersWaypoint()
 	}
 }
 
+/* Set the player's current position in the race */
 void GameScene::SetPlayerRanking()
 {
 	for (int i = 0; i < game_config["player_count"]; i++)
@@ -414,388 +722,7 @@ void GameScene::SetPlayerRanking()
 	}
 }
 
-void GameScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
-{
-	/*
-		This has been kinda butchered for now as we only have one viewport, not 4.
-	*/
-
-	// temp solution for having a cinematic cam and countdown for the beta
-	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_resourceDescriptors->Heap() };
-	switch (state)
-	{
-	case OPENING:
-		//Configure viewport
-		m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-		m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
-		Locator::getRD()->m_cam = cine_cam;
-
-		//Render 3D objects
-		for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-		{
-			if ((*it)->isVisible()) {
-				if (dynamic_cast<Track*>(*it)) //debugging only
-				{
-					if (GameDebugToggles::render_level) {
-						(*it)->Render();
-					}
-				}
-				else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
-					if (GameDebugToggles::show_debug_meshes) {
-						(*it)->Render();
-					}
-				}
-				else
-				{
-					(*it)->Render();
-				}
-			}
-		}
-
-		//Render items
-		for (Item* obj : m_itemModels)
-		{
-			if (obj->GetRenderMesh())
-			{
-				obj->GetRenderMesh()->Render();
-			}
-		}
-		m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-
-		//Render countdown in screen centre
-		/*
-		m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-		m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
-		Locator::getRD()->m_spriteBatch->SetViewport(Locator::getRD()->m_screenViewport);
-		Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
-		Locator::getRD()->m_spriteBatch->End();*/
-
-		break;
-	case CAM_OPEN:
-	case COUNTDOWN:
-		//for (int i = 0; i < game_config["player_count"]; ++i)
-		//{
-			//Configure viewports
-			//m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
-			//m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
-			//Locator::getRD()->m_cam = m_cam[i];
-
-			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
-			Locator::getRD()->m_cam = m_cam[0];
-
-			//Render 3D objects
-			for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-			{
-				if ((*it)->isVisible()) {
-					if (dynamic_cast<Track*>(*it)) //debugging only
-					{
-						if (GameDebugToggles::render_level) {
-							(*it)->Render();
-						}
-					}
-					else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
-						if (GameDebugToggles::show_debug_meshes) {
-							(*it)->Render();
-						}
-					}
-					else
-					{
-						(*it)->Render();
-					}
-				}
-			}
-
-			//Render items
-			for (Item* obj : m_itemModels)
-			{
-				if (obj->GetMesh())
-				{
-					obj->GetRenderMesh()->Render();
-				}
-			}
-		//}
-		m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-
-		if (state == COUNTDOWN)
-		{
-			//Render countdown in screen centre
-			/*
-			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
-			Locator::getRD()->m_spriteBatch->SetViewport(Locator::getRD()->m_screenViewport);
-			Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
-			for (int i = 0; i < game_config["player_count"]; i++)
-			{
-				player[i]->GetCountdown()->Render();
-			}
-			Locator::getRD()->m_spriteBatch->End();*/
-		}
-		break;
-	case PLAY:
-		//for (int i = 0; i < game_config["player_count"]; ++i)
-		//{
-			//Setup viewport
-			//m_commandList->RSSetViewports(1, &Locator::getWD()->m_viewport[i]);
-			//m_commandList->RSSetScissorRects(1, &Locator::getWD()->m_scissorRect[i]);
-			//Locator::getRD()->m_cam = m_cam[i];
-
-			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
-			Locator::getRD()->m_cam = m_cam[0];
-
-			//Render 3D objects
-			for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-			{
-				if ((*it)->isVisible()) {
-					if (dynamic_cast<Track*>(*it)) //debugging only
-					{
-						if (GameDebugToggles::render_level) {
-							(*it)->Render();
-						}
-					}
-					else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
-						if (GameDebugToggles::show_debug_meshes) {
-							(*it)->Render();
-						}
-					}
-					else
-					{
-						(*it)->Render();
-					}
-				}
-			}
-
-			//Render items
-			for (Item* obj : m_itemModels)
-			{
-				if (obj->GetMesh())
-				{
-					obj->GetRenderMesh()->Render();
-				}
-			}
-		//}
-
-		//Render sprites
-		/*
-		m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-		m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-		m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
-		Locator::getRD()->m_spriteBatch->SetViewport(Locator::getRD()->m_screenViewport);
-		Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
-		//draw 2d objects
-		//for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-		//{
-		//	(*it)->Render();
-		//}
-		for (int i = 0; i < game_config["player_count"]; i++)
-		{
-			if (player[i]->GetFinished())
-			{
-				player[i]->GetFinishOrder()->Render();
-			}
-			else if (!player[i]->GetFinished())
-			{
-				player[i]->GetRankingText()->Render();
-				player[i]->GetLapText()->Render();
-				player[i]->GetItemImg()->Render();
-			}
-		}
-		Locator::getRD()->m_spriteBatch->End();*/
-		break;
-	}
-}
-
-bool GameScene::Load()
-{
-	//Read in game config
-	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
-	game_config << i;
-
-	//Read in track config
-	//std::ifstream x(m_filepath.generateFilepath("MAP_CONFIG", m_filepath.CONFIG));
-	//track_config << x;
-
-	create3DObjects();
-
-	create2DObjects();
-
-	pushBackObjects();
-
-	m_aiScheduler = std::make_unique<AIScheduler>(track);
-	Locator::setupAIScheduler(m_aiScheduler.get());
-
-	return true;
-}
-
-void GameScene::create2DObjects()
-{
-	//These widths and heights might be wrong, I dunno :)
-	*&Locator::getRD()->m_screenViewport = { 0.0f, 0.0f, static_cast<float>(Locator::getRD()->m_window_width), static_cast<float>(Locator::getRD()->m_window_height), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	*&Locator::getRD()->m_scissorRect = { 0,0,(int)(Locator::getRD()->m_window_width),(int)(Locator::getRD()->m_window_height) };
-
-	/*
-	for (int i = 0; i < game_config["player_count"]; i++)
-	{
-		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
-		player[i]->SetItemPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
-		//test->CentreOrigin();
-		m_2DObjects.push_back(player[i]->GetItemImg());
-
-		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
-		float text_pos_x = Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
-		float text_pos_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetRankingText()->GetSize().y;
-		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
-		m_2DObjects.push_back(player[i]->GetRankingText());
-
-		float text_lap_x = Locator::getWD()->m_viewport[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
-		float text_lap_y = Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height - player[i]->GetLapText()->GetSize().y;
-		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
-		m_2DObjects.push_back(player[i]->GetLapText());
-	}*/
-	for (int i = 0; i < game_config["player_count"]; i++)
-	{
-		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getWD()->m_viewport[i].TopLeftX, Locator::getWD()->m_viewport[i].TopLeftY));
-		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewport.TopLeftX, Locator::getRD()->m_screenViewport.TopLeftY)); //PART OF THE GROSS MEMORY LEAK
-		//test->CentreOrigin();
-		m_2DObjects.push_back(player[i]->GetItemImg());
-
-		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
-		float text_pos_x = Locator::getRD()->m_screenViewport.TopLeftX + Locator::getRD()->m_screenViewport.Width - player[i]->GetRankingText()->GetSize().x * 2.f;
-		float text_pos_y = Locator::getRD()->m_screenViewport.TopLeftY + Locator::getRD()->m_screenViewport.Height - player[i]->GetRankingText()->GetSize().y;
-		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
-		m_2DObjects.push_back(player[i]->GetRankingText());
-
-		float text_lap_x = Locator::getRD()->m_screenViewport.TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
-		float text_lap_y = Locator::getRD()->m_screenViewport.TopLeftY + Locator::getRD()->m_screenViewport.Height - player[i]->GetLapText()->GetSize().y;
-		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
-		m_2DObjects.push_back(player[i]->GetLapText());
-	}
-
-
-	// player countdown text
-	/*
-
-	BUTCHERED AS WE ONLY HAVE ONE VIEWPORT CURRENTLY!!!
-
-	for (int i = 0; i < game_config["player_count"]; i++)
-	{
-		player[i]->GetCountdown()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2 });
-		player[i]->GetFinishOrder()->SetPos({ Locator::getWD()->m_viewport[i].TopLeftX + Locator::getWD()->m_viewport[i].Width / 2 - player[i]->GetFinishOrder()->GetSize().x / 2 , Locator::getWD()->m_viewport[i].TopLeftY + Locator::getWD()->m_viewport[i].Height / 2 - player[i]->GetFinishOrder()->GetSize().y / 2 });
-	}
-	*/
-	for (int i = 0; i < game_config["player_count"]; i++) {
-		player[i]->GetCountdown()->SetPos({ Locator::getRD()->m_screenViewport.TopLeftX + Locator::getRD()->m_screenViewport.Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 , Locator::getRD()->m_screenViewport.TopLeftY + Locator::getRD()->m_screenViewport.Height / 2 - player[i]->GetCountdown()->GetSize().y / 2 });
-		player[i]->GetFinishOrder()->SetPos({ Locator::getRD()->m_screenViewport.TopLeftX + Locator::getRD()->m_screenViewport.Width / 2 - player[i]->GetFinishOrder()->GetSize().x / 2 , Locator::getRD()->m_screenViewport.TopLeftY + Locator::getRD()->m_screenViewport.Height / 2 - player[i]->GetFinishOrder()->GetSize().y / 2 });
-	}
-}
-
-void GameScene::create3DObjects()
-{
-	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
-	// e.g. for 60 FPS fixed timestep update logic, call:
-	/*
-	m_timer.SetFixedTimeStep(true);
-	m_timer.SetTargetElapsedSeconds(1.0 / 60);
-	*/
-
-	//Load in a track
-	track = new Track(game_config["default_track"]);
-	track->setWaypointBB();
-	m_3DObjects.push_back(track);
-
-	//Add all track item boxes to 3D object update array
-	/*
-	for (ItemBox* this_item_box : track->GetItemBoxes()) {
-		m_3DObjects.push_back(this_item_box);
-	}*/
-
-	//Add all debug markers
-	/*
-	for (DebugMarker* this_debug_marker : track->GetDebugMarkers()) {
-		m_3DObjects.push_back(this_debug_marker);
-	}*/
-
-	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
-	for (int i = 0; i < game_config["player_count"]; i++) {
-
-		//Create a player and position on track
-		using std::placeholders::_1;
-		player[i] = new Player("Knuckles_Kart", i, std::bind(&GameScene::CreateItem, this, _1));
-		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
-		player[i]->setMass(10);
-		m_3DObjects.push_back(player[i]);
-
-		//Create a camera to follow the player
-		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
-		m_cam[i]->SetBehav(Camera::BEHAVIOUR::RACE_START);
-		//m_3DObjects.push_back(m_cam[i]);
-
-		//Create a viewport
-		float width_mod = 0.5f;
-		float height_mod = 0.5f;
-		/*
-		switch (i) {
-		case 0: {
-			*&Locator::getWD()->m_viewport[i] = { 0.0f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth * 0.5f),(int)(Locator::getWD()->m_outputHeight * 0.5f) };
-			break;
-		}
-		case 1: {
-			*&Locator::getWD()->m_viewport[i] = { static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth)* 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight * 0.5f) };
-			break;
-		}
-		case 2: {
-			*&Locator::getWD()->m_viewport[i] = { 0.0f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth * 0.5f),(int)(Locator::getWD()->m_outputHeight) };
-			break;
-		}
-		case 3: {
-			*&Locator::getWD()->m_viewport[i] = { static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(*&Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight) };
-			break;
-		}
-		}
-		*/
-		*&Locator::getRD()->m_screenViewport = { 0.0f, 0.0f, static_cast<float>(Locator::getRD()->m_window_width), static_cast<float>(Locator::getRD()->m_window_height), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-		*&Locator::getRD()->m_scissorRect = { 0,0,(int)(Locator::getRD()->m_window_width),(int)(Locator::getRD()->m_window_height) };
-	}
-
-	/*
-	for (SDKMeshGO3D*& cup : debug_cups)
-	{
-		cup = new SDKMeshGO3D("Cup");
-		m_3DObjects.push_back(cup);
-	}*/
-
-
-	cine_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
-	//cine_cam->SetCinematicRot(track->getCamerasRot());
-	//cine_cam->SetCinematicPos(track->getCamerasPos());
-	//m_3DObjects.push_back(cine_cam);
-
-	//Global illumination
-	/*
-	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
-	m_3DObjects.push_back(m_light);
-	Locator::getRD()->m_light = m_light;*/
-}
-
-void GameScene::pushBackObjects()
-{
-	//Add all 3D game objects with a collider to the collision manager's list
-	for (int i = 0; i < m_3DObjects.size(); i++)
-	{
-		if (dynamic_cast<PhysModel*>(m_3DObjects[i]) && dynamic_cast<PhysModel*>(m_3DObjects[i])->hasCollider())
-		{
-			m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
-			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
-		}
-	}
-}
-
+/* Create an item in the scene */
 Item* GameScene::CreateItem(ItemType type)
 {
 	switch (type)
@@ -841,6 +768,7 @@ Item* GameScene::CreateItem(ItemType type)
 	}
 }
 
+/* Create an explosion! */
 Explosion * GameScene::CreateExplosion()
 {
 	Explosion* explosion = new Explosion();
@@ -850,10 +778,13 @@ Explosion * GameScene::CreateExplosion()
 	return explosion;
 }
 
+/* Delete item (this is a mixup of old and new stuff - for the record, you just need to call Reset() on models to delete them - none of this threading crap.) */
 void GameScene::DeleteItem(Item * item)
 {
+	item->GetMesh()->Reset();
+	/*
 	std::thread thread(&GameScene::DeleteThread, this, item);
-	thread.detach();
+	thread.detach();*/
 }
 void GameScene::DeleteThread(Item * item)
 {

@@ -1,14 +1,6 @@
-//--------------------------------------------------------------------------------------
-// File: Game.cpp
-//
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-//--------------------------------------------------------------------------------------
-
 #pragma once
 
 #include "StepTimer.h"
-#include "ArcBall.h"
 #include "RenderTexture.h"
 
 #include "DeviceResourcesPC.h"
@@ -61,54 +53,57 @@ public:
 	bool RequestHDRMode() const { return m_device_data.m_deviceResources ? (m_device_data.m_deviceResources->GetDeviceOptions() & DX::DeviceResources::c_EnableHDR) != 0 : false; }
 
 private:
-
+	//Core game loops
 	void Update(DX::StepTimer const& timer);
 	void Render();
 
+	//Create splitscreen viewports
+	void SetupSplitscreenViewports();
+
+	//Render clear
 	void Clear();
 
+	//Core resource creation
 	void CreateDeviceDependentResources();
 	void CreateWindowSizeDependentResources();
 
-	void LoadModel(std::string filename);
+	//Set the font we'll use
 	void SetDefaultFont(std::string _default_font);
 
-	void CreateProjection();
-
+	//Engine functions
 	GameFilepaths m_filepath;
 	LocalisationManager m_localiser;
 	KeybindManager m_keybinds;
 	AudioManager m_AM;
 	
+	//Engine data & the core game instance
 	ThICC_Game m_game_inst;
 	ThICC_InputData m_input_data;
 	ThICC_DeviceData m_device_data;
 	ThICC_GameStateData m_gamestate_data;
 
+	//Misc data banks
 	json m_game_config;
 	ItemData* m_probabilities = nullptr;
 
-	//audio system
-	//This uses a simple system, but a better pipeline can be used using Wave Banks
-	//See here: https://github.com/Microsoft/DirectXTK/wiki/Creating-and-playing-sounds Using wave banks Section
+	//Audio engine
 	std::unique_ptr<DirectX::AudioEngine> m_audEngine;
 
-	// Rendering loop timer.
-	DX::StepTimer                                   m_timer;
+	//Game timer
+	DX::StepTimer m_timer;
 
-	std::unique_ptr<DirectX::GraphicsMemory>        m_graphicsMemory;
-	std::unique_ptr<DirectX::DescriptorPile>        m_resourceDescriptors;
-	std::unique_ptr<DirectX::DescriptorHeap>        m_renderDescriptors;
+	//Core resources (these can probably be cut back a bit, since we only really use them for the tonemap now)
+	std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+	std::unique_ptr<DirectX::DescriptorPile> m_resourceDescriptors;
+	std::unique_ptr<DirectX::DescriptorHeap> m_renderDescriptors;
 
-	std::unique_ptr<DirectX::BasicEffect>                                   m_lineEffect;
-	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>>  m_lineBatch;
+	//Our tonemap
+	std::unique_ptr<DirectX::ToneMapPostProcess> m_toneMapACESFilmic;
 
-	std::unique_ptr<DirectX::ToneMapPostProcess>    m_toneMapACESFilmic;
+	//Debug text
+	Text2D* debug_text = nullptr;
 
-	std::unique_ptr<DirectX::EffectTextureFactory>  m_gameMapResources;
-	std::unique_ptr<DirectX::Model>                 m_gameMap;
-	std::vector<std::shared_ptr<DirectX::IEffect>>  m_gameMapEffects;
-
+	//Internal core resource descriptors (most of these are unused now)
 	enum Descriptors
 	{
 		ConsolasFont,
@@ -124,33 +119,10 @@ private:
 		Count = 1024
 	};
 
+	//Used for internal switches between scene types
 	enum RTVDescriptors
 	{
 		HDRScene,
 		RTVCount
 	};
-
-	DirectX::SimpleMath::Matrix                     m_world;
-	DirectX::SimpleMath::Matrix                     m_view;
-	DirectX::SimpleMath::Matrix                     m_proj;
-
-	DirectX::SimpleMath::Vector3                    m_cameraFocus;
-	DirectX::SimpleMath::Vector3                    m_lastCameraPos;
-	DirectX::SimpleMath::Quaternion                 m_cameraRot;
-	DirectX::SimpleMath::Quaternion                 m_viewRot;
-
-	DirectX::SimpleMath::Quaternion                 m_modelRot;
-
-	float                                           m_fov;
-	float                                           m_zoom;
-	float                                           m_distance;
-	float                                           m_farPlane;
-	float                                           m_sensitivity;
-
-	bool                                            m_reloadModel;
-
-	int                                             m_toneMapMode;
-
-	ArcBall                                         m_ballCamera;
-	ArcBall                                         m_ballModel;
 };

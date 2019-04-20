@@ -22,7 +22,7 @@ bool MeshTri::DoesLineIntersect(const Vector& _direction, const Vector& _startPo
 
 	if (Vector::Distance(_direction*-1, m_plane.Normal()) > 2)
 	{
-		//std::cout << Vector::Distance(_direction*-1, m_plane.Normal());
+		//DebugText::print(std::to_string(Vector::Distance(_direction*-1, m_plane.Normal())));
 		//return false;
 	}
 	// If the normal is pointing away from the _starPos, ignore this tri

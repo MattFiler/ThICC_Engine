@@ -73,11 +73,16 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	SetRotationInDegrees(m_track_data.start_rot);
 
 	//Debug output
-	std::cout << "Loaded track data: " << m_track_data_j["asset_name"] << std::endl;
-	std::cout << "Suitable spawn spot: " << m_track_data.spawn_pos.x << ", " << m_track_data.spawn_pos.y << ", " << m_track_data.spawn_pos.z << std::endl;
+	DebugText::print("Loaded data for track: " + _filename);
+	//DebugText::print("Suitable spawn spot: (" + std::to_string(m_track_data.spawn_pos.x) + ", " + std::to_string(m_track_data.spawn_pos.y) + ", " + std::to_string(m_track_data.spawn_pos.z) + ")");
+	filename = _filename;
+}
 
+/* Load the track collision info */
+void Track::LoadCollision() {
 	//Load track vertex list for generating our collmap
-	LoadVertexList(m_filepath.generateFilepath(_filename, m_filepath.MODEL_COLLMAP));
+	DebugText::print("Starting generation of track tri map for '" + filename + "'...");
+	LoadVertexList(m_filepath.generateFilepath(filename, m_filepath.MODEL_COLLMAP));
 
 	// Populate the collsion map
 	using pair = std::pair<CollisionType, bool>;
@@ -85,7 +90,14 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	m_validCollisions.insert(pair(CollisionType::OFF_TRACK, true));
 	m_validCollisions.insert(pair(CollisionType::ON_TRACK, true));
 	m_validCollisions.insert(pair(CollisionType::WALL, true));
+}
 
+/* Unload the track collision info */
+void Track::UnloadCollision() {
+	m_validCollisions.clear();
+	m_triangles.clear();
+	m_triGrid.clear();
+	DebugText::print("Unloaded track tri map for '" + filename + "'.");
 }
 
 /* Returns a suitable spawn location for a player in this map */
@@ -303,7 +315,7 @@ void Track::SplitTrisIntoGrid()
 		}
 	}
 
-	std::cout << "Track tri map created with " << m_triGridX*m_triGridY*m_triGridZ << " segments" << std::endl;
+	DebugText::print("Track tri map created with " + std::to_string(m_triGridX * m_triGridY * m_triGridZ) + " segments!");
 }
 
 /* Loops though the m_trianges vector and finds every tri that falls within the area at _index  */

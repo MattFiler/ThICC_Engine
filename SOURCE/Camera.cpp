@@ -160,7 +160,6 @@ void Camera::Tick()
 			}
 		}
 	}
-#if Debug
 	case BEHAVIOUR::DEBUG_CAM:
 	{
 		float cam_speed = 40.0f;
@@ -181,8 +180,8 @@ void Camera::Tick()
 		upMove = Vector3::Transform(upMove, rotMove);
 		m_targetPos = m_pos + forwardMove;
 
-		m_yaw -= cam_rot_speed * Locator::getGSD()->m_mouseState.x;
-		m_pitch -= cam_rot_speed * Locator::getGSD()->m_mouseState.y;
+		m_yaw -= cam_rot_speed * Locator::getID()->m_mouseState.x;
+		m_pitch -= cam_rot_speed * Locator::getID()->m_mouseState.y;
 
 		if (m_keybinds.keyHeld("DebugCamFor"))
 		{
@@ -221,7 +220,6 @@ void Camera::Tick()
 
 		break;
 	}
-#endif
 	}
 
 	if (behav != BEHAVIOUR::DEBUG_CAM)
@@ -233,12 +231,21 @@ void Camera::Tick()
 		if (m_pos != target_pos)
 			m_pos = Vector3::Lerp(m_pos, target_pos, pos_lerp);
 	}
-	//std::cout << timer << std::endl;
+	//DebugText::print(std::to_string(timer));
 
 	//Debug output player location - useful for setting up spawns
 	if (m_keybinds.keyPressed("Debug Print Camera Location")) {
-		std::cout << "CAMERA POSITION: (" << m_pos.x << ", " << m_pos.y << ", " << m_pos.z << ")" << std::endl;
+		DebugText::print("CAMERA POSITION: (" + std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + ")");
 	}
 
 	GameObject3D::Tick();
+}
+
+/* reset */
+void Camera::Reset() {
+	angle = 0.0f;
+	cam_point = 0;
+	time_out = 3.0f;
+	timer = 0.0f;
+	m_cameraID = 0;
 }

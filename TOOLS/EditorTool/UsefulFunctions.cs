@@ -17,6 +17,14 @@ using System.Windows.Forms.Integration;
 
 namespace EditorTool
 {
+    /* A struct for storing a queue of assets to modify the useage tags on */
+    public struct UseageQueue
+    {
+        public bool removing; //true if removing / false if adding
+        public AssetType asset_type;
+        public string asset_name;
+    }
+
     /* Common functionality library */
     class UsefulFunctions
     {
@@ -37,7 +45,7 @@ namespace EditorTool
             }
             imagePreview.Visible = true;
 
-            string file_path_without_extension = "DATA/IMAGES/" + assetList.SelectedItem.ToString() + ".";
+            string file_path_without_extension = getFolder(AssetType.IMAGE) + assetList.SelectedItem.ToString() + ".";
             string file_path_with_extension = "";
             if (File.Exists(file_path_without_extension + "PNG"))
             {
@@ -122,7 +130,7 @@ namespace EditorTool
             }
 
             modelPreview.Visible = true;
-            modelPreview.Child = new ModelViewer("DATA/MODELS/" + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
+            modelPreview.Child = new ModelViewer(getFolder(AssetType.MODEL) + assetList.SelectedItem.ToString() + "/" + assetList.SelectedItem.ToString() + ".OBJ");
             return true;
         }
 
@@ -137,7 +145,7 @@ namespace EditorTool
             }
             imagePreview.Visible = true;
 
-            using (var tempPreviewImg = new Bitmap("DATA/FONTS/" + assetList.SelectedItem.ToString() + ".BMP"))
+            using (var tempPreviewImg = new Bitmap(getFolder(AssetType.FONT) + assetList.SelectedItem.ToString() + ".BMP"))
             {
                 imagePreview.Image = new Bitmap(tempPreviewImg);
             }
@@ -206,7 +214,7 @@ namespace EditorTool
         private void openSoundStream(ListBox assetList)
         {
             closeSoundStream();
-            sound_stream = File.Open("DATA/SOUNDS/" + assetList.SelectedItem.ToString() + ".WAV", FileMode.Open, FileAccess.Read);
+            sound_stream = File.Open(getFolder(AssetType.SOUND) + assetList.SelectedItem.ToString() + ".WAV", FileMode.Open, FileAccess.Read);
         }
         private void closeSoundStream()
         {
@@ -266,6 +274,235 @@ namespace EditorTool
             return string_config[language][request].Value<string>();
         }
 
+        /* Get a useage tag string (this unifies all tags in a simple way) */
+        public string getUseageTagFor(AssetCompType comp_type)
+        {
+            switch (comp_type)
+            {
+                case AssetCompType.CHARACTER:
+                    return "Character";
+                case AssetCompType.MAP:
+                    return "Map";
+                case AssetCompType.VEHICLE:
+                    return "Vehicle";
+            }
+            return "";
+        }
+
+        /* Add something to the useage queue to batch delete */
+        List<UseageQueue> useage_queue = new List<UseageQueue>();
+        public void pushToUseageQueue(UseageQueue new_item)
+        {
+            useage_queue.Add(new_item);
+        }
+
+        /* Batch handle the queue */
+        public void executeUseageQueueForTag(string tag)
+        {
+            foreach (UseageQueue useage in useage_queue)
+            {
+                if (useage.removing)
+                {
+                    removeUseageTag(useage.asset_type, useage.asset_name, tag);
+                }
+                else
+                {
+                    addUseageTag(useage.asset_type, useage.asset_name, tag);
+                }
+            }
+        }
+
+        /* Get the useages for the asset */
+        public List<string> getUseages(AssetType type, string asset_name)
+        {
+            string path = getConfigPath(type, asset_name);
+            JObject inuse_config = JObject.Parse(File.ReadAllText(path));
+            JArray array;
+            if (type == AssetType.STRING)
+            {
+                array = inuse_config[asset_name]["in_use_in"].Value<JArray>();
+            }
+            else
+            {
+                array = inuse_config["in_use_in"].Value<JArray>();
+            }
+            List<string> to_return = new List<string>();
+            foreach (JToken useage in array)
+            {
+                to_return.Add(useage.Value<string>());
+            }
+            return to_return;
+        }
+
+        /* Add a "in_use_in" tag to a config */
+        public void addUseageTag(AssetType type, string asset_name, string new_tag)
+        {
+            string path = getConfigPath(type, asset_name);
+            JObject config = JObject.Parse(File.ReadAllText(path));
+            if (type == AssetType.STRING)
+            {
+                config[asset_name]["in_use_in"].Value<JArray>().Add(new_tag);
+            }
+            else
+            {
+                config["in_use_in"].Value<JArray>().Add(new_tag);
+            }
+            File.WriteAllText(path, config.ToString(Formatting.Indented));
+        }
+
+        /* Remove a "in_use_in" tag from a config */
+        public void removeUseageTag(AssetType type, string asset_name, string old_tag)
+        {
+            string path = getConfigPath(type, asset_name);
+            JObject config = JObject.Parse(File.ReadAllText(path));
+            if (type == AssetType.STRING)
+            {
+                RemoveValue(config[asset_name]["in_use_in"].Value<JArray>(), old_tag);
+            }
+            else
+            {
+                RemoveValue(config["in_use_in"].Value<JArray>(), old_tag);
+            }
+            File.WriteAllText(path, config.ToString(Formatting.Indented));
+        }
+        //Fixing removal issue
+        private void RemoveValue(JArray array, string to_delete)
+        {
+            foreach (JToken thing in array)
+            {
+                if (thing.Value<string>() == to_delete)
+                {
+                    thing.Remove();
+                    break;
+                }
+            }
+        }
+
+        ///////////////////////////////////////////////
+        ///////////////////////////////////////////////
+
+        /* 
+         * 
+         * Asset Selection
+         * 
+         */
+
+        /* Launch asset selector */
+        public string selectAsset(AssetType asset_type, string existing_option = "")
+        {
+            string asset_name = "";
+            using (var form = new Asset_Browser(asset_type, existing_option))
+            {
+                form.ShowDialog();
+                if (form.DialogResult == DialogResult.OK)
+                {
+                    asset_name = form.selected_asset;
+
+                    UseageQueue new_queue_item = new UseageQueue();
+                    new_queue_item.asset_name = form.selected_asset;
+                    new_queue_item.asset_type = asset_type;
+                    new_queue_item.removing = false;
+                    useage_queue.Add(new_queue_item);
+                }
+            }
+            return asset_name;
+        }
+
+        /* Asset selection handler */
+        public void assetSelectHandler(TextBox textbox, AssetType type)
+        {
+            if (textbox.Text != "")
+            {
+                UseageQueue new_queue_item = new UseageQueue();
+                new_queue_item.asset_name = textbox.Text;
+                new_queue_item.asset_type = type;
+                new_queue_item.removing = true;
+                useage_queue.Add(new_queue_item);
+            }
+            string selection = selectAsset(type, textbox.Text);
+            if (selection == "")
+            {
+                return;
+            }
+            textbox.Text = selection;
+        }
+
+        ///////////////////////////////////////////////
+        ///////////////////////////////////////////////
+
+        /* 
+         * 
+         * Filepath Generator
+         * 
+         */
+
+        /* Get a folder path */
+        public string getFolder(AssetType type, string asset_name = "")
+        {
+            switch (type)
+            {
+                case AssetType.FONT:
+                    {
+                        return "DATA/FONTS/";
+                    }
+                case AssetType.IMAGE:
+                    {
+                        return "DATA/IMAGES/";
+                    }
+                case AssetType.MODEL:
+                    {
+                        if (asset_name == "")
+                        {
+                            return "DATA/MODELS/";
+                        }
+                        return "DATA/MODELS/" + asset_name + "/";
+                    }
+                case AssetType.SOUND:
+                    {
+                        return "DATA/SOUNDS/";
+                    }
+            }
+            throw new InvalidOperationException("Unhandled AssetType.");
+        }
+
+        /* Get an extension */
+        public string getExtension(AssetType type)
+        {
+            switch (type)
+            {
+                case AssetType.FONT:
+                    {
+                        return ".SPRITEFONT";
+                    }
+                case AssetType.IMAGE:
+                    {
+                        return ".DDS";
+                    }
+                case AssetType.MODEL:
+                    {
+                        return ".SDKMESH";
+                    }
+                case AssetType.SOUND:
+                    {
+                        return ".WAV";
+                    }
+            }
+            throw new InvalidOperationException("Unhandled AssetType.");
+        }
+
+        /* Get config path */
+        public string getConfigPath(AssetType type, string asset_name = "")
+        {
+            if (type == AssetType.STRING)
+            {
+                return "DATA/CONFIGS/LOCALISATION_INUSE.JSON";
+            }
+            else
+            {
+                return getFolder(type, asset_name) + asset_name + ".JSON";
+            }
+        }
+
         ///////////////////////////////////////////////
         ///////////////////////////////////////////////
 
@@ -278,8 +515,8 @@ namespace EditorTool
         /* Import a sound asset */
         public bool importSound(string asset_name, string sound_path)
         {
-            string asset_path = "DATA/SOUNDS/" + asset_name.ToUpper() + ".WAV";
-            string asset_path_orig_ext = "DATA/SOUNDS/" + asset_name.ToUpper() + Path.GetExtension(sound_path);
+            string asset_path = getFolder(AssetType.SOUND) + asset_name.ToUpper() + ".WAV";
+            string asset_path_orig_ext = getFolder(AssetType.SOUND) + asset_name.ToUpper() + Path.GetExtension(sound_path);
 
             if (File.Exists(asset_path) || sound_path == "" || asset_name == "" || !Regex.IsMatch(asset_name, "^[_a-zA-Z0-9\x20]+$"))
             {
@@ -306,8 +543,8 @@ namespace EditorTool
                 {
                     //Convert file to WAV if it isn't already
                     ProcessStartInfo soundConverter = new ProcessStartInfo();
-                    soundConverter.WorkingDirectory = "DATA/SOUNDS";
-                    soundConverter.FileName = "DATA/SOUNDS/ffmpeg.exe";
+                    soundConverter.WorkingDirectory = getFolder(AssetType.SOUND);
+                    soundConverter.FileName = getFolder(AssetType.SOUND) + "ffmpeg.exe";
                     soundConverter.Arguments = "-i \"" + Path.GetFileName(asset_path_orig_ext) + "\" \"" + Path.GetFileName(asset_path) + "\"";
                     soundConverter.UseShellExecute = false;
                     soundConverter.RedirectStandardOutput = true;
@@ -338,7 +575,7 @@ namespace EditorTool
                 }
 
                 //Create JSON data
-                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + asset_name + "\", \"asset_type\": \"Sounds\", \"is_looping\": false, \"volume\": 1.0, \"pitch\": 0.0, \"pan\": 0.0}");
+                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + asset_name + "\", \"asset_type\": \"Sounds\", \"is_looping\": false, \"volume\": 1.0, \"pitch\": 0.0, \"pan\": 0.0, \"in_use_in\": []}");
                 File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "JSON", asset_json.ToString(Formatting.Indented));
 
                 //Import success
@@ -351,8 +588,8 @@ namespace EditorTool
         /* Import an image asset */
         public bool importImage(string asset_name, string image_path)
         {
-            string asset_path = "DATA/IMAGES/" + asset_name.ToUpper() + ".DDS";
-            string asset_path_orig_ext = "DATA/IMAGES/" + asset_name.ToUpper() + Path.GetExtension(image_path);
+            string asset_path = getFolder(AssetType.IMAGE) + asset_name.ToUpper() + ".DDS";
+            string asset_path_orig_ext = getFolder(AssetType.IMAGE) + asset_name.ToUpper() + Path.GetExtension(image_path);
 
             if (File.Exists(asset_path) || image_path == "" || asset_name == "" || !Regex.IsMatch(asset_name, "^[_a-zA-Z0-9\x20]+$"))
             {
@@ -376,8 +613,8 @@ namespace EditorTool
 
                 //Convert copied image to DDS
                 ProcessStartInfo imageConverter = new ProcessStartInfo();
-                imageConverter.WorkingDirectory = "DATA/IMAGES";
-                imageConverter.FileName = "DATA/IMAGES/texconv.exe";
+                imageConverter.WorkingDirectory = getFolder(AssetType.IMAGE);
+                imageConverter.FileName = getFolder(AssetType.IMAGE) + "texconv.exe";
                 imageConverter.Arguments = "\"" + Path.GetFileName(asset_path_orig_ext) + "\"";
                 imageConverter.UseShellExecute = false;
                 imageConverter.RedirectStandardOutput = true;
@@ -421,7 +658,7 @@ namespace EditorTool
                 }
 
                 //Create JSON data
-                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + asset_name + "\", \"asset_type\": \"Images\", \"visible\": true, \"is_2d\": true, \"res_x\": " + image_width + ", \"res_y\": " + image_height + ", \"x_pos\": 0, \"y_pos\": 0}");
+                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + asset_name + "\", \"asset_type\": \"Images\", \"visible\": true, \"is_2d\": true, \"res_x\": " + image_width + ", \"res_y\": " + image_height + ", \"x_pos\": 0, \"y_pos\": 0, \"in_use_in\": []}");
                 File.WriteAllText(asset_path.Substring(0, asset_path.Length - 3) + "JSON", asset_json.ToString(Formatting.Indented));
 
                 //Import success
@@ -434,7 +671,7 @@ namespace EditorTool
         /* Import a system font */
         public bool importFont(ComboBox selected_font, decimal font_size)
         {
-            string asset_path = "DATA/FONTS/" + selected_font.SelectedItem.ToString().ToUpper() + ".SPRITEFONT";
+            string asset_path = getFolder(AssetType.FONT) + selected_font.SelectedItem.ToString().ToUpper() + ".SPRITEFONT";
 
             if (File.Exists(asset_path) || selected_font.SelectedItem.ToString() == "" || selected_font.SelectedIndex == -1 || !(font_size > 0))
             {
@@ -450,8 +687,8 @@ namespace EditorTool
             {
                 //Convert font to SPRITEFONT
                 ProcessStartInfo fontImporter = new ProcessStartInfo();
-                fontImporter.WorkingDirectory = "DATA/FONTS";
-                fontImporter.FileName = "DATA/FONTS/MakeSpriteFont.exe";
+                fontImporter.WorkingDirectory = getFolder(AssetType.FONT);
+                fontImporter.FileName = getFolder(AssetType.FONT) + "MakeSpriteFont.exe";
                 fontImporter.Arguments = "\"" + selected_font.SelectedItem.ToString() + "\" \"" + selected_font.SelectedItem.ToString().ToUpper() + ".SPRITEFONT\" /FontSize:" + font_size + " /DebugOutputSpriteSheet:\"" + selected_font.SelectedItem.ToString().ToUpper() + ".BMP\"";
                 fontImporter.UseShellExecute = false;
                 fontImporter.RedirectStandardOutput = true;
@@ -475,7 +712,7 @@ namespace EditorTool
                 }
 
                 //Create JSON data
-                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + selected_font.SelectedItem.ToString() + "\", \"asset_type\": \"Fonts\"}");
+                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + selected_font.SelectedItem.ToString() + "\", \"asset_type\": \"Fonts\", \"in_use_in\": []}");
                 File.WriteAllText(asset_path.Substring(0, asset_path.Length - 10) + "JSON", asset_json.ToString(Formatting.Indented));
 
                 //Import success
@@ -483,6 +720,21 @@ namespace EditorTool
 
                 return true;
             }
+        }
+
+        ///////////////////////////////////////////////
+        ///////////////////////////////////////////////
+
+        /* 
+         * 
+         * Misc Functionality
+         * 
+         */
+
+        /* Make a string capitalised */
+        public string makeCapitalised(string text)
+        {
+            return text.Substring(0, 1).ToUpper() + text.Substring(1);
         }
     }
 }

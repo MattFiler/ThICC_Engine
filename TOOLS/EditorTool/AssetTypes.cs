@@ -4,7 +4,7 @@
     public enum AssetType
     {
         MODEL,
-        MESH,
+        //MESH, - now depreciated
         IMAGE,
         SOUND,
         FONT,
@@ -27,5 +27,12 @@
         WALL,
 
         NUM_OF_TYPES //must be last
+    }
+    /* Types of available asset compilations */
+    public enum AssetCompType
+    {
+        MAP,
+        CHARACTER,
+        VEHICLE
     }
 }

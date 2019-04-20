@@ -32,6 +32,9 @@ class Track : public PhysModel
 public:
 	Track(std::string _filename);
 
+	void LoadCollision();
+	void UnloadCollision();
+
 	Vector3 getSuitableSpawnSpot();
 
 	std::vector<Vector3> getWaypoints() {
@@ -127,6 +130,8 @@ private:
 	std::vector<DebugMarker*> debug_markers;
 
 	BlenderToDirectX blender_vector;
+
+	std::string filename;
 
 	// Size of each dimension of the vector
 	int m_triGridX = 0;

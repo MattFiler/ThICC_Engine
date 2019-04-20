@@ -48,6 +48,8 @@
             this.DEBUG_DEFAULTTRACK = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.openProject = new System.Windows.Forms.Button();
+            this.openVehicleManager = new System.Windows.Forms.Button();
+            this.openCharacterManager = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -109,7 +111,7 @@
             // openItemManager
             // 
             this.openItemManager.Enabled = false;
-            this.openItemManager.Location = new System.Drawing.Point(6, 56);
+            this.openItemManager.Location = new System.Drawing.Point(6, 130);
             this.openItemManager.Name = "openItemManager";
             this.openItemManager.Size = new System.Drawing.Size(270, 31);
             this.openItemManager.TabIndex = 5;
@@ -118,11 +120,13 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.openCharacterManager);
+            this.groupBox1.Controls.Add(this.openVehicleManager);
             this.groupBox1.Controls.Add(this.openMapManager);
             this.groupBox1.Controls.Add(this.openItemManager);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(281, 93);
+            this.groupBox1.Size = new System.Drawing.Size(281, 167);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Grouped Asset Configurations";
@@ -131,7 +135,7 @@
             // 
             this.groupBox2.Controls.Add(this.compileAssets);
             this.groupBox2.Controls.Add(this.openAssetManager);
-            this.groupBox2.Location = new System.Drawing.Point(12, 111);
+            this.groupBox2.Location = new System.Drawing.Point(12, 185);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(281, 92);
             this.groupBox2.TabIndex = 7;
@@ -153,7 +157,7 @@
             this.groupBox3.Controls.Add(this.openUiEditor);
             this.groupBox3.Controls.Add(this.openKeybindEditor);
             this.groupBox3.Controls.Add(this.openLocalisationEditor);
-            this.groupBox3.Location = new System.Drawing.Point(12, 209);
+            this.groupBox3.Location = new System.Drawing.Point(12, 283);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(281, 129);
             this.groupBox3.TabIndex = 7;
@@ -168,7 +172,7 @@
             this.groupBox4.Controls.Add(this.DEBUG_SAVE);
             this.groupBox4.Controls.Add(this.label15);
             this.groupBox4.Controls.Add(this.DEBUG_DEFAULTTRACK);
-            this.groupBox4.Location = new System.Drawing.Point(12, 344);
+            this.groupBox4.Location = new System.Drawing.Point(12, 418);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(281, 105);
             this.groupBox4.TabIndex = 35;
@@ -254,7 +258,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.openProject);
-            this.groupBox5.Location = new System.Drawing.Point(12, 455);
+            this.groupBox5.Location = new System.Drawing.Point(12, 529);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(281, 56);
             this.groupBox5.TabIndex = 8;
@@ -271,11 +275,31 @@
             this.openProject.UseVisualStyleBackColor = true;
             this.openProject.Click += new System.EventHandler(this.openProject_Click);
             // 
+            // openVehicleManager
+            // 
+            this.openVehicleManager.Location = new System.Drawing.Point(6, 56);
+            this.openVehicleManager.Name = "openVehicleManager";
+            this.openVehicleManager.Size = new System.Drawing.Size(270, 31);
+            this.openVehicleManager.TabIndex = 6;
+            this.openVehicleManager.Text = "Vehicle Manager";
+            this.openVehicleManager.UseVisualStyleBackColor = true;
+            this.openVehicleManager.Click += new System.EventHandler(this.openVehicleManager_Click);
+            // 
+            // openCharacterManager
+            // 
+            this.openCharacterManager.Location = new System.Drawing.Point(6, 93);
+            this.openCharacterManager.Name = "openCharacterManager";
+            this.openCharacterManager.Size = new System.Drawing.Size(270, 31);
+            this.openCharacterManager.TabIndex = 7;
+            this.openCharacterManager.Text = "Character Manager";
+            this.openCharacterManager.UseVisualStyleBackColor = true;
+            this.openCharacterManager.Click += new System.EventHandler(this.openCharacterManager_Click);
+            // 
             // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(304, 519);
+            this.ClientSize = new System.Drawing.Size(304, 593);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -319,5 +343,7 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button openProject;
         private System.Windows.Forms.Button reloadDebugList;
+        private System.Windows.Forms.Button openCharacterManager;
+        private System.Windows.Forms.Button openVehicleManager;
     }
 }

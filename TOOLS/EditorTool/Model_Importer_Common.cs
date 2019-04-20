@@ -18,6 +18,8 @@ namespace EditorTool
 
     public class Model_Importer_Common
     {
+        UsefulFunctions function_libary = new UsefulFunctions();
+
         /* File Paths */
 
         private string import_directory = "";
@@ -34,7 +36,7 @@ namespace EditorTool
         public void configureAssetPaths(string _filename)
         {
             asset_name = _filename;
-            import_directory = "DATA/MODELS/" + asset_name + "/";
+            import_directory = function_libary.getFolder(AssetType.MODEL) + asset_name + "/";
             string file_prelude = import_directory + asset_name;
             obj_file_name = file_prelude + ".OBJ";
             sdkmesh_file_name = file_prelude + ".SDKMESH";

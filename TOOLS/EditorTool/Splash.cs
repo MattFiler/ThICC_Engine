@@ -16,6 +16,7 @@ namespace EditorTool
 {
     public partial class Splash : Form
     {
+        UsefulFunctions common_functions = new UsefulFunctions();
         List<string> ignored_extensions = new List<string>();
         public Splash(bool shouldInitialiseGUI = true)
         {
@@ -57,7 +58,7 @@ namespace EditorTool
             //Fix VS debugging directory config
             fixVS();
 
-            if (!autoCompileAssets())
+            if (!autoCompileAssets(true))
             {
                 Cursor.Current = Cursors.Default;
                 MessageBox.Show("An error occured while compiling assets.\nMake sure that the game is closed and no files are open.", "Asset compile failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -190,7 +191,7 @@ namespace EditorTool
         /* UPDATE DEBUG LEVEL CHOICES */
         void REFRESH_DEBUG_LIST()
         {
-            string[] levels = Directory.GetFiles("DATA/MODELS/", "*.SDKMESH", SearchOption.AllDirectories);
+            string[] levels = Directory.GetFiles(common_functions.getFolder(AssetType.MODEL), "*.SDKMESH", SearchOption.AllDirectories);
             DEBUG_DEFAULTTRACK.Items.Clear();
             foreach (string level in levels)
             {
@@ -199,7 +200,7 @@ namespace EditorTool
                 {
                     continue; //Skip over collision debug meshes
                 }
-                JToken game_config = JToken.Parse(File.ReadAllText("DATA/MODELS/" + Path.GetFileNameWithoutExtension(level) + "/" + Path.GetFileNameWithoutExtension(level) + ".JSON"));
+                JToken game_config = JToken.Parse(File.ReadAllText(common_functions.getFolder(AssetType.MODEL) + Path.GetFileNameWithoutExtension(level) + "/" + Path.GetFileNameWithoutExtension(level) + ".JSON"));
                 if (game_config["model_type"] == null || game_config["model_type"].Type != JTokenType.Integer || game_config["model_type"].Value<int>() != (int)ModelType.MAP)
                 {
                     continue;
@@ -211,8 +212,26 @@ namespace EditorTool
         /* Open Map Manager */
         private void openMapManager_Click(object sender, EventArgs e)
         {
-            Map_Manager mapManager = new Map_Manager();
-            mapManager.Show();
+            openManager(AssetCompType.MAP);
+        }
+
+        /* Open Vehicle Manager */
+        private void openVehicleManager_Click(object sender, EventArgs e)
+        {
+            openManager(AssetCompType.VEHICLE);
+        }
+
+        /* Open Character Manager */
+        private void openCharacterManager_Click(object sender, EventArgs e)
+        {
+            openManager(AssetCompType.CHARACTER);
+        }
+
+        /* Open A Manager */
+        private void openManager(AssetCompType type)
+        {
+            Asset_Comp_Manager manager = new Asset_Comp_Manager(type);
+            manager.Show();
         }
 
         /* Open VS Project */
@@ -223,26 +242,31 @@ namespace EditorTool
         }
 
         /* Compile assets */
-        public bool autoCompileAssets(string path_mod = "")
+        public bool autoCompileAssets(bool show_notifs, string path_mod = "")
         {
-            //Create cache directory/file if it doesn't exist
-            if (!Directory.Exists(path_mod + "CACHE") || !File.Exists(path_mod + "CACHE/DATA_CACHE.BIN"))
-            {
-                Directory.CreateDirectory(path_mod + "CACHE");
-                using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Create)))
-                {
-                    long placeholder = 0;
-                    writer.Write(placeholder);
-                }
-            }
-
             try
             {
-                //Copy to debug folder
-                buildAssets("BUILDS/Debug", path_mod);
-
-                //Copy to release folder
-                buildAssets("BUILDS/Release", path_mod);
+                //Copy to release and debug folder if needed
+                bool skipped_debug = (buildAssets("BUILDS/Debug", path_mod) == 0);
+                bool skipped_release = (buildAssets("BUILDS/Release", path_mod) == 0);
+                if (skipped_debug || skipped_release)
+                {
+                    //Cache said there was no point copying assets - if we have a GUI, give the user an option to reset it
+                    if (show_notifs)
+                    {
+                        DialogResult cache_override = MessageBox.Show("Cache indicates an asset compile is not necessary.\nIs this correct?", "Should cache reset?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (cache_override != DialogResult.No)
+                        {
+                            return true;
+                        }
+                        Directory.Delete(path_mod + "CACHE", true);
+                        autoCompileAssets(show_notifs, path_mod);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Compiler cache indicates that assets have not changed. Skipping...");
+                    }
+                }
 
                 return true;
             }
@@ -253,8 +277,19 @@ namespace EditorTool
         }
 
         /* Build assets for... */
-        private void buildAssets(string output, string path_mod)
+        private int buildAssets(string output, string path_mod)
         {
+            //Create cache directory/file if it doesn't exist
+            if (!Directory.Exists(path_mod + "CACHE") || !File.Exists(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN"))
+            {
+                Directory.CreateDirectory(path_mod + "CACHE");
+                using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN", FileMode.Create)))
+                {
+                    long placeholder = 0;
+                    writer.Write(placeholder);
+                }
+            }
+
             if (Directory.Exists(path_mod + output))
             {
                 if (Directory.Exists(path_mod + output + "/DATA/"))
@@ -279,16 +314,16 @@ namespace EditorTool
                         }
                     }
                     long orig_size = 0;
-                    using (BinaryReader reader = new BinaryReader(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Open)))
+                    using (BinaryReader reader = new BinaryReader(File.Open(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN", FileMode.Open)))
                     {
                         orig_size = reader.ReadInt64();
                     }
                     if (orig_size == total_size)
                     {
-                        return;
+                        return 0;
                     }
                     //We do need to copy, save new cache value
-                    using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Create)))
+                    using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN", FileMode.Create)))
                     {
                         writer.Write(Convert.ToInt64(total_size));
                     }
@@ -301,8 +336,9 @@ namespace EditorTool
                     File.Delete(path_mod + output + "/Mario Kart Launcher.exe");
                 }
                 File.Copy(path_mod + "DATA/MarioKartLauncher.exe", path_mod + output + "/Mario Kart Launcher.exe");
+                return 1;
             }
-            return;
+            return -1;
         }
 
         /* Fix VS config */

@@ -1,8 +1,19 @@
 {
   "MARIO KART STADIUM": {
-    "menu_sprite": "MARIO KART STADIUM PREVIEW",
     "friendly_name": "MAP_MKS",
-    "model": "MARIO KART STADIUM",
+    "menu_sprite": "MARIO KART STADIUM PREVIEW",
+    "model": "MARIOKARTSTADIUM",
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
+  },
+  "DRAGON DRIFTWAY": {
+    "friendly_name": "MAP_DRIFTWAY",
+    "menu_sprite": "DRAGON_DRIFTWAY_PREVIEW",
+    "model": "DRAGON_DRIFTWAY",
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",

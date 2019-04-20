@@ -28,6 +28,8 @@ public:
 	virtual void Tick();
 	virtual void Render() = 0;
 
+	virtual void Load() {}; //for manually loading expensive items at runtime
+
 	void SetPos(Vector3 _pos) { m_pos = _pos; }
 	void AddPos(Vector3 _vec) { m_pos += _vec; }
 	void SetScale(float _scale) { m_scale = _scale * Vector3::One; }

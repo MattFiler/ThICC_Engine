@@ -195,7 +195,7 @@ namespace EditorTool
             this.Cursor = Cursors.WaitCursor;
             ProcessStartInfo meshConverter = new ProcessStartInfo();
             meshConverter.WorkingDirectory = importer_common.importDir();
-            meshConverter.FileName = "DATA/MODELS/meshconvert.exe";
+            meshConverter.FileName = common_functions.getFolder(AssetType.MODEL) + "meshconvert.exe";
             meshConverter.Arguments = conv_args;
             meshConverter.UseShellExecute = false;
             meshConverter.RedirectStandardOutput = true;
@@ -259,6 +259,7 @@ namespace EditorTool
             asset_json["rot_y"] = 0;
             asset_json["rot_z"] = 0;
             asset_json["segment_size"] = 10;
+            asset_json["in_use_in"] = JToken.Parse("[]");
 
             //If model type is track, parse config
             if (importer_common.getModelType() == ModelType.MAP)
@@ -515,7 +516,7 @@ namespace EditorTool
                 //Convert debug box to a format for our engine
                 ProcessStartInfo meshConverter2 = new ProcessStartInfo();
                 meshConverter2.WorkingDirectory = importer_common.importDir();
-                meshConverter2.FileName = "DATA/MODELS/meshconvert.exe";
+                meshConverter2.FileName = common_functions.getFolder(AssetType.MODEL) + "meshconvert.exe";
                 meshConverter2.Arguments = "\"" + debug_model + "\" -sdkmesh2 -y";
                 meshConverter2.UseShellExecute = false;
                 meshConverter2.RedirectStandardOutput = true;
@@ -718,7 +719,7 @@ namespace EditorTool
         {
             ProcessStartInfo texConv = new ProcessStartInfo();
             texConv.WorkingDirectory = importer_common.importDir();
-            texConv.FileName = "DATA/IMAGES/texconv.exe";
+            texConv.FileName = common_functions.getFolder(AssetType.IMAGE) + "texconv.exe";
             texConv.Arguments = "\"" + filename + "\"";
             texConv.UseShellExecute = false;
             texConv.RedirectStandardOutput = true;

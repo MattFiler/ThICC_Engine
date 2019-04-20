@@ -27,7 +27,10 @@ namespace EditorTool
         SoundPlayer sound_player = new SoundPlayer();
         UsefulFunctions function_libary = new UsefulFunctions();
 
+        public string selected_asset { get; set; }
         public string selected_file_path { get; set; }
+        public JObject selected_file_config { get; set; }
+        public string selected_file_config_path { get; set; }
 
         /* Configure asset list filtering */
         public Asset_Browser(AssetType type_to_select_from, string existing_option = "")
@@ -38,23 +41,19 @@ namespace EditorTool
             switch (type_to_select_from)
             {
                 case AssetType.MODEL:
-                    file_path = "DATA/MODELS/";
+                    file_path = function_libary.getFolder(AssetType.MODEL);
                     file_extension = "*.SDKMESH";
                     break;
-                case AssetType.MESH:
-                    file_path = "DATA/MODELS/";
-                    file_extension = "*.TXTMESH";
-                    break;
                 case AssetType.IMAGE:
-                    file_path = "DATA/IMAGES/";
+                    file_path = function_libary.getFolder(AssetType.IMAGE);
                     file_extension = "*.DDS";
                     break;
                 case AssetType.SOUND:
-                    file_path = "DATA/SOUNDS/";
+                    file_path = function_libary.getFolder(AssetType.SOUND);
                     file_extension = "*.WAV";
                     break;
                 case AssetType.FONT:
-                    file_path = "DATA/FONTS/";
+                    file_path = function_libary.getFolder(AssetType.FONT);
                     file_extension = "*.SPRITEFONT";
                     break;
                 case AssetType.STRING:
@@ -74,6 +73,12 @@ namespace EditorTool
                     break;
             }
             pre_selected_option = existing_option;
+        }
+
+        /* When closing, clear any lingering stuff */
+        private void Asset_Browser_Close(object sender, EventArgs e)
+        {
+            function_libary.closeLingeringSoundStreams();
         }
 
         /* Fetch asset list on form load */
@@ -116,7 +121,18 @@ namespace EditorTool
                 MessageBox.Show("Please select an asset from the list.");
                 return;
             }
-            selected_file_path = assetList.SelectedItem.ToString();
+            selected_asset = assetList.SelectedItem.ToString();
+            if (file_type == AssetType.STRING)
+            {
+                selected_file_path = "DATA/CONFIGS/LOCALISATION_INUSE.JSON";
+            }
+            else
+            {
+                selected_file_path = function_libary.getFolder(file_type, selected_asset) + selected_asset + function_libary.getExtension(file_type);
+            }
+            selected_file_config_path = selected_file_path.Substring(0, selected_file_path.Length - Path.GetExtension(selected_file_path).Length) + ".JSON";
+            selected_file_config = JObject.Parse(File.ReadAllText(selected_file_config_path));
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
