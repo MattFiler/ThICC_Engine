@@ -192,6 +192,16 @@ void Player::TrailItems()
 	{
 		for (int i = 0; i < m_trailingItems.size(); i++)
 		{
+			if (m_trailingItems[i]->ShouldDestroy())
+			{
+				m_trailingItems.erase(m_trailingItems.begin() + i);
+				if (m_InventoryItem == MUSHROOM_UNLIMITED) {
+					setActiveItem(MUSHROOM_UNLIMITED);
+					active_item = NONE;
+				}
+				continue;
+			}
+
 			if (m_trailingItems[i]->GetMesh())
 			{
 				if (m_trailingItems[i]->ShouldDestroy())
@@ -219,14 +229,16 @@ void Player::TrailItems()
 						* m_dpos.x, m_dpos.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_dpos.z }, m_rot));
 				}
 			}
+
+			m_trailingItems[i]->setTrailing(true);
 		}	
 	}
 }
 
 void Player::SpawnItems(ItemType type)
 {
-	//Triple mushrooms still in inventory after use
-	if (type != MUSHROOM_3X)
+	//Triple mushrooms and Golden Mushroom still in inventory after use
+	if (type != MUSHROOM_3X && type != MUSHROOM_UNLIMITED)
 	{
 		setActiveItem(type);
 	}
@@ -319,6 +331,28 @@ void Player::SpawnItems(ItemType type)
 			m_trailingItems.push_back(box);
 			TrailItems();
 		}
+
+		case MUSHROOM_UNLIMITED:
+		{
+			GoldenMushroom* mushroom = static_cast<GoldenMushroom*>(CreateItem(MUSHROOM_UNLIMITED));
+			mushroom->Use(this, false);
+			m_trailingItems.push_back(mushroom);
+			m_multiItem = true;
+			break;
+		}
+
+		case STAR:
+		{
+			Star* star = static_cast<Star*>(CreateItem(STAR));
+			star->Use(this, false);
+			break;
+		}
+
+		case MUSHROOM_GIANT:
+		{
+			GiantMushroom* mushroom = static_cast<GiantMushroom*>(CreateItem(MUSHROOM_GIANT));
+			mushroom->Use(this, false);
+		}
 		default:
 			break;
 	}
@@ -335,7 +369,12 @@ void Player::ReleaseItem()
 	if (!m_trailingItems.empty())
 	{
 		m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getID()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
-		m_trailingItems.pop_back();
+		m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
+
+		if (m_InventoryItem != MUSHROOM_UNLIMITED)
+		{
+			m_trailingItems.pop_back();
+		}
 		
 		if (m_trailingItems.empty())
 		{

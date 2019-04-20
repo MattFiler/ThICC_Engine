@@ -1,5 +1,9 @@
 #pragma once
+
 #include "Item.h"
+
+class Player;
+
 class GiantMushroom :public Item
 {
 public:
@@ -18,7 +22,5 @@ private:
 	float m_growthTimeElapsed = 0;
 	float m_maxGrowthTime = 12;
 	enum ScaleState {GROW, MAINTIAIN, SHRINK} m_scaleState = GROW;
-
-
 };
 

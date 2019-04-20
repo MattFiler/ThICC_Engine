@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "GiantMushroom.h"
+#include "Player.h"
+#include "GameStateData.h"
 
 void GiantMushroom::Tick()
 {

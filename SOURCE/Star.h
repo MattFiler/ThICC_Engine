@@ -1,5 +1,9 @@
 #pragma once
+
 #include "Item.h"
+
+class Player;
+
 class Star :public Item
 {
 public:

@@ -10,13 +10,16 @@ public:
 	CollisionManager() = default;
 	~CollisionManager() = default;
 
-	static  void CollisionDetectionAndResponse(std::vector<PhysModel*> _physModel, std::vector<Item*> _items);
+	static void CollisionDetectionAndResponse(std::vector<PhysModel*> _physModel, std::vector<Item*> _items);
 private:
 	static std::vector<Collision> CheckPhysModelCollisions(std::vector<PhysModel*> _physModels);
 	static void CheckResolveItemCollisions(std::vector<PhysModel*> _physModels, std::vector<Item*> _items);
+	static bool bombResponse(Item * item1, Item * item2);
+	static void fakeBoxResponse(Item * item1, Item * item2);
+
 	static bool CheckItemImmunity(Item* _item1, Item* _item2);
 
-	static void PlayerCollisions(Collision & collision);
+	static void PlayerCollisions(PhysModel*& _player1, PhysModel*& _player2, Vector3 _collisionNormal);
 	static void ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox);
 	static void ExplosionCollision(PhysModel*& _player, PhysModel*& _explosion);
 

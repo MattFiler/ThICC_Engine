@@ -112,7 +112,6 @@
     <ClCompile Include="AudioManager.cpp">
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="LocalisationManager.cpp">
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
@@ -125,9 +124,23 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="SplashscreenScene.cpp">
       <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="GoldenMushroom.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="GiantMushroom.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Star.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Engine Backend\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Game\Components\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -263,7 +276,6 @@
     <ClInclude Include="AudioManager.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sound.h" />
     <ClInclude Include="LocalisationManager.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
@@ -282,7 +294,6 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Collision.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
@@ -306,6 +317,21 @@
     </ClInclude>
     <ClInclude Include="SplashscreenScene.h">
       <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldenMushroom.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="GiantMushroom.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Star.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Game\Components\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -374,6 +400,9 @@
     </Filter>
     <Filter Include="Engine Backend\AssetComps">
       <UniqueIdentifier>{dac50347-06e1-4c26-b494-aec2d5739cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Sound">
+      <UniqueIdentifier>{5699aae9-37eb-4cc1-b06f-ac42c6a35060}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

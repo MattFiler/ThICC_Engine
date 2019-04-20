@@ -1,5 +1,9 @@
 #pragma once
+
 #include "Item.h"
+
+class Player;
+
 class GoldenMushroom : public Item
 {
 public:

@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Star.h"
+#include "Player.h"
+#include "GameStateData.h"
 
 Star::Star()
 {

@@ -237,6 +237,8 @@
     <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameStateData.h" />
+    <ClInclude Include="GiantMushroom.h" />
+    <ClInclude Include="GoldenMushroom.h" />
     <ClInclude Include="GreenShell.h" />
     <ClInclude Include="ImageGO2D.h" />
     <ClInclude Include="Item.h" />
@@ -262,6 +264,7 @@
     <ClInclude Include="InputData.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SplashscreenScene.h" />
+    <ClInclude Include="Star.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Track.h" />
@@ -288,6 +291,8 @@
     <ClCompile Include="GameObject2D.cpp" />
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="GiantMushroom.cpp" />
+    <ClCompile Include="GoldenMushroom.cpp" />
     <ClCompile Include="GreenShell.cpp" />
     <ClCompile Include="ImageGO2D.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -314,6 +319,7 @@
     <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SplashscreenScene.cpp" />
+    <ClCompile Include="Star.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="TrackMagnet.cpp" />

@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "GoldenMushroom.h"
+#include "Player.h"
+#include "GameStateData.h"
 
 GoldenMushroom::GoldenMushroom()
 {

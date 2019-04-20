@@ -52,7 +52,7 @@ void Item::setSpinAngle(float _angle)
 
 bool Item::ignorePlayerCollisions(Player* player)
 {
-	return m_player == player /*&& m_trailingPlayerImmunity*/;
+	return m_player == player;
 }
 
 void Item::setItemInUse(Player* player)
