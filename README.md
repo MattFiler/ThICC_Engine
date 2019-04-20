@@ -1,7 +1,9 @@
-## Mario Kart DX12
+## ThICC Engine - Mario Kart
 
-To play the game, launch the asset tool and press the compile button.
+To open Visual Studio, open "ThICC Toolkit.exe" and press "Open Project".
 
-Launch Visual Studio and build the game. Press the compile button again in the tool before playing.
+Asset compile will happen automatically after building the game in Visual Studio.
 
-For future rebuilds, you will only need to press the compile button if any assets in DATA are changed.
+To perform a manual asset compile, press "Compile Assets" in the toolkit.
+
+The toolkit caches the latest asset compile, to clear the cache, delete the "CACHE" folder.
