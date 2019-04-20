@@ -226,17 +226,6 @@ namespace EditorTool
         /* Compile assets */
         public bool autoCompileAssets(bool show_notifs, string path_mod = "")
         {
-            //Create cache directory/file if it doesn't exist
-            if (!Directory.Exists(path_mod + "CACHE") || !File.Exists(path_mod + "CACHE/DATA_CACHE.BIN"))
-            {
-                Directory.CreateDirectory(path_mod + "CACHE");
-                using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Create)))
-                {
-                    long placeholder = 0;
-                    writer.Write(placeholder);
-                }
-            }
-
             try
             {
                 //Copy to release and debug folder if needed
@@ -272,6 +261,17 @@ namespace EditorTool
         /* Build assets for... */
         private int buildAssets(string output, string path_mod)
         {
+            //Create cache directory/file if it doesn't exist
+            if (!Directory.Exists(path_mod + "CACHE") || !File.Exists(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN"))
+            {
+                Directory.CreateDirectory(path_mod + "CACHE");
+                using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN", FileMode.Create)))
+                {
+                    long placeholder = 0;
+                    writer.Write(placeholder);
+                }
+            }
+
             if (Directory.Exists(path_mod + output))
             {
                 if (Directory.Exists(path_mod + output + "/DATA/"))
@@ -296,7 +296,7 @@ namespace EditorTool
                         }
                     }
                     long orig_size = 0;
-                    using (BinaryReader reader = new BinaryReader(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Open)))
+                    using (BinaryReader reader = new BinaryReader(File.Open(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN", FileMode.Open)))
                     {
                         orig_size = reader.ReadInt64();
                     }
@@ -305,7 +305,7 @@ namespace EditorTool
                         return 0;
                     }
                     //We do need to copy, save new cache value
-                    using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE.BIN", FileMode.Create)))
+                    using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN", FileMode.Create)))
                     {
                         writer.Write(Convert.ToInt64(total_size));
                     }
