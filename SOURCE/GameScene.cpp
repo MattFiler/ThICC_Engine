@@ -262,7 +262,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		}
 		cine_cam->Tick();
 
-		if (m_cam[3]->GetBehav() == Camera::BEHAVIOUR::FOLLOW)
+		if (m_cam[game_config["player_count"]-1]->GetBehav() == Camera::BEHAVIOUR::FOLLOW)
 		{
 			Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN)->SetVolume(0.7f);
 			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN);
