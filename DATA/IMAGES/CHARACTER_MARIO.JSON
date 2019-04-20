@@ -1,0 +1,11 @@
+{
+  "asset_name": "CHARACTER_MARIO",
+  "asset_type": "Images",
+  "visible": true,
+  "is_2d": true,
+  "res_x": 250,
+  "res_y": 300,
+  "x_pos": 0,
+  "y_pos": 0,
+  "in_use_in": []
+}
