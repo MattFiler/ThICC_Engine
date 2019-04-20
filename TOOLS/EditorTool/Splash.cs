@@ -212,8 +212,26 @@ namespace EditorTool
         /* Open Map Manager */
         private void openMapManager_Click(object sender, EventArgs e)
         {
-            Map_Manager mapManager = new Map_Manager();
-            mapManager.Show();
+            openManager(AssetCompType.MAP);
+        }
+
+        /* Open Vehicle Manager */
+        private void openVehicleManager_Click(object sender, EventArgs e)
+        {
+            openManager(AssetCompType.VEHICLE);
+        }
+
+        /* Open Character Manager */
+        private void openCharacterManager_Click(object sender, EventArgs e)
+        {
+            openManager(AssetCompType.CHARACTER);
+        }
+
+        /* Open A Manager */
+        private void openManager(AssetCompType type)
+        {
+            Asset_Comp_Manager manager = new Asset_Comp_Manager(type);
+            manager.Show();
         }
 
         /* Open VS Project */

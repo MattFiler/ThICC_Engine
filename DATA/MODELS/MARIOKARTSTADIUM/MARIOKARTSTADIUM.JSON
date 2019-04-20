@@ -13,7 +13,7 @@
   "rot_z": 0.0,
   "segment_size": 10.0,
   "in_use_in": [
-    "map_config"
+    "Map"
   ],
   "map_cameras": [
     {

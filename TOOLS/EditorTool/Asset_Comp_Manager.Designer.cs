@@ -1,6 +1,6 @@
 ﻿namespace EditorTool
 {
-    partial class Map_Manager
+    partial class Asset_Comp_Manager
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Map_Manager));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Asset_Comp_Manager));
             this.assetList = new System.Windows.Forms.ListBox();
             this.newMap = new System.Windows.Forms.Button();
             this.deleteMap = new System.Windows.Forms.Button();

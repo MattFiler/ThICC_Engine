@@ -84,11 +84,23 @@
     <Compile Include="Asset_Browser.Designer.cs">
       <DependentUpon>Asset_Browser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Create_Character.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Create_Character.Designer.cs">
+      <DependentUpon>Create_Character.cs</DependentUpon>
+    </Compile>
     <Compile Include="Create_Map.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Create_Map.Designer.cs">
       <DependentUpon>Create_Map.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Create_Vehicle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Create_Vehicle.Designer.cs">
+      <DependentUpon>Create_Vehicle.cs</DependentUpon>
     </Compile>
     <Compile Include="Generic_Importer.cs">
       <SubType>Form</SubType>
@@ -114,11 +126,11 @@
     <Compile Include="Localisation_Editor.Designer.cs">
       <DependentUpon>Localisation_Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Map_Manager.cs">
+    <Compile Include="Asset_Comp_Manager.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Map_Manager.Designer.cs">
-      <DependentUpon>Map_Manager.cs</DependentUpon>
+    <Compile Include="Asset_Comp_Manager.Designer.cs">
+      <DependentUpon>Asset_Comp_Manager.cs</DependentUpon>
     </Compile>
     <Compile Include="Model_Importer_AssetSelector.cs">
       <SubType>Form</SubType>
@@ -178,8 +190,14 @@
     <EmbeddedResource Include="Asset_Browser.resx">
       <DependentUpon>Asset_Browser.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Create_Character.resx">
+      <DependentUpon>Create_Character.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Create_Map.resx">
       <DependentUpon>Create_Map.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Create_Vehicle.resx">
+      <DependentUpon>Create_Vehicle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generic_Importer.resx">
       <DependentUpon>Generic_Importer.cs</DependentUpon>
@@ -193,8 +211,8 @@
     <EmbeddedResource Include="Localisation_Editor.resx">
       <DependentUpon>Localisation_Editor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Map_Manager.resx">
-      <DependentUpon>Map_Manager.cs</DependentUpon>
+    <EmbeddedResource Include="Asset_Comp_Manager.resx">
+      <DependentUpon>Asset_Comp_Manager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Model_Importer.resx">
       <DependentUpon>Model_Importer.cs</DependentUpon>

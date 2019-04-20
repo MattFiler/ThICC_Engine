@@ -209,10 +209,13 @@
   <ItemGroup>
     <ClInclude Include="AIScheduler.h" />
     <ClInclude Include="AnimationMesh.h" />
+    <ClInclude Include="AssetComp.h" />
+    <ClInclude Include="AssetCompPch.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Banana.h" />
     <ClInclude Include="BlenderToDirectX.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="CharacterInfo.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Constants.h" />
@@ -262,6 +265,7 @@
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Track.h" />
     <ClInclude Include="TrackMagnet.h" />
+    <ClInclude Include="VehicleInfo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AIScheduler.cpp" />

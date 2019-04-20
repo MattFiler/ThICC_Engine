@@ -4,7 +4,7 @@
 #include "SceneManager.h"
 #include "LocalisationManager.h"
 #include "ImageGO2D.h"
-#include "MapInfo.h"
+#include "AssetCompPch.h"
 #include <vector>
 
 class ThICC_Game {
@@ -23,5 +23,10 @@ private:
 
 	json game_config;
 	json map_config;
+	json character_config;
+	json vehicle_config;
+
 	std::vector<MapInfo> map_instances;
+	std::vector<VehicleInfo> vehicle_instances;
+	std::vector<CharacterInfo> character_instances;
 };

@@ -287,7 +287,19 @@
       <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="MapInfo.h">
-      <Filter>Game\Components</Filter>
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterInfo.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="VehicleInfo.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetCompPch.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetComp.h">
+      <Filter>Engine Backend\AssetComps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +365,9 @@
     </Filter>
     <Filter Include="Game\Scenes">
       <UniqueIdentifier>{548f9388-7aee-467a-9829-97617e463cc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Backend\AssetComps">
+      <UniqueIdentifier>{dac50347-06e1-4c26-b494-aec2d5739cc3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

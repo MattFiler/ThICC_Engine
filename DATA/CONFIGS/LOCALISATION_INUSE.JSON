@@ -16,7 +16,7 @@
   },
   "MAP_DRIFTWAY": {
     "in_use_in": [
-      "map_config"
+      "Map"
     ]
   }
 }

@@ -274,6 +274,21 @@ namespace EditorTool
             return string_config[language][request].Value<string>();
         }
 
+        /* Get a useage tag string (this unifies all tags in a simple way) */
+        public string getUseageTagFor(AssetCompType comp_type)
+        {
+            switch (comp_type)
+            {
+                case AssetCompType.CHARACTER:
+                    return "Character";
+                case AssetCompType.MAP:
+                    return "Map";
+                case AssetCompType.VEHICLE:
+                    return "Vehicle";
+            }
+            return "";
+        }
+
         /* Add something to the useage queue to batch delete */
         List<UseageQueue> useage_queue = new List<UseageQueue>();
         public void pushToUseageQueue(UseageQueue new_item)
@@ -705,6 +720,21 @@ namespace EditorTool
 
                 return true;
             }
+        }
+
+        ///////////////////////////////////////////////
+        ///////////////////////////////////////////////
+
+        /* 
+         * 
+         * Misc Functionality
+         * 
+         */
+
+        /* Make a string capitalised */
+        public string makeCapitalised(string text)
+        {
+            return text.Substring(0, 1).ToUpper() + text.Substring(1);
         }
     }
 }

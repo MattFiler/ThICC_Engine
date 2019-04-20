@@ -91,7 +91,7 @@ namespace EditorTool
             }
 
             //Update tags
-            function_libary.executeUseageQueueForTag("map_config");
+            function_libary.executeUseageQueueForTag(function_libary.getUseageTagFor(AssetCompType.MAP));
 
             //Remove old json config or load existing (depends on mode)
             if (edit_mode)

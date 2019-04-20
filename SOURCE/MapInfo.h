@@ -2,11 +2,12 @@
 #include "pch.h"
 #include "ImageGO2D.h"
 #include "LocalisationManager.h"
+#include "AssetComp.h"
 #include <json.hpp>
 using json = nlohmann::json;
 
 //A struct to store map info like our scene index, localised name, audio and preview sprite
-struct MapInfo {
+struct MapInfo : public AssetComp {
 	MapInfo() {};
 	MapInfo(json _element, int _index) {
 		LocalisationManager m_localiser;

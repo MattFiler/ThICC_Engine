@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Game.h"
 #include "RenderData.h"
-#include "MapInfo.h"
 
 #include "MenuScene.h"
 #include "GameScene.h"
@@ -18,10 +17,28 @@ void ThICC_Game::Initialize() {
 	//Create the scenes
 	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
 
+	//Load all character data
+	std::ifstream p(m_filepath.generateFilepath("CHARACTER_CONFIG", m_filepath.CONFIG));
+	character_config << p;
+	int index = 0;
+	for (auto& element : character_config) {
+		character_instances.emplace_back(element);
+		index++;
+	}
+
+	//Load all vehicle data
+	std::ifstream k(m_filepath.generateFilepath("VEHICLE_CONFIG", m_filepath.CONFIG));
+	vehicle_config << k;
+	index = 0;
+	for (auto& element : vehicle_config) {
+		vehicle_instances.emplace_back(element);
+		index++;
+	}
+
 	//Create all game scenes (all maps) and store map preview data
 	std::ifstream j(m_filepath.generateFilepath("MAP_CONFIG", m_filepath.CONFIG));
 	map_config << j;
-	int index = 0;
+	index = 0;
 	for (auto& element : map_config) {
 		//Store map info
 		map_instances.emplace_back(element, index);
