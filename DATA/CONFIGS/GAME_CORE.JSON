@@ -1,9 +1,10 @@
 {
-  "default_track": "MARIO_KART_STADIUM",
-  "player_count": 4.0,
+  "default_track": "MARIOKARTSTADIUM",
+  "player_count": 1.0,
   "language": "English",
   "window_width": 1280,
   "window_height": 720,
   "ui_scale": 1.0,
-  "itembox_respawn_time": 4.0
+  "itembox_respawn_time": 4.0,
+  "enable_fps": true
 }

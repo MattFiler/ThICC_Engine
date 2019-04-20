@@ -101,5 +101,6 @@
   "map_waypoints": [],
   "map_spawnpoints": [],
   "map_finishline": [],
-  "map_itemboxes": []
+  "map_itemboxes": [],
+  "in_use_in": []
 }
