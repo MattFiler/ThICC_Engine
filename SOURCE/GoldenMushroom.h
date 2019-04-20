@@ -4,10 +4,11 @@
 
 class Player;
 
-class Mushroom : public Item {
+class GoldenMushroom : public Item
+{
 public:
-	Mushroom();
-	~Mushroom() = default;
+	GoldenMushroom();
+	~GoldenMushroom() = default;
 
 	virtual void Tick() override;
 	void HitByPlayer(Player* player) override {};
@@ -15,7 +16,8 @@ public:
 
 private:
 	float m_boostTimeElapsed = 0;
-	float m_boostAmount = 40;
+	float m_boostAmount = 35;
 	float m_minVelo = 50;
-	double m_boostDuration = 2;
+	double m_boostDuration = 1;
 };
+

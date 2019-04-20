@@ -136,8 +136,8 @@ void ThICC_Engine::SetupSplitscreenViewports() {
 				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
 					0.0f,
 					0.0f,
-					0.0f,
-					0.0f,
+					(float)(Locator::getRD()->m_window_width),
+					(float)(Locator::getRD()->m_window_height),
 					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
 				};
 				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {

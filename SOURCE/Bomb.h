@@ -1,9 +1,9 @@
 #pragma once
 
-#include "pch.h"
 #include "Item.h"
 
 class Explosion;
+class Player;
 
 class Bomb : public Item
 {

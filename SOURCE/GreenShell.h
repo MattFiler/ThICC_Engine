@@ -2,6 +2,8 @@
 
 #include "Item.h"
 
+class Player;
+
 class GreenShell : public Item
 {
 public:

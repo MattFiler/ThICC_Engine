@@ -31,7 +31,7 @@ GameScene::~GameScene()
 	m_3DObjects.clear();
 	delete cine_cam;
 	cine_cam = nullptr;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		delete m_cam[i];
 		m_cam[i] = nullptr;
@@ -625,7 +625,7 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			{
 				player[i]->GetRankingText()->Render();
 				player[i]->GetLapText()->Render();
-				//player[i]->GetItemImg()->Render();
+				player[i]->GetItemImg()->Render();
 			}
 		}
 		break;
@@ -762,6 +762,24 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(box);
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(box->GetMesh())->getDebugCollider());
 		return box;
+	}
+	case MUSHROOM_UNLIMITED:
+	{
+		GoldenMushroom * mushroom = new GoldenMushroom();
+		m_itemModels.push_back(mushroom);
+		return mushroom;
+	}
+	case STAR:
+	{
+		Star* star = new Star();
+		m_itemModels.push_back(star);
+		return star;
+	}
+	case MUSHROOM_GIANT:
+	{
+		GiantMushroom* mushroom = new GiantMushroom();
+		m_itemModels.push_back(mushroom);
+		return mushroom;
 	}
 	default:
 		return nullptr;

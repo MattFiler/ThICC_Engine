@@ -11,6 +11,9 @@
 #include "ControlledMovement.h"
 #include "MoveAI.h"
 #include "Text2D.h"
+#include "GoldenMushroom.h"
+#include "Star.h"
+#include "GiantMushroom.h"
 #include <functional>
 
 //=================================================================
@@ -64,6 +67,9 @@ public:
 	void Flip(int _revolutions, float _duration) { m_displayedMesh->Flip(_revolutions, _duration); };
 	void Jump(float _jumpHeight, float _duration) { m_displayedMesh->Jump(_jumpHeight, _duration); };
 
+	bool isInvincible() { return m_invincible; };
+	void setInvicible(bool _invincible) { m_invincible = _invincible; };
+
 protected:
 	int m_playerID = 0;
 
@@ -89,6 +95,7 @@ private:
 	Text2D *m_textFinishOrder = nullptr;
 	Vector m_savedGravDir;
 	bool m_finished = false;
+	bool m_invincible = false;
 
 	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th" };
 

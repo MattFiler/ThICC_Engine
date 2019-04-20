@@ -2,6 +2,8 @@
 
 #include "Item.h"
 
+class Player;
+
 class Banana : public Item {
 public:
 	Banana();
@@ -10,5 +12,5 @@ public:
 	virtual void Tick() override { Item::Tick(); };
 
 	void Use(Player* player, bool _altUse) override;
-	void HitByPlayer(Player* player) override;
+	void HitByPlayer(Player* _player) override;
 };
