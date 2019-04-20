@@ -100,7 +100,7 @@ private:
 	//Our tonemap
 	std::unique_ptr<DirectX::ToneMapPostProcess> m_toneMapACESFilmic;
 
-	//Debug text
+	//Debug text for FPS
 	Text2D* debug_text = nullptr;
 
 	//Internal core resource descriptors (most of these are unused now)
