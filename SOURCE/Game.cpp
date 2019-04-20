@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "RenderData.h"
 
+#include "SplashscreenScene.h"
 #include "MenuScene.h"
 #include "GameScene.h"
 
@@ -13,8 +14,10 @@ void ThICC_Game::Initialize() {
 
 	//Send out scene manager instance for scenes to grab
 	Locator::setupSM(&m_scene_manager);
+	m_scene_manager.Initialize();
 
 	//Create the scenes
+	m_scene_manager.addScene(new SplashscreenScene(), (int)Scenes::SPLASHSCREEN);
 	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
 
 	//Load all character data
@@ -48,15 +51,20 @@ void ThICC_Game::Initialize() {
 	}
 
 	//Set our default scene
-	m_scene_manager.setCurrentScene(Scenes::MENUSCENE, true);
+	m_scene_manager.setCurrentScene(Scenes::SPLASHSCREEN, true);
 }
 
 /* Update loop */
 void ThICC_Game::Update(DX::StepTimer const& timer) {
-	m_scene_manager.Update();
+	m_scene_manager.Update(timer);
 }
 
-/* Render loop */
-void ThICC_Game::Render() {
-	m_scene_manager.Render(Locator::getRD()->m_commandList);
+/* Render loop 3D */
+void ThICC_Game::Render3D() {
+	m_scene_manager.Render3D(Locator::getRD()->m_commandList);
+}
+
+/* Render loop 2D */
+void ThICC_Game::Render2D() {
+	m_scene_manager.Render2D(Locator::getRD()->m_commandList);
 }

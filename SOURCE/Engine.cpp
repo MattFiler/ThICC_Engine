@@ -116,6 +116,11 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	m_probabilities = new ItemData();
 	Locator::setupItemData(m_probabilities);
 
+	//Setup debug text
+	debug_text = new Text2D("");
+	debug_text->SetPos(Vector2(0, 0));
+	debug_text->SetColour(Colors::Red);
+
 	//Initialise anything we need in our game
 	m_game_inst.Initialize();
 
@@ -227,6 +232,9 @@ void ThICC_Engine::Update(DX::StepTimer const& timer)
 	//Delta time
 	m_gamestate_data.m_dt = float(timer.GetElapsedSeconds());
 
+	//Framerate monitor
+	debug_text->SetText(std::to_string(timer.GetFramesPerSecond()));
+
 	//Pass off to our game now we've done our engine-y stuff
 	m_game_inst.Update(timer);
 
@@ -261,9 +269,8 @@ void ThICC_Engine::Render()
 	Clear();
 	m_device_data.m_hdrScene->EndScene(commandList);
 
-	// Render the game
-	SetupSplitscreenViewports();
-	m_game_inst.Render();
+	// Render the game 3D elements
+	m_game_inst.Render3D();
 
 	// Set render targets
 	auto rtvDescriptor = m_device_data.m_deviceResources->GetRenderTargetView();
@@ -272,8 +279,17 @@ void ThICC_Engine::Render()
 	// Process our tone map
 	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
 	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 	m_toneMapACESFilmic->Process(commandList);
+
+	// Render the game 2D elements
+	m_game_inst.Render2D();
+
+	//Render FPS
+	Locator::getRD()->m_2dSpriteBatch->Begin(Locator::getRD()->m_commandList.Get());
+	if (m_game_config["enable_fps"]) {
+		debug_text->Render();
+	}
+	Locator::getRD()->m_2dSpriteBatch->End();
 
 	// Show the new frame.
 	m_device_data.m_deviceResources->Present();
@@ -393,8 +409,11 @@ void ThICC_Engine::CreateWindowSizeDependentResources()
 void ThICC_Engine::OnDeviceLost()
 {
 	Locator::getRD()->m_fxFactoryPBR.reset();
-
 	Locator::getRD()->m_states.reset();
+
+	Locator::getRD()->m_2dFont.reset();
+	Locator::getRD()->m_2dResourceDescriptors.reset();
+	Locator::getRD()->m_2dSpriteBatch.reset();
 
 	m_toneMapACESFilmic.reset();
 
@@ -417,26 +436,30 @@ void ThICC_Engine::OnDeviceRestored()
 /* Set the default font */
 void ThICC_Engine::SetDefaultFont(std::string _default_font)
 {
-	Locator::getRD()->m_states = std::make_unique<CommonStates>(Locator::getRD()->m_d3dDevice.Get());
+	//Start the upload process
 	ResourceUploadBatch resourceUpload(Locator::getRD()->m_d3dDevice.Get());
-
 	resourceUpload.Begin();
 
 	RenderTargetState rtState(m_device_data.m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
-	SpriteBatchPipelineStateDescription pd(rtState);
 
+	//Create sprite batch
+	SpriteBatchPipelineStateDescription pd(rtState);
+	Locator::getRD()->m_2dSpriteBatch = std::make_unique<SpriteBatch>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, pd);
+	Locator::getRD()->m_2dSpriteBatch->SetViewport(Locator::getRD()->m_screenViewport);
+
+	//Get font name
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	string font_path = m_filepath.generateFilepath(_default_font, m_filepath.FONT);
 	std::wstring w_font_path = converter.from_bytes(font_path.c_str());
-	pd.blendDesc = Locator::getRD()->m_states->NonPremultiplied;
-	Locator::getRD()->m_spriteBatch = std::make_unique<SpriteBatch>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, pd);
-	Locator::getRD()->m_font = std::make_unique<SpriteFont>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload,
+
+	//Load font resource
+	Locator::getRD()->m_2dFont = std::make_unique<SpriteFont>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload,
 		w_font_path.c_str(),
-		Locator::getRD()->m_resourceDescriptors->GetCpuHandle(Locator::getRD()->m_resourceCount),
-		Locator::getRD()->m_resourceDescriptors->GetGpuHandle(Locator::getRD()->m_resourceCount));
+		Locator::getRD()->m_2dResourceDescriptors->GetCpuHandle(Locator::getRD()->m_resourceCount),
+		Locator::getRD()->m_2dResourceDescriptors->GetGpuHandle(Locator::getRD()->m_resourceCount));
 	Locator::getRD()->m_resourceCount++;
 
-	auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
-	Locator::getDD()->m_deviceResources->WaitForGpu();
+	//End the upload process
+	auto uploadResourcesFinished = resourceUpload.End(Locator::getRD()->m_commandQueue.Get());
 	uploadResourcesFinished.wait();
 }

@@ -9,6 +9,7 @@
 
 enum Scenes
 {
+	SPLASHSCREEN,
 	MENUSCENE,
 	GAMESCENE,
 	DEBUGSCENE,

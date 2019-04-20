@@ -126,6 +126,9 @@
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="SplashscreenScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -300,6 +303,9 @@
     </ClInclude>
     <ClInclude Include="AssetComp.h">
       <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="SplashscreenScene.h">
+      <Filter>Game\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

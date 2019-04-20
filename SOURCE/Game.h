@@ -13,8 +13,9 @@ public:
 	~ThICC_Game() = default;
 
 	void Initialize();
+	void Render3D();
+	void Render2D();
 	void Update(DX::StepTimer const& timer);
-	void Render();
 
 private:
 	SceneManager m_scene_manager;

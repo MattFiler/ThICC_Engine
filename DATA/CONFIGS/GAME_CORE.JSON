@@ -5,5 +5,6 @@
   "window_width": 1280,
   "window_height": 720,
   "ui_scale": 1.0,
-  "itembox_respawn_time": 4.0
+  "itembox_respawn_time": 4.0,
+  "enable_fps": true
 }

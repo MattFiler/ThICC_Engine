@@ -66,17 +66,24 @@ struct ThICC_RenderData {
 	//The current env map index
 	uint32_t m_ibl = 0;
 
+	//The active camera
+	Camera* m_cam = NULL;
 
-	/* IMPORTED */
+
+
+
+	std::unique_ptr<DirectX::DescriptorHeap> m_2dResourceDescriptors = NULL;
+	std::unique_ptr<DirectX::SpriteBatch> m_2dSpriteBatch = NULL;
+	std::unique_ptr<DirectX::SpriteFont> m_2dFont = NULL;
+
+
+
+	/* IMPORTED - ALL TO BE REMOVED OR REFACTORED */
 
 	std::unique_ptr<DirectX::EffectFactory> m_fxFactory = NULL;
-	std::unique_ptr<DirectX::SpriteFont> m_font = NULL;
 	int m_fontResNum;
 	std::unique_ptr<DirectX::DescriptorHeap> m_resourceDescriptors = NULL;
 	int m_resourceCount = 0;
 	std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch = NULL;
 	std::unique_ptr<DirectX::BasicEffect> m_GPeffect = NULL;
-
-	//The active camera
-	Camera* m_cam = NULL;
 };

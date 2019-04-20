@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Text;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +51,10 @@ namespace EditorTool
         private void browseToFile_Click(object sender, EventArgs e)
         {
             filePath.Text = function_library.userLocatedFile(asset_picker_filter);
+            if (assetName.Text == "" && filePath.Text != "")
+            {
+                assetName.Text = Path.GetFileNameWithoutExtension(filePath.Text).ToUpper();
+            }
         }
 
         /* Import asset if valid */

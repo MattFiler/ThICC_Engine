@@ -14,15 +14,6 @@
 #include <json.hpp>
 using json = nlohmann::json;
 
-using std::vector;
-
-//predefs
-class GameObject2D;
-class GameObject3D;
-struct RenderData;
-struct InputData;
-class SceneManager;
-
 class GameScene : public Scene
 {
 public:
@@ -30,8 +21,9 @@ public:
 	~GameScene() override;
 
 	//Core update/render/load functions
-	void Update() override;
-	void Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
+	void Update(DX::StepTimer const& timer) override;
+	void Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
+	void Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
 	bool Load() override;
 
 	//Load/unload the expensive objects in the scene (only keep expensive stuff in memory if we're active)
@@ -57,8 +49,8 @@ private:
 	void pushBackObjects() override;
 
 	//Structures for the scene's objects
-	vector<GameObject2D*> m_2DObjects;
-	vector<GameObject3D*> m_3DObjects;
+	std::vector<GameObject2D*> m_2DObjects;
+	std::vector<GameObject3D*> m_3DObjects;
 	std::vector<PhysModel*> m_physModels;
 
 	//Common engine components

@@ -261,6 +261,7 @@
     <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="InputData.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="SplashscreenScene.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Track.h" />
@@ -312,6 +313,7 @@
     <ClCompile Include="SDKMeshGO3D.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SplashscreenScene.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="TrackMagnet.cpp" />

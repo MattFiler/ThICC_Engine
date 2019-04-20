@@ -21,86 +21,35 @@ MenuScene::MenuScene()
 MenuScene::~MenuScene()
 {
 	m_2DObjects.clear();
-	m_3DObjects.clear();
 }
 
 /* Load inexpensive things and create the objects for expensive things we will populate when required */
 bool MenuScene::Load()
 {
 	create2DObjects();
-	create3DObjects();
-	pushBackObjects();
-
 	return true;
-}
-
-/* Populate the expensive things! */
-void MenuScene::ExpensiveLoad() {
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-	{
-		(*it)->Load();
-	}
-}
-
-/* Unpopulate the expensive things. */
-void MenuScene::ExpensiveUnload() {
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-	{
-		(*it)->Reset();
-	}
-
-	//Will also wanna reset player positions and race data here
 }
 
 /* Create all 2D objects for the scene */
 void MenuScene::create2DObjects()
 {
-	//test text
-	Text2D* m_enterMenu = new Text2D("Lewis is not cool.");
-	m_2DObjects.push_back(m_enterMenu);
-
 	ImageGO2D* splash_screen = new ImageGO2D("cbc04-jdryd");
 	m_2DObjects.push_back(splash_screen);
 
-	ImageGO2D* lobby_screen = new ImageGO2D("lobby");
-	lobby_screen->SetPos(Vector2(0, -720));
-	m_2DObjects.push_back(lobby_screen);
+	//ImageGO2D* lobby_screen = new ImageGO2D("lobby");
+	//lobby_screen->SetPos(Vector2(0, -720));
+	//m_2DObjects.push_back(lobby_screen);
 
 	//Charecter images
-	initCharecterImages();
-}
+	//initCharacterImages();
 
-/* Create all 3D objects in the scene. */
-void MenuScene::create3DObjects()
-{
-	for (int i = 0; i < num_of_cam; i++) {
-		//Create a player and position on track
-		//player[i] = new Player(_RD, "Standard Kart", i, *_ID->m_gamePad.get());
-		//player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
-		//m_3DObjects.push_back(player[i]);
-
-		//Create a camera to follow the player
-		m_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-		m_cam->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
-		m_3DObjects.push_back(m_cam);
-	}
-}
-
-/* Push objects back to their associated arrays */
-void MenuScene::pushBackObjects()
-{
-	for (int i = 0; i < m_3DObjects.size(); i++)
-	{
-		if (dynamic_cast<PhysModel*>(m_3DObjects[i]) && dynamic_cast<PhysModel*>(m_3DObjects[i])->hasCollider())
-		{
-			m_physModels.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i]));
-			m_3DObjects.push_back(dynamic_cast<PhysModel*>(m_3DObjects[i])->getDebugCollider());
-		}
-	}
+	//debug text
+	Text2D* m_enterMenu = new Text2D("PRESS ENTER FOR DRAGON DRIFTWAY / D FOR MARIO KART STADIUM");
+	m_2DObjects.push_back(m_enterMenu);
 }
 
 /* Update the scene */
-void MenuScene::Update()
+void MenuScene::Update(DX::StepTimer const& timer)
 {
 	if (m_keybinds.keyPressed("Quit"))
 	{
@@ -144,12 +93,7 @@ void MenuScene::Update()
 		playerJoin();
 	}
 
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		(*it)->Tick();
-	}
-
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	for (std::vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
 		(*it)->Tick();
 	}
@@ -160,33 +104,13 @@ void MenuScene::Update()
 	}
 }
 
-/* Render the scene */
-void MenuScene::Render(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
+/* Render the 2D scene */
+void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
-	m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
-	Locator::getRD()->m_cam = m_cam;
-
-	for (vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	for (std::vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
 	{
 		(*it)->Render();
 	}
-	/*
-	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_resourceDescriptors->Heap() };
-	m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
-
-	m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
-	Locator::getRD()->m_spriteBatch->SetViewport(Locator::getRD()->m_screenViewport);
-	Locator::getRD()->m_spriteBatch->Begin(m_commandList.Get());
-
-	//draw 2d objects
-	for (vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		(*it)->Render();
-	}
-
-	Locator::getRD()->m_spriteBatch->End();*/
 }
 
 /* Player enters into the "lobby" */
@@ -199,7 +123,7 @@ void MenuScene::enterPlayerLobby()
 			m_menu_state = States::LOBBY;
 			m_2DObjects[1]->SetPos(Vector2(0, -720));
 			m_2DObjects[2]->SetPos(Vector2(0, 0));
-			//m_charecter_images[0][0]->SetPos(Vector2(200, 200));
+			//m_character_images[0][0]->SetPos(Vector2(200, 200));
 			Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TTLE_LOOP)->Stop();
 			Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP);
 		}
@@ -213,7 +137,7 @@ void MenuScene::enterPlayerLobby()
 			m_menu_state = States::NOSTATE;
 			m_2DObjects[1]->SetPos(Vector2(0, 0));
 			m_2DObjects[2]->SetPos(Vector2(0, -720));
-			resetCharecterImagePos();
+			resetCharacterImagePos();
 		}
 	}
 }
@@ -228,14 +152,14 @@ void MenuScene::playerJoin()
 			if (Locator::getID()->m_gamePadState[i].IsAPressed() && m_menu_state == States::LOBBY)
 			{
 				//set player charecter selection image
-				m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));
+				m_character_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));
 			}
 
 			if (m_charTimeout[i] <= 0) // stops continuous flipping of charecter selection
 			{
 				if (Locator::getID()->m_gamePadState[i].thumbSticks.leftX > 0)
 				{
-					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(0, -500)); //set old image pos
+					m_character_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(0, -500)); //set old image pos
 					++Locator::getGSD()->charecter_selected[i];
 
 					if (Locator::getGSD()->charecter_selected[i] > 3)
@@ -244,12 +168,12 @@ void MenuScene::playerJoin()
 					}
 					Locator::getAudio()->Play(SOUND_TYPE::CHARACTER_SEL, Locator::getGSD()->charecter_selected[i]);
 					m_charTimeout[i] = 0.3f; // set charecter selection timeout
-					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
+					m_character_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
 				}
 
 				if (Locator::getID()->m_gamePadState[i].thumbSticks.leftX < 0)
 				{
-					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(0, -500)); //set old image pos
+					m_character_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(0, -500)); //set old image pos
 					--Locator::getGSD()->charecter_selected[i];
 					if (Locator::getGSD()->charecter_selected[i] < 0)
 					{
@@ -258,7 +182,7 @@ void MenuScene::playerJoin()
 					}
 					Locator::getAudio()->Play(SOUND_TYPE::CHARACTER_SEL, Locator::getGSD()->charecter_selected[i]);
 					m_charTimeout[i] = 0.2f; // set charecter selection timeout
-					m_charecter_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
+					m_character_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
 				}
 			}
 		}
@@ -266,38 +190,38 @@ void MenuScene::playerJoin()
 }
 
 /* Initialise the images for each character */
-void MenuScene::initCharecterImages()
+void MenuScene::initCharacterImages()
 {
 	for (int i = 0; i < 4; ++i)
 	{
-		m_charecter_images[i][0] = new ImageGO2D("MARIO");
-		m_charecter_images[i][0]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][1] = new ImageGO2D("BOWSER");
-		m_charecter_images[i][1]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][2] = new ImageGO2D("PEACH");
-		m_charecter_images[i][2]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][3] = new ImageGO2D("WALUIGI");
-		m_charecter_images[i][3]->SetPos(Vector2(0, -500));
+		m_character_images[i][0] = new ImageGO2D("MARIO");
+		m_character_images[i][0]->SetPos(Vector2(0, -500));
+		m_character_images[i][1] = new ImageGO2D("BOWSER");
+		m_character_images[i][1]->SetPos(Vector2(0, -500));
+		m_character_images[i][2] = new ImageGO2D("PEACH");
+		m_character_images[i][2]->SetPos(Vector2(0, -500));
+		m_character_images[i][3] = new ImageGO2D("WALUIGI");
+		m_character_images[i][3]->SetPos(Vector2(0, -500));
 	}
 
 	for (int i = 0; i < 4; ++i)
 	{
 		for (int j = 0; j < 4; ++j)
 		{
-			m_2DObjects.push_back(m_charecter_images[i][j]);
+			m_2DObjects.push_back(m_character_images[i][j]);
 		}
 	}
 }
 
 /* reset the position of each character image */
-void MenuScene::resetCharecterImagePos()
+void MenuScene::resetCharacterImagePos()
 {
 	for (int i = 0; i < 4; ++i)
 	{
-		m_charecter_images[i][0]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][1]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][2]->SetPos(Vector2(0, -500));
-		m_charecter_images[i][3]->SetPos(Vector2(0, -500));
+		m_character_images[i][0]->SetPos(Vector2(0, -500));
+		m_character_images[i][1]->SetPos(Vector2(0, -500));
+		m_character_images[i][2]->SetPos(Vector2(0, -500));
+		m_character_images[i][3]->SetPos(Vector2(0, -500));
 	}
 }
 

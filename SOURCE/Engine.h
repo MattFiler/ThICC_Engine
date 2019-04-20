@@ -93,12 +93,15 @@ private:
 	DX::StepTimer m_timer;
 
 	//Core resources (these can probably be cut back a bit, since we only really use them for the tonemap now)
-	std::unique_ptr<DirectX::GraphicsMemory>        m_graphicsMemory;
-	std::unique_ptr<DirectX::DescriptorPile>        m_resourceDescriptors;
-	std::unique_ptr<DirectX::DescriptorHeap>        m_renderDescriptors;
+	std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+	std::unique_ptr<DirectX::DescriptorPile> m_resourceDescriptors;
+	std::unique_ptr<DirectX::DescriptorHeap> m_renderDescriptors;
 
 	//Our tonemap
-	std::unique_ptr<DirectX::ToneMapPostProcess>    m_toneMapACESFilmic;
+	std::unique_ptr<DirectX::ToneMapPostProcess> m_toneMapACESFilmic;
+
+	//Debug text
+	Text2D* debug_text = nullptr;
 
 	//Internal core resource descriptors (most of these are unused now)
 	enum Descriptors
