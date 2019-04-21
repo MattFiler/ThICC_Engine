@@ -1,0 +1,414 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Manifest Include="settings.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Engine Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceResourcesPC.cpp">
+      <Filter>Engine Backend\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTexture.cpp">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceLocator.cpp">
+      <Filter>Engine Backend\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Engine Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="KeybindManager.cpp">
+      <Filter>Engine Backend\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject3D.cpp">
+      <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\Components\Controllable</Filter>
+    </ClCompile>
+    <ClCompile Include="AIScheduler.cpp">
+      <Filter>Game\Components\Controllable\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackMagnet.cpp">
+      <Filter>Game\Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Track.cpp">
+      <Filter>Game\Components\Game Objects\3D\Physmodels</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysModel.cpp">
+      <Filter>Game\Components\Game Objects\3D\Physmodels</Filter>
+    </ClCompile>
+    <ClCompile Include="SDKMeshGO3D.cpp">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshTri.cpp">
+      <Filter>Engine Backend\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugMarker.cpp">
+      <Filter>Game\Components\Game Objects\3D\Physmodels</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemBox.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemData.cpp">
+      <Filter>Game\Components\Item Info</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageGO2D.cpp">
+      <Filter>Game\Components\Game Objects\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject2D.cpp">
+      <Filter>Game\Components\Game Objects\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveAI.cpp">
+      <Filter>Game\Components\Controllable\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlledMovement.cpp">
+      <Filter>Game\Components\Controllable</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationMesh.cpp">
+      <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDebugToggles.cpp">
+      <Filter>Engine Backend\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Banana.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Text2D.cpp">
+      <Filter>Game\Components\Game Objects\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="FakeItemBox.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="GreenShell.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Constants.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Engine Backend\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalisationManager.cpp">
+      <Filter>Engine Backend\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Engine Backend\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SplashscreenScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="GoldenMushroom.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="GiantMushroom.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Star.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Engine Backend\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Game\Components\Sound</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="d3dx12.h">
+      <Filter>Engine Backend\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceResourcesPC.h">
+      <Filter>Engine Backend\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="StepTimer.h">
+      <Filter>Engine Backend\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadData.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTexture.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="FindMedia.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceLocator.h">
+      <Filter>Engine Backend\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="InputData.h">
+      <Filter>Engine Backend\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderData.h">
+      <Filter>Engine Backend\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFilepaths.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateData.h">
+      <Filter>Engine Backend\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Engine Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="KeybindManager.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject3D.h">
+      <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game\Components\Controllable</Filter>
+    </ClInclude>
+    <ClInclude Include="AIScheduler.h">
+      <Filter>Game\Components\Controllable\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackMagnet.h">
+      <Filter>Game\Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Track.h">
+      <Filter>Game\Components\Game Objects\3D\Physmodels</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysModel.h">
+      <Filter>Game\Components\Game Objects\3D\Physmodels</Filter>
+    </ClInclude>
+    <ClInclude Include="SDKMeshGO3D.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshTri.h">
+      <Filter>Engine Backend\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="BlenderToDirectX.h">
+      <Filter>Engine Backend\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugMarker.h">
+      <Filter>Game\Components\Game Objects\3D\Physmodels</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBox.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemData.h">
+      <Filter>Game\Components\Item Info</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageGO2D.h">
+      <Filter>Game\Components\Game Objects\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject2D.h">
+      <Filter>Game\Components\Game Objects\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveAI.h">
+      <Filter>Game\Components\Controllable\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlledMovement.h">
+      <Filter>Game\Components\Controllable</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationMesh.h">
+      <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDebugToggles.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Banana.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Text2D.h">
+      <Filter>Game\Components\Game Objects\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="FakeItemBox.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenShell.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Mushroom.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalisationManager.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceData.h">
+      <Filter>Engine Backend\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugText.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="MapInfo.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterInfo.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="VehicleInfo.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetCompPch.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetComp.h">
+      <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="SplashscreenScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldenMushroom.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="GiantMushroom.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Star.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Engine Backend\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Game\Components\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectShared.h">
+      <Filter>Game\Shared Data</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Game">
+      <UniqueIdentifier>{9ed7f449-3b2b-404f-9dd9-d51576049267}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Backend">
+      <UniqueIdentifier>{8248ed35-66f0-409e-8ef9-e9d6bd9d8540}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Backend\Common">
+      <UniqueIdentifier>{4fafe345-da8d-450b-b757-da0f856c24c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Backend\Utilities">
+      <UniqueIdentifier>{f98789ef-91ed-463d-be71-076719bb0770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Backend\Shared">
+      <UniqueIdentifier>{9e79fc87-651c-47a7-9ec5-8e7e4bb0471a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{bd8459be-a1d6-48b1-ae69-bced3dbb1e71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Backend\Components">
+      <UniqueIdentifier>{e2f2439d-5b8b-441f-80f1-a0971ecc9c5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components">
+      <UniqueIdentifier>{7473ecb9-161b-40d6-82e8-c5603b51ccf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Game Objects">
+      <UniqueIdentifier>{154979ff-c02b-443e-b150-0f0349ee36f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Game Objects\3D">
+      <UniqueIdentifier>{ba606b51-c089-46a7-b04b-290b0d65cb00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Controllable">
+      <UniqueIdentifier>{4e0954e9-60ea-4458-b216-54c2a325dfae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Controllable\AI">
+      <UniqueIdentifier>{6bcbc44b-1f9a-4d8d-bf02-e9d335dc27da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Physics">
+      <UniqueIdentifier>{a139e418-6d0b-4005-92b5-03e6ef6f2bd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Game Objects\3D\Physmodels">
+      <UniqueIdentifier>{28a6dbba-cb5f-465f-99e5-7909456e2ea5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Backend\Maths">
+      <UniqueIdentifier>{038a5201-f0e4-41d3-a8eb-c0a3a159f54a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Game Objects\3D\Items">
+      <UniqueIdentifier>{1711d7d3-2a4c-4d49-ab65-605df8ffa236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Item Info">
+      <UniqueIdentifier>{b7593796-6d86-48d4-8340-6dee8651a575}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Game Objects\2D">
+      <UniqueIdentifier>{35d9589c-cadc-42f5-8894-5951a9615d2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Game Objects\Audio">
+      <UniqueIdentifier>{38deb851-3adc-427f-9ab6-65f5b4340688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scenes">
+      <UniqueIdentifier>{548f9388-7aee-467a-9829-97617e463cc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Backend\AssetComps">
+      <UniqueIdentifier>{dac50347-06e1-4c26-b494-aec2d5739cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components\Sound">
+      <UniqueIdentifier>{5699aae9-37eb-4cc1-b06f-ac42c6a35060}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shared Data">
+      <UniqueIdentifier>{17ae1519-6a7e-4407-a589-5c18b93def3c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
