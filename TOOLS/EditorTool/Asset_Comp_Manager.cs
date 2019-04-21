@@ -58,9 +58,9 @@ namespace EditorTool
             switch (this_comp_type)
             {
                 case AssetCompType.CHARACTER:
-                    //Create_Map createChar = new Create_Map();
+                    Create_Character createChar = new Create_Character();
                     //needs to refresh
-                    //createChar.Show();
+                    createChar.Show();
                     break;
                 case AssetCompType.MAP:
                     Create_Map createMap = new Create_Map();
@@ -68,9 +68,9 @@ namespace EditorTool
                     createMap.Show();
                     break;
                 case AssetCompType.VEHICLE:
-                    //Create_Map createVehicle = new Create_Map();
+                    Create_Vehicle createVehicle = new Create_Vehicle();
                     //needs to refresh
-                    //createVehicle.Show();
+                    createVehicle.Show();
                     break;
             }
         }

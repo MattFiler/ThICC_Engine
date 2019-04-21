@@ -9,7 +9,7 @@
 
 extern void ExitGame();
 
-Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_filename), CreateItem(_createItemFunction)
+Player::Player(CharacterInfo _character, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character.model), CreateItem(_createItemFunction)
 {
 	m_RD = Locator::getRD();
 	SetDrag(0.7);
@@ -25,7 +25,7 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 
 	// Don't render this mesh, render a second one instead
 	m_shouldRender = false;
-	m_displayedMesh = std::make_unique<AnimationMesh>(_filename);
+	m_displayedMesh = std::make_unique<AnimationMesh>(_character.model);
 
 	m_move = std::make_unique<ControlledMovement>(this, m_displayedMesh.get());
 
@@ -468,4 +468,14 @@ void Player::SetWaypoint(int _waypoint)
 {
 	m_move->SetWaypoint(_waypoint);
 	m_waypoint = _waypoint;
+}
+
+void Player::ChangeCharacter(CharacterInfo _character) {
+	AnimationMesh* old_mesh = m_displayedMesh.release();
+	m_displayedMesh = std::make_unique<AnimationMesh>(_character.model);
+
+	ControlledMovement* old_movement = m_move.release();
+	m_move = std::make_unique<ControlledMovement>(this, m_displayedMesh.get());
+
+	//Update TrackMagnet here too?
 }

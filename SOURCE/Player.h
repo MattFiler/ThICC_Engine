@@ -14,6 +14,7 @@
 #include "GoldenMushroom.h"
 #include "Star.h"
 #include "GiantMushroom.h"
+#include "CharacterInfo.h"
 #include <functional>
 
 //=================================================================
@@ -24,7 +25,7 @@ class Player : public TrackMagnet
 {
 
 public:
-	Player(string _filename, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
+	Player(CharacterInfo _character, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
 	~Player();
 
 	virtual void Tick() override;
@@ -69,6 +70,8 @@ public:
 
 	bool isInvincible() { return m_invincible; };
 	void setInvicible(bool _invincible) { m_invincible = _invincible; };
+
+	void ChangeCharacter(CharacterInfo _character);
 
 protected:
 	int m_playerID = 0;

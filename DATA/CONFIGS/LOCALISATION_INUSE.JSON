@@ -23,5 +23,11 @@
     "in_use_in": [
       "Map"
     ]
+  },
+  "CHARACTER_KNUCKLES": {
+    "in_use_in": [
+      "Vehicle",
+      "Character"
+    ]
   }
 }

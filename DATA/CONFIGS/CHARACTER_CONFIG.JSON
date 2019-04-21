@@ -1,2 +1,8 @@
 {
+  "KNUCKLES CHARACTER": {
+    "friendly_name": "CHARACTER_KNUCKLES",
+    "menu_sprite": "CHARACTER_KNUCKLES",
+    "model": "KNUCKLES_KART",
+    "audio": {}
+  }
 }
