@@ -7,18 +7,22 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 {
 	for (int i = 0; i < m_maxPathIterations; i++)
 	{
-		//m_debugCups.push_back(new SDKMeshGO3D("CUP"));
+		m_debugCups.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
+		m_debugCups.back()->Load();
+		Vector3 new_scale = m_debugCups.back()->GetScale() * ((float)(i+1) / m_maxPathIterations);
+		m_debugCups.back()->SetScale(new_scale);
+		m_debugCups.back()->UpdateWorld();
 	}
 }
 
 void MoveAI::DebugRender()
 {
-	/*
+	
 	for (SDKMeshGO3D* mesh : m_debugCups)
 	{
 		mesh->Render();
 	}
-	*/
+	
 }
 
 void MoveAI::Update(Track* _track)
@@ -41,12 +45,12 @@ void MoveAI::Update(Track* _track)
 		m_waypointPos = _track->getWaypoints()[m_move->GetWaypoint()+1];
 	}
 
-	if (FindRoute(_track, world, pos, direction, iterations, 1))
+	if (FindRoute(_track, world, pos, direction, iterations, true))
 	{
 		for (int i = 0; i < m_route.size(); i++)
 		{
-			//m_debugCups[i]->SetPos(m_route[i]);
-			//m_debugCups[i]->UpdateWorld();
+			m_debugCups[i]->SetPos(m_route[i]);
+			m_debugCups[i]->UpdateWorld();
 		}
 	}
 	else
@@ -54,7 +58,7 @@ void MoveAI::Update(Track* _track)
 		m_route.clear();
 		Vector3 waypointDir = m_waypointPos - pos;
 		waypointDir.Normalize();
-		FindWorld(_track, world, world, pos, pos, waypointDir, 1);
+		FindWorld(_track, world, world, pos, pos, waypointDir, 1, 0);
 		m_route.push_back(pos);
 	}
 
@@ -119,33 +123,20 @@ void MoveAI::Update(Track* _track)
 	*/
 }
 
-bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int& _iterations, int _localIterations)
+bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int _iterations, bool _allowTurn)
 {
-	// Get start pos
-
-	// int iterations
-	// int localiter
-	// While steps to go
-	//	 If forward dist too short
-	//     if localiter > 0
-	//      if FindRoute(right)
-	//         return true
-	//      else return FindRoute(left)
-	//   else if left dist too short
-	//       push if forward+left valid
-	//   else if right dist too short
-	//       push if forward+left valid
-	//   else forward
-
 	while (_iterations < m_maxPathIterations)
 	{
 		Matrix newWorld = Matrix::Identity;
 		Vector3 newPos = Vector::Zero;
 		
-		int count = FindWorld(_track, _world, newWorld, _pos, newPos, _direction, m_minFrontSpace);
+		// Check to see if straight ahead is valid
+		int count = FindWorld(_track, _world, newWorld, _pos, newPos, _direction, m_minFrontSpace, _iterations);
+		// If straight ahead isn't valid
 		if (count < m_minFrontSpace)
 		{
-			if (_localIterations > 0)
+			// Try left and right recurring this method to find a valid route
+			if (_allowTurn)
 			{
 				Vector right;
 				Vector left;
@@ -161,37 +152,45 @@ bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _d
 					right.Normalize();
 					left.Normalize();
 				}
-				if (FindRoute(_track, _world, _pos, right, _iterations, 0))
+				if (FindRoute(_track, _world, _pos, right, _iterations, false))
 				{
 					return true;
 				}
-				else return(FindRoute(_track, _world, _pos, left, _iterations, 0));
+				else
+				{
+					m_route.resize(_iterations);
+				}
+
+				return(FindRoute(_track, _world, _pos, left, _iterations, false));
 			}
+			// Return straight away if this is the first iteration, this prevents going down a pointless tree
 			else
 			{
 				return false;
 			}
 		}
+		// If straight ahead is valid
 		else
 		{
-			FindWorld(_track, _world, newWorld, _pos, newPos, _direction, 1);
+			// Find the world forward of this one
+			FindWorld(_track, _world, newWorld, _pos, newPos, _direction, 1, _iterations);
 			_world = newWorld;
 			_pos = newPos;
 			_direction = _world.Forward();
 			_iterations++;
-			_localIterations++;
+			_allowTurn = true;
 			m_route.push_back(_pos);
 		}
 	}
 	return true;
 }
 
-int MoveAI::FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorld, const Vector3& _startPos, Vector3& _endPos, Vector3 _direction, const int& _steps)
+int MoveAI::FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorld, const Vector3& _startPos, Vector3& _endPos, Vector3 _direction, const int& _steps, const int& _iteration)
 {
 	_direction *= m_aiPathStep;
 
 	// Check to see if this direction diverges from the waypoint
-	if (Vector3::DistanceSquared(_startPos, m_waypointPos) < Vector3::DistanceSquared(_startPos + _direction, m_waypointPos))
+	if (_iteration > 0 && Vector3::DistanceSquared(_startPos, m_waypointPos) < Vector3::DistanceSquared(_startPos + _direction, m_waypointPos))
 	{
 		return 0;
 	}
@@ -206,6 +205,7 @@ int MoveAI::FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorl
 	{
 		if (_track->DoesLineIntersect(_endWorld.Down()*(m_model->data.m_height * 10), _endPos + (_endWorld.Up() * (m_model->data.m_height * 2)), intersect, tri, 0.4f))
 		{
+			// If there is a valid collision, find the new world ahead on the track
 			Vector secondIntersect;
 			MeshTri* tri2 = nullptr;
 			tri->DoesLineIntersect(_endWorld.Down() * (m_model->data.m_height * 10), _endPos + _direction + (_endWorld.Up() * (m_model->data.m_height * 2)), secondIntersect, tri2, 0.4f);
