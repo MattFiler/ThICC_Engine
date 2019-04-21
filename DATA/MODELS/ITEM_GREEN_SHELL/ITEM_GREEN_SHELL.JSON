@@ -1,17 +1,14 @@
 {
-  "asset_name": "ITEM_GREEN_SHELL",
-  "asset_type": "Models",
-  "model_type": "Track",
   "has_box_collider": true,
   "collision_box": {
     "front_top_left": [
       0.556348,
-      1.007075,
+      1.00561,
       0.619336
     ],
     "front_top_right": [
       -0.556348,
-      1.007075,
+      1.00561,
       0.619336
     ],
     "front_bottom_right": [
@@ -26,12 +23,12 @@
     ],
     "back_top_left": [
       0.556348,
-      1.007075,
+      1.00561,
       -0.619336
     ],
     "back_top_right": [
       -0.556348,
-      1.007075,
+      1.00561,
       -0.619336
     ],
     "back_bottom_right": [
@@ -45,6 +42,9 @@
       -0.619336
     ]
   },
+  "asset_name": "ITEM_GREEN_SHELL",
+  "asset_type": "Models",
+  "model_type": 1,
   "visible": true,
   "start_x": 0,
   "start_y": 0,
