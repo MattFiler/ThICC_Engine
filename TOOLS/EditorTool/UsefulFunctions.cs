@@ -442,25 +442,19 @@ namespace EditorTool
             switch (type)
             {
                 case AssetType.FONT:
-                    {
-                        return "DATA/FONTS/";
-                    }
+                    return "DATA/FONTS/";
                 case AssetType.IMAGE:
-                    {
-                        return "DATA/IMAGES/";
-                    }
+                    return "DATA/IMAGES/";
                 case AssetType.MODEL:
+                    if (asset_name == "")
                     {
-                        if (asset_name == "")
-                        {
-                            return "DATA/MODELS/";
-                        }
-                        return "DATA/MODELS/" + asset_name + "/";
+                        return "DATA/MODELS/";
                     }
+                    return "DATA/MODELS/" + asset_name + "/";
                 case AssetType.SOUND:
-                    {
-                        return "DATA/SOUNDS/";
-                    }
+                    return "DATA/SOUNDS/";
+                case AssetType.CUBEMAP:
+                    return "DATA/CUBEMAPS/";
             }
             throw new InvalidOperationException("Unhandled AssetType.");
         }
@@ -471,21 +465,15 @@ namespace EditorTool
             switch (type)
             {
                 case AssetType.FONT:
-                    {
-                        return ".SPRITEFONT";
-                    }
+                    return ".SPRITEFONT";
                 case AssetType.IMAGE:
-                    {
-                        return ".DDS";
-                    }
+                    return ".DDS";
                 case AssetType.MODEL:
-                    {
-                        return ".SDKMESH";
-                    }
+                    return ".SDKMESH";
                 case AssetType.SOUND:
-                    {
-                        return ".WAV";
-                    }
+                    return ".WAV";
+                case AssetType.CUBEMAP:
+                    return ".DDS"; //"_SPECULAR.DDS" for irradiance, "_DIFFUSE.DDS" for radiance
             }
             throw new InvalidOperationException("Unhandled AssetType.");
         }

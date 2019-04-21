@@ -93,6 +93,11 @@ namespace EditorTool
                     stringEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
                     stringEditor.Show();
                     break;
+                case "Cubemaps":
+                    Cubemap_Creator cubemapEditor = new Cubemap_Creator();
+                    cubemapEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    cubemapEditor.Show();
+                    break;
             }
         }
 
