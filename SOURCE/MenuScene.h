@@ -32,13 +32,8 @@ private:
 	void create3DObjects() override {};
 	void pushBackObjects() override {};
 
-	//Handle players in the "lobby"
-	void enterPlayerLobby();
-	void playerJoin();
-	void initCharacterImages();
-	void resetCharacterImagePos();
-
 	//Structures for the scene's objects
+	std::vector<Text2D*> m_mapSelections;
 	std::vector<GameObject2D*> m_2DObjects;
 
 	//Common engine components
@@ -49,17 +44,10 @@ private:
 	//Referenced stuff
 	SceneManager* m_scene_manager;
 
-	//Charecter Images
-	ImageGO2D* m_character_images[4][4]; //[player][character]
-
 	//Configs
 	json game_config;
 
 	//States and timings
-	float m_charTimeout[4] = { 0.0f,0.0f,0.0f,0.0f };
-	float timeout = 1.2f;
-	bool intro_music_start = true;
-	bool game_start = true;
-	States m_menu_state = States::NOSTATE;
+	int highlighted_map = 0;
 };
 

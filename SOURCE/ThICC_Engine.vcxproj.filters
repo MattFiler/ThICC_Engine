@@ -333,6 +333,9 @@
     <ClInclude Include="Sound.h">
       <Filter>Game\Components\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="GameObjectShared.h">
+      <Filter>Game\Shared Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -403,6 +406,9 @@
     </Filter>
     <Filter Include="Game\Components\Sound">
       <UniqueIdentifier>{5699aae9-37eb-4cc1-b06f-ac42c6a35060}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shared Data">
+      <UniqueIdentifier>{17ae1519-6a7e-4407-a589-5c18b93def3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

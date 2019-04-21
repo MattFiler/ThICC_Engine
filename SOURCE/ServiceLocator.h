@@ -10,6 +10,7 @@ class ItemData;
 class AIScheduler;
 class AudioManager;
 class SceneManager;
+class GameObjectShared;
 
 struct Locator {
 	static ThICC_InputData* getID() {
@@ -60,6 +61,12 @@ struct Locator {
 		}
 		return ref_SM;
 	}
+	static GameObjectShared* getGOS() {
+		if (ref_GOS == nullptr) {
+			throw std::runtime_error("Call to game object scene before initialisation.");
+		}
+		return ref_GOS;
+	}
 
 	static void setupID(ThICC_InputData* inst_ID) {
 		ref_ID = inst_ID;
@@ -85,6 +92,9 @@ struct Locator {
 	static void setupSM(SceneManager* inst_SM) {
 		ref_SM = inst_SM;
 	}
+	static void setupGOS(GameObjectShared* inst_GOS) {
+		ref_GOS = inst_GOS;
+	}
 
 private:
 	static ThICC_InputData* ref_ID;
@@ -95,4 +105,5 @@ private:
 	static AIScheduler* ref_AIS;
 	static AudioManager* ref_audio;
 	static SceneManager* ref_SM;
+	static GameObjectShared* ref_GOS;
 };

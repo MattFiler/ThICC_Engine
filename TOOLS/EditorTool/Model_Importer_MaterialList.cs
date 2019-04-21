@@ -87,8 +87,28 @@ namespace EditorTool
 
         private void SaveMaterials_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             //Save json config back
             File.WriteAllText(importer_common.fileName(importer_file.IMPORTER_CONFIG), model_material_config.ToString(Formatting.Indented));
+
+            //Load OBJ
+            string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
+
+            //------
+
+            //If we're in edit mode, delete the old files
+            if (importer_common.getEditMode())
+            {
+                if (File.Exists(importer_common.fileName(importer_file.ENGINE_MESH)))
+                {
+                    File.Delete(importer_common.fileName(importer_file.ENGINE_MESH));
+                }
+                if (File.Exists(importer_common.fileName(importer_file.COLLMAP)))
+                {
+                    File.Delete(importer_common.fileName(importer_file.COLLMAP));
+                }
+            }
 
             //------
 
@@ -98,15 +118,36 @@ namespace EditorTool
             new_mtl.Add("");
             foreach (var this_material_config in model_material_config)
             {
+                //Work out if we have alpha in this material 
+                string diffuse_map = "";
+                foreach (JProperty prop_2 in model_material_config[this_material_config.Key])
+                {
+                    if (prop_2.Name == "map_d" || prop_2.Name == "map_Kd")
+                    {
+                        diffuse_map = prop_2.Value.ToString();
+                        break;
+                    }
+                }
+                bool has_alpha = common_functions.hasTransparency(importer_common.importDir() + diffuse_map);
+
+                //Parse MTL from JSON
                 foreach (JProperty material_prop in model_material_config[this_material_config.Key])
                 {
                     //Ignore engine config
                     if (material_prop.Name != "ThICC_COLLISION")
                     {
-                        //Fix alpha issue if it has somehow come up
-                        if (material_prop.Name == "d" && material_prop.Value.Value<string>() == "1.000000")
+                        //Auto calculated alpha
+                        if (material_prop.Name == "d")
                         {
-                            material_prop.Value = "0.999999";
+                            material_prop.Value = (has_alpha ? "0.999999" : "0.000000");
+                        }
+                        //Transparency hack
+                        if (material_prop.Name == "Tr")
+                        {
+                            if (has_alpha && material_prop.Value.ToString() == "0.000000")
+                            {
+                                material_prop.Value = "0.000001";
+                            }
                         }
                         //Fix filepath issue
                         if (material_prop.Name.Contains("map"))
@@ -151,7 +192,6 @@ namespace EditorTool
 
             //Make sure our MTL is uncommented in the OBJ
             int obj_index = 0;
-            string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
             foreach (string line in obj_file)
             {
                 if (line.Contains("mtllib"))
@@ -165,21 +205,6 @@ namespace EditorTool
                 obj_index++;
             }
             File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
-
-            //------
-
-            //If we're in edit mode, delete the old files
-            if (importer_common.getEditMode())
-            {
-                if (File.Exists(importer_common.fileName(importer_file.COLLMAP)))
-                {
-                    File.Delete(importer_common.fileName(importer_file.COLLMAP));
-                }
-                if (File.Exists(importer_common.fileName(importer_file.ENGINE_MESH)))
-                {
-                    File.Delete(importer_common.fileName(importer_file.ENGINE_MESH));
-                }
-            }
 
             //------
 
@@ -322,6 +347,8 @@ namespace EditorTool
             File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
 
             //------
+
+            Cursor.Current = Cursors.Default;
 
             //Done
             string final_confirmation = "Model imported with" + writeInfo + ".";
@@ -639,7 +666,7 @@ namespace EditorTool
         private void autoDetect_Click(object sender, EventArgs e)
         {
             //Confirmation
-            DialogResult areYouSure = MessageBox.Show("This process will auto-detect the best transparency and colision properties based on material metadata.\nThis will potentially overwrite existing configurations.\nAre you sure you wish to continue?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            DialogResult areYouSure = MessageBox.Show("This process will auto-detect the best collision properties based on material metadata.\nThis will potentially overwrite existing configurations.\nAre you sure you wish to continue?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (areYouSure != DialogResult.Yes)
             {
                 return;
@@ -676,21 +703,6 @@ namespace EditorTool
                 {
                     setCollisionParam(CollisionType.OFF_TRACK, this_token);
                 }
-
-                //Materials containing "nuki" usually have alpha
-                if (this_material_config.Key.ToUpper().Contains("NUKI"))
-                {
-                    this_token["d"] = "0.999999";
-                    this_token["Tr"] = "0.000001";
-                }
-                else
-                {
-                    this_token["d"] = "0.000000";
-                    this_token["Tr"] = "0.000000";
-                }
-
-                //Make everything opaque
-                //this_token["Tr"] = "0.000001"; //Does this screw up our alpha?
             }
         }
 

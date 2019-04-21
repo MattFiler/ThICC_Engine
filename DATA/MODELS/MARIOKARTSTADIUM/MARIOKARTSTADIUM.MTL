@@ -159,12 +159,12 @@ Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
+d 0.999999
 illum 2
 map_Kd ufc_RedLight_Alb.png
 map_Ke ufc_RedLight_emm.png
 map_emissive ufc_RedLight_emm.png
-Tr 0.000000
+Tr 0.000001
 map_Ks spec_placeholder.png
 map_Kn norm_placeholder.png
 norm norm_placeholder.png
@@ -748,13 +748,13 @@ Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
+d 0.999999
 illum 2
 map_Kd ufc_flower_Alb.png
 map_Ks ufc_flower_spm.png
 map_Kn ufc_flower_nrm.png
 norm ufc_flower_nrm.png
-Tr 0.000000
+Tr 0.000001
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png

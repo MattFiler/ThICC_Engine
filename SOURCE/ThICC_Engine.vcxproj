@@ -235,6 +235,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
+    <ClInclude Include="GameObjectShared.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameStateData.h" />
     <ClInclude Include="GiantMushroom.h" />
