@@ -44,6 +44,10 @@ void MenuScene::ExpensiveLoad() {
 void MenuScene::create2DObjects()
 {
 	m_background = new ImageGO2D("MAIN_MENU_TEMP");
+	m_state_desc = new Text2D("", true);
+	m_state_desc->SetPos(Vector2(498, 620));
+	m_state_desc->SetColour(Colors::Black);
+	m_state_desc->SetScale(0.5f);
 
 	//position map options
 	int index = 0;
@@ -52,10 +56,10 @@ void MenuScene::create2DObjects()
 
 		//Text
 		Text2D* map_name = new Text2D(a_map.name);
+		map_name->SetColour(inactive_colour);
 		if (index == 1) {
-			map_name->SetText("> " + map_name->GetText());
+			map_name->SetColour(active_colour);
 		}
-		map_name->SetColour(Colors::White);
 		map_name->SetPos(Vector2(209, 55 + (index * 47)));
 		m_mapTitles.push_back(map_name);
 
@@ -71,10 +75,10 @@ void MenuScene::create2DObjects()
 
 		//Text
 		Text2D* character_name = new Text2D(a_character.name);
+		character_name->SetColour(inactive_colour);
 		if (index == 1) {
-			character_name->SetText("> " + character_name->GetText());
+			character_name->SetColour(active_colour);
 		}
-		character_name->SetColour(Colors::White);
 		character_name->SetPos(Vector2(209, 55 + (index * 47)));
 		m_characterTitles.push_back(character_name);
 
@@ -90,10 +94,10 @@ void MenuScene::create2DObjects()
 
 		//Text
 		Text2D* vehicle_name = new Text2D(a_vehicle.name);
+		vehicle_name->SetColour(inactive_colour);
 		if (index == 1) {
-			vehicle_name->SetText("> " + vehicle_name->GetText());
+			vehicle_name->SetColour(active_colour);
 		}
-		vehicle_name->SetColour(Colors::White);
 		vehicle_name->SetPos(Vector2(209, 55 + (index * 47)));
 		m_vehicleTitles.push_back(vehicle_name);
 
@@ -108,6 +112,8 @@ void MenuScene::Update(DX::StepTimer const& timer)
 {
 	switch (m_menu_state) {
 		case menu_states::MAP_SELECT:
+			m_state_desc->SetText(m_localiser.getString("map_select"));
+
 			//Exit
 			if (m_keybinds.keyPressed("Quit"))
 			{
@@ -118,17 +124,17 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			if (m_keybinds.keyPressed("Down Arrow"))
 			{
 				if (highlighted_map < m_mapTitles.size() - 1) {
-					m_mapTitles.at(highlighted_map)->SetText(m_mapTitles.at(highlighted_map)->GetText().substr(2));
+					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
 					highlighted_map++;
-					m_mapTitles.at(highlighted_map)->SetText("> " + m_mapTitles.at(highlighted_map)->GetText());
+					m_mapTitles.at(highlighted_map)->SetColour(active_colour);
 				}
 			}
 			if (m_keybinds.keyPressed("Up Arrow"))
 			{
 				if (highlighted_map > 0) {
-					m_mapTitles.at(highlighted_map)->SetText(m_mapTitles.at(highlighted_map)->GetText().substr(2));
+					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
 					highlighted_map--;
-					m_mapTitles.at(highlighted_map)->SetText("> " + m_mapTitles.at(highlighted_map)->GetText());
+					m_mapTitles.at(highlighted_map)->SetColour(active_colour);
 				}
 			}
 
@@ -140,6 +146,8 @@ void MenuScene::Update(DX::StepTimer const& timer)
 
 			break;
 		case menu_states::CHARACTER_SELECT:
+			m_state_desc->SetText(m_localiser.getString("character_select"));
+
 			//Back to map select
 			if (m_keybinds.keyPressed("Quit"))
 			{
@@ -150,17 +158,17 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			if (m_keybinds.keyPressed("Down Arrow"))
 			{
 				if (highlighted_character < m_characterTitles.size() - 1) {
-					m_characterTitles.at(highlighted_character)->SetText(m_characterTitles.at(highlighted_character)->GetText().substr(2));
+					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
 					highlighted_character++;
-					m_characterTitles.at(highlighted_character)->SetText("> " + m_characterTitles.at(highlighted_character)->GetText());
+					m_characterTitles.at(highlighted_character)->SetColour(active_colour);
 				}
 			}
 			if (m_keybinds.keyPressed("Up Arrow"))
 			{
 				if (highlighted_character > 0) {
-					m_characterTitles.at(highlighted_character)->SetText(m_characterTitles.at(highlighted_character)->GetText().substr(2));
+					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
 					highlighted_character--;
-					m_characterTitles.at(highlighted_character)->SetText("> " + m_characterTitles.at(highlighted_character)->GetText());
+					m_characterTitles.at(highlighted_character)->SetColour(active_colour);
 				}
 			}
 
@@ -172,6 +180,8 @@ void MenuScene::Update(DX::StepTimer const& timer)
 
 			break;
 		case menu_states::VEHICLE_SELECT:
+			m_state_desc->SetText(m_localiser.getString("vehicle_select"));
+
 			//Back to character select
 			if (m_keybinds.keyPressed("Quit"))
 			{
@@ -182,17 +192,17 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			if (m_keybinds.keyPressed("Down Arrow"))
 			{
 				if (highlighted_vehicle < m_vehicleTitles.size() - 1) {
-					m_vehicleTitles.at(highlighted_vehicle)->SetText(m_vehicleTitles.at(highlighted_vehicle)->GetText().substr(2));
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
 					highlighted_vehicle++;
-					m_vehicleTitles.at(highlighted_vehicle)->SetText("> " + m_vehicleTitles.at(highlighted_vehicle)->GetText());
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(active_colour);
 				}
 			}
 			if (m_keybinds.keyPressed("Up Arrow"))
 			{
 				if (highlighted_vehicle > 0) {
-					m_vehicleTitles.at(highlighted_vehicle)->SetText(m_vehicleTitles.at(highlighted_vehicle)->GetText().substr(2));
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
 					highlighted_vehicle--;
-					m_vehicleTitles.at(highlighted_vehicle)->SetText("> " + m_vehicleTitles.at(highlighted_vehicle)->GetText());
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(active_colour);
 				}
 			}
 
@@ -214,6 +224,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
 	m_background->Render();
+	m_state_desc->Render();
 	switch (m_menu_state) {
 		case menu_states::MAP_SELECT:
 			m_mapPreviews.at(highlighted_map)->Render();

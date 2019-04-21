@@ -34,5 +34,5 @@ void Text2D::Render()
 
 	//Render
 	Locator::getRD()->m_2dFont->DrawString(Locator::getRD()->m_2dSpriteBatch.get(), m_wText.c_str(),
-		m_pos, m_colour, 0.f, m_origin);
+		m_pos, m_colour, 0.f, m_origin, m_scale);
 }

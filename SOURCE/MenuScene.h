@@ -34,6 +34,7 @@ private:
 
 	//Background
 	ImageGO2D* m_background = nullptr;
+	Text2D* m_state_desc = nullptr;
 
 	//Map select objects
 	int highlighted_map = 0;
@@ -57,6 +58,10 @@ private:
 
 	//Referenced stuff
 	SceneManager* m_scene_manager;
+
+	//Colours
+	XMVECTORF32 active_colour = Colors::White;
+	XMVECTORF32 inactive_colour = Colors::LightGray;
 
 	//Configs
 	json game_config;
