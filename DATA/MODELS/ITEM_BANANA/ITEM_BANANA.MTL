@@ -1,16 +1,16 @@
 ### CREATED BY THE ThICC TOOLKIT ###
 
 newmtl lambert2SG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-Ks 1.000000 1.000000 1.000000
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
-d 0.999999
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ItemBanana_Alb.png
 Tr 0.000000
-Ns 100.000000
 map_Ks spec_placeholder.png
 map_Kn norm_placeholder.png
 norm norm_placeholder.png
