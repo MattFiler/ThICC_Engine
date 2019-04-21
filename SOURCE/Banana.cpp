@@ -4,7 +4,7 @@
 #include "ItemData.h"
 #include <iostream>
 
-Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BANANA))
+Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BULLET_BILL))
 {
 	m_mesh->SetDrag(0.9f);
 	m_mesh->SetPhysicsOn(true);
