@@ -80,7 +80,6 @@ void MenuScene::create2DObjects()
 
 		//Image
 		a_character.preview_sprite->SetPos(Vector2(881, 285));
-		a_character.preview_sprite->CentreOrigin();
 		m_characterPreviews.push_back(a_character.preview_sprite);
 	}
 
@@ -100,7 +99,6 @@ void MenuScene::create2DObjects()
 
 		//Image
 		a_vehicle.preview_sprite->SetPos(Vector2(881, 285));
-		a_vehicle.preview_sprite->CentreOrigin();
 		m_vehiclePreviews.push_back(a_vehicle.preview_sprite);
 	}
 }
