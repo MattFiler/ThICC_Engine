@@ -736,5 +736,29 @@ namespace EditorTool
         {
             return text.Substring(0, 1).ToUpper() + text.Substring(1);
         }
+
+        /* Work out if an image has transparency */
+        public bool hasTransparency(string image_path)
+        {
+            if (!File.Exists(image_path))
+            {
+                return false;
+            }
+            using (var image = new Bitmap(image_path))
+            {
+                for (int x = 0; x < image.Width; x++)
+                {
+                    for (int y = 0; y < image.Height; y++)
+                    {
+                        var this_pixel = image.GetPixel(x, y);
+                        if (this_pixel.A != 255)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

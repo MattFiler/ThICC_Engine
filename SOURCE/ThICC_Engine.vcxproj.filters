@@ -124,9 +124,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
-    <ClCompile Include="SplashscreenScene.cpp">
-      <Filter>Game\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="GoldenMushroom.cpp">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClCompile>
@@ -315,9 +312,6 @@
     <ClInclude Include="AssetComp.h">
       <Filter>Engine Backend\AssetComps</Filter>
     </ClInclude>
-    <ClInclude Include="SplashscreenScene.h">
-      <Filter>Game\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="GoldenMushroom.h">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClInclude>
@@ -332,6 +326,9 @@
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>Game\Components\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectShared.h">
+      <Filter>Game\Shared Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -403,6 +400,9 @@
     </Filter>
     <Filter Include="Game\Components\Sound">
       <UniqueIdentifier>{5699aae9-37eb-4cc1-b06f-ac42c6a35060}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shared Data">
+      <UniqueIdentifier>{17ae1519-6a7e-4407-a589-5c18b93def3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

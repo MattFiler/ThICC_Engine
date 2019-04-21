@@ -51,9 +51,6 @@ namespace EditorTool
             //Emissive Colour (RGB)
             common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour);
 
-            //Alpha (0.5+ = has alpha)
-            hasAlpha.Checked = (material_config["d"].Value<float>() > 0.5f);
-
             //Transparency (1 = completely invisible)
             transparencySlider.Value = Convert.ToInt32(material_config["Tr"].Value<float>() * 10);
             transparencyValue.Text = sliderToString(transparencySlider, 10);
@@ -70,12 +67,20 @@ namespace EditorTool
 
             //Specular Texture
             specularMap.Text = material_config["map_Ks"].Value<string>();
+            if (specularMap.Text == "spec_placeholder.png")
+            {
+                specularMap.Text = "";
+            }
 
             //Normal Texture
             normalMap.Text = material_config["map_Kn"].Value<string>();
             if (normalMap.Text == "")
             {
                 normalMap.Text = material_config["norm"].Value<string>();
+            }
+            if (normalMap.Text == "norm_placeholder.png")
+            {
+                normalMap.Text = "";
             }
 
             //Emissive Texture
@@ -84,12 +89,20 @@ namespace EditorTool
             {
                 emissiveMap.Text = material_config["map_emissive"].Value<string>();
             }
+            if (emissiveMap.Text == "emm_placeholder.png")
+            {
+                emissiveMap.Text = "";
+            }
 
             //RMA Texture
             RMAMap.Text = material_config["map_RMA"].Value<string>();
             if (RMAMap.Text == "")
             {
                 RMAMap.Text = material_config["map_occlusionRoughnessMetallic"].Value<string>();
+            }
+            if (RMAMap.Text == "rma_placeholder.png")
+            {
+                RMAMap.Text = "";
             }
 
             /* Engine Config */
@@ -216,7 +229,8 @@ namespace EditorTool
             /* Maybe just resort back to how the auto-detect button handles this? */
 
             //Alpha (0.5+ = has alpha)
-            material_config["d"] = (hasAlpha.Checked ? "0.999999" : "0.000000");
+            //material_config["d"] = (common_functions.hasTransparency(diffuseMap.Text) ? "0.999999" : "0.000000");
+            /* ^ this is now done later to save performance */
 
             //Transparency (1 = completely invisible)
             material_config["Tr"] = (transparencySlider.Value / 10).ToString("0.000000");

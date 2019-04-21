@@ -239,17 +239,11 @@ void DeviceResources::CreateDeviceResources()
         throw std::exception("CreateEvent");
     }
 
-	//Fill out our resource descriptor
-	Locator::getRD()->m_resourceDescriptors = std::make_unique<DescriptorHeap>(m_rd.m_d3dDevice.Get(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
-		100);
-
 	//2D resource descriptor
 	Locator::getRD()->m_2dResourceDescriptors = std::make_unique<DescriptorHeap>(m_rd.m_d3dDevice.Get(),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
 		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
-		100);
+		1024);
 }
 
 // These resources need to be recreated every time the window size is changed.
@@ -274,6 +268,10 @@ void DeviceResources::CreateWindowSizeDependentResources()
     UINT backBufferWidth = std::max<UINT>(m_rd.m_outputSize.right - m_rd.m_outputSize.left, 1);
     UINT backBufferHeight = std::max<UINT>(m_rd.m_outputSize.bottom - m_rd.m_outputSize.top, 1);
     DXGI_FORMAT backBufferFormat = NoSRGB(m_rd.m_backBufferFormat);
+
+	//Save sizes
+	m_rd.m_window_width = backBufferWidth;
+	m_rd.m_window_height = backBufferHeight;
 
     // If the swap chain already exists, resize it, otherwise create one.
     if (m_rd.m_swapChain)

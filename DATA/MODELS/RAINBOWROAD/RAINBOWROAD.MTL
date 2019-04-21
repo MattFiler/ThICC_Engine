@@ -1,0 +1,364 @@
+### CREATED BY THE ThICC TOOLKIT ###
+
+newmtl M_Kankyo_star.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd M_Kankyo_star.png
+map_Ka M_Kankyo_star.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl M_Kankyo_star_ncl1_1.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd M_Kankyo_star.png
+map_Ka M_Kankyo_star.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl arrowShMrr.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.999999
+illum 2
+map_Kd arrowShMrr.png
+map_Ka arrowShMrr.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl ef_rainbowRed2.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd ef_rainbowRed2.png
+map_Ka ef_rainbowRed2.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl env01.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd env01.png
+map_Ka env01.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl luminous.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.999999
+illum 2
+map_Kd luminous.png
+map_Ka luminous.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl luminous_ncl1_1.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.999999
+illum 2
+map_Kd luminous.png
+map_Ka luminous.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl r_arrow03.002
+Ns 10.000000
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd r_arrow03.png
+map_Ka r_arrow03.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl r_earth02.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd r_earth02.png
+map_Ka r_earth02.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl r_ring01.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.999999
+illum 2
+map_Kd r_ring01.png
+map_Ka r_ring01.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl r_road01.005
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd r_road01.png
+map_Ka r_road01.png
+refl r_warpgrad.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl r_road01_ncl1_1.004
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd r_road01.png
+map_Ka r_road01.png
+refl r_warpgrad.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl r_saku03.002
+Ns 10.000000
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.999999
+illum 2
+map_Kd r_saku03.png
+map_Ka r_saku03.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl r_starling01g.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd r_starling01g.png
+map_Ka r_starling01g.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl r_warp_particle.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.999999
+illum 2
+map_Kd r_warp_particle.png
+map_Ka r_warp_particle.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl r_warpgrad.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd r_warpgrad.png
+map_Ka r_warpgrad.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl tex_set03.002
+Ns 10.000000
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.000000
+illum 2
+map_Kd tex_set03.png
+map_Ka tex_set03.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl warp01.002
+Ns 9.803922
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.999999
+illum 2
+map_Kd warp01.png
+map_Ka warp01.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+

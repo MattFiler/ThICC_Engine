@@ -7,6 +7,7 @@ struct ThICC_GameStateData
 	float m_dt;
 
 	//Player State Data
-	int charecter_selected[4] = { 0,0,0,0 };
+	int character_selected[4] = { 0,0,0,0 };
+	int vehicle_selected[4] = { 0,0,0,0 };
 
 };

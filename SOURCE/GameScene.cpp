@@ -8,6 +8,7 @@
 #include "AudioManager.h"
 #include "DebugMarker.h"
 #include "Explosion.h"
+#include "GameObjectShared.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
@@ -61,12 +62,24 @@ bool GameScene::Load()
 
 /* Populate the expensive things! */
 void GameScene::ExpensiveLoad() {
+	//Update characters
+	for (int i = 0; i < game_config["player_count"]; i++)
+	{
+		player[i]->Reload(
+			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
+			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i])
+		);
+	}
+
+	//Load in
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
+		//Load meshes
 		(*it)->Load();
 		if (dynamic_cast<Player*>(*it)) {
-			dynamic_cast<Player*>(*it)->GetAnimationMesh()->Load();
+			dynamic_cast<Player*>(*it)->ExpensiveLoad();
 		}
+		//Load collision info
 		if (dynamic_cast<Track*>(*it)) {
 			dynamic_cast<Track*>(*it)->LoadCollision();
 		}
@@ -79,6 +92,7 @@ void GameScene::ExpensiveLoad() {
 void GameScene::ExpensiveUnload() {
 	Vector3 suitable_spawn = Vector3(0, 0, 0);
 
+	//Unload meshes
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
 		(*it)->Reset();
@@ -176,7 +190,11 @@ void GameScene::create3DObjects()
 
 		//Create a player and position on track
 		using std::placeholders::_1;
-		player[i] = new Player("Knuckles_Kart", i, std::bind(&GameScene::CreateItem, this, _1));
+		player[i] = new Player(
+			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
+			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i]),
+			i, std::bind(&GameScene::CreateItem, this, _1)
+		);
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		player[i]->setMass(10);
 		m_3DObjects.push_back(player[i]);

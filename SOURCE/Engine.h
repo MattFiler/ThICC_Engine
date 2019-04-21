@@ -94,30 +94,15 @@ private:
 
 	//Core resources (these can probably be cut back a bit, since we only really use them for the tonemap now)
 	std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
-	std::unique_ptr<DirectX::DescriptorPile> m_resourceDescriptors;
 	std::unique_ptr<DirectX::DescriptorHeap> m_renderDescriptors;
+
+	int tonemapIndex = -1;
 
 	//Our tonemap
 	std::unique_ptr<DirectX::ToneMapPostProcess> m_toneMapACESFilmic;
 
-	//Debug text
+	//Debug text for FPS
 	Text2D* debug_text = nullptr;
-
-	//Internal core resource descriptors (most of these are unused now)
-	enum Descriptors
-	{
-		ConsolasFont,
-		ComicFont,
-		SceneTex,
-		RadianceIBL1,
-		RadianceIBL2,
-		RadianceIBL3,
-		IrradianceIBL1,
-		IrradianceIBL2,
-		IrradianceIBL3,
-		Reserve,
-		Count = 1024
-	};
 
 	//Used for internal switches between scene types
 	enum RTVDescriptors

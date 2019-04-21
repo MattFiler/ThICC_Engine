@@ -5,6 +5,7 @@
 #include "LocalisationManager.h"
 #include "ImageGO2D.h"
 #include "AssetCompPch.h"
+#include "GameObjectShared.h"
 #include <vector>
 
 class ThICC_Game {
@@ -27,7 +28,5 @@ private:
 	json character_config;
 	json vehicle_config;
 
-	std::vector<MapInfo> map_instances;
-	std::vector<VehicleInfo> vehicle_instances;
-	std::vector<CharacterInfo> character_instances;
+	GameObjectShared m_go_shared;
 };

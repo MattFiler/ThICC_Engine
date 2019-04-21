@@ -12,19 +12,23 @@ struct LocalisationManager
 	void configure(const std::string& language)
 	{
 		language_definition = language;
+		std::transform(language_definition.begin(), language_definition.end(), language_definition.begin(), ::toupper);
+
 		std::ifstream i(m_filepath.generateConfigFilepath("Localisation", m_filepath.CONFIG));
 		language_config << i;
-		language_config = language_config[language];
+		language_config = language_config[language_definition];
 	}
 	std::string getString(const std::string& id)
 	{
-		if (language_config[id].is_string())
+		std::string this_id = id;
+		std::transform(this_id.begin(), this_id.end(), this_id.begin(), ::toupper);
+		if (language_config[this_id].is_string())
 		{
-			return language_config[id];
+			return language_config[this_id];
 		}
 		//Instead of a throw, fail nicely by logging and printing the requested string id.
-		DebugText::print("COULDN'T FIND A LOCALISATION FOR '#" + id + "'");
-		return "#" + id;
+		DebugText::print("COULDN'T FIND A LOCALISATION FOR '#" + this_id + "'");
+		return "#" + this_id;
 	}
 	std::string getLanguage() {
 		return language_definition;

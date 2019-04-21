@@ -9,7 +9,7 @@
 
 extern void ExitGame();
 
-Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_filename), CreateItem(_createItemFunction)
+Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character.model), CreateItem(_createItemFunction)
 {
 	m_RD = Locator::getRD();
 	SetDrag(0.7);
@@ -25,9 +25,9 @@ Player::Player(string _filename, int _playerID, std::function<Item*(ItemType)> _
 
 	// Don't render this mesh, render a second one instead
 	m_shouldRender = false;
-	m_displayedMesh = std::make_unique<AnimationMesh>(_filename);
+	m_animationMesh = std::make_unique<AnimationMesh>(_character.model);
 
-	m_move = std::make_unique<ControlledMovement>(this, m_displayedMesh.get());
+	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
 	for (int i = 0; i < (int)m_posHistoryLength / m_posHistoryInterval; i++)
 	{
@@ -39,6 +39,33 @@ Player::~Player()
 {
 	delete m_imgItem;
 	m_imgItem = nullptr;
+}
+
+
+void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
+
+	std::ifstream i(m_filepath.generateConfigFilepath(_vehicle.model, m_filepath.MODEL));
+	json m_model_config_vehicle;
+	m_model_config_vehicle << i;
+
+	AnimationMesh* old_animationMesh = m_animationMesh.release();
+	m_animationMesh = std::make_unique<AnimationMesh>(_vehicle.model);
+	SetScale(m_model_config_vehicle["modelscale"]);
+
+	std::ifstream x(m_filepath.generateConfigFilepath(_character.model, m_filepath.MODEL));
+	json m_model_config_character;
+	m_model_config_character << x;
+
+	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character.model);
+	new_model->SetScale(m_model_config_character["modelscale"]);
+	m_animationMesh->AddModel(new_model, Vector3(0,0,0));
+
+	m_animationMesh->Load();
+
+	ControlledMovement* old_movement = m_move.release();
+	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
+
+	//Update TrackMagnet here too?
 }
 
 
@@ -71,7 +98,7 @@ void Player::setItemInInventory(ItemType _item) {
 
 void Player::Render()
 {
-	m_displayedMesh->Render();
+	m_animationMesh->Render();
 	SDKMeshGO3D::Render();
 
 	if (m_ai)
@@ -397,14 +424,14 @@ void Player::setGamePad(bool _state)
 	m_controlsActive = _state;
 
 	// TEST CODE //
-	/*
+	
 	if (m_playerID == 0)
 	{
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);
 		Locator::getAIScheduler()->AddAI(m_ai.get());
 	}
-	*/
+	
 	// TEST CODE //
 }
 

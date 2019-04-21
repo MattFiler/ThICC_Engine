@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "AudioManager.h"
 #include "Text2D.h"
+#include "GameObjectShared.h"
 #include <iostream>
 #include <experimental/filesystem>
 
@@ -20,7 +21,11 @@ MenuScene::MenuScene()
 /* Destroy! */
 MenuScene::~MenuScene()
 {
-	m_2DObjects.clear();
+	m_mapTitles.clear();
+	m_mapPreviews.clear();
+	m_characterTitles.clear();
+	m_characterPreviews.clear();
+	delete m_background;
 }
 
 /* Load inexpensive things and create the objects for expensive things we will populate when required */
@@ -30,201 +35,243 @@ bool MenuScene::Load()
 	return true;
 }
 
+/* Reset on load */
+void MenuScene::ExpensiveLoad() {
+	m_menu_state = menu_states::SPLASH;
+}
+
 /* Create all 2D objects for the scene */
 void MenuScene::create2DObjects()
 {
-	ImageGO2D* splash_screen = new ImageGO2D("MENU_SPLASHSCREEN");
-	m_2DObjects.push_back(splash_screen);
+	//Splashscreen objects
+	m_splash_bg = new ImageGO2D("WHITE_720");
+	m_logo = new ImageGO2D("engine_logo_white_720");
+	m_logo->SetScale(Vector2(0.3, 0.3));
+	m_logo->SetPos(Vector2(Locator::getRD()->m_window_width / 2.f, Locator::getRD()->m_window_height / 2.f));
+	m_logo->CentreOrigin();
 
-	//ImageGO2D* lobby_screen = new ImageGO2D("MENU_LOBBY");
-	//lobby_screen->SetPos(Vector2(0, -720));
-	//m_2DObjects.push_back(lobby_screen);
+	//Main menu objects
+	m_background = new ImageGO2D("MAIN_MENU_TEMP");
+	m_state_desc = new Text2D("", true);
+	m_state_desc->SetPos(Vector2(498, 620));
+	m_state_desc->SetColour(Colors::Black);
+	m_state_desc->SetScale(0.5f);
 
-	//Charecter images
-	//initCharacterImages();
+	//position map options
+	int index = 0;
+	for (MapInfo a_map : Locator::getGOS()->map_instances) {
+		index++;
 
-	//debug text
-	Text2D* m_enterMenu = new Text2D("CHARACTER SELECT DISABLED!");
-	m_enterMenu->SetColour(Colors::Black);
-	m_2DObjects.push_back(m_enterMenu);
+		//Text
+		Text2D* map_name = new Text2D(a_map.name);
+		map_name->SetColour(inactive_colour);
+		if (index == 1) {
+			map_name->SetColour(active_colour);
+		}
+		map_name->SetPos(Vector2(209, 55 + (index * 47)));
+		m_mapTitles.push_back(map_name);
+
+		//Image
+		a_map.preview_sprite->SetPos(Vector2(812, 279));
+		m_mapPreviews.push_back(a_map.preview_sprite);
+	}
+
+	//position character options
+	index = 0;
+	for (CharacterInfo a_character : Locator::getGOS()->character_instances) {
+		index++;
+
+		//Text
+		Text2D* character_name = new Text2D(a_character.name);
+		character_name->SetColour(inactive_colour);
+		if (index == 1) {
+			character_name->SetColour(active_colour);
+		}
+		character_name->SetPos(Vector2(209, 55 + (index * 47)));
+		m_characterTitles.push_back(character_name);
+
+		//Image
+		a_character.preview_sprite->SetPos(Vector2(881, 285));
+		m_characterPreviews.push_back(a_character.preview_sprite);
+	}
+
+	//position vehicle options
+	index = 0;
+	for (VehicleInfo a_vehicle : Locator::getGOS()->vehicle_instances) {
+		index++;
+
+		//Text
+		Text2D* vehicle_name = new Text2D(a_vehicle.name);
+		vehicle_name->SetColour(inactive_colour);
+		if (index == 1) {
+			vehicle_name->SetColour(active_colour);
+		}
+		vehicle_name->SetPos(Vector2(209, 55 + (index * 47)));
+		m_vehicleTitles.push_back(vehicle_name);
+
+		//Image
+		a_vehicle.preview_sprite->SetPos(Vector2(881, 285));
+		m_vehiclePreviews.push_back(a_vehicle.preview_sprite);
+	}
 }
 
 /* Update the scene */
 void MenuScene::Update(DX::StepTimer const& timer)
 {
-	if (m_keybinds.keyPressed("Quit"))
-	{
-		ExitGame();
-	}
-	else if (Locator::getID()->m_keyboardState.Enter || Locator::getID()->m_gamePadState[0].IsStartPressed())
-	{
-		Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
-		m_scene_manager->setCurrentScene(Scenes::GAMESCENE);
-	}
-
-	/*
-	if (game_start)
-	{
-		Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TITLE_START);
-		game_start = false;
-	}
-
-	//in splash screen
-	enterPlayerLobby();
-
-	if (m_menu_state == States::NOSTATE)
-	{
-		timeout -= Locator::getGSD()->m_dt;
-
-		if (timeout < 0 && intro_music_start)
-		{
-			Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TTLE_LOOP);
-			intro_music_start = false;
-		}
-	}
-	//in lobby
-	else if (m_menu_state == States::LOBBY)
-	{
-		for (int i = 0; i < 4; ++i)
-		{
-			if (m_charTimeout[i] > 0)
-			{
-				m_charTimeout[i] -= Locator::getGSD()->m_dt;
+	switch (m_menu_state) {
+		case menu_states::SPLASH:
+			//Animate logo over time
+			m_logo->SetScale(Vector2(0.3 + (m_timer / 30), 0.3 + (m_timer / 30)));
+			m_timer += (float)timer.GetElapsedSeconds();
+			if (m_timer > m_timeout) {
+				m_menu_state = menu_states::MAP_SELECT;
 			}
-		}
-		playerJoin();
-	}*/
 
-	for (std::vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		(*it)->Tick();
-	}
+			//Allow skip
+			if (m_keybinds.keyPressed("Activate"))
+			{
+				m_menu_state = menu_states::MAP_SELECT;
+			}
 
-	if (m_keybinds.keyPressed("Load Debug Scene"))
-	{
-		Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
-		m_scene_manager->setCurrentScene(Scenes::GAMESCENE+1);
+			break;
+		case menu_states::MAP_SELECT:
+			m_state_desc->SetText(m_localiser.getString("map_select"));
+
+			//Exit
+			if (m_keybinds.keyPressed("Quit"))
+			{
+				ExitGame();
+			}
+
+			//Change map selection
+			if (m_keybinds.keyPressed("Down Arrow"))
+			{
+				if (highlighted_map < m_mapTitles.size() - 1) {
+					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
+					highlighted_map++;
+					m_mapTitles.at(highlighted_map)->SetColour(active_colour);
+				}
+			}
+			if (m_keybinds.keyPressed("Up Arrow"))
+			{
+				if (highlighted_map > 0) {
+					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
+					highlighted_map--;
+					m_mapTitles.at(highlighted_map)->SetColour(active_colour);
+				}
+			}
+
+			//Change to character select
+			if (m_keybinds.keyPressed("Activate"))
+			{
+				m_menu_state = menu_states::CHARACTER_SELECT;
+			}
+
+			break;
+		case menu_states::CHARACTER_SELECT:
+			m_state_desc->SetText(m_localiser.getString("character_select"));
+
+			//Back to map select
+			if (m_keybinds.keyPressed("Quit"))
+			{
+				m_menu_state = menu_states::MAP_SELECT;
+			}
+
+			//Change character selection
+			if (m_keybinds.keyPressed("Down Arrow"))
+			{
+				if (highlighted_character < m_characterTitles.size() - 1) {
+					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
+					highlighted_character++;
+					m_characterTitles.at(highlighted_character)->SetColour(active_colour);
+				}
+			}
+			if (m_keybinds.keyPressed("Up Arrow"))
+			{
+				if (highlighted_character > 0) {
+					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
+					highlighted_character--;
+					m_characterTitles.at(highlighted_character)->SetColour(active_colour);
+				}
+			}
+
+			//Go to vehicle select
+			if (m_keybinds.keyPressed("Activate"))
+			{
+				m_menu_state = menu_states::VEHICLE_SELECT;
+			}
+
+			break;
+		case menu_states::VEHICLE_SELECT:
+			m_state_desc->SetText(m_localiser.getString("vehicle_select"));
+
+			//Back to character select
+			if (m_keybinds.keyPressed("Quit"))
+			{
+				m_menu_state = menu_states::CHARACTER_SELECT;
+			}
+
+			//Change vehicle selection
+			if (m_keybinds.keyPressed("Down Arrow"))
+			{
+				if (highlighted_vehicle < m_vehicleTitles.size() - 1) {
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
+					highlighted_vehicle++;
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(active_colour);
+				}
+			}
+			if (m_keybinds.keyPressed("Up Arrow"))
+			{
+				if (highlighted_vehicle > 0) {
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
+					highlighted_vehicle--;
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(active_colour);
+				}
+			}
+
+			//Load selected map with character choices
+			if (m_keybinds.keyPressed("Activate"))
+			{
+				Locator::getGSD()->character_selected[0] = highlighted_character; //We only support P1 choices atm!
+				Locator::getGSD()->vehicle_selected[0] = highlighted_vehicle;
+
+				Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
+				m_scene_manager->setCurrentScene(Scenes::GAMESCENE + highlighted_map);
+			}
+
+			break;
 	}
 }
 
 /* Render the 2D scene */
 void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
-	for (std::vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-	{
-		(*it)->Render();
+	if (m_menu_state == menu_states::SPLASH) {
+		m_splash_bg->Render();
+		m_logo->Render();
+		return;
 	}
-}
 
-/* Player enters into the "lobby" */
-void MenuScene::enterPlayerLobby()
-{
-	if (Locator::getID()->m_gamePadState[0].IsConnected())
-	{
-		if (Locator::getID()->m_gamePadState[0].IsAPressed() && m_menu_state == States::NOSTATE)
-		{
-			m_menu_state = States::LOBBY;
-			m_2DObjects[1]->SetPos(Vector2(0, -720));
-			m_2DObjects[2]->SetPos(Vector2(0, 0));
-			//m_character_images[0][0]->SetPos(Vector2(200, 200));
-			Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::TTLE_LOOP)->Stop();
-			Locator::getAudio()->Play(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP);
-		}
-
-		if (Locator::getID()->m_gamePadState[0].IsBPressed() && m_menu_state == States::LOBBY)
-		{
-			intro_music_start = true;
-			timeout = 1.2f;
-			game_start = true;
-			Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
-			m_menu_state = States::NOSTATE;
-			m_2DObjects[1]->SetPos(Vector2(0, 0));
-			m_2DObjects[2]->SetPos(Vector2(0, -720));
-			resetCharacterImagePos();
-		}
-	}
-}
-
-/* Player joins the "lobby" */
-void MenuScene::playerJoin()
-{
-	for (int i = 0; i < 4; ++i)
-	{
-		if (Locator::getID()->m_gamePadState[i].IsConnected())
-		{
-			if (Locator::getID()->m_gamePadState[i].IsAPressed() && m_menu_state == States::LOBBY)
-			{
-				//set player charecter selection image
-				m_character_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));
+	m_background->Render();
+	m_state_desc->Render();
+	switch (m_menu_state) {
+		case menu_states::MAP_SELECT:
+			m_mapPreviews.at(highlighted_map)->Render();
+			for (std::vector<Text2D*>::iterator it = m_mapTitles.begin(); it != m_mapTitles.end(); it++) {
+				(*it)->Render();
 			}
-
-			if (m_charTimeout[i] <= 0) // stops continuous flipping of charecter selection
-			{
-				if (Locator::getID()->m_gamePadState[i].thumbSticks.leftX > 0)
-				{
-					m_character_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(0, -500)); //set old image pos
-					++Locator::getGSD()->charecter_selected[i];
-
-					if (Locator::getGSD()->charecter_selected[i] > 3)
-					{
-						Locator::getGSD()->charecter_selected[i] = 0;
-					}
-					Locator::getAudio()->Play(SOUND_TYPE::CHARACTER_SEL, Locator::getGSD()->charecter_selected[i]);
-					m_charTimeout[i] = 0.3f; // set charecter selection timeout
-					m_character_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
-				}
-
-				if (Locator::getID()->m_gamePadState[i].thumbSticks.leftX < 0)
-				{
-					m_character_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(0, -500)); //set old image pos
-					--Locator::getGSD()->charecter_selected[i];
-					if (Locator::getGSD()->charecter_selected[i] < 0)
-					{
-						m_2DObjects[3 + i]->SetPos(Vector2(0, -500));//set old image pos
-						Locator::getGSD()->charecter_selected[i] = 3;
-					}
-					Locator::getAudio()->Play(SOUND_TYPE::CHARACTER_SEL, Locator::getGSD()->charecter_selected[i]);
-					m_charTimeout[i] = 0.2f; // set charecter selection timeout
-					m_character_images[i][Locator::getGSD()->charecter_selected[i]]->SetPos(Vector2(50 + (i * 300), 100));//set new image pos
-				}
+			break;
+		case menu_states::CHARACTER_SELECT:
+			m_characterPreviews.at(highlighted_character)->Render();
+			for (std::vector<Text2D*>::iterator it = m_characterTitles.begin(); it != m_characterTitles.end(); it++) {
+				(*it)->Render();
 			}
-		}
+			break;
+		case menu_states::VEHICLE_SELECT:
+			m_vehiclePreviews.at(highlighted_vehicle)->Render();
+			for (std::vector<Text2D*>::iterator it = m_vehicleTitles.begin(); it != m_vehicleTitles.end(); it++) {
+				(*it)->Render();
+			}
+			break;
 	}
 }
-
-/* Initialise the images for each character */
-void MenuScene::initCharacterImages()
-{
-	for (int i = 0; i < 4; ++i)
-	{
-		m_character_images[i][0] = new ImageGO2D("CHARACTER_MARIO");
-		m_character_images[i][0]->SetPos(Vector2(0, -500));
-		m_character_images[i][1] = new ImageGO2D("CHARACTER_BOWSER");
-		m_character_images[i][1]->SetPos(Vector2(0, -500));
-		m_character_images[i][2] = new ImageGO2D("CHARACTER_PEACH");
-		m_character_images[i][2]->SetPos(Vector2(0, -500));
-		m_character_images[i][3] = new ImageGO2D("CHARACTER_WALUIGI");
-		m_character_images[i][3]->SetPos(Vector2(0, -500));
-	}
-
-	for (int i = 0; i < 4; ++i)
-	{
-		for (int j = 0; j < 4; ++j)
-		{
-			m_2DObjects.push_back(m_character_images[i][j]);
-		}
-	}
-}
-
-/* reset the position of each character image */
-void MenuScene::resetCharacterImagePos()
-{
-	for (int i = 0; i < 4; ++i)
-	{
-		m_character_images[i][0]->SetPos(Vector2(0, -500));
-		m_character_images[i][1]->SetPos(Vector2(0, -500));
-		m_character_images[i][2]->SetPos(Vector2(0, -500));
-		m_character_images[i][3]->SetPos(Vector2(0, -500));
-	}
-}
-

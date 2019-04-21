@@ -117,7 +117,7 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	Locator::setupItemData(m_probabilities);
 
 	//Setup debug text
-	debug_text = new Text2D("");
+	debug_text = new Text2D("", true);
 	debug_text->SetPos(Vector2(50, 50));
 	debug_text->SetColour(Colors::Red);
 
@@ -277,7 +277,7 @@ void ThICC_Engine::Render()
 	commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, nullptr);
 
 	// Process our tone map
-	ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
+	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_2dResourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
 	commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 	m_toneMapACESFilmic->Process(commandList);
 
@@ -367,20 +367,17 @@ void ThICC_Engine::CreateDeviceDependentResources()
 {
 	auto device = m_device_data.m_deviceResources->GetD3DDevice();
 
-	//Create our core graphics resources (the count of these can probs be reduced to save a bit of memory)
+	//Create our core render graphics resources
 	m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
-	m_resourceDescriptors = std::make_unique<DescriptorPile>(device,
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
-		Descriptors::Count,
-		Descriptors::Reserve);
 	m_renderDescriptors = std::make_unique<DescriptorHeap>(device,
 		D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
 		D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
 		RTVDescriptors::RTVCount);
 
 	//Setup HDR scene
-	m_device_data.m_hdrScene->SetDevice(device, m_resourceDescriptors->GetCpuHandle(Descriptors::SceneTex), m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene));
+	tonemapIndex = Locator::getRD()->m_resourceCount;
+	Locator::getRD()->m_resourceCount++;
+	m_device_data.m_hdrScene->SetDevice(device, Locator::getRD()->m_2dResourceDescriptors->GetCpuHandle(tonemapIndex), m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene));
 
 	//Setup states
 	Locator::getRD()->m_states = std::make_unique<CommonStates>(device);
@@ -390,7 +387,7 @@ void ThICC_Engine::CreateDeviceDependentResources()
 
 	//Setup tone map
 	m_toneMapACESFilmic = std::make_unique<ToneMapPostProcess>(device, rtState, ToneMapPostProcess::ACESFilmic, ToneMapPostProcess::SRGB);
-	m_toneMapACESFilmic->SetHDRSourceTexture(m_resourceDescriptors->GetGpuHandle(Descriptors::SceneTex));
+	m_toneMapACESFilmic->SetHDRSourceTexture(Locator::getRD()->m_2dResourceDescriptors->GetGpuHandle(tonemapIndex));
 
 	//HDR state format (required?)
 	RenderTargetState hdrState(m_device_data.m_hdrScene->GetFormat(), m_device_data.m_deviceResources->GetDepthBufferFormat());
@@ -417,7 +414,7 @@ void ThICC_Engine::OnDeviceLost()
 
 	m_toneMapACESFilmic.reset();
 
-	m_resourceDescriptors.reset();
+	Locator::getRD()->m_2dResourceDescriptors.reset();
 	m_renderDescriptors.reset();
 
 	m_device_data.m_hdrScene->ReleaseDevice();

@@ -14,8 +14,8 @@ public:
 
 	void UseDrift(bool _flag) { m_useDrift = _flag;};
 private:
-	bool FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int& _iterations, int _localIterations);
-	int FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorld, const Vector3& _startPos, Vector3& _endPos, Vector3 _direction, const int& _steps);
+	bool FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int _iterations, bool _allowTurn);
+	int FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorld, const Vector3& _startPos, Vector3& _endPos, Vector3 _direction, const int& _steps, const int& _iteration);
 	int GetStepsForDirection(Track* _track, Vector3 _direction);
 
 	PhysModel* m_model = nullptr;

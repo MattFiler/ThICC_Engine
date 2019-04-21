@@ -3,13 +3,17 @@
 #include <codecvt>
 
 /* Create */
-Text2D::Text2D(std::string _text)
+Text2D::Text2D(std::string _text, bool _middle)
 {
 	SetText(_text);
 
-	//Start in centre as default
-	m_pos.x = Locator::getRD()->m_window_width / 2.f;
-	m_pos.y = Locator::getRD()->m_window_height / 2.f;
+	middle_origin = _middle;
+
+	if (middle_origin) {
+		//Start in centre as default
+		m_pos.x = Locator::getRD()->m_window_width / 2.f;
+		m_pos.y = Locator::getRD()->m_window_height / 2.f;
+	}
 }
 
 /* Set the text to render */
@@ -23,10 +27,12 @@ void Text2D::SetText(std::string _text)
 /* Render text */
 void Text2D::Render()
 {
-	//Keep our origin up to date
-	m_origin = Locator::getRD()->m_2dFont->MeasureString(m_wText.c_str()) / 2.f;
+	if (middle_origin) {
+		//Keep our origin up to date
+		m_origin = Locator::getRD()->m_2dFont->MeasureString(m_wText.c_str()) / 2.f;
+	}
 
 	//Render
 	Locator::getRD()->m_2dFont->DrawString(Locator::getRD()->m_2dSpriteBatch.get(), m_wText.c_str(),
-		m_pos, m_colour, 0.f, m_origin);
+		m_pos, m_colour, 0.f, m_origin, m_scale);
 }

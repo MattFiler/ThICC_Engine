@@ -26,6 +26,7 @@ public:
 	void SetOrigin(Vector2 _origin) { m_origin = _origin; }
 	void SetOri(float _ori) { m_orientation = _ori; }
 	void SetColour(XMVECTORF32 _col) { m_colour = _col; }
+	void SetScale(float _scale) { m_scale = _scale * Vector2::One; }
 	void SetScale(Vector2 _scale) { m_scale = _scale; }
 
 

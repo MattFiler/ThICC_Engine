@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "RenderData.h"
 
-#include "SplashscreenScene.h"
 #include "MenuScene.h"
 #include "GameScene.h"
 
@@ -12,20 +11,19 @@ void ThICC_Game::Initialize() {
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
 
+	//Share out object data
+	Locator::setupGOS(&m_go_shared);
+
 	//Send out scene manager instance for scenes to grab
 	Locator::setupSM(&m_scene_manager);
 	m_scene_manager.Initialize();
-
-	//Create the scenes
-	m_scene_manager.addScene(new SplashscreenScene(), (int)Scenes::SPLASHSCREEN);
-	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
 
 	//Load all character data
 	std::ifstream p(m_filepath.generateFilepath("CHARACTER_CONFIG", m_filepath.CONFIG));
 	character_config << p;
 	int index = 0;
 	for (auto& element : character_config) {
-		character_instances.emplace_back(element);
+		m_go_shared.character_instances.emplace_back(element);
 		index++;
 	}
 
@@ -34,7 +32,7 @@ void ThICC_Game::Initialize() {
 	vehicle_config << k;
 	index = 0;
 	for (auto& element : vehicle_config) {
-		vehicle_instances.emplace_back(element);
+		m_go_shared.vehicle_instances.emplace_back(element);
 		index++;
 	}
 
@@ -44,14 +42,17 @@ void ThICC_Game::Initialize() {
 	index = 0;
 	for (auto& element : map_config) {
 		//Store map info
-		map_instances.emplace_back(element, index);
+		m_go_shared.map_instances.emplace_back(element, index);
 		//Create scene
-		m_scene_manager.addScene(new GameScene(map_instances.at(index)), (int)Scenes::GAMESCENE + index);
+		m_scene_manager.addScene(new GameScene(m_go_shared.map_instances.at(index)), (int)Scenes::GAMESCENE + index);
 		index++;
 	}
 
+	//Create the scenes
+	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
+
 	//Set our default scene
-	m_scene_manager.setCurrentScene(Scenes::SPLASHSCREEN, true);
+	m_scene_manager.setCurrentScene(Scenes::MENUSCENE, true);
 }
 
 /* Update loop */
