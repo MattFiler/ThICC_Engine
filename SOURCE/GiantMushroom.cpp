@@ -35,6 +35,7 @@ void GiantMushroom::Tick()
 			break;
 
 		case GiantMushroom::SHRINK:
+			m_player->setInvicible(false);
 			m_player->SetScale(Vector3::Lerp(m_startScale, m_endScale, m_scalePercent));
 			m_player->UpdateWorld();
 
