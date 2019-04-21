@@ -2,13 +2,17 @@
 #include "AIScheduler.h"
 
 
-AIScheduler::AIScheduler(Track* _track) : m_track(_track)
+AIScheduler::AIScheduler()
 {
 }
 
 
 AIScheduler::~AIScheduler()
 {
+}
+
+void AIScheduler::UpdateTrack(Track* _track) {
+	m_track = _track;
 }
 
 void AIScheduler::Update()

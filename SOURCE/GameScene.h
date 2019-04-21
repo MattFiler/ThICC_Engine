@@ -102,8 +102,5 @@ private:
 	bool final_lap = false;
 	int finished = 0;
 
-	//AI
-	std::unique_ptr<AIScheduler> m_aiScheduler = nullptr;
-
 };
 

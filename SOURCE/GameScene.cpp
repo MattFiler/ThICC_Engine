@@ -54,9 +54,6 @@ bool GameScene::Load()
 	create2DObjects();
 	pushBackObjects();
 
-	m_aiScheduler = std::make_unique<AIScheduler>(track);
-	Locator::setupAIScheduler(m_aiScheduler.get());
-
 	return true;
 }
 
@@ -84,6 +81,9 @@ void GameScene::ExpensiveLoad() {
 			dynamic_cast<Track*>(*it)->LoadCollision();
 		}
 	}
+
+	//Set AI to current track
+	Locator::getAIScheduler()->UpdateTrack(track);
 
 	//Load the map's audio here using map_info's data
 }
@@ -234,7 +234,6 @@ void GameScene::pushBackObjects()
 /* Update the scene */
 void GameScene::Update(DX::StepTimer const& timer)
 {
-	m_aiScheduler->Update();
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
 
