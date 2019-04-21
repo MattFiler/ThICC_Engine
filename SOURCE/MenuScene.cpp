@@ -38,6 +38,7 @@ bool MenuScene::Load()
 /* Reset on load */
 void MenuScene::ExpensiveLoad() {
 	m_menu_state = menu_states::SPLASH;
+	m_timer = 0.0f;
 }
 
 /* Create all 2D objects for the scene */

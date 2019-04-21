@@ -2,8 +2,10 @@
 #include "pch.h"
 #include "ImageGO2D.h"
 #include "LocalisationManager.h"
+#include "GameFilepaths.h"
 #include "AssetComp.h"
 #include <json.hpp>
+#include <codecvt>
 using json = nlohmann::json;
 
 //A struct to store map info like our scene index, localised name, audio and preview sprite
@@ -11,11 +13,18 @@ struct MapInfo : public AssetComp {
 	MapInfo() {};
 	MapInfo(json _element, int _index) {
 		LocalisationManager m_localiser;
+		GameFilepaths m_filepaths;
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 
 		name = m_localiser.getString(_element["friendly_name"]);
 		model = _element["model"];
 		preview_sprite = new ImageGO2D(_element["menu_sprite"]);
 		scene_index = _index;
+
+		std::string cubemap_radiance_str = m_filepaths.generateFilepath(_element["cubemaps"]["radiance"], m_filepaths.IMAGE);
+		cubemap_radiance = converter.from_bytes(cubemap_radiance_str.c_str());
+		std::string cubemap_irradiance_str = m_filepaths.generateFilepath(_element["cubemaps"]["irradiance"], m_filepaths.IMAGE);
+		cubemap_irradiance = converter.from_bytes(cubemap_irradiance_str.c_str());
 
 		audio_background_start = _element["audio"]["background_start"];
 		audio_background = _element["audio"]["background"];
@@ -27,6 +36,9 @@ struct MapInfo : public AssetComp {
 	std::string name = "";
 	std::string model = "";
 	int scene_index = -1;
+
+	std::wstring cubemap_radiance;
+	std::wstring cubemap_irradiance;
 
 	std::string audio_background_start = "";
 	std::string audio_background = "";

@@ -27,36 +27,39 @@ void SDKMeshGO3D::Render()
 {
 	if (!m_model) {
 		//DebugText::print("Call to render non-loaded model: " + filename);
-		return; //model doesn't exist, we're probably in the process of deleting
+		return;
 	}
 	if ((m_shouldRender && !isDebugMesh()) || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
-
+		//Begin scene
 		auto commandList = Locator::getDD()->m_deviceResources->GetCommandList();
 		Locator::getDD()->m_hdrScene->BeginScene(commandList);
 
+		//Set to our model's heaps
 		ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
 		commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
+		//Load PBR data per PBREffect
 		{
-			/* This is wrong and what is contributing to the gross visual output. We're getting the GPU handles for the model's materials, not where the env maps are stored :) */
-			/* The 2D sprites also don't work due to a similar issue - we're allocating sprites to the wrong descriptor causing memory issues. */
-			auto radianceTex = m_resourceDescriptors->GetGpuHandle(Locator::getRD()->m_ibl);
-			auto diffuseDesc = m_radianceIBL[Locator::getRD()->m_ibl]->GetDesc();
-			auto irradianceTex = m_resourceDescriptors->GetGpuHandle((int)NUM_OF_ENV_MAPS::ENV_MAP_COUNT + Locator::getRD()->m_ibl);
+			auto radianceTex = m_resourceDescriptors->GetGpuHandle(radiance_index);
+			auto diffuseDesc = m_radianceIBL->GetDesc();
+			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(irradiance_index);
 
 			for (auto& it : m_modelNormal)
 			{
 				auto pbr = dynamic_cast<PBREffect*>(it.get());
 				if (pbr)
 				{
+					//Set IBL textures
 					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, Locator::getRD()->m_states->AnisotropicClamp());
 				}
 			}
 		}
 
+		//Update effects and draw
 		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
 		m_model->Draw(commandList, m_modelNormal.cbegin());
 
+		//End scene
 		Locator::getDD()->m_hdrScene->EndScene(commandList);
 	}
 }
@@ -88,44 +91,25 @@ void SDKMeshGO3D::Load()
 		1024,
 		0);
 
-	//Names of our radiance and irradiance env maps - it'd be nice to load these globally rather than per model :)
-	static const wchar_t* s_radianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT] =
-	{
-		L"DATA/IMPORTED/SunSubMixer_diffuseIBL.dds",
-		L"DATA/IMPORTED/Atrium_diffuseIBL.dds",
-		L"DATA/IMPORTED/Garage_diffuseIBL.dds",
-	};
-	static const wchar_t* s_irradianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT] =
-	{
-		L"DATA/IMPORTED/SunSubMixer_specularIBL.dds",
-		L"DATA/IMPORTED/Atrium_specularIBL.dds",
-		L"DATA/IMPORTED/Garage_specularIBL.dds",
-	};
+	//Find our current env maps
+	wchar_t radiance[_MAX_PATH] = {};
+	wchar_t irradiance[_MAX_PATH] = {};
+	DX::FindMediaFile(radiance, _MAX_PATH, Locator::getRD()->current_cubemap_radiance.c_str());
+	DX::FindMediaFile(irradiance, _MAX_PATH, Locator::getRD()->current_cubemap_irradiance.c_str());
 
-	//Load the env maps - what a waste!
-	for (size_t j = 0; j < (unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT; ++j)
-	{
-		static_assert(_countof(s_radianceIBL) == _countof(s_irradianceIBL), "IBL array mismatch");
+	//Create texture from env map files
+	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, radiance, m_radianceIBL.ReleaseAndGetAddressOf()));
+	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, irradiance, m_irradianceIBL.ReleaseAndGetAddressOf()));
 
-		wchar_t radiance[_MAX_PATH] = {};
-		wchar_t irradiance[_MAX_PATH] = {};
+	//Push radiance texture to resource stores
+	radiance_index = resourceDescriptorOffset;
+	CreateShaderResourceView(device, m_radianceIBL.Get(), m_resourceDescriptors->GetCpuHandle(radiance_index), true);
+	resourceDescriptorOffset++;
 
-		DX::FindMediaFile(radiance, _MAX_PATH, s_radianceIBL[j]);
-		DX::FindMediaFile(irradiance, _MAX_PATH, s_irradianceIBL[j]);
-
-		DX::ThrowIfFailed(
-			CreateDDSTextureFromFile(device, resourceUpload, radiance, m_radianceIBL[j].ReleaseAndGetAddressOf())
-		);
-
-		DX::ThrowIfFailed(
-			CreateDDSTextureFromFile(device, resourceUpload, irradiance, m_irradianceIBL[j].ReleaseAndGetAddressOf())
-		);
-
-		CreateShaderResourceView(device, m_radianceIBL[j].Get(), m_resourceDescriptors->GetCpuHandle(j), true);
-		resourceDescriptorOffset++;
-		CreateShaderResourceView(device, m_irradianceIBL[j].Get(), m_resourceDescriptors->GetCpuHandle((int)NUM_OF_ENV_MAPS::ENV_MAP_COUNT + j), true);
-		resourceDescriptorOffset++;
-	}
+	//And the same for irradiance
+	irradiance_index = resourceDescriptorOffset;
+	CreateShaderResourceView(device, m_irradianceIBL.Get(), m_resourceDescriptors->GetCpuHandle(irradiance_index), true);
+	resourceDescriptorOffset++;
 
 	//End the upload and wait for it to finish
 	auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
@@ -254,8 +238,6 @@ void SDKMeshGO3D::Reset()
 	m_model.reset();
 	m_modelNormal.clear();
 	m_resourceDescriptors.reset();
-	m_radianceIBL->Reset(); //eek?
-	m_irradianceIBL->Reset(); //eek?
 	resourceDescriptorOffset = 0;
 }
 

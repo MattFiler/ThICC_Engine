@@ -61,7 +61,6 @@ void ThICC_Game::Initialize() {
 
 /* Update loop */
 void ThICC_Game::Update(DX::StepTimer const& timer) {
-	m_aiScheduler->Update();
 	m_scene_manager.Update(timer);
 }
 
