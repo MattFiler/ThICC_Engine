@@ -473,7 +473,7 @@ namespace EditorTool
                 case AssetType.SOUND:
                     return ".WAV";
                 case AssetType.CUBEMAP:
-                    return ".DDS"; //"_SPECULAR.DDS" for irradiance, "_DIFFUSE.DDS" for radiance
+                    return ".DDS"; //"_IR.DDS" for irradiance, "_R.DDS" for radiance
             }
             throw new InvalidOperationException("Unhandled AssetType.");
         }

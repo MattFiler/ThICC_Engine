@@ -15,8 +15,8 @@ public:
 		SOUND, 
 		FONT, 
 		CONFIG, 
-		CUBEMAP_SPECULAR, // AKA Irradiance
-		CUBEMAP_DIFFUSE   // AKA Radiance
+		CUBEMAP_IRRADIANCE, 
+		CUBEMAP_RADIANCE 
 	};
 
 	/* Generate filepath */
@@ -57,10 +57,10 @@ public:
 			return font_path[FOLDER] + _asset_name + font_path[EXTENSION];
 		case CONFIG:
 			return config_path[FOLDER] + _asset_name + config_path[EXTENSION];
-		case CUBEMAP_SPECULAR:
-			return cubemap_path_s[FOLDER] + _asset_name + cubemap_path_s[EXTENSION];
-		case CUBEMAP_DIFFUSE:
-			return cubemap_path_d[FOLDER] + _asset_name + cubemap_path_d[EXTENSION];
+		case CUBEMAP_IRRADIANCE:
+			return cubemap_path_ir[FOLDER] + _asset_name + cubemap_path_ir[EXTENSION];
+		case CUBEMAP_RADIANCE:
+			return cubemap_path_r[FOLDER] + _asset_name + cubemap_path_r[EXTENSION];
 		}
 		return "";
 	}
@@ -92,8 +92,8 @@ private:
 	std::string sound_path[2] = { "DATA/SOUNDS/", ".WAV" };
 	std::string font_path[2] = { "DATA/FONTS/", ".SPRITEFONT" };
 	std::string config_path[2] = { "DATA/CONFIGS/", ".JSON" };
-	std::string cubemap_path_s[2] = { "DATA/CUBEMAPS/", "_SPECULAR.DDS" };
-	std::string cubemap_path_d[2] = { "DATA/CUBEMAPS/", "_DIFFUSE.DDS" };
+	std::string cubemap_path_ir[2] = { "DATA/CUBEMAPS/", "_IR.DDS" };
+	std::string cubemap_path_r[2] = { "DATA/CUBEMAPS/", "_R.DDS" };
 
 	/* Internally get our path/extension info for use further */
 	std::string getPathSection(m_asset_type _asset_type, m_path_data _path_section) {
@@ -114,10 +114,10 @@ private:
 			return font_path[_path_section];
 		case CONFIG:
 			return config_path[_path_section];
-		case CUBEMAP_SPECULAR:
-			return cubemap_path_s[_path_section];
-		case CUBEMAP_DIFFUSE:
-			return cubemap_path_d[_path_section];
+		case CUBEMAP_IRRADIANCE:
+			return cubemap_path_ir[_path_section];
+		case CUBEMAP_RADIANCE:
+			return cubemap_path_r[_path_section];
 		}
 	}
 };

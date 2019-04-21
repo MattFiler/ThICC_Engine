@@ -240,7 +240,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 {
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
-	Locator::getAIScheduler()->Update();
+
+	//DISABLING AI UPDATE FOR NOW :)
+	//Locator::getAIScheduler()->Update();
+
+
 
 	if (finished == 4)
 	{

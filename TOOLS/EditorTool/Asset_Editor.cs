@@ -138,6 +138,10 @@ namespace EditorTool
                         assetList.Items.Add(localised_string.Key);
                     }
                     break;
+                case "Cubemaps":
+                    path = function_libary.getFolder(AssetType.CUBEMAP);
+                    extension = "*.DDS";
+                    break;
             }
 
             if (should_go_further)

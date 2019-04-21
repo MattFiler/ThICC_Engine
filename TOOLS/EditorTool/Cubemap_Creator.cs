@@ -16,5 +16,14 @@ namespace EditorTool
         {
             InitializeComponent();
         }
+
+        private void Cubemap_Creator_Load(object sender, EventArgs e)
+        {
+            /*
+             * 
+             * The default setup is DIFFUSE = RADIANCE, SPECULAR = IRRADIANCE - however I think it looks better the other way around.
+             * 
+             */
+        }
     }
 }
