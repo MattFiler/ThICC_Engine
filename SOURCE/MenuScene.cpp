@@ -37,12 +37,20 @@ bool MenuScene::Load()
 
 /* Reset on load */
 void MenuScene::ExpensiveLoad() {
-	m_menu_state = menu_states::MAP_SELECT;
+	m_menu_state = menu_states::SPLASH;
 }
 
 /* Create all 2D objects for the scene */
 void MenuScene::create2DObjects()
 {
+	//Splashscreen objects
+	m_splash_bg = new ImageGO2D("WHITE_720");
+	m_logo = new ImageGO2D("engine_logo_white_720");
+	m_logo->SetScale(Vector2(0.3, 0.3));
+	m_logo->SetPos(Vector2(Locator::getRD()->m_window_width / 2.f, Locator::getRD()->m_window_height / 2.f));
+	m_logo->CentreOrigin();
+
+	//Main menu objects
 	m_background = new ImageGO2D("MAIN_MENU_TEMP");
 	m_state_desc = new Text2D("", true);
 	m_state_desc->SetPos(Vector2(498, 620));
@@ -111,6 +119,21 @@ void MenuScene::create2DObjects()
 void MenuScene::Update(DX::StepTimer const& timer)
 {
 	switch (m_menu_state) {
+		case menu_states::SPLASH:
+			//Animate logo over time
+			m_logo->SetScale(Vector2(0.3 + (m_timer / 30), 0.3 + (m_timer / 30)));
+			m_timer += (float)timer.GetElapsedSeconds();
+			if (m_timer > m_timeout) {
+				m_menu_state = menu_states::MAP_SELECT;
+			}
+
+			//Allow skip
+			if (m_keybinds.keyPressed("Activate"))
+			{
+				m_menu_state = menu_states::MAP_SELECT;
+			}
+
+			break;
 		case menu_states::MAP_SELECT:
 			m_state_desc->SetText(m_localiser.getString("map_select"));
 
@@ -223,6 +246,12 @@ void MenuScene::Update(DX::StepTimer const& timer)
 /* Render the 2D scene */
 void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
+	if (m_menu_state == menu_states::SPLASH) {
+		m_splash_bg->Render();
+		m_logo->Render();
+		return;
+	}
+
 	m_background->Render();
 	m_state_desc->Render();
 	switch (m_menu_state) {

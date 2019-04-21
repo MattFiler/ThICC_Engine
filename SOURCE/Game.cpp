@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "RenderData.h"
 
-#include "SplashscreenScene.h"
 #include "MenuScene.h"
 #include "GameScene.h"
 
@@ -50,11 +49,10 @@ void ThICC_Game::Initialize() {
 	}
 
 	//Create the scenes
-	m_scene_manager.addScene(new SplashscreenScene(), (int)Scenes::SPLASHSCREEN);
 	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
 
 	//Set our default scene
-	m_scene_manager.setCurrentScene(Scenes::SPLASHSCREEN, true);
+	m_scene_manager.setCurrentScene(Scenes::MENUSCENE, true);
 }
 
 /* Update loop */
