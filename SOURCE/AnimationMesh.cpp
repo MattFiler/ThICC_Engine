@@ -106,8 +106,10 @@ void AnimationMesh::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
 	using pair = std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>;
 	for (pair& p : m_additionalModels)
 	{
+		Vector3 scale_original = p.first->GetScale();
 		p.first->SetWorld(m_world);
 		p.first->AddPos(p.second);
+		p.first->SetScale(scale_original);
 		p.first->UpdateWorld();
 	}
 }
