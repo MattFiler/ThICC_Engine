@@ -32,9 +32,15 @@ private:
 	void create3DObjects() override {};
 	void pushBackObjects() override {};
 
-	//Structures for the scene's objects
-	std::vector<Text2D*> m_mapSelections;
-	std::vector<GameObject2D*> m_2DObjects;
+	//Map select objects
+	int highlighted_map = 0;
+	std::vector<Text2D*> m_mapTitles;
+	std::vector<ImageGO2D*> m_mapPreviews;
+
+	//Map select objects
+	int highlighted_character = 0;
+	std::vector<Text2D*> m_characterTitles;
+	std::vector<ImageGO2D*> m_characterPreviews;
 
 	//Common engine components
 	LocalisationManager m_localiser;
@@ -47,7 +53,8 @@ private:
 	//Configs
 	json game_config;
 
-	//States and timings
-	int highlighted_map = 0;
+	//States
+	enum menu_states { MAP_SELECT, CHARACTER_SELECT };
+	menu_states m_menu_state = menu_states::MAP_SELECT;
 };
 
