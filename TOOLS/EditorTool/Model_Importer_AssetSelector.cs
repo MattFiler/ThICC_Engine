@@ -80,6 +80,8 @@ namespace EditorTool
                 return;
             }
 
+            Cursor.Current = Cursors.WaitCursor;
+
             //------
 
             //Setup asset paths
@@ -91,6 +93,7 @@ namespace EditorTool
             {
                 MessageBox.Show("Couldn't import model, a model with the same name already exists.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 importer_common = new Model_Importer_Common(); //Reset
+                Cursor.Current = Cursors.Default;
                 return;
             }
 
@@ -136,6 +139,7 @@ namespace EditorTool
                 //The model has no MTL file - this can be handled, but fail for now.
                 MessageBox.Show("This model has no materials.\nThe new importer doesn't handle this yet!", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 importer_common = new Model_Importer_Common(); //Reset
+                Cursor.Current = Cursors.Default;
                 return;
             }
             else
@@ -158,6 +162,7 @@ namespace EditorTool
                         //No idea where the file is! Ideally here we'll show a file picker as a last resort, or do some further logic.
                         MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         importer_common = new Model_Importer_Common(); //Reset
+                        Cursor.Current = Cursors.Default;
                         return;
                     }
                 }
@@ -272,6 +277,7 @@ namespace EditorTool
                             Directory.Delete(importer_common.importDir(), true);
                             MessageBox.Show("Could not find all required materials!\nTry and re-export your model.", "Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             importer_common = new Model_Importer_Common();
+                            Cursor.Current = Cursors.Default;
                             return;
                         }
                     }
@@ -347,6 +353,10 @@ namespace EditorTool
                 addPropIfNotAlready("map_RMA", "", this_mat_jobject, props); //RMA Texture
                 addPropIfNotAlready("map_occlusionRoughnessMetallic", "", this_mat_jobject, props); //RMA Texture (alt def)
 
+                //Auto calculate alpha
+                //this_mat_jobject["d"] = (function_library.hasTransparency(this_mat_jobject["map_Kd"].Value<string>()) ? "0.999999" : "0.000000");
+                /* ^ disabled for now due to performance - also, we can do it later and get the same result :) */
+
                 // Add in placeholders for our custom properties
                 this_mat_jobject["ThICC_COLLISION"] = mariokart_properties; 
 
@@ -356,6 +366,8 @@ namespace EditorTool
             File.WriteAllText(importer_common.fileName(importer_file.IMPORTER_CONFIG), material_config.ToString(Formatting.Indented));
 
             //------
+
+            Cursor.Current = Cursors.Default;
 
             //Progress to next form
             Model_Importer_MaterialList nextForm = new Model_Importer_MaterialList(importer_common);
