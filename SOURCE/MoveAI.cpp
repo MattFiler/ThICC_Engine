@@ -7,18 +7,19 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 {
 	for (int i = 0; i < m_maxPathIterations; i++)
 	{
-		//m_debugCups.push_back(new SDKMeshGO3D("CUP"));
+		m_debugCups.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
+		m_debugCups.at(i)->Load();
 	}
 }
 
 void MoveAI::DebugRender()
 {
-	/*
+	
 	for (SDKMeshGO3D* mesh : m_debugCups)
 	{
 		mesh->Render();
 	}
-	*/
+	
 }
 
 void MoveAI::Update(Track* _track)
@@ -45,8 +46,8 @@ void MoveAI::Update(Track* _track)
 	{
 		for (int i = 0; i < m_route.size(); i++)
 		{
-			//m_debugCups[i]->SetPos(m_route[i]);
-			//m_debugCups[i]->UpdateWorld();
+			m_debugCups[i]->SetPos(m_route[i]);
+			m_debugCups[i]->UpdateWorld();
 		}
 	}
 	else

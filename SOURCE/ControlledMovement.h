@@ -1,6 +1,7 @@
 #pragma once
 #include "PhysModel.h"
 #include "AnimationMesh.h"
+#include "KeybindManager.h"
 
 class ControlledMovement
 {
@@ -22,6 +23,8 @@ public:
 	int GetWaypoint() { return m_waypoint; };
 
 private:
+	KeybindManager m_keybind;
+
 	void GetControllerInput();
 	void ProcessInputFlags();
 
