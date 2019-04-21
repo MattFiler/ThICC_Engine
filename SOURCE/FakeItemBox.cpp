@@ -17,7 +17,7 @@ void FakeItemBox::Use(Player * player, bool _altUse)
 	{
 		//Positions the box
 		m_mesh->SetWorld(player->GetWorld());
-		m_mesh->AddPos(player->GetWorld().Right() * 2 + player->GetWorld().Up() * 2);
+		m_mesh->AddPos(player->GetWorld().Right() * 2 + player->GetWorld().Up() * 3);
 		m_mesh->UpdateWorld();
 
 		//Yeets said box
