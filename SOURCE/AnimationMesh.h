@@ -8,10 +8,13 @@ public:
 	AnimationMesh(std::string _filepath);
 
 	void Update(Matrix _parentWorld, Vector3 _rotOffsetOverride);
+	void Render() override;
 
 	void Jump(float _jumpHeight, float _duration);
 	void Spin(int _revolutions, float _duration);
 	void Flip(int _revolutions, float _duration);
+
+	void AddModel(GameObject3D* _gameObject, SimpleMath::Vector3 _offset);
 
 	enum direction
 	{
@@ -42,4 +45,6 @@ private:
 	direction m_prevDirection = FORWARD;
 	float m_timeBetweenRot = 0.5f;
 	float m_rotTimeElapsed = 0;
+	
+	std::vector<std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>> m_additionalModels;
 };
