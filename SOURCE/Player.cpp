@@ -330,6 +330,7 @@ void Player::SpawnItems(ItemType type)
 			FakeItemBox* box = static_cast<FakeItemBox*>(CreateItem(FAKE_BOX));
 			m_trailingItems.push_back(box);
 			TrailItems();
+			break;
 		}
 
 		case MUSHROOM_UNLIMITED:

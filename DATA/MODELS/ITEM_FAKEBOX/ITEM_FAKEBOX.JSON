@@ -2,57 +2,57 @@
   "has_box_collider": true,
   "collision_box": {
     "front_top_left": [
-      0.66972,
-      1.54009,
-      0.66972
+      0.468804,
+      1.078063,
+      0.468804
     ],
     "front_top_right": [
-      -0.66972,
-      1.54009,
-      0.66972
+      -0.468804,
+      1.078063,
+      0.468804
     ],
     "front_bottom_right": [
-      -0.66972,
+      -0.468804,
       0,
-      0.66972
+      0.468804
     ],
     "front_bottom_left": [
-      0.66972,
+      0.468804,
       0,
-      0.66972
+      0.468804
     ],
     "back_top_left": [
-      0.66972,
-      1.54009,
-      -0.66972
+      0.468804,
+      1.078063,
+      -0.468804
     ],
     "back_top_right": [
-      -0.66972,
-      1.54009,
-      -0.66972
+      -0.468804,
+      1.078063,
+      -0.468804
     ],
     "back_bottom_right": [
-      -0.66972,
+      -0.468804,
       0,
-      -0.66972
+      -0.468804
     ],
     "back_bottom_left": [
-      0.66972,
+      0.468804,
       0,
-      -0.66972
+      -0.468804
     ]
   },
   "asset_name": "ITEM_FAKEBOX",
   "asset_type": "Models",
   "model_type": 1,
   "visible": true,
-  "start_x": 0.0,
-  "start_y": 0.0,
-  "start_z": 0.0,
+  "start_x": 0,
+  "start_y": 0,
+  "start_z": 0,
   "modelscale": 1.0,
-  "rot_x": 0.0,
-  "rot_y": 0.0,
-  "rot_z": 0.0,
-  "segment_size": 10.0,
+  "rot_x": 0,
+  "rot_y": 0,
+  "rot_z": 0,
+  "segment_size": 10,
   "in_use_in": []
 }
