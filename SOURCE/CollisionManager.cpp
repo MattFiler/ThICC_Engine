@@ -96,6 +96,18 @@ void CollisionManager::PlayerCollisions(PhysModel*& _player1, PhysModel*& _playe
 
 		_player1->setVelocity(_player1->getVelocity() - impulse * (1.0f / _player1->getMass()));
 		_player2->setVelocity(_player2->getVelocity() + impulse * (1.0f / _player2->getMass()));
+
+		LightningCloudCollision(player2, player1);
+	}
+}
+
+void CollisionManager::LightningCloudCollision(Player * player2, Player * player1)
+{
+	LightningCloud* cloud = player2->GetLightningCloud();
+	if (cloud)
+	{
+		player1->SpawnItems(LIGHTNING_CLOUD);
+		player1->GetLightningCloud()->SetElapsedStrikeTime(cloud->GetElapsedStrikeTime());
 	}
 }
 

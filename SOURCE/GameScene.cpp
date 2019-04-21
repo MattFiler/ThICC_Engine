@@ -781,6 +781,12 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(mushroom);
 		return mushroom;
 	}
+	case LIGHTNING_CLOUD:
+	{
+		LightningCloud* cloud = new LightningCloud();
+		m_itemModels.push_back(cloud);
+		return cloud;
+	}
 	default:
 		return nullptr;
 	}

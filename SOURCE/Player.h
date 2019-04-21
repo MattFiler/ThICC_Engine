@@ -14,6 +14,7 @@
 #include "GoldenMushroom.h"
 #include "Star.h"
 #include "GiantMushroom.h"
+#include "LightningCloud.h"
 #include <functional>
 
 //=================================================================
@@ -53,10 +54,11 @@ public:
 	void SetFinished(bool _finished) { m_finished = _finished; }
 
 	/* Inventory Management */
-	ItemType getActiveItem() { return active_item; };
-	void setActiveItem(ItemType _item);
-	ItemType getItemInInventory() { return m_InventoryItem; };
-	void setItemInInventory(ItemType _item);
+	ItemType GetActiveItem() { return active_item; };
+	void SetActiveItem(ItemType _item);
+	ItemType GetItemInInventory() { return m_InventoryItem; };
+	void SetItemInInventory(ItemType _item);
+	LightningCloud* GetLightningCloud();
 
 	void CheckUseItem();
 	void TrailItems();
@@ -112,6 +114,8 @@ private:
 	ImageGO2D *m_imgItem = nullptr;
 
 	std::vector<Item*> m_trailingItems;
+	std::vector<Item*> m_floatingItems; //Items which renders above the player - POW, Blooper, and Lightning Cloud
+	void PositionFloatingItems();
 	bool m_aPressed = true;
 	bool m_multiItem = false;
 	const int m_maxItems = 3;

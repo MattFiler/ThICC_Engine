@@ -142,6 +142,7 @@
     <ClCompile Include="Sound.cpp">
       <Filter>Game\Components\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="LightningCloud.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -336,6 +337,7 @@
     <ClInclude Include="GameObjectShared.h">
       <Filter>Game\Shared Data</Filter>
     </ClInclude>
+    <ClInclude Include="LightningCloud.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
