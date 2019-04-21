@@ -7,7 +7,7 @@ class ControlledMovement
 {
 public:
 	ControlledMovement() = default;
-	ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh = nullptr);
+	ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh);
 
 	void Tick();
 	void SetGamepadActive(bool _flag) { m_controlsActive = _flag;};

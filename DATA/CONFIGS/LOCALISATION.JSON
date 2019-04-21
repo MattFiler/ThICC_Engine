@@ -5,7 +5,13 @@
     "DEBUG_TEXT": "Example string loaded as English.",
     "MAP_MKS": "Mario Kart Stadium",
     "TEST": "testing string",
-    "MAP_DRIFTWAY": "Dragon Driftway"
+    "MAP_DRIFTWAY": "Dragon Driftway",
+    "MAP_RBR": "Rainbow Road",
+    "CHARACTER_KNUCKLES": "Ugandan Knuckles",
+    "CHARACTER_MARIO": "Mario",
+    "KART_STANDARD": "Standard Kart",
+    "KART_MK_WII": "MK Wii Kart",
+    "KART_MK8": "MK8 Kart"
   },
   "SPANISH": {},
   "FRENCH": {}

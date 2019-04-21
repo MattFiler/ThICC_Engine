@@ -14,6 +14,8 @@ public:
 	void Spin(int _revolutions, float _duration);
 	void Flip(int _revolutions, float _duration);
 
+	void Load() override;
+
 	void AddModel(GameObject3D* _gameObject, SimpleMath::Vector3 _offset);
 
 	enum direction

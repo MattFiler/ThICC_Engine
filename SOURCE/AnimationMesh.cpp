@@ -22,6 +22,15 @@ void AnimationMesh::AddModel(GameObject3D* _gameObject, SimpleMath::Vector3 _off
 	m_additionalModels.push_back(pair(_gameObject, _offset));
 }
 
+void AnimationMesh::Load() {
+	SDKMeshGO3D::Load();
+	using pair = std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>;
+	for (pair& p : m_additionalModels)
+	{
+		p.first->Load();
+	}
+}
+
 void AnimationMesh::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
 {
 	if (!m_posAnimPoints.empty())
