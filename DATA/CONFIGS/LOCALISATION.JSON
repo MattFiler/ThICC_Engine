@@ -5,7 +5,8 @@
     "DEBUG_TEXT": "Example string loaded as English.",
     "MAP_MKS": "Mario Kart Stadium",
     "TEST": "testing string",
-    "MAP_DRIFTWAY": "Dragon Driftway"
+    "MAP_DRIFTWAY": "Dragon Driftway",
+    "MAP_RBR": "Rainbow Road"
   },
   "SPANISH": {},
   "FRENCH": {}
