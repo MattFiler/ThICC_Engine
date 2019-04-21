@@ -6,6 +6,7 @@ Explosion::Explosion() : TrackMagnet("bomb_explosion")
 {
 	m_startSize = m_scale;
 	m_endSize = m_startSize * 10;
+	Load();
 }
 
 void Explosion::HitByPlayer(Player * _player)

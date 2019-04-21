@@ -1,7 +1,4 @@
 {
-  "asset_name": "ITEM_BOMB",
-  "asset_type": "Models",
-  "model_type": "Track",
   "has_box_collider": true,
   "collision_box": {
     "front_top_left": [
@@ -45,6 +42,9 @@
       -0.853366
     ]
   },
+  "asset_name": "ITEM_BOMB",
+  "asset_type": "Models",
+  "model_type": 1,
   "visible": true,
   "start_x": 0,
   "start_y": 0,
