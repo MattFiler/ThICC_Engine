@@ -117,7 +117,7 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	Locator::setupItemData(m_probabilities);
 
 	//Setup debug text
-	debug_text = new Text2D("");
+	debug_text = new Text2D("", true);
 	debug_text->SetPos(Vector2(50, 50));
 	debug_text->SetColour(Colors::Red);
 

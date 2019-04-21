@@ -25,6 +25,7 @@ MenuScene::~MenuScene()
 	m_mapPreviews.clear();
 	m_characterTitles.clear();
 	m_characterPreviews.clear();
+	delete m_background;
 }
 
 /* Load inexpensive things and create the objects for expensive things we will populate when required */
@@ -42,8 +43,7 @@ void MenuScene::ExpensiveLoad() {
 /* Create all 2D objects for the scene */
 void MenuScene::create2DObjects()
 {
-	//ImageGO2D* splash_screen = new ImageGO2D("MENU_SPLASHSCREEN");
-	//m_2DObjects.push_back(splash_screen);
+	m_background = new ImageGO2D("MAIN_MENU_TEMP");
 
 	//position map options
 	int index = 0;
@@ -55,13 +55,12 @@ void MenuScene::create2DObjects()
 		if (index == 1) {
 			map_name->SetText("> " + map_name->GetText());
 		}
-		map_name->SetColour(Colors::Black);
-		map_name->SetPos(Vector2(Locator::getRD()->m_window_width/2, index * 160));
+		map_name->SetColour(Colors::White);
+		map_name->SetPos(Vector2(209, 55 + (index * 47)));
 		m_mapTitles.push_back(map_name);
 
 		//Image
-		a_map.preview_sprite->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
-		a_map.preview_sprite->CentreOrigin();
+		a_map.preview_sprite->SetPos(Vector2(812, 279));
 		m_mapPreviews.push_back(a_map.preview_sprite);
 	}
 
@@ -75,12 +74,12 @@ void MenuScene::create2DObjects()
 		if (index == 1) {
 			character_name->SetText("> " + character_name->GetText());
 		}
-		character_name->SetColour(Colors::Black);
-		character_name->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
+		character_name->SetColour(Colors::White);
+		character_name->SetPos(Vector2(209, 55 + (index * 47)));
 		m_characterTitles.push_back(character_name);
 
 		//Image
-		a_character.preview_sprite->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
+		a_character.preview_sprite->SetPos(Vector2(881, 285));
 		a_character.preview_sprite->CentreOrigin();
 		m_characterPreviews.push_back(a_character.preview_sprite);
 	}
@@ -95,12 +94,12 @@ void MenuScene::create2DObjects()
 		if (index == 1) {
 			vehicle_name->SetText("> " + vehicle_name->GetText());
 		}
-		vehicle_name->SetColour(Colors::Black);
-		vehicle_name->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
+		vehicle_name->SetColour(Colors::White);
+		vehicle_name->SetPos(Vector2(209, 55 + (index * 47)));
 		m_vehicleTitles.push_back(vehicle_name);
 
 		//Image
-		a_vehicle.preview_sprite->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
+		a_vehicle.preview_sprite->SetPos(Vector2(881, 285));
 		a_vehicle.preview_sprite->CentreOrigin();
 		m_vehiclePreviews.push_back(a_vehicle.preview_sprite);
 	}
@@ -216,27 +215,22 @@ void MenuScene::Update(DX::StepTimer const& timer)
 /* Render the 2D scene */
 void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
+	m_background->Render();
 	switch (m_menu_state) {
 		case menu_states::MAP_SELECT:
-			for (std::vector<ImageGO2D*>::iterator it = m_mapPreviews.begin(); it != m_mapPreviews.end(); it++) {
-				(*it)->Render();
-			}
+			m_mapPreviews.at(highlighted_map)->Render();
 			for (std::vector<Text2D*>::iterator it = m_mapTitles.begin(); it != m_mapTitles.end(); it++) {
 				(*it)->Render();
 			}
 			break;
 		case menu_states::CHARACTER_SELECT:
-			for (std::vector<ImageGO2D*>::iterator it = m_characterPreviews.begin(); it != m_characterPreviews.end(); it++) {
-				(*it)->Render();
-			}
+			m_characterPreviews.at(highlighted_character)->Render();
 			for (std::vector<Text2D*>::iterator it = m_characterTitles.begin(); it != m_characterTitles.end(); it++) {
 				(*it)->Render();
 			}
 			break;
 		case menu_states::VEHICLE_SELECT:
-			for (std::vector<ImageGO2D*>::iterator it = m_vehiclePreviews.begin(); it != m_vehiclePreviews.end(); it++) {
-				(*it)->Render();
-			}
+			m_vehiclePreviews.at(highlighted_vehicle)->Render();
 			for (std::vector<Text2D*>::iterator it = m_vehicleTitles.begin(); it != m_vehicleTitles.end(); it++) {
 				(*it)->Render();
 			}

@@ -32,6 +32,9 @@ private:
 	void create3DObjects() override {};
 	void pushBackObjects() override {};
 
+	//Background
+	ImageGO2D* m_background = nullptr;
+
 	//Map select objects
 	int highlighted_map = 0;
 	std::vector<Text2D*> m_mapTitles;
