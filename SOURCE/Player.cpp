@@ -25,10 +25,9 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 
 	// Don't render this mesh, render a second one instead
 	m_shouldRender = false;
-	m_characterMesh = std::make_unique<AnimationMesh>(_character.model);
-	m_vehicleMesh = std::make_unique<AnimationMesh>(_vehicle.model);
+	m_animationMesh = std::make_unique<AnimationMesh>(_character.model);
 
-	m_move = std::make_unique<ControlledMovement>(this, m_characterMesh.get(), m_vehicleMesh.get());
+	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
 	for (int i = 0; i < (int)m_posHistoryLength / m_posHistoryInterval; i++)
 	{
@@ -44,21 +43,27 @@ Player::~Player()
 
 
 void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
-	AnimationMesh* old_character = m_characterMesh.release();
-	m_characterMesh = std::make_unique<AnimationMesh>(_character.model);
 
-	AnimationMesh* old_vehicle = m_vehicleMesh.release();
-	m_vehicleMesh = std::make_unique<AnimationMesh>(_vehicle.model);
+	std::ifstream i(m_filepath.generateConfigFilepath(_vehicle.model, m_filepath.MODEL));
+	json m_model_config_vehicle;
+	m_model_config_vehicle << i;
+
+	AnimationMesh* old_animationMesh = m_animationMesh.release();
+	m_animationMesh = std::make_unique<AnimationMesh>(_vehicle.model);
+	SetScale(m_model_config_vehicle["modelscale"]);
+
+	std::ifstream x(m_filepath.generateConfigFilepath(_character.model, m_filepath.MODEL));
+	json m_model_config_character;
+	m_model_config_character << x;
+
+	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character.model);
+	new_model->SetScale(m_model_config_character["modelscale"]);
+	m_animationMesh->AddModel(new_model, Vector3(0,0,0));
+
+	m_animationMesh->Load();
 
 	ControlledMovement* old_movement = m_move.release();
-	m_move = std::make_unique<ControlledMovement>(this, m_characterMesh.get(), m_vehicleMesh.get());
-
-	//Update scale to character's
-	std::ifstream i(m_filepath.generateConfigFilepath(_character.model, m_filepath.MODEL));
-	json m_model_config;
-	m_model_config << i;
-	SetScale(m_model_config["modelscale"]);
-	UpdateWorld();
+	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
 	//Update TrackMagnet here too?
 }
@@ -93,8 +98,7 @@ void Player::setItemInInventory(ItemType _item) {
 
 void Player::Render()
 {
-	m_characterMesh->Render();
-	m_vehicleMesh->Render();
+	m_animationMesh->Render();
 	SDKMeshGO3D::Render();
 
 	if (m_ai)

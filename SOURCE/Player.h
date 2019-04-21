@@ -45,8 +45,7 @@ public:
 	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
 
 	void ExpensiveLoad() {
-		m_characterMesh->Load();
-		m_vehicleMesh->Load();
+		m_animationMesh->Load();
 	};
 
 	void SetWaypoint(int _waypoint);
@@ -66,9 +65,9 @@ public:
 	void SpawnItems(ItemType type);
 	void ReleaseItem();
 
-	void Spin(int _revolutions, float _duration) { m_characterMesh->Spin(_revolutions, _duration); };
-	void Flip(int _revolutions, float _duration) { m_characterMesh->Flip(_revolutions, _duration); };
-	void Jump(float _jumpHeight, float _duration) { m_characterMesh->Jump(_jumpHeight, _duration); };
+	void Spin(int _revolutions, float _duration) { m_animationMesh->Spin(_revolutions, _duration); };
+	void Flip(int _revolutions, float _duration) { m_animationMesh->Flip(_revolutions, _duration); };
+	void Jump(float _jumpHeight, float _duration) { m_animationMesh->Jump(_jumpHeight, _duration); };
 
 	bool isInvincible() { return m_invincible; };
 	void setInvicible(bool _invincible) { m_invincible = _invincible; };
@@ -124,8 +123,7 @@ private:
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;
 
-	std::unique_ptr<AnimationMesh> m_characterMesh = nullptr;
-	std::unique_ptr<AnimationMesh> m_vehicleMesh = nullptr;
+	std::unique_ptr<AnimationMesh> m_animationMesh = nullptr;
 
 	std::queue<Matrix> m_posHistory;
 	float m_posHistoryInterval = 0.1f;
