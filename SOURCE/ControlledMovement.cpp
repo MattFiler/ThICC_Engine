@@ -17,7 +17,7 @@ void ControlledMovement::GetControllerInput()
 {
 
 	//float rotSpeed = 0.05f;
-	if (m_controlsActive /* && Locator::getID()->m_gamePadState[m_playerID].IsConnected()*/)
+	if (m_controlsActive)
 	{
 		m_isTurning = false;
 		//GameController Movement
