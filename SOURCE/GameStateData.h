@@ -8,5 +8,6 @@ struct ThICC_GameStateData
 
 	//Player State Data
 	int character_selected[4] = { 0,0,0,0 };
+	int vehicle_selected[4] = { 0,0,0,0 };
 
 };

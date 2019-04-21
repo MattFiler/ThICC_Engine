@@ -3,9 +3,11 @@
   "asset_type": "Images",
   "visible": true,
   "is_2d": true,
-  "res_x": 250,
-  "res_y": 300,
+  "res_x": 150,
+  "res_y": 150,
   "x_pos": 0,
   "y_pos": 0,
-  "in_use_in": []
+  "in_use_in": [
+    "Character"
+  ]
 }

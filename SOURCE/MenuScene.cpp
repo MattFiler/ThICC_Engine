@@ -34,6 +34,11 @@ bool MenuScene::Load()
 	return true;
 }
 
+/* Reset on load */
+void MenuScene::ExpensiveLoad() {
+	m_menu_state = menu_states::MAP_SELECT;
+}
+
 /* Create all 2D objects for the scene */
 void MenuScene::create2DObjects()
 {
@@ -78,6 +83,26 @@ void MenuScene::create2DObjects()
 		a_character.preview_sprite->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
 		a_character.preview_sprite->CentreOrigin();
 		m_characterPreviews.push_back(a_character.preview_sprite);
+	}
+
+	//position vehicle options
+	index = 0;
+	for (VehicleInfo a_vehicle : Locator::getGOS()->vehicle_instances) {
+		index++;
+
+		//Text
+		Text2D* vehicle_name = new Text2D(a_vehicle.name);
+		if (index == 1) {
+			vehicle_name->SetText("> " + vehicle_name->GetText());
+		}
+		vehicle_name->SetColour(Colors::Black);
+		vehicle_name->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
+		m_vehicleTitles.push_back(vehicle_name);
+
+		//Image
+		a_vehicle.preview_sprite->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
+		a_vehicle.preview_sprite->CentreOrigin();
+		m_vehiclePreviews.push_back(a_vehicle.preview_sprite);
 	}
 }
 
@@ -127,18 +152,50 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			//Change character selection
 			if (m_keybinds.keyPressed("Down Arrow"))
 			{
-				if (highlighted_character < m_mapTitles.size() - 1) {
-					m_mapTitles.at(highlighted_character)->SetText(m_mapTitles.at(highlighted_character)->GetText().substr(2));
+				if (highlighted_character < m_characterTitles.size() - 1) {
+					m_characterTitles.at(highlighted_character)->SetText(m_characterTitles.at(highlighted_character)->GetText().substr(2));
 					highlighted_character++;
-					m_mapTitles.at(highlighted_character)->SetText("> " + m_mapTitles.at(highlighted_character)->GetText());
+					m_characterTitles.at(highlighted_character)->SetText("> " + m_characterTitles.at(highlighted_character)->GetText());
 				}
 			}
 			if (m_keybinds.keyPressed("Up Arrow"))
 			{
 				if (highlighted_character > 0) {
-					m_mapTitles.at(highlighted_character)->SetText(m_mapTitles.at(highlighted_character)->GetText().substr(2));
+					m_characterTitles.at(highlighted_character)->SetText(m_characterTitles.at(highlighted_character)->GetText().substr(2));
 					highlighted_character--;
-					m_mapTitles.at(highlighted_character)->SetText("> " + m_mapTitles.at(highlighted_character)->GetText());
+					m_characterTitles.at(highlighted_character)->SetText("> " + m_characterTitles.at(highlighted_character)->GetText());
+				}
+			}
+
+			//Go to vehicle select
+			if (m_keybinds.keyPressed("Activate"))
+			{
+				m_menu_state = menu_states::VEHICLE_SELECT;
+			}
+
+			break;
+		case menu_states::VEHICLE_SELECT:
+			//Back to character select
+			if (m_keybinds.keyPressed("Quit"))
+			{
+				m_menu_state = menu_states::CHARACTER_SELECT;
+			}
+
+			//Change vehicle selection
+			if (m_keybinds.keyPressed("Down Arrow"))
+			{
+				if (highlighted_vehicle < m_vehicleTitles.size() - 1) {
+					m_vehicleTitles.at(highlighted_vehicle)->SetText(m_vehicleTitles.at(highlighted_vehicle)->GetText().substr(2));
+					highlighted_vehicle++;
+					m_vehicleTitles.at(highlighted_vehicle)->SetText("> " + m_vehicleTitles.at(highlighted_vehicle)->GetText());
+				}
+			}
+			if (m_keybinds.keyPressed("Up Arrow"))
+			{
+				if (highlighted_vehicle > 0) {
+					m_vehicleTitles.at(highlighted_vehicle)->SetText(m_vehicleTitles.at(highlighted_vehicle)->GetText().substr(2));
+					highlighted_vehicle--;
+					m_vehicleTitles.at(highlighted_vehicle)->SetText("> " + m_vehicleTitles.at(highlighted_vehicle)->GetText());
 				}
 			}
 
@@ -146,10 +203,12 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			if (m_keybinds.keyPressed("Activate"))
 			{
 				Locator::getGSD()->character_selected[0] = highlighted_character; //We only support P1 choices atm!
+				Locator::getGSD()->vehicle_selected[0] = highlighted_vehicle;
 
 				Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
 				m_scene_manager->setCurrentScene(Scenes::GAMESCENE + highlighted_map);
 			}
+
 			break;
 	}
 }
@@ -171,6 +230,14 @@ void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 				(*it)->Render();
 			}
 			for (std::vector<Text2D*>::iterator it = m_characterTitles.begin(); it != m_characterTitles.end(); it++) {
+				(*it)->Render();
+			}
+			break;
+		case menu_states::VEHICLE_SELECT:
+			for (std::vector<ImageGO2D*>::iterator it = m_vehiclePreviews.begin(); it != m_vehiclePreviews.end(); it++) {
+				(*it)->Render();
+			}
+			for (std::vector<Text2D*>::iterator it = m_vehicleTitles.begin(); it != m_vehicleTitles.end(); it++) {
 				(*it)->Render();
 			}
 			break;

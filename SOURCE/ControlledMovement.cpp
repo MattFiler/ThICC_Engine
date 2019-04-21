@@ -3,8 +3,11 @@
 #include "InputData.h"
 #include "GameStateData.h"
 
-ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh) : m_physModel(_physModel), m_animMesh(_animMesh)
+ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh, AnimationMesh* _animMesh2) : m_physModel(_physModel), m_animMesh(_animMesh)
 {
+	if (_animMesh2 != nullptr) {
+		m_animMesh2 = _animMesh2;
+	}
 }
 
 void ControlledMovement::Tick()
@@ -101,6 +104,9 @@ void ControlledMovement::ProcessInputFlags()
 	if (m_startDrift)
 	{
 		m_animMesh->Jump(0.5f, 0.25f);
+		if (m_animMesh2 != nullptr) {
+			m_animMesh2->Jump(0.5f, 0.25f);
+		}
 		m_startDrift = false;
 	}
 	else if (m_endDrift)
@@ -217,6 +223,9 @@ void ControlledMovement::ProcessInputFlags()
 	}
 
 	m_animMesh->Update(m_physModel->GetWorld(), m_targetAnimRotOffset);
+	if (m_animMesh2 != nullptr) {
+		m_animMesh2->Update(m_physModel->GetWorld(), m_targetAnimRotOffset);
+	}
 }
 
 void ControlledMovement::EndDrift()

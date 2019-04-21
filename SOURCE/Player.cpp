@@ -9,7 +9,7 @@
 
 extern void ExitGame();
 
-Player::Player(CharacterInfo _character, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character.model), CreateItem(_createItemFunction)
+Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character.model), CreateItem(_createItemFunction)
 {
 	m_RD = Locator::getRD();
 	SetDrag(0.7);
@@ -25,9 +25,10 @@ Player::Player(CharacterInfo _character, int _playerID, std::function<Item*(Item
 
 	// Don't render this mesh, render a second one instead
 	m_shouldRender = false;
-	m_displayedMesh = std::make_unique<AnimationMesh>(_character.model);
+	m_characterMesh = std::make_unique<AnimationMesh>(_character.model);
+	m_vehicleMesh = std::make_unique<AnimationMesh>(_vehicle.model);
 
-	m_move = std::make_unique<ControlledMovement>(this, m_displayedMesh.get());
+	m_move = std::make_unique<ControlledMovement>(this, m_characterMesh.get(), m_vehicleMesh.get());
 
 	for (int i = 0; i < (int)m_posHistoryLength / m_posHistoryInterval; i++)
 	{
@@ -39,6 +40,27 @@ Player::~Player()
 {
 	delete m_imgItem;
 	m_imgItem = nullptr;
+}
+
+
+void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
+	AnimationMesh* old_character = m_characterMesh.release();
+	m_characterMesh = std::make_unique<AnimationMesh>(_character.model);
+
+	AnimationMesh* old_vehicle = m_vehicleMesh.release();
+	m_vehicleMesh = std::make_unique<AnimationMesh>(_vehicle.model);
+
+	ControlledMovement* old_movement = m_move.release();
+	m_move = std::make_unique<ControlledMovement>(this, m_characterMesh.get(), m_vehicleMesh.get());
+
+	//Update scale to character's
+	std::ifstream i(m_filepath.generateConfigFilepath(_character.model, m_filepath.MODEL));
+	json m_model_config;
+	m_model_config << i;
+	SetScale(m_model_config["modelscale"]);
+	UpdateWorld();
+
+	//Update TrackMagnet here too?
 }
 
 
@@ -71,7 +93,8 @@ void Player::setItemInInventory(ItemType _item) {
 
 void Player::Render()
 {
-	m_displayedMesh->Render();
+	m_characterMesh->Render();
+	m_vehicleMesh->Render();
 	SDKMeshGO3D::Render();
 
 	if (m_ai)
@@ -468,14 +491,4 @@ void Player::SetWaypoint(int _waypoint)
 {
 	m_move->SetWaypoint(_waypoint);
 	m_waypoint = _waypoint;
-}
-
-void Player::ChangeCharacter(CharacterInfo _character) {
-	AnimationMesh* old_mesh = m_displayedMesh.release();
-	m_displayedMesh = std::make_unique<AnimationMesh>(_character.model);
-
-	ControlledMovement* old_movement = m_move.release();
-	m_move = std::make_unique<ControlledMovement>(this, m_displayedMesh.get());
-
-	//Update TrackMagnet here too?
 }

@@ -7,7 +7,11 @@
     "TEST": "testing string",
     "MAP_DRIFTWAY": "Dragon Driftway",
     "MAP_RBR": "Rainbow Road",
-    "CHARACTER_KNUCKLES": "Ugandan Knuckles"
+    "CHARACTER_KNUCKLES": "Ugandan Knuckles",
+    "CHARACTER_MARIO": "Mario",
+    "KART_STANDARD": "Standard Kart",
+    "KART_MK_WII": "MK Wii Kart",
+    "KART_MK8": "MK8 Kart"
   },
   "SPANISH": {},
   "FRENCH": {}

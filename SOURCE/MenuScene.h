@@ -23,7 +23,7 @@ public:
 	bool Load() override;
 
 	//Load/unload the expensive objects in the scene (only keep expensive stuff in memory if we're active)
-	void ExpensiveLoad() override {};
+	void ExpensiveLoad() override;
 	void ExpensiveUnload() override {};
 
 private:
@@ -42,6 +42,11 @@ private:
 	std::vector<Text2D*> m_characterTitles;
 	std::vector<ImageGO2D*> m_characterPreviews;
 
+	//Vehicle select objects
+	int highlighted_vehicle = 0;
+	std::vector<Text2D*> m_vehicleTitles;
+	std::vector<ImageGO2D*> m_vehiclePreviews;
+
 	//Common engine components
 	LocalisationManager m_localiser;
 	KeybindManager m_keybinds;
@@ -54,7 +59,7 @@ private:
 	json game_config;
 
 	//States
-	enum menu_states { MAP_SELECT, CHARACTER_SELECT };
+	enum menu_states { MAP_SELECT, CHARACTER_SELECT, VEHICLE_SELECT };
 	menu_states m_menu_state = menu_states::MAP_SELECT;
 };
 

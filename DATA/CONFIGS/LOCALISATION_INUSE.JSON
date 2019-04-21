@@ -26,8 +26,23 @@
   },
   "CHARACTER_KNUCKLES": {
     "in_use_in": [
-      "Vehicle",
       "Character"
+    ]
+  },
+  "CHARACTER_MARIO": {
+    "in_use_in": []
+  },
+  "KART_STANDARD": {
+    "in_use_in": []
+  },
+  "KART_MK_WII": {
+    "in_use_in": [
+      "Vehicle"
+    ]
+  },
+  "KART_MK8": {
+    "in_use_in": [
+      "Vehicle"
     ]
   }
 }

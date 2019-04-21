@@ -15,6 +15,7 @@
 #include "Star.h"
 #include "GiantMushroom.h"
 #include "CharacterInfo.h"
+#include "VehicleInfo.h"
 #include <functional>
 
 //=================================================================
@@ -25,7 +26,7 @@ class Player : public TrackMagnet
 {
 
 public:
-	Player(CharacterInfo _character, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
+	Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
 	~Player();
 
 	virtual void Tick() override;
@@ -43,8 +44,9 @@ public:
 	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
 	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
 
-	AnimationMesh* GetAnimationMesh() {
-		return m_displayedMesh.get();
+	void ExpensiveLoad() {
+		m_characterMesh->Load();
+		m_vehicleMesh->Load();
 	};
 
 	void SetWaypoint(int _waypoint);
@@ -64,14 +66,14 @@ public:
 	void SpawnItems(ItemType type);
 	void ReleaseItem();
 
-	void Spin(int _revolutions, float _duration) { m_displayedMesh->Spin(_revolutions, _duration); };
-	void Flip(int _revolutions, float _duration) { m_displayedMesh->Flip(_revolutions, _duration); };
-	void Jump(float _jumpHeight, float _duration) { m_displayedMesh->Jump(_jumpHeight, _duration); };
+	void Spin(int _revolutions, float _duration) { m_characterMesh->Spin(_revolutions, _duration); };
+	void Flip(int _revolutions, float _duration) { m_characterMesh->Flip(_revolutions, _duration); };
+	void Jump(float _jumpHeight, float _duration) { m_characterMesh->Jump(_jumpHeight, _duration); };
 
 	bool isInvincible() { return m_invincible; };
 	void setInvicible(bool _invincible) { m_invincible = _invincible; };
 
-	void ChangeCharacter(CharacterInfo _character);
+	void Reload(CharacterInfo _character, VehicleInfo _vehicle);
 
 protected:
 	int m_playerID = 0;
@@ -121,7 +123,9 @@ private:
 
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;
-	std::unique_ptr<AnimationMesh> m_displayedMesh = nullptr;
+
+	std::unique_ptr<AnimationMesh> m_characterMesh = nullptr;
+	std::unique_ptr<AnimationMesh> m_vehicleMesh = nullptr;
 
 	std::queue<Matrix> m_posHistory;
 	float m_posHistoryInterval = 0.1f;
