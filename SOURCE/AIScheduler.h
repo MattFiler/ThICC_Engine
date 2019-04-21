@@ -6,8 +6,10 @@
 class AIScheduler
 {
 public:
-	AIScheduler(Track* _track);
+	AIScheduler();
 	~AIScheduler();
+
+	void UpdateTrack(Track* _track);
 
 	void Update();
 	void AddAI(MoveAI* _ai);

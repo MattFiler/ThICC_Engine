@@ -19,6 +19,10 @@ void ThICC_Game::Initialize() {
 	Locator::setupSM(&m_scene_manager);
 	m_scene_manager.Initialize();
 
+	//Set up AI scheduler
+	m_aiScheduler = std::make_unique<AIScheduler>();
+	Locator::setupAIScheduler(m_aiScheduler.get());
+
 	//Load all character data
 	std::ifstream p(m_filepath.generateFilepath("CHARACTER_CONFIG", m_filepath.CONFIG));
 	character_config << p;
@@ -59,6 +63,7 @@ void ThICC_Game::Initialize() {
 
 /* Update loop */
 void ThICC_Game::Update(DX::StepTimer const& timer) {
+	m_aiScheduler->Update();
 	m_scene_manager.Update(timer);
 }
 
