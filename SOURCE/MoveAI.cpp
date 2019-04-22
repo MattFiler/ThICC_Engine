@@ -111,7 +111,12 @@ void MoveAI::RecalculateLine(Track* _track)
 		m_debugNextWaypoint[i]->UpdateWorld();
 	}
 
-	FindRoute(_track, world, pos, direction, iterations, true, m_waypointPos);
+	if (!FindRoute(_track, world, pos, direction, iterations, true, m_waypointPos))
+	{
+		// If no route is found this is probably a jump so head to the next waypoint
+		m_route.clear();
+		m_route.push_back(_track->getWaypointMiddle(m_waypointPos));
+	}
 
 	if (m_route.size() < 3)
 	{
@@ -136,11 +141,6 @@ void MoveAI::RecalculateLine(Track* _track)
 		}
 	}
 	
-
-	condensedRoute.push_back(m_route.back());
-	m_route = condensedRoute;
-
-
 	for (int i = 0; i < m_route.size(); i++)
 	{
 		m_debugRaceLine[i]->SetShouldRender(true);
@@ -151,6 +151,11 @@ void MoveAI::RecalculateLine(Track* _track)
 	{
 		m_debugRaceLine[i]->SetShouldRender(false);
 	}
+
+	condensedRoute.push_back(m_route.back());
+	m_route = condensedRoute;
+
+
 
 }
 
@@ -171,15 +176,25 @@ bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _d
 			{
 				Vector right;
 				Vector left;
-				if (count < m_minFrontSpace / 2)
-				{
-					right = _world.Right();
-					left = _world.Left();
-				}
-				else
+				if (count < m_minFrontSpace / 4)
 				{
 					right = _world.Right() + _world.Forward();
 					left = _world.Left() + _world.Forward();
+					right.Normalize();
+					left.Normalize();
+				}
+				else if (count < m_minFrontSpace / 2)
+				{
+					right = _world.Right() + (_world.Forward() * 2);
+					left = _world.Left() + (_world.Forward() * 2);
+
+					right.Normalize();
+					left.Normalize();
+				}
+				else
+				{
+					right = _world.Right() + (_world.Forward()*4);
+					left = _world.Left() + (_world.Forward()*4);
 					right.Normalize();
 					left.Normalize();
 				}
@@ -222,7 +237,7 @@ int MoveAI::FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorl
 
 	// Check to see if this direction diverges from the waypoint
 	float diff = Vector3::DistanceSquared(_startPos, _track->getWaypointMiddle(_waypointIndex)) - Vector3::DistanceSquared(_startPos + _direction, _track->getWaypointMiddle(_waypointIndex));
-	// If diff is negative they are diverging. So if they are diverging by more than half the step
+	// If diff is negative they are diverging.
 	if (_iteration > 0 && diff < 0)
 	{
 		// Check to see if we are also divering from the next waypoint
