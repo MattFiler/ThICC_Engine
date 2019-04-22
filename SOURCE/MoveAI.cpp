@@ -136,11 +136,6 @@ void MoveAI::RecalculateLine(Track* _track)
 		}
 	}
 	
-
-	condensedRoute.push_back(m_route.back());
-	m_route = condensedRoute;
-
-
 	for (int i = 0; i < m_route.size(); i++)
 	{
 		m_debugRaceLine[i]->SetShouldRender(true);
@@ -151,6 +146,11 @@ void MoveAI::RecalculateLine(Track* _track)
 	{
 		m_debugRaceLine[i]->SetShouldRender(false);
 	}
+
+	condensedRoute.push_back(m_route.back());
+	m_route = condensedRoute;
+
+
 
 }
 
