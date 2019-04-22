@@ -83,6 +83,8 @@ public:
 	bool DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle);
 	void SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall);
 
+	Vector3 getWaypointMiddle(int index);
+
 private:
 	void LoadVertexList(std::string _vertex_list);
 	void CompareVectorToMinimum(Vector& _vect);

@@ -427,3 +427,12 @@ void Track::SetValidCollision(const bool& _boost, const bool& _off, const bool& 
 	m_validCollisions[CollisionType::ON_TRACK] = _on;
 	m_validCollisions[CollisionType::WALL] = _wall;
 }
+
+Vector3 Track::getWaypointMiddle(int index)
+{
+	while (index >= map_waypoints.size())
+	{
+		index -= map_waypoints.size();
+	}
+	return map_waypoints[index].middle_bottom;
+}
