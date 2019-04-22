@@ -10,7 +10,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 		m_debugRaceLine.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
 		m_debugRaceLine.back()->Load();
 		Vector3 new_scale = m_debugRaceLine.back()->GetScale() * ((float)(i+1) / m_maxPathIterations);
-		m_debugRaceLine.back()->SetScale(new_scale);
+		m_debugRaceLine.back()->SetScale(1);
 		m_debugRaceLine.back()->UpdateWorld();
 	}
 	for (int i = 0; i < 20; i++)
@@ -31,7 +31,7 @@ void MoveAI::DebugRender()
 	}
 	for (SDKMeshGO3D* mesh : m_debugNextWaypoint)
 	{
-		mesh->Render();
+		//mesh->Render();
 	}
 }
 
@@ -51,19 +51,7 @@ void MoveAI::RecalculateLine(Track* _track)
 
 	DebugText::print("AI DEBUG, CURRENT WAYPOINT: " + std::to_string(m_move->GetWaypoint()));
 
-	/* 
-	For now I'm grabbing the top_left position from the waypoint's plane mesh. This should ideally be updated to utilise all four corner points.
-
-	if (m_move->GetWaypoint() == (int)(_track->getWaypoints().size() - 1))
-	{
-		m_waypointPos = 0;
-	}
-	else
-	{
-		m_waypointPos = m_move->GetWaypoint() + 1;
-	}	*/
 	m_waypointPos = m_move->GetWaypoint();
-
 
 	Vector3 diff = _track->getWaypointMiddle(m_waypointPos) - pos;
 	diff = diff * (1.0f / m_debugNextWaypoint.size());
@@ -73,82 +61,47 @@ void MoveAI::RecalculateLine(Track* _track)
 		m_debugNextWaypoint[i]->UpdateWorld();
 	}
 
-	if (FindRoute(_track, world, pos, direction, iterations, true, m_waypointPos))
+	FindRoute(_track, world, pos, direction, iterations, true, m_waypointPos);
+
+	if (m_route.size() < 3)
 	{
-		for (int i = 0; i < m_route.size(); i++)
+		return;
+	}
+	// Loop through the route and remove nodes that are roughly on the same line
+	Vector3 previous_direction = m_route[1] - m_route[0];
+	Vector3 total_deflection = Vector3::Zero;
+	std::vector<Vector> condensedRoute;
+	for (int i = 1; i < m_route.size()-1; i++)
+	{
+		// Find the deflection from the previous direction and add it to the total
+		Vector3 new_direction = m_route[i+1] - m_route[i];
+		total_deflection += new_direction - previous_direction;
+		// If the acculated deflection gets too high
+		if (total_deflection.Length() > m_deflectionLimit)
 		{
-			m_debugRaceLine[i]->SetPos(m_route[i]);
-			m_debugRaceLine[i]->UpdateWorld();
+			// Add the current node to the new vector and set the previous direction as the new one
+			total_deflection = Vector3::Zero;
+			condensedRoute.push_back(m_route[i]);
+			previous_direction = new_direction;
 		}
 	}
-	else
+	
+
+	condensedRoute.push_back(m_route.back());
+	m_route = condensedRoute;
+
+
+	for (int i = 0; i < m_route.size(); i++)
 	{
-		m_route.clear();
-		Vector3 waypointDir = _track->getWaypoints()[m_waypointPos].middle_bottom - pos;
-		waypointDir.Normalize();
-		FindWorld(_track, world, world, pos, pos, waypointDir, 1, 0, m_waypointPos);
-		m_route.push_back(pos);
+		m_debugRaceLine[i]->SetShouldRender(true);
+		m_debugRaceLine[i]->SetPos(m_route[i]);
+		m_debugRaceLine[i]->UpdateWorld();
+	}
+	for (int i = m_route.size(); i < m_debugRaceLine.size(); i++)
+	{
+		m_debugRaceLine[i]->SetShouldRender(false);
 	}
 
-	/*
-	Vector3 left = m_model->GetWorld().Forward() + m_model->GetWorld().Left();
-	left.Normalize();
-	Vector3 right = m_model->GetWorld().Forward() + m_model->GetWorld().Right();
-	right.Normalize();
-
-	int forwardCount = GetStepsForDirection(_track, m_model->GetWorld().Forward() * m_aiPathStep);
-	int leftCount = GetStepsForDirection(_track, left * m_aiPathStep);
-	int rightCount = GetStepsForDirection(_track, right * m_aiPathStep);
-
-	DebugText::print("AI DEBUG, FORWARD: " + std::to_string(forwardCount) + ", LEFT: " + std::to_string(leftCount) + ", RIGHT: " + std::to_string(rightCount));
-
-	// If off the track and every direction is 0, check hard left/right to get back on the track
-	if (m_offTrack && !forwardCount && !leftCount && !rightCount)
-	{
-		if (GetStepsForDirection(_track, m_model->GetWorld().Left() * m_aiPathStep))
-		{
-			m_move->TurnLeft(true);
-		}
-		else if (GetStepsForDirection(_track, m_model->GetWorld().Right() * m_aiPathStep))
-		{
-			m_move->TurnRight(true);
-		}
-	}
-	else if (forwardCount >= rightCount && forwardCount >= leftCount)
-	{
-		m_move->TurnLeft(false);
-		m_move->TurnRight(false);
-	}
-	else if (leftCount >= rightCount)
-	{
-		m_move->TurnLeft(true);
-	}
-	else if(rightCount > leftCount)
-	{
-		m_move->TurnRight(true);
-	}
-
-	if (forwardCount < m_maxPathIterations * 0.7f)
-	{
-		m_move->Drift(true);
-		m_move->setAcceleration(1);
-	}
-	else if (forwardCount < m_maxPathIterations * 0.4f)
-	{
-		m_move->Drift(true);
-		m_move->setAcceleration(0);
-	}
-	else if (forwardCount < m_maxPathIterations * 0.2f)
-	{
-		m_move->Drift(true);
-		m_move->setAcceleration(-1);
-	}
-	else
-	{
-		m_move->Drift(false);
-		m_move->setAcceleration(1);
-	}
-	*/
 }
 
 bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int _iterations, bool _allowTurn, int _waypointIndex)
@@ -263,60 +216,4 @@ int MoveAI::FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorl
 		}
 	}
 	return _steps;
-}
-
-int MoveAI::GetStepsForDirection(Track* _track, Vector3 _direction)
-{
-	Matrix world = m_model->GetWorld();
-	Vector3 pos = m_model->GetPos();
-	Vector3 intersect = Vector3::Zero;
-	float length = _direction.Length();
-
-	MeshTri* tri = nullptr;
-
-	int iterations = 0;
-	m_offTrack = false;
-
-	while (iterations < m_maxPathIterations && _track->DoesLineIntersect(world.Down()*(m_model->data.m_height * 10), pos + (world.Up() * (m_model->data.m_height * 2)), intersect, tri, 0.4f))
-	{
-		if (tri->GetType() == CollisionType::OFF_TRACK)
-		{
-			// If off the track on the first iteration set a flag
-			if (iterations == 0)
-			{
-				m_offTrack = true;
-			}
-			else if(!m_offTrack)
-			{
-				return iterations;
-			}
-		}
-		// If off the track we instead count the distance to valid track
-		if (m_offTrack)
-		{
-			// So we return once we hit it
-			if (tri->GetType() != CollisionType::OFF_TRACK)
-			{
-				return m_maxPathIterations - iterations;
-			}
-		}
-		Vector secondIntersect;
-		MeshTri* tri2 = nullptr;
-		tri->DoesLineIntersect(world.Down() * (m_model->data.m_height * 10), pos + _direction + (world.Up() * (m_model->data.m_height *2)), secondIntersect, tri2, 0.4f);
-
-		world = Matrix::CreateWorld(secondIntersect, secondIntersect - intersect, tri->m_plane.Normal());
-		_direction = world.Forward() * length;
-
-		Vector scale = Vector::Zero;
-		Quaternion rot = Quaternion::Identity;
-		world.Decompose(scale, rot, pos);
-
-		iterations++;
-	}
-
-	if (m_offTrack)
-	{
-		return 0;
-	}
-	return iterations;
 }
