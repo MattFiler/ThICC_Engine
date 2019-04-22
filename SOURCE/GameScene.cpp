@@ -110,10 +110,10 @@ void GameScene::ExpensiveUnload() {
 	for (int i = 0; i < game_config["player_count"]; i++) {
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		m_cam[i]->Reset();
-		m_cam[i]->SetBehav(Camera::BEHAVIOUR::RACE_START);
+		m_cam[i]->SetBehav(Camera::Behavior::RACE_START);
 	}
 	cine_cam->Reset();
-	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
+	cine_cam->SetBehav(Camera::Behavior::CINEMATIC);
 
 	//We'll probably need to reset more stuff here, like race timers, etc
 	timeout = 12.f;
@@ -204,8 +204,8 @@ void GameScene::create3DObjects()
 		m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
-		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
-		m_cam[i]->SetBehav(Camera::BEHAVIOUR::RACE_START);
+		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, Vector3(0.0f, 3.0f, 10.0f), player[i], Camera::Behavior::FOLLOW);
+		m_cam[i]->SetBehav(Camera::Behavior::RACE_START);
 	}
 
 	/*
@@ -217,8 +217,8 @@ void GameScene::create3DObjects()
 
 
 	//Cinematic cam
-	cine_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
+	cine_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, Vector3(0.0f, 3.0f, 10.0f), nullptr, Camera::Behavior::CINEMATIC);
+	cine_cam->SetBehav(Camera::Behavior::CINEMATIC);
 }
 
 /* Push objects back to their associated arrays */
@@ -287,7 +287,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		}
 		cine_cam->Tick();
 
-		if (m_cam[game_config["player_count"]-1]->GetBehav() == Camera::BEHAVIOUR::FOLLOW)
+		if (m_cam[game_config["player_count"]-1]->GetBehav() == Camera::Behavior::FOLLOW)
 		{
 			Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN)->SetVolume(0.7f);
 			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN);
@@ -356,20 +356,20 @@ void GameScene::Update(DX::StepTimer const& timer)
 	}
 	if (m_keybinds.keyPressed("Orbit"))
 	{
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::INDEPENDENT);
+		m_cam[0]->SetBehav(Camera::Behavior::INDEPENDENT);
 	}
 	if (m_keybinds.keyPressed("Lerp"))
 	{
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
+		m_cam[0]->SetBehav(Camera::Behavior::FOLLOW);
 	}
 #ifdef _DEBUG
 	if (m_keybinds.keyPressed("Matt"))
 	{
-		if (m_cam[0]->GetBehav() == Camera::BEHAVIOUR::DEBUG_CAM) {
-			m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
+		if (m_cam[0]->GetBehav() == Camera::Behavior::DEBUG_CAM) {
+			m_cam[0]->SetBehav(Camera::Behavior::FOLLOW);
 			return;
 		}
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
+		m_cam[0]->SetBehav(Camera::Behavior::DEBUG_CAM);
 	}
 #endif
 
@@ -679,7 +679,7 @@ void GameScene::SetPlayersWaypoint()
 				{
 					player[i]->SetFinished(true);
 					player[i]->GetFinishOrder()->SetText(std::to_string(player[i]->GetRanking()) + player[i]->GetOrderIndicator()[player[i]->GetRanking() - 1]);
-					m_cam[i]->SetBehav(Camera::BEHAVIOUR::ORBIT);
+					m_cam[i]->SetBehav(Camera::Behavior::ORBIT);
 					player[i]->setGamePad(false);
 					finished++;
 				}

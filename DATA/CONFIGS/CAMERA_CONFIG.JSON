@@ -1,0 +1,52 @@
+{
+  "FOLLOW": {
+    "look_at_target" : "object",
+    "rotation_lerp": 0.1,
+    "position_lerp": 0.25,
+    "camera_delta_position": [
+      0.0,
+      3.0,
+      10.0
+    ]
+  },
+  "ORBIT": {
+    "rotation_lerp": 0.1,
+    "position_lerp": 0.25,
+    "camera_delta_position": [
+      0.0,
+      3.0,
+      10.0
+    ],
+      "angle" : 1.5
+  },
+"CINEMATIC": {
+    "rotation_lerp": 0.1,
+    "position_lerp": 0.25,
+    "camera_delta_position": [
+      0.0,
+      3.0,
+      10.0
+    ],
+      "angle" : 1.5
+  },
+"FIRST": {
+    "rotation_lerp": 0.1,
+    "position_lerp": 0.25,
+    "camera_delta_position": [
+      0.0,
+      3.0,
+      10.0
+    ],
+      "angle" : 1.5
+  },
+"INDEPENDENT": {
+    "rotation_lerp": 0.1,
+    "position_lerp": 0.25,
+    "camera_delta_position": [
+      0.0,
+      3.0,
+      10.0
+    ],
+      "angle" : 1.5
+  }
+}

@@ -12,27 +12,28 @@ class Camera :
 {
 public:
 
-	enum class BEHAVIOUR : int
+	enum class Behavior : int
 	{
 		FOLLOW = 0,
 		BACK_FACING = 1,
-		FIRST = 3,
-		INDEPENDENT = 4,
-		ORBIT = 6,
-		CINEMATIC = 7,
+		FIRST = 2,
+		INDEPENDENT = 3,
+		ORBIT = 4,
+		CINEMATIC = 5,
+		RACE_START = 6,
 #ifdef _DEBUG
-		DEBUG_CAM = 8,
+		DEBUG_CAM = 7,
 #endif
-		RACE_START = 9,
 	};
 
-	Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos);
+	Camera(float _width, float _height, float _near, float _far, Vector3 _dpos, GameObject3D * _target, Behavior _behav);
+	void setUpCameras(json &m_camera_configs, GameObject3D * _target, std::map<Behavior, std::string> camera_map, Behavior _behav);
 	~Camera() = default;
 
 	void SetTarget(GameObject3D* _target) { m_targetObject = _target; }
 	void SetTarget(Vector3 _target) { m_targetObject = NULL; m_targetPos = _target; }
 	void SetDPos(Vector3 _m_dpos) { m_dpos = _m_dpos; }
-	void SetBehav(BEHAVIOUR _behav) { behav = _behav; }
+	void SetBehav(Behavior _behav) { behavior = _behav; }
 
 	/*
 	void SetCinematicPos(std::vector<Vector3> positions);
@@ -42,7 +43,7 @@ public:
 	Matrix GetProj() { return m_proj; }
 	Matrix GetView() { return m_view; }
 	Vector3 GetDeltaPos() { return m_dpos; };
-	BEHAVIOUR GetBehav() { return behav; }
+	Behavior GetBehav() { return behavior; }
 
 	virtual void Tick();
 	virtual void Render() {};
@@ -91,7 +92,15 @@ protected:
 	std::vector<Vector3> look_points;
 	*/
 
-	BEHAVIOUR behav;
+	std::vector<Vector3> delta_positions;
+	std::vector<Vector3> look_at_positions;
+	std::vector<Vector3> target_positions;
+	std::vector<Vector3> up_tranforms;
+	std::vector<Matrix> orientations;
+	std::vector<float> rotation_lerps;
+	std::vector<float> position_lerps;
+
+	Behavior behavior;
 
 	KeybindManager m_keybinds;
 

@@ -6,12 +6,47 @@
 #include "KeybindManager.h"
 #include <math.h>
 
-Camera::Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos)
+Camera::Camera(float _width, float _height, float _near, float _far, Vector3 _dpos, GameObject3D * _target, Behavior _behav = Behavior::FOLLOW) : behavior (_behav)
 {
+	//Read in track config
+	std::ifstream i("DATA/CONFIGS/CAMERA_CONFIG.JSON");
+	json m_camera_configs;
+	m_camera_configs << i;
+
 	m_pos = Vector3::Backward;
 	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f, _width / _height, _near, _far);
+
 	m_targetObject = _target;
-	m_dpos = _dpos;
+
+	std::map <Behavior, std::string> behavior_map;
+	behavior_map[Behavior::FOLLOW] = "FOLLOW";
+	behavior_map[Behavior::ORBIT] = "ORBIT";
+	behavior_map[Behavior::FIRST] = "FIRST";
+	behavior_map[Behavior::INDEPENDENT] = "INDEPENDENT";
+	behavior_map[Behavior::BACK_FACING] = "BACK_FACING";
+	behavior_map[Behavior::RACE_START] = "RACE_START";
+	behavior_map[Behavior::CINEMATIC] = "CINEMATIC";
+	behavior_map[Behavior::DEBUG_CAM] = "DEBUG_CAM";
+
+	setUpCameras(m_camera_configs, _target, behavior_map, Behavior::FOLLOW);
+
+	//m_dpos = _dpos;
+}
+
+void Camera::setUpCameras(json &m_camera_configs, GameObject3D * _target, std::map<Behavior, std::string> camera_map, Behavior _behav)
+{
+	if (m_camera_configs[camera_map[_behav]]["look_at_target"] == "object")
+	{
+		orientations.push_back(_target ? m_targetObject->GetOri() : GetOri());
+		up_tranforms.push_back(_target ? m_targetObject->GetWorld().Up() : GetWorld().Up());
+		target_positions.push_back(_target ? m_targetObject->GetPos() : GetPos());
+		look_at_positions.push_back(_target ? m_targetObject->GetPos() : GetPos());
+	}
+	rotation_lerps.push_back(m_camera_configs[camera_map[_behav]]["rotation_lerp"]);
+	position_lerps.push_back(m_camera_configs[camera_map[_behav]]["position_lerp"]);
+	delta_positions.push_back(Vector3{ m_camera_configs[camera_map[_behav]]["camera_delta_position"][0],
+		m_camera_configs[camera_map[_behav]]["camera_delta_position"][1],
+		m_camera_configs[camera_map[_behav]]["camera_delta_position"][2] });
 }
 
 /*
@@ -44,28 +79,35 @@ void Camera::Tick()
 {
 	Vector3 look_at_target;
 	Vector3 target_pos;
-	Vector up_transform;
+	Vector3 up_transform;
 	Matrix orientation;
 	float rot_lerp;
 	float pos_lerp;
 
-	switch (behav)
+	switch (behavior)
 	{
-	case BEHAVIOUR::FOLLOW:
+	case Behavior::FOLLOW:
 	{
-		m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
+		//m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
+		m_dpos = delta_positions[static_cast<int>(behavior)];
 		if (m_targetObject)
 		{
-			orientation = m_targetObject->GetOri();
-			rot_lerp = 0.1f;
-			pos_lerp = 0.25f;
-			look_at_target = m_targetObject->GetPos();
-			target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, orientation);
-			up_transform = m_targetObject->GetWorld().Up();
+			//orientation = m_targetObject->GetOri();
+			//rot_lerp = 0.1f;
+			//pos_lerp = 0.25f;
+			//look_at_target = m_targetObject->GetPos();
+			//target_pos = m_targetObject->GetPos() + Vector3::Transform(m_dpos, orientation);
+			//up_transform = m_targetObject->GetWorld().Up();
+			orientation = m_targetObject ? m_targetObject->GetOri() : GetOri();
+			rot_lerp = rotation_lerps[static_cast<int>(behavior)];
+			pos_lerp = position_lerps[static_cast<int>(behavior)];
+			look_at_target = m_targetObject ? m_targetObject->GetPos() : GetPos();
+			target_pos = m_targetObject ? m_targetObject->GetPos() : GetPos() + Vector3::Transform(m_dpos, orientation);
+			up_transform = m_targetObject ? m_targetObject->GetWorld().Up() :Vector3::Up;
 		}
 		break;
 	}
-	case BEHAVIOUR::ORBIT:
+	case Behavior::ORBIT:
 	{
 		if (m_targetObject)
 		{
@@ -81,7 +123,7 @@ void Camera::Tick()
 		}
 		break;
 	}
-	case BEHAVIOUR::CINEMATIC:
+	case Behavior::CINEMATIC:
 	{
 		timer += Locator::getGSD()->m_dt;
 		time_out = 4.0f;
@@ -104,7 +146,7 @@ void Camera::Tick()
 		pos_lerp = 1.f;
 		break;
 	}
-	case BEHAVIOUR::FIRST:
+	case Behavior::FIRST:
 	{
 		if (m_targetObject)
 		{
@@ -116,11 +158,9 @@ void Camera::Tick()
 			rot_lerp = 0.08;
 			target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, orientation);
 		}
-		else
-			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
 		break;
 	}
-	case BEHAVIOUR::INDEPENDENT:
+	case Behavior::INDEPENDENT:
 	{
 		if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
 			angle -= 3.0f;
@@ -140,7 +180,7 @@ void Camera::Tick()
 		}
 		break;
 	}
-	case BEHAVIOUR::RACE_START:
+	case Behavior::RACE_START:
 	{
 		timer += Locator::getGSD()->m_dt;
 		time_out = 3.f;
@@ -157,12 +197,12 @@ void Camera::Tick()
 			if (timer >= time_out)
 			{
 				timer = 0.0f;
-				behav = BEHAVIOUR::FOLLOW;
+				behavior = Behavior::FOLLOW;
 			}
 		}
 	}
 #ifdef _DEBUG
-	case BEHAVIOUR::DEBUG_CAM:
+	case Behavior::DEBUG_CAM:
 	{
 		float cam_speed = 40.0f;
 		float cam_rot_speed = 0.007f;
@@ -227,14 +267,14 @@ void Camera::Tick()
 		}
 
 		if (m_keybinds.keyHeld("DebugCamLookUp"))
-			m_pitch -= cam_rot_speed * 10;
-		else if (m_keybinds.keyHeld("DebugCamLookDown"))
 			m_pitch += cam_rot_speed * 10;
+		else if (m_keybinds.keyHeld("DebugCamLookDown"))
+			m_pitch -= cam_rot_speed * 10;
 
 		if (m_keybinds.keyHeld("DebugCamLookLeft"))
-			m_yaw -= cam_rot_speed * 10;
-		else if (m_keybinds.keyHeld("DebugCamLookRight"))
 			m_yaw += cam_rot_speed * 10;
+		else if (m_keybinds.keyHeld("DebugCamLookRight"))
+			m_yaw -= cam_rot_speed * 10;
 
 		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
 
@@ -244,7 +284,7 @@ void Camera::Tick()
 	}
 
 #ifdef _DEBUG
-	if (behav != BEHAVIOUR::DEBUG_CAM)
+	if (behavior != Behavior::DEBUG_CAM)
 	{
 		m_view = Matrix::CreateLookAt(m_pos, look_at_target, up_transform);
 		if (rotCam != orientation)
