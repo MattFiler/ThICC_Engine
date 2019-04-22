@@ -64,9 +64,6 @@ struct ThICC_RenderData {
 	int m_window_width;
 	int m_window_height;
 
-	//The current env map index
-	uint32_t m_ibl = 0;
-
 	//The active camera
 	Camera* m_cam = NULL;
 
@@ -75,4 +72,8 @@ struct ThICC_RenderData {
 	std::unique_ptr<DirectX::SpriteBatch> m_2dSpriteBatch = NULL;
 	std::unique_ptr<DirectX::SpriteFont> m_2dFont = NULL;
 	int m_resourceCount = 0;
+
+	//Current cubemaps (set on map load)
+	std::wstring current_cubemap_radiance;
+	std::wstring current_cubemap_irradiance;
 };

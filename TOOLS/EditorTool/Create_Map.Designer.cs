@@ -50,18 +50,21 @@
             this.finalLapLoop = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.loadString = new System.Windows.Forms.Button();
+            this.mapCodename = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.mapName = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.mapCodename = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.cubemapChoice = new System.Windows.Forms.TextBox();
+            this.loadCubemap = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // saveMap
             // 
-            this.saveMap.Location = new System.Drawing.Point(11, 383);
+            this.saveMap.Location = new System.Drawing.Point(11, 419);
             this.saveMap.Name = "saveMap";
             this.saveMap.Size = new System.Drawing.Size(327, 23);
             this.saveMap.TabIndex = 0;
@@ -245,7 +248,7 @@
             this.groupBox1.Controls.Add(this.selectFinalLapIntro);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.finalLapIntro);
-            this.groupBox1.Location = new System.Drawing.Point(11, 197);
+            this.groupBox1.Location = new System.Drawing.Point(11, 233);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(327, 180);
             this.groupBox1.TabIndex = 20;
@@ -254,7 +257,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label11);
+            this.groupBox2.Controls.Add(this.cubemapChoice);
             this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.loadCubemap);
             this.groupBox2.Controls.Add(this.loadString);
             this.groupBox2.Controls.Add(this.mapCodename);
             this.groupBox2.Controls.Add(this.label2);
@@ -267,10 +273,19 @@
             this.groupBox2.Controls.Add(this.mapModelAsset);
             this.groupBox2.Location = new System.Drawing.Point(11, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(327, 179);
+            this.groupBox2.Size = new System.Drawing.Size(327, 215);
             this.groupBox2.TabIndex = 21;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Core Map Elements";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 17);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(63, 13);
+            this.label8.TabIndex = 23;
+            this.label8.Text = "Code Name";
             // 
             // loadString
             // 
@@ -281,6 +296,14 @@
             this.loadString.Text = "Load";
             this.loadString.UseVisualStyleBackColor = true;
             this.loadString.Click += new System.EventHandler(this.loadString_Click);
+            // 
+            // mapCodename
+            // 
+            this.mapCodename.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.mapCodename.Location = new System.Drawing.Point(9, 33);
+            this.mapCodename.Name = "mapCodename";
+            this.mapCodename.Size = new System.Drawing.Size(310, 20);
+            this.mapCodename.TabIndex = 22;
             // 
             // label2
             // 
@@ -299,28 +322,38 @@
             this.mapName.Size = new System.Drawing.Size(229, 20);
             this.mapName.TabIndex = 8;
             // 
-            // label8
+            // label11
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 17);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(63, 13);
-            this.label8.TabIndex = 23;
-            this.label8.Text = "Code Name";
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 173);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(52, 13);
+            this.label11.TabIndex = 3;
+            this.label11.Text = "Cubemap";
             // 
-            // mapCodename
+            // cubemapChoice
             // 
-            this.mapCodename.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.mapCodename.Location = new System.Drawing.Point(9, 33);
-            this.mapCodename.Name = "mapCodename";
-            this.mapCodename.Size = new System.Drawing.Size(310, 20);
-            this.mapCodename.TabIndex = 22;
+            this.cubemapChoice.Location = new System.Drawing.Point(9, 189);
+            this.cubemapChoice.Name = "cubemapChoice";
+            this.cubemapChoice.ReadOnly = true;
+            this.cubemapChoice.Size = new System.Drawing.Size(229, 20);
+            this.cubemapChoice.TabIndex = 1;
+            // 
+            // loadCubemap
+            // 
+            this.loadCubemap.Location = new System.Drawing.Point(244, 188);
+            this.loadCubemap.Name = "loadCubemap";
+            this.loadCubemap.Size = new System.Drawing.Size(75, 23);
+            this.loadCubemap.TabIndex = 2;
+            this.loadCubemap.Text = "Load";
+            this.loadCubemap.UseVisualStyleBackColor = true;
+            this.loadCubemap.Click += new System.EventHandler(this.loadRadiance_Click);
             // 
             // Create_Map
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 415);
+            this.ClientSize = new System.Drawing.Size(349, 451);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.saveMap);
@@ -366,5 +399,8 @@
         private System.Windows.Forms.Button loadString;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox mapCodename;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox cubemapChoice;
+        private System.Windows.Forms.Button loadCubemap;
     }
 }

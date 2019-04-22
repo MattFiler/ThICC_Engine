@@ -102,6 +102,12 @@
     <Compile Include="Create_Vehicle.Designer.cs">
       <DependentUpon>Create_Vehicle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Cubemap_Creator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cubemap_Creator.Designer.cs">
+      <DependentUpon>Cubemap_Creator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Generic_Importer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -198,6 +204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Create_Vehicle.resx">
       <DependentUpon>Create_Vehicle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cubemap_Creator.resx">
+      <DependentUpon>Cubemap_Creator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generic_Importer.resx">
       <DependentUpon>Generic_Importer.cs</DependentUpon>

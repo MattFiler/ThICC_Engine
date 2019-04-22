@@ -231,16 +231,25 @@ void ControlledMovement::EndDrift()
 	m_drifting = false;
 }
 
-void ControlledMovement::TurnLeft(bool _flag)
+void ControlledMovement::TurnLeft()
 { 
-	m_left = _flag;
-	m_isTurning = _flag;
+	m_left = true;
+	m_right = false;
+	m_isTurning = true;
 }
-void ControlledMovement::TurnRight(bool _flag)
+void ControlledMovement::TurnRight()
 { 
-	m_right = _flag; 
-	m_isTurning = _flag;
+	m_left = false;
+	m_right = true;
+	m_isTurning = true;
 };
+
+void ControlledMovement::DontTurn()
+{
+	m_left = false;
+	m_right = false;
+	m_isTurning = false;
+}
 
 void ControlledMovement::Drift(bool _flag)
 {

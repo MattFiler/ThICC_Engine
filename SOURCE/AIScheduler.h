@@ -6,14 +6,20 @@
 class AIScheduler
 {
 public:
-	AIScheduler(Track* _track);
+	AIScheduler();
 	~AIScheduler();
+
+	void UpdateTrack(Track* _track);
 
 	void Update();
 	void AddAI(MoveAI* _ai);
 	void RemoveAI(MoveAI* _ai);
 private:
 
+	float m_lineUpdateFrequency = 1;
+	float m_totalFrequency = 1;
+	float m_elapsedTime = 0;
+	size_t m_currentIndex = 0;
 	std::vector<MoveAI*> m_aiList;
 	Track* m_track = nullptr;
 };

@@ -8,7 +8,8 @@
         IMAGE,
         SOUND,
         FONT,
-        STRING
+        STRING,
+        CUBEMAP //new
     }
     /* Model types handled */
     public enum ModelType

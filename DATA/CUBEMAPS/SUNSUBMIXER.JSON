@@ -1,0 +1,9 @@
+{
+  "asset_name": "SUNSUBMIXER",
+  "asset_type": "Cubemap",
+  "in_use_in": [
+    "Map",
+    "Map",
+    "Map"
+  ]
+}

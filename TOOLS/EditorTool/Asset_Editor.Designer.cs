@@ -88,7 +88,8 @@ namespace EditorTool
             "Images",
             "Sounds",
             "Fonts",
-            "Strings"});
+            "Strings",
+            "Cubemaps"});
             this.loadAssetType.Location = new System.Drawing.Point(6, 19);
             this.loadAssetType.Name = "loadAssetType";
             this.loadAssetType.Size = new System.Drawing.Size(202, 21);

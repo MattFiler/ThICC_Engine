@@ -25,19 +25,24 @@ public:
 	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
 
 protected:
+	//Model resources
 	std::unique_ptr<DirectX::EffectTextureFactory> m_modelResources;
 	std::unique_ptr<DirectX::Model> m_model;
 	std::vector<std::shared_ptr<DirectX::IEffect>> m_modelNormal;
-	std::unique_ptr<DirectX::DescriptorPile>        m_resourceDescriptors;
-	Microsoft::WRL::ComPtr<ID3D12Resource>          m_radianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT];
-	Microsoft::WRL::ComPtr<ID3D12Resource>          m_irradianceIBL[(unsigned long long)NUM_OF_ENV_MAPS::ENV_MAP_COUNT];
+	std::unique_ptr<DirectX::DescriptorPile> m_resourceDescriptors;
 
+	//Our IBL cubemaps
+	Microsoft::WRL::ComPtr<ID3D12Resource> m_radianceIBL;
+	Microsoft::WRL::ComPtr<ID3D12Resource> m_irradianceIBL;
+
+	//Engine features
 	GameFilepaths m_filepath;
 
+	//Settings and data
 	std::string filename;
-
 	int resourceDescriptorOffset = 0;
-
+	int radiance_index = -1;
+	int irradiance_index = -1;
 	bool is_debug_mesh = false;
 	bool m_shouldRender = true;
 };

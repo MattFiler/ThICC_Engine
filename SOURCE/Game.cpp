@@ -18,6 +18,10 @@ void ThICC_Game::Initialize() {
 	Locator::setupSM(&m_scene_manager);
 	m_scene_manager.Initialize();
 
+	//Set up AI scheduler
+	m_aiScheduler = std::make_unique<AIScheduler>();
+	Locator::setupAIScheduler(m_aiScheduler.get());
+
 	//Load all character data
 	std::ifstream p(m_filepath.generateFilepath("CHARACTER_CONFIG", m_filepath.CONFIG));
 	character_config << p;
@@ -41,6 +45,11 @@ void ThICC_Game::Initialize() {
 	map_config << j;
 	index = 0;
 	for (auto& element : map_config) {
+		/* TEMP FIX TO DISABLE MAPS THAT DON'T HAVE UPDATED WAYPOINTS!! */
+		if (element["friendly_name"] == "MAP_RBR") {
+			continue;
+		}
+
 		//Store map info
 		m_go_shared.map_instances.emplace_back(element, index);
 		//Create scene

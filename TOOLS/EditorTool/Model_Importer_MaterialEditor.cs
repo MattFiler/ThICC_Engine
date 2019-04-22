@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace EditorTool
         UsefulFunctions common_functions = new UsefulFunctions();
         string this_model_folder;
         ModelType model_type;
+        int[] default_rma_vals = { 0, 0, 0 };
         public Model_Importer_MaterialEditor(JToken _config, ModelType _type, string _folder)
         {
             material_config = _config;
@@ -94,16 +96,24 @@ namespace EditorTool
                 emissiveMap.Text = "";
             }
 
-            //RMA Texture
-            RMAMap.Text = material_config["map_RMA"].Value<string>();
-            if (RMAMap.Text == "")
+            //RMA values
+            string path_to_rma = material_config["map_RMA"].Value<string>();
+            if (path_to_rma == "")
             {
-                RMAMap.Text = material_config["map_occlusionRoughnessMetallic"].Value<string>();
+                path_to_rma = material_config["map_occlusionRoughnessMetallic"].Value<string>();
+                if (path_to_rma == "")
+                {
+                    path_to_rma = "rma_placeholder.png";
+                }
             }
-            if (RMAMap.Text == "rma_placeholder.png")
-            {
-                RMAMap.Text = "";
-            }
+            Bitmap rma_image = new Bitmap(this_model_folder + path_to_rma);
+            var rma_pixel = rma_image.GetPixel(0, 0);
+            metalnessSlider.Value = rma_pixel.B;
+            roughnessSlider.Value = rma_pixel.G;
+            ambientocclusionSlider.Value = rma_pixel.R;
+            default_rma_vals[0] = metalnessSlider.Value;
+            default_rma_vals[1] = roughnessSlider.Value;
+            default_rma_vals[2] = ambientocclusionSlider.Value;
 
             /* Engine Config */
             if (model_type == ModelType.MAP)
@@ -189,10 +199,6 @@ namespace EditorTool
         {
             normalMap.Text = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
         }
-        private void RMAMapBrowse_Click(object sender, EventArgs e)
-        {
-            RMAMap.Text = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
-        }
 
         /* Slider interaction */
         private void transparencySlider_Scroll(object sender, EventArgs e)
@@ -260,9 +266,15 @@ namespace EditorTool
             copyNewMat(emissiveMap.Text);
 
             //RMA Texture
-            material_config["map_RMA"] = Path.GetFileName(RMAMap.Text);
-            material_config["map_occlusionRoughnessMetallic"] = Path.GetFileName(RMAMap.Text);
-            copyNewMat(RMAMap.Text);
+            string rma = "rma_placeholder.png";
+            if (metalnessSlider.Value != default_rma_vals[0] || 
+                ambientocclusionSlider.Value != default_rma_vals[2] || 
+                roughnessSlider.Value != default_rma_vals[1])
+            {
+                rma = createRMA();
+            }
+            material_config["map_RMA"] = rma;
+            material_config["map_occlusionRoughnessMetallic"] = rma;
 
             //Collision config
             material_config["ThICC_COLLISION"]["0"] = (inPlayableArea.Checked ? onTrack.Checked : false);
@@ -300,6 +312,15 @@ namespace EditorTool
             }
         }
 
+        /* Create our RMA material from slider values (keeping the option to define a pre-made RMA would be nice) */
+        private string createRMA()
+        {
+            Bitmap temp_rma = new Bitmap(1, 1);
+            temp_rma.SetPixel(0, 0, Color.FromArgb(255, ambientocclusionSlider.Value, roughnessSlider.Value, metalnessSlider.Value));
+            temp_rma.Save(this_model_folder + materialName.Text.Replace(' ', '_') + "_occlusionRoughnessMetallic.png", ImageFormat.Png);
+            return materialName.Text.Replace(' ', '_') + "_occlusionRoughnessMetallic.png";
+        }
+
 
 
         // stuff to be deleted
@@ -317,6 +338,10 @@ namespace EditorTool
         }
         private void saveMaterial_Click(object sender, EventArgs e)
         {
+        }
+        private void RMAMapBrowse_Click(object sender, EventArgs e)
+        {
+
         }
 
     }
