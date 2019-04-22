@@ -46,7 +46,7 @@ void ThICC_Game::Initialize() {
 	index = 0;
 	for (auto& element : map_config) {
 		/* TEMP FIX TO DISABLE MAPS THAT DON'T HAVE UPDATED WAYPOINTS!! */
-		if (element["friendly_name"] != "MAP_MKS") {
+		if (element["friendly_name"] == "MAP_RBR") {
 			continue;
 		}
 
