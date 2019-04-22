@@ -1,16 +1,4 @@
 {
-  "MARIO KART STADIUM": {
-    "friendly_name": "MAP_MKS",
-    "menu_sprite": "MARIO KART STADIUM PREVIEW",
-    "model": "MARIOKARTSTADIUM",
-    "cubemap": "SUNSUBMIXER",
-    "audio": {
-      "background_start": "MKS START MUSIC",
-      "background": "MKS MAIN MUSIC",
-      "final_lap_start": "MKS FINAL LAP START",
-      "final_lap": "MKS FINAL LAP LOOP"
-    }
-  },
   "RAINBOW ROAD": {
     "friendly_name": "MAP_RBR",
     "menu_sprite": "RBR PREVIEW",
@@ -27,6 +15,18 @@
     "friendly_name": "MAP_DRIFTWAY",
     "menu_sprite": "DRAGON_DRIFTWAY_PREVIEW",
     "model": "DRAGON_DRIFTWAY",
+    "cubemap": "SUNSUBMIXER",
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
+  },
+  "MARIO KART STADIUM": {
+    "friendly_name": "MAP_MKS",
+    "menu_sprite": "MARIO KART STADIUM PREVIEW",
+    "model": "MARIOKARTSTADIUM",
     "cubemap": "SUNSUBMIXER",
     "audio": {
       "background_start": "MKS START MUSIC",

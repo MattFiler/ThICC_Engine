@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -747,7 +748,8 @@ namespace EditorTool
                     string face_copy = asset_name + "/" + Path.GetFileName(face);
                     if (!File.Exists(getFolder(AssetType.CUBEMAP) + face_copy))
                     {
-                        File.Copy(face, getFolder(AssetType.CUBEMAP) + face_copy);
+                        Bitmap resized_file = new Bitmap(Image.FromFile(face), 500, 500);
+                        resized_file.Save(getFolder(AssetType.CUBEMAP) + face_copy);
                     }
                     cube_face_args += " \"" + face_copy + "\"";
                 }
