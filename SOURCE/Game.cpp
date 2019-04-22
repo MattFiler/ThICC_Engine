@@ -45,6 +45,11 @@ void ThICC_Game::Initialize() {
 	map_config << j;
 	index = 0;
 	for (auto& element : map_config) {
+		/* TEMP FIX TO DISABLE MAPS THAT DON'T HAVE UPDATED WAYPOINTS!! */
+		if (element["friendly_name"] != "MAP_MKS") {
+			continue;
+		}
+
 		//Store map info
 		m_go_shared.map_instances.emplace_back(element, index);
 		//Create scene

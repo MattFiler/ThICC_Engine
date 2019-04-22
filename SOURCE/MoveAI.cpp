@@ -36,13 +36,16 @@ void MoveAI::Update(Track* _track)
 
 	DebugText::print("AI DEBUG, CURRENT WAYPOINT: " + std::to_string(m_move->GetWaypoint()));
 
+	/* 
+	For now I'm grabbing the top_left position from the waypoint's plane mesh. This should ideally be updated to utilise all four corner points.
+	*/
 	if (m_move->GetWaypoint() == _track->getWaypoints().size() - 1)
 	{
-		m_waypointPos = _track->getWaypoints()[0];
+		m_waypointPos = _track->getWaypoints()[0].top_left;
 	}
 	else
 	{
-		m_waypointPos = _track->getWaypoints()[m_move->GetWaypoint()+1];
+		m_waypointPos = _track->getWaypoints()[m_move->GetWaypoint()+1].top_left;
 	}
 
 	if (FindRoute(_track, world, pos, direction, iterations, true))

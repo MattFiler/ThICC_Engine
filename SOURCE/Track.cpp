@@ -23,13 +23,19 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	m_triSegSize = m_track_data_j["segment_size"];
 
 	//Parse loaded arrays from config
+
 	for (json::iterator it = m_track_data_j["map_waypoints"].begin(); it != m_track_data_j["map_waypoints"].end(); ++it) {
-		Vector3 pos = blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale);
+		Vector3 top_left = blender_vector.ConvertPosition(Vector3(it.value()["top_left"][0], it.value()["top_left"][1], it.value()["top_left"][2]) * m_track_data.scale);
+		Vector3 top_right = blender_vector.ConvertPosition(Vector3(it.value()["top_right"][0], it.value()["top_right"][1], it.value()["top_right"][2]) * m_track_data.scale);
+		Vector3 bottom_left = blender_vector.ConvertPosition(Vector3(it.value()["bottom_left"][0], it.value()["bottom_left"][1], it.value()["bottom_left"][2]) * m_track_data.scale);
+		Vector3 bottom_right = blender_vector.ConvertPosition(Vector3(it.value()["bottom_right"][0], it.value()["bottom_right"][1], it.value()["bottom_right"][2]) * m_track_data.scale);
 
-		map_waypoints.push_back(pos);
+		Waypoint new_waypoint = Waypoint(top_left, top_right, bottom_left, bottom_right);
+		map_waypoints.push_back(new_waypoint);
 
-		DebugMarker* new_marker = new DebugMarker(pos, Vector3(0, 0, 0));
-		debug_markers.push_back(new_marker);
+		//Calculate debug marker position as the mid-point of top left and bottom right!
+		//DebugMarker* new_marker = new DebugMarker(pos, Vector3(0, 0, 0));
+		//debug_markers.push_back(new_marker);
 	}
 	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
 		map_cams_pos.push_back(blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
@@ -49,14 +55,17 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 		item_boxes.push_back(new_item_box);
 	}
 	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
-		Vector3 pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
-		Vector3 rot = blender_vector.ConvertAngle(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale);
+		Vector3 top_left = blender_vector.ConvertPosition(Vector3(it.value()["top_left"][0], it.value()["top_left"][1], it.value()["top_left"][2]) * m_track_data.scale);
+		Vector3 top_right = blender_vector.ConvertPosition(Vector3(it.value()["top_right"][0], it.value()["top_right"][1], it.value()["top_right"][2]) * m_track_data.scale);
+		Vector3 bottom_left = blender_vector.ConvertPosition(Vector3(it.value()["bottom_left"][0], it.value()["bottom_left"][1], it.value()["bottom_left"][2]) * m_track_data.scale);
+		Vector3 bottom_right = blender_vector.ConvertPosition(Vector3(it.value()["bottom_right"][0], it.value()["bottom_right"][1], it.value()["bottom_right"][2]) * m_track_data.scale);
 
-		map_finishline_pos.push_back(pos);
-		map_finishline_rot.push_back(rot);
+		Waypoint finish_line = Waypoint(top_left, top_right, bottom_left, bottom_right);
+		map_finishline.push_back(finish_line);
 
-		DebugMarker* new_marker = new DebugMarker(pos, rot);
-		debug_markers.push_back(new_marker);
+		//Calculate debug marker position as the mid-point of top left and bottom right!
+		//DebugMarker* new_marker = new DebugMarker(pos, rot);
+		//debug_markers.push_back(new_marker);
 	}
 
 	//Work out the spawn pos from blender definition, or fall back to our origin
@@ -169,16 +178,19 @@ void Track::LoadVertexList(std::string _vertex_list)
 /* Sets up the bounding boxes for each waypoint */
 void Track::setWaypointBB()
 {
-	for (size_t i = 0; i < map_finishline_pos.size(); ++i)
+	/*
+	For now I'm grabbing the top_left position from the waypoint's plane mesh. This should ideally be updated to utilise all four corner points.
+	*/
+	for (size_t i = 0; i < map_finishline.size(); ++i)
 	{
 		waypoint_bb.push_back(BoundingOrientedBox());
-		waypoint_bb[i].Center = { static_cast<float>(map_finishline_pos[i].x), static_cast<float>(map_finishline_pos[i].y), static_cast<float>(map_finishline_pos[i].z) };
+		waypoint_bb[i].Center = { static_cast<float>(map_finishline[i].top_left.x), static_cast<float>(map_finishline[i].top_left.y), static_cast<float>(map_finishline[i].top_left.z) };
 		waypoint_bb[i].Extents = { 100, 100, 5 };
 	}
 	for (size_t i = 0; i < map_waypoints.size(); ++i)
 	{
 		waypoint_bb.push_back(BoundingOrientedBox());
-		waypoint_bb[i + 1].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z) };
+		waypoint_bb[i + 1].Center = { static_cast<float>(map_waypoints[i].top_left.x), static_cast<float>(map_waypoints[i].top_left.y), static_cast<float>(map_waypoints[i].top_left.z) };
 		waypoint_bb[i + 1].Extents = { 100, 100, 100 };
 	}
 	int y = 0;

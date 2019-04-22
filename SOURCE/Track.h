@@ -16,13 +16,17 @@ struct TrackData {
 	Vector3 start_rot = Vector3(0, 0, 0);
 };
 
-struct FinishLine {
-	FinishLine(Vector3 _pos, Vector3 _rot) {
-		position = _pos;
-		rotation = _rot;
+struct Waypoint {
+	Waypoint(Vector3 _tl, Vector3 _tr, Vector3 _bl, Vector3 _br) {
+		top_left = _tl;
+		top_right = _tr;
+		bottom_left = _bl;
+		bottom_right = _br;
 	}
-	Vector3 position = Vector3(0, 0, 0);
-	Vector3 rotation = Vector3(0, 0, 0);
+	Vector3 top_left = Vector3(0, 0, 0);
+	Vector3 top_right = Vector3(0, 0, 0);
+	Vector3 bottom_left = Vector3(0, 0, 0);
+	Vector3 bottom_right = Vector3(0, 0, 0);
 };
 
 /* A type of PhysModel that stores a reference to their triangles, used so that TrackMagnet objects
@@ -37,7 +41,7 @@ public:
 
 	Vector3 getSuitableSpawnSpot();
 
-	std::vector<Vector3> getWaypoints() {
+	std::vector<Waypoint> getWaypoints() {
 		return map_waypoints;
 	};
 	std::vector<Vector3> getSpawnpoints() {
@@ -52,10 +56,10 @@ public:
 	std::vector<BoundingOrientedBox> getWaypointsBB() {
 		return waypoint_bb;
 	};
-	FinishLine getFinishLine() {
+	Waypoint getFinishLine() {
 		//This is all stored as a vector, but really there should only be one finish line per map - so just return element zero.
 		//If we end up changing maps to have multiple end-points, then this can easily be supported by modifying this return type.
-		return FinishLine(map_finishline_pos.at(0), map_finishline_rot.at(0));
+		return map_finishline.at(0);
 	};
 	std::vector<Vector3> getItemBoxesPos() {
 		return map_itemboxes_pos;
@@ -111,14 +115,13 @@ private:
 	float m_triSegSize = 10;
 
 	// Map config data from Blender
-	std::vector<Vector3> map_waypoints;
+	std::vector<Waypoint> map_waypoints;
 	std::vector<Vector3> map_spawnpoints;
 	std::vector<Vector3> map_cams_pos;
-	std::vector<Vector3> map_cams_rot;
+	std::vector<Vector3> map_cams_rot; //broken
 	std::vector<Vector3> map_itemboxes_pos;
-	std::vector<Vector3> map_itemboxes_rot;
-	std::vector<Vector3> map_finishline_pos;
-	std::vector<Vector3> map_finishline_rot;
+	std::vector<Vector3> map_itemboxes_rot; //broken
+	std::vector<Waypoint> map_finishline;
 
 	// waypoint bounding box
 	std::vector<BoundingOrientedBox> waypoint_bb;
