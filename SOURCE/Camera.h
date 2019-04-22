@@ -20,7 +20,9 @@ public:
 		INDEPENDENT = 4,
 		ORBIT = 6,
 		CINEMATIC = 7,
+#ifdef _DEBUG
 		DEBUG_CAM = 8,
+#endif
 		RACE_START = 9,
 	};
 
@@ -98,4 +100,6 @@ protected:
 	float time_out = 3.0f;
 	float timer = 0.0f;
 	int m_cameraID = 0;
+	float last_mouse_xpos = 0.0f;
+	float last_mouse_ypos = 0.0f;
 };

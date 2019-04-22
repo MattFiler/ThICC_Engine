@@ -108,12 +108,13 @@ void Camera::Tick()
 	{
 		if (m_targetObject)
 		{
+			m_dpos = Vector3{ 0.0f, 2.0f, -2.5f };
 			orientation = m_targetObject->GetOri();
 			look_at_target = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 2.0f, -10.0f }, orientation);
 			up_transform = m_targetObject->GetWorld().Up();
 			pos_lerp = 1.f;
 			rot_lerp = 0.08;
-			target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 2.0f, -2.5f }, orientation);
+			target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, orientation);
 		}
 		else
 			m_view = Matrix::CreateLookAt(m_pos, m_targetPos, Vector3::Up);
@@ -160,6 +161,7 @@ void Camera::Tick()
 			}
 		}
 	}
+#ifdef _DEBUG
 	case BEHAVIOUR::DEBUG_CAM:
 	{
 		float cam_speed = 40.0f;
@@ -180,8 +182,16 @@ void Camera::Tick()
 		upMove = Vector3::Transform(upMove, rotMove);
 		m_targetPos = m_pos + forwardMove;
 
-		m_yaw -= cam_rot_speed * Locator::getID()->m_mouseState.x;
-		m_pitch -= cam_rot_speed * Locator::getID()->m_mouseState.y;
+
+		float mouse_xpos = last_mouse_xpos - Locator::getID()->m_mouseState.x;
+		float mouse_ypos = last_mouse_ypos - Locator::getID()->m_mouseState.y;
+		//m_yaw -= cam_rot_speed * Locator::getID()->m_mouseState.x;
+		//m_pitch -= cam_rot_speed * Locator::getID()->m_mouseState.y;
+		m_yaw += cam_rot_speed * mouse_xpos;
+		m_pitch -= cam_rot_speed * mouse_ypos;
+
+		last_mouse_xpos = Locator::getID()->m_mouseState.x;
+		last_mouse_ypos = Locator::getID()->m_mouseState.y;
 
 		if (m_keybinds.keyHeld("DebugCamFor"))
 		{
@@ -216,12 +226,24 @@ void Camera::Tick()
 			m_targetPos += Locator::getGSD()->m_dt * upMove;
 		}
 
+		if (m_keybinds.keyHeld("DebugCamLookUp"))
+			m_pitch -= cam_rot_speed * 10;
+		else if (m_keybinds.keyHeld("DebugCamLookDown"))
+			m_pitch += cam_rot_speed * 10;
+
+		if (m_keybinds.keyHeld("DebugCamLookLeft"))
+			m_yaw -= cam_rot_speed * 10;
+		else if (m_keybinds.keyHeld("DebugCamLookRight"))
+			m_yaw += cam_rot_speed * 10;
+
 		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
 
 		break;
 	}
+#endif
 	}
 
+#ifdef _DEBUG
 	if (behav != BEHAVIOUR::DEBUG_CAM)
 	{
 		m_view = Matrix::CreateLookAt(m_pos, look_at_target, up_transform);
@@ -231,12 +253,21 @@ void Camera::Tick()
 		if (m_pos != target_pos)
 			m_pos = Vector3::Lerp(m_pos, target_pos, pos_lerp);
 	}
-	//DebugText::print(std::to_string(timer));
 
 	//Debug output player location - useful for setting up spawns
 	if (m_keybinds.keyPressed("Debug Print Camera Location")) {
 		DebugText::print("CAMERA POSITION: (" + std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + ")");
 	}
+#else
+	m_view = Matrix::CreateLookAt(m_pos, look_at_target, up_transform);
+	if (rotCam != orientation)
+		rotCam = Matrix::Lerp(rotCam, orientation, rot_lerp);
+
+	if (m_pos != target_pos)
+		m_pos = Vector3::Lerp(m_pos, target_pos, pos_lerp);
+#endif
+
+	//DebugText::print(std::to_string(timer));
 
 	GameObject3D::Tick();
 }
