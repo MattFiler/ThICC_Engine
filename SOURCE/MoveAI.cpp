@@ -35,7 +35,12 @@ void MoveAI::DebugRender()
 	}
 }
 
-void MoveAI::Update(Track* _track)
+void MoveAI::Update()
+{
+
+}
+
+void MoveAI::RecalculateLine(Track* _track)
 {
 	_track->SetValidCollision(true, false, true, false);
 	m_route.clear();

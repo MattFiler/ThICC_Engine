@@ -9,7 +9,8 @@ class MoveAI
 public:
 	MoveAI(PhysModel* _model, ControlledMovement* _move);
 
-	void Update(Track* _track);
+	void Update();
+	void RecalculateLine(Track* _track);
 	void DebugRender();
 
 	void UseDrift(bool _flag) { m_useDrift = _flag;};
