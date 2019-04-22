@@ -329,11 +329,13 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 
-!Mario Kart Asset Manager.exe
-Mario Kart Asset Manager.exe.config
-Mario Kart Asset Manager.pdb
+!ThICC Toolkit.exe
+ThICC Toolkit.exe.config
+ThICC Toolkit.pdb
 Costura.dll
 Costura.xml
 Newtonsoft.Json.dll
 Newtonsoft.Json.pdb
 Newtonsoft.Json.xml
+CACHE/*
+BUILDS/*

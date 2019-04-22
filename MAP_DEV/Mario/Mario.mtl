@@ -1,0 +1,26 @@
+# Blender MTL File: 'Mario.blend'
+# Material Count: 2
+
+newmtl Body__m_Body
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd \\nstu-nas01.uwe.ac.uk\users3$\m2-filer\Windows\Downloads\Wii U - Mario Kart 8 - Mario\Mario\mario_alb.png
+disp \\\\nstu-nas01.uwe.ac.uk\\users3$\\m2-filer\\Windows\\Downloads\\Wii U - Mario Kart 8 - Mario\\Mario\\mario_nrm.png
+
+newmtl Body__m_Eye
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd \\nstu-nas01.uwe.ac.uk\users3$\m2-filer\Windows\Downloads\Wii U - Mario Kart 8 - Mario\Mario\marioeye_alb.0.png
+disp \\\\nstu-nas01.uwe.ac.uk\\users3$\\m2-filer\\Windows\\Downloads\\Wii U - Mario Kart 8 - Mario\\Mario\\marioeye_nrm.0.png

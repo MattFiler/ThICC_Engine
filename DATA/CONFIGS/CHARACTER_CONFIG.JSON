@@ -1,0 +1,14 @@
+{
+  "MARIO": {
+    "friendly_name": "CHARACTER_MARIO",
+    "menu_sprite": "CHARACTER_MARIO",
+    "model": "CHARACTER_MARIO",
+    "audio": {}
+  },
+  "KNUCKLES CHARACTER": {
+    "friendly_name": "CHARACTER_KNUCKLES",
+    "menu_sprite": "CHARACTER_KNUCKLES",
+    "model": "CHARACTER_KNUCKLES",
+    "audio": {}
+  }
+}

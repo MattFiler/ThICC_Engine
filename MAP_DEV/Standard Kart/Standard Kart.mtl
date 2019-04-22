@@ -1,0 +1,14 @@
+# Blender MTL File: 'Standard Kart.blend'
+# Material Count: 1
+
+newmtl m_Body
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd \\nstu-nas01.uwe.ac.uk\users3$\m2-filer\Windows\Downloads\Wii U - Mario Kart 8 - Standard Kart\Body_Dummy_Alb.png
+map_d \\\\nstu-nas01.uwe.ac.uk\\users3$\\m2-filer\\Windows\\Downloads\\Wii U - Mario Kart 8 - Standard Kart\\Body_Dummy_Alb.png

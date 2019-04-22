@@ -1,17 +1,21 @@
 {
-	"ENGLISH": {
-		"placeholder": "placeholder",
-		"demo2": "TESTING",
-		"debug_text": "Example string loaded as English."
-	},
-	"SPANISH": {
-		"placeholder": "SPANISH placeholder",
-		"demo2": "TESTING SPANISH",
-		"debug_text": "Ejemplo de cadena cargada como espanol."
-	},
-	"FRENCH": {
-		"placeholder": "FRENCH placeholder",
-		"demo2": "TESTING FRENCH",
-		"debug_text": "Exemple de chaine chargee en francais."
-	}
+  "ENGLISH": {
+    "PLACEHOLDER": "placeholder",
+    "DEMO2": "TESTING",
+    "DEBUG_TEXT": "Example string loaded as English.",
+    "MAP_MKS": "Mario Kart Stadium",
+    "TEST": "testing string",
+    "MAP_DRIFTWAY": "Dragon Driftway",
+    "MAP_RBR": "Rainbow Road",
+    "CHARACTER_KNUCKLES": "Ugandan Knuckles",
+    "CHARACTER_MARIO": "Mario",
+    "KART_STANDARD": "Standard Kart",
+    "KART_MK_WII": "MK Wii Kart",
+    "KART_MK8": "MK8 Kart",
+    "MAP_SELECT": "Map Selection",
+    "CHARACTER_SELECT": "Character Selection",
+    "VEHICLE_SELECT": "Vehicle Selection"
+  },
+  "SPANISH": {},
+  "FRENCH": {}
 }
