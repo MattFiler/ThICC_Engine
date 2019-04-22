@@ -68,6 +68,10 @@ namespace EditorTool
                         }
                     }
                     break;
+                case AssetType.CUBEMAP:
+                    file_path = function_libary.getFolder(AssetType.CUBEMAP);
+                    file_extension = "*.JSON";
+                    break;
                 default:
                     this.Close();
                     break;
@@ -144,8 +148,9 @@ namespace EditorTool
                 case AssetType.SOUND:
                     function_libary.loadSoundPreview(assetList, sound_player, soundPreview, playSoundPreview);
                     break;
+                case AssetType.CUBEMAP:
                 case AssetType.IMAGE:
-                    function_libary.loadImagePreview(assetList, imagePreview);
+                    function_libary.loadImagePreview(assetList, imagePreview, file_type);
                     break;
                 case AssetType.MODEL:
                     function_libary.loadModelPreview(assetList, modelPreview);

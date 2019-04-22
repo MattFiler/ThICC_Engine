@@ -55,21 +55,16 @@
             this.mapCodename = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.mapName = new System.Windows.Forms.TextBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.radianceTexture = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.loadRadiance = new System.Windows.Forms.Button();
-            this.loadIrradiance = new System.Windows.Forms.Button();
-            this.irradianceTexture = new System.Windows.Forms.TextBox();
+            this.cubemapChoice = new System.Windows.Forms.TextBox();
+            this.loadCubemap = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // saveMap
             // 
-            this.saveMap.Location = new System.Drawing.Point(12, 487);
+            this.saveMap.Location = new System.Drawing.Point(11, 419);
             this.saveMap.Name = "saveMap";
             this.saveMap.Size = new System.Drawing.Size(327, 23);
             this.saveMap.TabIndex = 0;
@@ -253,7 +248,7 @@
             this.groupBox1.Controls.Add(this.selectFinalLapIntro);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.finalLapIntro);
-            this.groupBox1.Location = new System.Drawing.Point(11, 301);
+            this.groupBox1.Location = new System.Drawing.Point(11, 233);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(327, 180);
             this.groupBox1.TabIndex = 20;
@@ -262,7 +257,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label11);
+            this.groupBox2.Controls.Add(this.cubemapChoice);
             this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.loadCubemap);
             this.groupBox2.Controls.Add(this.loadString);
             this.groupBox2.Controls.Add(this.mapCodename);
             this.groupBox2.Controls.Add(this.label2);
@@ -275,7 +273,7 @@
             this.groupBox2.Controls.Add(this.mapModelAsset);
             this.groupBox2.Location = new System.Drawing.Point(11, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(327, 179);
+            this.groupBox2.Size = new System.Drawing.Size(327, 215);
             this.groupBox2.TabIndex = 21;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Core Map Elements";
@@ -324,81 +322,38 @@
             this.mapName.Size = new System.Drawing.Size(229, 20);
             this.mapName.TabIndex = 8;
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.label11);
-            this.groupBox3.Controls.Add(this.radianceTexture);
-            this.groupBox3.Controls.Add(this.label12);
-            this.groupBox3.Controls.Add(this.loadRadiance);
-            this.groupBox3.Controls.Add(this.loadIrradiance);
-            this.groupBox3.Controls.Add(this.irradianceTexture);
-            this.groupBox3.Location = new System.Drawing.Point(12, 197);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(327, 98);
-            this.groupBox3.TabIndex = 24;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Environment Cubemaps";
-            // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 16);
+            this.label11.Location = new System.Drawing.Point(6, 173);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(92, 13);
+            this.label11.Size = new System.Drawing.Size(52, 13);
             this.label11.TabIndex = 3;
-            this.label11.Text = "Radiance Texture";
+            this.label11.Text = "Cubemap";
             // 
-            // radianceTexture
+            // cubemapChoice
             // 
-            this.radianceTexture.Location = new System.Drawing.Point(9, 32);
-            this.radianceTexture.Name = "radianceTexture";
-            this.radianceTexture.ReadOnly = true;
-            this.radianceTexture.Size = new System.Drawing.Size(229, 20);
-            this.radianceTexture.TabIndex = 1;
+            this.cubemapChoice.Location = new System.Drawing.Point(9, 189);
+            this.cubemapChoice.Name = "cubemapChoice";
+            this.cubemapChoice.ReadOnly = true;
+            this.cubemapChoice.Size = new System.Drawing.Size(229, 20);
+            this.cubemapChoice.TabIndex = 1;
             // 
-            // label12
+            // loadCubemap
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 55);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(93, 13);
-            this.label12.TabIndex = 7;
-            this.label12.Text = "Irradiance Texture";
-            // 
-            // loadRadiance
-            // 
-            this.loadRadiance.Location = new System.Drawing.Point(244, 31);
-            this.loadRadiance.Name = "loadRadiance";
-            this.loadRadiance.Size = new System.Drawing.Size(75, 23);
-            this.loadRadiance.TabIndex = 2;
-            this.loadRadiance.Text = "Load";
-            this.loadRadiance.UseVisualStyleBackColor = true;
-            this.loadRadiance.Click += new System.EventHandler(this.loadRadiance_Click);
-            // 
-            // loadIrradiance
-            // 
-            this.loadIrradiance.Location = new System.Drawing.Point(244, 70);
-            this.loadIrradiance.Name = "loadIrradiance";
-            this.loadIrradiance.Size = new System.Drawing.Size(75, 23);
-            this.loadIrradiance.TabIndex = 6;
-            this.loadIrradiance.Text = "Load";
-            this.loadIrradiance.UseVisualStyleBackColor = true;
-            this.loadIrradiance.Click += new System.EventHandler(this.loadIrradiance_Click);
-            // 
-            // irradianceTexture
-            // 
-            this.irradianceTexture.Location = new System.Drawing.Point(9, 71);
-            this.irradianceTexture.Name = "irradianceTexture";
-            this.irradianceTexture.ReadOnly = true;
-            this.irradianceTexture.Size = new System.Drawing.Size(229, 20);
-            this.irradianceTexture.TabIndex = 5;
+            this.loadCubemap.Location = new System.Drawing.Point(244, 188);
+            this.loadCubemap.Name = "loadCubemap";
+            this.loadCubemap.Size = new System.Drawing.Size(75, 23);
+            this.loadCubemap.TabIndex = 2;
+            this.loadCubemap.Text = "Load";
+            this.loadCubemap.UseVisualStyleBackColor = true;
+            this.loadCubemap.Click += new System.EventHandler(this.loadRadiance_Click);
             // 
             // Create_Map
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 519);
-            this.Controls.Add(this.groupBox3);
+            this.ClientSize = new System.Drawing.Size(349, 451);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.saveMap);
@@ -412,8 +367,6 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -446,12 +399,8 @@
         private System.Windows.Forms.Button loadString;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox mapCodename;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox radianceTexture;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Button loadRadiance;
-        private System.Windows.Forms.Button loadIrradiance;
-        private System.Windows.Forms.TextBox irradianceTexture;
+        private System.Windows.Forms.TextBox cubemapChoice;
+        private System.Windows.Forms.Button loadCubemap;
     }
 }

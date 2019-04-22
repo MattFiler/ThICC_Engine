@@ -35,7 +35,7 @@ namespace EditorTool
          */
 
         /* Load an image preview from an asset list to a picture box */
-        public bool loadImagePreview(ListBox assetList, PictureBox imagePreview)
+        public bool loadImagePreview(ListBox assetList, PictureBox imagePreview, AssetType asset_type = AssetType.IMAGE)
         {
             imagePreview.BackColor = Color.Transparent;
             if (assetList.SelectedIndex == -1)
@@ -45,7 +45,7 @@ namespace EditorTool
             }
             imagePreview.Visible = true;
 
-            string file_path_without_extension = getFolder(AssetType.IMAGE) + assetList.SelectedItem.ToString() + ".";
+            string file_path_without_extension = getFolder(asset_type) + assetList.SelectedItem.ToString() + ".";
             string file_path_with_extension = "";
             if (File.Exists(file_path_without_extension + "PNG"))
             {
@@ -63,12 +63,18 @@ namespace EditorTool
             {
                 return false;
             }
+            
+            loadGenericImagePreview(file_path_with_extension, imagePreview);
+            return true;
+        }
 
-            using (var tempPreviewImg = new Bitmap(file_path_with_extension))
+        /* A more generic image preview */
+        public void loadGenericImagePreview(string path, PictureBox imagePreview)
+        {
+            using (var tempPreviewImg = new Bitmap(path))
             {
                 imagePreview.Image = new Bitmap(tempPreviewImg);
             }
-            return true;
         }
 
         /* Try find our material preview, show it if we find it */
@@ -705,6 +711,98 @@ namespace EditorTool
 
                 //Import success
                 MessageBox.Show("Font successfully imported.", "Imported!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                return true;
+            }
+        }
+
+        /* Create a cubemap */
+        public bool createCubemap(string asset_name, List<string> images)
+        {
+            string asset_path_radiance = getFolder(AssetType.CUBEMAP) + asset_name.ToUpper() + "_R" + getExtension(AssetType.CUBEMAP);
+            string asset_path_irradiance = getFolder(AssetType.CUBEMAP) + asset_name.ToUpper() + "_IR" + getExtension(AssetType.CUBEMAP);
+
+            if (File.Exists(asset_path_radiance) || images.Contains("") || asset_name == "" || !Regex.IsMatch(asset_name, "^[_a-zA-Z0-9\x20]+$"))
+            {
+                if (images.Contains("") || asset_name == "")
+                {
+                    MessageBox.Show("Please fill out all required inputs.", "Creation failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                else if (!Regex.IsMatch(asset_name, "^[_a-zA-Z0-9\x20]+$"))
+                {
+                    MessageBox.Show("Your asset name cannot contain any special characters.", "Creation failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                MessageBox.Show("Couldn't create asset, a cubemap with the same name already exists.", "Creation Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                //Copy images into cubemap directory and compile args
+                string cube_face_args = "";
+                Directory.CreateDirectory(getFolder(AssetType.CUBEMAP) + asset_name);
+                foreach (string face in images)
+                {
+                    string face_copy = asset_name + "/" + Path.GetFileName(face);
+                    if (!File.Exists(getFolder(AssetType.CUBEMAP) + face_copy))
+                    {
+                        File.Copy(face, getFolder(AssetType.CUBEMAP) + face_copy);
+                    }
+                    cube_face_args += " \"" + face_copy + "\"";
+                }
+
+                //Convert supplied images to cubemap
+                ProcessStartInfo cubemapCreator = new ProcessStartInfo();
+                cubemapCreator.WorkingDirectory = getFolder(AssetType.CUBEMAP);
+                cubemapCreator.FileName = getFolder(AssetType.CUBEMAP) + "texassemble.exe";
+                cubemapCreator.Arguments = "cube -o \"" + Path.GetFileName(asset_path_radiance) + "\"" + cube_face_args;
+                cubemapCreator.UseShellExecute = false;
+                cubemapCreator.RedirectStandardOutput = true;
+                cubemapCreator.CreateNoWindow = true;
+                Process converterProcess = Process.Start(cubemapCreator);
+                StreamReader reader = converterProcess.StandardOutput;
+                converterProcess.WaitForExit();
+
+                //Capture output incase we errored
+                string output = reader.ReadToEnd();
+
+                //Uppercase extension pls
+                if (File.Exists(asset_path_radiance.Substring(0, asset_path_radiance.Length - 3) + "dds"))
+                {
+                    File.Move(asset_path_radiance.Substring(0, asset_path_radiance.Length - 3) + "dds", asset_path_radiance);
+                }
+
+                if (!File.Exists(asset_path_radiance))
+                {
+                    //Import failed, show reason if requested
+                    DialogResult showErrorInfo = MessageBox.Show("Cubemap creation failed!\nWould you like error info?", "Creation failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (showErrorInfo == DialogResult.Yes)
+                    {
+                        MessageBox.Show(output, "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    Directory.Delete(getFolder(AssetType.CUBEMAP) + asset_name, true);
+                    return false;
+                }
+
+                //Create preview
+                cubemapCreator.WorkingDirectory = getFolder(AssetType.CUBEMAP);
+                cubemapCreator.FileName = getFolder(AssetType.CUBEMAP) + "texassemble.exe";
+                cubemapCreator.Arguments = "h-cross -o \"" + asset_name + ".PNG\" \"" + Path.GetFileName(asset_path_radiance) + "\"";
+                cubemapCreator.UseShellExecute = false;
+                cubemapCreator.RedirectStandardOutput = true;
+                cubemapCreator.CreateNoWindow = true;
+                Process.Start(cubemapCreator).WaitForExit();
+
+                //Create JSON data
+                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + asset_name + "\", \"asset_type\": \"Cubemap\", \"in_use_in\": []}");
+                File.WriteAllText(getFolder(AssetType.CUBEMAP) + asset_name + ".JSON", asset_json.ToString(Formatting.Indented));
+
+                //Duplicate radiance texture as our irradiance for now - this is a work in progress!
+                File.Copy(asset_path_radiance, asset_path_irradiance);
+
+                //Import success
+                MessageBox.Show("Cubemap created successfully!", "Created!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return true;
             }
