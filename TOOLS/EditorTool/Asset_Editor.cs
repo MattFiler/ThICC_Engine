@@ -93,6 +93,11 @@ namespace EditorTool
                     stringEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
                     stringEditor.Show();
                     break;
+                case "Cubemaps":
+                    Cubemap_Creator cubemapEditor = new Cubemap_Creator();
+                    cubemapEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    cubemapEditor.Show();
+                    break;
             }
         }
 
@@ -132,6 +137,10 @@ namespace EditorTool
                     {
                         assetList.Items.Add(localised_string.Key);
                     }
+                    break;
+                case "Cubemaps":
+                    path = function_libary.getFolder(AssetType.CUBEMAP);
+                    extension = "*.DDS";
                     break;
             }
 

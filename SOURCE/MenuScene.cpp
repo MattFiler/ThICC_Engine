@@ -25,6 +25,7 @@ MenuScene::~MenuScene()
 	m_mapPreviews.clear();
 	m_characterTitles.clear();
 	m_characterPreviews.clear();
+	delete m_background;
 }
 
 /* Load inexpensive things and create the objects for expensive things we will populate when required */
@@ -36,14 +37,26 @@ bool MenuScene::Load()
 
 /* Reset on load */
 void MenuScene::ExpensiveLoad() {
-	m_menu_state = menu_states::MAP_SELECT;
+	m_menu_state = menu_states::SPLASH;
+	m_timer = 0.0f;
 }
 
 /* Create all 2D objects for the scene */
 void MenuScene::create2DObjects()
 {
-	//ImageGO2D* splash_screen = new ImageGO2D("MENU_SPLASHSCREEN");
-	//m_2DObjects.push_back(splash_screen);
+	//Splashscreen objects
+	m_splash_bg = new ImageGO2D("WHITE_720");
+	m_logo = new ImageGO2D("engine_logo_white_720");
+	m_logo->SetScale(Vector2(0.3, 0.3));
+	m_logo->SetPos(Vector2(Locator::getRD()->m_window_width / 2.f, Locator::getRD()->m_window_height / 2.f));
+	m_logo->CentreOrigin();
+
+	//Main menu objects
+	m_background = new ImageGO2D("MAIN_MENU_TEMP");
+	m_state_desc = new Text2D("", true);
+	m_state_desc->SetPos(Vector2(498, 620));
+	m_state_desc->SetColour(Colors::Black);
+	m_state_desc->SetScale(0.5f);
 
 	//position map options
 	int index = 0;
@@ -52,16 +65,15 @@ void MenuScene::create2DObjects()
 
 		//Text
 		Text2D* map_name = new Text2D(a_map.name);
+		map_name->SetColour(inactive_colour);
 		if (index == 1) {
-			map_name->SetText("> " + map_name->GetText());
+			map_name->SetColour(active_colour);
 		}
-		map_name->SetColour(Colors::Black);
-		map_name->SetPos(Vector2(Locator::getRD()->m_window_width/2, index * 160));
+		map_name->SetPos(Vector2(209, 55 + (index * 47)));
 		m_mapTitles.push_back(map_name);
 
 		//Image
-		a_map.preview_sprite->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
-		a_map.preview_sprite->CentreOrigin();
+		a_map.preview_sprite->SetPos(Vector2(812, 279));
 		m_mapPreviews.push_back(a_map.preview_sprite);
 	}
 
@@ -72,16 +84,15 @@ void MenuScene::create2DObjects()
 
 		//Text
 		Text2D* character_name = new Text2D(a_character.name);
+		character_name->SetColour(inactive_colour);
 		if (index == 1) {
-			character_name->SetText("> " + character_name->GetText());
+			character_name->SetColour(active_colour);
 		}
-		character_name->SetColour(Colors::Black);
-		character_name->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
+		character_name->SetPos(Vector2(209, 55 + (index * 47)));
 		m_characterTitles.push_back(character_name);
 
 		//Image
-		a_character.preview_sprite->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
-		a_character.preview_sprite->CentreOrigin();
+		a_character.preview_sprite->SetPos(Vector2(881, 285));
 		m_characterPreviews.push_back(a_character.preview_sprite);
 	}
 
@@ -92,16 +103,15 @@ void MenuScene::create2DObjects()
 
 		//Text
 		Text2D* vehicle_name = new Text2D(a_vehicle.name);
+		vehicle_name->SetColour(inactive_colour);
 		if (index == 1) {
-			vehicle_name->SetText("> " + vehicle_name->GetText());
+			vehicle_name->SetColour(active_colour);
 		}
-		vehicle_name->SetColour(Colors::Black);
-		vehicle_name->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
+		vehicle_name->SetPos(Vector2(209, 55 + (index * 47)));
 		m_vehicleTitles.push_back(vehicle_name);
 
 		//Image
-		a_vehicle.preview_sprite->SetPos(Vector2(Locator::getRD()->m_window_width / 2, index * 160));
-		a_vehicle.preview_sprite->CentreOrigin();
+		a_vehicle.preview_sprite->SetPos(Vector2(881, 285));
 		m_vehiclePreviews.push_back(a_vehicle.preview_sprite);
 	}
 }
@@ -110,7 +120,24 @@ void MenuScene::create2DObjects()
 void MenuScene::Update(DX::StepTimer const& timer)
 {
 	switch (m_menu_state) {
+		case menu_states::SPLASH:
+			//Animate logo over time
+			m_logo->SetScale(Vector2(0.3 + (m_timer / 30), 0.3 + (m_timer / 30)));
+			m_timer += (float)timer.GetElapsedSeconds();
+			if (m_timer > m_timeout) {
+				m_menu_state = menu_states::MAP_SELECT;
+			}
+
+			//Allow skip
+			if (m_keybinds.keyPressed("Activate"))
+			{
+				m_menu_state = menu_states::MAP_SELECT;
+			}
+
+			break;
 		case menu_states::MAP_SELECT:
+			m_state_desc->SetText(m_localiser.getString("map_select"));
+
 			//Exit
 			if (m_keybinds.keyPressed("Quit"))
 			{
@@ -121,17 +148,17 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			if (m_keybinds.keyPressed("Down Arrow"))
 			{
 				if (highlighted_map < m_mapTitles.size() - 1) {
-					m_mapTitles.at(highlighted_map)->SetText(m_mapTitles.at(highlighted_map)->GetText().substr(2));
+					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
 					highlighted_map++;
-					m_mapTitles.at(highlighted_map)->SetText("> " + m_mapTitles.at(highlighted_map)->GetText());
+					m_mapTitles.at(highlighted_map)->SetColour(active_colour);
 				}
 			}
 			if (m_keybinds.keyPressed("Up Arrow"))
 			{
 				if (highlighted_map > 0) {
-					m_mapTitles.at(highlighted_map)->SetText(m_mapTitles.at(highlighted_map)->GetText().substr(2));
+					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
 					highlighted_map--;
-					m_mapTitles.at(highlighted_map)->SetText("> " + m_mapTitles.at(highlighted_map)->GetText());
+					m_mapTitles.at(highlighted_map)->SetColour(active_colour);
 				}
 			}
 
@@ -143,6 +170,8 @@ void MenuScene::Update(DX::StepTimer const& timer)
 
 			break;
 		case menu_states::CHARACTER_SELECT:
+			m_state_desc->SetText(m_localiser.getString("character_select"));
+
 			//Back to map select
 			if (m_keybinds.keyPressed("Quit"))
 			{
@@ -153,17 +182,17 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			if (m_keybinds.keyPressed("Down Arrow"))
 			{
 				if (highlighted_character < m_characterTitles.size() - 1) {
-					m_characterTitles.at(highlighted_character)->SetText(m_characterTitles.at(highlighted_character)->GetText().substr(2));
+					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
 					highlighted_character++;
-					m_characterTitles.at(highlighted_character)->SetText("> " + m_characterTitles.at(highlighted_character)->GetText());
+					m_characterTitles.at(highlighted_character)->SetColour(active_colour);
 				}
 			}
 			if (m_keybinds.keyPressed("Up Arrow"))
 			{
 				if (highlighted_character > 0) {
-					m_characterTitles.at(highlighted_character)->SetText(m_characterTitles.at(highlighted_character)->GetText().substr(2));
+					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
 					highlighted_character--;
-					m_characterTitles.at(highlighted_character)->SetText("> " + m_characterTitles.at(highlighted_character)->GetText());
+					m_characterTitles.at(highlighted_character)->SetColour(active_colour);
 				}
 			}
 
@@ -175,6 +204,8 @@ void MenuScene::Update(DX::StepTimer const& timer)
 
 			break;
 		case menu_states::VEHICLE_SELECT:
+			m_state_desc->SetText(m_localiser.getString("vehicle_select"));
+
 			//Back to character select
 			if (m_keybinds.keyPressed("Quit"))
 			{
@@ -185,17 +216,17 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			if (m_keybinds.keyPressed("Down Arrow"))
 			{
 				if (highlighted_vehicle < m_vehicleTitles.size() - 1) {
-					m_vehicleTitles.at(highlighted_vehicle)->SetText(m_vehicleTitles.at(highlighted_vehicle)->GetText().substr(2));
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
 					highlighted_vehicle++;
-					m_vehicleTitles.at(highlighted_vehicle)->SetText("> " + m_vehicleTitles.at(highlighted_vehicle)->GetText());
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(active_colour);
 				}
 			}
 			if (m_keybinds.keyPressed("Up Arrow"))
 			{
 				if (highlighted_vehicle > 0) {
-					m_vehicleTitles.at(highlighted_vehicle)->SetText(m_vehicleTitles.at(highlighted_vehicle)->GetText().substr(2));
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
 					highlighted_vehicle--;
-					m_vehicleTitles.at(highlighted_vehicle)->SetText("> " + m_vehicleTitles.at(highlighted_vehicle)->GetText());
+					m_vehicleTitles.at(highlighted_vehicle)->SetColour(active_colour);
 				}
 			}
 
@@ -216,27 +247,29 @@ void MenuScene::Update(DX::StepTimer const& timer)
 /* Render the 2D scene */
 void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
+	if (m_menu_state == menu_states::SPLASH) {
+		m_splash_bg->Render();
+		m_logo->Render();
+		return;
+	}
+
+	m_background->Render();
+	m_state_desc->Render();
 	switch (m_menu_state) {
 		case menu_states::MAP_SELECT:
-			for (std::vector<ImageGO2D*>::iterator it = m_mapPreviews.begin(); it != m_mapPreviews.end(); it++) {
-				(*it)->Render();
-			}
+			m_mapPreviews.at(highlighted_map)->Render();
 			for (std::vector<Text2D*>::iterator it = m_mapTitles.begin(); it != m_mapTitles.end(); it++) {
 				(*it)->Render();
 			}
 			break;
 		case menu_states::CHARACTER_SELECT:
-			for (std::vector<ImageGO2D*>::iterator it = m_characterPreviews.begin(); it != m_characterPreviews.end(); it++) {
-				(*it)->Render();
-			}
+			m_characterPreviews.at(highlighted_character)->Render();
 			for (std::vector<Text2D*>::iterator it = m_characterTitles.begin(); it != m_characterTitles.end(); it++) {
 				(*it)->Render();
 			}
 			break;
 		case menu_states::VEHICLE_SELECT:
-			for (std::vector<ImageGO2D*>::iterator it = m_vehiclePreviews.begin(); it != m_vehiclePreviews.end(); it++) {
-				(*it)->Render();
-			}
+			m_vehiclePreviews.at(highlighted_vehicle)->Render();
 			for (std::vector<Text2D*>::iterator it = m_vehicleTitles.begin(); it != m_vehicleTitles.end(); it++) {
 				(*it)->Render();
 			}

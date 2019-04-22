@@ -44,5 +44,14 @@
     "in_use_in": [
       "Vehicle"
     ]
+  },
+  "MAP_SELECT": {
+    "in_use_in": []
+  },
+  "CHARACTER_SELECT": {
+    "in_use_in": []
+  },
+  "VEHICLE_SELECT": {
+    "in_use_in": []
   }
 }

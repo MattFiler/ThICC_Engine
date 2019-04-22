@@ -10,7 +10,7 @@ class Text2D :
 	public GameObject2D
 {
 public:
-	Text2D(std::string _text);
+	Text2D(std::string _text, bool _middle = false);
 	virtual ~Text2D() {};
 
 	void SetText(std::string _text);
@@ -24,5 +24,6 @@ public:
 protected:
 	std::string m_text;
 	std::wstring m_wText;
+	bool middle_origin = false;
 };
 

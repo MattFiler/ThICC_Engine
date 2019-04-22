@@ -59,6 +59,10 @@ bool GameScene::Load()
 
 /* Populate the expensive things! */
 void GameScene::ExpensiveLoad() {
+	//Set cubemaps
+	Locator::getRD()->current_cubemap_radiance = map_info.cubemap_radiance;
+	Locator::getRD()->current_cubemap_irradiance = map_info.cubemap_irradiance;
+
 	//Update characters
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
@@ -235,6 +239,10 @@ void GameScene::pushBackObjects()
 void GameScene::Update(DX::StepTimer const& timer)
 {
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
+
+
+	Locator::getAIScheduler()->Update();
+
 
 
 	if (finished == 4)

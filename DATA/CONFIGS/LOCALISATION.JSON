@@ -11,7 +11,10 @@
     "CHARACTER_MARIO": "Mario",
     "KART_STANDARD": "Standard Kart",
     "KART_MK_WII": "MK Wii Kart",
-    "KART_MK8": "MK8 Kart"
+    "KART_MK8": "MK8 Kart",
+    "MAP_SELECT": "Map Selection",
+    "CHARACTER_SELECT": "Character Selection",
+    "VEHICLE_SELECT": "Vehicle Selection"
   },
   "SPANISH": {},
   "FRENCH": {}

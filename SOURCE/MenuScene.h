@@ -32,6 +32,10 @@ private:
 	void create3DObjects() override {};
 	void pushBackObjects() override {};
 
+	//Background
+	ImageGO2D* m_background = nullptr;
+	Text2D* m_state_desc = nullptr;
+
 	//Map select objects
 	int highlighted_map = 0;
 	std::vector<Text2D*> m_mapTitles;
@@ -55,11 +59,23 @@ private:
 	//Referenced stuff
 	SceneManager* m_scene_manager;
 
+	//Colours
+	XMVECTORF32 active_colour = Colors::White;
+	XMVECTORF32 inactive_colour = Colors::LightGray;
+
+	//Timing
+	float m_timeout = 5.0f;
+	float m_timer = 0.0f;
+
+	//Logo
+	ImageGO2D* m_logo = nullptr;
+	ImageGO2D* m_splash_bg = nullptr;
+
 	//Configs
 	json game_config;
 
 	//States
-	enum menu_states { MAP_SELECT, CHARACTER_SELECT, VEHICLE_SELECT };
-	menu_states m_menu_state = menu_states::MAP_SELECT;
+	enum menu_states { SPLASH, MAP_SELECT, CHARACTER_SELECT, VEHICLE_SELECT };
+	menu_states m_menu_state = menu_states::SPLASH;
 };
 

@@ -117,7 +117,7 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	Locator::setupItemData(m_probabilities);
 
 	//Setup debug text
-	debug_text = new Text2D("");
+	debug_text = new Text2D("", true);
 	debug_text->SetPos(Vector2(50, 50));
 	debug_text->SetColour(Colors::Red);
 
@@ -237,18 +237,6 @@ void ThICC_Engine::Update(DX::StepTimer const& timer)
 
 	//Pass off to our game now we've done our engine-y stuff
 	m_game_inst.Update(timer);
-
-	/* DEBUG: CHANGE ENV MAPS ON X PRESS */
-	if (m_input_data.m_keyboardTracker.IsKeyPressed(Keyboard::X))
-	{
-		++Locator::getRD()->m_ibl;
-		if (Locator::getRD()->m_ibl >= (int)NUM_OF_ENV_MAPS::ENV_MAP_COUNT)
-		{
-			Locator::getRD()->m_ibl = 0;
-		}
-		DebugText::print("Changing to environment map " + std::to_string(Locator::getRD()->m_ibl));
-		DebugText::print("THIS FUNCTIONALITY NEEDS TO BE REMOVED :)");
-	}
 }
 
 /* Render the scene */

@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "RenderData.h"
 
-#include "SplashscreenScene.h"
 #include "MenuScene.h"
 #include "GameScene.h"
 
@@ -46,6 +45,11 @@ void ThICC_Game::Initialize() {
 	map_config << j;
 	index = 0;
 	for (auto& element : map_config) {
+		/* TEMP FIX TO DISABLE MAPS THAT DON'T HAVE UPDATED WAYPOINTS!! */
+		if (element["friendly_name"] != "MAP_MKS") {
+			continue;
+		}
+
 		//Store map info
 		m_go_shared.map_instances.emplace_back(element, index);
 		//Create scene
@@ -54,16 +58,14 @@ void ThICC_Game::Initialize() {
 	}
 
 	//Create the scenes
-	m_scene_manager.addScene(new SplashscreenScene(), (int)Scenes::SPLASHSCREEN);
 	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
 
 	//Set our default scene
-	m_scene_manager.setCurrentScene(Scenes::SPLASHSCREEN, true);
+	m_scene_manager.setCurrentScene(Scenes::MENUSCENE, true);
 }
 
 /* Update loop */
 void ThICC_Game::Update(DX::StepTimer const& timer) {
-	m_aiScheduler->Update();
 	m_scene_manager.Update(timer);
 }
 

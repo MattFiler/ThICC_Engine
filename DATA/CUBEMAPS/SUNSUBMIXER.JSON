@@ -1,0 +1,13 @@
+{
+  "asset_name": "SUNSUBMIXER",
+  "asset_type": "Cubemap",
+  "parts": {
+	"diffuse": "SUNSUBMIXER_DIFFUSE_IBL.DDS",
+	"specular": "SUNSUBMIXER_SPECULAR_IBL.DDS"
+  }
+  "meta_info": {
+	"_comment": "This spot will be used to store metadata such as number of images to create (maybe store source images?) and the configuration used on the importer"
+	"_comment2": "The coded protocol for loading a cubemap is ending '_SPECULAR.DDS' for irradiance files, and '_DIFFUSE.DDS' for radiance files - just FYI"
+  }
+  "in_use_in": []
+}

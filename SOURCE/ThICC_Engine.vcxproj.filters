@@ -124,9 +124,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
-    <ClCompile Include="SplashscreenScene.cpp">
-      <Filter>Game\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="GoldenMushroom.cpp">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClCompile>
@@ -314,9 +311,6 @@
     </ClInclude>
     <ClInclude Include="AssetComp.h">
       <Filter>Engine Backend\AssetComps</Filter>
-    </ClInclude>
-    <ClInclude Include="SplashscreenScene.h">
-      <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="GoldenMushroom.h">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>

@@ -41,6 +41,8 @@ namespace EditorTool
                 mapName.Text = maps_json_config[map_json_key]["friendly_name"].Value<string>();
                 mapPreviewImage.Text = maps_json_config[map_json_key]["menu_sprite"].Value<string>();
                 mapModelAsset.Text = maps_json_config[map_json_key]["model"].Value<string>();
+                radianceTexture.Text = maps_json_config[map_json_key]["cubemaps"]["radiance"].Value<string>();
+                irradianceTexture.Text = maps_json_config[map_json_key]["cubemaps"]["irradiance"].Value<string>();
                 soundtrackIntro.Text = maps_json_config[map_json_key]["audio"]["background_start"].Value<string>();
                 soundtrackIntroLoop.Text = maps_json_config[map_json_key]["audio"]["background"].Value<string>();
                 finalLapIntro.Text = maps_json_config[map_json_key]["audio"]["final_lap_start"].Value<string>();
@@ -56,6 +58,14 @@ namespace EditorTool
         private void selectMapModel_Click(object sender, EventArgs e)
         {
             function_libary.assetSelectHandler(mapModelAsset, AssetType.MODEL);
+        }
+        private void loadRadiance_Click(object sender, EventArgs e)
+        {
+            function_libary.assetSelectHandler(radianceTexture, AssetType.IMAGE);
+        }
+        private void loadIrradiance_Click(object sender, EventArgs e)
+        {
+            function_libary.assetSelectHandler(irradianceTexture, AssetType.IMAGE);
         }
         private void selectSoundtrackIntro_Click(object sender, EventArgs e)
         {
@@ -83,7 +93,8 @@ namespace EditorTool
         {
             //All inputs required
             if (mapCodename.Text == "" || mapName.Text == "" || mapPreviewImage.Text == "" || 
-                mapModelAsset.Text == "" || soundtrackIntro.Text == "" || soundtrackIntroLoop.Text == "" || 
+                mapModelAsset.Text == "" || radianceTexture.Text == "" || irradianceTexture.Text == "" || 
+                soundtrackIntro.Text == "" || soundtrackIntroLoop.Text == "" || 
                 finalLapIntro.Text == "" || finalLapLoop.Text == "")
             {
                 MessageBox.Show("Please complete all fields before trying to save.", "Can't save.", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -110,6 +121,9 @@ namespace EditorTool
             maps_json_config[map_name]["friendly_name"] = mapName.Text;
             maps_json_config[map_name]["menu_sprite"] = mapPreviewImage.Text;
             maps_json_config[map_name]["model"] = mapModelAsset.Text;
+            maps_json_config[map_name]["cubemaps"] = JObject.Parse("{}");
+            maps_json_config[map_name]["cubemaps"]["radiance"] = radianceTexture.Text;
+            maps_json_config[map_name]["cubemaps"]["irradiance"] = irradianceTexture.Text;
             maps_json_config[map_name]["audio"] = JObject.Parse("{}");
             maps_json_config[map_name]["audio"]["background_start"] = soundtrackIntro.Text;
             maps_json_config[map_name]["audio"]["background"] = soundtrackIntroLoop.Text;

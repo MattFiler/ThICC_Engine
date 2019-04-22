@@ -4,11 +4,6 @@
 #include "GameFilepaths.h"
 #include <string>
 #include <codecvt>
-struct GameStateData;
-
-//GEP:: Essential sound effect stuff here
-// https://github.com/Microsoft/DirectXTK/wiki/Adding-the-DirectX-Tool-Kit-for-Audio
-// More involved 3D sound system seems to be in place but the wiki documentation runs out
 
 class Sound
 {
@@ -16,7 +11,7 @@ public:
 	Sound(DirectX::AudioEngine* _audEngine, std::string _filename);
 	virtual ~Sound();
 
-	virtual void Tick(GameStateData* _GSD);
+	virtual void Tick();
 
 	virtual void Play();
 
@@ -45,6 +40,7 @@ protected:
 
 	bool loop = false;
 	bool m_playing = false;
+	std::string filename = "";
 
 	GameFilepaths m_filepath;
 };
