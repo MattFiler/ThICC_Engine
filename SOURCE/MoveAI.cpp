@@ -213,14 +213,19 @@ int MoveAI::FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorl
 	_direction *= m_aiPathStep;
 
 	// Check to see if this direction diverges from the waypoint
-	if (_iteration > 0 && Vector3::DistanceSquared(_startPos, _track->getWaypointMiddle(_waypointIndex)) < Vector3::DistanceSquared(_startPos + _direction, _track->getWaypointMiddle(_waypointIndex)))
+	float diff = Vector3::DistanceSquared(_startPos, _track->getWaypointMiddle(_waypointIndex)) - Vector3::DistanceSquared(_startPos + _direction, _track->getWaypointMiddle(_waypointIndex));
+	// If diff is negative they are diverging. So if they are diverging by more than half the step
+	if (_iteration > 0 && diff < 0)
 	{
+		// Check to see if we are also divering from the next waypoint
 		if (Vector3::DistanceSquared(_startPos, _track->getWaypointMiddle(_waypointIndex+1)) > Vector3::DistanceSquared(_startPos + _direction, _track->getWaypointMiddle(_waypointIndex+1)))
 		{
+			// If not, use this waypoint instead of the current one
 			_waypointIndex++;
 		}
 		else
 		{
+			// Otherwise this direction is in-valid
 			return 0;
 		}
 	}
