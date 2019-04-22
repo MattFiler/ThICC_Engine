@@ -42,9 +42,16 @@ class MK_KartSpawnPos(bpy.types.Operator):
         for item in bpy.context.selectable_objects:  
             item.select = False  
         
+        #Create spawn spot object
         kart_spawn = bpy.data.objects.new(name="Kart Spawn Position", object_data=None)
         bpy.context.scene.objects.link(kart_spawn)
-        kart_spawn.location = bpy.context.scene.objects.active.location
+        kart_spawn.location = (0,0,0)
+        
+        #Set to selected object's position if we can
+        if bpy.context.active_object != None:
+            kart_spawn.location = bpy.context.scene.objects.active.location
+            
+        #Select object
         kart_spawn.select = True
         bpy.context.scene.objects.active = kart_spawn
         
@@ -61,13 +68,28 @@ class MK_TrackWaypoint(bpy.types.Operator):
     def execute(self, context):
         for item in bpy.context.selectable_objects:  
             item.select = False  
+            
+        #Create plane
+        waypoint_mesh = bpy.data.meshes.new("Plane")
+        waypoint_object = bpy.data.objects.new("Plane", waypoint_mesh)
+        waypoint_object.location = (0,0,0)
+        waypoint_object.name = "Track Waypoint Marker"
         
-        track_waypoint = bpy.data.objects.new(name="Track Waypoint", object_data=None)
-        bpy.context.scene.objects.link(track_waypoint)
-        track_waypoint.location = bpy.context.scene.objects.active.location
-        track_waypoint.select = True
-        bpy.context.scene.objects.active = track_waypoint
+        #Set to selected object's position if we can
+        if bpy.context.active_object != None:
+            waypoint_object.location = bpy.context.scene.objects.active.location
         
+        #Put the plane in the scene
+        bpy.context.scene.objects.link(waypoint_object)
+        
+        #Actually populate the plane
+        waypoint_mesh.from_pydata([(0,0,0),(0,5,0),(0,5,5),(0,0,5)],[],[(0,1,2,3)])
+        waypoint_mesh.update(calc_edges=True)
+        
+        #Select our new plane
+        waypoint_object.select = True
+        bpy.context.scene.objects.active = waypoint_object
+
         return {'FINISHED'}
         
         
@@ -82,11 +104,26 @@ class MK_FinishLine(bpy.types.Operator):
         for item in bpy.context.selectable_objects:  
             item.select = False  
             
-        finish_line = bpy.data.objects.new(name="Finish Line", object_data=None)
-        bpy.context.scene.objects.link(finish_line)
-        finish_line.location = bpy.context.scene.objects.active.location
-        finish_line.select = True
-        bpy.context.scene.objects.active = finish_line
+        #Create plane
+        finishline_mesh = bpy.data.meshes.new("Plane")
+        finishline_object = bpy.data.objects.new("Plane", finishline_mesh)
+        finishline_object.location = (0,0,0)
+        finishline_object.name = "Finish Line Marker"
+        
+        #Set to selected object's position if we can
+        if bpy.context.active_object != None:
+            finishline_object.location = bpy.context.scene.objects.active.location
+        
+        #Put the plane in the scene
+        bpy.context.scene.objects.link(finishline_object)
+        
+        #Actually populate the plane
+        finishline_mesh.from_pydata([(0,0,0),(0,5,0),(0,5,5),(0,0,5)],[],[(0,1,2,3)])
+        finishline_mesh.update(calc_edges=True)
+        
+        #Select our new plane
+        finishline_object.select = True
+        bpy.context.scene.objects.active = finishline_object
         
         return {'FINISHED'}
         
@@ -102,9 +139,16 @@ class MK_ItemBox(bpy.types.Operator):
         for item in bpy.context.selectable_objects:  
             item.select = False  
             
+        #Create itembox spawn spot
         itembox_spawn = bpy.data.objects.new(name="Item Box Spawn", object_data=None)
         bpy.context.scene.objects.link(itembox_spawn)
-        itembox_spawn.location = bpy.context.scene.objects.active.location
+        itembox_spawn.location = (0,0,0)
+        
+        #Set to selected object's position if we can
+        if bpy.context.active_object != None:
+            finish_line.location = bpy.context.scene.objects.active.location
+            
+        #Select it
         itembox_spawn.select = True
         bpy.context.scene.objects.active = itembox_spawn
         
@@ -154,21 +198,66 @@ class MK_SaveAllIntroCams(bpy.types.Operator, ExportHelper):
             )
 
     def execute(self, context):
+        #JSON template
         mk_json = {'cams': [], 'spawns': [], 'waypoints': [], 'finish_line': [], 'item_boxes': []}
+        waypoint_index = 0
         
         for object in bpy.data.objects:
             if object.type == "EMPTY":
+                #Kart spawn position
                 if object.name[:19] == "Kart Spawn Position":
-                    mk_json["spawns"].append({"name": object.name, "pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
-                if object.name[:14] == "Track Waypoint":
-                    mk_json["waypoints"].append({"name": object.name, "pos": [object.location[0], object.location[1], object.location[2]]})
-                if object.name[:11] == "Finish Line":
-                    mk_json["finish_line"].append({"pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
+                    mk_json["spawns"].append({
+                        "name": object.name, 
+                        "pos": [object.location[0], object.location[1], object.location[2]], 
+                        "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]
+                    })
+                #Item box position
                 if object.name[:14] == "Item Box Spawn":
-                    mk_json["item_boxes"].append({"pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
+                    mk_json["item_boxes"].append({
+                        "pos": [object.location[0], object.location[1], object.location[2]], 
+                        "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]
+                    })
+                    
             if object.type == "CAMERA":
-                mk_json["cams"].append({"name": object.name, "role": "WIP", "pos": [object.location[0], object.location[1], object.location[2]], "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]})
+                #Cinematic cam (WIP)
+                mk_json["cams"].append({
+                    "name": object.name, 
+                    "role": "WIP", 
+                    "pos": [object.location[0], object.location[1], object.location[2]], 
+                    "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]
+                })
+                
+            if object.type == "MESH":
+                #Track waypoint
+                if object.name[:21] == "Track Waypoint Marker":
+                    if len(object.data.vertices) == 4:
+                        top_left = object.matrix_world * object.data.vertices[2].co;
+                        top_right = object.matrix_world * object.data.vertices[3].co;
+                        bottom_left = object.matrix_world * object.data.vertices[0].co;
+                        bottom_right = object.matrix_world * object.data.vertices[1].co;
+                        mk_json["waypoints"].append({
+                            "index": waypoint_index,
+                            "top_left": [top_left[0], top_left[1], top_left[2]],
+                            "top_right": [top_right[0], top_right[1], top_right[2]],
+                            "bottom_left": [bottom_left[0], bottom_left[1], bottom_left[2]],
+                            "bottom_right": [bottom_right[0], bottom_right[1], bottom_right[2]]
+                        })
+                        waypoint_index += 1
+                #Finish line marker
+                if object.name[:18] == "Finish Line Marker":
+                    if len(object.data.vertices) == 4:
+                        top_left = object.matrix_world * object.data.vertices[2].co;
+                        top_right = object.matrix_world * object.data.vertices[3].co;
+                        bottom_left = object.matrix_world * object.data.vertices[0].co;
+                        bottom_right = object.matrix_world * object.data.vertices[1].co;
+                        mk_json["finish_line"].append({
+                            "top_left": [top_left[0], top_left[1], top_left[2]],
+                            "top_right": [top_right[0], top_right[1], top_right[2]],
+                            "bottom_left": [bottom_left[0], bottom_left[1], bottom_left[2]],
+                            "bottom_right": [bottom_right[0], bottom_right[1], bottom_right[2]]
+                        })
         
+        #Save out to file
         with open(self.filepath, 'w') as outfile:
             json.dump(mk_json, outfile, indent=2, sort_keys=True)
         
