@@ -20,6 +20,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 		m_debugNextWaypoint.back()->SetScale(0.2f);
 		m_debugNextWaypoint.back()->UpdateWorld();
 	}
+	m_move->SetGamepadActive(false);
 }
 
 void MoveAI::DebugRender()
@@ -37,19 +38,68 @@ void MoveAI::DebugRender()
 
 void MoveAI::Update()
 {
+	// If there at least 2 waypoints left
+	if (m_routeIndex < m_route.size()-1 && !m_route.empty())
+	{
+		// If close to the current waypoint OR the the Karts current position is closer to the next waypoint than the previous waypoint is
+		if (Vector3::Distance(m_model->GetPos(), m_route[m_routeIndex]) <= m_wayPointHitRadius ||
+			Vector3::Distance(m_model->GetPos(), m_route[m_routeIndex+1]) < Vector3::Distance(m_route[m_routeIndex], m_route[m_routeIndex + 1]))
+		{
+			m_routeIndex++;
+			// This shouldn't happen often, but if we reach the end of the waypoints don't continue
+			if (m_routeIndex == m_route.size())
+			{
+				return;
+			}
+		}
+	}
 
+	Vector3 normVelo = m_model->getVelocity();
+	normVelo.Normalize();
+	Vector3 normVeloLeft = normVelo + (m_model->GetWorld().Left() * 0.25f);
+	normVeloLeft.Normalize();
+	Vector3 normVeloRight = normVelo + (m_model->GetWorld().Right() * 0.25f);
+	normVeloRight.Normalize();
+
+	if (m_route.empty())
+	{
+		m_move->setAcceleration(1);
+		return;
+	}
+	m_move->setAcceleration(1);
+	Vector3 normDiff = m_route[m_routeIndex] - m_model->GetPos();
+	normDiff.Normalize();
+	
+	// If the currentl veloicty is too far off the driving line
+	float dist = Vector3::Distance(normVelo, normDiff);
+	DebugText::print(std::to_string(dist));
+	if (dist  > m_lineLeeway)
+	{
+		// If left would reduce the difference
+		if (Vector3::Distance(normVeloLeft, normDiff) < dist)
+		{
+			m_move->TurnLeft();
+		}
+		else if (Vector3::Distance(normVeloRight, normDiff) < dist)
+		{
+			m_move->TurnRight();
+		}
+	}
+	else
+	{
+		m_move->DontTurn();
+	}
 }
 
 void MoveAI::RecalculateLine(Track* _track)
 {
+	m_routeIndex = 0;
 	_track->SetValidCollision(true, false, true, false);
 	m_route.clear();
 	Matrix world = m_model->GetWorld();
 	Vector3 pos = m_model->GetPos();
 	Vector3 direction = world.Forward();
 	int iterations = 0;
-
-	DebugText::print("AI DEBUG, CURRENT WAYPOINT: " + std::to_string(m_move->GetWaypoint()));
 
 	m_waypointPos = m_move->GetWaypoint();
 

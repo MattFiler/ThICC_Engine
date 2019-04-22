@@ -28,6 +28,10 @@ private:
 	bool m_useDrift = false;
 
 	int m_waypointPos = 0;
+	size_t m_routeIndex = 0;
+	float m_lineLeeway = 0.1f; // The amount of leeway allowed between the current velocity and the driving line before the kart turns
+	float m_wayPointHitRadius = 1; // Radius for the "hit box" of the waypoint where the kart will move onto the next one
+
 	std::vector<Vector3> m_route;
 	std::vector<SDKMeshGO3D*> m_debugRaceLine;
 	std::vector<SDKMeshGO3D*> m_debugNextWaypoint;

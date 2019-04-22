@@ -19,17 +19,19 @@ void AIScheduler::Update()
 {
 	m_elapsedTime += Locator::getGSD()->m_dt;
 
-	for (MoveAI* ai : m_aiList)
-	{
-		ai->Update();
-	}
-
 	for (size_t i = 0; i < m_aiList.size(); i++)
 	{
-		if (i == m_currentIndex && m_elapsedTime >= (m_totalFrequency*i))
+		if (i == m_currentIndex)
 		{
-			m_aiList[i]->RecalculateLine(m_track);
-			m_currentIndex++;
+			if (m_elapsedTime >= (m_totalFrequency*i))
+			{
+				m_aiList[i]->RecalculateLine(m_track);
+				m_currentIndex++;
+			}
+			else
+			{
+				break;
+			}
 		}
 	}
 
@@ -37,6 +39,11 @@ void AIScheduler::Update()
 	{
 		m_elapsedTime -= m_lineUpdateFrequency;
 		m_currentIndex = 0;
+	}
+
+	for (MoveAI* ai : m_aiList)
+	{
+		ai->Update();
 	}
 }
 
