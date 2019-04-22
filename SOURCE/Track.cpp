@@ -178,20 +178,33 @@ void Track::LoadVertexList(std::string _vertex_list)
 /* Sets up the bounding boxes for each waypoint */
 void Track::setWaypointBB()
 {
-	/*
-	For now I'm grabbing the top_left position from the waypoint's plane mesh. This should ideally be updated to utilise all four corner points.
-	*/
 	for (size_t i = 0; i < map_finishline.size(); ++i)
 	{
-		waypoint_bb.push_back(BoundingOrientedBox());
-		waypoint_bb[i].Center = { static_cast<float>(map_finishline[i].top_left.x), static_cast<float>(map_finishline[i].top_left.y), static_cast<float>(map_finishline[i].top_left.z) };
-		waypoint_bb[i].Extents = { 100, 100, 5 };
+		Vector3 vertices[4] =
+		{
+			Vector3(static_cast<float>(map_finishline[i].top_left.x), static_cast<float>(map_finishline[i].top_left.y), static_cast<float>(map_finishline[i].top_left.z)),
+			Vector3(static_cast<float>(map_finishline[i].top_right.x), static_cast<float>(map_finishline[i].top_right.y), static_cast<float>(map_finishline[i].top_right.z)),
+			Vector3(static_cast<float>(map_finishline[i].bottom_left.x), static_cast<float>(map_finishline[i].bottom_left.y), static_cast<float>(map_finishline[i].bottom_left.z)),
+			Vector3(static_cast<float>(map_finishline[i].bottom_right.x), static_cast<float>(map_finishline[i].bottom_right.y), static_cast<float>(map_finishline[i].bottom_right.z))
+		};
+		BoundingOrientedBox box;
+		BoundingOrientedBox::CreateFromPoints(box, 4, (const XMFLOAT3*)&vertices[0], 3 * sizeof(float));
+
+		waypoint_bb.push_back(box);
 	}
 	for (size_t i = 0; i < map_waypoints.size(); ++i)
 	{
-		waypoint_bb.push_back(BoundingOrientedBox());
-		waypoint_bb[i + 1].Center = { static_cast<float>(map_waypoints[i].top_left.x), static_cast<float>(map_waypoints[i].top_left.y), static_cast<float>(map_waypoints[i].top_left.z) };
-		waypoint_bb[i + 1].Extents = { 100, 100, 100 };
+		Vector3 vertices[4] =
+		{
+			Vector3(static_cast<float>(map_waypoints[i].top_left.x), static_cast<float>(map_waypoints[i].top_left.y), static_cast<float>(map_waypoints[i].top_left.z)),
+			Vector3(static_cast<float>(map_waypoints[i].top_right.x), static_cast<float>(map_waypoints[i].top_right.y), static_cast<float>(map_waypoints[i].top_right.z)),
+			Vector3(static_cast<float>(map_waypoints[i].bottom_left.x), static_cast<float>(map_waypoints[i].bottom_left.y), static_cast<float>(map_waypoints[i].bottom_left.z)),
+			Vector3(static_cast<float>(map_waypoints[i].bottom_right.x), static_cast<float>(map_waypoints[i].bottom_right.y), static_cast<float>(map_waypoints[i].bottom_right.z))
+		};
+		BoundingOrientedBox box;
+		BoundingOrientedBox::CreateFromPoints(box, 4, (const XMFLOAT3*)&vertices[0], 3 * sizeof(float));
+
+		waypoint_bb.push_back(box);
 	}
 	int y = 0;
 }
