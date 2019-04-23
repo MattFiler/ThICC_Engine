@@ -39,6 +39,16 @@
   <PropertyGroup>
     <ApplicationIcon>ThICC_Tool_Logo.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Arcade|AnyCPU'">
+    <OutputPath>bin\Arcade\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=3.3.3.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\..\SOURCE\packages\Costura.Fody.3.3.3\lib\net40\Costura.dll</HintPath>
@@ -114,10 +124,16 @@
     <Compile Include="Generic_Importer.Designer.cs">
       <DependentUpon>Generic_Importer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Keybind_Editor.cs">
+    <Compile Include="Keybinds_Editor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Keybind_Editor.Designer.cs">
+    <Compile Include="Keybinds_Editor.Designer.cs">
+      <DependentUpon>Keybinds_Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Depreciated References\Keybind_Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Depreciated References\Keybind_Editor.Designer.cs">
       <DependentUpon>Keybind_Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Asset_Editor.cs">
@@ -125,6 +141,12 @@
     </Compile>
     <Compile Include="Asset_Editor.Designer.cs">
       <DependentUpon>Asset_Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Keybinds_Manager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Keybinds_Manager.Designer.cs">
+      <DependentUpon>Keybinds_Manager.cs</DependentUpon>
     </Compile>
     <Compile Include="Localisation_Editor.cs">
       <SubType>Form</SubType>
@@ -172,10 +194,10 @@
     <Compile Include="Model_Viewer.xaml.cs">
       <DependentUpon>Model_Viewer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model_Importer.cs">
+    <Compile Include="Depreciated References\Model_Importer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Model_Importer.Designer.cs">
+    <Compile Include="Depreciated References\Model_Importer.Designer.cs">
       <DependentUpon>Model_Importer.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -214,8 +236,14 @@
     <EmbeddedResource Include="Asset_Editor.resx">
       <DependentUpon>Asset_Editor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Keybind_Editor.resx">
+    <EmbeddedResource Include="Keybinds_Editor.resx">
+      <DependentUpon>Keybinds_Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Depreciated References\Keybind_Editor.resx">
       <DependentUpon>Keybind_Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Keybinds_Manager.resx">
+      <DependentUpon>Keybinds_Manager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Localisation_Editor.resx">
       <DependentUpon>Localisation_Editor.cs</DependentUpon>
@@ -223,7 +251,7 @@
     <EmbeddedResource Include="Asset_Comp_Manager.resx">
       <DependentUpon>Asset_Comp_Manager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Model_Importer.resx">
+    <EmbeddedResource Include="Depreciated References\Model_Importer.resx">
       <DependentUpon>Model_Importer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Model_Importer_AssetSelector.resx">

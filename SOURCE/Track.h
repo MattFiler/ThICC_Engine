@@ -17,16 +17,18 @@ struct TrackData {
 };
 
 struct Waypoint {
-	Waypoint(Vector3 _tl, Vector3 _tr, Vector3 _bl, Vector3 _br) {
+	Waypoint(Vector3 _tl, Vector3 _tr, Vector3 _bl, Vector3 _br, Vector3 _mb) {
 		top_left = _tl;
 		top_right = _tr;
 		bottom_left = _bl;
 		bottom_right = _br;
+		middle_bottom = _mb;
 	}
 	Vector3 top_left = Vector3(0, 0, 0);
 	Vector3 top_right = Vector3(0, 0, 0);
 	Vector3 bottom_left = Vector3(0, 0, 0);
 	Vector3 bottom_right = Vector3(0, 0, 0);
+	Vector3 middle_bottom = Vector3(0, 0, 0);
 };
 
 /* A type of PhysModel that stores a reference to their triangles, used so that TrackMagnet objects
@@ -80,6 +82,8 @@ public:
 
 	bool DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle);
 	void SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall);
+
+	Vector3 getWaypointMiddle(int index);
 
 private:
 	void LoadVertexList(std::string _vertex_list);

@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject3D.h"
 #include "KeybindManager.h"
+#include "Constants.h"
 struct GameStateData;
 
 //This is a basic camera class
@@ -12,27 +13,13 @@ class Camera :
 {
 public:
 
-	enum class Behavior : int
-	{
-		FOLLOW = 0,
-		BACK_FACING = 1,
-		FIRST = 2,
-		INDEPENDENT = 3,
-		ORBIT = 4,
-		CINEMATIC = 5,
-#ifdef _DEBUG
-		DEBUG_CAM = 6,
-#endif
-	};
-
-	Camera(float _width, float _height, float _near, float _far, Vector3 _dpos, GameObject3D * _target, Behavior _behav);
-	void setUpCameras(json &m_camera_configs, std::string camera_type);
+	Camera(float _width, float _height, Vector3 _dpos, GameObject3D * _target, CameraType _behav);
 	~Camera() = default;
 
 	void SetTarget(GameObject3D* _target) { m_targetObject = _target; }
 	void SetTarget(Vector3 _target) { m_targetObject = NULL; m_targetPos = _target; }
 	void SetDPos(Vector3 _m_dpos) { m_dpos = _m_dpos; }
-	void SetBehav(Behavior _behav) { behavior = _behav; }
+	void SetType(CameraType _behav) { cam_type = _behav; }
 
 	/*
 	void SetCinematicPos(std::vector<Vector3> positions);
@@ -42,7 +29,7 @@ public:
 	Matrix GetProj() { return m_proj; }
 	Matrix GetView() { return m_view; }
 	Vector3 GetDeltaPos() { return m_dpos; };
-	Behavior GetBehav() { return behavior; }
+	CameraType GetType() { return cam_type; }
 
 	virtual void Tick();
 	virtual void Render() {};
@@ -91,36 +78,24 @@ protected:
 	std::vector<Vector3> look_points;
 	*/
 
-	std::vector<Vector3> camera_offsets;
-	std::vector<Vector3> look_at_positions;
-	std::vector<Vector3> target_positions;
-	std::vector<Vector3> look_at_offsets;
-	std::vector<float> rotation_lerps;
-	std::vector<float> position_lerps;
-
-	Behavior behavior;
+	CameraType cam_type;
 
 	KeybindManager m_keybinds;
 
 	int m_cameraID = 0;
 
 	// Independent Cam variables
-	float indep_spin_amount = 0.0f;
 	float indep_angle_x = 0.0f;
 	float indep_angle_y = 60.0f;
 
 	// Orbit Cam varibles
-	float orbit_spin_amount = 0.0f;
 	float angle = 0.0f;
 
 	// Cinematic Cam variables
 	int cam_point = 0;
-	float cine_time_out = 3.0f;
 	float timer = 0.0f;
 
 	// Debug Cam variables
-	float cam_speed;
-	float cam_rot_speed;
 	float last_mouse_xpos = 0.0f;
 	float last_mouse_ypos = 0.0f;
 };

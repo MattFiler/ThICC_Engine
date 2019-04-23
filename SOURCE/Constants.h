@@ -63,6 +63,21 @@ struct ItemBoxConfig {
 	static double respawn_time;
 };
 
+// camera type
+
+enum class CameraType : int
+{
+	FOLLOW = 0,
+	BACK_FACING = 1,
+	FIRST = 2,
+	INDEPENDENT = 3,
+	ORBIT = 4,
+	CINEMATIC = 5,
+#ifdef _DEBUG
+	DEBUG_CAM = 6,
+#endif
+};
+
 
 // sound
 // sound catergories

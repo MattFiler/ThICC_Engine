@@ -156,14 +156,6 @@ void SDKMeshGO3D::Load()
 	//Only continue if we loaded our model
 	if (m_model)
 	{
-		//Create another resource upload
-		ResourceUploadBatch resourceUpload(device);
-		resourceUpload.Begin();
-
-		//Static buffers and create TextureEffectFactory
-		m_model->LoadStaticBuffers(device, resourceUpload, true);
-		m_modelResources = std::make_unique<EffectTextureFactory>(device, resourceUpload, m_resourceDescriptors->Heap());
-
 		//Get current directory (this is currently hacky and needs a fix - is VS giving us the wrong working dir?)
 		std::string curr_dir = std::experimental::filesystem::current_path().string();
 		if (curr_dir.substr(curr_dir.length() - 6) == "SOURCE") {
@@ -174,9 +166,20 @@ void SDKMeshGO3D::Load()
 			dirpath = dirpath.substr(0, dirpath.length() - 7) + "/";
 			is_debug_mesh = true;
 			DebugText::print("'" + filename + "' IS A DEBUG MESH!");
+			#ifndef _DEBUG
+			return;
+			#endif
 		}
 		std::wstring dirpath_wstring = std::wstring(dirpath.begin(), dirpath.end());
 		const wchar_t* dirpath_wchar = dirpath_wstring.c_str();
+
+		//Create another resource upload
+		ResourceUploadBatch resourceUpload(device);
+		resourceUpload.Begin();
+
+		//Static buffers and create TextureEffectFactory
+		m_model->LoadStaticBuffers(device, resourceUpload, true);
+		m_modelResources = std::make_unique<EffectTextureFactory>(device, resourceUpload, m_resourceDescriptors->Heap());
 
 		//Set the directory for our materials
 		m_modelResources->SetDirectory(dirpath_wchar);

@@ -139,6 +139,9 @@
     <ClCompile Include="Sound.cpp">
       <Filter>Game\Components\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -329,6 +332,12 @@
     </ClInclude>
     <ClInclude Include="GameObjectShared.h">
       <Filter>Game\Shared Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraData.h">
+      <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

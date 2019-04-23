@@ -8,6 +8,7 @@
 #include "GameFilepaths.h"
 #include "RenderData.h"
 #include "DeviceData.h"
+#include "CameraData.h"
 #include "GameStateData.h"
 #include "LocalisationManager.h"
 
@@ -81,6 +82,7 @@ private:
 	ThICC_InputData m_input_data;
 	ThICC_DeviceData m_device_data;
 	ThICC_GameStateData m_gamestate_data;
+	ThICC_CameraData m_camera_data;
 
 	//Misc data banks
 	json m_game_config;

@@ -21,9 +21,9 @@ struct MapInfo : public AssetComp {
 		preview_sprite = new ImageGO2D(_element["menu_sprite"]);
 		scene_index = _index;
 
-		std::string cubemap_radiance_str = m_filepaths.generateFilepath(_element["cubemaps"]["radiance"], m_filepaths.IMAGE);
+		std::string cubemap_radiance_str = m_filepaths.generateFilepath(_element["cubemap"], m_filepaths.CUBEMAP_RADIANCE);
 		cubemap_radiance = converter.from_bytes(cubemap_radiance_str.c_str());
-		std::string cubemap_irradiance_str = m_filepaths.generateFilepath(_element["cubemaps"]["irradiance"], m_filepaths.IMAGE);
+		std::string cubemap_irradiance_str = m_filepaths.generateFilepath(_element["cubemap"], m_filepaths.CUBEMAP_IRRADIANCE);
 		cubemap_irradiance = converter.from_bytes(cubemap_irradiance_str.c_str());
 
 		audio_background_start = _element["audio"]["background_start"];

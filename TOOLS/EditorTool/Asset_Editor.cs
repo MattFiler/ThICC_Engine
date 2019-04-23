@@ -140,7 +140,7 @@ namespace EditorTool
                     break;
                 case "Cubemaps":
                     path = function_libary.getFolder(AssetType.CUBEMAP);
-                    extension = "*.DDS";
+                    extension = "*.JSON";
                     break;
             }
 
@@ -192,13 +192,13 @@ namespace EditorTool
             
             //Get name
             string selected_file_name = "";
-            if (loadAssetType.SelectedItem.ToString() != "Strings")
+            if (loadAssetType.SelectedItem.ToString() == "Strings" || loadAssetType.SelectedItem.ToString() == "Cubemaps")
             {
-                selected_file_name = full_loaded_filenames.ElementAt(assetList.SelectedIndex);
+                selected_file_name = assetList.SelectedItem.ToString();
             }
             else
             {
-                selected_file_name = assetList.SelectedItem.ToString();
+                selected_file_name = full_loaded_filenames.ElementAt(assetList.SelectedIndex);
             }
 
             //Get type
@@ -216,6 +216,9 @@ namespace EditorTool
                     break;
                 case "Strings":
                     selected_type = AssetType.STRING;
+                    break;
+                case "Cubemaps":
+                    selected_type = AssetType.CUBEMAP;
                     break;
                 default:
                     selected_type = AssetType.SOUND;
@@ -279,6 +282,13 @@ namespace EditorTool
                     inuse_config[selected_file_name].Parent.Remove();
                     File.WriteAllText("DATA/CONFIGS/LOCALISATION_INUSE.JSON", inuse_config.ToString(Formatting.Indented));
                     break;
+                case AssetType.CUBEMAP:
+                    Directory.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name, true);
+                    File.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + "_R.DDS");
+                    File.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + "_IR.DDS");
+                    File.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + ".PNG");
+                    File.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + ".JSON");
+                    break;
                 default:
                     File.Delete(selected_file_name);
                     File.Delete(selected_file_name.Substring(0, selected_file_name.Length - 3) + "JSON");
@@ -330,6 +340,9 @@ namespace EditorTool
                 case "Sounds":
                     selected_type = AssetType.SOUND;
                     break;
+                case "Cubemaps":
+                    selected_type = AssetType.CUBEMAP;
+                    break;
                 default:
                     return;
             }
@@ -366,8 +379,9 @@ namespace EditorTool
                         modelConfigs.Visible = true;
                     }
                     break;
+                case AssetType.CUBEMAP:
                 case AssetType.IMAGE:
-                    function_libary.loadImagePreview(assetList, imagePreview);
+                    function_libary.loadImagePreview(assetList, imagePreview, selected_type);
                     break;
                 case AssetType.SOUND:
                     function_libary.loadSoundPreview(assetList, sound_player, soundPreview, playSoundPreview);

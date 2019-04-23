@@ -21,18 +21,18 @@ void ControlledMovement::GetControllerInput()
 	{
 		m_isTurning = false;
 		//GameController Movement
-		if (Locator::getID()->m_gamePadState[m_playerID].IsRightShoulderPressed() || Locator::getID()->m_keyboardState.Q)
+		if (m_keybind.keyHeld("drift", m_playerID))
 		{
 			m_isTurning = true;
 			if (m_drifting == false)
 			{
 				m_startDrift = true;
 				m_drifting = true;
-				if (Locator::getID()->m_gamePadState[m_playerID].IsLeftThumbStickLeft() || Locator::getID()->m_keyboardState.A)
+				if (m_keybind.keyHeld("left", m_playerID))
 				{
 					m_driftingRight = false;
 				}
-				else if (Locator::getID()->m_gamePadState[m_playerID].IsLeftThumbStickRight() || Locator::getID()->m_keyboardState.D)
+				else if (m_keybind.keyHeld("right", m_playerID))
 				{
 					m_driftingRight = true;
 				}
@@ -51,11 +51,11 @@ void ControlledMovement::GetControllerInput()
 			}
 		}
 
-		if (Locator::getID()->m_gamePadState[m_playerID].IsRightTriggerPressed() || Locator::getID()->m_keyboardState.W)
+		if (m_keybind.keyHeld("accelerate", m_playerID))
 		{
 			m_acceleration = 1;
 		}
-		else if (Locator::getID()->m_gamePadState[m_playerID].IsLeftTriggerPressed() || Locator::getID()->m_keyboardState.S)
+		else if (m_keybind.keyHeld("decelerate", m_playerID))
 		{
 			m_acceleration = -0.5f;
 		}
@@ -64,13 +64,13 @@ void ControlledMovement::GetControllerInput()
 			m_acceleration = 0;
 		}
 
-		if (Locator::getID()->m_gamePadState[m_playerID].IsLeftThumbStickLeft() || Locator::getID()->m_keyboardState.A)
+		if (m_keybind.keyHeld("left", m_playerID))
 		{
 			m_left = true;
 			m_right = false;
 			m_isTurning = true;
 		}
-		else if (Locator::getID()->m_gamePadState[m_playerID].IsLeftThumbStickRight() || Locator::getID()->m_keyboardState.D)
+		else if (m_keybind.keyHeld("right", m_playerID))
 		{
 			m_right = true;
 			m_left = false;
@@ -231,16 +231,25 @@ void ControlledMovement::EndDrift()
 	m_drifting = false;
 }
 
-void ControlledMovement::TurnLeft(bool _flag)
+void ControlledMovement::TurnLeft()
 { 
-	m_left = _flag;
-	m_isTurning = _flag;
+	m_left = true;
+	m_right = false;
+	m_isTurning = true;
 }
-void ControlledMovement::TurnRight(bool _flag)
+void ControlledMovement::TurnRight()
 { 
-	m_right = _flag; 
-	m_isTurning = _flag;
+	m_left = false;
+	m_right = true;
+	m_isTurning = true;
 };
+
+void ControlledMovement::DontTurn()
+{
+	m_left = false;
+	m_right = false;
+	m_isTurning = false;
+}
 
 void ControlledMovement::Drift(bool _flag)
 {

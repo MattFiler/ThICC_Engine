@@ -723,7 +723,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl dr_Rock
-Ns 94.117647
+Ns 62.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -738,11 +738,11 @@ norm udr_rock01_nrm.png
 Tr 0.000000
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
-map_RMA rma_placeholder.png
-map_occlusionRoughnessMetallic rma_placeholder.png
+map_RMA dr_Rock.png
+map_occlusionRoughnessMetallic dr_Rock.png
 
 newmtl dr_Rock2
-Ns 94.117647
+Ns 62.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -752,16 +752,16 @@ d 0.000000
 illum 2
 map_Kd udr_rock01_Alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
+map_Ks udr_rock01_spm.png
+map_Kn udr_rock01_nrm.png
+norm udr_rock01_nrm.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
-map_RMA rma_placeholder.png
-map_occlusionRoughnessMetallic rma_placeholder.png
+map_RMA dr_Rock2.png
+map_occlusionRoughnessMetallic dr_Rock2.png
 
 newmtl dr_RockStart
-Ns 94.117647
+Ns 81.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -771,13 +771,13 @@ d 0.000000
 illum 2
 map_Kd udr_rock01_Alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
+map_Ks udr_rock01_spm.png
+map_Kn udr_rock01_nrm.png
+norm udr_rock01_nrm.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
-map_RMA rma_placeholder.png
-map_occlusionRoughnessMetallic rma_placeholder.png
+map_RMA dr_RockStart.png
+map_occlusionRoughnessMetallic dr_RockStart.png
 
 newmtl dr_Saku1
 Ns 94.117647
