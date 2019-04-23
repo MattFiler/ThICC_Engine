@@ -9,5 +9,11 @@ public:
 	DebugMarker(Vector3 position, Vector3 rotation);
 	~DebugMarker() = default;
 
+	void Render() override {
+		#ifdef _DEBUG
+		PhysModel::Render();
+		#endif
+	}
+
 private:
 };

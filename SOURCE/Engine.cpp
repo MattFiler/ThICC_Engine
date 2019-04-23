@@ -110,7 +110,7 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	Locator::getRD()->m_window_width = width;
 
 	//Set our default font
-	SetDefaultFont("NeueHaasGroteskDisp Pro BD");
+	SetDefaultFont(m_game_config["font"]);
 
 	//Setup item data
 	m_probabilities = new ItemData();
