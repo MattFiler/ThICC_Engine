@@ -45,18 +45,20 @@ void Camera::setUpCameras(json &m_camera_configs, std::string camera_type)
 {
 	if (camera_type != "DEBUG_CAM")
 	{
+		rotation_lerps.push_back(m_camera_configs[camera_type]["rotation_lerp"]);
+		position_lerps.push_back(m_camera_configs[camera_type]["position_lerp"]);
 		target_positions.push_back(Vector3{ m_camera_configs[camera_type]["target_position"][0],
 			m_camera_configs[camera_type]["target_position"][1],
 			m_camera_configs[camera_type]["target_position"][2] });
 		look_at_positions.push_back(Vector3{ m_camera_configs[camera_type]["look_at_position"][0],
 			m_camera_configs[camera_type]["look_at_position"][1],
 			m_camera_configs[camera_type]["look_at_position"][2] });
-		rotation_lerps.push_back(m_camera_configs[camera_type]["rotation_lerp"]);
-		position_lerps.push_back(m_camera_configs[camera_type]["position_lerp"]);
-		delta_positions.push_back(Vector3{ m_camera_configs[camera_type]["camera_offset"][0],
+		camera_offsets.push_back(Vector3{ m_camera_configs[camera_type]["camera_offset"][0],
 			m_camera_configs[camera_type]["camera_offset"][1],
 			m_camera_configs[camera_type]["camera_offset"][2] });
-	}
+		look_at_offsets.push_back(Vector3{ m_camera_configs[camera_type]["look_at_offset"][0],
+			m_camera_configs[camera_type]["look_at_offset"][1],
+			m_camera_configs[camera_type]["look_at_offset"][2] });
 
 	if (camera_type == "ORBIT")
 		orbit_spin_amount = m_camera_configs[camera_type]["spin_amount"];
@@ -66,14 +68,8 @@ void Camera::setUpCameras(json &m_camera_configs, std::string camera_type)
 
 	else if (camera_type == "CINEMATIC")
 		cine_time_out = m_camera_configs[camera_type]["timeout"];
-
-	else if (camera_type == "FIRST")
-	{
-		look_at_offset = Vector3{ m_camera_configs[camera_type]["look_at_offset"][0],
-			m_camera_configs[camera_type]["look_at_offset"][1],
-			m_camera_configs[camera_type]["look_at_offset"][2] };
 	}
-	else if (camera_type == "DEBUG_CAM")
+	else
 	{
 		cam_speed = m_camera_configs[camera_type]["camera_speed"];
 		cam_rot_speed = m_camera_configs[camera_type]["camera_rot_speed"];
@@ -117,9 +113,10 @@ void Camera::Tick()
 
 	if (behavior != Behavior::DEBUG_CAM)
 	{
-		m_dpos = delta_positions[static_cast<int>(behavior)];
+		m_dpos = camera_offsets[static_cast<int>(behavior)];
 		orientation = m_targetObject ? m_targetObject->GetOri() : GetOri();
-		look_at_target = m_targetObject ? m_targetObject->GetPos() : look_at_positions[static_cast<int>(behavior)];
+		//look_at_target = m_targetObject ? m_targetObject->GetPos() : look_at_positions[static_cast<int>(behavior)];
+		look_at_target = (m_targetObject ? m_targetObject->GetPos() : look_at_positions[static_cast<int>(behavior)]) + Vector3::Transform(look_at_offsets[static_cast<int>(behavior)], orientation);
 		target_pos = (m_targetObject ? m_targetObject->GetPos() : target_positions[static_cast<int>(behavior)]) + Vector3::Transform(m_dpos, orientation);
 		up_transform = m_targetObject ? m_targetObject->GetWorld().Up() : Vector3::Up;
 		rot_lerp = rotation_lerps[static_cast<int>(behavior)];
@@ -153,13 +150,6 @@ void Camera::Tick()
 				cam_point++;
 			}
 		}
-		break;
-	}
-	case Behavior::FIRST:
-	{
-		look_at_target = (m_targetObject ? m_targetObject->GetPos() : look_at_positions[static_cast<int>(behavior)]);
-		look_at_target = m_targetObject->GetPos() + Vector3::Transform(look_at_offset, orientation);
-		target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, orientation);
 		break;
 	}
 	case Behavior::INDEPENDENT:

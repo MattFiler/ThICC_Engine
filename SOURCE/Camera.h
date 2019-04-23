@@ -91,9 +91,10 @@ protected:
 	std::vector<Vector3> look_points;
 	*/
 
-	std::vector<Vector3> delta_positions;
+	std::vector<Vector3> camera_offsets;
 	std::vector<Vector3> look_at_positions;
 	std::vector<Vector3> target_positions;
+	std::vector<Vector3> look_at_offsets;
 	std::vector<float> rotation_lerps;
 	std::vector<float> position_lerps;
 
@@ -102,9 +103,6 @@ protected:
 	KeybindManager m_keybinds;
 
 	int m_cameraID = 0;
-
-	// First Person Cam variables
-	Vector3 look_at_offset;
 
 	// Independent Cam variables
 	float indep_spin_amount = 0.0f;

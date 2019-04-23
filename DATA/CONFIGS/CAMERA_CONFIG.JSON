@@ -4,7 +4,8 @@
     "position_lerp": 0.25,
     "look_at_position" : [0.0, 0.0, 1.0],
     "target_position" : [0.0, 0.0, 0.0],
-    "camera_offset": [0.0,3.0,10.0]
+    "camera_offset": [0.0,3.0,10.0],
+    "look_at_offset": [0.0, 2.0, 0.0]
   },
   "ORBIT": {
     "rotation_lerp": 0.1,
@@ -12,6 +13,7 @@
     "look_at_position" : [0.0, 0.0, 1.0],
     "target_position" : [0.0, 0.0, 0.0],
     "camera_offset": [10.0, 3.0, 10.0],
+    "look_at_offset": [0.0, 1.0, 0.0],
     "spin_amount" : 30.0
   },
 "CINEMATIC": {
@@ -20,6 +22,7 @@
     "look_at_position" : [0.0, 0.0, 1.0],
     "target_position" : [0.0, 0.0, 0.0],
     "camera_offset": [0.0, 0.0, 0.0],
+    "look_at_offset": [0.0, 0.0, 0.0],
     "timeout" : 4.0
   },
 "FIRST": {
@@ -36,6 +39,7 @@
     "look_at_position" : [0.0, 0.0, 1.0],
     "target_position" : [0.0, 0.0, 0.0],
     "camera_offset": [10.0, 3.0, 10.0],
+    "look_at_offset": [0.0, 2.0, 0.0],
     "spin_amount" : 3.0
   },      
 "BACK_FACING": {
@@ -43,7 +47,8 @@
     "position_lerp": 1.0,
     "look_at_position" : [0.0, 0.0, 1.0],
     "target_position" : [0.0, 0.0, 0.0],
-    "camera_offset": [10.0, 3.0, 10.0]
+    "camera_offset": [0.0, 3.0, -10.0],
+    "look_at_offset": [0.0, 2.0, 0.0]
   },
 "DEBUG_CAM": {
     "camera_speed" : 40.0,
