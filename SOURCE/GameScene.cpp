@@ -123,11 +123,14 @@ void GameScene::ExpensiveUnload() {
 	final_lap_start = false;
 	final_lap = false;
 	finished = 0;
+	is_paused = false;
 }
 
 /* Create all 2D objects for the scene */
 void GameScene::create2DObjects()
 {
+	m_pause_screen = new ImageGO2D("paused");
+
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
@@ -164,13 +167,6 @@ void GameScene::create2DObjects()
 /* Create all 3D objects in the scene. */
 void GameScene::create3DObjects()
 {
-	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
-	// e.g. for 60 FPS fixed timestep update logic, call:
-	/*
-	m_timer.SetFixedTimeStep(true);
-	m_timer.SetTargetElapsedSeconds(1.0 / 60);
-	*/
-
 	//Load in a track
 	track = new Track(map_info.model);
 	track->setWaypointBB();
@@ -182,9 +178,11 @@ void GameScene::create3DObjects()
 	}
 
 	//Add all debug markers
+	#ifdef _DEBUG
 	for (DebugMarker* this_debug_marker : track->GetDebugMarkers()) {
 		m_3DObjects.push_back(this_debug_marker);
 	}
+	#endif
 
 	DebugText::print("Width: " + std::to_string(Locator::getRD()->m_window_width));
 	DebugText::print("Height: " + std::to_string(Locator::getRD()->m_window_height));
@@ -208,14 +206,6 @@ void GameScene::create3DObjects()
 		m_cam[i]->SetBehav(Camera::BEHAVIOUR::RACE_START);
 	}
 
-	/*
-	for (SDKMeshGO3D*& cup : debug_cups)
-	{
-		cup = new SDKMeshGO3D("Cup");
-		m_3DObjects.push_back(cup);
-	}*/
-
-
 	//Cinematic cam
 	cine_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
 	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
@@ -238,6 +228,18 @@ void GameScene::pushBackObjects()
 /* Update the scene */
 void GameScene::Update(DX::StepTimer const& timer)
 {
+	//handle pause
+	if (is_paused) {
+		if (m_keybinds.keyReleased("pause")) {
+			is_paused = false;
+		}
+		return;
+	}
+	if (m_keybinds.keyReleased("pause")) {
+		is_paused = true;
+	}
+
+
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
 
@@ -280,6 +282,13 @@ void GameScene::Update(DX::StepTimer const& timer)
 			timeout = 2.99999f;
 			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::PRE_COUNTDOWN);
 		}
+		#ifdef _DEBUG
+		if (m_keybinds.keyReleased("Activate"))
+		{
+			timeout = 2.999999f;
+			state = COUNTDOWN;
+		}
+		#endif
 		break;
 	case CAM_OPEN:
 		for (int i = 0; i < game_config["player_count"]; ++i) {
@@ -344,25 +353,23 @@ void GameScene::Update(DX::StepTimer const& timer)
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track);
 		player[i]->ResolveWallCollisions(*track);
-		Locator::getID()->m_gamePadState[i] = Locator::getID()->m_gamepad->GetState(i); //set game controllers state[s]
-
 	}
 
-	if (m_keybinds.keyPressed("Quit"))
+	if (m_keybinds.keyReleased("Quit"))
 	{
 		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
 		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_FL_GAME)->Stop();
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
-	if (m_keybinds.keyPressed("Orbit"))
+	if (m_keybinds.keyReleased("toggle orbit cam"))
 	{
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::INDEPENDENT);
 	}
-	if (m_keybinds.keyPressed("Lerp"))
+	if (m_keybinds.keyReleased("toggle lerp cam"))
 	{
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
 	}
-	if (m_keybinds.keyPressed("Matt"))
+	if (m_keybinds.keyReleased("toggle debug cam"))
 	{
 		if (m_cam[0]->GetBehav() == Camera::BEHAVIOUR::DEBUG_CAM) {
 			m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
@@ -431,18 +438,13 @@ void GameScene::Update(DX::StepTimer const& timer)
 	}*/
 
 	//Toggle debug mesh renders
-	if (m_keybinds.keyPressed("Debug Toggle"))
+	if (m_keybinds.keyReleased("toggle collision debug"))
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 		DebugText::print("show_debug_meshes: " + std::to_string((int)GameDebugToggles::show_debug_meshes));
 	}
-	if (m_keybinds.keyPressed("Debug Toggle World Render")) {
+	if (m_keybinds.keyReleased("toggle world render")) {
 		GameDebugToggles::render_level = !GameDebugToggles::render_level;
-	}
-	else if (m_keybinds.keyPressed("Activate"))
-	{
-		timeout = 2.999999f;
-		state = COUNTDOWN;
 	}
 
 	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels);
@@ -509,17 +511,19 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 		{
 			if ((*it)->isVisible()) {
-				if (dynamic_cast<Track*>(*it)) //debugging only
+				if (dynamic_cast<Track*>(*it)) 
 				{
 					if (GameDebugToggles::render_level) {
 						(*it)->Render();
 					}
 				}
+				#ifdef _DEBUG
 				else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
 					if (GameDebugToggles::show_debug_meshes) {
 						(*it)->Render();
 					}
 				}
+				#endif
 				else
 				{
 					(*it)->Render();
@@ -550,17 +554,19 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 			{
 				if ((*it)->isVisible()) {
-					if (dynamic_cast<Track*>(*it)) //debugging only
+					if (dynamic_cast<Track*>(*it)) 
 					{
 						if (GameDebugToggles::render_level) {
 							(*it)->Render();
 						}
 					}
+					#ifdef _DEBUG
 					else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
 						if (GameDebugToggles::show_debug_meshes) {
 							(*it)->Render();
 						}
 					}
+					#endif
 					else
 					{
 						(*it)->Render();
@@ -590,17 +596,19 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 			{
 				if ((*it)->isVisible()) {
-					if (dynamic_cast<Track*>(*it)) //debugging only
+					if (dynamic_cast<Track*>(*it))
 					{
 						if (GameDebugToggles::render_level) {
 							(*it)->Render();
 						}
 					}
+					#ifdef _DEBUG
 					else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
 						if (GameDebugToggles::show_debug_meshes) {
 							(*it)->Render();
 						}
 					}
+					#endif
 					else
 					{
 						(*it)->Render();
@@ -624,6 +632,11 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 /* Render the 2D scene */
 void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
+	if (is_paused) {
+		m_pause_screen->Render();
+		return;
+	}
+
 	switch (state)
 	{
 	case COUNTDOWN:

@@ -154,7 +154,7 @@ namespace EditorTool
         /* Open Keybind Editor */
         private void openKeybindEditor_Click(object sender, EventArgs e)
         {
-            Keybind_Editor keybindeditor = new Keybind_Editor();
+            Keybinds_Manager keybindeditor = new Keybinds_Manager();
             keybindeditor.Show();
         }
 
@@ -246,10 +246,11 @@ namespace EditorTool
         {
             try
             {
-                //Copy to release and debug folder if needed
+                //Copy to output folders if needed
                 bool skipped_debug = (buildAssets("BUILDS/Debug", path_mod) == 0);
                 bool skipped_release = (buildAssets("BUILDS/Release", path_mod) == 0);
-                if (skipped_debug || skipped_release)
+                bool skipped_arcade = (buildAssets("BUILDS/Arcade", path_mod) == 0);
+                if (skipped_debug || skipped_release || skipped_arcade)
                 {
                     //Cache said there was no point copying assets - if we have a GUI, give the user an option to reset it
                     if (show_notifs)
@@ -344,7 +345,7 @@ namespace EditorTool
         /* Fix VS config */
         public void fixVS()
         {
-            File.WriteAllText(Directory.GetCurrentDirectory() + "/SOURCE/ThICC_Engine.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments><LocalDebuggerWorkingDirectory>$(SolutionDir)..\\\\BUILDS\\$(Configuration)\\\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments><LocalDebuggerWorkingDirectory>$(SolutionDir)..\\\\BUILDS\\$(Configuration)\\\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup></Project>");
+            File.WriteAllText(Directory.GetCurrentDirectory() + "/SOURCE/ThICC_Engine.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments><LocalDebuggerWorkingDirectory>$(SolutionDir)..\\\\BUILDS\\$(Configuration)\\\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments><LocalDebuggerWorkingDirectory>$(SolutionDir)..\\\\BUILDS\\$(Configuration)\\\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Arcade|Win32'\"><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments><LocalDebuggerWorkingDirectory>$(SolutionDir)..\\\\BUILDS\\$(Configuration)\\\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup></Project>");
         }
 
 

@@ -85,7 +85,7 @@ private:
 	void RespawnLogic();
 
 	ThICC_RenderData* m_RD = nullptr;
-	KeybindManager m_keymindManager;
+	KeybindManager m_keybind;
 	Matrix m_savedMatrix;
 	Vector m_savedPos;
 	Vector m_savedVel;
