@@ -123,11 +123,14 @@ void GameScene::ExpensiveUnload() {
 	final_lap_start = false;
 	final_lap = false;
 	finished = 0;
+	is_paused = false;
 }
 
 /* Create all 2D objects for the scene */
 void GameScene::create2DObjects()
 {
+	m_pause_screen = new ImageGO2D("paused");
+
 	for (int i = 0; i < game_config["player_count"]; i++)
 	{
 		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
@@ -225,6 +228,18 @@ void GameScene::pushBackObjects()
 /* Update the scene */
 void GameScene::Update(DX::StepTimer const& timer)
 {
+	//handle pause
+	if (is_paused) {
+		if (m_keybinds.keyReleased("pause")) {
+			is_paused = false;
+		}
+		return;
+	}
+	if (m_keybinds.keyReleased("pause")) {
+		is_paused = true;
+	}
+
+
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
 
@@ -617,6 +632,11 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 /* Render the 2D scene */
 void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
+	if (is_paused) {
+		m_pause_screen->Render();
+		return;
+	}
+
 	switch (state)
 	{
 	case COUNTDOWN:

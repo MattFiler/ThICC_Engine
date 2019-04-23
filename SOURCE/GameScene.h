@@ -80,6 +80,9 @@ private:
 	//Referenced stuff
 	RenderData* m_RD;
 
+	//Pause screen
+	ImageGO2D* m_pause_screen = nullptr;
+
 	//Our scene manager instance
 	SceneManager* m_scene_manager;
 
@@ -101,6 +104,7 @@ private:
 	bool final_lap_start = false;
 	bool final_lap = false;
 	int finished = 0;
+	bool is_paused = false;
 
 };
 

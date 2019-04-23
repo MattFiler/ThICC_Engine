@@ -238,5 +238,13 @@
     "Arcade_Code": 37,
     "Gamepad": "B",
     "is_debug": false
+  },
+  "PAUSE": {
+    "Keyboard": "Escape",
+    "Keyboard_Code": 27,
+    "Arcade": "Left Grey Top Button",
+    "Arcade_Code": 32,
+    "Gamepad": "Start",
+    "is_debug": false
   }
 }
