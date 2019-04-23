@@ -110,7 +110,7 @@ void GameScene::ExpensiveUnload() {
 	for (int i = 0; i < game_config["player_count"]; i++) {
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		m_cam[i]->Reset();
-		m_cam[i]->SetBehav(Camera::Behavior::RACE_START);
+		m_cam[i]->SetBehav(Camera::Behavior::ORBIT);
 	}
 	cine_cam->Reset();
 	cine_cam->SetBehav(Camera::Behavior::CINEMATIC);
@@ -204,8 +204,8 @@ void GameScene::create3DObjects()
 		m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
-		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, Vector3(0.0f, 3.0f, 10.0f), player[i], Camera::Behavior::FOLLOW);
-		m_cam[i]->SetBehav(Camera::Behavior::RACE_START);
+		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, Vector3(0.0f, 3.0f, 10.0f), player[i], Camera::Behavior::INDEPENDENT);
+		m_cam[i]->setAngle(180.0f);
 	}
 
 	/*

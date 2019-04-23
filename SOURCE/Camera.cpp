@@ -8,45 +8,76 @@
 
 Camera::Camera(float _width, float _height, float _near, float _far, Vector3 _dpos, GameObject3D * _target, Behavior _behav = Behavior::FOLLOW) : behavior (_behav)
 {
-	//Read in track config
-	std::ifstream i("DATA/CONFIGS/CAMERA_CONFIG.JSON");
-	json m_camera_configs;
-	m_camera_configs << i;
 
 	m_pos = Vector3::Backward;
 	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f, _width / _height, _near, _far);
 
 	m_targetObject = _target;
 
+
+
 	std::map <Behavior, std::string> behavior_map;
 	behavior_map[Behavior::FOLLOW] = "FOLLOW";
-	behavior_map[Behavior::ORBIT] = "ORBIT";
-	behavior_map[Behavior::FIRST] = "FIRST";
-	behavior_map[Behavior::INDEPENDENT] = "INDEPENDENT";
 	behavior_map[Behavior::BACK_FACING] = "BACK_FACING";
-	behavior_map[Behavior::RACE_START] = "RACE_START";
+	behavior_map[Behavior::FIRST] = "FIRST";
+	behavior_map[Behavior::ORBIT] = "ORBIT";
+	behavior_map[Behavior::INDEPENDENT] = "INDEPENDENT";
 	behavior_map[Behavior::CINEMATIC] = "CINEMATIC";
+#if _DEBUG
 	behavior_map[Behavior::DEBUG_CAM] = "DEBUG_CAM";
+#endif 
 
-	setUpCameras(m_camera_configs, _target, behavior_map, Behavior::FOLLOW);
+	//Read in track config
+	std::ifstream i("DATA/CONFIGS/CAMERA_CONFIG.JSON");
+	json m_camera_configs;
+	m_camera_configs << i;
+
+	for (size_t i = 0; i < behavior_map.size(); i++)
+	{
+		setUpCameras(m_camera_configs, behavior_map[static_cast<Camera::Behavior>(i)]);
+	}
+	//setUpCameras(m_camera_configs, _target, "FOLLOW");
 
 	//m_dpos = _dpos;
 }
 
-void Camera::setUpCameras(json &m_camera_configs, GameObject3D * _target, std::map<Behavior, std::string> camera_map, Behavior _behav)
+void Camera::setUpCameras(json &m_camera_configs, std::string camera_type)
 {
-	if (m_camera_configs[camera_map[_behav]]["look_at_target"] == "object")
+	if (camera_type != "DEBUG_CAM")
 	{
-		orientations.push_back(_target ? m_targetObject->GetOri() : GetOri());
-		up_tranforms.push_back(_target ? m_targetObject->GetWorld().Up() : GetWorld().Up());
-		target_positions.push_back(_target ? m_targetObject->GetPos() : GetPos());
-		look_at_positions.push_back(_target ? m_targetObject->GetPos() : GetPos());
+		target_positions.push_back(Vector3{ m_camera_configs[camera_type]["target_position"][0],
+			m_camera_configs[camera_type]["target_position"][1],
+			m_camera_configs[camera_type]["target_position"][2] });
+		look_at_positions.push_back(Vector3{ m_camera_configs[camera_type]["look_at_position"][0],
+			m_camera_configs[camera_type]["look_at_position"][1],
+			m_camera_configs[camera_type]["look_at_position"][2] });
+		rotation_lerps.push_back(m_camera_configs[camera_type]["rotation_lerp"]);
+		position_lerps.push_back(m_camera_configs[camera_type]["position_lerp"]);
+		delta_positions.push_back(Vector3{ m_camera_configs[camera_type]["camera_offset"][0],
+			m_camera_configs[camera_type]["camera_offset"][1],
+			m_camera_configs[camera_type]["camera_offset"][2] });
 	}
-	rotation_lerps.push_back(m_camera_configs[camera_map[_behav]]["rotation_lerp"]);
-	position_lerps.push_back(m_camera_configs[camera_map[_behav]]["position_lerp"]);
-	delta_positions.push_back(Vector3{ m_camera_configs[camera_map[_behav]]["camera_delta_position"][0],
-		m_camera_configs[camera_map[_behav]]["camera_delta_position"][1],
-		m_camera_configs[camera_map[_behav]]["camera_delta_position"][2] });
+
+	if (camera_type == "ORBIT")
+		orbit_spin_amount = m_camera_configs[camera_type]["spin_amount"];
+
+	else if (camera_type == "INDEPENDENT")
+		indep_spin_amount = m_camera_configs[camera_type]["spin_amount"];
+
+	else if (camera_type == "CINEMATIC")
+		cine_time_out = m_camera_configs[camera_type]["timeout"];
+
+	else if (camera_type == "FIRST")
+	{
+		look_at_offset = Vector3{ m_camera_configs[camera_type]["look_at_offset"][0],
+			m_camera_configs[camera_type]["look_at_offset"][1],
+			m_camera_configs[camera_type]["look_at_offset"][2] };
+	}
+	else if (camera_type == "DEBUG_CAM")
+	{
+		cam_speed = m_camera_configs[camera_type]["camera_speed"];
+		cam_rot_speed = m_camera_configs[camera_type]["camera_rot_speed"];
+	}
 }
 
 /*
@@ -84,132 +115,74 @@ void Camera::Tick()
 	float rot_lerp;
 	float pos_lerp;
 
+	if (behavior != Behavior::DEBUG_CAM)
+	{
+		m_dpos = delta_positions[static_cast<int>(behavior)];
+		orientation = m_targetObject ? m_targetObject->GetOri() : GetOri();
+		look_at_target = m_targetObject ? m_targetObject->GetPos() : look_at_positions[static_cast<int>(behavior)];
+		target_pos = (m_targetObject ? m_targetObject->GetPos() : target_positions[static_cast<int>(behavior)]) + Vector3::Transform(m_dpos, orientation);
+		up_transform = m_targetObject ? m_targetObject->GetWorld().Up() : Vector3::Up;
+		rot_lerp = rotation_lerps[static_cast<int>(behavior)];
+		pos_lerp = position_lerps[static_cast<int>(behavior)];
+	}
+
 	switch (behavior)
 	{
-	case Behavior::FOLLOW:
-	{
-		//m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
-		m_dpos = delta_positions[static_cast<int>(behavior)];
-		if (m_targetObject)
-		{
-			//orientation = m_targetObject->GetOri();
-			//rot_lerp = 0.1f;
-			//pos_lerp = 0.25f;
-			//look_at_target = m_targetObject->GetPos();
-			//target_pos = m_targetObject->GetPos() + Vector3::Transform(m_dpos, orientation);
-			//up_transform = m_targetObject->GetWorld().Up();
-			orientation = m_targetObject ? m_targetObject->GetOri() : GetOri();
-			rot_lerp = rotation_lerps[static_cast<int>(behavior)];
-			pos_lerp = position_lerps[static_cast<int>(behavior)];
-			look_at_target = m_targetObject ? m_targetObject->GetPos() : GetPos();
-			target_pos = m_targetObject ? m_targetObject->GetPos() : GetPos() + Vector3::Transform(m_dpos, orientation);
-			up_transform = m_targetObject ? m_targetObject->GetWorld().Up() :Vector3::Up;
-		}
-		break;
-	}
 	case Behavior::ORBIT:
 	{
-		if (m_targetObject)
-		{
-			m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
-			orientation = m_targetObject->GetOri();
-			rot_lerp = 0.05f;
-			pos_lerp = 1.f;
-			look_at_target = m_targetObject->GetPos();
-			up_transform = m_targetObject->GetWorld().Up();
-			angle += 1.5f;
+		angle += (orbit_spin_amount * Locator::getGSD()->m_dt);
+		target_pos = (m_targetObject ? m_targetObject->GetPos() : target_positions[static_cast<int>(behavior)]) + 
+			Vector3::Transform({ sin(angle / 57.2958f) * m_dpos.x, m_dpos.y, cos(angle / 57.2958f) * m_dpos.z }, orientation);
 
-			target_pos = m_targetObject->GetPos() + Vector3::Transform({ sin(angle / 57.2958f) * m_dpos.x, m_dpos.y, cos(angle / 57.2958f) * m_dpos.z }, orientation);
-		}
 		break;
 	}
 	case Behavior::CINEMATIC:
 	{
 		timer += Locator::getGSD()->m_dt;
-		time_out = 4.0f;
-		rotCam = Matrix::Identity;
+		look_at_target = m_targetPos;
+		up_transform = Vector3::Up;
 
 		if (cam_point < points.size())
 		{
-			target_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / time_out);
+			target_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / cine_time_out);
 			m_targetPos = look_points[cam_point];
 
-			if (timer >= time_out)
+			if (timer >= cine_time_out)
 			{
 				timer = 0.0f;
 				cam_point++;
 			}
 		}
-		look_at_target = m_targetPos;
-		up_transform = Vector3::Up;
-		rot_lerp = 0.05f;
-		pos_lerp = 1.f;
 		break;
 	}
 	case Behavior::FIRST:
 	{
-		if (m_targetObject)
-		{
-			m_dpos = Vector3{ 0.0f, 2.0f, -2.5f };
-			orientation = m_targetObject->GetOri();
-			look_at_target = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3{ 0.0f, 2.0f, -10.0f }, orientation);
-			up_transform = m_targetObject->GetWorld().Up();
-			pos_lerp = 1.f;
-			rot_lerp = 0.08;
-			target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, orientation);
-		}
+		look_at_target = (m_targetObject ? m_targetObject->GetPos() : look_at_positions[static_cast<int>(behavior)]);
+		look_at_target = m_targetObject->GetPos() + Vector3::Transform(look_at_offset, orientation);
+		target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(m_dpos, orientation);
 		break;
 	}
 	case Behavior::INDEPENDENT:
 	{
 		if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
-			angle -= 3.0f;
+			indep_angle_x += indep_spin_amount;
+		else if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickRight())
+			indep_angle_x -= indep_spin_amount;
 
-		if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickRight())
-			angle += 3.0f;
+		if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickUp() && indep_angle_y > -88)
+			indep_angle_y -= indep_spin_amount;
+		else if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickDown() && indep_angle_y < 88)
+			indep_angle_y += indep_spin_amount;
 
-		if (m_targetObject)
-		{
-			m_dpos = Vector3{ 10.0f, 3.0f, 10.0f };
-			orientation = m_targetObject->GetOri();
-			rot_lerp = 0.2f;
-			pos_lerp = 1.f;
-			look_at_target = m_targetObject->GetPos();
-			up_transform = m_targetObject->GetWorld().Up();
-			target_pos = m_targetObject->GetPos() + Vector3::Transform({ sin(angle / 57.2958f) * m_dpos.x, m_dpos.y, cos(angle / 57.2958f) * m_dpos.z }, orientation);
-		}
+		target_pos = m_targetObject->GetPos() + Vector3::Transform({ sin(indep_angle_x / 57.2958f) * m_dpos.x, sin(indep_angle_y / 57.2958f) * m_dpos.y, cos(indep_angle_x / 57.2958f) * m_dpos.z }, orientation);
 		break;
-	}
-	case Behavior::RACE_START:
-	{
-		timer += Locator::getGSD()->m_dt;
-		time_out = 3.f;
-		Vector3 start_pos = { 5.0f, 1.0f, -5.0f };
-		m_dpos = Vector3{ 0.0f, 3.0f, 10.0f };
-		if (m_targetObject)
-		{
-			orientation = m_targetObject->GetOri();
-			look_at_target = m_targetObject->GetPos();
-			pos_lerp = 1.f;
-			rot_lerp = 0.2f;
-			up_transform = m_targetObject->GetWorld().Up();
-			target_pos = m_targetObject->GetPos() + m_targetObject->GetPos().Transform(Vector3::Lerp(start_pos, m_dpos, timer / time_out), rotCam);
-			if (timer >= time_out)
-			{
-				timer = 0.0f;
-				behavior = Behavior::FOLLOW;
-			}
-		}
 	}
 #ifdef _DEBUG
 	case Behavior::DEBUG_CAM:
 	{
-		float cam_speed = 40.0f;
-		float cam_rot_speed = 0.007f;
 		if (m_keybinds.keyHeld("DebugCamSpeedup"))
 		{
-			cam_speed *= 2;
-			cam_rot_speed *= 2;
+			cam_speed *= 1.1f;
 		}
 
 		Vector3 forwardMove = cam_speed * m_world.Forward();
@@ -228,7 +201,12 @@ void Camera::Tick()
 		//m_yaw -= cam_rot_speed * Locator::getID()->m_mouseState.x;
 		//m_pitch -= cam_rot_speed * Locator::getID()->m_mouseState.y;
 		m_yaw += cam_rot_speed * mouse_xpos;
-		m_pitch -= cam_rot_speed * mouse_ypos;
+		m_pitch += cam_rot_speed * mouse_ypos;
+
+		if (m_pitch > 1.5f)
+			m_pitch = 1.5f;
+		else if (m_pitch < -1.5f)
+			m_pitch = -1.5f;
 
 		last_mouse_xpos = Locator::getID()->m_mouseState.x;
 		last_mouse_ypos = Locator::getID()->m_mouseState.y;
@@ -266,15 +244,15 @@ void Camera::Tick()
 			m_targetPos += Locator::getGSD()->m_dt * upMove;
 		}
 
-		if (m_keybinds.keyHeld("DebugCamLookUp"))
-			m_pitch += cam_rot_speed * 10;
-		else if (m_keybinds.keyHeld("DebugCamLookDown"))
-			m_pitch -= cam_rot_speed * 10;
+		if (m_keybinds.keyHeld("DebugCamLookUp") && m_pitch > -1.5)
+			m_pitch += cam_rot_speed;
+		else if (m_keybinds.keyHeld("DebugCamLookDown") && m_pitch < 1.5)
+			m_pitch -= cam_rot_speed;
 
 		if (m_keybinds.keyHeld("DebugCamLookLeft"))
-			m_yaw += cam_rot_speed * 10;
+			m_yaw += cam_rot_speed;
 		else if (m_keybinds.keyHeld("DebugCamLookRight"))
-			m_yaw -= cam_rot_speed * 10;
+			m_yaw -= cam_rot_speed;
 
 		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
 
@@ -316,7 +294,7 @@ void Camera::Tick()
 void Camera::Reset() {
 	angle = 0.0f;
 	cam_point = 0;
-	time_out = 3.0f;
+	cine_time_out = 3.0f;
 	timer = 0.0f;
 	m_cameraID = 0;
 }

@@ -1,52 +1,52 @@
 {
   "FOLLOW": {
-    "look_at_target" : "object",
     "rotation_lerp": 0.1,
     "position_lerp": 0.25,
-    "camera_delta_position": [
-      0.0,
-      3.0,
-      10.0
-    ]
+    "look_at_position" : [0.0, 0.0, 1.0],
+    "target_position" : [0.0, 0.0, 0.0],
+    "camera_offset": [0.0,3.0,10.0]
   },
   "ORBIT": {
     "rotation_lerp": 0.1,
     "position_lerp": 0.25,
-    "camera_delta_position": [
-      0.0,
-      3.0,
-      10.0
-    ],
-      "angle" : 1.5
+    "look_at_position" : [0.0, 0.0, 1.0],
+    "target_position" : [0.0, 0.0, 0.0],
+    "camera_offset": [10.0, 3.0, 10.0],
+    "spin_amount" : 30.0
   },
 "CINEMATIC": {
-    "rotation_lerp": 0.1,
-    "position_lerp": 0.25,
-    "camera_delta_position": [
-      0.0,
-      3.0,
-      10.0
-    ],
-      "angle" : 1.5
+    "rotation_lerp": 0.05,
+    "position_lerp": 1.0,
+    "look_at_position" : [0.0, 0.0, 1.0],
+    "target_position" : [0.0, 0.0, 0.0],
+    "camera_offset": [0.0, 0.0, 0.0],
+    "timeout" : 4.0
   },
 "FIRST": {
-    "rotation_lerp": 0.1,
-    "position_lerp": 0.25,
-    "camera_delta_position": [
-      0.0,
-      3.0,
-      10.0
-    ],
-      "angle" : 1.5
+    "rotation_lerp": 0.08,
+    "position_lerp": 1.0,
+    "look_at_position" : [0.0, 0.0, 1.0],
+    "target_position" : [0.0, 0.0, 0.0],
+    "camera_offset": [0.0, 2.0, -2.5],
+    "look_at_offset": [0.0, 2.0, -10.0]
   },
 "INDEPENDENT": {
-    "rotation_lerp": 0.1,
-    "position_lerp": 0.25,
-    "camera_delta_position": [
-      0.0,
-      3.0,
-      10.0
-    ],
-      "angle" : 1.5
+    "rotation_lerp": 0.25,
+    "position_lerp": 1.0,
+    "look_at_position" : [0.0, 0.0, 1.0],
+    "target_position" : [0.0, 0.0, 0.0],
+    "camera_offset": [10.0, 3.0, 10.0],
+    "spin_amount" : 3.0
+  },      
+"BACK_FACING": {
+    "rotation_lerp": 0.25,
+    "position_lerp": 1.0,
+    "look_at_position" : [0.0, 0.0, 1.0],
+    "target_position" : [0.0, 0.0, 0.0],
+    "camera_offset": [10.0, 3.0, 10.0]
+  },
+"DEBUG_CAM": {
+    "camera_speed" : 40.0,
+    "camera_rot_speed" : 0.01
   }
 }
