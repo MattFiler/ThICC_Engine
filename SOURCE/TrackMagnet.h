@@ -6,7 +6,7 @@ class TrackMagnet : public PhysModel
 public:
 	TrackMagnet(std::string _filename);
 	bool ShouldStickToTrack(Track& track);
-	void ResolveWallCollisions(Track& walls);
+	bool ResolveWallCollisions(Track& walls);
 	virtual void Tick() override { PhysModel::Tick(); };
 
 	void setDampenWallReflect(bool _toggle) { m_dampenWallReflect = _toggle; };

@@ -343,7 +343,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track);
-		player[i]->ResolveWallCollisions(*track);
+		//player[i]->ResolveWallCollisions(*track);
 		Locator::getID()->m_gamePadState[i] = Locator::getID()->m_gamepad->GetState(i); //set game controllers state[s]
 
 	}

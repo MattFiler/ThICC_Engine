@@ -122,6 +122,16 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 		m_gravDirection = m_world.Down() * gravityMultiplier;
 	}
+
+	// Check if this new world would collide with walls
+	Matrix tempWorld = m_world;
+	m_world = targetWorld;
+	if (ResolveWallCollisions(track))
+	{
+		targetWorld = tempWorld;
+		m_world = tempWorld;
+	}
+
 	// Update the position and rotation by breaking apart m_world
 	Vector3 scale = Vector3::Zero;
 	Quaternion rot = Quaternion::Identity;
@@ -147,7 +157,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	return shouldStick;
 }
 
-void TrackMagnet::ResolveWallCollisions(Track& walls)
+bool TrackMagnet::ResolveWallCollisions(Track& walls)
 {
 	walls.SetValidCollision(true, true, true, true);
 	Vector leftSide = data.m_globalBackTopLeft - data.m_globalFrontTopLeft + (m_world.Down() *1);
@@ -190,8 +200,9 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 				m_vel *= 1 - (dist / 2.4f);
 			}
 		}
+		return true;
 	}
-
+	return false;
 }
 
 void TrackMagnet::MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector _down, MeshTri * _tri)
