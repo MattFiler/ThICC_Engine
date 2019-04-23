@@ -45,11 +45,7 @@ namespace EditorTool
             deleteMap.Text = "Delete Selected " + common_functions.makeCapitalised(comp_displayname);
 
             //Load config
-            comp_json_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/" + comp_displayname.ToUpper() + "_CONFIG.JSON"));
-            foreach (var config_entry in comp_json_config)
-            {
-                assetList.Items.Add(config_entry.Key.ToString());
-            }
+            refreshList();
         }
 
         /* Open creator window per comp type */
@@ -59,17 +55,17 @@ namespace EditorTool
             {
                 case AssetCompType.CHARACTER:
                     Create_Character createChar = new Create_Character();
-                    //needs to refresh
+                    createChar.FormClosed += new FormClosedEventHandler(refreshList);
                     createChar.Show();
                     break;
                 case AssetCompType.MAP:
                     Create_Map createMap = new Create_Map();
-                    //needs to refresh
+                    createMap.FormClosed += new FormClosedEventHandler(refreshList);
                     createMap.Show();
                     break;
                 case AssetCompType.VEHICLE:
                     Create_Vehicle createVehicle = new Create_Vehicle();
-                    //needs to refresh
+                    createVehicle.FormClosed += new FormClosedEventHandler(refreshList);
                     createVehicle.Show();
                     break;
             }
@@ -122,17 +118,17 @@ namespace EditorTool
             {
                 case AssetCompType.CHARACTER:
                     Create_Character createChar = new Create_Character(comp_json_config, assetList.SelectedItem.ToString());
-                    //needs to refresh
+                    createChar.FormClosed += new FormClosedEventHandler(refreshList);
                     createChar.Show();
                     break;
                 case AssetCompType.MAP:
                     Create_Map editMap = new Create_Map(comp_json_config, assetList.SelectedItem.ToString());
-                    //needs to refresh
+                    editMap.FormClosed += new FormClosedEventHandler(refreshList);
                     editMap.Show();
                     break;
                 case AssetCompType.VEHICLE:
                     Create_Vehicle createVehicle = new Create_Vehicle(comp_json_config, assetList.SelectedItem.ToString());
-                    //needs to refresh
+                    createVehicle.FormClosed += new FormClosedEventHandler(refreshList);
                     createVehicle.Show();
                     break;
             }
@@ -171,6 +167,21 @@ namespace EditorTool
             comp_json_config.Remove(assetList.SelectedItem.ToString());
             File.WriteAllText("DATA/CONFIGS/" + comp_displayname.ToUpper() + "_CONFIG.JSON", comp_json_config.ToString(Formatting.Indented));
             MessageBox.Show(common_functions.makeCapitalised(comp_displayname) + " successfully deleted!", "Deleted.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        
+        /* Refresh list */
+        private void refreshList(object sender, EventArgs e)
+        {
+            refreshList();
+        }
+        private void refreshList()
+        {
+            comp_json_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/" + comp_displayname.ToUpper() + "_CONFIG.JSON"));
+            assetList.Items.Clear();
+            foreach (var config_entry in comp_json_config)
+            {
+                assetList.Items.Add(config_entry.Key.ToString());
+            }
         }
     }
 }

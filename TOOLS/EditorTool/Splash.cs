@@ -154,7 +154,7 @@ namespace EditorTool
         /* Open Keybind Editor */
         private void openKeybindEditor_Click(object sender, EventArgs e)
         {
-            Keybind_Editor keybindeditor = new Keybind_Editor();
+            Keybinds_Manager keybindeditor = new Keybinds_Manager();
             keybindeditor.Show();
         }
 

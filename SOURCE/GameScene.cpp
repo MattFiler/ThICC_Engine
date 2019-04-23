@@ -344,25 +344,23 @@ void GameScene::Update(DX::StepTimer const& timer)
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track);
 		player[i]->ResolveWallCollisions(*track);
-		Locator::getID()->m_gamePadState[i] = Locator::getID()->m_gamepad->GetState(i); //set game controllers state[s]
-
 	}
 
-	if (m_keybinds.keyPressed("Quit"))
+	if (m_keybinds.keyReleased("Quit"))
 	{
 		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
 		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_FL_GAME)->Stop();
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
-	if (m_keybinds.keyPressed("Orbit"))
+	if (m_keybinds.keyReleased("toggle orbit cam"))
 	{
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::INDEPENDENT);
 	}
-	if (m_keybinds.keyPressed("Lerp"))
+	if (m_keybinds.keyReleased("toggle lerp cam"))
 	{
 		m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
 	}
-	if (m_keybinds.keyPressed("Matt"))
+	if (m_keybinds.keyReleased("toggle debug cam"))
 	{
 		if (m_cam[0]->GetBehav() == Camera::BEHAVIOUR::DEBUG_CAM) {
 			m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
@@ -431,15 +429,15 @@ void GameScene::Update(DX::StepTimer const& timer)
 	}*/
 
 	//Toggle debug mesh renders
-	if (m_keybinds.keyPressed("Debug Toggle"))
+	if (m_keybinds.keyReleased("toggle collision debug"))
 	{
 		GameDebugToggles::show_debug_meshes = !GameDebugToggles::show_debug_meshes;
 		DebugText::print("show_debug_meshes: " + std::to_string((int)GameDebugToggles::show_debug_meshes));
 	}
-	if (m_keybinds.keyPressed("Debug Toggle World Render")) {
+	if (m_keybinds.keyReleased("toggle world render")) {
 		GameDebugToggles::render_level = !GameDebugToggles::render_level;
 	}
-	else if (m_keybinds.keyPressed("Activate"))
+	else if (m_keybinds.keyReleased("Activate"))
 	{
 		timeout = 2.999999f;
 		state = COUNTDOWN;
