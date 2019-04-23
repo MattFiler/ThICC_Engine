@@ -246,10 +246,11 @@ namespace EditorTool
         {
             try
             {
-                //Copy to release and debug folder if needed
+                //Copy to output folders if needed
                 bool skipped_debug = (buildAssets("BUILDS/Debug", path_mod) == 0);
                 bool skipped_release = (buildAssets("BUILDS/Release", path_mod) == 0);
-                if (skipped_debug || skipped_release)
+                bool skipped_arcade = (buildAssets("BUILDS/Arcade", path_mod) == 0);
+                if (skipped_debug || skipped_release || skipped_arcade)
                 {
                     //Cache said there was no point copying assets - if we have a GUI, give the user an option to reset it
                     if (show_notifs)
