@@ -399,6 +399,13 @@ namespace EditorTool
             {
                 model_face_indexes.Add(new List<List<int>>());
             }
+            for (int i = 0; i < obj_file.Length; i++)
+            {
+                //fix for older tabbed OBJ files
+                obj_file[i] = obj_file[i].Replace("\t", string.Empty);
+                obj_file[i] = obj_file[i].Replace("    ", string.Empty);
+                obj_file[i] = obj_file[i].Replace("  ", string.Empty); //I ACTUALLY SAW THIS ONCE!
+            }
 
             //Use cases
             bool collision_enabled = false;

@@ -119,6 +119,12 @@ void MenuScene::create2DObjects()
 /* Update the scene */
 void MenuScene::Update(DX::StepTimer const& timer)
 {
+	//Hacky implementation to get to the debug scene (temp)
+	if (Locator::getID()->m_keyboardTracker.IsKeyReleased(DirectX::Keyboard::Keys::D))
+	{
+		m_scene_manager->setCurrentScene(Scenes::DEBUG_LIGHTINGTEST);
+	}
+
 	switch (m_menu_state) {
 		case menu_states::SPLASH:
 			//Animate logo over time

@@ -10,8 +10,8 @@
 enum Scenes
 {
 	MENUSCENE,
-	GAMESCENE,
-	DEBUGSCENE,
+	DEBUG_LIGHTINGTEST,
+	GAMESCENE, // must be second to last as we dynamically extend from this position
 
 	SCENE_COUNT // must always be last!
 };
