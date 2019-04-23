@@ -8,6 +8,7 @@
 #include "AudioManager.h"
 #include "DebugMarker.h"
 #include "Explosion.h"
+#include "GameObjectShared.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
@@ -53,24 +54,40 @@ bool GameScene::Load()
 	create2DObjects();
 	pushBackObjects();
 
-	m_aiScheduler = std::make_unique<AIScheduler>(track);
-	Locator::setupAIScheduler(m_aiScheduler.get());
-
 	return true;
 }
 
 /* Populate the expensive things! */
 void GameScene::ExpensiveLoad() {
+	//Set cubemaps
+	Locator::getRD()->current_cubemap_radiance = map_info.cubemap_radiance;
+	Locator::getRD()->current_cubemap_irradiance = map_info.cubemap_irradiance;
+
+	//Update characters
+	for (int i = 0; i < game_config["player_count"]; i++)
+	{
+		player[i]->Reload(
+			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
+			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i])
+		);
+	}
+
+	//Load in
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
+		//Load meshes
 		(*it)->Load();
 		if (dynamic_cast<Player*>(*it)) {
-			dynamic_cast<Player*>(*it)->GetAnimationMesh()->Load();
+			dynamic_cast<Player*>(*it)->ExpensiveLoad();
 		}
+		//Load collision info
 		if (dynamic_cast<Track*>(*it)) {
 			dynamic_cast<Track*>(*it)->LoadCollision();
 		}
 	}
+
+	//Set AI to current track
+	Locator::getAIScheduler()->UpdateTrack(track);
 
 	//Load the map's audio here using map_info's data
 }
@@ -79,6 +96,7 @@ void GameScene::ExpensiveLoad() {
 void GameScene::ExpensiveUnload() {
 	Vector3 suitable_spawn = Vector3(0, 0, 0);
 
+	//Unload meshes
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
 		(*it)->Reset();
@@ -176,7 +194,11 @@ void GameScene::create3DObjects()
 
 		//Create a player and position on track
 		using std::placeholders::_1;
-		player[i] = new Player("Knuckles_Kart", i, std::bind(&GameScene::CreateItem, this, _1));
+		player[i] = new Player(
+			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
+			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i]),
+			i, std::bind(&GameScene::CreateItem, this, _1)
+		);
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		player[i]->setMass(10);
 		m_3DObjects.push_back(player[i]);
@@ -216,8 +238,11 @@ void GameScene::pushBackObjects()
 /* Update the scene */
 void GameScene::Update(DX::StepTimer const& timer)
 {
-	m_aiScheduler->Update();
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
+
+
+	Locator::getAIScheduler()->Update();
+
 
 
 	if (finished == 4)

@@ -124,9 +124,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
-    <ClCompile Include="SplashscreenScene.cpp">
-      <Filter>Game\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="GoldenMushroom.cpp">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClCompile>
@@ -141,6 +138,9 @@
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>Game\Components\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="LightningCloud.cpp" />
   </ItemGroup>
@@ -316,9 +316,6 @@
     <ClInclude Include="AssetComp.h">
       <Filter>Engine Backend\AssetComps</Filter>
     </ClInclude>
-    <ClInclude Include="SplashscreenScene.h">
-      <Filter>Game\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="GoldenMushroom.h">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClInclude>
@@ -336,6 +333,9 @@
     </ClInclude>
     <ClInclude Include="GameObjectShared.h">
       <Filter>Game\Shared Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="LightningCloud.h" />
   </ItemGroup>

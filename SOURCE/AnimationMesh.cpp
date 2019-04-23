@@ -6,6 +6,31 @@ AnimationMesh::AnimationMesh(std::string _filename) :SDKMeshGO3D(_filename)
 {
 }
 
+void AnimationMesh::Render()
+{
+	using pair = std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>;
+	for (pair& p : m_additionalModels)
+	{
+		p.first->Render();
+	}
+	SDKMeshGO3D::Render();
+}
+
+void AnimationMesh::AddModel(GameObject3D* _gameObject, SimpleMath::Vector3 _offset)
+{
+	using pair = std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>;
+	m_additionalModels.push_back(pair(_gameObject, _offset));
+}
+
+void AnimationMesh::Load() {
+	SDKMeshGO3D::Load();
+	using pair = std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>;
+	for (pair& p : m_additionalModels)
+	{
+		p.first->Load();
+	}
+}
+
 void AnimationMesh::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
 {
 	if (!m_posAnimPoints.empty())
@@ -86,6 +111,16 @@ void AnimationMesh::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
 
 	m_pos += m_posOffset;
 	UpdateWorld();
+
+	using pair = std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>;
+	for (pair& p : m_additionalModels)
+	{
+		Vector3 scale_original = p.first->GetScale();
+		p.first->SetWorld(m_world);
+		p.first->AddPos(p.second);
+		p.first->SetScale(scale_original);
+		p.first->UpdateWorld();
+	}
 }
 
 void AnimationMesh::Jump(float _jumpHeight, float _duration)

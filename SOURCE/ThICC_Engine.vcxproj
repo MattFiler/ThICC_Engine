@@ -264,8 +264,8 @@
     <ClInclude Include="SDKMeshGO3D.h" />
     <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="InputData.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sound.h" />
-    <ClInclude Include="SplashscreenScene.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="Text2D.h" />
@@ -320,8 +320,8 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SDKMeshGO3D.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Sound.cpp" />
-    <ClCompile Include="SplashscreenScene.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Track.cpp" />

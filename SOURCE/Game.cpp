@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "RenderData.h"
 
-#include "SplashscreenScene.h"
 #include "MenuScene.h"
 #include "GameScene.h"
 
@@ -18,6 +17,10 @@ void ThICC_Game::Initialize() {
 	//Send out scene manager instance for scenes to grab
 	Locator::setupSM(&m_scene_manager);
 	m_scene_manager.Initialize();
+
+	//Set up AI scheduler
+	m_aiScheduler = std::make_unique<AIScheduler>();
+	Locator::setupAIScheduler(m_aiScheduler.get());
 
 	//Load all character data
 	std::ifstream p(m_filepath.generateFilepath("CHARACTER_CONFIG", m_filepath.CONFIG));
@@ -42,6 +45,11 @@ void ThICC_Game::Initialize() {
 	map_config << j;
 	index = 0;
 	for (auto& element : map_config) {
+		/* TEMP FIX TO DISABLE MAPS THAT DON'T HAVE UPDATED WAYPOINTS!! */
+		if (element["friendly_name"] == "MAP_RBR") {
+			continue;
+		}
+
 		//Store map info
 		m_go_shared.map_instances.emplace_back(element, index);
 		//Create scene
@@ -50,11 +58,10 @@ void ThICC_Game::Initialize() {
 	}
 
 	//Create the scenes
-	m_scene_manager.addScene(new SplashscreenScene(), (int)Scenes::SPLASHSCREEN);
 	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
 
 	//Set our default scene
-	m_scene_manager.setCurrentScene(Scenes::SPLASHSCREEN, true);
+	m_scene_manager.setCurrentScene(Scenes::MENUSCENE, true);
 }
 
 /* Update loop */

@@ -6,7 +6,18 @@
 // so nicer to reference from somewhere easier to modify.
 struct GameFilepaths {
 public:
-	enum m_asset_type { SHADER, MODEL, MODEL_CUSTOM, MODEL_COLLMAP, IMAGE, SOUND, FONT, CONFIG };
+	enum m_asset_type { 
+		SHADER, 
+		MODEL, 
+		MODEL_CUSTOM, 
+		MODEL_COLLMAP, 
+		IMAGE, 
+		SOUND, 
+		FONT, 
+		CONFIG, 
+		CUBEMAP_IRRADIANCE, //AKA SPECULAR
+		CUBEMAP_RADIANCE    //AKA DIFFUSE
+	};
 
 	/* Generate filepath */
 	std::string generateFilepath(std::string _asset_name, m_asset_type _asset_type) {
@@ -46,6 +57,10 @@ public:
 			return font_path[FOLDER] + _asset_name + font_path[EXTENSION];
 		case CONFIG:
 			return config_path[FOLDER] + _asset_name + config_path[EXTENSION];
+		case CUBEMAP_IRRADIANCE:
+			return cubemap_path_ir[FOLDER] + _asset_name + cubemap_path_ir[EXTENSION];
+		case CUBEMAP_RADIANCE:
+			return cubemap_path_r[FOLDER] + _asset_name + cubemap_path_r[EXTENSION];
 		}
 		return "";
 	}
@@ -77,6 +92,8 @@ private:
 	std::string sound_path[2] = { "DATA/SOUNDS/", ".WAV" };
 	std::string font_path[2] = { "DATA/FONTS/", ".SPRITEFONT" };
 	std::string config_path[2] = { "DATA/CONFIGS/", ".JSON" };
+	std::string cubemap_path_ir[2] = { "DATA/CUBEMAPS/", "_IR.DDS" };
+	std::string cubemap_path_r[2] = { "DATA/CUBEMAPS/", "_R.DDS" };
 
 	/* Internally get our path/extension info for use further */
 	std::string getPathSection(m_asset_type _asset_type, m_path_data _path_section) {
@@ -97,6 +114,10 @@ private:
 			return font_path[_path_section];
 		case CONFIG:
 			return config_path[_path_section];
+		case CUBEMAP_IRRADIANCE:
+			return cubemap_path_ir[_path_section];
+		case CUBEMAP_RADIANCE:
+			return cubemap_path_r[_path_section];
 		}
 	}
 };

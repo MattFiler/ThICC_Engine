@@ -113,12 +113,13 @@ namespace EditorTool
             //------
 
             //Rewrite MTL from json
+            int diffuse_missing_count = 0;
             List<string> new_mtl = new List<string>();
             new_mtl.Add("### CREATED BY THE ThICC TOOLKIT ###");
             new_mtl.Add("");
             foreach (var this_material_config in model_material_config)
             {
-                //Work out if we have alpha in this material 
+                //Work out if we have alpha in this material & check diffuse map
                 string diffuse_map = "";
                 foreach (JProperty prop_2 in model_material_config[this_material_config.Key])
                 {
@@ -127,6 +128,10 @@ namespace EditorTool
                         diffuse_map = prop_2.Value.ToString();
                         break;
                     }
+                }
+                if (diffuse_map == "")
+                {
+                    diffuse_missing_count++;
                 }
                 bool has_alpha = common_functions.hasTransparency(importer_common.importDir() + diffuse_map);
 
@@ -185,6 +190,15 @@ namespace EditorTool
                 }
                 new_mtl.Add("");
             }
+
+            //Check for missing diffuse maps
+            if (diffuse_missing_count > 0)
+            {
+                MessageBox.Show(diffuse_missing_count + " material(s) are missing diffuse maps.\nImport cannot continue!", "Missing diffuse maps!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            //Update MTL with new info
             File.Delete(importer_common.fileName(importer_file.MATERIAL));
             File.WriteAllLines(importer_common.fileName(importer_file.MATERIAL), new_mtl);
 

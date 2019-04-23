@@ -29,4 +29,6 @@ private:
 	json vehicle_config;
 
 	GameObjectShared m_go_shared;
+
+	std::unique_ptr<AIScheduler> m_aiScheduler = nullptr;
 };

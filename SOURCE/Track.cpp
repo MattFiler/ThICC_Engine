@@ -23,13 +23,20 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	m_triSegSize = m_track_data_j["segment_size"];
 
 	//Parse loaded arrays from config
+
 	for (json::iterator it = m_track_data_j["map_waypoints"].begin(); it != m_track_data_j["map_waypoints"].end(); ++it) {
-		Vector3 pos = blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale);
+		Vector3 top_left = blender_vector.ConvertPosition(Vector3(it.value()["top_left"][0], it.value()["top_left"][1], it.value()["top_left"][2]) * m_track_data.scale);
+		Vector3 top_right = blender_vector.ConvertPosition(Vector3(it.value()["top_right"][0], it.value()["top_right"][1], it.value()["top_right"][2]) * m_track_data.scale);
+		Vector3 bottom_left = blender_vector.ConvertPosition(Vector3(it.value()["bottom_left"][0], it.value()["bottom_left"][1], it.value()["bottom_left"][2]) * m_track_data.scale);
+		Vector3 bottom_right = blender_vector.ConvertPosition(Vector3(it.value()["bottom_right"][0], it.value()["bottom_right"][1], it.value()["bottom_right"][2]) * m_track_data.scale);
+		Vector3 middle_bottom = bottom_left + ((bottom_right - bottom_left)*0.5f);
 
-		map_waypoints.push_back(pos);
+		Waypoint new_waypoint = Waypoint(top_left, top_right, bottom_left, bottom_right, middle_bottom);
+		map_waypoints.push_back(new_waypoint);
 
-		DebugMarker* new_marker = new DebugMarker(pos, Vector3(0, 0, 0));
-		debug_markers.push_back(new_marker);
+		//Calculate debug marker position as the mid-point of top left and bottom right!
+		//DebugMarker* new_marker = new DebugMarker(pos, Vector3(0, 0, 0));
+		//debug_markers.push_back(new_marker);
 	}
 	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
 		map_cams_pos.push_back(blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
@@ -49,14 +56,18 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 		item_boxes.push_back(new_item_box);
 	}
 	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
-		Vector3 pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
-		Vector3 rot = blender_vector.ConvertAngle(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]) * m_track_data.scale);
+		Vector3 top_left = blender_vector.ConvertPosition(Vector3(it.value()["top_left"][0], it.value()["top_left"][1], it.value()["top_left"][2]) * m_track_data.scale);
+		Vector3 top_right = blender_vector.ConvertPosition(Vector3(it.value()["top_right"][0], it.value()["top_right"][1], it.value()["top_right"][2]) * m_track_data.scale);
+		Vector3 bottom_left = blender_vector.ConvertPosition(Vector3(it.value()["bottom_left"][0], it.value()["bottom_left"][1], it.value()["bottom_left"][2]) * m_track_data.scale);
+		Vector3 bottom_right = blender_vector.ConvertPosition(Vector3(it.value()["bottom_right"][0], it.value()["bottom_right"][1], it.value()["bottom_right"][2]) * m_track_data.scale);
+		Vector3 middle_bottom = bottom_left + ((bottom_right - bottom_left)*0.5f);
 
-		map_finishline_pos.push_back(pos);
-		map_finishline_rot.push_back(rot);
+		Waypoint finish_line = Waypoint(top_left, top_right, bottom_left, bottom_right, middle_bottom);
+		map_finishline.push_back(finish_line);
 
-		DebugMarker* new_marker = new DebugMarker(pos, rot);
-		debug_markers.push_back(new_marker);
+		//Calculate debug marker position as the mid-point of top left and bottom right!
+		//DebugMarker* new_marker = new DebugMarker(pos, rot);
+		//debug_markers.push_back(new_marker);
 	}
 
 	//Work out the spawn pos from blender definition, or fall back to our origin
@@ -169,17 +180,33 @@ void Track::LoadVertexList(std::string _vertex_list)
 /* Sets up the bounding boxes for each waypoint */
 void Track::setWaypointBB()
 {
-	for (size_t i = 0; i < map_finishline_pos.size(); ++i)
+	for (size_t i = 0; i < map_finishline.size(); ++i)
 	{
-		waypoint_bb.push_back(BoundingOrientedBox());
-		waypoint_bb[i].Center = { static_cast<float>(map_finishline_pos[i].x), static_cast<float>(map_finishline_pos[i].y), static_cast<float>(map_finishline_pos[i].z) };
-		waypoint_bb[i].Extents = { 100, 100, 5 };
+		Vector3 vertices[4] =
+		{
+			Vector3(static_cast<float>(map_finishline[i].top_left.x), static_cast<float>(map_finishline[i].top_left.y), static_cast<float>(map_finishline[i].top_left.z)),
+			Vector3(static_cast<float>(map_finishline[i].top_right.x), static_cast<float>(map_finishline[i].top_right.y), static_cast<float>(map_finishline[i].top_right.z)),
+			Vector3(static_cast<float>(map_finishline[i].bottom_left.x), static_cast<float>(map_finishline[i].bottom_left.y), static_cast<float>(map_finishline[i].bottom_left.z)),
+			Vector3(static_cast<float>(map_finishline[i].bottom_right.x), static_cast<float>(map_finishline[i].bottom_right.y), static_cast<float>(map_finishline[i].bottom_right.z))
+		};
+		BoundingOrientedBox box;
+		BoundingOrientedBox::CreateFromPoints(box, 4, (const XMFLOAT3*)&vertices[0], 3 * sizeof(float));
+
+		waypoint_bb.push_back(box);
 	}
 	for (size_t i = 0; i < map_waypoints.size(); ++i)
 	{
-		waypoint_bb.push_back(BoundingOrientedBox());
-		waypoint_bb[i + 1].Center = { static_cast<float>(map_waypoints[i].x), static_cast<float>(map_waypoints[i].y), static_cast<float>(map_waypoints[i].z) };
-		waypoint_bb[i + 1].Extents = { 100, 100, 100 };
+		Vector3 vertices[4] =
+		{
+			Vector3(static_cast<float>(map_waypoints[i].top_left.x), static_cast<float>(map_waypoints[i].top_left.y), static_cast<float>(map_waypoints[i].top_left.z)),
+			Vector3(static_cast<float>(map_waypoints[i].top_right.x), static_cast<float>(map_waypoints[i].top_right.y), static_cast<float>(map_waypoints[i].top_right.z)),
+			Vector3(static_cast<float>(map_waypoints[i].bottom_left.x), static_cast<float>(map_waypoints[i].bottom_left.y), static_cast<float>(map_waypoints[i].bottom_left.z)),
+			Vector3(static_cast<float>(map_waypoints[i].bottom_right.x), static_cast<float>(map_waypoints[i].bottom_right.y), static_cast<float>(map_waypoints[i].bottom_right.z))
+		};
+		BoundingOrientedBox box;
+		BoundingOrientedBox::CreateFromPoints(box, 4, (const XMFLOAT3*)&vertices[0], 3 * sizeof(float));
+
+		waypoint_bb.push_back(box);
 	}
 	int y = 0;
 }
@@ -399,4 +426,13 @@ void Track::SetValidCollision(const bool& _boost, const bool& _off, const bool& 
 	m_validCollisions[CollisionType::OFF_TRACK] = _off;
 	m_validCollisions[CollisionType::ON_TRACK] = _on;
 	m_validCollisions[CollisionType::WALL] = _wall;
+}
+
+Vector3 Track::getWaypointMiddle(int index)
+{
+	while (index >= map_waypoints.size())
+	{
+		index -= map_waypoints.size();
+	}
+	return map_waypoints[index].middle_bottom;
 }

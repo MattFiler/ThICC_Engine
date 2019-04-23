@@ -1,12 +1,13 @@
 #pragma once
 #include "PhysModel.h"
 #include "AnimationMesh.h"
+#include "KeybindManager.h"
 
 class ControlledMovement
 {
 public:
 	ControlledMovement() = default;
-	ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh = nullptr);
+	ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh);
 
 	void Tick();
 	void SetGamepadActive(bool _flag) { m_controlsActive = _flag;};
@@ -14,14 +15,17 @@ public:
 
 	// Setters so that the AI can move the physObject
 	void setAcceleration(float _acc) { m_acceleration = _acc;};
-	void TurnLeft(bool _flag);
-	void TurnRight(bool _flag);
+	void TurnLeft();
+	void TurnRight();
+	void DontTurn();
 	void Drift(bool _flag);
 
 	void SetWaypoint(int _waypoint) { m_waypoint = _waypoint; };
 	int GetWaypoint() { return m_waypoint; };
 
 private:
+	KeybindManager m_keybind;
+
 	void GetControllerInput();
 	void ProcessInputFlags();
 

@@ -68,6 +68,10 @@ namespace EditorTool
                         }
                     }
                     break;
+                case AssetType.CUBEMAP:
+                    file_path = function_libary.getFolder(AssetType.CUBEMAP);
+                    file_extension = "*.JSON";
+                    break;
                 default:
                     this.Close();
                     break;
@@ -144,8 +148,9 @@ namespace EditorTool
                 case AssetType.SOUND:
                     function_libary.loadSoundPreview(assetList, sound_player, soundPreview, playSoundPreview);
                     break;
+                case AssetType.CUBEMAP:
                 case AssetType.IMAGE:
-                    function_libary.loadImagePreview(assetList, imagePreview);
+                    function_libary.loadImagePreview(assetList, imagePreview, file_type);
                     break;
                 case AssetType.MODEL:
                     function_libary.loadModelPreview(assetList, modelPreview);
@@ -167,11 +172,43 @@ namespace EditorTool
             function_libary.playSoundPreview(assetList, sound_player);
         }
 
-        /* Open asset manager & close */
+        /* Open importer */
         private void createNew_Click(object sender, EventArgs e)
         {
-            Asset_Editor assetEditor = new Asset_Editor(file_type);
-            assetEditor.Show();
+            switch (file_type)
+            {
+                case AssetType.MODEL:
+                    using (var form = new Model_Importer_Preselect())
+                    {
+                        var result = form.ShowDialog();
+                        if (result == DialogResult.OK)
+                        {
+                            Model_Importer_AssetSelector modelimporter = new Model_Importer_AssetSelector(form.selected_model_type);
+                            modelimporter.FormClosed += new FormClosedEventHandler(refreshOnClose); //needs to use the wrapper, this closes too early
+                            modelimporter.Show();
+                        }
+                    }
+                    break;
+                case AssetType.SOUND:
+                case AssetType.IMAGE:
+                case AssetType.FONT:
+                    Generic_Importer multipurposeImporter = new Generic_Importer(file_type);
+                    multipurposeImporter.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    multipurposeImporter.Show();
+                    break;
+                case AssetType.STRING:
+                    Localisation_Editor stringEditor = new Localisation_Editor();
+                    stringEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
+                    stringEditor.Show();
+                    break;
+            }
+        }
+
+        /* Reopen when new thing imported */
+        private void refreshOnClose(object sender, EventArgs e)
+        {
+            Asset_Browser new_browser = new Asset_Browser(file_type);
+            new_browser.Show();
             this.Close();
         }
     }

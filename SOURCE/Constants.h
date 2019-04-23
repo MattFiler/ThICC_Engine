@@ -9,7 +9,6 @@
 
 enum Scenes
 {
-	SPLASHSCREEN,
 	MENUSCENE,
 	GAMESCENE,
 	DEBUGSCENE,
@@ -64,10 +63,6 @@ struct ItemBoxConfig {
 	static double respawn_time;
 };
 
-
-enum class NUM_OF_ENV_MAPS : int {
-	ENV_MAP_COUNT = 3
-};
 
 // sound
 // sound catergories
