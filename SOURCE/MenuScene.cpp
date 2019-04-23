@@ -145,7 +145,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 
 			//Change map selection
-			if (m_keybinds.keyReleased("Menu Down"))
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
 				if (highlighted_map < m_mapTitles.size() - 1) {
 					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
@@ -153,7 +153,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 					m_mapTitles.at(highlighted_map)->SetColour(active_colour);
 				}
 			}
-			if (m_keybinds.keyReleased("Menu Up"))
+			if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
 			{
 				if (highlighted_map > 0) {
 					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
@@ -179,7 +179,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 
 			//Change character selection
-			if (m_keybinds.keyReleased("Menu Down"))
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
 				if (highlighted_character < m_characterTitles.size() - 1) {
 					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
@@ -187,7 +187,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 					m_characterTitles.at(highlighted_character)->SetColour(active_colour);
 				}
 			}
-			if (m_keybinds.keyReleased("Menu Up"))
+			if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
 			{
 				if (highlighted_character > 0) {
 					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
@@ -213,7 +213,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 
 			//Change vehicle selection
-			if (m_keybinds.keyReleased("Menu Down"))
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
 				if (highlighted_vehicle < m_vehicleTitles.size() - 1) {
 					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
@@ -221,7 +221,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 					m_vehicleTitles.at(highlighted_vehicle)->SetColour(active_colour);
 				}
 			}
-			if (m_keybinds.keyReleased("Menu Up"))
+			if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
 			{
 				if (highlighted_vehicle > 0) {
 					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
