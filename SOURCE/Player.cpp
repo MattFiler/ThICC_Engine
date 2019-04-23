@@ -69,7 +69,7 @@ void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
 }
 
 
-void Player::setActiveItem(ItemType _item) {
+void Player::SetActiveItem(ItemType _item) {
 	if (m_InventoryItem == _item) {
 		active_item = _item;
 		m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
@@ -121,10 +121,10 @@ void Player::Render()
 	m_animationMesh->Render();
 	SDKMeshGO3D::Render();
 
-	if (m_ai)
+	/*if (m_ai)
 	{
 		m_ai->DebugRender();
-	}
+	}*/
 }
 
 
