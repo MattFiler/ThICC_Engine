@@ -29,7 +29,7 @@ public:
 	};
 
 	// Check to see if key was released
-	bool keyReleased(const std::string& keybind)
+	bool keyReleased(const std::string& keybind, int gamepad = -1)
 	{
 		//Format keybind
 		std::string this_keybind = formatKeybind(keybind);
@@ -51,33 +51,20 @@ public:
 				}
 			}
 
-			//Check gamepads
+			//Check gamepad(s)
 			if (config[this_keybind]["Gamepad"] != "DISABLED") {
-				for (int i = 0; i < 4; i++) {
-					if (config[this_keybind]["Gamepad"] == "A") { if (m_ID->m_gamepadButtonTracker[i].a == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "B") { if (m_ID->m_gamepadButtonTracker[i].b == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "X") { if (m_ID->m_gamepadButtonTracker[i].x == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Y") { if (m_ID->m_gamepadButtonTracker[i].y == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Stick") { if (m_ID->m_gamepadButtonTracker[i].leftStick == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Stick") { if (m_ID->m_gamepadButtonTracker[i].rightStick == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Shoulder") { if (m_ID->m_gamepadButtonTracker[i].leftShoulder == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Shoulder") { if (m_ID->m_gamepadButtonTracker[i].rightShoulder == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Back") { if (m_ID->m_gamepadButtonTracker[i].back == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Start") { if (m_ID->m_gamepadButtonTracker[i].start == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "D-Pad Up") { if (m_ID->m_gamepadButtonTracker[i].dpadUp == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "D-Pad Down") { if (m_ID->m_gamepadButtonTracker[i].dpadDown == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "D-Pad Left") { if (m_ID->m_gamepadButtonTracker[i].dpadLeft == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "D-Pad Right") { if (m_ID->m_gamepadButtonTracker[i].dpadRight == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Stick Up") { if (m_ID->m_gamepadButtonTracker[i].leftStickUp == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Stick Down") { if (m_ID->m_gamepadButtonTracker[i].leftStickDown == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Stick Left") { if (m_ID->m_gamepadButtonTracker[i].leftStickLeft == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Stick Right") { if (m_ID->m_gamepadButtonTracker[i].leftStickRight == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Stick Up") { if (m_ID->m_gamepadButtonTracker[i].rightStickUp == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Stick Down") { if (m_ID->m_gamepadButtonTracker[i].rightStickDown == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Stick Left") { if (m_ID->m_gamepadButtonTracker[i].rightStickLeft == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Stick Right") { if (m_ID->m_gamepadButtonTracker[i].rightStickRight == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Trigger") { if (m_ID->m_gamepadButtonTracker[i].leftTrigger == DX_BUTTON_STATE::RELEASED) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Trigger") { if (m_ID->m_gamepadButtonTracker[i].rightTrigger == DX_BUTTON_STATE::RELEASED) { return true; } }
+				if (gamepad == -1) {
+					for (int i = 0; i < 4; i++) {
+						if (gamepadButton(this_keybind, i, DX_BUTTON_STATE::RELEASED)) {
+							return true;
+						}
+					}
+				}
+				else
+				{
+					if (gamepadButton(this_keybind, gamepad, DX_BUTTON_STATE::RELEASED)) {
+						return true;
+					}
 				}
 			}
 			#endif
@@ -86,7 +73,7 @@ public:
 	}
 
 	// Check to see if key is being held
-	bool keyHeld(const std::string& keybind)
+	bool keyHeld(const std::string& keybind, int gamepad = -1)
 	{
 		//Format keybind
 		std::string this_keybind = formatKeybind(keybind);
@@ -108,33 +95,20 @@ public:
 				}
 			}
 
-			//Check gamepads
+			//Check gamepad(s)
 			if (config[this_keybind]["Gamepad"] != "DISABLED") {
-				for (int i = 0; i < 4; i++) {
-					if (config[this_keybind]["Gamepad"] == "A") { if (m_ID->m_gamepadButtonTracker[i].a == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "B") { if (m_ID->m_gamepadButtonTracker[i].b == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "X") { if (m_ID->m_gamepadButtonTracker[i].x == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Y") { if (m_ID->m_gamepadButtonTracker[i].y == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Stick") { if (m_ID->m_gamepadButtonTracker[i].leftStick == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Stick") { if (m_ID->m_gamepadButtonTracker[i].rightStick == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Shoulder") { if (m_ID->m_gamepadButtonTracker[i].leftShoulder == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Shoulder") { if (m_ID->m_gamepadButtonTracker[i].rightShoulder == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Back") { if (m_ID->m_gamepadButtonTracker[i].back == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Start") { if (m_ID->m_gamepadButtonTracker[i].start == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "D-Pad Up") { if (m_ID->m_gamepadButtonTracker[i].dpadUp == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "D-Pad Down") { if (m_ID->m_gamepadButtonTracker[i].dpadDown == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "D-Pad Left") { if (m_ID->m_gamepadButtonTracker[i].dpadLeft == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "D-Pad Right") { if (m_ID->m_gamepadButtonTracker[i].dpadRight == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Stick Up") { if (m_ID->m_gamepadButtonTracker[i].leftStickUp == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Stick Down") { if (m_ID->m_gamepadButtonTracker[i].leftStickDown == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Stick Left") { if (m_ID->m_gamepadButtonTracker[i].leftStickLeft == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Stick Right") { if (m_ID->m_gamepadButtonTracker[i].leftStickRight == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Stick Up") { if (m_ID->m_gamepadButtonTracker[i].rightStickUp == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Stick Down") { if (m_ID->m_gamepadButtonTracker[i].rightStickDown == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Stick Left") { if (m_ID->m_gamepadButtonTracker[i].rightStickLeft == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Stick Right") { if (m_ID->m_gamepadButtonTracker[i].rightStickRight == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Left Trigger") { if (m_ID->m_gamepadButtonTracker[i].leftTrigger == DX_BUTTON_STATE::HELD) { return true; } }
-					if (config[this_keybind]["Gamepad"] == "Right Trigger") { if (m_ID->m_gamepadButtonTracker[i].rightTrigger == DX_BUTTON_STATE::HELD) { return true; } }
+				if (gamepad == -1) {
+					for (int i = 0; i < 4; i++) {
+						if (gamepadButton(this_keybind, i, DX_BUTTON_STATE::HELD)) {
+							return true;
+						}
+					}
+				}
+				else
+				{
+					if (gamepadButton(this_keybind, gamepad, DX_BUTTON_STATE::HELD)) {
+						return true;
+					}
 				}
 			}
 			#endif
@@ -181,6 +155,34 @@ private:
 			}
 		}
 		return this_keybind;
+	}
+
+	/* Gamepad button held */
+	bool gamepadButton(const std::string& this_keybind, int i, DX_BUTTON_STATE button_state) {
+		if (config[this_keybind]["Gamepad"] == "A") { if (m_ID->m_gamepadButtonTracker[i].a == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "B") { if (m_ID->m_gamepadButtonTracker[i].b == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "X") { if (m_ID->m_gamepadButtonTracker[i].x == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Y") { if (m_ID->m_gamepadButtonTracker[i].y == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Left Stick") { if (m_ID->m_gamepadButtonTracker[i].leftStick == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Right Stick") { if (m_ID->m_gamepadButtonTracker[i].rightStick == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Left Shoulder") { if (m_ID->m_gamepadButtonTracker[i].leftShoulder == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Right Shoulder") { if (m_ID->m_gamepadButtonTracker[i].rightShoulder == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Back") { if (m_ID->m_gamepadButtonTracker[i].back == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Start") { if (m_ID->m_gamepadButtonTracker[i].start == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "D-Pad Up") { if (m_ID->m_gamepadButtonTracker[i].dpadUp == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "D-Pad Down") { if (m_ID->m_gamepadButtonTracker[i].dpadDown == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "D-Pad Left") { if (m_ID->m_gamepadButtonTracker[i].dpadLeft == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "D-Pad Right") { if (m_ID->m_gamepadButtonTracker[i].dpadRight == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Left Stick Up") { if (m_ID->m_gamepadButtonTracker[i].leftStickUp == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Left Stick Down") { if (m_ID->m_gamepadButtonTracker[i].leftStickDown == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Left Stick Left") { if (m_ID->m_gamepadButtonTracker[i].leftStickLeft == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Left Stick Right") { if (m_ID->m_gamepadButtonTracker[i].leftStickRight == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Right Stick Up") { if (m_ID->m_gamepadButtonTracker[i].rightStickUp == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Right Stick Down") { if (m_ID->m_gamepadButtonTracker[i].rightStickDown == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Right Stick Left") { if (m_ID->m_gamepadButtonTracker[i].rightStickLeft == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Right Stick Right") { if (m_ID->m_gamepadButtonTracker[i].rightStickRight == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Left Trigger") { if (m_ID->m_gamepadButtonTracker[i].leftTrigger == button_state) { return true; } }
+		if (config[this_keybind]["Gamepad"] == "Right Trigger") { if (m_ID->m_gamepadButtonTracker[i].rightTrigger == button_state) { return true; } }
 	}
 
 	static ThICC_InputData* m_ID;

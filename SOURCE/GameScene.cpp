@@ -267,6 +267,13 @@ void GameScene::Update(DX::StepTimer const& timer)
 			timeout = 2.99999f;
 			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::PRE_COUNTDOWN);
 		}
+		#ifdef _DEBUG
+		if (m_keybinds.keyReleased("Activate"))
+		{
+			timeout = 2.999999f;
+			state = COUNTDOWN;
+		}
+		#endif
 		break;
 	case CAM_OPEN:
 		for (int i = 0; i < game_config["player_count"]; ++i) {
@@ -423,11 +430,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 	}
 	if (m_keybinds.keyReleased("toggle world render")) {
 		GameDebugToggles::render_level = !GameDebugToggles::render_level;
-	}
-	else if (m_keybinds.keyReleased("Activate"))
-	{
-		timeout = 2.999999f;
-		state = COUNTDOWN;
 	}
 
 	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels);

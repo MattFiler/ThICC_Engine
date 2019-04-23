@@ -214,21 +214,12 @@ void ThICC_Engine::Tick()
 /* Update the scene */
 void ThICC_Engine::Update(DX::StepTimer const& timer)
 {
-	//OLD INPUT TRACKERS TO BE DEPRECIATED!!!! (TODO)
-	m_input_data.m_prevKeyboardState = m_input_data.m_keyboardState;
-	m_input_data.m_keyboardState = m_input_data.m_keyboard->GetState();
-	m_input_data.m_mouseState = m_input_data.m_mouse->GetState();
-	for (int i = 0; i < m_game_config["player_count"]; ++i)
-	{
-		m_input_data.m_gamePadState[i] = m_input_data.m_gamepad->GetState(i);
-	}
-	//-------------------------------------------------
-
 	//Update input trackers
-	m_input_data.m_keyboardTracker.Update(m_input_data.m_keyboardState);
+	m_input_data.m_keyboardTracker.Update(m_input_data.m_keyboard->GetState());
+	m_input_data.m_mouseState = m_input_data.m_mouse->GetState();
 	m_input_data.m_mouseButtonTracker.Update(m_input_data.m_mouseState);
 	for (int i = 0; i < 4; i++) {
-		m_input_data.m_gamepadButtonTracker[i].Update(m_input_data.m_gamePadState[i]);
+		m_input_data.m_gamepadButtonTracker[i].Update(m_input_data.m_gamepad->GetState(i));
 	}
 
 	//Delta time

@@ -103,8 +103,8 @@ namespace EditorTool
             keybindPreview.Show();
             
             kbPreview.Text = comp_json_config[assetList.SelectedItem]["Keyboard"].Value<string>();
-            gpPreview.Text = comp_json_config[assetList.SelectedItem]["Arcade"].Value<string>();
-            arPreview.Text = comp_json_config[assetList.SelectedItem]["Gamepad"].Value<string>();
+            gpPreview.Text = comp_json_config[assetList.SelectedItem]["Gamepad"].Value<string>();
+            arPreview.Text = comp_json_config[assetList.SelectedItem]["Arcade"].Value<string>();
             isDebug.Checked = comp_json_config[assetList.SelectedItem]["is_debug"].Value<bool>();
         }
     }

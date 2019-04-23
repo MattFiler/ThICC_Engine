@@ -173,7 +173,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			m_state_desc->SetText(m_localiser.getString("character_select"));
 
 			//Back to map select
-			if (m_keybinds.keyReleased("Quit"))
+			if (m_keybinds.keyReleased("Back"))
 			{
 				m_menu_state = menu_states::MAP_SELECT;
 			}
@@ -207,7 +207,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			m_state_desc->SetText(m_localiser.getString("vehicle_select"));
 
 			//Back to character select
-			if (m_keybinds.keyReleased("Quit"))
+			if (m_keybinds.keyReleased("Back"))
 			{
 				m_menu_state = menu_states::CHARACTER_SELECT;
 			}

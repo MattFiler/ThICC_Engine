@@ -121,10 +121,10 @@ void Camera::Tick()
 	}
 	case BEHAVIOUR::INDEPENDENT:
 	{
-		if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
+		if (m_keybinds.keyHeld("left", m_cameraID))
 			angle -= 3.0f;
 
-		if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickRight())
+		if (m_keybinds.keyHeld("right", m_cameraID))
 			angle += 3.0f;
 
 		if (m_targetObject)

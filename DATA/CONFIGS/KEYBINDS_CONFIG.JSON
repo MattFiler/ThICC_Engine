@@ -143,38 +143,6 @@
     "Gamepad": "DISABLED",
     "is_debug": true
   },
-  "LEFT": {
-    "Keyboard": "A",
-    "Keyboard_Code": 65,
-    "Arcade": "Left Joystick Left",
-    "Arcade_Code": 37,
-    "Gamepad": "D-Pad Left",
-    "is_debug": false
-  },
-  "RIGHT": {
-    "Keyboard": "D",
-    "Keyboard_Code": 68,
-    "Arcade": "Left Joystick Right",
-    "Arcade_Code": 39,
-    "Gamepad": "D-Pad Right",
-    "is_debug": false
-  },
-  "FORWARD": {
-    "Keyboard": "W",
-    "Keyboard_Code": 87,
-    "Arcade": "Left Joystick Up",
-    "Arcade_Code": 38,
-    "Gamepad": "D-Pad Up",
-    "is_debug": false
-  },
-  "BACKWARDS": {
-    "Keyboard": "S",
-    "Keyboard_Code": 83,
-    "Arcade": "Left Joystick Down",
-    "Arcade_Code": 40,
-    "Gamepad": "D-Pad Down",
-    "is_debug": false
-  },
   "PRINT_PLAYER_LOCATION": {
     "Keyboard": "O",
     "Keyboard_Code": 79,
@@ -205,6 +173,70 @@
     "Arcade": "Left Blue Button",
     "Arcade_Code": 162,
     "Gamepad": "Right Shoulder",
+    "is_debug": false
+  },
+  "BACKWARDS": {
+    "Keyboard": "S",
+    "Keyboard_Code": 83,
+    "Arcade": "Left Joystick Down",
+    "Arcade_Code": 40,
+    "Gamepad": "Left Stick Down",
+    "is_debug": false
+  },
+  "LEFT": {
+    "Keyboard": "A",
+    "Keyboard_Code": 65,
+    "Arcade": "Left Joystick Left",
+    "Arcade_Code": 37,
+    "Gamepad": "Left Stick Left",
+    "is_debug": false
+  },
+  "RIGHT": {
+    "Keyboard": "D",
+    "Keyboard_Code": 68,
+    "Arcade": "Left Joystick Right",
+    "Arcade_Code": 39,
+    "Gamepad": "Left Stick Right",
+    "is_debug": false
+  },
+  "FORWARD": {
+    "Keyboard": "W",
+    "Keyboard_Code": 87,
+    "Arcade": "Left Joystick Up",
+    "Arcade_Code": 38,
+    "Gamepad": "Left Stick Up",
+    "is_debug": false
+  },
+  "ACCELERATE": {
+    "Keyboard": "W",
+    "Keyboard_Code": 87,
+    "Arcade": "Left Joystick Up",
+    "Arcade_Code": 38,
+    "Gamepad": "Right Trigger",
+    "is_debug": false
+  },
+  "DECELERATE": {
+    "Keyboard": "S",
+    "Keyboard_Code": 83,
+    "Arcade": "Left Joystick Down",
+    "Arcade_Code": 40,
+    "Gamepad": "Left Trigger",
+    "is_debug": false
+  },
+  "TRAIL_ITEMS": {
+    "Keyboard": "E",
+    "Keyboard_Code": 69,
+    "Arcade": "Left Yellow Button",
+    "Arcade_Code": 164,
+    "Gamepad": "Left Shoulder",
+    "is_debug": false
+  },
+  "BACK": {
+    "Keyboard": "Escape",
+    "Keyboard_Code": 27,
+    "Arcade": "Left Joystick Left",
+    "Arcade_Code": 37,
+    "Gamepad": "B",
     "is_debug": false
   }
 }
