@@ -36,16 +36,17 @@ public:
 
 		if (checkKeybind(this_keybind))
 		{
-			//Check keyboard
-			if (config[this_keybind]["Keyboard"] != "DISABLED") {
-				if (m_ID->m_keyboardTracker.IsKeyReleased((DirectX::Keyboard::Keys)config[this_keybind]["Keyboard_Code"])) {
-					return true;
-				}
-			}
-
+			#ifdef _ARCADE
 			//Check arcade
 			if (config[this_keybind]["Arcade"] != "DISABLED") {
 				if (m_ID->m_keyboardTracker.IsKeyReleased((DirectX::Keyboard::Keys)config[this_keybind]["Arcade_Code"])) {
+					return true;
+				}
+			}
+			#else
+			//Check keyboard
+			if (config[this_keybind]["Keyboard"] != "DISABLED") {
+				if (m_ID->m_keyboardTracker.IsKeyReleased((DirectX::Keyboard::Keys)config[this_keybind]["Keyboard_Code"])) {
 					return true;
 				}
 			}
@@ -79,6 +80,7 @@ public:
 					if (config[this_keybind]["Gamepad"] == "Right Trigger") { if (m_ID->m_gamepadButtonTracker[i].rightTrigger == DX_BUTTON_STATE::RELEASED) { return true; } }
 				}
 			}
+			#endif
 		}
 		return false;
 	}
@@ -91,16 +93,17 @@ public:
 
 		if (checkKeybind(this_keybind))
 		{
-			//Check keyboard
-			if (config[this_keybind]["Keyboard"] != "DISABLED") {
-				if (m_ID->m_keyboardTracker.IsKeyPressed((DirectX::Keyboard::Keys)config[this_keybind]["Keyboard_Code"])) {
-					return true;
-				}
-			}
-
+			#ifdef _ARCADE
 			//Check arcade
 			if (config[this_keybind]["Arcade"] != "DISABLED") {
 				if (m_ID->m_keyboardTracker.IsKeyPressed((DirectX::Keyboard::Keys)config[this_keybind]["Arcade_Code"])) {
+					return true;
+				}
+			}
+			#else
+			//Check keyboard
+			if (config[this_keybind]["Keyboard"] != "DISABLED") {
+				if (m_ID->m_keyboardTracker.IsKeyPressed((DirectX::Keyboard::Keys)config[this_keybind]["Keyboard_Code"])) {
 					return true;
 				}
 			}
@@ -134,6 +137,7 @@ public:
 					if (config[this_keybind]["Gamepad"] == "Right Trigger") { if (m_ID->m_gamepadButtonTracker[i].rightTrigger == DX_BUTTON_STATE::HELD) { return true; } }
 				}
 			}
+			#endif
 		}
 		return false;
 	}
