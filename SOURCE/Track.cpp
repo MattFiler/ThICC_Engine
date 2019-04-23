@@ -213,7 +213,7 @@ void Track::setWaypointBB()
 
 /* Checks through all triangles to see if this line intersects any of them.
    The point of intersecion is stored in _intersect */
-bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle)
+bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle, const float& _minAngle)
 {
 	// Check to see if the position is within the grid
 	if (!IsPointInBounds(_startPos, m_smallest, m_largest))
@@ -245,7 +245,7 @@ bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos,
 			{
 				for (MeshTri* tri : m_triGrid[index + k])
 				{
-					if (m_validCollisions[tri->GetType()] && tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
+					if (m_validCollisions[tri->GetType()] && tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle, _minAngle))
 					{
 						float dist = Vector::Distance(_startPos, _intersect);
 						if (dist < bestDist)

@@ -261,12 +261,12 @@ int MoveAI::FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorl
 
 	for (int i = 0; i < _steps; i++)
 	{
-		if (_track->DoesLineIntersect(_endWorld.Down()*(m_model->data.m_height * 10), _endPos + (_endWorld.Up() * (m_model->data.m_height * 2)), intersect, tri, 0.4f))
+		if (_track->DoesLineIntersect(_endWorld.Down()*(m_model->data.m_height * 10), _endPos + (_endWorld.Up() * (m_model->data.m_height * 2)), intersect, tri, 0.4f,0))
 		{
 			// If there is a valid collision, find the new world ahead on the track
 			Vector secondIntersect;
 			MeshTri* tri2 = nullptr;
-			tri->DoesLineIntersect(_endWorld.Down() * (m_model->data.m_height * 10), _endPos + _direction + (_endWorld.Up() * (m_model->data.m_height * 2)), secondIntersect, tri2, 0.4f);
+			tri->DoesLineIntersect(_endWorld.Down() * (m_model->data.m_height * 10), _endPos + _direction + (_endWorld.Up() * (m_model->data.m_height * 2)), secondIntersect, tri2, 0.4f,0);
 
 			_endWorld = Matrix::CreateWorld(secondIntersect, secondIntersect - intersect, tri->m_plane.Normal());
 			_direction = _endWorld.Forward() * m_aiPathStep;
