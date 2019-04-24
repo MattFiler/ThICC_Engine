@@ -370,7 +370,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		m_cam[0]->SetType(CameraType::FOLLOW);
 	}
 #ifdef _DEBUG
-	if (m_keybinds.keyReleased("Matt"))
+	if (m_keybinds.keyReleased("toggle debug cam"))
 	{
 		if (m_cam[0]->GetType() == CameraType::DEBUG_CAM) {
 			m_cam[0]->SetType(CameraType::FOLLOW);
