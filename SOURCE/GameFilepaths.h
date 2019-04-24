@@ -15,8 +15,8 @@ public:
 		SOUND, 
 		FONT, 
 		CONFIG, 
-		CUBEMAP_IRRADIANCE, 
-		CUBEMAP_RADIANCE 
+		CUBEMAP_IRRADIANCE, //AKA SPECULAR (detailed)
+		CUBEMAP_RADIANCE    //AKA DIFFUSE (blurry)
 	};
 
 	/* Generate filepath */

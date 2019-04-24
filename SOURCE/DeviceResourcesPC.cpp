@@ -670,7 +670,6 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
         }
     }
 
-#if !defined(NDEBUG)
     if (!adapter)
     {
         // Try WARP12 instead
@@ -681,7 +680,6 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
 
         OutputDebugStringA("Direct3D Adapter - WARP12\n");
     }
-#endif
 
     if (!adapter)
     {

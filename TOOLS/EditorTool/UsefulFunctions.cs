@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -35,7 +36,7 @@ namespace EditorTool
          */
 
         /* Load an image preview from an asset list to a picture box */
-        public bool loadImagePreview(ListBox assetList, PictureBox imagePreview)
+        public bool loadImagePreview(ListBox assetList, PictureBox imagePreview, AssetType asset_type = AssetType.IMAGE)
         {
             imagePreview.BackColor = Color.Transparent;
             if (assetList.SelectedIndex == -1)
@@ -45,7 +46,7 @@ namespace EditorTool
             }
             imagePreview.Visible = true;
 
-            string file_path_without_extension = getFolder(AssetType.IMAGE) + assetList.SelectedItem.ToString() + ".";
+            string file_path_without_extension = getFolder(asset_type) + assetList.SelectedItem.ToString() + ".";
             string file_path_with_extension = "";
             if (File.Exists(file_path_without_extension + "PNG"))
             {
@@ -63,12 +64,18 @@ namespace EditorTool
             {
                 return false;
             }
+            
+            loadGenericImagePreview(file_path_with_extension, imagePreview);
+            return true;
+        }
 
-            using (var tempPreviewImg = new Bitmap(file_path_with_extension))
+        /* A more generic image preview */
+        public void loadGenericImagePreview(string path, PictureBox imagePreview)
+        {
+            using (var tempPreviewImg = new Bitmap(path))
             {
                 imagePreview.Image = new Bitmap(tempPreviewImg);
             }
-            return true;
         }
 
         /* Try find our material preview, show it if we find it */
@@ -710,6 +717,127 @@ namespace EditorTool
             }
         }
 
+        /* Create a cubemap */
+        public bool createCubemap(string asset_name, List<string> images)
+        {
+            string asset_path_radiance = getFolder(AssetType.CUBEMAP) + asset_name.ToUpper() + "_R" + getExtension(AssetType.CUBEMAP);
+            string asset_path_irradiance = getFolder(AssetType.CUBEMAP) + asset_name.ToUpper() + "_IR" + getExtension(AssetType.CUBEMAP);
+
+            if (File.Exists(asset_path_radiance) || images.Contains("") || asset_name == "" || !Regex.IsMatch(asset_name, "^[_a-zA-Z0-9\x20]+$"))
+            {
+                if (images.Contains("") || asset_name == "")
+                {
+                    MessageBox.Show("Please fill out all required inputs.", "Creation failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                else if (!Regex.IsMatch(asset_name, "^[_a-zA-Z0-9\x20]+$"))
+                {
+                    MessageBox.Show("Your asset name cannot contain any special characters.", "Creation failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                MessageBox.Show("Couldn't create asset, a cubemap with the same name already exists.", "Creation Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                Cursor.Current = Cursors.WaitCursor;
+
+                string output = "";
+                Directory.CreateDirectory(getFolder(AssetType.CUBEMAP) + asset_name);
+                Directory.CreateDirectory(getFolder(AssetType.CUBEMAP) + asset_name + "/IRRADIANCE");
+                Directory.CreateDirectory(getFolder(AssetType.CUBEMAP) + asset_name + "/RADIANCE");
+                for (int i = 0; i < 2; i++)
+                {
+                    //Copy images into cubemap directory and compile args
+                    string cube_face_args = "";
+                    foreach (string face in images)
+                    {
+                        string face_copy = asset_name + "/";
+                        if (i == 0)
+                        {
+                            face_copy += "IRRADIANCE/";
+                        }
+                        else
+                        {
+                            face_copy += "RADIANCE/";
+                        }
+                        face_copy += Path.GetFileName(face);
+                        if (!File.Exists(getFolder(AssetType.CUBEMAP) + face_copy))
+                        {
+                            Bitmap resized_file = new Bitmap(Image.FromFile(face), 700, 700);
+                            if (i != 0)
+                            {
+                                resized_file = Blur(resized_file, 10); //radiance is blurred
+                            }
+                            resized_file.Save(getFolder(AssetType.CUBEMAP) + face_copy);
+                        }
+                        cube_face_args += " \"" + face_copy + "\"";
+                    }
+
+                    //Convert supplied images to cubemap
+                    string asset_path = asset_path_irradiance;
+                    if (i != 0)
+                    {
+                        asset_path = asset_path_radiance;
+                    }
+                    ProcessStartInfo cubemapCreator = new ProcessStartInfo();
+                    cubemapCreator.WorkingDirectory = getFolder(AssetType.CUBEMAP);
+                    cubemapCreator.FileName = getFolder(AssetType.CUBEMAP) + "texassemble.exe";
+                    cubemapCreator.Arguments = "cube -o \"" + Path.GetFileName(asset_path) + "\"" + cube_face_args;
+                    cubemapCreator.UseShellExecute = false;
+                    cubemapCreator.RedirectStandardOutput = true;
+                    cubemapCreator.CreateNoWindow = true;
+                    Process converterProcess = Process.Start(cubemapCreator);
+                    StreamReader reader = converterProcess.StandardOutput;
+                    converterProcess.WaitForExit();
+
+                    //Capture output incase we errored
+                    output += reader.ReadToEnd();
+
+                    //Uppercase extension pls
+                    if (File.Exists(asset_path.Substring(0, asset_path.Length - 3) + "dds"))
+                    {
+                        File.Move(asset_path.Substring(0, asset_path.Length - 3) + "dds", asset_path);
+                    }
+                }
+
+                if (!File.Exists(asset_path_irradiance) || !File.Exists(asset_path_radiance))
+                {
+                    //Import failed, show reason if requested
+                    Cursor.Current = Cursors.Default;
+                    DialogResult showErrorInfo = MessageBox.Show("Cubemap creation failed!\nWould you like error info?", "Creation failed!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (showErrorInfo == DialogResult.Yes)
+                    {
+                        MessageBox.Show(output, "Error details...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    Directory.Delete(getFolder(AssetType.CUBEMAP) + asset_name + "/IRRADIANCE", true);
+                    Directory.Delete(getFolder(AssetType.CUBEMAP) + asset_name + "/RADIANCE", true);
+                    Directory.Delete(getFolder(AssetType.CUBEMAP) + asset_name, true);
+                    return false;
+                }
+
+                //Create preview
+                ProcessStartInfo cubemapPreviewCreator = new ProcessStartInfo();
+                cubemapPreviewCreator.WorkingDirectory = getFolder(AssetType.CUBEMAP);
+                cubemapPreviewCreator.FileName = getFolder(AssetType.CUBEMAP) + "texassemble.exe";
+                cubemapPreviewCreator.Arguments = "h-cross -o \"" + asset_name + ".PNG\" \"" + Path.GetFileName(asset_path_irradiance) + "\"";
+                cubemapPreviewCreator.UseShellExecute = false;
+                cubemapPreviewCreator.RedirectStandardOutput = true;
+                cubemapPreviewCreator.CreateNoWindow = true;
+                Process.Start(cubemapPreviewCreator).WaitForExit();
+
+                //Create JSON data
+                JToken asset_json = JToken.Parse("{\"asset_name\": \"" + asset_name + "\", \"asset_type\": \"Cubemap\", \"in_use_in\": []}");
+                File.WriteAllText(getFolder(AssetType.CUBEMAP) + asset_name + ".JSON", asset_json.ToString(Formatting.Indented));
+
+                //Import success
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show("Cubemap created successfully!", "Created!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                return true;
+            }
+        }
+
         ///////////////////////////////////////////////
         ///////////////////////////////////////////////
 
@@ -747,6 +875,81 @@ namespace EditorTool
                 }
             }
             return false;
+        }
+
+        /* Blur an image (taken from: https://stackoverflow.com/a/44827454/3798962) */
+        private static Bitmap Blur(Bitmap image, Int32 blurSize)
+        {
+            return Blur(image, new Rectangle(0, 0, image.Width, image.Height), blurSize);
+        }
+        private unsafe static Bitmap Blur(Bitmap image, Rectangle rectangle, Int32 blurSize)
+        {
+            Bitmap blurred = new Bitmap(image.Width, image.Height);
+
+            // make an exact copy of the bitmap provided
+            using (Graphics graphics = Graphics.FromImage(blurred))
+                graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height),
+                    new Rectangle(0, 0, image.Width, image.Height), GraphicsUnit.Pixel);
+
+            // Lock the bitmap's bits
+            BitmapData blurredData = blurred.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, blurred.PixelFormat);
+
+            // Get bits per pixel for current PixelFormat
+            int bitsPerPixel = Image.GetPixelFormatSize(blurred.PixelFormat);
+
+            // Get pointer to first line
+            byte* scan0 = (byte*)blurredData.Scan0.ToPointer();
+
+            // look at every pixel in the blur rectangle
+            for (int xx = rectangle.X; xx < rectangle.X + rectangle.Width; xx++)
+            {
+                for (int yy = rectangle.Y; yy < rectangle.Y + rectangle.Height; yy++)
+                {
+                    int avgR = 0, avgG = 0, avgB = 0;
+                    int blurPixelCount = 0;
+
+                    // average the color of the red, green and blue for each pixel in the
+                    // blur size while making sure you don't go outside the image bounds
+                    for (int x = xx; (x < xx + blurSize && x < image.Width); x++)
+                    {
+                        for (int y = yy; (y < yy + blurSize && y < image.Height); y++)
+                        {
+                            // Get pointer to RGB
+                            byte* data = scan0 + x * blurredData.Stride + y * bitsPerPixel / 8;
+
+                            avgB += data[0]; // Blue
+                            avgG += data[1]; // Green
+                            avgR += data[2]; // Red
+
+                            blurPixelCount++;
+                        }
+                    }
+
+                    avgR = avgR / blurPixelCount;
+                    avgG = avgG / blurPixelCount;
+                    avgB = avgB / blurPixelCount;
+
+                    // now that we know the average for the blur size, set each pixel to that color
+                    for (int x = xx; x < xx + blurSize && x < image.Width && x < rectangle.Width; x++)
+                    {
+                        for (int y = yy; y < yy + blurSize && y < image.Height && y < rectangle.Height; y++)
+                        {
+                            // Get pointer to RGB
+                            byte* data = scan0 + x * blurredData.Stride + y * bitsPerPixel / 8;
+
+                            // Change values
+                            data[0] = (byte)avgB;
+                            data[1] = (byte)avgG;
+                            data[2] = (byte)avgR;
+                        }
+                    }
+                }
+            }
+
+            // Unlock the bits
+            blurred.UnlockBits(blurredData);
+
+            return blurred;
         }
     }
 }

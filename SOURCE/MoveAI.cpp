@@ -5,6 +5,7 @@
 
 MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), m_move(_move)
 {
+	#ifdef _DEBUG
 	for (int i = 0; i < m_maxPathIterations; i++)
 	{
 		m_debugRaceLine.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
@@ -20,12 +21,13 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 		m_debugNextWaypoint.back()->SetScale(0.2f);
 		m_debugNextWaypoint.back()->UpdateWorld();
 	}
+	#endif
 	m_move->SetGamepadActive(false);
 }
 
 void MoveAI::DebugRender()
 {
-	
+	#ifdef _DEBUG
 	for (SDKMeshGO3D* mesh : m_debugRaceLine)
 	{
 		mesh->Render();
@@ -34,6 +36,7 @@ void MoveAI::DebugRender()
 	{
 		//mesh->Render();
 	}
+	#endif
 }
 
 void MoveAI::Update()
@@ -141,6 +144,7 @@ void MoveAI::RecalculateLine(Track* _track)
 		}
 	}
 	
+	#ifdef _DEBUG
 	for (int i = 0; i < m_route.size(); i++)
 	{
 		m_debugRaceLine[i]->SetShouldRender(true);
@@ -151,6 +155,7 @@ void MoveAI::RecalculateLine(Track* _track)
 	{
 		m_debugRaceLine[i]->SetShouldRender(false);
 	}
+	#endif
 
 	condensedRoute.push_back(m_route.back());
 	m_route = condensedRoute;

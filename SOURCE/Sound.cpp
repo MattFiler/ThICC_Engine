@@ -82,6 +82,6 @@ void Sound::Tick()
 
 /* Set looping */
 void Sound::SetLoop(bool _loop) {
-	m_loop = m_sfx->CreateInstance();
 	loop = _loop;
+	m_loop = m_sfx->CreateInstance();
 }

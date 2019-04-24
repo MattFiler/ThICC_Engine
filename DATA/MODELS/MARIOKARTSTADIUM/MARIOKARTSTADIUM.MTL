@@ -1211,8 +1211,8 @@ map_Kn ufc_suna_nrm.png
 norm ufc_suna_nrm.png
 Tr 0.000000
 map_Ks ufc_suna_alb.png
-map_Ke ufc_suna_alb.png
-map_emissive ufc_suna_alb.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 

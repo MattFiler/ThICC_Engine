@@ -1652,8 +1652,8 @@
     "norm": "ufc_suna_nrm.png",
     "Tr": "0.000000",
     "map_Ks": "ufc_suna_alb.png",
-    "map_Ke": "ufc_suna_alb.png",
-    "map_emissive": "ufc_suna_alb.png",
+    "map_Ke": "",
+    "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
     "ThICC_COLLISION": {

@@ -1,0 +1,266 @@
+{
+  "MENU_UP": {
+    "Keyboard": "Up",
+    "Keyboard_Code": 38,
+    "Arcade": "Left Joystick Up",
+    "Arcade_Code": 38,
+    "Gamepad": "D-Pad Up",
+    "is_debug": false
+  },
+  "MENU_DOWN": {
+    "Keyboard": "Down",
+    "Keyboard_Code": 40,
+    "Arcade": "Left Joystick Down",
+    "Arcade_Code": 40,
+    "Gamepad": "D-Pad Down",
+    "is_debug": false
+  },
+  "QUIT": {
+    "Keyboard": "Escape",
+    "Keyboard_Code": 27,
+    "Arcade": "Left Side Button",
+    "Arcade_Code": 67,
+    "Gamepad": "Back",
+    "is_debug": false
+  },
+  "ACTIVATE": {
+    "Keyboard": "Enter",
+    "Keyboard_Code": 13,
+    "Arcade": "Left Green Button",
+    "Arcade_Code": 160,
+    "Gamepad": "A",
+    "is_debug": false
+  },
+  "TOGGLE_COLLISION_DEBUG": {
+    "Keyboard": "P",
+    "Keyboard_Code": 80,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
+  },
+  "TOGGLE_ORBIT_CAM": {
+    "Keyboard": "K",
+    "Keyboard_Code": 75,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
+  },
+  "TOGGLE_LERP_CAM": {
+    "Keyboard": "L",
+    "Keyboard_Code": 76,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
+  },
+  "TOGGLE_DEBUG_CAM": {
+    "Keyboard": "M",
+    "Keyboard_Code": 77,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
+  },
+  "DEBUG_SAVE_POSITION": {
+    "Keyboard": "1",
+    "Keyboard_Code": 49,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
+  },
+  "DEBUG_LOAD_POSITION": {
+    "Keyboard": "2",
+    "Keyboard_Code": 50,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
+  },
+  "PRINT_PLAYER_LOCATION": {
+    "Keyboard": "O",
+    "Keyboard_Code": 79,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
+  },
+  "PRINT_CAMERA_LOCATION": {
+    "Keyboard": "I",
+    "Keyboard_Code": 73,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
+  },
+  "TOGGLE_WORLD_RENDER": {
+    "Keyboard": "U",
+    "Keyboard_Code": 85,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
+  },
+  "DRIFT": {
+    "Keyboard": "Q",
+    "Keyboard_Code": 81,
+    "Arcade": "Left Blue Button",
+    "Arcade_Code": 162,
+    "Gamepad": "Right Shoulder",
+    "is_debug": false
+  },
+  "BACKWARDS": {
+    "Keyboard": "S",
+    "Keyboard_Code": 83,
+    "Arcade": "Left Joystick Down",
+    "Arcade_Code": 40,
+    "Gamepad": "Left Stick Down",
+    "is_debug": false
+  },
+  "LEFT": {
+    "Keyboard": "A",
+    "Keyboard_Code": 65,
+    "Arcade": "Left Joystick Left",
+    "Arcade_Code": 37,
+    "Gamepad": "Left Stick Left",
+    "is_debug": false
+  },
+  "RIGHT": {
+    "Keyboard": "D",
+    "Keyboard_Code": 68,
+    "Arcade": "Left Joystick Right",
+    "Arcade_Code": 39,
+    "Gamepad": "Left Stick Right",
+    "is_debug": false
+  },
+  "FORWARD": {
+    "Keyboard": "W",
+    "Keyboard_Code": 87,
+    "Arcade": "Left Joystick Up",
+    "Arcade_Code": 38,
+    "Gamepad": "Left Stick Up",
+    "is_debug": false
+  },
+  "ACCELERATE": {
+    "Keyboard": "W",
+    "Keyboard_Code": 87,
+    "Arcade": "Left Joystick Up",
+    "Arcade_Code": 38,
+    "Gamepad": "Right Trigger",
+    "is_debug": false
+  },
+  "DECELERATE": {
+    "Keyboard": "S",
+    "Keyboard_Code": 83,
+    "Arcade": "Left Joystick Down",
+    "Arcade_Code": 40,
+    "Gamepad": "Left Trigger",
+    "is_debug": false
+  },
+  "TRAIL_ITEMS": {
+    "Keyboard": "E",
+    "Keyboard_Code": 69,
+    "Arcade": "Left Yellow Button",
+    "Arcade_Code": 164,
+    "Gamepad": "Left Shoulder",
+    "is_debug": false
+  },
+  "BACK": {
+    "Keyboard": "Escape",
+    "Keyboard_Code": 27,
+    "Arcade": "Left Joystick Left",
+    "Arcade_Code": 37,
+    "Gamepad": "B",
+    "is_debug": false
+  },
+  "PAUSE": {
+    "Keyboard": "Escape",
+    "Keyboard_Code": 27,
+    "Arcade": "Left Grey Top Button",
+    "Arcade_Code": 32,
+    "Gamepad": "Start",
+    "is_debug": false
+  },
+  "DEBUG_CAM_UP": {
+    "Keyboard": "NumPad7",
+    "Keyboard_Code": 103,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Right Shoulder",
+    "is_debug": true
+  },
+  "DEBUG_CAM_DOWN": {
+    "Keyboard": "NumPad9",
+    "Keyboard_Code": 105,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Left Shoulder",
+    "is_debug": true
+  },
+  "DEBUG_CAM_FORWARD": {
+    "Keyboard": "NumPad8",
+    "Keyboard_Code": 104,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Left Stick Up",
+    "is_debug": true
+  },
+  "DEBUG_CAM_BACKWARD": {
+    "Keyboard": "NumPad5",
+    "Keyboard_Code": 101,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Left Stick Down",
+    "is_debug": true
+  },
+  "DEBUG_CAM_LEFT": {
+    "Keyboard": "NumPad4",
+    "Keyboard_Code": 100,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Left Stick Left",
+    "is_debug": true
+  },
+  "DEBUG_CAM_LOOK_DOWN": {
+    "Keyboard": "Multiply",
+    "Keyboard_Code": 106,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Right Stick Down",
+    "is_debug": true
+  },
+  "DEBUG_CAM_RIGHT": {
+    "Keyboard": "NumPad6",
+    "Keyboard_Code": 102,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Left Stick Right",
+    "is_debug": true
+  },
+  "DEBUG_CAM_LOOK_UP": {
+    "Keyboard": "Divide",
+    "Keyboard_Code": 111,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Right Stick Up",
+    "is_debug": true
+  },
+  "DEBUG_CAM_LOOK_LEFT": {
+    "Keyboard": "NumPad1",
+    "Keyboard_Code": 97,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Right Stick Left",
+    "is_debug": true
+  },
+  "DEBUG_CAM_LOOK_RIGHT": {
+    "Keyboard": "NumPad3",
+    "Keyboard_Code": 99,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Right Stick Right",
+    "is_debug": true
+  }
+}

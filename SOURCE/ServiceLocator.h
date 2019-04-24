@@ -11,6 +11,7 @@ class AIScheduler;
 class AudioManager;
 class SceneManager;
 class GameObjectShared;
+class ThICC_CameraData;
 
 struct Locator {
 	static ThICC_InputData* getID() {
@@ -67,6 +68,12 @@ struct Locator {
 		}
 		return ref_GOS;
 	}
+	static ThICC_CameraData* getCD() {
+		if (ref_CamD == nullptr) {
+			throw std::runtime_error("Call to camera data before initialisation.");
+		}
+		return ref_CamD;
+	}
 
 	static void setupID(ThICC_InputData* inst_ID) {
 		ref_ID = inst_ID;
@@ -95,6 +102,9 @@ struct Locator {
 	static void setupGOS(GameObjectShared* inst_GOS) {
 		ref_GOS = inst_GOS;
 	}
+	static void setupCamData(ThICC_CameraData* inst_camData) {
+		ref_CamD = inst_camData;
+	}
 
 private:
 	static ThICC_InputData* ref_ID;
@@ -106,4 +116,5 @@ private:
 	static AudioManager* ref_audio;
 	static SceneManager* ref_SM;
 	static GameObjectShared* ref_GOS;
+	static ThICC_CameraData* ref_CamD;
 };

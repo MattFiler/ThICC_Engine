@@ -39,6 +39,7 @@ bool MenuScene::Load()
 void MenuScene::ExpensiveLoad() {
 	m_menu_state = menu_states::SPLASH;
 	m_timer = 0.0f;
+	m_keybinds.Reset();
 }
 
 /* Create all 2D objects for the scene */
@@ -119,6 +120,14 @@ void MenuScene::create2DObjects()
 /* Update the scene */
 void MenuScene::Update(DX::StepTimer const& timer)
 {
+	#ifdef _DEBUG
+	//Hacky implementation to get to the debug scene (temp)
+	if (Locator::getID()->m_keyboardTracker.IsKeyReleased(DirectX::Keyboard::Keys::D))
+	{
+		m_scene_manager->setCurrentScene(Scenes::DEBUG_LIGHTINGTEST);
+	}
+	#endif
+
 	switch (m_menu_state) {
 		case menu_states::SPLASH:
 			//Animate logo over time
@@ -129,7 +138,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 
 			//Allow skip
-			if (m_keybinds.keyPressed("Activate"))
+			if (m_keybinds.keyReleased("Activate"))
 			{
 				m_menu_state = menu_states::MAP_SELECT;
 			}
@@ -139,13 +148,13 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			m_state_desc->SetText(m_localiser.getString("map_select"));
 
 			//Exit
-			if (m_keybinds.keyPressed("Quit"))
+			if (m_keybinds.keyReleased("Quit"))
 			{
 				ExitGame();
 			}
 
 			//Change map selection
-			if (m_keybinds.keyPressed("Down Arrow"))
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
 				if (highlighted_map < m_mapTitles.size() - 1) {
 					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
@@ -153,7 +162,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 					m_mapTitles.at(highlighted_map)->SetColour(active_colour);
 				}
 			}
-			if (m_keybinds.keyPressed("Up Arrow"))
+			if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
 			{
 				if (highlighted_map > 0) {
 					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
@@ -163,7 +172,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 
 			//Change to character select
-			if (m_keybinds.keyPressed("Activate"))
+			if (m_keybinds.keyReleased("Activate"))
 			{
 				m_menu_state = menu_states::CHARACTER_SELECT;
 			}
@@ -173,13 +182,13 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			m_state_desc->SetText(m_localiser.getString("character_select"));
 
 			//Back to map select
-			if (m_keybinds.keyPressed("Quit"))
+			if (m_keybinds.keyReleased("Back"))
 			{
 				m_menu_state = menu_states::MAP_SELECT;
 			}
 
 			//Change character selection
-			if (m_keybinds.keyPressed("Down Arrow"))
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
 				if (highlighted_character < m_characterTitles.size() - 1) {
 					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
@@ -187,7 +196,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 					m_characterTitles.at(highlighted_character)->SetColour(active_colour);
 				}
 			}
-			if (m_keybinds.keyPressed("Up Arrow"))
+			if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
 			{
 				if (highlighted_character > 0) {
 					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
@@ -197,7 +206,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 
 			//Go to vehicle select
-			if (m_keybinds.keyPressed("Activate"))
+			if (m_keybinds.keyReleased("Activate"))
 			{
 				m_menu_state = menu_states::VEHICLE_SELECT;
 			}
@@ -207,13 +216,13 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			m_state_desc->SetText(m_localiser.getString("vehicle_select"));
 
 			//Back to character select
-			if (m_keybinds.keyPressed("Quit"))
+			if (m_keybinds.keyReleased("Back"))
 			{
 				m_menu_state = menu_states::CHARACTER_SELECT;
 			}
 
 			//Change vehicle selection
-			if (m_keybinds.keyPressed("Down Arrow"))
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
 				if (highlighted_vehicle < m_vehicleTitles.size() - 1) {
 					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
@@ -221,7 +230,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 					m_vehicleTitles.at(highlighted_vehicle)->SetColour(active_colour);
 				}
 			}
-			if (m_keybinds.keyPressed("Up Arrow"))
+			if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
 			{
 				if (highlighted_vehicle > 0) {
 					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
@@ -231,12 +240,12 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 
 			//Load selected map with character choices
-			if (m_keybinds.keyPressed("Activate"))
+			if (m_keybinds.keyReleased("Activate"))
 			{
 				Locator::getGSD()->character_selected[0] = highlighted_character; //We only support P1 choices atm!
 				Locator::getGSD()->vehicle_selected[0] = highlighted_vehicle;
 
-				Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
+				Locator::getAudio()->GetSound(SoundType::MENU, (int)MenuSounds::MENU_LOOP)->Stop();
 				m_scene_manager->setCurrentScene(Scenes::GAMESCENE + highlighted_map);
 			}
 
