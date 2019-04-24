@@ -99,7 +99,7 @@ void Player::setItemInInventory(ItemType _item) {
 void Player::Render()
 {
 	m_animationMesh->Render();
-	SDKMeshGO3D::Render();
+	TrackMagnet::Render();
 
 	if (m_ai)
 	{

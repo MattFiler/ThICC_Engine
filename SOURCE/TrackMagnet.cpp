@@ -11,11 +11,10 @@ TrackMagnet::TrackMagnet(std::string _filename) : PhysModel(_filename)
 	Vector3 scale = Vector3::Zero;
 	m_world.Decompose(scale, m_quatRot, m_pos);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		m_debugBoxes.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
-		m_debugBoxes.back()->Load();
-		m_debugBoxes.back()->SetScale(0.1);
+		m_debugBoxes.back()->SetScale(0.1f);
 		m_debugBoxes.back()->UpdateWorld();
 	}
 
@@ -23,11 +22,15 @@ TrackMagnet::TrackMagnet(std::string _filename) : PhysModel(_filename)
 
 void TrackMagnet::Render()
 {
-	for (GameObject3D* mesh : m_debugBoxes)
+	for (SDKMeshGO3D* mesh : m_debugBoxes)
 	{
+		if (!mesh->IsLoaded())
+		{
+			mesh->Load();
+		}
 		mesh->Render();
 	}
-	PhysModel::Render();
+	SDKMeshGO3D::Render();
 }
 
 /* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
@@ -177,42 +180,59 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 
 bool TrackMagnet::ResolveWallCollisions(Track& walls)
 {
-	walls.SetValidCollision(true, true, true, true);
 	/*Vector leftSide = (data.m_globalBackTopLeft - data.m_globalFrontTopLeft) + (m_world.Down() *1);
 	Vector rightSide = (data.m_globalBackTopRight - data.m_globalFrontTopRight) + (m_world.Down() * 1);
 	Vector frontSide = (data.m_globalFrontTopRight - data.m_globalFrontTopLeft) + (m_world.Down() * 1);
 	Vector backSide = (data.m_globalBackTopRight - data.m_globalBackTopLeft) + (m_world.Down() * 1);*/
 
-	Vector leftSide = (data.m_globalBackBottomLeft - data.m_globalFrontBottomLeft);
-	Vector rightSide = (data.m_globalBackBottomRight - data.m_globalFrontBottomRight);
-	Vector frontSide = (data.m_globalFrontBottomRight - data.m_globalFrontBottomLeft);
-	Vector backSide = (data.m_globalBackBottomRight - data.m_globalBackBottomLeft);
+	Vector3 sideOffset = m_world.Up() * (data.m_height / 2);
 
-	m_debugBoxes[0]->SetPos(data.m_globalBackBottomLeft);
-	m_debugBoxes[1]->SetPos(data.m_globalBackBottomRight);
-	m_debugBoxes[2]->SetPos(data.m_globalFrontBottomRight);
+	Vector leftSide = (data.m_globalBackBottomLeft + sideOffset) - (data.m_globalFrontBottomLeft + sideOffset);
+	Vector rightSide = (data.m_globalBackBottomRight + sideOffset) - (data.m_globalFrontBottomRight + sideOffset);
+	Vector frontSide = (data.m_globalFrontBottomRight + sideOffset) - (data.m_globalFrontBottomLeft + sideOffset);
+	Vector backSide = (data.m_globalBackBottomRight + sideOffset) - (data.m_globalBackBottomLeft + sideOffset);
+
+	Vector cornerOffset = m_world.Up() * data.m_height*5;
+
+	Vector frontLeft = data.m_globalFrontBottomLeft - (data.m_globalFrontTopLeft + cornerOffset);
+	Vector frontRight = data.m_globalFrontBottomRight - (data.m_globalFrontTopRight + cornerOffset);
+	Vector backLeft = data.m_globalBackBottomLeft - (data.m_globalBackTopLeft + cornerOffset);
+	Vector backRight = data.m_globalBackBottomRight - (data.m_globalBackTopRight + cornerOffset);
+
+	m_debugBoxes[0]->SetPos(data.m_globalFrontBottomLeft);
+	m_debugBoxes[1]->SetPos(data.m_globalFrontBottomRight);
+	m_debugBoxes[2]->SetPos(data.m_globalBackBottomLeft);
 	m_debugBoxes[3]->SetPos(data.m_globalBackBottomRight);
+	m_debugBoxes[4]->SetPos(data.m_globalFrontBottomLeft + (leftSide*0.5f));
+	m_debugBoxes[5]->SetPos(data.m_globalFrontBottomRight + (rightSide*0.5f));
+	m_debugBoxes[6]->SetPos(data.m_globalFrontBottomLeft + (frontSide*0.5f));
+	m_debugBoxes[7]->SetPos(data.m_globalBackBottomLeft + (backSide*0.5f));
+
 	m_debugBoxes[0]->UpdateWorld();
 	m_debugBoxes[1]->UpdateWorld();
 	m_debugBoxes[2]->UpdateWorld();
 	m_debugBoxes[3]->UpdateWorld();
+	m_debugBoxes[4]->UpdateWorld();
+	m_debugBoxes[5]->UpdateWorld();
+	m_debugBoxes[6]->UpdateWorld();
+	m_debugBoxes[7]->UpdateWorld();
 
 	Vector intersect = Vector::Zero;
 	MeshTri* wallTri = nullptr;
 
 	// First check collision against walls only without angle limits
-	walls.SetValidCollision(false, false, false, true);
-	bool hit_wall = (walls.DoesLineIntersect(leftSide, data.m_globalFrontBottomLeft, intersect, wallTri, 5,0) ||
-		walls.DoesLineIntersect(rightSide, data.m_globalFrontBottomRight, intersect, wallTri, 5,0) ||
-		walls.DoesLineIntersect(frontSide, data.m_globalFrontBottomLeft, intersect, wallTri, 5,0) ||
-		walls.DoesLineIntersect(backSide, data.m_globalBackBottomLeft, intersect, wallTri, 5,0));
+	walls.SetValidCollision(true, true, true, true);
+	bool hit_wall = (walls.DoesLineIntersect(leftSide, data.m_globalFrontBottomLeft + sideOffset, intersect, wallTri, 5,0) ||
+		walls.DoesLineIntersect(rightSide, data.m_globalFrontBottomRight + sideOffset, intersect, wallTri, 5,0) ||
+		walls.DoesLineIntersect(frontSide, data.m_globalFrontBottomLeft + sideOffset, intersect, wallTri, 5,0) ||
+		walls.DoesLineIntersect(backSide, data.m_globalBackBottomLeft + sideOffset, intersect, wallTri, 5,0));
 
-	// Then if no collision is found check against non-walls but with a limit
-	walls.SetValidCollision(true, true, true, false);
-	if (hit_wall || walls.DoesLineIntersect(leftSide, data.m_globalFrontBottomLeft, intersect, wallTri, 5,m_minAngle) ||
-		walls.DoesLineIntersect(rightSide, data.m_globalFrontBottomRight, intersect, wallTri, 5, m_minAngle) ||
-		walls.DoesLineIntersect(frontSide, data.m_globalFrontBottomLeft, intersect, wallTri, 5, m_minAngle) ||
-		walls.DoesLineIntersect(backSide, data.m_globalBackBottomLeft, intersect, wallTri, 5, m_minAngle))
+	// Then if no collision is found check against non-walls with verticle lines and an angle limit
+	walls.SetValidCollision(false, false, false, true);
+	if (hit_wall || walls.DoesLineIntersect(frontLeft, data.m_globalFrontTopLeft + cornerOffset, intersect, wallTri, 5,m_minAngle) ||
+		walls.DoesLineIntersect(frontRight, data.m_globalFrontTopRight + cornerOffset, intersect, wallTri, 5, m_minAngle) ||
+		walls.DoesLineIntersect(backLeft, data.m_globalBackTopLeft + cornerOffset, intersect, wallTri, 5, m_minAngle) ||
+		walls.DoesLineIntersect(backRight, data.m_globalBackTopRight + cornerOffset, intersect, wallTri, 5, m_minAngle))
 	{
 		//std::cout << std::to_string(wallTri->m_pointA.x - m_pos.x) << std::endl;
 		/*offset = (wallTri->m_pointA.x - m_pos.x) * 2;
