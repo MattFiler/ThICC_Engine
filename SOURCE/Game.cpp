@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "RenderData.h"
+#include "AudioManager.h"
 
 #include "MenuScene.h"
 #include "GameScene.h"
@@ -29,8 +30,15 @@ void ThICC_Game::Initialize() {
 	int index = 0;
 	for (auto& element : character_config) {
 		m_go_shared.character_instances.emplace_back(element);
+		Locator::getAudio()->addToSoundsList(m_go_shared.character_instances[index].audio, SoundType::CHARACTER);
 		index++;
 	}
+
+
+	//for (auto& inst : m_go_shared.character_instances)
+	//{
+	//	Locator::getAudio()->addToSoundsList(inst.audio, SoundType::CHARACTER);
+	//}
 
 	//Load all vehicle data
 	std::ifstream k(m_filepath.generateFilepath("VEHICLE_CONFIG", m_filepath.CONFIG));

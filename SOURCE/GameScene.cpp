@@ -72,6 +72,11 @@ void GameScene::ExpensiveLoad() {
 		);
 	}
 
+	Locator::getAudio()->addToSoundsList(map_info.audio_background_start, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info.audio_background, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info.audio_final_lap_start, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info.audio_final_lap, SoundType::GAME);
+
 	//Load in
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
@@ -85,6 +90,8 @@ void GameScene::ExpensiveLoad() {
 			dynamic_cast<Track*>(*it)->LoadCollision();
 		}
 	}
+
+
 
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
@@ -114,6 +121,8 @@ void GameScene::ExpensiveUnload() {
 	}
 	cine_cam->Reset();
 	cine_cam->SetType(CameraType::CINEMATIC);
+
+	Locator::getAudio()->clearSoundsList(SoundType::GAME);
 
 	//We'll probably need to reset more stuff here, like race timers, etc
 	timeout = 12.f;
@@ -258,8 +267,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 	switch (state)
 	{
 	case START:
-		Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::INTRO_MUSIC)->SetVolume(1.f);
-		Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::INTRO_MUSIC);
+		Locator::getAudio()->GetSound(SoundType::MISC, (int)MiscSounds::INTRO_MUSIC)->SetVolume(1.f);
+		Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::INTRO_MUSIC);
 		state = OPENING;
 		break;
 	case OPENING:
@@ -280,7 +289,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
-			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::PRE_COUNTDOWN);
+			Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::PRE_COUNTDOWN);
 		}
 		#ifdef _DEBUG
 		if (m_keybinds.keyReleased("Activate"))
@@ -298,8 +307,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		if (m_cam[game_config["player_count"]-1]->GetType() == CameraType::FOLLOW)
 		{
-			Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN)->SetVolume(0.7f);
-			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN);
+			Locator::getAudio()->GetSound(SoundType::MISC, (int)MiscSounds::COUNTDOWN)->SetVolume(0.7f);
+			Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::COUNTDOWN);
 			state = COUNTDOWN;
 		}
 		break;
@@ -320,8 +329,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			state = PLAY;
 			timeout = 3.5f;
-			Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START)->SetVolume(0.7f);
-			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START);
+			Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_START)->SetVolume(0.7f);
+			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_START);
 			for (int i = 0; i < game_config["player_count"]; ++i)
 			{
 				player[i]->setGamePad(true);
@@ -337,13 +346,13 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		if (timeout <= 0 && track_music_start)
 		{
-			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME);
+			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_GAME);
 			track_music_start = false;
 		}
 
 		if (timeout <= 0 && final_lap_start)
 		{
-			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_FL_GAME);
+			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_FL_GAME);
 			final_lap_start = false;
 		}
 
@@ -357,8 +366,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 	if (m_keybinds.keyReleased("Quit"))
 	{
-		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
-		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_FL_GAME)->Stop();
+		Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_GAME)->Stop();
+		Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_FL_GAME)->Stop();
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	if (m_keybinds.keyReleased("toggle orbit cam"))
@@ -698,8 +707,8 @@ void GameScene::SetPlayersWaypoint()
 				}
 				else if (player[i]->GetLap() == 2 && !final_lap)
 				{
-					Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
-					Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::FINAL_LAP_IND);
+					Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_GAME)->Stop();
+					Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::FINAL_LAP_IND);
 					final_lap = true;
 					final_lap_start = true;
 					timeout = 3.8f;

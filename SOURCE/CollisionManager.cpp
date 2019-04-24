@@ -50,7 +50,7 @@ void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _ph
 void CollisionManager::ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox)
 {
 	dynamic_cast<ItemBox*>(_itemBox)->hasCollided(dynamic_cast<Player*>(_player));
-	Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
+	Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::ITEM_BOX_HIT);
 }
 
 void CollisionManager::ExplosionCollision(PhysModel *& _player, PhysModel *& _explosion)

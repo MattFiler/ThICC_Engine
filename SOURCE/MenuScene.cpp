@@ -242,7 +242,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 				Locator::getGSD()->character_selected[0] = highlighted_character; //We only support P1 choices atm!
 				Locator::getGSD()->vehicle_selected[0] = highlighted_vehicle;
 
-				Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
+				Locator::getAudio()->GetSound(SoundType::MENU, (int)MenuSounds::MENU_LOOP)->Stop();
 				m_scene_manager->setCurrentScene(Scenes::GAMESCENE + highlighted_map);
 			}
 
