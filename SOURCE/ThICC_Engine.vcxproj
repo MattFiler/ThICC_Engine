@@ -309,7 +309,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AIScheduler.h" />
-    <ClInclude Include="AnimationMesh.h" />
+    <ClInclude Include="AnimationController.h" />
     <ClInclude Include="AnimationModel.h" />
     <ClInclude Include="AssetComp.h" />
     <ClInclude Include="AssetCompPch.h" />
@@ -380,7 +380,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AIScheduler.cpp" />
-    <ClCompile Include="AnimationMesh.cpp" />
+    <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="AnimationModel.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />

@@ -1,6 +1,6 @@
 #pragma once
 #include "PhysModel.h"
-#include "AnimationMesh.h"
+#include "AnimationController.h"
 #include "KeybindManager.h"
 
 class ControlledMovement

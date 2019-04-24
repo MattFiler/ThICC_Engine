@@ -4,7 +4,7 @@
 #include "TrackMagnet.h"
 #include "ServiceLocator.h"
 #include "ItemData.h"
-#include "AnimationMesh.h"
+#include "AnimationController.h"
 
 class Player;
 
