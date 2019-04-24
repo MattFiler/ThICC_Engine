@@ -112,10 +112,10 @@ void Camera::Tick()
 	case CameraType::DEBUG_CAM:
 	{
 		float cam_speed = Locator::getCD()->cam_speed;
-		if (m_keybinds.keyHeld("DebugCamSpeedup"))
-		{
-			cam_speed *= 1.1f;
-		}
+		//if (m_keybinds.keyHeld("DebugCamSpeedup"))
+		//{
+		//	cam_speed *= 1.1f;
+		//}
 
 		Vector3 forwardMove = cam_speed * m_world.Forward();
 		Vector3 rightMove = cam_speed * m_world.Right();
@@ -143,7 +143,7 @@ void Camera::Tick()
 		last_mouse_xpos = Locator::getID()->m_mouseState.x;
 		last_mouse_ypos = Locator::getID()->m_mouseState.y;
 
-		if (m_keybinds.keyHeld("DebugCamFor"))
+		if (m_keybinds.keyHeld("debug cam forward"))
 		{
 			m_pos += Locator::getGSD()->m_dt * forwardMove;
 			m_targetPos += Locator::getGSD()->m_dt * forwardMove;
@@ -176,14 +176,14 @@ void Camera::Tick()
 			m_targetPos += Locator::getGSD()->m_dt * upMove;
 		}
 
-		if (m_keybinds.keyHeld("DebugCamLookUp") && m_pitch > -1.5)
+		if (m_keybinds.keyHeld("debug cam look up") && m_pitch > -1.5)
 			m_pitch += Locator::getCD()->cam_rot_speed;
-		else if (m_keybinds.keyHeld("DebugCamLookDown") && m_pitch < 1.5)
+		else if (m_keybinds.keyHeld("debug cam look down") && m_pitch < 1.5)
 			m_pitch -= Locator::getCD()->cam_rot_speed;
 
-		if (m_keybinds.keyHeld("DebugCamLookLeft"))
+		if (m_keybinds.keyHeld("debug cam look left"))
 			m_yaw += Locator::getCD()->cam_rot_speed;
-		else if (m_keybinds.keyHeld("DebugCamLookRight"))
+		else if (m_keybinds.keyHeld("debug cam look right"))
 			m_yaw -= Locator::getCD()->cam_rot_speed;
 
 		m_view = Matrix::CreateLookAt(m_pos, m_targetPos, m_pos.Up);
