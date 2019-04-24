@@ -142,14 +142,14 @@ void Player::Tick()
 	PositionFloatingItems();
 
 	// Debug code to save/load the players game state
-	if (m_keymindManager.keyPressed("Debug Save Matrix"))
+	if (m_keybind.keyReleased("debug save position"))
 	{
 		m_savedMatrix = m_world;
 		m_savedVel = m_vel;
 		m_savedGravVel = m_gravVel;
 		m_savedGravDir = m_gravDirection;
 	}
-	else if (m_keymindManager.keyPressed("Debug Load Matrix"))
+	else if (m_keybind.keyReleased("debug load position"))
 	{
 		SetWorld(m_savedMatrix);
 		m_vel = m_savedVel;
@@ -157,21 +157,13 @@ void Player::Tick()
 		m_velTotal = m_vel + m_savedGravVel;
 		m_gravDirection = m_savedGravDir;
 	}
-	else if (m_keymindManager.keyPressed("Spawn Banana"))
-	{
-		SpawnItems(ItemType::GREEN_SHELL);
-	}
-	else if (m_keymindManager.keyHeld("Spawn Banana"))
-	{
-		TrailItems();
-	}
 	/*else
 	{
 		ReleaseItem();
 	}*/
 
 	//Debug output player location - useful for setting up spawns
-	if (m_keymindManager.keyPressed("Debug Print Player Location")) {
+	if (m_keybind.keyReleased("Print Player Location")) {
 		DebugText::print("PLAYER POSITION: (" + std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + ")");
 	}
 
@@ -203,7 +195,7 @@ void Player::CheckUseItem()
 	{
 		TrailItems();
 
-		if (Locator::getID()->m_gamePadState[m_playerID].IsAPressed())
+		if (m_keybind.keyHeld("activate", m_playerID))
 		{
 			if (m_trailingItems.empty() && m_InventoryItem != NONE)
 			{
@@ -223,7 +215,7 @@ void Player::CheckUseItem()
 	}
 	else
 	{
-		if (Locator::getID()->m_gamePadState[m_playerID].IsAPressed())
+		if (m_keybind.keyHeld("activate", m_playerID))
 		{
 			if (m_trailingItems.empty() && m_InventoryItem != NONE && !m_aPressed)
 			{
@@ -435,7 +427,7 @@ void Player::ReleaseItem()
 {
 	if (!m_trailingItems.empty())
 	{
-		m_trailingItems[m_trailingItems.size() - 1]->Use(this, Locator::getID()->m_gamePadState[m_playerID].IsLeftShoulderPressed());
+		m_trailingItems[m_trailingItems.size() - 1]->Use(this, m_keybind.keyHeld("trail items", m_playerID));
 		m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
 
 		if (m_InventoryItem != MUSHROOM_UNLIMITED)
@@ -465,12 +457,14 @@ void Player::setGamePad(bool _state)
 
 	// TEST CODE //
 	
+	/*
 	if (m_playerID == 0)
 	{
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);
 		Locator::getAIScheduler()->AddAI(m_ai.get());
 	}
+	*/
 	
 	// TEST CODE //
 }
@@ -479,16 +473,17 @@ void Player::movement()
 {
 	m_move->Tick();
 
-	Locator::getID()->m_gamepad->SetVibration(m_playerID, Locator::getID()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getID()->m_gamePadState[m_playerID].triggers.right * 0.1);
+	//Disabling rumble for now :)
+	//Locator::getID()->m_gamepad->SetVibration(m_playerID, Locator::getID()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getID()->m_gamePadState[m_playerID].triggers.right * 0.1);
 
 	// Debug code to save/load the players game state
-	if (m_keymindManager.keyPressed("Debug Save Matrix"))
+	if (m_keybind.keyReleased("debug save position"))
 	{
 		m_savedMatrix = m_world;
 		m_savedVel = m_vel;
 		m_savedGravVel = m_gravVel;
 	}
-	else if (m_keymindManager.keyPressed("Debug Load Matrix"))
+	else if (m_keybind.keyReleased("debug load position"))
 	{
 		m_world = m_savedMatrix;
 		m_vel = m_savedVel;
@@ -500,7 +495,7 @@ void Player::movement()
 	}
 
 	//Debug output player location - useful for setting up spawns
-	if (m_keymindManager.keyPressed("Debug Print Player Location")) {
+	if (m_keybind.keyReleased("print player location")) {
 		DebugText::print("PLAYER POSITION: (" + std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + ")");
 	}
 

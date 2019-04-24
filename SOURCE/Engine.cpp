@@ -110,7 +110,7 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	Locator::getRD()->m_window_width = width;
 
 	//Set our default font
-	SetDefaultFont("NeueHaasGroteskDisp Pro BD");
+	SetDefaultFont(m_game_config["font"]);
 
 	//Setup item data
 	m_probabilities = new ItemData();
@@ -214,23 +214,19 @@ void ThICC_Engine::Tick()
 /* Update the scene */
 void ThICC_Engine::Update(DX::StepTimer const& timer)
 {
-	//Get keyboard and mouse state
-	m_input_data.m_prevKeyboardState = m_input_data.m_keyboardState; // keep previous state for just pressed logic
-	m_input_data.m_keyboardState = m_input_data.m_keyboard->GetState();
+	//Update input trackers
+	m_input_data.m_keyboardTracker.Update(m_input_data.m_keyboard->GetState());
 	m_input_data.m_mouseState = m_input_data.m_mouse->GetState();
-
-	//Update trackers - this would be a nice system to move across to with the new keybind manager
-	m_input_data.m_keyboardTracker.Update(m_input_data.m_keyboardState);
 	m_input_data.m_mouseButtonTracker.Update(m_input_data.m_mouseState);
-
-	//Get controller state for each player
-	for (int i = 0; i < m_game_config["player_count"]; ++i)
-	{
-		m_input_data.m_gamePadState[i] = m_input_data.m_gamepad->GetState(i); //set game controllers state[s]
+	for (int i = 0; i < 4; i++) {
+		m_input_data.m_gamepadButtonTracker[i].Update(m_input_data.m_gamepad->GetState(i));
 	}
 
 	//Delta time
 	m_gamestate_data.m_dt = float(timer.GetElapsedSeconds());
+
+	//Update global timer
+	m_gamestate_data.m_timer = timer;
 
 	//Framerate monitor
 	debug_text->SetText(std::to_string(timer.GetFramesPerSecond()));
@@ -312,7 +308,9 @@ void ThICC_Engine::OnActivated()
 	//Reset input trackers
 	m_input_data.m_keyboardTracker.Reset();
 	m_input_data.m_mouseButtonTracker.Reset();
-	m_input_data.m_gamepadButtonTracker.Reset();
+	for (int i = 0; i < 4; i++) {
+		m_input_data.m_gamepadButtonTracker[i].Reset();
+	}
 }
 void ThICC_Engine::OnDeactivated()
 {
@@ -326,7 +324,9 @@ void ThICC_Engine::OnResuming()
 	m_timer.ResetElapsedTime();
 	m_input_data.m_keyboardTracker.Reset();
 	m_input_data.m_mouseButtonTracker.Reset();
-	m_input_data.m_gamepadButtonTracker.Reset();
+	for (int i = 0; i < 4; i++) {
+		m_input_data.m_gamepadButtonTracker[i].Reset();
+	}
 }
 void ThICC_Engine::OnWindowMoved()
 {

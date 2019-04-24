@@ -121,10 +121,10 @@ void Camera::Tick()
 	}
 	case BEHAVIOUR::INDEPENDENT:
 	{
-		if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickLeft())
+		if (m_keybinds.keyHeld("left", m_cameraID))
 			angle -= 3.0f;
 
-		if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickRight())
+		if (m_keybinds.keyHeld("right", m_cameraID))
 			angle += 3.0f;
 
 		if (m_targetObject)
@@ -164,11 +164,11 @@ void Camera::Tick()
 	{
 		float cam_speed = 40.0f;
 		float cam_rot_speed = 0.007f;
-		if (m_keybinds.keyHeld("DebugCamSpeedup"))
-		{
-			cam_speed *= 2;
-			cam_rot_speed *= 2;
-		}
+		//if (m_keybinds.keyHeld("DebugCamSpeedup"))
+		//{
+		//	cam_speed *= 2;
+		//	cam_rot_speed *= 2;
+		//}
 
 		Vector3 forwardMove = cam_speed * m_world.Forward();
 		Vector3 rightMove = cam_speed * m_world.Right();
@@ -183,34 +183,34 @@ void Camera::Tick()
 		m_yaw -= cam_rot_speed * Locator::getID()->m_mouseState.x;
 		m_pitch -= cam_rot_speed * Locator::getID()->m_mouseState.y;
 
-		if (m_keybinds.keyHeld("DebugCamFor"))
+		if (m_keybinds.keyHeld("debug cam forward"))
 		{
 			m_pos += Locator::getGSD()->m_dt * forwardMove;
 			m_targetPos += Locator::getGSD()->m_dt * forwardMove;
 		}
-		else if (m_keybinds.keyHeld("DebugCamBack"))
+		else if (m_keybinds.keyHeld("debug cam backward"))
 		{
 			m_pos -= Locator::getGSD()->m_dt * forwardMove;
 			m_targetPos -= Locator::getGSD()->m_dt * forwardMove;
 		}
 
-		if (m_keybinds.keyHeld("DebugCamLeft"))
+		if (m_keybinds.keyHeld("debug cam left"))
 		{
 			m_pos -= Locator::getGSD()->m_dt * rightMove;
 			m_targetPos -= Locator::getGSD()->m_dt * rightMove;
 		}
-		else if (m_keybinds.keyHeld("DebugCamRight"))
+		else if (m_keybinds.keyHeld("debug cam right"))
 		{
 			m_pos += Locator::getGSD()->m_dt * rightMove;
 			m_targetPos += Locator::getGSD()->m_dt * rightMove;
 		}
 
-		if (m_keybinds.keyHeld("DebugCamUp"))
+		if (m_keybinds.keyHeld("debug cam up"))
 		{
 			m_pos -= Locator::getGSD()->m_dt * upMove;
 			m_targetPos -= Locator::getGSD()->m_dt * upMove;
 		}
-		else if (m_keybinds.keyHeld("DebugCamDown"))
+		else if (m_keybinds.keyHeld("debug cam down"))
 		{
 			m_pos += Locator::getGSD()->m_dt * upMove;
 			m_targetPos += Locator::getGSD()->m_dt * upMove;
@@ -234,7 +234,7 @@ void Camera::Tick()
 	//DebugText::print(std::to_string(timer));
 
 	//Debug output player location - useful for setting up spawns
-	if (m_keybinds.keyPressed("Debug Print Camera Location")) {
+	if (m_keybinds.keyReleased("Print Camera Location")) {
 		DebugText::print("CAMERA POSITION: (" + std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + ")");
 	}
 
