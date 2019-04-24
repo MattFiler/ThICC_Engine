@@ -142,6 +142,7 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="LightningCloud.cpp" />
     <ClCompile Include="DebugScene.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
@@ -345,6 +346,7 @@
     <ClInclude Include="CameraData.h">
       <Filter>Engine Backend\Shared</Filter>
     </ClInclude>
+    <ClInclude Include="LightningCloud.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

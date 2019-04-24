@@ -179,6 +179,7 @@
 	},
 	"LIGHTNING_CLOUD": {
 		"ui_sprite": "ITEM_LIGHTNING_CLOUD",
+		"model": "ITEM_LIGHTNING_CLOUD",
 		"probabilities": {
 			"place_3": 5,
 			"place_4": 7.5,

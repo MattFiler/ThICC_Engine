@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "ServiceLocator.h"
 
-GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_SHELL))
+GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(BLUE_SHELL))
 {
 	m_mesh->SetDrag(0);
 	m_mesh->SetPhysicsOn(true);
@@ -41,6 +41,9 @@ void GreenShell::Use(Player * player, bool _altUse)
 
 void GreenShell::Tick()
 {
-	m_displayedMesh->Spin(1, 0.7);
+	if (m_itemUsed)
+	{
+		m_displayedMesh->Spin(1, 0.7);
+	}
 	Item::Tick();
 }

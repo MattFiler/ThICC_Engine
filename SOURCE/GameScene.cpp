@@ -781,8 +781,9 @@ Item* GameScene::CreateItem(ItemType type)
 	case BANANA:
 	{
 		Banana* banana = new Banana();
-		m_itemModels.push_back(banana);
+		m_itemModels.push_back(banana);		
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(banana->GetMesh())->getDebugCollider());
+		banana->GetMesh()->getDebugCollider()->Load();
 		return banana;
 	}
 	case GREEN_SHELL:
@@ -790,6 +791,7 @@ Item* GameScene::CreateItem(ItemType type)
 		GreenShell* greenShell = new GreenShell();
 		m_itemModels.push_back(greenShell);
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(greenShell->GetMesh())->getDebugCollider());
+		greenShell->GetMesh()->getDebugCollider()->Load();
 
 		return greenShell;
 	}
@@ -804,6 +806,7 @@ Item* GameScene::CreateItem(ItemType type)
 		Bomb* bomb = new Bomb(std::bind(&GameScene::CreateExplosion, this));
 		m_itemModels.push_back(bomb);
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(bomb->GetMesh())->getDebugCollider());
+		bomb->GetMesh()->getDebugCollider()->Load();
 
 		return bomb;
 	}
@@ -812,6 +815,8 @@ Item* GameScene::CreateItem(ItemType type)
 		FakeItemBox* box = new FakeItemBox();
 		m_itemModels.push_back(box);
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(box->GetMesh())->getDebugCollider());
+		box->GetMesh()->getDebugCollider()->Load();
+
 		return box;
 	}
 	case MUSHROOM_UNLIMITED:
@@ -832,6 +837,14 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(mushroom);
 		return mushroom;
 	}
+	case LIGHTNING_CLOUD:
+	{
+		LightningCloud* cloud = new LightningCloud();
+		m_itemModels.push_back(cloud);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(cloud->GetMesh())->getDebugCollider());
+		cloud->GetMesh()->getDebugCollider()->Load();
+		return cloud;
+	}
 	default:
 		return nullptr;
 	}
@@ -844,6 +857,8 @@ Explosion * GameScene::CreateExplosion()
 	m_3DObjects.push_back(explosion);
 	m_physModels.push_back(explosion);
 	m_3DObjects.push_back(dynamic_cast<PhysModel*>(explosion)->getDebugCollider());
+	explosion->getDebugCollider()->Load();
+
 	return explosion;
 }
 
