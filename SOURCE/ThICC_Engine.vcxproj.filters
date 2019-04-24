@@ -342,6 +342,9 @@
     <ClInclude Include="DebugScene.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="CameraData.h">
+      <Filter>Engine Backend\Shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

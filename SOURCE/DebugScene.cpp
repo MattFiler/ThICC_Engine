@@ -43,7 +43,7 @@ void DebugScene::ExpensiveLoad() {
 		(*it)->Load();
 	}
 
-	debug_cam->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
+	debug_cam->SetType(CameraType::DEBUG_CAM);
 	#endif
 }
 
@@ -65,7 +65,7 @@ void DebugScene::ExpensiveUnload() {
 void DebugScene::create3DObjects()
 {
 	m_3DObjects.push_back(new SDKMeshGO3D("sponza"));
-	debug_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
+	debug_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), nullptr, CameraType::DEBUG_CAM);
 }
 
 /* Update the scene */
