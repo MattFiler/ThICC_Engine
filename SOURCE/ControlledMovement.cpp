@@ -47,7 +47,7 @@ void ControlledMovement::GetControllerInput()
 		{
 			if (m_drifting)
 			{
-				m_endDrift;
+				m_endDrift = true;
 			}
 		}
 
@@ -78,6 +78,10 @@ void ControlledMovement::GetControllerInput()
 		}
 		else
 		{
+			if (!m_drifting)
+			{
+				m_isTurning = false;
+			}
 			m_right = false;
 			m_left = false;
 		}
