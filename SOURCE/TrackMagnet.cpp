@@ -10,6 +10,24 @@ TrackMagnet::TrackMagnet(std::string _filename) : PhysModel(_filename)
 	m_autoCalculateWolrd = false;
 	Vector3 scale = Vector3::Zero;
 	m_world.Decompose(scale, m_quatRot, m_pos);
+
+	for (int i = 0; i < 4; i++)
+	{
+		m_debugBoxes.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
+		m_debugBoxes.back()->Load();
+		m_debugBoxes.back()->SetScale(0.1);
+		m_debugBoxes.back()->UpdateWorld();
+	}
+
+}
+
+void TrackMagnet::Render()
+{
+	for (GameObject3D* mesh : m_debugBoxes)
+	{
+		mesh->Render();
+	}
+	PhysModel::Render();
 }
 
 /* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
@@ -169,6 +187,15 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 	Vector rightSide = (data.m_globalBackBottomRight - data.m_globalFrontBottomRight);
 	Vector frontSide = (data.m_globalFrontBottomRight - data.m_globalFrontBottomLeft);
 	Vector backSide = (data.m_globalBackBottomRight - data.m_globalBackBottomLeft);
+
+	m_debugBoxes[0]->SetPos(data.m_globalBackBottomLeft);
+	m_debugBoxes[1]->SetPos(data.m_globalBackBottomRight);
+	m_debugBoxes[2]->SetPos(data.m_globalFrontBottomRight);
+	m_debugBoxes[3]->SetPos(data.m_globalBackBottomRight);
+	m_debugBoxes[0]->UpdateWorld();
+	m_debugBoxes[1]->UpdateWorld();
+	m_debugBoxes[2]->UpdateWorld();
+	m_debugBoxes[3]->UpdateWorld();
 
 	Vector intersect = Vector::Zero;
 	MeshTri* wallTri = nullptr;

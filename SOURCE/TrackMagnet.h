@@ -8,6 +8,7 @@ public:
 	bool ShouldStickToTrack(Track& track);
 	bool ResolveWallCollisions(Track& walls);
 	virtual void Tick() override { PhysModel::Tick(); };
+	virtual void Render() override;
 
 	void setDampenWallReflect(bool _toggle) { m_dampenWallReflect = _toggle; };
 
@@ -34,4 +35,6 @@ private:
 	MeshTri* tri = nullptr;
 
 	bool m_dampenWallReflect = true;
+
+	std::vector<SDKMeshGO3D*> m_debugBoxes;
 };
