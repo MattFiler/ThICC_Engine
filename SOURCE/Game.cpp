@@ -60,7 +60,9 @@ void ThICC_Game::Initialize() {
 
 	//Create the scenes
 	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
+	#ifdef _DEBUG 
 	m_scene_manager.addScene(new DebugScene(), (int)Scenes::DEBUG_LIGHTINGTEST);
+	#endif
 
 	//Set our default scene
 	m_scene_manager.setCurrentScene(Scenes::MENUSCENE, true);
