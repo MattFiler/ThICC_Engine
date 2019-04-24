@@ -84,6 +84,8 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transparencySlider)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -645,6 +647,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.label5);
             this.groupBox6.Controls.Add(this.specularColourBrowse);
             this.groupBox6.Controls.Add(this.specularMap);
             this.groupBox6.Controls.Add(this.specularMapBrowse);
@@ -660,6 +663,7 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.label16);
             this.groupBox7.Controls.Add(this.ambientColourBrowse);
             this.groupBox7.Controls.Add(this.normalMapBrowse);
             this.groupBox7.Controls.Add(this.label12);
@@ -672,6 +676,24 @@
             this.groupBox7.TabIndex = 43;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Extra Values";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(58, 77);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(140, 13);
+            this.label5.TabIndex = 47;
+            this.label5.Text = "I THINK THIS IS IGNORED";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(58, 79);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(140, 13);
+            this.label16.TabIndex = 48;
+            this.label16.Text = "I THINK THIS IS IGNORED";
             // 
             // Model_Importer_MaterialEditor
             // 
@@ -777,5 +799,7 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label16;
     }
 }

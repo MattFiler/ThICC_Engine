@@ -463,8 +463,7 @@ void Player::setGamePad(bool _state)
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);
 		Locator::getAIScheduler()->AddAI(m_ai.get());
-	}
-	*/
+	}*/
 	
 	// TEST CODE //
 }

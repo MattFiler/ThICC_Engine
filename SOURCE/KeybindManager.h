@@ -18,7 +18,7 @@ public:
 	KeybindManager() = default;
 	~KeybindManager() = default;
 
-	// Initial setup of keybind values
+	/* Initial setup of keybind values */
 	void setup(ThICC_InputData* _GSD) {
 		//Read in config
 		std::ifstream i(m_filepath.generateConfigFilepath("Keybinds_Config", m_filepath.CONFIG));
@@ -28,7 +28,14 @@ public:
 		m_ID = _GSD;
 	};
 
-	// Check to see if key was released
+	/* Reset internal trackers */
+	void Reset() {
+		for (int i = 0; i < 254; i++) {
+			key_held[i] = false;
+		}
+	}
+
+	/* Check to see if key was released */
 	bool keyReleased(const std::string& keybind, int gamepad = -1)
 	{
 		//Format keybind
@@ -72,7 +79,7 @@ public:
 		return false;
 	}
 
-	// Check to see if key is being held
+	/* Check to see if key is being held */
 	bool keyHeld(const std::string& keybind, int gamepad = -1)
 	{
 		//Format keybind
@@ -84,6 +91,12 @@ public:
 			//Check arcade
 			if (config[this_keybind]["Arcade"] != "DISABLED") {
 				if (m_ID->m_keyboardTracker.IsKeyPressed((DirectX::Keyboard::Keys)config[this_keybind]["Arcade_Code"])) {
+					key_held[config[this_keybind]["Arcade_Code"]] = true;
+				}
+				if (m_ID->m_keyboardTracker.IsKeyReleased((DirectX::Keyboard::Keys)config[this_keybind]["Arcade_Code"])) {
+					key_held[config[this_keybind]["Arcade_Code"]] = false;
+				}
+				if (key_held[config[this_keybind]["Arcade_Code"]]) {
 					return true;
 				}
 			}
@@ -91,6 +104,12 @@ public:
 			//Check keyboard
 			if (config[this_keybind]["Keyboard"] != "DISABLED") {
 				if (m_ID->m_keyboardTracker.IsKeyPressed((DirectX::Keyboard::Keys)config[this_keybind]["Keyboard_Code"])) {
+					key_held[config[this_keybind]["Keyboard_Code"]] = true;
+				}
+				if (m_ID->m_keyboardTracker.IsKeyReleased((DirectX::Keyboard::Keys)config[this_keybind]["Keyboard_Code"])) {
+					key_held[config[this_keybind]["Keyboard_Code"]] = false;
+				}
+				if (key_held[config[this_keybind]["Keyboard_Code"]]) {
 					return true;
 				}
 			}
@@ -117,7 +136,7 @@ public:
 	}
 
 private:
-	/* Check keybind validity*/
+	/* Check keybind validity */
 	bool checkKeybind(const std::string& keybind)
 	{
 		//Ignore first 5 frames because DirectX inputs are brilliant.
@@ -188,4 +207,5 @@ private:
 	static ThICC_InputData* m_ID;
 	static json config;
 	GameFilepaths m_filepath;
+	bool key_held[254] = { 0 };
 };
