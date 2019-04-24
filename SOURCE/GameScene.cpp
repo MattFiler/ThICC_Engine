@@ -96,6 +96,9 @@ void GameScene::ExpensiveLoad() {
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
 
+	//Reset key presses
+	m_keybinds.Reset();
+
 	//Load the map's audio here using map_info's data
 }
 

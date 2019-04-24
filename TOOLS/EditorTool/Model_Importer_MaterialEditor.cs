@@ -26,6 +26,7 @@ namespace EditorTool
         UsefulFunctions common_functions = new UsefulFunctions();
         string this_model_folder;
         ModelType model_type;
+        string path_to_rma = "";
         int[] default_rma_vals = { 0, 0, 0 };
         public Model_Importer_MaterialEditor(JToken _config, ModelType _type, string _folder)
         {
@@ -97,7 +98,7 @@ namespace EditorTool
             }
 
             //RMA values
-            string path_to_rma = material_config["map_RMA"].Value<string>();
+            path_to_rma = material_config["map_RMA"].Value<string>();
             if (path_to_rma == "")
             {
                 path_to_rma = material_config["map_occlusionRoughnessMetallic"].Value<string>();
@@ -266,7 +267,7 @@ namespace EditorTool
             copyNewMat(emissiveMap.Text);
 
             //RMA Texture
-            string rma = "rma_placeholder.png";
+            string rma = path_to_rma;
             if (metalnessSlider.Value != default_rma_vals[0] || 
                 ambientocclusionSlider.Value != default_rma_vals[2] || 
                 roughnessSlider.Value != default_rma_vals[1])
@@ -317,8 +318,13 @@ namespace EditorTool
         {
             Bitmap temp_rma = new Bitmap(1, 1);
             temp_rma.SetPixel(0, 0, Color.FromArgb(255, ambientocclusionSlider.Value, roughnessSlider.Value, metalnessSlider.Value));
-            temp_rma.Save(this_model_folder + materialName.Text.Replace(' ', '_') + "_occlusionRoughnessMetallic.png", ImageFormat.Png);
-            return materialName.Text.Replace(' ', '_') + "_occlusionRoughnessMetallic.png";
+            string rma_mat = materialName.Text.Replace(' ', '_') + "_occlusionRoughnessMetallic.png";
+            if (File.Exists(this_model_folder + rma_mat))
+            {
+                File.Delete(this_model_folder + rma_mat);
+            }
+            temp_rma.Save(this_model_folder + rma_mat, ImageFormat.Png);
+            return rma_mat;
         }
 
 

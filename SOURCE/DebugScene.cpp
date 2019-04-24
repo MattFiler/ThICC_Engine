@@ -36,8 +36,8 @@ void DebugScene::ExpensiveLoad() {
 	DebugText::print("Entering Debug Scene!");
 
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	Locator::getRD()->current_cubemap_radiance = converter.from_bytes(m_filepaths.generateFilepath("sponza", m_filepaths.CUBEMAP_RADIANCE).c_str());
-	Locator::getRD()->current_cubemap_irradiance = converter.from_bytes(m_filepaths.generateFilepath("sponza", m_filepaths.CUBEMAP_IRRADIANCE).c_str());
+	Locator::getRD()->current_cubemap_radiance = converter.from_bytes(m_filepaths.generateFilepath("sponza_brighter", m_filepaths.CUBEMAP_RADIANCE).c_str());
+	Locator::getRD()->current_cubemap_irradiance = converter.from_bytes(m_filepaths.generateFilepath("sponza_brighter", m_filepaths.CUBEMAP_IRRADIANCE).c_str());
 
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
@@ -45,6 +45,7 @@ void DebugScene::ExpensiveLoad() {
 	}
 
 	debug_cam->SetType(CameraType::DEBUG_CAM);
+	m_keybinds.Reset();
 	#endif
 }
 

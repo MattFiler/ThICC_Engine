@@ -8,20 +8,20 @@ Tr 0.000000
 Tf 1.000000 1.000000 1.000000 
 illum 2
 Ka 0.000000 0.000000 0.000000
-Kd 0.745098 0.709804 0.674510
+Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
+Ke 1.000000 1.000000 1.000000
 map_Ka SP_LUK.JPG
 map_Kd SP_LUK.JPG
 map_bump sp_luk-bump.JPG
 bump sp_luk-bump.JPG
 map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
+map_Kn sp_luk-bump.JPG
+norm sp_luk-bump.JPG
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
-map_RMA rma_placeholder.png
-map_occlusionRoughnessMetallic rma_placeholder.png
+map_RMA sp_00_luk_mali_occlusionRoughnessMetallic.png
+map_occlusionRoughnessMetallic sp_00_luk_mali_occlusionRoughnessMetallic.png
 
 newmtl sp_svod_kapitel
 Ns 50.000000
@@ -90,14 +90,14 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl sp_00_stup
-Ns 50.000000
+Ns 0.000000
 Ni 1.500000
 d 0.000000
 Tr 0.000000
 Tf 1.000000 1.000000 1.000000 
-illum 2
+illum 0
 Ka 0.000000 0.000000 0.000000
-Kd 0.737255 0.709804 0.670588
+Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 map_Ka 01_STUB.JPG
@@ -105,12 +105,12 @@ map_Kd 01_STUB.JPG
 map_bump 01_STUB-bump.jpg
 bump 01_STUB-bump.jpg
 map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
+map_Kn 01_STUB-bump.jpg
+norm 01_STUB-bump.jpg
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
-map_RMA rma_placeholder.png
-map_occlusionRoughnessMetallic rma_placeholder.png
+map_RMA sp_00_stup_occlusionRoughnessMetallic.png
+map_occlusionRoughnessMetallic sp_00_stup_occlusionRoughnessMetallic.png
 
 newmtl sp_01_stub_baza
 Ns 50.000000

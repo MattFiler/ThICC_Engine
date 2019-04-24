@@ -39,6 +39,7 @@ bool MenuScene::Load()
 void MenuScene::ExpensiveLoad() {
 	m_menu_state = menu_states::SPLASH;
 	m_timer = 0.0f;
+	m_keybinds.Reset();
 }
 
 /* Create all 2D objects for the scene */
@@ -119,11 +120,13 @@ void MenuScene::create2DObjects()
 /* Update the scene */
 void MenuScene::Update(DX::StepTimer const& timer)
 {
+	#ifdef _DEBUG
 	//Hacky implementation to get to the debug scene (temp)
 	if (Locator::getID()->m_keyboardTracker.IsKeyReleased(DirectX::Keyboard::Keys::D))
 	{
 		m_scene_manager->setCurrentScene(Scenes::DEBUG_LIGHTINGTEST);
 	}
+	#endif
 
 	switch (m_menu_state) {
 		case menu_states::SPLASH:
