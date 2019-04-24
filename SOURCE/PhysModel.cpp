@@ -122,11 +122,9 @@ void PhysModel::updateCollider()
 		//Updates the debug collider position and rotation
 		m_colliderDebug->SetPos(Vector3::Transform(Vector3(m_physData.m_localCentre.x, m_physData.m_localCentre.y - (m_physData.m_height / 2), m_physData.m_localCentre.z), m_world));
 		m_colliderDebug->SetScale(m_physData.m_scale);
-		Quaternion test = Quaternion(m_collider.Orientation);
 		m_colliderDebug->SetYaw(euler.y);
 		m_colliderDebug->SetPitch(euler.x);
 		m_colliderDebug->SetRoll(euler.z);
-
 		if (debug_print)
 		{
 			DebugText::print("START OF PHYSMODEL INFO DUMP");

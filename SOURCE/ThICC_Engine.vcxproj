@@ -361,6 +361,7 @@
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ReadData.h" />
+    <ClInclude Include="RedShell.h" />
     <ClInclude Include="RenderData.h" />
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="Scene.h" />
@@ -424,6 +425,7 @@
     </ClCompile>
     <ClCompile Include="PhysModel.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RedShell.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SDKMeshGO3D.cpp" />

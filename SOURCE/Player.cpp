@@ -412,7 +412,16 @@ void Player::SpawnItems(ItemType type)
 			m_floatingItems.push_back(cloud);
 			cloud->Use(this, false);
 			break;
-		}		
+		}
+
+		case RED_SHELL:
+		{
+			RedShell* shell = static_cast<RedShell*>(CreateItem(RED_SHELL));
+			m_trailingItems.push_back(shell);
+			TrailItems();
+			break;
+		}
+
 		default:
 			break;
 	}

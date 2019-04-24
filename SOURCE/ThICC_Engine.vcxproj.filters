@@ -146,7 +146,7 @@
     <ClCompile Include="DebugScene.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationModel.cpp" />
+    <ClCompile Include="RedShell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -341,14 +341,14 @@
     <ClInclude Include="Skybox.h">
       <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="LightningCloud.h" />
     <ClInclude Include="DebugScene.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="CameraData.h">
       <Filter>Engine Backend\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="LightningCloud.h" />
-    <ClInclude Include="AnimationModel.h" />
+    <ClInclude Include="RedShell.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
