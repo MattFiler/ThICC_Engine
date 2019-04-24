@@ -2,6 +2,7 @@
 #include "SDKMeshGO3D.h"
 #include "RenderData.h"
 #include "DebugScene.h"
+#include "SceneManager.h"
 #include <codecvt>
 
 extern void ExitGame();
@@ -78,6 +79,11 @@ void DebugScene::Update(DX::StepTimer const& timer)
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
 		(*it)->Tick();
+	}
+
+	if (m_keybinds.keyReleased("Quit"))
+	{
+		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	#else
 	m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
