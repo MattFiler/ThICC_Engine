@@ -143,9 +143,9 @@ void Camera::Tick()
 		m_pitch += Locator::getCD()->cam_rot_speed * mouse_ypos;
 
 		if (m_pitch > 1.5f)
-			m_pitch = 1.5f;
+			m_pitch = 1.49f;
 		else if (m_pitch < -1.5f)
-			m_pitch = -1.5f;
+			m_pitch = -1.49f;
 
 		last_mouse_xpos = Locator::getID()->m_mouseState.x;
 		last_mouse_ypos = Locator::getID()->m_mouseState.y;
