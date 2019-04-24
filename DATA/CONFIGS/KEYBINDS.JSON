@@ -8,13 +8,13 @@
   "DebugCamUp": "NumPad7",
   "DebugCamDown": "NumPad9",
   "DebugCamFor": "NumPad8",
-  "DebugCamBack": "NumPad5",
+  "DebugCamBack": "NumPad2",
   "DebugCamLeft": "NumPad4",
   "DebugCamRight": "NumPad6",
   "Debug Save Matrix": "D1",
   "Debug Load Matrix": "D2",
-  "DebugCamLookDown": "Multiply",
-  "DebugCamLookUp": "Divide",
+  "DebugCamLookDown": "Add",
+  "DebugCamLookUp": "Subtract",
   "Left": "A",
   "Right": "D",
   "Forward": "W",
@@ -30,5 +30,7 @@
   "Save Display Player Pos": "N",
   "Up Arrow": "Up",
   "Down Arrow": "Down",
-  "Drift": "Q"
+  "Drift": "Q",
+  "DebugCamLookLeft": "NumPad1",
+  "DebugCamLookRight": "NumPad3"
 }

@@ -143,6 +143,9 @@
       <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="LightningCloud.cpp" />
+    <ClCompile Include="DebugScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -338,6 +341,12 @@
       <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="LightningCloud.h" />
+    <ClInclude Include="DebugScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraData.h">
+      <Filter>Engine Backend\Shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

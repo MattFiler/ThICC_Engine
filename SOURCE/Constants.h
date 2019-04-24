@@ -10,8 +10,8 @@
 enum Scenes
 {
 	MENUSCENE,
-	GAMESCENE,
-	DEBUGSCENE,
+	DEBUG_LIGHTINGTEST,
+	GAMESCENE, // must be second to last as we dynamically extend from this position
 
 	SCENE_COUNT // must always be last!
 };
@@ -63,19 +63,34 @@ struct ItemBoxConfig {
 	static double respawn_time;
 };
 
+// camera type
+
+enum class CameraType : int
+{
+	FOLLOW = 0,
+	BACK_FACING = 1,
+	FIRST = 2,
+	INDEPENDENT = 3,
+	ORBIT = 4,
+	CINEMATIC = 5,
+#ifdef _DEBUG
+	DEBUG_CAM = 6,
+#endif // DEBUG
+};
+
 
 // sound
 // sound catergories
-enum class SOUND_TYPE : int
+enum class SoundType : int
 {
 	MENU = 0,
 	GAME = 1,
-	CHARACTER_SEL = 2,
+	CHARACTER = 2,
 	MISC = 3,
 };
 
 // game sounds
-enum class SOUNDS_GAME : int
+enum class GameSounds : int
 {
 	MKS_START = 0,
 	MKS_GAME = 1,
@@ -84,7 +99,7 @@ enum class SOUNDS_GAME : int
 };
 
 // character sounds
-enum class SOUNDS_CHARACTER : int
+enum class CharacterSounds : int
 {
 	MARIO = 0,
 	BOWSER = 1,
@@ -93,7 +108,7 @@ enum class SOUNDS_CHARACTER : int
 };
 
 // menu sounds
-enum class SOUNDS_MENU : int
+enum class MenuSounds : int
 {
 	MENU_LOOP = 0,
 	TITLE_START = 1,
@@ -101,7 +116,7 @@ enum class SOUNDS_MENU : int
 };
 
 // misc sounds
-enum class SOUNDS_MISC : int
+enum class MiscSounds : int
 {
 	INTRO_MUSIC = 0,
 	PRE_COUNTDOWN = 1,

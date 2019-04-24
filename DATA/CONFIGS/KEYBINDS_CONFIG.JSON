@@ -246,5 +246,21 @@
     "Arcade_Code": 32,
     "Gamepad": "Start",
     "is_debug": false
+  },
+  "DEBUG_CAM_LOOK_LEFT": {
+    "Keyboard": "NumPad1",
+    "Keyboard_Code": 97,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
+  },
+  "DEBUG_CAM_LOOK_RIGHT": {
+    "Keyboard": "NumPad3",
+    "Keyboard_Code": 99,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "DISABLED",
+    "is_debug": true
   }
 }

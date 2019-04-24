@@ -77,12 +77,15 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	m_input_data.m_gamepad = std::make_unique<GamePad>();
 	m_input_data.m_keyboard = std::make_unique<Keyboard>();
 	m_input_data.m_mouse = std::make_unique<Mouse>();
+	m_camera_data.init();
 
 	//Pass out stuff to our service locator
 	Locator::setupID(&m_input_data);
 	Locator::setupDD(&m_device_data);
 	Locator::setupGSD(&m_gamestate_data);
 	Locator::setupAudio(&m_AM);
+	Locator::setupCamData(&m_camera_data);
+
 
 	//Setup itembox respawn time
 	ItemBoxConfig::respawn_time = m_game_config["itembox_respawn_time"];
