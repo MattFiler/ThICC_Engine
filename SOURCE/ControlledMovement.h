@@ -22,6 +22,9 @@ public:
 
 	void SetWaypoint(int _waypoint) { m_waypoint = _waypoint; };
 	int GetWaypoint() { return m_waypoint; };
+	
+	void SetMoveSpeed(float _newSpeed) { m_moveSpeed = _newSpeed; };
+	void SetTurnSpeed(float _newTurn) { m_turnSpeed = _newTurn; };
 
 private:
 	KeybindManager m_keybind;
@@ -49,6 +52,9 @@ private:
 	bool m_drifting = false;
 	bool m_startDrift = false;
 	bool m_endDrift = false;
+
+	float m_moveSpeed = 25;
+	float m_turnSpeed = 12.5f;
 
 	bool m_driftingRight = false;
 	float m_driftBoost = 300;

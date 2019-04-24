@@ -9,9 +9,12 @@ RedShell::RedShell() : Item(Locator::getItemData()->GetItemModelName(RED_SHELL))
 	m_mesh->SetDrag(0);
 	m_mesh->SetPhysicsOn(true);
 	m_mesh->setDampenWallReflect(false);
+	m_mesh->SetMaxSpeed(40);
 
 	m_maxImmunityTime = 0.5;
 	m_move = std::make_unique<ControlledMovement>(m_mesh, m_displayedMesh.get());
+	m_move->SetMoveSpeed(50);
+	m_move->SetTurnSpeed(50);
 }
 
 void RedShell::Tick()
