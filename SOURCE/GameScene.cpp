@@ -202,7 +202,7 @@ void GameScene::create3DObjects()
 		m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
-		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::ORBIT);
+		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::FOLLOW);
 		m_cam[i]->setAngle(180.0f);
 	}
 

@@ -343,7 +343,7 @@
       <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="CameraData.h">
-      <Filter>Engine Backend\Utilities</Filter>
+      <Filter>Engine Backend\Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
