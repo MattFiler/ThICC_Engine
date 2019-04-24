@@ -92,6 +92,31 @@ void GameScene::ExpensiveLoad() {
 	//Reset key presses
 	m_keybinds.Reset();
 
+	//Load current metalness config
+	std::string filepath = m_filepath.getFolder(GameFilepaths::MODEL) + map_info.model + "/REFLECTION.ThICC";
+	std::ifstream fin(filepath, std::ios::binary);
+
+	//Get number of materials in config
+	fin.seekg(0);
+	int number_of_materials = 0;
+	fin.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
+
+	//Go through config for number of materials - is this correct?
+	for (int i = 0; i < number_of_materials+1; i++) {
+		char data;
+		fin.read(&data, sizeof(bool));
+		bool choice = static_cast<bool>(data);
+		if (choice) {
+			DebugText::print("MATERIAL IS METALLIC");
+		}
+		else
+		{
+			DebugText::print("MATERIAL IS NOT METALLIC");
+		}
+		Locator::getRD()->current_metalness.push_back(choice);
+	}
+	DebugText::print("Loaded metal config for " + std::to_string(number_of_materials) + " materials.");
+
 	//Load the map's audio here using map_info's data
 }
 
@@ -127,6 +152,7 @@ void GameScene::ExpensiveUnload() {
 	final_lap = false;
 	finished = 0;
 	is_paused = false;
+	Locator::getRD()->current_metalness.clear();
 }
 
 /* Create all 2D objects for the scene */
@@ -240,6 +266,16 @@ void GameScene::Update(DX::StepTimer const& timer)
 	}
 	if (m_keybinds.keyReleased("pause")) {
 		is_paused = true;
+	}
+
+
+	if (Locator::getID()->m_keyboardTracker.pressed.N) {
+		Locator::getID()->TEST++;
+		DebugText::print(std::to_string(Locator::getID()->TEST));
+	}
+	if (Locator::getID()->m_keyboardTracker.pressed.B) {
+		Locator::getID()->TEST--;
+		DebugText::print(std::to_string(Locator::getID()->TEST));
 	}
 
 

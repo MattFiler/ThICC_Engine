@@ -41,20 +41,28 @@ void SDKMeshGO3D::Render()
 		//Load PBR data per PBREffect
 		{
 			/* 
-			As a proof of concept, I've currently applied radiance maps to both. This gives a really flat look.
-			TODO: enable per-object toggling of FLAT/GLOSSY (with glossy applying irradiance)
+			Continuing work on custom metal/non-metal render definitions.
+			Current only applies to track, but will be extended to all models.
 			*/
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(radiance_index);
 			auto diffuseDesc = m_radianceIBL->GetDesc();
-			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(radiance_index);
+			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(irradiance_index);
 
+			int i = 0;
 			for (auto& it : m_modelNormal)
 			{
 				auto pbr = dynamic_cast<PBREffect*>(it.get());
 				if (pbr)
 				{
-					//Set IBL textures
-					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+					if (i < Locator::getRD()->current_metalness.size() && Locator::getRD()->current_metalness.at(i)) { //wip
+						//Set IBL textures
+						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+					}
+					else
+					{
+						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, radianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+					}
+					i++;
 				}
 			}
 		}

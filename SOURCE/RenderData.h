@@ -76,4 +76,7 @@ struct ThICC_RenderData {
 	//Current cubemaps (set on map load)
 	std::wstring current_cubemap_radiance;
 	std::wstring current_cubemap_irradiance;
+
+	//Current metalness config for track
+	std::vector<bool> current_metalness;
 };

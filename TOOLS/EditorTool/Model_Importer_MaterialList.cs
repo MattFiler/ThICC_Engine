@@ -19,11 +19,12 @@ namespace EditorTool
         JObject model_material_config = new JObject();
         List<JToken> material_tokens = new List<JToken>();
         UsefulFunctions common_functions = new UsefulFunctions();
-        JToken extra_json = JToken.Parse("{}");
+        JToken extra_json;
         Model_Importer_Common importer_common;
         public Model_Importer_MaterialList(Model_Importer_Common _importer_conf)
         {
             importer_common = _importer_conf;
+            extra_json = JToken.Parse(importer_common.getExtraJson());
             model_material_config = JObject.Parse(File.ReadAllText(importer_common.fileName(importer_file.IMPORTER_CONFIG)));
             InitializeComponent();
         }
@@ -204,6 +205,32 @@ namespace EditorTool
 
             //------
 
+            //Create metal config
+            List<bool> metal_config = new List<bool>();
+            for (int i = 0; i < model_material_config.Count - 1; i++)
+            {
+                foreach (var this_material_config in model_material_config)
+                {
+                    if (model_material_config[this_material_config.Key]["ThICC_INDEX"].Value<int>() == i)
+                    {
+                        metal_config.Add(model_material_config[this_material_config.Key]["ThICC_METALLIC"].Value<bool>());
+                        break;
+                    }
+                }
+            }
+            
+            //Output metal config
+            using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.METALLIC_CONFIG), FileMode.Create)))
+            {
+                writer.Write(metal_config.Count - 1);
+                foreach (bool is_metal in metal_config)
+                {
+                    writer.Write(is_metal); 
+                }
+            }
+
+            //------
+
             //Make sure our MTL is uncommented in the OBJ
             int obj_index = 0;
             foreach (string line in obj_file)
@@ -219,7 +246,7 @@ namespace EditorTool
                 obj_index++;
             }
             File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
-
+            
             //------
 
             //Delete old DDS materials and convert new ones
@@ -317,7 +344,7 @@ namespace EditorTool
                     }
                     foreach (JToken data in model_blender_data["waypoints"])
                     {
-                        waypoint_array.Add(data["pos"]);
+                        waypoint_array.Add(data);
                     }
                     foreach (JToken data in model_blender_data["spawns"])
                     {

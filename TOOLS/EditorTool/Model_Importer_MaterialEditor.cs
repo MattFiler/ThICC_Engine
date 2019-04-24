@@ -41,13 +41,13 @@ namespace EditorTool
             //Name and material preview
             materialName.Text = material_config["newmtl"].Value<string>();
             common_functions.loadMaterialPreview(material_config, materialPreview, this_model_folder);
-            
+
             //Ambient Colour (RGB)
             common_functions.loadMaterialColourPreview(material_config, "Ka", ambientColour);
 
             //Diffuse Colour (RGB)
             common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour);
-            
+
             //Specular Colour (RGB)
             common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour);
 
@@ -64,7 +64,7 @@ namespace EditorTool
 
             //Specular on/off
             hasSpec.Checked = (material_config["illum"].Value<int>() == 2);
-            
+
             //Diffuse Texture
             diffuseMap.Text = material_config["map_Kd"].Value<string>();
 
@@ -146,6 +146,8 @@ namespace EditorTool
                 //Hide collision options for non-track models
                 collisionGroup.Visible = false;
             }
+            //Metallic
+            isMetallic.Checked = material_config["ThICC_METALLIC"].Value<bool>();
         }
 
         /* Collision selection */
@@ -282,6 +284,9 @@ namespace EditorTool
             material_config["ThICC_COLLISION"]["1"] = (inPlayableArea.Checked ? offTrack.Checked : false);
             material_config["ThICC_COLLISION"]["2"] = (inPlayableArea.Checked ? boostPad.Checked : false);
             material_config["ThICC_COLLISION"]["3"] = (inPlayableArea.Checked ? isWall.Checked : false);
+
+            //Metallic
+            material_config["ThICC_METALLIC"] = isMetallic.Checked;
 
             MessageBox.Show("Material edits saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             DialogResult = DialogResult.OK; 
