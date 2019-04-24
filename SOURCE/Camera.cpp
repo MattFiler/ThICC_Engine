@@ -50,7 +50,14 @@ void Camera::Tick()
 	float rot_lerp;
 	float pos_lerp;
 
-	if (cam_type != CameraType::DEBUG_CAM)
+	bool checker = true;
+
+#ifdef _DEBUG
+	checker = cam_type != CameraType::DEBUG_CAM;
+#endif // DEBUG
+
+
+	if (checker)
 	{
 		m_dpos = Locator::getCD()->camera_offsets[static_cast<int>(cam_type)];
 		orientation = m_targetObject ? m_targetObject->GetOri() : GetOri();

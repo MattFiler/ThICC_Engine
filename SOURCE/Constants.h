@@ -73,7 +73,9 @@ enum class CameraType : int
 	INDEPENDENT = 3,
 	ORBIT = 4,
 	CINEMATIC = 5,
+#ifdef _DEBUG
 	DEBUG_CAM = 6,
+#endif // DEBUG
 };
 
 
