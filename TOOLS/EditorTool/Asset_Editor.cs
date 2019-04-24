@@ -283,6 +283,8 @@ namespace EditorTool
                     File.WriteAllText("DATA/CONFIGS/LOCALISATION_INUSE.JSON", inuse_config.ToString(Formatting.Indented));
                     break;
                 case AssetType.CUBEMAP:
+                    Directory.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + "/IRRADIANCE", true);
+                    Directory.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + "/RADIANCE", true);
                     Directory.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name, true);
                     File.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + "_R.DDS");
                     File.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + "_IR.DDS");
