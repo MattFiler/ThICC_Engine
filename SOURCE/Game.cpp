@@ -4,6 +4,7 @@
 
 #include "MenuScene.h"
 #include "GameScene.h"
+#include "DebugScene.h"
 
 /* Perform initialisation */
 void ThICC_Game::Initialize() {
@@ -59,6 +60,7 @@ void ThICC_Game::Initialize() {
 
 	//Create the scenes
 	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
+	m_scene_manager.addScene(new DebugScene(), (int)Scenes::DEBUG_LIGHTINGTEST);
 
 	//Set our default scene
 	m_scene_manager.setCurrentScene(Scenes::MENUSCENE, true);
