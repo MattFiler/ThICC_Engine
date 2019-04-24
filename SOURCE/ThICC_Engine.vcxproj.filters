@@ -146,6 +146,7 @@
     <ClCompile Include="DebugScene.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="RedShell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -347,6 +348,7 @@
     <ClInclude Include="CameraData.h">
       <Filter>Engine Backend\Shared</Filter>
     </ClInclude>
+    <ClInclude Include="RedShell.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

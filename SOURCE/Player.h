@@ -17,6 +17,7 @@
 #include "CharacterInfo.h"
 #include "VehicleInfo.h"
 #include "LightningCloud.h"
+#include "RedShell.h"
 #include <functional>
 
 //=================================================================

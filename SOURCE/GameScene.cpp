@@ -845,6 +845,15 @@ Item* GameScene::CreateItem(ItemType type)
 		cloud->GetMesh()->getDebugCollider()->Load();
 		return cloud;
 	}
+	case RED_SHELL:
+	{
+		RedShell* redShell = new RedShell();
+		m_itemModels.push_back(redShell);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(redShell->GetMesh())->getDebugCollider());
+		redShell->GetMesh()->getDebugCollider()->Load();
+
+		return redShell;
+	}
 	default:
 		return nullptr;
 	}
