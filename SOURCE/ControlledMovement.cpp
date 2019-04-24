@@ -3,7 +3,7 @@
 #include "InputData.h"
 #include "GameStateData.h"
 
-ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh) : m_physModel(_physModel), m_animMesh(_animMesh)
+ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationController* _animMesh) : m_physModel(_physModel), m_animMesh(_animMesh)
 {
 }
 

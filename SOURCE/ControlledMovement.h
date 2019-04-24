@@ -7,7 +7,7 @@ class ControlledMovement
 {
 public:
 	ControlledMovement() = default;
-	ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh);
+	ControlledMovement(PhysModel* _physModel, AnimationController* _animMesh);
 
 	void Tick();
 	void SetGamepadActive(bool _flag) { m_controlsActive = _flag;};
@@ -33,7 +33,7 @@ private:
 
 
 	PhysModel* m_physModel = nullptr;
-	AnimationMesh* m_animMesh = nullptr;
+	AnimationController* m_animMesh = nullptr;
 	Vector3 m_targetAnimRotOffset = Vector3::Zero;
 
 	float m_acceleration = 0;

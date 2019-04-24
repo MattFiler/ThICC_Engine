@@ -310,6 +310,7 @@
   <ItemGroup>
     <ClInclude Include="AIScheduler.h" />
     <ClInclude Include="AnimationMesh.h" />
+    <ClInclude Include="AnimationModel.h" />
     <ClInclude Include="AssetComp.h" />
     <ClInclude Include="AssetCompPch.h" />
     <ClInclude Include="AudioManager.h" />
@@ -379,6 +380,7 @@
   <ItemGroup>
     <ClCompile Include="AIScheduler.cpp" />
     <ClCompile Include="AnimationMesh.cpp" />
+    <ClCompile Include="AnimationModel.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />
     <ClCompile Include="Bomb.cpp" />

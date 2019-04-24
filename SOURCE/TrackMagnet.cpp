@@ -10,26 +10,10 @@ TrackMagnet::TrackMagnet(std::string _filename) : PhysModel(_filename)
 	m_autoCalculateWolrd = false;
 	Vector3 scale = Vector3::Zero;
 	m_world.Decompose(scale, m_quatRot, m_pos);
-
-	for (int i = 0; i < 8; i++)
-	{
-		m_debugBoxes.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
-		m_debugBoxes.back()->SetScale(0.1f);
-		m_debugBoxes.back()->UpdateWorld();
-	}
-
 }
 
 void TrackMagnet::Render()
 {
-	for (SDKMeshGO3D* mesh : m_debugBoxes)
-	{
-		if (!mesh->IsLoaded())
-		{
-			mesh->Load();
-		}
-		mesh->Render();
-	}
 	SDKMeshGO3D::Render();
 }
 
@@ -192,30 +176,12 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 	Vector frontSide = (data.m_globalFrontBottomRight + sideOffset) - (data.m_globalFrontBottomLeft + sideOffset);
 	Vector backSide = (data.m_globalBackBottomRight + sideOffset) - (data.m_globalBackBottomLeft + sideOffset);
 
-	Vector cornerOffset = m_world.Up() * data.m_height*5;
+	Vector cornerOffset = m_world.Up() * data.m_height*2;
 
 	Vector frontLeft = data.m_globalFrontBottomLeft - (data.m_globalFrontTopLeft + cornerOffset);
 	Vector frontRight = data.m_globalFrontBottomRight - (data.m_globalFrontTopRight + cornerOffset);
 	Vector backLeft = data.m_globalBackBottomLeft - (data.m_globalBackTopLeft + cornerOffset);
 	Vector backRight = data.m_globalBackBottomRight - (data.m_globalBackTopRight + cornerOffset);
-
-	m_debugBoxes[0]->SetPos(data.m_globalFrontBottomLeft);
-	m_debugBoxes[1]->SetPos(data.m_globalFrontBottomRight);
-	m_debugBoxes[2]->SetPos(data.m_globalBackBottomLeft);
-	m_debugBoxes[3]->SetPos(data.m_globalBackBottomRight);
-	m_debugBoxes[4]->SetPos(data.m_globalFrontBottomLeft + (leftSide*0.5f));
-	m_debugBoxes[5]->SetPos(data.m_globalFrontBottomRight + (rightSide*0.5f));
-	m_debugBoxes[6]->SetPos(data.m_globalFrontBottomLeft + (frontSide*0.5f));
-	m_debugBoxes[7]->SetPos(data.m_globalBackBottomLeft + (backSide*0.5f));
-
-	m_debugBoxes[0]->UpdateWorld();
-	m_debugBoxes[1]->UpdateWorld();
-	m_debugBoxes[2]->UpdateWorld();
-	m_debugBoxes[3]->UpdateWorld();
-	m_debugBoxes[4]->UpdateWorld();
-	m_debugBoxes[5]->UpdateWorld();
-	m_debugBoxes[6]->UpdateWorld();
-	m_debugBoxes[7]->UpdateWorld();
 
 	Vector intersect = Vector::Zero;
 	MeshTri* wallTri = nullptr;

@@ -146,6 +146,7 @@
     <ClCompile Include="DebugScene.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -347,6 +348,7 @@
       <Filter>Engine Backend\Shared</Filter>
     </ClInclude>
     <ClInclude Include="LightningCloud.h" />
+    <ClInclude Include="AnimationModel.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

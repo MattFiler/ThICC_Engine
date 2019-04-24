@@ -35,6 +35,4 @@ private:
 	MeshTri* tri = nullptr;
 
 	bool m_dampenWallReflect = true;
-
-	std::vector<SDKMeshGO3D*> m_debugBoxes;
 };

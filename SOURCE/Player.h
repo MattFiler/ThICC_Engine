@@ -127,7 +127,7 @@ private:
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;
 
-	std::unique_ptr<AnimationMesh> m_animationMesh = nullptr;
+	std::unique_ptr<AnimationController> m_animationMesh = nullptr;
 
 	std::queue<Matrix> m_posHistory;
 	float m_posHistoryInterval = 0.1f;
