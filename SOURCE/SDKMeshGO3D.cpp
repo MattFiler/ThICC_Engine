@@ -40,9 +40,13 @@ void SDKMeshGO3D::Render()
 
 		//Load PBR data per PBREffect
 		{
+			/* 
+			As a proof of concept, I've currently applied radiance maps to both. This gives a really flat look.
+			TODO: enable per-object toggling of FLAT/GLOSSY (with glossy applying irradiance)
+			*/
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(radiance_index);
 			auto diffuseDesc = m_radianceIBL->GetDesc();
-			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(irradiance_index);
+			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(radiance_index);
 
 			for (auto& it : m_modelNormal)
 			{
