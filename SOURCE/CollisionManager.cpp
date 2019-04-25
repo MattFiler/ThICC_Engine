@@ -50,7 +50,7 @@ void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _ph
 void CollisionManager::ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox)
 {
 	dynamic_cast<ItemBox*>(_itemBox)->hasCollided(dynamic_cast<Player*>(_player));
-	Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::ITEM_BOX_HIT);
+	Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::ITEM_BOX_HIT);
 }
 
 void CollisionManager::ExplosionCollision(PhysModel *& _player, PhysModel *& _explosion)
@@ -96,6 +96,18 @@ void CollisionManager::PlayerCollisions(PhysModel*& _player1, PhysModel*& _playe
 
 		_player1->setVelocity(_player1->getVelocity() - impulse * (1.0f / _player1->getMass()));
 		_player2->setVelocity(_player2->getVelocity() + impulse * (1.0f / _player2->getMass()));
+
+		LightningCloudCollision(player2, player1);
+	}
+}
+
+void CollisionManager::LightningCloudCollision(Player * player2, Player * player1)
+{
+	LightningCloud* cloud = player2->GetLightningCloud();
+	if (cloud)
+	{
+		player1->SpawnItems(LIGHTNING_CLOUD);
+		player1->GetLightningCloud()->SetElapsedStrikeTime(cloud->GetElapsedStrikeTime());
 	}
 }
 

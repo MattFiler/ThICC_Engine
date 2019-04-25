@@ -1,0 +1,21 @@
+### CREATED BY THE ThICC TOOLKIT ###
+
+newmtl m_ItemGesso
+Ns 96.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd itemgesso_alb.png
+Tr 0.000000
+map_Ks itemgesso_spm.png
+map_Kn itemgesso_nrm.png
+norm itemgesso_nrm.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+

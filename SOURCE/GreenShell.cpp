@@ -41,6 +41,9 @@ void GreenShell::Use(Player * player, bool _altUse)
 
 void GreenShell::Tick()
 {
-	m_displayedMesh->Spin(1, 0.7);
+	if (m_itemUsed)
+	{
+		m_displayedMesh->Spin(1, 0.7);
+	}
 	Item::Tick();
 }

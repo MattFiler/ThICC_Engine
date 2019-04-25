@@ -25,7 +25,6 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 
 	// Don't render this mesh, render a second one instead
 	m_shouldRender = false;
-	m_animationMesh = std::make_unique<AnimationMesh>(_character.model);
 
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
@@ -48,8 +47,8 @@ void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
 	json m_model_config_vehicle;
 	m_model_config_vehicle << i;
 
-	AnimationMesh* old_animationMesh = m_animationMesh.release();
-	m_animationMesh = std::make_unique<AnimationMesh>(_vehicle.model);
+	m_animationMesh = std::make_unique<AnimationController>();
+	m_animationMesh->AddModel("vehicle", _vehicle.model, Vector::Zero);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
 	std::ifstream x(m_filepath.generateConfigFilepath(_character.model, m_filepath.MODEL));
@@ -58,7 +57,9 @@ void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
 
 	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character.model);
 	new_model->SetScale(m_model_config_character["modelscale"]);
-	m_animationMesh->AddModel(new_model, Vector3(0,0,0));
+	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
+	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
+	m_animationMesh->SwitchModelSet("default");
 
 	m_animationMesh->Load();
 
@@ -69,7 +70,7 @@ void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
 }
 
 
-void Player::setActiveItem(ItemType _item) {
+void Player::SetActiveItem(ItemType _item) {
 	if (m_InventoryItem == _item) {
 		active_item = _item;
 		m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
@@ -87,24 +88,44 @@ void Player::setActiveItem(ItemType _item) {
 	}
 };
 
-void Player::setItemInInventory(ItemType _item) {
+void Player::SetItemInInventory(ItemType _item) {
 	if (m_InventoryItem == ItemType::NONE) {
 		m_InventoryItem = _item;
 		m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
 		m_imgItem->SetPos(m_itemPos);
 		DebugText::print("PLAYER " + std::to_string(m_playerID) + " HAS ACQUIRED ITEM: " + std::to_string(_item));
+
+		//Lightning cloud spawns as soon as it gets picked up
+		if (m_InventoryItem == LIGHTNING_CLOUD)
+		{
+			SpawnItems(LIGHTNING_CLOUD);
+		}
 	}
+}
+
+LightningCloud* Player::GetLightningCloud()
+{
+	for (Item* item : m_floatingItems)
+	{
+		LightningCloud* cloud = dynamic_cast<LightningCloud*>(item);
+		if (cloud)
+		{
+			return cloud;
+		}
+	}
+
+	return nullptr;
 }
 
 void Player::Render()
 {
 	m_animationMesh->Render();
-	SDKMeshGO3D::Render();
+	TrackMagnet::Render();
 
-	if (m_ai)
+	/*if (m_ai)
 	{
 		m_ai->DebugRender();
-	}
+	}*/
 }
 
 
@@ -119,6 +140,7 @@ void Player::Tick()
 		CheckUseItem();
 	}
 	
+	PositionFloatingItems();
 
 	// Debug code to save/load the players game state
 	if (m_keybind.keyReleased("debug save position"))
@@ -156,6 +178,16 @@ void Player::Tick()
 
 	//apply my base behaviour
 	TrackMagnet::Tick();
+}
+
+void Player::PositionFloatingItems()
+{
+	for (int i = 0; i < m_floatingItems.size(); i++)
+	{
+		m_floatingItems[i]->GetMesh()->SetWorld(m_world);
+		m_floatingItems[i]->GetMesh()->AddPos(m_world.Up() * 2);
+		m_floatingItems[i]->GetMesh()->UpdateWorld();
+	}
 }
 
 void Player::CheckUseItem()
@@ -215,7 +247,7 @@ void Player::TrailItems()
 			{
 				m_trailingItems.erase(m_trailingItems.begin() + i);
 				if (m_InventoryItem == MUSHROOM_UNLIMITED) {
-					setActiveItem(MUSHROOM_UNLIMITED);
+					SetActiveItem(MUSHROOM_UNLIMITED);
 					active_item = NONE;
 				}
 				continue;
@@ -259,7 +291,7 @@ void Player::SpawnItems(ItemType type)
 	//Triple mushrooms and Golden Mushroom still in inventory after use
 	if (type != MUSHROOM_3X && type != MUSHROOM_UNLIMITED)
 	{
-		setActiveItem(type);
+		SetActiveItem(type);
 	}
 
 	switch (type)
@@ -349,6 +381,7 @@ void Player::SpawnItems(ItemType type)
 			FakeItemBox* box = static_cast<FakeItemBox*>(CreateItem(FAKE_BOX));
 			m_trailingItems.push_back(box);
 			TrailItems();
+			break;
 		}
 
 		case MUSHROOM_UNLIMITED:
@@ -372,6 +405,23 @@ void Player::SpawnItems(ItemType type)
 			GiantMushroom* mushroom = static_cast<GiantMushroom*>(CreateItem(MUSHROOM_GIANT));
 			mushroom->Use(this, false);
 		}
+
+		case LIGHTNING_CLOUD:
+		{
+			LightningCloud* cloud = static_cast<LightningCloud*>(CreateItem(LIGHTNING_CLOUD));
+			m_floatingItems.push_back(cloud);
+			cloud->Use(this, false);
+			break;
+		}
+
+		case RED_SHELL:
+		{
+			RedShell* shell = static_cast<RedShell*>(CreateItem(RED_SHELL));
+			m_trailingItems.push_back(shell);
+			TrailItems();
+			break;
+		}
+
 		default:
 			break;
 	}
@@ -402,7 +452,7 @@ void Player::ReleaseItem()
 
 			if (m_InventoryItem == MUSHROOM_3X)
 			{
-				setActiveItem(MUSHROOM_3X);
+				SetActiveItem(MUSHROOM_3X);
 				active_item = NONE;
 			}
 		}

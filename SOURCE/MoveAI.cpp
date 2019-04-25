@@ -45,10 +45,14 @@ void MoveAI::Update()
 	if (m_routeIndex < m_route.size()-1 && !m_route.empty())
 	{
 		// If close to the current waypoint OR the the Karts current position is closer to the next waypoint than the previous waypoint is
-		if (Vector3::Distance(m_model->GetPos(), m_route[m_routeIndex]) <= m_wayPointHitRadius ||
-			Vector3::Distance(m_model->GetPos(), m_route[m_routeIndex+1]) < Vector3::Distance(m_route[m_routeIndex], m_route[m_routeIndex + 1]))
+		if (Vector3::Distance(m_model->GetPos(), m_route[m_routeIndex].position) <= m_wayPointHitRadius ||
+			Vector3::Distance(m_model->GetPos(), m_route[m_routeIndex+1].position) < Vector3::Distance(m_route[m_routeIndex].position, m_route[m_routeIndex + 1].position))
 		{
 			m_routeIndex++;
+			if (m_autoUpdateWaypoints)
+			{
+				m_move->SetWaypoint(m_route[m_routeIndex].waypoint);
+			}
 			// This shouldn't happen often, but if we reach the end of the waypoints don't continue
 			if (m_routeIndex == m_route.size())
 			{
@@ -70,10 +74,10 @@ void MoveAI::Update()
 		return;
 	}
 	m_move->setAcceleration(1);
-	Vector3 normDiff = m_route[m_routeIndex] - m_model->GetPos();
+	Vector3 normDiff = m_route[m_routeIndex].position - m_model->GetPos();
 	normDiff.Normalize();
 	
-	// If the currentl veloicty is too far off the driving line
+	// If the current veloicty is too far off the driving line
 	float dist = Vector3::Distance(normVelo, normDiff);
 	DebugText::print(std::to_string(dist));
 	if (dist  > m_lineLeeway)
@@ -118,7 +122,7 @@ void MoveAI::RecalculateLine(Track* _track)
 	{
 		// If no route is found this is probably a jump so head to the next waypoint
 		m_route.clear();
-		m_route.push_back(_track->getWaypointMiddle(m_waypointPos));
+		m_route.push_back(RouteNode(_track->getWaypointMiddle(m_waypointPos), m_move->GetWaypoint()));
 	}
 
 	if (m_route.size() < 3)
@@ -126,13 +130,13 @@ void MoveAI::RecalculateLine(Track* _track)
 		return;
 	}
 	// Loop through the route and remove nodes that are roughly on the same line
-	Vector3 previous_direction = m_route[1] - m_route[0];
+	Vector3 previous_direction = m_route[1].position - m_route[0].position;
 	Vector3 total_deflection = Vector3::Zero;
-	std::vector<Vector> condensedRoute;
+	std::vector<RouteNode> condensedRoute;
 	for (int i = 1; i < m_route.size()-1; i++)
 	{
 		// Find the deflection from the previous direction and add it to the total
-		Vector3 new_direction = m_route[i+1] - m_route[i];
+		Vector3 new_direction = m_route[i+1].position - m_route[i].position;
 		total_deflection += new_direction - previous_direction;
 		// If the acculated deflection gets too high
 		if (total_deflection.Length() > m_deflectionLimit)
@@ -141,6 +145,10 @@ void MoveAI::RecalculateLine(Track* _track)
 			total_deflection = Vector3::Zero;
 			condensedRoute.push_back(m_route[i]);
 			previous_direction = new_direction;
+			if (condensedRoute.size() == 1 && m_autoUpdateWaypoints)
+			{
+				m_move->SetWaypoint(m_route[i].waypoint);
+			}
 		}
 	}
 	
@@ -148,7 +156,7 @@ void MoveAI::RecalculateLine(Track* _track)
 	for (int i = 0; i < m_route.size(); i++)
 	{
 		m_debugRaceLine[i]->SetShouldRender(true);
-		m_debugRaceLine[i]->SetPos(m_route[i]);
+		m_debugRaceLine[i]->SetPos(m_route[i].position);
 		m_debugRaceLine[i]->UpdateWorld();
 	}
 	for (int i = m_route.size(); i < m_debugRaceLine.size(); i++)
@@ -230,7 +238,7 @@ bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _d
 			_direction = _world.Forward();
 			_iterations++;
 			_allowTurn = true;
-			m_route.push_back(_pos);
+			m_route.push_back(RouteNode(_pos, _waypointIndex));
 		}
 	}
 	return true;
@@ -266,12 +274,12 @@ int MoveAI::FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorl
 
 	for (int i = 0; i < _steps; i++)
 	{
-		if (_track->DoesLineIntersect(_endWorld.Down()*(m_model->data.m_height * 10), _endPos + (_endWorld.Up() * (m_model->data.m_height * 2)), intersect, tri, 0.4f))
+		if (_track->DoesLineIntersect(_endWorld.Down()*(m_model->data.m_height * 10), _endPos + (_endWorld.Up() * (m_model->data.m_height * 2)), intersect, tri, 0.4f,0))
 		{
 			// If there is a valid collision, find the new world ahead on the track
 			Vector secondIntersect;
 			MeshTri* tri2 = nullptr;
-			tri->DoesLineIntersect(_endWorld.Down() * (m_model->data.m_height * 10), _endPos + _direction + (_endWorld.Up() * (m_model->data.m_height * 2)), secondIntersect, tri2, 0.4f);
+			tri->DoesLineIntersect(_endWorld.Down() * (m_model->data.m_height * 10), _endPos + _direction + (_endWorld.Up() * (m_model->data.m_height * 2)), secondIntersect, tri2, 0.4f,0);
 
 			_endWorld = Matrix::CreateWorld(secondIntersect, secondIntersect - intersect, tri->m_plane.Normal());
 			_direction = _endWorld.Forward() * m_aiPathStep;

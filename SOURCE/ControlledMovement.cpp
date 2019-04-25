@@ -3,7 +3,7 @@
 #include "InputData.h"
 #include "GameStateData.h"
 
-ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh) : m_physModel(_physModel), m_animMesh(_animMesh)
+ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationController* _animMesh) : m_physModel(_physModel), m_animMesh(_animMesh)
 {
 }
 
@@ -47,7 +47,7 @@ void ControlledMovement::GetControllerInput()
 		{
 			if (m_drifting)
 			{
-				m_endDrift;
+				m_endDrift = true;
 			}
 		}
 
@@ -78,6 +78,10 @@ void ControlledMovement::GetControllerInput()
 		}
 		else
 		{
+			if (!m_drifting)
+			{
+				m_isTurning = false;
+			}
 			m_right = false;
 			m_left = false;
 		}
@@ -87,8 +91,8 @@ void ControlledMovement::GetControllerInput()
 
 void ControlledMovement::ProcessInputFlags()
 {
-	Vector3 forwardMove = 25.0f * m_physModel->GetWorld().Forward();
-	Vector3 rightMove = 12.5f * m_physModel->GetWorld().Right();
+	Vector3 forwardMove = m_moveSpeed * m_physModel->GetWorld().Forward();
+	Vector3 rightMove = m_turnSpeed * m_physModel->GetWorld().Right();
 	Vector3 forwardComponent = Vector3::Zero;
 	Vector3 turnComponent = Vector3::Zero;
 	float driftMultiplier = 1;

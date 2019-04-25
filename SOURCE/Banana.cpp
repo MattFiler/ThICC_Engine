@@ -19,7 +19,7 @@ void Banana::Use(Player * _player, bool _altUse)
 	{
 		//Positions the banan
 		m_mesh->SetWorld(_player->GetWorld());
-		m_mesh->AddPos(_player->GetWorld().Right() * 2 + _player->GetWorld().Up() * 2);
+		m_mesh->AddPos(_player->GetWorld().Right() * 2 + _player->GetWorld().Up() * 3);
 		m_mesh->UpdateWorld();
 
 		//Yeets said banan

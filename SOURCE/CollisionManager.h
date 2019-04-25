@@ -20,6 +20,7 @@ private:
 	static bool CheckItemImmunity(Item* _item1, Item* _item2);
 
 	static void PlayerCollisions(PhysModel*& _player1, PhysModel*& _player2, Vector3 _collisionNormal);
+	static void LightningCloudCollision(Player * player2, Player * player1);
 	static void ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox);
 	static void ExplosionCollision(PhysModel*& _player, PhysModel*& _explosion);
 

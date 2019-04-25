@@ -16,7 +16,7 @@ ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("ITEM_BOX") {
 
 void ItemBox::hasCollided(Player* collided_player) {
 	setVisible(false);
-	collided_player->setItemInInventory(Locator::getItemData()->GetRandomItem(collided_player->GetRanking()));
+	collided_player->SetItemInInventory(Locator::getItemData()->GetRandomItem(collided_player->GetRanking()));
 }
 
 void ItemBox::Tick() {
