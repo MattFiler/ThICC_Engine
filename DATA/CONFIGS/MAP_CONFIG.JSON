@@ -1,21 +1,10 @@
 {
-  "RAINBOW ROAD": {
-    "friendly_name": "MAP_RBR",
-    "menu_sprite": "RBR PREVIEW",
-    "model": "RAINBOWROAD",
-    "cubemap": "SUNSUBMIXER",
-    "audio": {
-      "background_start": "MKS START MUSIC",
-      "background": "MKS MAIN MUSIC",
-      "final_lap_start": "MKS FINAL LAP START",
-      "final_lap": "MKS FINAL LAP LOOP"
-    }
-  },
   "DRAGON DRIFTWAY": {
     "friendly_name": "MAP_DRIFTWAY",
     "menu_sprite": "DRAGON_DRIFTWAY_PREVIEW",
     "model": "DRAGON_DRIFTWAY",
     "cubemap": "SUNSUBMIXER",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",
@@ -28,6 +17,7 @@
     "menu_sprite": "MARIO KART STADIUM PREVIEW",
     "model": "MARIOKARTSTADIUM",
     "cubemap": "SUNSUBMIXER",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",

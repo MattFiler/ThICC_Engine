@@ -283,6 +283,8 @@ namespace EditorTool
                     File.WriteAllText("DATA/CONFIGS/LOCALISATION_INUSE.JSON", inuse_config.ToString(Formatting.Indented));
                     break;
                 case AssetType.CUBEMAP:
+                    Directory.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + "/IRRADIANCE", true);
+                    Directory.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + "/RADIANCE", true);
                     Directory.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name, true);
                     File.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + "_R.DDS");
                     File.Delete(function_libary.getFolder(AssetType.CUBEMAP) + selected_file_name + "_IR.DDS");
@@ -442,7 +444,7 @@ namespace EditorTool
                     common_importer.setEditMode(true);
 
                     //Load editor
-                    Model_Importer_MaterialList modelEditor = new Model_Importer_MaterialList(common_importer);
+                    Model_Importer_MaterialList modelEditor = new Model_Importer_MaterialList(common_importer, true);
                     modelEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
                     modelEditor.Show();
                     break;

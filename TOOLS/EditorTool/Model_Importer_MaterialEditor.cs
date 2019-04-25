@@ -26,6 +26,7 @@ namespace EditorTool
         UsefulFunctions common_functions = new UsefulFunctions();
         string this_model_folder;
         ModelType model_type;
+        string path_to_rma = "";
         int[] default_rma_vals = { 0, 0, 0 };
         public Model_Importer_MaterialEditor(JToken _config, ModelType _type, string _folder)
         {
@@ -40,13 +41,13 @@ namespace EditorTool
             //Name and material preview
             materialName.Text = material_config["newmtl"].Value<string>();
             common_functions.loadMaterialPreview(material_config, materialPreview, this_model_folder);
-            
+
             //Ambient Colour (RGB)
             common_functions.loadMaterialColourPreview(material_config, "Ka", ambientColour);
 
             //Diffuse Colour (RGB)
             common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour);
-            
+
             //Specular Colour (RGB)
             common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour);
 
@@ -54,16 +55,16 @@ namespace EditorTool
             common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour);
 
             //Transparency (1 = completely invisible)
-            transparencySlider.Value = Convert.ToInt32(material_config["Tr"].Value<float>() * 10);
+            transparencySlider.Value = Convert.ToInt32(Convert.ToSingle(material_config["Tr"].Value<string>()) * 10);
             transparencyValue.Text = sliderToString(transparencySlider, 10);
 
             //Shininess (0-1000)
-            specExSlider.Value = Convert.ToInt32(material_config["Ns"].Value<float>());
+            specExSlider.Value = Convert.ToInt32(Convert.ToSingle(material_config["Ns"].Value<string>()));
             specExValue.Text = sliderToString(specExSlider);
 
             //Specular on/off
-            hasSpec.Checked = (material_config["illum"].Value<int>() == 2);
-            
+            hasSpec.Checked = (material_config["illum"].Value<string>() == "2");
+
             //Diffuse Texture
             diffuseMap.Text = material_config["map_Kd"].Value<string>();
 
@@ -97,7 +98,7 @@ namespace EditorTool
             }
 
             //RMA values
-            string path_to_rma = material_config["map_RMA"].Value<string>();
+            path_to_rma = material_config["map_RMA"].Value<string>();
             if (path_to_rma == "")
             {
                 path_to_rma = material_config["map_occlusionRoughnessMetallic"].Value<string>();
@@ -145,6 +146,8 @@ namespace EditorTool
                 //Hide collision options for non-track models
                 collisionGroup.Visible = false;
             }
+            //Metallic
+            isMetallic.Checked = material_config["ThICC_METALLIC"].Value<bool>();
         }
 
         /* Collision selection */
@@ -239,7 +242,7 @@ namespace EditorTool
             /* ^ this is now done later to save performance */
 
             //Transparency (1 = completely invisible)
-            material_config["Tr"] = (transparencySlider.Value / 10).ToString("0.000000");
+            material_config["Tr"] = (Convert.ToSingle(transparencySlider.Value) / 10.0f).ToString("0.000000");
 
             //Shininess (0-1000)
             material_config["Ns"] = specExSlider.Value.ToString("0.000000");
@@ -266,7 +269,7 @@ namespace EditorTool
             copyNewMat(emissiveMap.Text);
 
             //RMA Texture
-            string rma = "rma_placeholder.png";
+            string rma = path_to_rma;
             if (metalnessSlider.Value != default_rma_vals[0] || 
                 ambientocclusionSlider.Value != default_rma_vals[2] || 
                 roughnessSlider.Value != default_rma_vals[1])
@@ -282,6 +285,9 @@ namespace EditorTool
             material_config["ThICC_COLLISION"]["2"] = (inPlayableArea.Checked ? boostPad.Checked : false);
             material_config["ThICC_COLLISION"]["3"] = (inPlayableArea.Checked ? isWall.Checked : false);
 
+            //Metallic
+            material_config["ThICC_METALLIC"] = isMetallic.Checked;
+
             MessageBox.Show("Material edits saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             DialogResult = DialogResult.OK; 
             this.Close();
@@ -296,7 +302,7 @@ namespace EditorTool
         /* Colour box to JSON data */
         private void colourToJSON(string key, PictureBox colour)
         {
-            material_config[key] = (colour.BackColor.R/255).ToString("0.000000") + " " + (colour.BackColor.G/255).ToString("0.000000") + " " + (colour.BackColor.B/255).ToString("0.000000");
+            material_config[key] = (Convert.ToSingle(colour.BackColor.R) / 255.0f).ToString("0.000000") + " " + (Convert.ToSingle(colour.BackColor.G) / 255.0f).ToString("0.000000") + " " + (Convert.ToSingle(colour.BackColor.B) / 255.0f).ToString("0.000000");
         }
         
         /* Copy new material to our model's directory */
@@ -317,8 +323,13 @@ namespace EditorTool
         {
             Bitmap temp_rma = new Bitmap(1, 1);
             temp_rma.SetPixel(0, 0, Color.FromArgb(255, ambientocclusionSlider.Value, roughnessSlider.Value, metalnessSlider.Value));
-            temp_rma.Save(this_model_folder + materialName.Text.Replace(' ', '_') + "_occlusionRoughnessMetallic.png", ImageFormat.Png);
-            return materialName.Text.Replace(' ', '_') + "_occlusionRoughnessMetallic.png";
+            string rma_mat = materialName.Text.Replace(' ', '_') + "_occlusionRoughnessMetallic.png";
+            if (File.Exists(this_model_folder + rma_mat))
+            {
+                File.Delete(this_model_folder + rma_mat);
+            }
+            temp_rma.Save(this_model_folder + rma_mat, ImageFormat.Png);
+            return rma_mat;
         }
 
 

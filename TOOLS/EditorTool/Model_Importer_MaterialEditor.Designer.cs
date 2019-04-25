@@ -36,6 +36,7 @@
             this.transparencySlider = new System.Windows.Forms.TrackBar();
             this.inPlayableArea = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.isMetallic = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.collisionGroup = new System.Windows.Forms.GroupBox();
             this.isWall = new System.Windows.Forms.RadioButton();
@@ -164,6 +165,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.isMetallic);
             this.groupBox1.Controls.Add(this.label15);
             this.groupBox1.Controls.Add(this.collisionGroup);
             this.groupBox1.Controls.Add(this.label4);
@@ -182,6 +184,16 @@
             this.groupBox1.TabIndex = 25;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Properties";
+            // 
+            // isMetallic
+            // 
+            this.isMetallic.AutoSize = true;
+            this.isMetallic.Location = new System.Drawing.Point(119, 201);
+            this.isMetallic.Name = "isMetallic";
+            this.isMetallic.Size = new System.Drawing.Size(73, 17);
+            this.isMetallic.TabIndex = 35;
+            this.isMetallic.Text = "Is Metallic";
+            this.isMetallic.UseVisualStyleBackColor = true;
             // 
             // label15
             // 
@@ -274,9 +286,9 @@
             this.hasSpec.AutoSize = true;
             this.hasSpec.Location = new System.Drawing.Point(9, 201);
             this.hasSpec.Name = "hasSpec";
-            this.hasSpec.Size = new System.Drawing.Size(88, 17);
+            this.hasSpec.Size = new System.Drawing.Size(104, 17);
             this.hasSpec.TabIndex = 34;
-            this.hasSpec.Text = "Enable Gloss";
+            this.hasSpec.Text = "Enable Specular";
             this.hasSpec.UseVisualStyleBackColor = true;
             // 
             // label6
@@ -285,9 +297,9 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(6, 230);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(60, 13);
+            this.label6.Size = new System.Drawing.Size(49, 13);
             this.label6.TabIndex = 18;
-            this.label6.Text = "Glossyness";
+            this.label6.Text = "Specular";
             // 
             // specExValue
             // 
@@ -777,5 +789,6 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.CheckBox isMetallic;
     }
 }

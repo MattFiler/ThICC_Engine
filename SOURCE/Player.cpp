@@ -17,7 +17,7 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 	SetPhysicsOn(true);
 	m_playerID = _playerID;
 	m_textRanking = new Text2D(std::to_string(m_ranking));
-	m_textRanking->SetScale(0.1f * Vector2::One);
+	//m_textRanking->SetScale(0.1f * Vector2::One);
 	m_textLap = new Text2D(std::to_string(m_lap) + "/3");
 	m_textCountdown = new Text2D("3");
 	m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
@@ -423,8 +423,7 @@ void Player::setGamePad(bool _state)
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);
 		Locator::getAIScheduler()->AddAI(m_ai.get());
-	}
-	*/
+	}*/
 	
 	// TEST CODE //
 }

@@ -62,6 +62,7 @@ void GameScene::ExpensiveLoad() {
 	//Set cubemaps
 	Locator::getRD()->current_cubemap_radiance = map_info.cubemap_radiance;
 	Locator::getRD()->current_cubemap_irradiance = map_info.cubemap_irradiance;
+	Locator::getRD()->current_cubemap_skybox = map_info.cubemap_skybox;
 
 	//Update characters
 	for (int i = 0; i < game_config["player_count"]; i++)
@@ -89,6 +90,14 @@ void GameScene::ExpensiveLoad() {
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
 
+	//Reset key presses
+	m_keybinds.Reset();
+
+	//Load skybox
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		Locator::getRD()->skybox[i]->Load();
+	}
+
 	//Load the map's audio here using map_info's data
 }
 
@@ -110,10 +119,10 @@ void GameScene::ExpensiveUnload() {
 	for (int i = 0; i < game_config["player_count"]; i++) {
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		m_cam[i]->Reset();
-		m_cam[i]->SetBehav(Camera::BEHAVIOUR::RACE_START);
+		m_cam[i]->SetType(CameraType::ORBIT);
 	}
 	cine_cam->Reset();
-	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
+	cine_cam->SetType(CameraType::CINEMATIC);
 
 	//We'll probably need to reset more stuff here, like race timers, etc
 	timeout = 12.f;
@@ -124,6 +133,11 @@ void GameScene::ExpensiveUnload() {
 	final_lap = false;
 	finished = 0;
 	is_paused = false;
+
+	//Unload skybox
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		Locator::getRD()->skybox[i]->Reset();
+	}
 }
 
 /* Create all 2D objects for the scene */
@@ -202,13 +216,13 @@ void GameScene::create3DObjects()
 		m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
-		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, player[i], Vector3(0.0f, 3.0f, 10.0f));
-		m_cam[i]->SetBehav(Camera::BEHAVIOUR::RACE_START);
+		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::FOLLOW);
+		m_cam[i]->setAngle(180.0f);
 	}
 
 	//Cinematic cam
-	cine_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, 1.0f, 2000.0f, nullptr, Vector3(0.0f, 3.0f, 10.0f));
-	cine_cam->SetBehav(Camera::BEHAVIOUR::CINEMATIC);
+	cine_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), nullptr, CameraType::CINEMATIC);
+	cine_cam->SetType(CameraType::CINEMATIC);
 }
 
 /* Push objects back to their associated arrays */
@@ -239,13 +253,18 @@ void GameScene::Update(DX::StepTimer const& timer)
 		is_paused = true;
 	}
 
+	if (Locator::getID()->m_keyboardTracker.pressed.N) {
+		Locator::getID()->TEST++;
+		DebugText::print(std::to_string(Locator::getID()->TEST));
+	}
+	if (Locator::getID()->m_keyboardTracker.pressed.B) {
+		Locator::getID()->TEST--;
+		DebugText::print(std::to_string(Locator::getID()->TEST));
+	}
 
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
-
 	Locator::getAIScheduler()->Update();
-
-
 
 	if (finished == 4)
 	{
@@ -267,9 +286,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			timeout -= Locator::getGSD()->m_dt;
 			cine_cam->Tick();
+			Locator::getRD()->skybox[0]->Tick(cine_cam);
 			if (timeout <= Locator::getGSD()->m_dt + 0.1) {
 				for (int i = 0; i < game_config["player_count"]; ++i) {
-					m_cam[i]->Tick();
+					m_cam[i]->Tick(); 
+					Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 				}
 			}
 		}
@@ -277,6 +298,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			for (int i = 0; i < game_config["player_count"]; ++i) {
 				m_cam[i]->Tick();
+				Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
@@ -293,10 +315,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case CAM_OPEN:
 		for (int i = 0; i < game_config["player_count"]; ++i) {
 			m_cam[i]->Tick();
+			Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 		}
 		cine_cam->Tick();
 
-		if (m_cam[game_config["player_count"]-1]->GetBehav() == Camera::BEHAVIOUR::FOLLOW)
+		if (m_cam[game_config["player_count"]-1]->GetType() == CameraType::FOLLOW)
 		{
 			Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN)->SetVolume(0.7f);
 			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN);
@@ -331,6 +354,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case PLAY:
 		for (int i = 0; i < game_config["player_count"]; ++i) {
 			m_cam[i]->Tick();
+			Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 		}
 
 		timeout -= Locator::getGSD()->m_dt;
@@ -363,21 +387,22 @@ void GameScene::Update(DX::StepTimer const& timer)
 	}
 	if (m_keybinds.keyReleased("toggle orbit cam"))
 	{
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::INDEPENDENT);
+		m_cam[0]->SetType(CameraType::INDEPENDENT);
 	}
 	if (m_keybinds.keyReleased("toggle lerp cam"))
 	{
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
+		m_cam[0]->SetType(CameraType::FOLLOW);
 	}
+#ifdef _DEBUG
 	if (m_keybinds.keyReleased("toggle debug cam"))
 	{
-		if (m_cam[0]->GetBehav() == Camera::BEHAVIOUR::DEBUG_CAM) {
-			m_cam[0]->SetBehav(Camera::BEHAVIOUR::FOLLOW);
+		if (m_cam[0]->GetType() == CameraType::DEBUG_CAM) {
+			m_cam[0]->SetType(CameraType::FOLLOW);
 			return;
 		}
-		m_cam[0]->SetBehav(Camera::BEHAVIOUR::DEBUG_CAM);
+		m_cam[0]->SetType(CameraType::DEBUG_CAM);
 	}
-
+#endif
 
 	// sets the players waypoint
 	SetPlayersWaypoint();
@@ -691,7 +716,7 @@ void GameScene::SetPlayersWaypoint()
 				{
 					player[i]->SetFinished(true);
 					player[i]->GetFinishOrder()->SetText(std::to_string(player[i]->GetRanking()) + player[i]->GetOrderIndicator()[player[i]->GetRanking() - 1]);
-					m_cam[i]->SetBehav(Camera::BEHAVIOUR::ORBIT);
+					m_cam[i]->SetType(CameraType::ORBIT);
 					player[i]->setGamePad(false);
 					finished++;
 				}

@@ -39,6 +39,7 @@ bool MenuScene::Load()
 void MenuScene::ExpensiveLoad() {
 	m_menu_state = menu_states::SPLASH;
 	m_timer = 0.0f;
+	m_keybinds.Reset();
 }
 
 /* Create all 2D objects for the scene */
@@ -119,6 +120,14 @@ void MenuScene::create2DObjects()
 /* Update the scene */
 void MenuScene::Update(DX::StepTimer const& timer)
 {
+	#ifdef _DEBUG
+	//Hacky implementation to get to the debug scene (temp)
+	if (Locator::getID()->m_keyboardTracker.IsKeyReleased(DirectX::Keyboard::Keys::D))
+	{
+		m_scene_manager->setCurrentScene(Scenes::DEBUG_LIGHTINGTEST);
+	}
+	#endif
+
 	switch (m_menu_state) {
 		case menu_states::SPLASH:
 			//Animate logo over time
@@ -145,7 +154,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 
 			//Change map selection
-			if (m_keybinds.keyReleased("Menu Down"))
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
 				if (highlighted_map < m_mapTitles.size() - 1) {
 					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
@@ -153,7 +162,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 					m_mapTitles.at(highlighted_map)->SetColour(active_colour);
 				}
 			}
-			if (m_keybinds.keyReleased("Menu Up"))
+			if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
 			{
 				if (highlighted_map > 0) {
 					m_mapTitles.at(highlighted_map)->SetColour(inactive_colour);
@@ -179,7 +188,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 
 			//Change character selection
-			if (m_keybinds.keyReleased("Menu Down"))
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
 				if (highlighted_character < m_characterTitles.size() - 1) {
 					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
@@ -187,7 +196,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 					m_characterTitles.at(highlighted_character)->SetColour(active_colour);
 				}
 			}
-			if (m_keybinds.keyReleased("Menu Up"))
+			if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
 			{
 				if (highlighted_character > 0) {
 					m_characterTitles.at(highlighted_character)->SetColour(inactive_colour);
@@ -213,7 +222,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 
 			//Change vehicle selection
-			if (m_keybinds.keyReleased("Menu Down"))
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
 				if (highlighted_vehicle < m_vehicleTitles.size() - 1) {
 					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);
@@ -221,7 +230,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 					m_vehicleTitles.at(highlighted_vehicle)->SetColour(active_colour);
 				}
 			}
-			if (m_keybinds.keyReleased("Menu Up"))
+			if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
 			{
 				if (highlighted_vehicle > 0) {
 					m_vehicleTitles.at(highlighted_vehicle)->SetColour(inactive_colour);

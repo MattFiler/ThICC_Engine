@@ -142,6 +142,9 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="DebugScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -335,6 +338,12 @@
     </ClInclude>
     <ClInclude Include="Skybox.h">
       <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraData.h">
+      <Filter>Engine Backend\Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

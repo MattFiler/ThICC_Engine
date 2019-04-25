@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "RenderTexture.h"
 #include "Constants.h"
+#include "Skybox.h"
 
 struct ThICC_RenderData {
 	//States and FX factory
@@ -76,4 +77,8 @@ struct ThICC_RenderData {
 	//Current cubemaps (set on map load)
 	std::wstring current_cubemap_radiance;
 	std::wstring current_cubemap_irradiance;
+	std::wstring current_cubemap_skybox;
+
+	//Skyboxes
+	Skybox* skybox[4];
 };

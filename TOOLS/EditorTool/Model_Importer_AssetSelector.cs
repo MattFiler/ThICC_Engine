@@ -92,7 +92,6 @@ namespace EditorTool
             if (Directory.Exists(importer_common.importDir()))
             {
                 MessageBox.Show("Couldn't import model, a model with the same name already exists.", "Import failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                importer_common = new Model_Importer_Common(); //Reset
                 Cursor.Current = Cursors.Default;
                 return;
             }
@@ -137,8 +136,8 @@ namespace EditorTool
             if (old_mtl_path == "")
             {
                 //The model has no MTL file - this can be handled, but fail for now.
+                Directory.Delete(importer_common.importDir(), true);
                 MessageBox.Show("This model has no materials.\nThe new importer doesn't handle this yet!", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                importer_common = new Model_Importer_Common(); //Reset
                 Cursor.Current = Cursors.Default;
                 return;
             }
@@ -160,8 +159,8 @@ namespace EditorTool
                     else
                     {
                         //No idea where the file is! Ideally here we'll show a file picker as a last resort, or do some further logic.
+                        Directory.Delete(importer_common.importDir(), true);
                         MessageBox.Show("Import failed because the tool was unable to locate a required MTL file for this model.", "Failed!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        importer_common = new Model_Importer_Common(); //Reset
                         Cursor.Current = Cursors.Default;
                         return;
                     }
@@ -172,6 +171,12 @@ namespace EditorTool
             int mtl_index = 0;
             int mat_start = 0;
             string[] mtl_file = File.ReadAllLines(importer_common.fileName(importer_file.MATERIAL));
+            for (int i = 0; i < mtl_file.Length; i++)
+            {
+                //fix for older tabbed MTL files
+                mtl_file[i] = mtl_file[i].Replace("\t", string.Empty); 
+                mtl_file[i] = mtl_file[i].Replace("    ", string.Empty);
+            }
             List<string> referenced_materials = new List<string>();
             List<int> material_prop_count = new List<int>();
             List<string> material_props = new List<string>();
@@ -275,8 +280,7 @@ namespace EditorTool
                         {
                             //Need to fail here as the engine hates missing textures!
                             Directory.Delete(importer_common.importDir(), true);
-                            MessageBox.Show("Could not find all required materials!\nTry and re-export your model.", "Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            importer_common = new Model_Importer_Common();
+                            MessageBox.Show("Could not find required material: '" + Path.GetFileNameWithoutExtension(material_path) + "'!", "Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             Cursor.Current = Cursors.Default;
                             return;
                         }
@@ -353,6 +357,21 @@ namespace EditorTool
                 addPropIfNotAlready("map_RMA", "", this_mat_jobject, props); //RMA Texture
                 addPropIfNotAlready("map_occlusionRoughnessMetallic", "", this_mat_jobject, props); //RMA Texture (alt def)
 
+                //Store our index in the OBJ to apply dx render-time configs
+                int index = 0;
+                foreach (string material in material_names)
+                {
+                    if (material == referenced_materials[i])
+                    {
+                        break;
+                    }
+                    index++;
+                }
+                this_mat_jobject["ThICC_INDEX"] = index;
+
+                //Set our default metallic value
+                this_mat_jobject["ThICC_METALLIC"] = false;
+
                 //Auto calculate alpha
                 //this_mat_jobject["d"] = (function_library.hasTransparency(this_mat_jobject["map_Kd"].Value<string>()) ? "0.999999" : "0.000000");
                 /* ^ disabled for now due to performance - also, we can do it later and get the same result :) */
@@ -387,6 +406,10 @@ namespace EditorTool
         /* Try to find a material variant using common naming conventions */
         private string findAndCopyMatVariant(string variant, string map_Kd)
         {
+            if (map_Kd.Length < 3)
+            {
+                return "";
+            }
             string mat_template = map_Kd.Substring(0, map_Kd.Length - Path.GetExtension(map_Kd).Length - 3);
             string proposed_file = mat_template + variant + Path.GetExtension(map_Kd);
             if (File.Exists(proposed_file))

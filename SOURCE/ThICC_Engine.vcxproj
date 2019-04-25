@@ -316,12 +316,14 @@
     <ClInclude Include="Banana.h" />
     <ClInclude Include="BlenderToDirectX.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="CameraData.h" />
     <ClInclude Include="CharacterInfo.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ControlledMovement.h" />
     <ClInclude Include="DebugMarker.h" />
+    <ClInclude Include="DebugScene.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DeviceData.h" />
     <ClInclude Include="Explosion.h" />
@@ -384,6 +386,7 @@
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="ControlledMovement.cpp" />
     <ClCompile Include="DebugMarker.cpp" />
+    <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="DeviceResourcesPC.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Explosion.cpp" />

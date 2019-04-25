@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject3D.h"
 #include "KeybindManager.h"
+#include "Constants.h"
 struct GameStateData;
 
 //This is a basic camera class
@@ -12,25 +13,13 @@ class Camera :
 {
 public:
 
-	enum class BEHAVIOUR : int
-	{
-		FOLLOW = 0,
-		BACK_FACING = 1,
-		FIRST = 3,
-		INDEPENDENT = 4,
-		ORBIT = 6,
-		CINEMATIC = 7,
-		DEBUG_CAM = 8,
-		RACE_START = 9,
-	};
-
-	Camera(float _width, float _height, float _near, float _far, GameObject3D* _target, Vector3 _dpos);
+	Camera(float _width, float _height, Vector3 _dpos, GameObject3D * _target, CameraType _behav);
 	~Camera() = default;
 
 	void SetTarget(GameObject3D* _target) { m_targetObject = _target; }
 	void SetTarget(Vector3 _target) { m_targetObject = NULL; m_targetPos = _target; }
 	void SetDPos(Vector3 _m_dpos) { m_dpos = _m_dpos; }
-	void SetBehav(BEHAVIOUR _behav) { behav = _behav; }
+	void SetType(CameraType _behav) { cam_type = _behav; }
 
 	/*
 	void SetCinematicPos(std::vector<Vector3> positions);
@@ -40,7 +29,7 @@ public:
 	Matrix GetProj() { return m_proj; }
 	Matrix GetView() { return m_view; }
 	Vector3 GetDeltaPos() { return m_dpos; };
-	BEHAVIOUR GetBehav() { return behav; }
+	CameraType GetType() { return cam_type; }
 
 	virtual void Tick();
 	virtual void Render() {};
@@ -50,7 +39,7 @@ public:
 	//Timer debug
 	float getTimer() { return timer; };
 	void resetTimer() { timer = 0.0f; };
-
+	void setAngle(float _angle) { angle = _angle; }
 
 
 protected:
@@ -89,13 +78,24 @@ protected:
 	std::vector<Vector3> look_points;
 	*/
 
-	BEHAVIOUR behav;
+	CameraType cam_type;
 
 	KeybindManager m_keybinds;
 
-	float angle = 0.0f;
-	int cam_point = 0;
-	float time_out = 3.0f;
-	float timer = 0.0f;
 	int m_cameraID = 0;
+
+	// Independent Cam variables
+	float indep_angle_x = 0.0f;
+	float indep_angle_y = 60.0f;
+
+	// Orbit Cam varibles
+	float angle = 0.0f;
+
+	// Cinematic Cam variables
+	int cam_point = 0;
+	float timer = 0.0f;
+
+	// Debug Cam variables
+	float last_mouse_xpos = 0.0f;
+	float last_mouse_ypos = 0.0f;
 };

@@ -19,6 +19,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 0
+ThICC_METALLIC False
 
 newmtl Body__m_Eye
 Ns 0.000000
@@ -39,4 +41,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 1
+ThICC_METALLIC False
 
