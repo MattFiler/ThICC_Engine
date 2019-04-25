@@ -1,10 +1,10 @@
 {
   "mat_body.002": {
     "newmtl": "mat_body.002",
-    "Ns": "96.078431",
+    "Ns": "96.000000",
     "Ka": "1.000000 1.000000 1.000000",
-    "Kd": "0.640000 0.640000 0.640000",
-    "Ks": "0.500000 0.500000 0.500000",
+    "Kd": "0.000000 0.000000 0.000000",
+    "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
     "d": "1.000000",
@@ -16,14 +16,16 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 1,
+    "ThICC_METALLIC": true
   },
   "mat_tire.002": {
     "newmtl": "mat_tire.002",
@@ -49,7 +51,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 0,
+    "ThICC_METALLIC": false
   },
   "mat_tire_rim.002": {
     "newmtl": "mat_tire_rim.002",
@@ -75,6 +79,8 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 2,
+    "ThICC_METALLIC": false
   }
 }

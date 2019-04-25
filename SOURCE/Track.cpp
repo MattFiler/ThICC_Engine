@@ -314,9 +314,9 @@ void Track::SplitTrisIntoGrid()
 	m_triGridX = static_cast<int>(ceilf(trackSize.x / m_triSegSize));
 	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
 	m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
-	m_triGridYX = m_triGridY*m_triGridX;
-	m_triGrid.reserve((m_triGridX+1)*(m_triGridY + 1)*(m_triGridZ + 1));
-	
+	m_triGridYX = m_triGridY * m_triGridX;
+	m_triGrid.reserve((m_triGridX + 1)*(m_triGridY + 1)*(m_triGridZ + 1));
+
 	for (int i = 0; i < m_triGrid.capacity(); i++)
 	{
 		std::vector<MeshTri*> vec;

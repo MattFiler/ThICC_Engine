@@ -62,6 +62,7 @@ void GameScene::ExpensiveLoad() {
 	//Set cubemaps
 	Locator::getRD()->current_cubemap_radiance = map_info.cubemap_radiance;
 	Locator::getRD()->current_cubemap_irradiance = map_info.cubemap_irradiance;
+	Locator::getRD()->current_cubemap_skybox = map_info.cubemap_skybox;
 
 	//Update characters
 	for (int i = 0; i < game_config["player_count"]; i++)
@@ -92,30 +93,10 @@ void GameScene::ExpensiveLoad() {
 	//Reset key presses
 	m_keybinds.Reset();
 
-	//Load current metalness config
-	std::string filepath = m_filepath.getFolder(GameFilepaths::MODEL) + map_info.model + "/REFLECTION.ThICC";
-	std::ifstream fin(filepath, std::ios::binary);
-
-	//Get number of materials in config
-	fin.seekg(0);
-	int number_of_materials = 0;
-	fin.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
-
-	//Go through config for number of materials - is this correct?
-	for (int i = 0; i < number_of_materials+1; i++) {
-		char data;
-		fin.read(&data, sizeof(bool));
-		bool choice = static_cast<bool>(data);
-		if (choice) {
-			DebugText::print("MATERIAL IS METALLIC");
-		}
-		else
-		{
-			DebugText::print("MATERIAL IS NOT METALLIC");
-		}
-		Locator::getRD()->current_metalness.push_back(choice);
+	//Load skybox
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		Locator::getRD()->skybox[i]->Load();
 	}
-	DebugText::print("Loaded metal config for " + std::to_string(number_of_materials) + " materials.");
 
 	//Load the map's audio here using map_info's data
 }
@@ -152,7 +133,11 @@ void GameScene::ExpensiveUnload() {
 	final_lap = false;
 	finished = 0;
 	is_paused = false;
-	Locator::getRD()->current_metalness.clear();
+
+	//Unload skybox
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		Locator::getRD()->skybox[i]->Reset();
+	}
 }
 
 /* Create all 2D objects for the scene */
@@ -268,7 +253,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 		is_paused = true;
 	}
 
-
 	if (Locator::getID()->m_keyboardTracker.pressed.N) {
 		Locator::getID()->TEST++;
 		DebugText::print(std::to_string(Locator::getID()->TEST));
@@ -278,13 +262,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 		DebugText::print(std::to_string(Locator::getID()->TEST));
 	}
 
-
 	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
 
-
 	Locator::getAIScheduler()->Update();
-
-
 
 	if (finished == 4)
 	{
@@ -306,9 +286,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			timeout -= Locator::getGSD()->m_dt;
 			cine_cam->Tick();
+			Locator::getRD()->skybox[0]->Tick(cine_cam);
 			if (timeout <= Locator::getGSD()->m_dt + 0.1) {
 				for (int i = 0; i < game_config["player_count"]; ++i) {
-					m_cam[i]->Tick();
+					m_cam[i]->Tick(); 
+					Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 				}
 			}
 		}
@@ -316,6 +298,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			for (int i = 0; i < game_config["player_count"]; ++i) {
 				m_cam[i]->Tick();
+				Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
@@ -332,6 +315,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case CAM_OPEN:
 		for (int i = 0; i < game_config["player_count"]; ++i) {
 			m_cam[i]->Tick();
+			Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 		}
 		cine_cam->Tick();
 
@@ -370,6 +354,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case PLAY:
 		for (int i = 0; i < game_config["player_count"]; ++i) {
 			m_cam[i]->Tick();
+			Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 		}
 
 		timeout -= Locator::getGSD()->m_dt;

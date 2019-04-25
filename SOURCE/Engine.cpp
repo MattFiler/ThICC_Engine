@@ -86,7 +86,6 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	Locator::setupAudio(&m_AM);
 	Locator::setupCamData(&m_camera_data);
 
-
 	//Setup itembox respawn time
 	ItemBoxConfig::respawn_time = m_game_config["itembox_respawn_time"];
 
@@ -129,6 +128,11 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 
 	//Setup viewports for splitscreen mode
 	SetupSplitscreenViewports();
+
+	//Load skybox objects
+	for (int i = 0; i < m_game_config["player_count"]; i++) {
+		Locator::getRD()->skybox[i] = new Skybox();
+	}
 }
 
 /* Setup our splitscreen viewport sizes */
@@ -255,6 +259,13 @@ void ThICC_Engine::Render()
 	m_device_data.m_hdrScene->BeginScene(commandList); //do we need this here?
 	Clear();
 	m_device_data.m_hdrScene->EndScene(commandList);
+
+	// Render skyboxes that are loaded
+	for (int i = 0; i < m_game_config["player_count"]; i++) {
+		if (Locator::getRD()->skybox[i]->Loaded()) {
+			Locator::getRD()->skybox[i]->Render();
+		}
+	}
 
 	// Render the game 3D elements
 	m_game_inst.Render3D();

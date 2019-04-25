@@ -30,6 +30,7 @@ namespace TestTest4
             string[] model_obj = File.ReadAllLines(filePicker.FileName);
             List<string> mat_names = new List<string>();
             int index = 0;
+            int count = 0;
             foreach (string line in model_obj)
             {
                 if (line.Contains("usemtl "))
@@ -37,9 +38,11 @@ namespace TestTest4
                     string line_i = line.Replace("\t", string.Empty);
                     line_i = line_i.Replace("    ", string.Empty);
                     mat_names.Add(line_i.Substring(7));
+                    count++;
                 }
                 index++;
             }
+            MessageBox.Show(count.ToString());
             File.WriteAllLines("parsed.txt", mat_names);
         }
     }

@@ -20,9 +20,11 @@ namespace EditorTool
         List<JToken> material_tokens = new List<JToken>();
         UsefulFunctions common_functions = new UsefulFunctions();
         JToken extra_json;
+        bool editing;
         Model_Importer_Common importer_common;
-        public Model_Importer_MaterialList(Model_Importer_Common _importer_conf)
+        public Model_Importer_MaterialList(Model_Importer_Common _importer_conf, bool is_editing = false)
         {
+            editing = is_editing;
             importer_common = _importer_conf;
             extra_json = JToken.Parse(importer_common.getExtraJson());
             model_material_config = JObject.Parse(File.ReadAllText(importer_common.fileName(importer_file.IMPORTER_CONFIG)));
@@ -44,6 +46,48 @@ namespace EditorTool
                 configPreview.Visible = false;
                 editMaterial.Location = new Point(272, 125);
                 autoDetect.Visible = false;
+            }
+
+            //If we're editing, check for depreciated configs
+            if (editing)
+            {
+                //Check to see if we have index update
+                if (material_tokens.ElementAt(0)["ThICC_INDEX"] == null)
+                {
+                    //Get all materials in order
+                    string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
+                    List<string> material_names = new List<string>();
+                    foreach (string line in obj_file)
+                    {
+                        if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
+                        {
+                            material_names.Add(line.Substring(7));
+                        }
+                    }
+                    //Push our order to the config file
+                    foreach (var material_object in model_material_config)
+                    {
+                        int index = 0;
+                        foreach (string material in material_names)
+                        {
+                            if (material == material_object.Key)
+                            {
+                                break;
+                            }
+                            index++;
+                        }
+                        model_material_config[material_object.Key]["ThICC_INDEX"] = index;
+                    }
+                }
+                //Check to see if we have metalness config update
+                if (material_tokens.ElementAt(0)["ThICC_METALLIC"] == null)
+                {
+                    //Push our order to the config file
+                    foreach (var material_object in model_material_config)
+                    {
+                        model_material_config[material_object.Key]["ThICC_METALLIC"] = false;
+                    }
+                }
             }
         }
 
@@ -207,7 +251,7 @@ namespace EditorTool
 
             //Create metal config
             List<bool> metal_config = new List<bool>();
-            for (int i = 0; i < model_material_config.Count - 1; i++)
+            for (int i = 0; i < model_material_config.Count + 1; i++)
             {
                 foreach (var this_material_config in model_material_config)
                 {
@@ -222,7 +266,7 @@ namespace EditorTool
             //Output metal config
             using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.METALLIC_CONFIG), FileMode.Create)))
             {
-                writer.Write(metal_config.Count - 1);
+                writer.Write(metal_config.Count);
                 foreach (bool is_metal in metal_config)
                 {
                     writer.Write(is_metal); 

@@ -55,15 +55,15 @@ namespace EditorTool
             common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour);
 
             //Transparency (1 = completely invisible)
-            transparencySlider.Value = Convert.ToInt32(material_config["Tr"].Value<float>() * 10);
+            transparencySlider.Value = Convert.ToInt32(Convert.ToSingle(material_config["Tr"].Value<string>()) * 10);
             transparencyValue.Text = sliderToString(transparencySlider, 10);
 
             //Shininess (0-1000)
-            specExSlider.Value = Convert.ToInt32(material_config["Ns"].Value<float>());
+            specExSlider.Value = Convert.ToInt32(Convert.ToSingle(material_config["Ns"].Value<string>()));
             specExValue.Text = sliderToString(specExSlider);
 
             //Specular on/off
-            hasSpec.Checked = (material_config["illum"].Value<int>() == 2);
+            hasSpec.Checked = (material_config["illum"].Value<string>() == "2");
 
             //Diffuse Texture
             diffuseMap.Text = material_config["map_Kd"].Value<string>();
@@ -242,7 +242,7 @@ namespace EditorTool
             /* ^ this is now done later to save performance */
 
             //Transparency (1 = completely invisible)
-            material_config["Tr"] = (transparencySlider.Value / 10).ToString("0.000000");
+            material_config["Tr"] = (Convert.ToSingle(transparencySlider.Value) / 10.0f).ToString("0.000000");
 
             //Shininess (0-1000)
             material_config["Ns"] = specExSlider.Value.ToString("0.000000");
@@ -302,7 +302,7 @@ namespace EditorTool
         /* Colour box to JSON data */
         private void colourToJSON(string key, PictureBox colour)
         {
-            material_config[key] = (colour.BackColor.R/255).ToString("0.000000") + " " + (colour.BackColor.G/255).ToString("0.000000") + " " + (colour.BackColor.B/255).ToString("0.000000");
+            material_config[key] = (Convert.ToSingle(colour.BackColor.R) / 255.0f).ToString("0.000000") + " " + (Convert.ToSingle(colour.BackColor.G) / 255.0f).ToString("0.000000") + " " + (Convert.ToSingle(colour.BackColor.B) / 255.0f).ToString("0.000000");
         }
         
         /* Copy new material to our model's directory */
