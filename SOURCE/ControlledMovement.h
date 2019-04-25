@@ -42,11 +42,9 @@ private:
 	float m_acceleration = 0;
 	bool m_isTurning = false;
 	double m_timeTurning = 0;
-	float m_maxTurnRateMutliplier = 10;
-	//float m_maxDriftTurnMutliplier = 4.2f;
 	double m_timeForMaxTurn = 5;
 	double m_timeForMaxDrift = 4;
-	float m_driftBoostMultiplier = 0.3f;
+	float m_driftBoostMultiplier = 0.5f;
 
 	bool m_left = false;
 	bool m_right = false;

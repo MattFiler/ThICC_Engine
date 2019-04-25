@@ -228,9 +228,13 @@ void ControlledMovement::ProcessInputFlags()
 
 void ControlledMovement::EndDrift()
 {
+	Vector3 test = m_physModel->GetWorld().Forward();
 	if (m_timeTurning > m_timeForMaxDrift / 3)
 	{
-		m_physModel->setVelocity(m_physModel->GetWorld().Forward() * (m_physModel->getVelocity().Length() * 1 + ((m_timeTurning/m_timeForMaxDrift)*m_driftBoostMultiplier)));
+		float multiplier = 1.0f + ((m_timeTurning / m_timeForMaxDrift)*m_driftBoostMultiplier);
+		multiplier *= m_physModel->getVelocity().Length();
+		Vector3 direction = m_physModel->GetWorld().Forward();
+		m_physModel->setVelocity(direction * multiplier);
 	}
 	m_timeTurning = 0;
 	m_endDrift = false;
