@@ -1,7 +1,7 @@
 {
   "Material.001": {
     "newmtl": "Material.001",
-    "Ns": "92.156863",
+    "Ns": "92.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -16,12 +16,12 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
     "ThICC_INDEX": 0,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
       "3": false
