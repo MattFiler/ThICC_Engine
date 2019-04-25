@@ -97,6 +97,9 @@ void ControlledMovement::ProcessInputFlags()
 	Vector3 turnComponent = Vector3::Zero;
 	float driftMultiplier = 1;
 
+	//ToDo: add in rumble here for controllers dependant on action (drifiting, on grass, etc)
+	//Locator::getID()->m_gamepad->SetVibration(m_playerID, 0.1, 0.1);
+
 	Matrix rotMove = Matrix::CreateRotationY(m_physModel->GetYaw());
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
 	rightMove = Vector3::Transform(rightMove, rotMove);

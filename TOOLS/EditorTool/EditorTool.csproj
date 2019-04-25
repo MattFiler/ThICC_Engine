@@ -88,6 +88,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asset_Manager_Preselect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Asset_Manager_Preselect.Designer.cs">
+      <DependentUpon>Asset_Manager_Preselect.cs</DependentUpon>
+    </Compile>
     <Compile Include="AssetTypes.cs" />
     <Compile Include="Asset_Browser.cs">
       <SubType>Form</SubType>
@@ -218,6 +224,9 @@
     <Compile Include="UsefulFunctions.cs" />
     <EmbeddedResource Include="Asset_Browser.resx">
       <DependentUpon>Asset_Browser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Asset_Manager_Preselect.resx">
+      <DependentUpon>Asset_Manager_Preselect.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Create_Character.resx">
       <DependentUpon>Create_Character.cs</DependentUpon>

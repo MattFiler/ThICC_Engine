@@ -482,9 +482,6 @@ void Player::movement()
 {
 	m_move->Tick();
 
-	//Disabling rumble for now :)
-	//Locator::getID()->m_gamepad->SetVibration(m_playerID, Locator::getID()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getID()->m_gamePadState[m_playerID].triggers.right * 0.1);
-
 	// Debug code to save/load the players game state
 	if (m_keybind.keyReleased("debug save position"))
 	{
