@@ -273,13 +273,6 @@ void ThICC_Engine::Render()
 	Clear();
 	m_device_data.m_hdrScene->EndScene(commandList);
 
-	// Render skyboxes that are loaded
-	for (int i = 0; i < m_game_config["player_count"]; i++) {
-		if (Locator::getRD()->skybox[i]->Loaded()) {
-			Locator::getRD()->skybox[i]->Render();
-		}
-	}
-
 	// Render the game 3D elements
 	m_game_inst.Render3D();
 

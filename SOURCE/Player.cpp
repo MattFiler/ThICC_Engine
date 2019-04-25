@@ -19,7 +19,7 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 	m_textRanking = new Text2D(std::to_string(m_ranking));
 	//m_textRanking->SetScale(0.1f * Vector2::One);
 	m_textLap = new Text2D(std::to_string(m_lap) + "/3");
-	m_textCountdown = new Text2D("3");
+	m_textCountdown = new Text2D("3", true);
 	m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 	m_textFinishOrder = new Text2D("0" + m_orderIndicator[0]);
 

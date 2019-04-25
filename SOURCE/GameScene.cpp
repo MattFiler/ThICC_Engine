@@ -658,6 +658,13 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		}
 		break;
 	}
+
+	// Render skyboxes that are loaded
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		if (Locator::getRD()->skybox[i]->Loaded()) {
+			Locator::getRD()->skybox[i]->Render();
+		}
+	}
 }
 
 /* Render the 2D scene */

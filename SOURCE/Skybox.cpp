@@ -22,7 +22,7 @@ void Skybox::Load() {
 	resourceUpload.Begin();
 
 	//Create skybox
-	skybox = GeometricPrimitive::CreateSphere(100.0f, 16U, false, true);
+	skybox = GeometricPrimitive::CreateSphere(100.0f, 16U, false, true, Locator::getRD()->m_d3dDevice.Get());
 	//skybox->LoadStaticBuffers(Locator::getRD()->m_d3dDevice, resourceUpload);
 
 	//Find and load our skybox material
@@ -65,7 +65,7 @@ void Skybox::Render() {
 	Locator::getDD()->m_deviceResources->GetCommandList()->SetDescriptorHeaps(_countof(heaps), heaps);
 
 	skybox_effect->Apply(Locator::getRD()->m_commandList.Get());
-	skybox->Draw(Locator::getRD()->m_commandList.Get());
+	//skybox->Draw(Locator::getRD()->m_commandList.Get()); - DISABLED FOR NOW
 }
 
 /* Reset skybox */
