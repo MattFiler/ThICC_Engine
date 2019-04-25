@@ -42,10 +42,11 @@ private:
 	float m_acceleration = 0;
 	bool m_isTurning = false;
 	double m_timeTurning = 0;
-	float m_maxTurnRateMutliplier = 2.3f;
-	float m_maxDriftTurnMutliplier = 4.2f;
-	double m_timeForMaxTurn = 4;
-	double m_timeForMaxDrift = 8;
+	float m_maxTurnRateMutliplier = 10;
+	//float m_maxDriftTurnMutliplier = 4.2f;
+	double m_timeForMaxTurn = 5;
+	double m_timeForMaxDrift = 4;
+	float m_driftBoostMultiplier = 0.3f;
 
 	bool m_left = false;
 	bool m_right = false;
@@ -53,11 +54,10 @@ private:
 	bool m_startDrift = false;
 	bool m_endDrift = false;
 
-	float m_moveSpeed = 25;
-	float m_turnSpeed = 12.5f;
+	float m_moveSpeed = 50;
+	float m_turnSpeed = 65;
 
 	bool m_driftingRight = false;
-	float m_driftBoost = 300;
 
 	bool m_controlsActive = false;
 	int m_playerID = 0;
