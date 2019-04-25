@@ -34,6 +34,7 @@
     {
         MAP,
         CHARACTER,
-        VEHICLE
+        VEHICLE,
+        ENGINE_FONT
     }
 }

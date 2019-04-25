@@ -165,26 +165,11 @@ namespace EditorTool
             keybindeditor.Show();
         }
 
-        private void groupBox4_Enter(object sender, EventArgs e)
+        /* Open Engine Configs */
+        private void openEngineConfigs_Click(object sender, EventArgs e)
         {
-
-        }
-
-        /* On Load */
-        private void Splash_Load(object sender, EventArgs e)
-        {
-            /* LOAD DEBUG CONFIGURATIONS */
-            JToken game_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/GAME_CORE.JSON"));
-            DEBUG_PLAYERCOUNT.Value = game_config["player_count"].Value<decimal>();
-        }
-
-        /* SAVE DEBUG CONFIG */
-        private void DEBUG_SAVE_Click(object sender, EventArgs e)
-        {
-            JToken game_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/GAME_CORE.JSON"));
-            game_config["player_count"] = DEBUG_PLAYERCOUNT.Value;
-            File.WriteAllText("DATA/CONFIGS/GAME_CORE.JSON", game_config.ToString(Formatting.Indented));
-            MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Game_Config_Preselect engineConfigs = new Game_Config_Preselect();
+            engineConfigs.Show();
         }
 
         /* Open VS Project */
@@ -311,6 +296,19 @@ namespace EditorTool
 
 
 
+
+
+        private void Splash_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void DEBUG_SAVE_Click(object sender, EventArgs e)
+        {
+        }
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
         private void reloadDebugList_Click(object sender, EventArgs e)
         {
         }

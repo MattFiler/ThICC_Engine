@@ -36,16 +36,11 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.compileAssets = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.DEBUG_PLAYERCOUNT = new System.Windows.Forms.NumericUpDown();
-            this.DEBUG_SAVE = new System.Windows.Forms.Button();
-            this.label15 = new System.Windows.Forms.Label();
+            this.openEngineConfigs = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.openProject = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DEBUG_PLAYERCOUNT)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -113,73 +108,30 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.openEngineConfigs);
             this.groupBox3.Controls.Add(this.openUiEditor);
             this.groupBox3.Controls.Add(this.openKeybindEditor);
             this.groupBox3.Location = new System.Drawing.Point(11, 148);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(281, 93);
+            this.groupBox3.Size = new System.Drawing.Size(281, 130);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Additional Game Editors";
+            this.groupBox3.Text = "Additional Editors";
             // 
-            // groupBox4
+            // openEngineConfigs
             // 
-            this.groupBox4.Controls.Add(this.DEBUG_PLAYERCOUNT);
-            this.groupBox4.Controls.Add(this.DEBUG_SAVE);
-            this.groupBox4.Controls.Add(this.label15);
-            this.groupBox4.Location = new System.Drawing.Point(11, 309);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(281, 62);
-            this.groupBox4.TabIndex = 3;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Debug Configurations";
-            this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
-            // 
-            // DEBUG_PLAYERCOUNT
-            // 
-            this.DEBUG_PLAYERCOUNT.Location = new System.Drawing.Point(6, 36);
-            this.DEBUG_PLAYERCOUNT.Maximum = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.DEBUG_PLAYERCOUNT.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.DEBUG_PLAYERCOUNT.Name = "DEBUG_PLAYERCOUNT";
-            this.DEBUG_PLAYERCOUNT.Size = new System.Drawing.Size(101, 20);
-            this.DEBUG_PLAYERCOUNT.TabIndex = 6;
-            this.DEBUG_PLAYERCOUNT.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // DEBUG_SAVE
-            // 
-            this.DEBUG_SAVE.Location = new System.Drawing.Point(156, 20);
-            this.DEBUG_SAVE.Name = "DEBUG_SAVE";
-            this.DEBUG_SAVE.Size = new System.Drawing.Size(120, 37);
-            this.DEBUG_SAVE.TabIndex = 7;
-            this.DEBUG_SAVE.Text = "Save";
-            this.DEBUG_SAVE.UseVisualStyleBackColor = true;
-            this.DEBUG_SAVE.Click += new System.EventHandler(this.DEBUG_SAVE_Click);
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(3, 19);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(67, 13);
-            this.label15.TabIndex = 17;
-            this.label15.Text = "Player Count";
+            this.openEngineConfigs.Location = new System.Drawing.Point(6, 93);
+            this.openEngineConfigs.Name = "openEngineConfigs";
+            this.openEngineConfigs.Size = new System.Drawing.Size(270, 31);
+            this.openEngineConfigs.TabIndex = 6;
+            this.openEngineConfigs.Text = "Engine Configurations";
+            this.openEngineConfigs.UseVisualStyleBackColor = true;
+            this.openEngineConfigs.Click += new System.EventHandler(this.openEngineConfigs_Click);
             // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.openProject);
-            this.groupBox5.Location = new System.Drawing.Point(11, 247);
+            this.groupBox5.Location = new System.Drawing.Point(11, 284);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(281, 56);
             this.groupBox5.TabIndex = 0;
@@ -200,9 +152,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(304, 380);
+            this.ClientSize = new System.Drawing.Size(301, 350);
             this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -213,9 +164,6 @@
             this.Load += new System.EventHandler(this.Splash_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DEBUG_PLAYERCOUNT)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -230,11 +178,8 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button compileAssets;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.NumericUpDown DEBUG_PLAYERCOUNT;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Button DEBUG_SAVE;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button openProject;
+        private System.Windows.Forms.Button openEngineConfigs;
     }
 }

@@ -292,6 +292,8 @@ namespace EditorTool
                     return "Map";
                 case AssetCompType.VEHICLE:
                     return "Vehicle";
+                case AssetCompType.ENGINE_FONT:
+                    return "Engine Font";
             }
             return "";
         }
