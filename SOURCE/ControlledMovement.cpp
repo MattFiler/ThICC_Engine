@@ -2,9 +2,22 @@
 #include "ControlledMovement.h"
 #include "InputData.h"
 #include "GameStateData.h"
+#include <json.hpp>
+using json = nlohmann::json;
 
 ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationController* _animMesh) : m_physModel(_physModel), m_animMesh(_animMesh)
 {
+	//movement config
+	std::ifstream i(m_filepath.generateFilepath("PLAYER_CONTROLLER_CONFIG", m_filepath.CONFIG));
+	json movement_config;
+	movement_config << i;
+
+	//populate values
+	m_timeForMaxTurn = movement_config["time_for_max_turn"];
+	m_timeForMaxDrift = movement_config["time_for_max_drift"];
+	m_driftBoostMultiplier = movement_config["drift_boost_multiplier"];
+	m_moveSpeed = movement_config["movement_speed"];
+	m_turnSpeed = movement_config["turning_speed"];
 }
 
 void ControlledMovement::Tick()
@@ -234,7 +247,7 @@ void ControlledMovement::EndDrift()
 	Vector3 test = m_physModel->GetWorld().Forward();
 	if (m_timeTurning > m_timeForMaxDrift / 3)
 	{
-		float multiplier = 1.0f + ((m_timeTurning / m_timeForMaxDrift)*m_driftBoostMultiplier);
+		float multiplier = 1.0f + ((m_timeTurning / m_timeForMaxDrift));
 		multiplier *= m_physModel->getVelocity().Length();
 		Vector3 direction = m_physModel->GetWorld().Forward();
 		m_physModel->setVelocity(direction * multiplier);
