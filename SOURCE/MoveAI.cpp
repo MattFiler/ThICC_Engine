@@ -73,27 +73,43 @@ void MoveAI::Update()
 		m_move->setAcceleration(1);
 		return;
 	}
-	m_move->setAcceleration(1);
+
 	Vector3 normDiff = m_route[m_routeIndex].position - m_model->GetPos();
 	normDiff.Normalize();
 	
 	// If the current veloicty is too far off the driving line
 	float dist = Vector3::Distance(normVelo, normDiff);
-	DebugText::print(std::to_string(dist));
 	if (dist  > m_lineLeeway)
 	{
+		m_move->setAcceleration(0.75f);
 		// If left would reduce the difference
 		if (Vector3::Distance(normVeloLeft, normDiff) < dist)
 		{
+			// Make sure to exit any current drift if switching directions
+			if (m_move->IsTurningRight())
+			{
+				m_move->Drift(false);
+			}
 			m_move->TurnLeft();
 		}
 		else if (Vector3::Distance(normVeloRight, normDiff) < dist)
 		{
+			if (m_move->IsTurningLeft())
+			{
+				m_move->Drift(false);
+			}
 			m_move->TurnRight();
+		}
+		if (dist > m_driftThreshold)
+		{
+			m_move->setAcceleration(0.5f);
+			m_move->Drift(true);
 		}
 	}
 	else
 	{
+		m_move->setAcceleration(1);
+		m_move->Drift(false);
 		m_move->DontTurn();
 	}
 }

@@ -20,6 +20,9 @@ public:
 	void DontTurn();
 	void Drift(bool _flag);
 
+	bool IsTurningLeft() { return m_left; };
+	bool IsTurningRight() { return m_right; };
+
 	void SetWaypoint(int _waypoint) { m_waypoint = _waypoint; };
 	int GetWaypoint() { return m_waypoint; };
 	

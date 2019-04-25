@@ -265,7 +265,7 @@ void ControlledMovement::Drift(bool _flag)
 {
 	if (!_flag)
 	{
-		EndDrift();
+		m_endDrift = true;
 		m_drifting = false;
 	}
 	else if (!m_drifting)
