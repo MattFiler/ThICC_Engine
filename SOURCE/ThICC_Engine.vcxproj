@@ -323,6 +323,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ControlledMovement.h" />
+    <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="DebugMarker.h" />
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="DebugText.h" />
@@ -389,6 +390,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="ControlledMovement.cpp" />
+    <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="DebugMarker.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="DeviceResourcesPC.cpp" />

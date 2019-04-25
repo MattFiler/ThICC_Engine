@@ -40,6 +40,7 @@ namespace EditorTool
         {
             Asset_Comp_Manager manager = new Asset_Comp_Manager(type);
             manager.Show();
+            this.Close();
         }
     }
 }
