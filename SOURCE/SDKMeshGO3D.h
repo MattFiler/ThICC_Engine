@@ -37,6 +37,9 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_radianceIBL;
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_irradianceIBL;
 
+	//Current metalness config
+	std::vector<bool> current_metalness;
+
 	//Engine features
 	GameFilepaths m_filepath;
 

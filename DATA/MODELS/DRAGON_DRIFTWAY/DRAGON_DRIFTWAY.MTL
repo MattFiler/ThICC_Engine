@@ -18,9 +18,11 @@ map_emissive udr_BodyLight_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 51
+ThICC_METALLIC False
 
 newmtl dr_Bridge
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -37,6 +39,8 @@ map_emissive udr_Bridge_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 29
+ThICC_METALLIC False
 
 newmtl dr_CubeMap_Light4
 Ns 94.117647
@@ -56,6 +60,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 24
+ThICC_METALLIC False
 
 newmtl dr_CubeMap_Light5
 Ns 94.117647
@@ -75,6 +81,8 @@ map_emissive udr_Tyochin_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 14
+ThICC_METALLIC False
 
 newmtl dr_CubeMap_Light6
 Ns 94.117647
@@ -94,6 +102,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 34
+ThICC_METALLIC False
 
 newmtl dr_CubeMap_Light7
 Ns 94.117647
@@ -113,6 +123,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 8
+ThICC_METALLIC False
 
 newmtl dr_CubeMap_SunSet
 Ns 94.117647
@@ -132,6 +144,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 3
+ThICC_METALLIC False
 
 newmtl dr_DragonAbdomen
 Ns 94.117647
@@ -151,6 +165,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 55
+ThICC_METALLIC False
 
 newmtl dr_DragonBody
 Ns 94.117647
@@ -170,6 +186,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 18
+ThICC_METALLIC False
 
 newmtl dr_DragonBody_Face
 Ns 94.117647
@@ -189,6 +207,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 9
+ThICC_METALLIC False
 
 newmtl dr_DragonParts1
 Ns 94.000000
@@ -208,9 +228,11 @@ map_emissive udr_DragonParts1_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 6
+ThICC_METALLIC True
 
 newmtl dr_DragonParts2
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -227,9 +249,11 @@ map_emissive udr_DragonParts2_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 59
+ThICC_METALLIC False
 
 newmtl dr_DragonParts3
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -246,6 +270,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 45
+ThICC_METALLIC False
 
 newmtl dr_DragonParts3_OutSide
 Ns 94.117647
@@ -265,6 +291,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 2
+ThICC_METALLIC False
 
 newmtl dr_EnkeiBlock
 Ns 94.117647
@@ -284,6 +312,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 38
+ThICC_METALLIC False
 
 newmtl dr_EnkeiBrock_Repeat
 Ns 94.117647
@@ -303,9 +333,11 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 49
+ThICC_METALLIC False
 
 newmtl dr_EnkeiGlass
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -322,9 +354,11 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 33
+ThICC_METALLIC False
 
 newmtl dr_EnkeiGlass2
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -341,6 +375,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 1
+ThICC_METALLIC False
 
 newmtl dr_EnkeiJugem
 Ns 94.117647
@@ -360,6 +396,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 30
+ThICC_METALLIC False
 
 newmtl dr_EnkeiMatsu_Kusa
 Ns 94.117647
@@ -379,6 +417,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 12
+ThICC_METALLIC False
 
 newmtl dr_EnkeiTuribashi
 Ns 94.117647
@@ -398,9 +438,11 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 39
+ThICC_METALLIC False
 
 newmtl dr_Enkei_Mori
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -417,6 +459,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 61
+ThICC_METALLIC False
 
 newmtl dr_Enkei_Tatemono
 Ns 94.117647
@@ -436,6 +480,8 @@ map_emissive udr_EnkeiTatemono_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 17
+ThICC_METALLIC False
 
 newmtl dr_Field_Enkei
 Ns 94.117647
@@ -455,9 +501,11 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 5
+ThICC_METALLIC False
 
 newmtl dr_FlagPole
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -474,6 +522,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 25
+ThICC_METALLIC True
 
 newmtl dr_Glass
 Ns 94.000000
@@ -493,6 +543,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 42
+ThICC_METALLIC False
 
 newmtl dr_JugemPicture
 Ns 94.117647
@@ -512,6 +564,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 15
+ThICC_METALLIC False
 
 newmtl dr_Kakiwari
 Ns 94.117647
@@ -531,6 +585,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 46
+ThICC_METALLIC False
 
 newmtl dr_Marumado
 Ns 94.117647
@@ -550,6 +606,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 10
+ThICC_METALLIC False
 
 newmtl dr_PlantA_m
 Ns 94.117647
@@ -569,6 +627,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 48
+ThICC_METALLIC False
 
 newmtl dr_PlantB
 Ns 94.117647
@@ -588,6 +648,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 58
+ThICC_METALLIC False
 
 newmtl dr_Road1
 Ns 94.117647
@@ -607,6 +669,8 @@ map_emissive udr_Road1_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 4
+ThICC_METALLIC False
 
 newmtl dr_Road1_G
 Ns 94.117647
@@ -626,6 +690,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 23
+ThICC_METALLIC False
 
 newmtl dr_Road2A
 Ns 94.117647
@@ -645,6 +711,8 @@ map_emissive udr_Road2A_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 57
+ThICC_METALLIC False
 
 newmtl dr_Road2B
 Ns 94.117647
@@ -664,6 +732,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 20
+ThICC_METALLIC False
 
 newmtl dr_Road3
 Ns 94.117647
@@ -683,6 +753,8 @@ map_emissive udr_Road3_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 53
+ThICC_METALLIC False
 
 newmtl dr_Road4
 Ns 94.117647
@@ -702,6 +774,8 @@ map_emissive udr_Road4_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 54
+ThICC_METALLIC False
 
 newmtl dr_RoadSideParts
 Ns 94.117647
@@ -721,9 +795,11 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 11
+ThICC_METALLIC False
 
 newmtl dr_Rock
-Ns 62.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -738,11 +814,13 @@ norm udr_rock01_nrm.png
 Tr 0.000000
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
-map_RMA dr_Rock.png
-map_occlusionRoughnessMetallic dr_Rock.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 13
+ThICC_METALLIC False
 
 newmtl dr_Rock2
-Ns 62.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -752,16 +830,18 @@ d 0.000000
 illum 2
 map_Kd udr_rock01_Alb.png
 Tr 0.000000
-map_Ks udr_rock01_spm.png
-map_Kn udr_rock01_nrm.png
-norm udr_rock01_nrm.png
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
-map_RMA dr_Rock2.png
-map_occlusionRoughnessMetallic dr_Rock2.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 50
+ThICC_METALLIC False
 
 newmtl dr_RockStart
-Ns 81.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -771,16 +851,18 @@ d 0.000000
 illum 2
 map_Kd udr_rock01_Alb.png
 Tr 0.000000
-map_Ks udr_rock01_spm.png
-map_Kn udr_rock01_nrm.png
-norm udr_rock01_nrm.png
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
-map_RMA dr_RockStart.png
-map_occlusionRoughnessMetallic dr_RockStart.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 40
+ThICC_METALLIC False
 
 newmtl dr_Saku1
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -797,9 +879,11 @@ map_emissive udr_Saku1_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 36
+ThICC_METALLIC False
 
 newmtl dr_Saku2
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -816,6 +900,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 60
+ThICC_METALLIC False
 
 newmtl dr_Sebire
 Ns 94.000000
@@ -835,9 +921,11 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 19
+ThICC_METALLIC False
 
 newmtl dr_Sebire_Back
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -854,9 +942,11 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 27
+ThICC_METALLIC False
 
 newmtl dr_StartGate
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -873,6 +963,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 31
+ThICC_METALLIC True
 
 newmtl dr_StartParts
 Ns 94.000000
@@ -892,6 +984,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 41
+ThICC_METALLIC False
 
 newmtl dr_StaticShadow
 Ns 94.117647
@@ -911,6 +1005,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 35
+ThICC_METALLIC False
 
 newmtl dr_StomachParts
 Ns 94.117647
@@ -930,6 +1026,8 @@ map_emissive udr_StomachParts_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 43
+ThICC_METALLIC False
 
 newmtl dr_Tenjyo
 Ns 94.117647
@@ -949,6 +1047,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 32
+ThICC_METALLIC False
 
 newmtl dr_Tourou
 Ns 94.117647
@@ -968,6 +1068,8 @@ map_emissive udr_Tourou_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 44
+ThICC_METALLIC False
 
 newmtl dr_Tourou_Group2
 Ns 94.117647
@@ -987,9 +1089,11 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 56
+ThICC_METALLIC False
 
 newmtl dr_Tyochin
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1006,9 +1110,11 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 47
+ThICC_METALLIC True
 
 newmtl dr_Tyochin2
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1025,6 +1131,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 28
+ThICC_METALLIC True
 
 newmtl dr_Tyochin_Nuki
 Ns 94.117647
@@ -1044,6 +1152,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 37
+ThICC_METALLIC False
 
 newmtl dr_Tyochin_Nuki_Group2
 Ns 94.117647
@@ -1063,6 +1173,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 7
+ThICC_METALLIC False
 
 newmtl dr_WhiteWood
 Ns 94.117647
@@ -1082,6 +1194,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 21
+ThICC_METALLIC False
 
 newmtl dr_YellowWood
 Ns 94.117647
@@ -1101,6 +1215,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 0
+ThICC_METALLIC False
 
 newmtl dr_YellowWood_Horn
 Ns 94.117647
@@ -1120,6 +1236,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 26
+ThICC_METALLIC False
 
 newmtl ef_gravityboard
 Ns 94.117647
@@ -1139,6 +1257,8 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 22
+ThICC_METALLIC False
 
 newmtl ef_river02_Dragon
 Ns 94.117647
@@ -1158,9 +1278,11 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 52
+ThICC_METALLIC False
 
 newmtl ef_waterfall04_Dragon
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1177,4 +1299,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 16
+ThICC_METALLIC True
 

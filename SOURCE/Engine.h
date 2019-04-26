@@ -11,6 +11,7 @@
 #include "CameraData.h"
 #include "GameStateData.h"
 #include "LocalisationManager.h"
+#include "DebugConsole.h"
 
 #include "Game.h"
 
@@ -76,6 +77,7 @@ private:
 	LocalisationManager m_localiser;
 	KeybindManager m_keybinds;
 	AudioManager m_AM;
+	DebugConsole* m_debug_console = nullptr;
 	
 	//Engine data & the core game instance
 	ThICC_Game m_game_inst;

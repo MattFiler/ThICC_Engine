@@ -25,6 +25,8 @@ struct MapInfo : public AssetComp {
 		cubemap_radiance = converter.from_bytes(cubemap_radiance_str.c_str());
 		std::string cubemap_irradiance_str = m_filepaths.generateFilepath(_element["cubemap"], m_filepaths.CUBEMAP_IRRADIANCE);
 		cubemap_irradiance = converter.from_bytes(cubemap_irradiance_str.c_str());
+		std::string cubemap_skybox_str = m_filepaths.generateFilepath(_element["skybox"], m_filepaths.IMAGE);
+		cubemap_skybox = converter.from_bytes(cubemap_skybox_str.c_str());
 
 		audio_background_start = _element["audio"]["background_start"];
 		audio_background = _element["audio"]["background"];
@@ -39,6 +41,7 @@ struct MapInfo : public AssetComp {
 
 	std::wstring cubemap_radiance;
 	std::wstring cubemap_irradiance;
+	std::wstring cubemap_skybox;
 
 	std::string audio_background_start = "";
 	std::string audio_background = "";

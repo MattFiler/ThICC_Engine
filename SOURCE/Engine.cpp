@@ -86,7 +86,6 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	Locator::setupAudio(&m_AM);
 	Locator::setupCamData(&m_camera_data);
 
-
 	//Setup itembox respawn time
 	ItemBoxConfig::respawn_time = m_game_config["itembox_respawn_time"];
 
@@ -129,6 +128,16 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 
 	//Setup viewports for splitscreen mode
 	SetupSplitscreenViewports();
+
+	//Load skybox objects
+	for (int i = 0; i < m_game_config["player_count"]; i++) {
+		Locator::getRD()->skybox[i] = new Skybox();
+	}
+
+	//Create debug console
+	#ifdef _DEBUG 
+	m_debug_console = new DebugConsole();
+	#endif
 }
 
 /* Setup our splitscreen viewport sizes */
@@ -234,6 +243,14 @@ void ThICC_Engine::Update(DX::StepTimer const& timer)
 	//Framerate monitor
 	debug_text->SetText(std::to_string(timer.GetFramesPerSecond()));
 
+	//Debug console
+	#ifdef _DEBUG 
+	m_debug_console->Tick();
+	if (m_debug_console->IsOpen()) {
+		return;
+	}
+	#endif
+
 	//Pass off to our game now we've done our engine-y stuff
 	m_game_inst.Update(timer);
 }
@@ -271,12 +288,16 @@ void ThICC_Engine::Render()
 	// Render the game 2D elements
 	m_game_inst.Render2D();
 
-	//Render FPS
+	#ifdef _DEBUG 
 	Locator::getRD()->m_2dSpriteBatch->Begin(Locator::getRD()->m_commandList.Get());
+	//Debug console
+	m_debug_console->Render();
+	//FPS
 	if (m_game_config["enable_fps"]) {
 		debug_text->Render();
 	}
 	Locator::getRD()->m_2dSpriteBatch->End();
+	#endif
 
 	// Show the new frame.
 	m_device_data.m_deviceResources->Present();

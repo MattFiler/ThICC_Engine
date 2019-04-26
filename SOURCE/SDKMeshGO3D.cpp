@@ -41,20 +41,30 @@ void SDKMeshGO3D::Render()
 		//Load PBR data per PBREffect
 		{
 			/* 
-			As a proof of concept, I've currently applied radiance maps to both. This gives a really flat look.
-			TODO: enable per-object toggling of FLAT/GLOSSY (with glossy applying irradiance)
+			Continuing work on custom metal/non-metal render definitions.
+			Current only applies to track, but will be extended to all models.
 			*/
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(radiance_index);
 			auto diffuseDesc = m_radianceIBL->GetDesc();
-			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(radiance_index);
+			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(irradiance_index);
 
+			int i = 0;
 			for (auto& it : m_modelNormal)
 			{
 				auto pbr = dynamic_cast<PBREffect*>(it.get());
 				if (pbr)
 				{
 					//Set IBL textures
-					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+					if (current_metalness.size() != 0 && current_metalness.at(i)) {
+						//Metal
+						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+					}
+					else
+					{
+						//Non-metal
+						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, radianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+					}
+					i++;
 				}
 			}
 		}
@@ -89,7 +99,7 @@ void SDKMeshGO3D::Load()
 	}
 
 	//Create our resource descriptor - I'm allocating 1024 spaces for now
-	m_resourceDescriptors = std::make_unique<DescriptorPile>(Locator::getDD()->m_deviceResources->GetD3DDevice(),
+	m_resourceDescriptors = std::make_unique<DescriptorPile>(device,
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
 		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
 		1024,
@@ -227,6 +237,31 @@ void SDKMeshGO3D::Load()
 
 			//Create effects for materials
 			m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, resourceDescriptorOffset);
+
+			if (!is_debug_mesh) {
+				//Load current metalness config
+				std::string filepath = m_filepath.getFolder(GameFilepaths::MODEL) + filename + "/REFLECTION.ThICC";
+				std::ifstream fin(filepath, std::ios::binary);
+
+				if (fin.good()) {
+					//Get number of materials in config
+					fin.seekg(0);
+					int number_of_materials = 0;
+					fin.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
+
+					//Go through config for number of materials
+					for (int i = 0; i < number_of_materials; i++) {
+						char data;
+						fin.read(&data, sizeof(bool));
+						bool choice = static_cast<bool>(data);
+						current_metalness.push_back(choice);
+					}
+				}
+				else
+				{
+					DebugText::print("Model '" + filename + "' uses a depreciated configuration.");
+				}
+			}
 		}
 
 		//Finish upload and wait for it to end
@@ -247,6 +282,7 @@ void SDKMeshGO3D::Reset()
 	m_modelNormal.clear();
 	m_resourceDescriptors.reset();
 	resourceDescriptorOffset = 0;
+	current_metalness.clear();
 	m_loaded = false;
 }
 

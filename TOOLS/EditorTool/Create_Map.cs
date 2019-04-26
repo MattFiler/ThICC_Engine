@@ -42,6 +42,7 @@ namespace EditorTool
                 mapPreviewImage.Text = maps_json_config[map_json_key]["menu_sprite"].Value<string>();
                 mapModelAsset.Text = maps_json_config[map_json_key]["model"].Value<string>();
                 cubemapChoice.Text = maps_json_config[map_json_key]["cubemap"].Value<string>();
+                skyboxChoice.Text = maps_json_config[map_json_key]["skybox"].Value<string>();
                 soundtrackIntro.Text = maps_json_config[map_json_key]["audio"]["background_start"].Value<string>();
                 soundtrackIntroLoop.Text = maps_json_config[map_json_key]["audio"]["background"].Value<string>();
                 finalLapIntro.Text = maps_json_config[map_json_key]["audio"]["final_lap_start"].Value<string>();
@@ -65,6 +66,10 @@ namespace EditorTool
         private void loadIrradiance_Click(object sender, EventArgs e)
         {
             //depreciated
+        }
+        private void loadSkybox_Click(object sender, EventArgs e)
+        {
+            function_libary.assetSelectHandler(skyboxChoice, AssetType.IMAGE);
         }
         private void selectSoundtrackIntro_Click(object sender, EventArgs e)
         {
@@ -121,6 +126,7 @@ namespace EditorTool
             maps_json_config[map_name]["menu_sprite"] = mapPreviewImage.Text;
             maps_json_config[map_name]["model"] = mapModelAsset.Text;
             maps_json_config[map_name]["cubemap"] = cubemapChoice.Text;
+            maps_json_config[map_name]["skybox"] = skyboxChoice.Text;
             maps_json_config[map_name]["audio"] = JObject.Parse("{}");
             maps_json_config[map_name]["audio"]["background_start"] = soundtrackIntro.Text;
             maps_json_config[map_name]["audio"]["background"] = soundtrackIntroLoop.Text;

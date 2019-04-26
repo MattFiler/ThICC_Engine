@@ -262,5 +262,13 @@
     "Arcade_Code": -1,
     "Gamepad": "Right Stick Right",
     "is_debug": true
+  },
+  "OPEN_CONSOLE": {
+    "Keyboard": "Insert",
+    "Keyboard_Code": 45,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Y",
+    "is_debug": true
   }
 }
