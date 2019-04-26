@@ -185,13 +185,17 @@ namespace EditorTool
         private void collisionCheckChanged(bool enabled)
         {
             onTrackNoAI.Checked = false;
-            onTrackNoAI.Enabled = false;
+            onTrackNoAI.Enabled = enabled;
             onTrack.Checked = enabled;
             onTrack.Enabled = enabled;
             offTrack.Checked = false;
             offTrack.Enabled = enabled;
             boostPad.Checked = false;
             boostPad.Enabled = enabled;
+            antiGravPad.Checked = false;
+            antiGravPad.Enabled = enabled;
+            jumpPad.Checked = false;
+            jumpPad.Enabled = enabled;
             isWall.Checked = false;
             isWall.Enabled = enabled;
         }
@@ -363,13 +367,7 @@ namespace EditorTool
             temp_rma.Save(this_model_folder + rma_mat, ImageFormat.Png);
             return rma_mat;
         }
-
-        /* Enable "navmesh" toggle for on-track mats */
-        private void onTrack_CheckedChanged(object sender, EventArgs e)
-        {
-            onTrackNoAI.Checked = false;
-            onTrackNoAI.Enabled = onTrack.Checked;
-        }
+        
 
 
         // stuff to be deleted
@@ -391,6 +389,9 @@ namespace EditorTool
         private void RMAMapBrowse_Click(object sender, EventArgs e)
         {
 
+        }
+        private void onTrack_CheckedChanged(object sender, EventArgs e)
+        {
         }
 
     }
