@@ -3,6 +3,7 @@
 #include "pch.h"
 #include <iostream>
 #include <string>
+#include "DebugConsole.h"
 
 /*
 
@@ -14,6 +15,7 @@ static struct DebugText {
 	static void print(const std::string& message) {
 		#ifdef _DEBUG
 		std::cout << "ThICC_DEBUG: " << message << std::endl;
+		DebugConsole::LogOutput(message);
 		#endif
 	}
 };

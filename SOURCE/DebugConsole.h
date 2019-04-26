@@ -1,38 +1,39 @@
 #pragma once
-#include "ImageGO2D.h"
-#include "Text2D.h"
-#include "KeybindManager.h"
+#include <string>
 
-class DebugConsole {
+class KeybindManager;
+class ImageGO2D;
+class Text2D;
+
+static class DebugConsole {
 public:
 	DebugConsole();
 	~DebugConsole();
 
-	void Tick();
-	void Render();
+	static void Tick();
+	static void Render();
 
-	bool IsOpen() { return is_visible; }
+	static bool IsOpen() { return is_visible; }
 
-	void LogOutput(std::string _log);
+	static void LogOutput(std::string _log);
 
 private:
-	void UserInputHandles();
-	void AddInputText(std::string _input);
-	void RemoveInputText(int _amount);
-	void SubmitCommand();
+	static void UserInputHandles();
+	static void AddInputText(std::string _input);
+	static void RemoveInputText(int _amount);
+	static void SubmitCommand();
 
 	//Engine features
-	KeybindManager m_keybinds;
+	static KeybindManager* m_keybinds;
 
 	//Background
-	ImageGO2D* console_bg = nullptr;
+	static ImageGO2D* console_bg;
 
 	//Text
-	Text2D* input_text = nullptr;
-	std::vector<std::string> output_text_array;
-	Text2D* output_text = nullptr;
+	static Text2D* input_text;
+	static std::vector<std::string> output_text_array;
+	static Text2D* output_text;
 
 	//States
-	bool is_visible = false;
-	const int max_console_lines = 20;
+	static bool is_visible;
 };

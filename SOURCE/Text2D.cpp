@@ -3,11 +3,11 @@
 #include <codecvt>
 
 /* Create */
-Text2D::Text2D(std::string _text, bool _middle)
+Text2D::Text2D(std::string _text, TextOrigin _origin)
 {
 	SetText(_text);
 
-	middle_origin = _middle;
+	m_originPos = _origin;
 
 	if (middle_origin) {
 		//Start in centre as default
@@ -27,9 +27,19 @@ void Text2D::SetText(std::string _text)
 /* Render text */
 void Text2D::Render()
 {
-	if (middle_origin) {
-		//Keep our origin up to date
+	switch (m_originPos) {
+	case TextOrigin::BOTTOM_LEFT:
+		m_origin = Vector2(0, ((Vector2)Locator::getRD()->m_2dFont->MeasureString(m_wText.c_str())).y);
+		break;
+	case TextOrigin::BOTTOM_RIGHT:
+		m_origin = Locator::getRD()->m_2dFont->MeasureString(m_wText.c_str());
+		break;
+	case TextOrigin::MIDDLE:
 		m_origin = Locator::getRD()->m_2dFont->MeasureString(m_wText.c_str()) / 2.f;
+		break;
+	case TextOrigin::TOP_RIGHT:
+		m_origin = Vector2(((Vector2)Locator::getRD()->m_2dFont->MeasureString(m_wText.c_str())).x, 0);
+		break;
 	}
 
 	//Render
