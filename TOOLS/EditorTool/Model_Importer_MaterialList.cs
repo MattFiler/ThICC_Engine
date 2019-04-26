@@ -419,6 +419,8 @@ namespace EditorTool
                         foreach (var vert in data)
                         {
                             glider_track_array.Add(vert[0].Value<double>());
+                            glider_track_array.Add(vert[1].Value<double>());
+                            glider_track_array.Add(vert[2].Value<double>());
                         }
                         glider_track.Add(glider_track_array);
                     }
@@ -541,10 +543,6 @@ namespace EditorTool
                     {
                         if (collision_config[i.ToString()] != null) //support for depreciated configs
                         {
-                            if (i == 7)
-                            {
-                                bool dssdfsdf = false;
-                            }
                             if (collision_config[i.ToString()].Value<bool>())
                             {
                                 collision_enabled = true;
@@ -739,10 +737,10 @@ namespace EditorTool
                     {
                         int offset = 0;
                         reader.BaseStream.Position = sizeof(int);
-                        for (int i = 0; i < collision_count; i++) {
+                        for (int i = 0; i < (int)CollisionType.GLIDER_TRACK; i++) {
                             offset += reader.ReadInt32();
                         }
-                        reader.BaseStream.Position = offset * sizeof(float);
+                        reader.BaseStream.Position = (sizeof(int) * (collision_count + 1)) + (offset * sizeof(float));
                         for (int i = 0; i < glider_vert_count; i++)
                         {
                             all_verts.ElementAt((int)CollisionType.GLIDER_TRACK).Add(reader.ReadSingle());
