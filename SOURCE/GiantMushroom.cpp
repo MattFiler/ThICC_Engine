@@ -14,10 +14,10 @@ void GiantMushroom::InitMushroomData()
 {
 	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
 	m_itemData << i;
-	m_growthData.m_scaleMulti = (float)m_itemData["MUSHROOM_GIANT"]["info"]["size_multiplier"];
-	m_growthData.m_growthSpeed = (float)m_itemData["MUSHROOM_GIANT"]["info"]["growth_speed"];
-	m_growthData.m_shrinkSpeed = (float)m_itemData["MUSHROOM_GIANT"]["info"]["shrink_speed"];
-	m_growthData.m_growthDuration = (float)m_itemData["MUSHROOM_GIANT"]["info"]["growth_duration"];
+	m_growthData.m_scaleMulti = (float)m_itemData["MUSHROOM_GIANT"]["info"]["grow"]["size_multiplier"];
+	m_growthData.m_growthSpeed = (float)m_itemData["MUSHROOM_GIANT"]["info"]["grow"]["growth_speed"];
+	m_growthData.m_shrinkSpeed = (float)m_itemData["MUSHROOM_GIANT"]["info"]["grow"]["shrink_speed"];
+	m_growthData.m_duration = (float)m_itemData["MUSHROOM_GIANT"]["info"]["grow"]["growth_duration"];
 }
 
 void GiantMushroom::Tick()
@@ -45,9 +45,9 @@ void GiantMushroom::Tick()
 
 		case ItemGrowthData::MAINTIAIN:
 
-			m_player->setInvicible(m_growthData.m_growthTimeElapsed < m_growthData.m_growthDuration);
-			m_growthData.m_growthTimeElapsed += Locator::getGSD()->m_dt;
-			if (m_growthData.m_growthTimeElapsed >= m_growthData.m_growthDuration)
+			m_player->setInvicible(m_growthData.m_timeElapsed < m_growthData.m_duration);
+			m_growthData.m_timeElapsed += Locator::getGSD()->m_dt;
+			if (m_growthData.m_timeElapsed >= m_growthData.m_duration)
 			{
 				m_growthData.m_scaleState = ItemGrowthData::SHRINK;
 			}

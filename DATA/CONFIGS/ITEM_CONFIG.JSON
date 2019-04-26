@@ -318,10 +318,12 @@
 			"place_8": 5
 		},
 		"info": {
+			"grow": {
 			"size_multiplier": 2,
 			"growth_speed": 2,
 			"shrink_speed": 3,
 			"growth_duration": 12 
+			}
 		}
 	},
 	"SQUID": {
@@ -355,6 +357,16 @@
 			"place_5": 7.5,
 			"place_6": 5,
 			"place_7": 2.5
+		},
+		"info": {
+			"strike_duration": 10,
+			"player_velocity_multiplier": 0.2,
+			"shrink": {
+				"size_multiplier": 0.5,
+				"growth_speed": 2,
+				"shrink_speed": 2,
+				"max_shrink_duration": 13 
+			}		
 		}
 	},
 	"BULLET_BILL": {

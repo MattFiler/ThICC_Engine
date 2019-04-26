@@ -1,5 +1,6 @@
 #pragma once
 #include "Item.h"
+#include "ItemGrowthData.h"
 
 class Player;
 
@@ -7,6 +8,7 @@ class LightningCloud : public Item
 {
 public:
 	LightningCloud();
+	void initCloudData();
 	~LightningCloud() = default;
 
 	virtual void Tick() override;
@@ -17,18 +19,19 @@ public:
 	float GetElapsedStrikeTime() { return m_strikeTimeElapsed; };
 
 private:
-
 	float m_strikeTimeElapsed = 0;
-	float m_strikeDuration = 10;
+	float m_strikeDuration = 0;
+	float m_slowAmount = 0;
+
 	bool m_striked = false;
 
-	Vector3 m_startScale;
+	/*Vector3 m_startScale;
 	Vector3 m_endScale;
 	float m_scaleSpeed = 2;
 	float m_scalePercent = 0;
 	float m_shrinkTimeElapsed = 0;
 	float m_shrinkDuration = 13;
-	enum ScaleState { GROW, MAINTIAIN, SHRINK } m_scaleState = SHRINK;
+	enum ScaleState { GROW, MAINTIAIN, SHRINK } m_scaleState = SHRINK;*/
 
-	float m_slowAmount = 0.2f;
+	ItemGrowthData m_growthData;
 };
