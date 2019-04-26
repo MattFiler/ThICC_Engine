@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.camType = new System.Windows.Forms.ComboBox();
+            this.loadMenuLoop = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.farClip = new System.Windows.Forms.NumericUpDown();
@@ -109,11 +109,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.camOffZ)).BeginInit();
             this.SuspendLayout();
             // 
-            // camType
+            // loadMenuLoop
             // 
-            this.camType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.camType.FormattingEnabled = true;
-            this.camType.Items.AddRange(new object[] {
+            this.loadMenuLoop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.loadMenuLoop.FormattingEnabled = true;
+            this.loadMenuLoop.Items.AddRange(new object[] {
             "FOLLOW",
             "ORBIT",
             "CINEMATIC",
@@ -121,11 +121,11 @@
             "INDEPENDENT",
             "BACK_FACING",
             "DEBUG_CAM"});
-            this.camType.Location = new System.Drawing.Point(15, 95);
-            this.camType.Name = "camType";
-            this.camType.Size = new System.Drawing.Size(307, 21);
-            this.camType.TabIndex = 1;
-            this.camType.SelectedIndexChanged += new System.EventHandler(this.camType_SelectedIndexChanged);
+            this.loadMenuLoop.Location = new System.Drawing.Point(15, 95);
+            this.loadMenuLoop.Name = "loadMenuLoop";
+            this.loadMenuLoop.Size = new System.Drawing.Size(307, 21);
+            this.loadMenuLoop.TabIndex = 1;
+            this.loadMenuLoop.SelectedIndexChanged += new System.EventHandler(this.camType_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -746,7 +746,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.camType);
+            this.Controls.Add(this.loadMenuLoop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Game_Config_Camera";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -787,7 +787,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox camType;
+        private System.Windows.Forms.ComboBox loadMenuLoop;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NumericUpDown farClip;

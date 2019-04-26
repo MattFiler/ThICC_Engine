@@ -32,6 +32,7 @@
             this.openVehicleManager = new System.Windows.Forms.Button();
             this.openMapManager = new System.Windows.Forms.Button();
             this.openItemManager = new System.Windows.Forms.Button();
+            this.openSoundManager = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openCharacterManager
@@ -74,11 +75,22 @@
             this.openItemManager.Text = "In-Game Item Manager";
             this.openItemManager.UseVisualStyleBackColor = true;
             // 
+            // openSoundManager
+            // 
+            this.openSoundManager.Location = new System.Drawing.Point(12, 160);
+            this.openSoundManager.Name = "openSoundManager";
+            this.openSoundManager.Size = new System.Drawing.Size(270, 31);
+            this.openSoundManager.TabIndex = 12;
+            this.openSoundManager.Text = "Shared Global Sounds Manager";
+            this.openSoundManager.UseVisualStyleBackColor = true;
+            this.openSoundManager.Click += new System.EventHandler(this.openSoundManager_Click);
+            // 
             // Asset_Manager_Preselect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 164);
+            this.ClientSize = new System.Drawing.Size(296, 199);
+            this.Controls.Add(this.openSoundManager);
             this.Controls.Add(this.openItemManager);
             this.Controls.Add(this.openCharacterManager);
             this.Controls.Add(this.openVehicleManager);
@@ -97,5 +109,6 @@
         private System.Windows.Forms.Button openVehicleManager;
         private System.Windows.Forms.Button openMapManager;
         private System.Windows.Forms.Button openItemManager;
+        private System.Windows.Forms.Button openSoundManager;
     }
 }

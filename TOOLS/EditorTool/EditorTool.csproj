@@ -107,6 +107,12 @@
     <Compile Include="Create_Character.Designer.cs">
       <DependentUpon>Create_Character.cs</DependentUpon>
     </Compile>
+    <Compile Include="Create_Global_Sounds.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Create_Global_Sounds.Designer.cs">
+      <DependentUpon>Create_Global_Sounds.cs</DependentUpon>
+    </Compile>
     <Compile Include="Create_Map.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -254,6 +260,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Create_Character.resx">
       <DependentUpon>Create_Character.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Create_Global_Sounds.resx">
+      <DependentUpon>Create_Global_Sounds.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Create_Map.resx">
       <DependentUpon>Create_Map.cs</DependentUpon>

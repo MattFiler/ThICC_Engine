@@ -30,7 +30,7 @@ namespace EditorTool
             farClip.Value = controller_config["GENERAL"]["view_far"].Value<int>();
 
             //Select cam always
-            camType.SelectedIndex = 0;
+            loadMenuLoop.SelectedIndex = 0;
         }
 
         /* Cam type changed */
@@ -79,7 +79,7 @@ namespace EditorTool
             }
 
             /* LOAD NEW CONFIG */
-            cam_type = camType.SelectedItem.ToString();
+            cam_type = loadMenuLoop.SelectedItem.ToString();
 
             //Common
             fov.Value = controller_config[cam_type]["fov"].Value<int>();
@@ -154,13 +154,13 @@ namespace EditorTool
         private void saveConfig_Click(object sender, EventArgs e)
         {
             //Change index to force a config update
-            if (camType.SelectedIndex < 6)
+            if (loadMenuLoop.SelectedIndex < 6)
             {
-                camType.SelectedIndex = camType.SelectedIndex + 1;
+                loadMenuLoop.SelectedIndex = loadMenuLoop.SelectedIndex + 1;
             }
             else
             {
-                camType.SelectedIndex = 0;
+                loadMenuLoop.SelectedIndex = 0;
             }
 
             //Save shared

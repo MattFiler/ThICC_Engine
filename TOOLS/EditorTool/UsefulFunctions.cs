@@ -294,6 +294,8 @@ namespace EditorTool
                     return "Vehicle";
                 case AssetCompType.ENGINE_FONT:
                     return "Engine Font";
+                case AssetCompType.GLOBAL_SOUNDS:
+                    return "Global Sound";
             }
             return "";
         }

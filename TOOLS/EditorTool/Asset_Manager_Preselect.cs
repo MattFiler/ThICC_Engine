@@ -35,6 +35,14 @@ namespace EditorTool
             openManager(AssetCompType.CHARACTER);
         }
 
+        /* Open Global Sound Manager */
+        private void openSoundManager_Click(object sender, EventArgs e)
+        {
+            Create_Global_Sounds globalSoundEditor = new Create_Global_Sounds();
+            globalSoundEditor.Show();
+            Close();
+        }
+
         /* Open A Manager */
         private void openManager(AssetCompType type)
         {

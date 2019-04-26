@@ -35,6 +35,7 @@
         MAP,
         CHARACTER,
         VEHICLE,
-        ENGINE_FONT
+        ENGINE_FONT,
+        GLOBAL_SOUNDS
     }
 }
