@@ -351,6 +351,7 @@
     <ClInclude Include="ItemBox.h" />
     <ClInclude Include="ItemCollisionData.h" />
     <ClInclude Include="ItemData.h" />
+    <ClInclude Include="ItemGrowthData.h" />
     <ClInclude Include="ItemThrowData.h" />
     <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="LightningCloud.h" />

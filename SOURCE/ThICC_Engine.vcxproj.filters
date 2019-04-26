@@ -368,6 +368,9 @@
     <ClInclude Include="ItemBoostData.h">
       <Filter>Game\Components\Item Info</Filter>
     </ClInclude>
+    <ClInclude Include="ItemGrowthData.h">
+      <Filter>Game\Components\Item Info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

@@ -52,11 +52,14 @@ void Item::Tick()
 
 	if (m_itemUsed)
 	{
-		//Despawn time
-		m_elapsedTime += Locator::getGSD()->m_dt;
-		if (m_elapsedTime > m_maxDuration)
+		if (m_shouldDespawn)
 		{
-			m_shouldDestroy = true;
+			//Despawn time
+			m_elapsedTime += Locator::getGSD()->m_dt;
+			if (m_elapsedTime > m_maxDuration)
+			{
+				m_shouldDestroy = true;
+			}
 		}
 
 		//Player immunity time

@@ -51,6 +51,7 @@ protected:
 	std::unique_ptr<AnimationController> m_displayedMesh = nullptr;
 	bool m_shouldDestroy = false;
 	bool m_itemUsed = false;
+	bool m_shouldDespawn = true;
 	bool m_trailingPlayerImmunity = true;
 	bool m_trailing = false;
 

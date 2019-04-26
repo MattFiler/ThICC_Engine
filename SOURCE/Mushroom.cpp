@@ -8,6 +8,7 @@
 Mushroom::Mushroom()
 {
 	InitMushroomData();
+	m_shouldDespawn = false;
 }
 
 void Mushroom::InitMushroomData()

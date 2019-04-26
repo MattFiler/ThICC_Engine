@@ -2,6 +2,23 @@
 #include "GiantMushroom.h"
 #include "Player.h"
 #include "GameStateData.h"
+#include "DebugText.h"
+
+GiantMushroom::GiantMushroom()
+{
+	InitMushroomData();
+	m_shouldDespawn = false;
+}
+
+void GiantMushroom::InitMushroomData()
+{
+	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
+	m_itemData << i;
+	m_growthData.m_scaleMulti = (float)m_itemData["MUSHROOM_GIANT"]["info"]["size_multiplier"];
+	m_growthData.m_growthSpeed = (float)m_itemData["MUSHROOM_GIANT"]["info"]["growth_speed"];
+	m_growthData.m_shrinkSpeed = (float)m_itemData["MUSHROOM_GIANT"]["info"]["shrink_speed"];
+	m_growthData.m_growthDuration = (float)m_itemData["MUSHROOM_GIANT"]["info"]["growth_duration"];
+}
 
 void GiantMushroom::Tick()
 {
@@ -9,41 +26,43 @@ void GiantMushroom::Tick()
 
 	if (m_itemUsed)
 	{
-		switch (m_scaleState)
+		switch (m_growthData.m_scaleState)
 		{
-		case GiantMushroom::GROW:
-			m_player->SetScale(Vector3::Lerp(m_startScale, m_endScale, m_scalePercent));
+		case ItemGrowthData::GROW:
+			m_player->SetScale(Vector3::Lerp(m_growthData.m_startScale, m_growthData.m_endScale, m_growthData.m_scalePercent));
 			m_player->UpdateWorld();
 
-			m_scalePercent += m_scaleSpeed * Locator::getGSD()->m_dt;
+			DebugText::print("x: " + std::to_string(m_player->GetScale().x) + " y: "  + std::to_string(m_player->GetScale().y) + " z: " + std::to_string(m_player->GetScale().z));
 
-			if (m_scalePercent >= 1)
+			m_growthData.m_scalePercent += m_growthData.m_growthSpeed * Locator::getGSD()->m_dt;
+
+			if (m_growthData.m_scalePercent >= 1)
 			{
-				m_scalePercent = 1;
-				m_scaleState = MAINTIAIN;
+				m_growthData.m_scalePercent = 1;
+				m_growthData.m_scaleState = ItemGrowthData::MAINTIAIN;
 			}
 			break;
 
-		case GiantMushroom::MAINTIAIN:
+		case ItemGrowthData::MAINTIAIN:
 
-			m_player->setInvicible(m_growthTimeElapsed < m_maxGrowthTime);
-			m_growthTimeElapsed += Locator::getGSD()->m_dt;
-			if (m_growthTimeElapsed >= m_maxGrowthTime)
+			m_player->setInvicible(m_growthData.m_growthTimeElapsed < m_growthData.m_growthDuration);
+			m_growthData.m_growthTimeElapsed += Locator::getGSD()->m_dt;
+			if (m_growthData.m_growthTimeElapsed >= m_growthData.m_growthDuration)
 			{
-				m_scaleState = SHRINK;
+				m_growthData.m_scaleState = ItemGrowthData::SHRINK;
 			}
 			break;
 
-		case GiantMushroom::SHRINK:
+		case ItemGrowthData::SHRINK:
 			m_player->setInvicible(false);
-			m_player->SetScale(Vector3::Lerp(m_startScale, m_endScale, m_scalePercent));
+			m_player->SetScale(Vector3::Lerp(m_growthData.m_startScale, m_growthData.m_endScale, m_growthData.m_scalePercent));
 			m_player->UpdateWorld();
 
-			m_scalePercent -= m_scaleSpeed * 1.5 * Locator::getGSD()->m_dt;
+			m_growthData.m_scalePercent -= m_growthData.m_shrinkSpeed * Locator::getGSD()->m_dt;
 
-			if (m_scalePercent <= 0)
+			if (m_growthData.m_scalePercent <= 0)
 			{
-				m_scalePercent = 0;
+				m_growthData.m_scalePercent = 0;
 				m_shouldDestroy = true;
 			}
 			break;
@@ -57,8 +76,8 @@ void GiantMushroom::Use(Player * player, bool _altUse)
 	{
 		setItemInUse(player);
 		m_trailingPlayerImmunity = true;
-		m_startScale = m_player->GetScale();
-		m_endScale = m_startScale * 2;
+		m_growthData.m_startScale = m_player->GetScale();
+		m_growthData.m_endScale = m_growthData.m_startScale * m_growthData.m_scaleMulti;
 	}
 }
 

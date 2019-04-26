@@ -404,6 +404,7 @@ void Player::SpawnItems(ItemType type)
 		{
 			GiantMushroom* mushroom = static_cast<GiantMushroom*>(CreateItem(MUSHROOM_GIANT));
 			mushroom->Use(this, false);
+			break;
 		}
 
 		case LIGHTNING_CLOUD:
