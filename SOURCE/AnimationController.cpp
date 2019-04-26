@@ -169,7 +169,7 @@ void AnimationController::UpdateWorld(Matrix& _newWorld)
 
 void AnimationController::Jump(float _jumpHeight, float _duration)
 {
-	if (m_posAnimPoints.empty())
+	if (m_posAnimPoints.empty() && _duration > 0)
 	{
 		m_timeBetweenPos = _duration / 2;
 		m_posTimeElapsed = 0;
@@ -181,7 +181,7 @@ void AnimationController::Jump(float _jumpHeight, float _duration)
 
 void AnimationController::Spin(int _revolutions, float _duration)
 {
-	if (m_rotAnimPoints.empty())
+	if (m_rotAnimPoints.empty() && _duration > 0)
 	{
 		m_timeBetweenRot = _duration / (4 * _revolutions);
 		m_rotTimeElapsed = 0;
@@ -198,7 +198,7 @@ void AnimationController::Spin(int _revolutions, float _duration)
 
 void AnimationController::Flip(int _revolutions, float _duration)
 {
-	if (m_rotAnimPoints.empty())
+	if (m_rotAnimPoints.empty() && _duration > 0)
 	{
 		m_timeBetweenRot = _duration / (4 * _revolutions);
 		m_rotTimeElapsed = 0;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Item.h"
+#include "ItemCollisionData.h"
 
 class Player;
 
@@ -8,6 +9,7 @@ class GreenShell : public Item
 {
 public:
 	GreenShell();
+	void initItemData();
 	~GreenShell() = default;
 
 	virtual void Tick() override;
@@ -23,11 +25,5 @@ private:
 	float m_spinRev = 0;
 	float m_spinDuration = 0;
 
-	//Player collision data
-	Vector3 m_playerVel = Vector3::Zero;
-	float m_playerJumpHeight = 0;
-	float m_playerJumpDuration = 0;
-	float m_playerFlipRev = 0;
-	float m_playerFlipDuration = 0;
-	float m_playerVerticalPosOffset = 0;
+	ItemCollisionData m_collisionData;
 };

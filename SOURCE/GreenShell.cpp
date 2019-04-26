@@ -20,14 +20,14 @@ void GreenShell::initItemData()
 	m_spinRev = (float)m_itemData["GREEN_SHELL"]["info"]["spin"]["revolutions"];
 	m_spinDuration = m_itemData["GREEN_SHELL"]["info"]["spin"]["duration"];
 
-	m_playerVel = Vector3((float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["velocity"][0],
-		(float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["velocity"][1],
-		(float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["velocity"][2]);
-	m_playerJumpHeight = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["jump"]["height"];
-	m_playerJumpDuration = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["jump"]["duration"];
-	m_playerFlipRev = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["flip"]["revolutions"];
-	m_playerFlipDuration = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["flip"]["duration"];
-	m_playerVerticalPosOffset = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["vertical_pos_offset"];
+	m_collisionData.m_playerVelMulti = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["velocity_multiplier"];
+	m_collisionData.m_jumpHeight = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["jump"]["height"];
+	m_collisionData.m_jumpDuration = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["jump"]["duration"];
+	m_collisionData.m_flipRev = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["flip"]["revolutions"];
+	m_collisionData.m_flipDuration = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["flip"]["duration"];
+	m_collisionData.m_spinRev = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["spin"]["revolutions"];
+	m_collisionData.m_spinDuration = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["spin"]["duration"];
+	m_collisionData.m_vertPosOffset = (float)m_itemData["GREEN_SHELL"]["info"]["player_collision"]["vertical_pos_offset"];
 }
 
 void GreenShell::HitByPlayer(Player* player)
@@ -38,10 +38,12 @@ void GreenShell::HitByPlayer(Player* player)
 		return;
 	}
 
-	player->setVelocity(m_playerVel);
-	player->Jump(m_playerJumpHeight, m_playerJumpDuration);
-	player->Flip(m_playerFlipRev, m_playerFlipDuration);
-	player->AddPos(player->GetWorld().Up() * m_playerVerticalPosOffset);
+	player->setVelocity(player->getVelocity() * m_collisionData.m_playerVelMulti);
+	player->Jump(m_collisionData.m_jumpHeight, m_collisionData.m_jumpDuration);
+	player->Flip(m_collisionData.m_flipRev, m_collisionData.m_flipDuration);
+	player->Spin(m_collisionData.m_spinRev, m_collisionData.m_spinDuration);
+	player->AddPos(player->GetWorld().Up() * m_collisionData.m_vertPosOffset);
+	player->UpdateWorld();
 	m_shouldDestroy = true;
 }
 

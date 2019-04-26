@@ -37,7 +37,7 @@
 				"duration": 0.7
 			},
 			"player_collision": {
-				"velocity": [0,0,0],		
+				"velocity_multiplier": 0,		
 				"jump": {
 					"height": 1.5,
 					"duration": 1
@@ -45,6 +45,10 @@
 				"flip": {
 					"revolutions": 1,
 					"duration": 0.8
+				},
+				"spin" : {
+					"revolutions": 0,
+					"duration": 0
 				},
 				"vertical_pos_offset": 4
 			}
@@ -74,6 +78,33 @@
 			"place_3": 10,
 			"place_4": 5,
 			"place_5": 2.5
+		},
+		"info": {
+			"lifetime": 300,
+			"player_immunity_time": 0.5,
+			"throw": {
+				"horizontal_pos_offset": 2,
+				"vertical_pos_offset" : 3,
+				"forward_force": 100,
+				"upward_force": 1,
+				"max_gravity": 500
+			},
+			"player_collision": {
+				"velocity_multiplier": 0.3,	
+				"jump": {
+					"height": 0,
+					"duration": 1
+				},
+				"flip": {
+					"revolutions": 0,
+					"duration": 0
+				},
+				"spin" : {
+					"revolutions": 1,
+					"duration": 0.4
+				},
+				"vertical_pos_offset": 0
+			}
 		}
 	},
 	"FAKE_BOX": {
