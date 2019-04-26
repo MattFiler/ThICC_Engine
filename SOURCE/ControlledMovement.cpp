@@ -91,6 +91,12 @@ void ControlledMovement::GetControllerInput()
 
 void ControlledMovement::ProcessInputFlags()
 {
+	if (!m_enabled)
+	{
+		m_animMesh->Update(m_physModel->GetWorld(), m_targetAnimRotOffset);
+		return;
+	}
+
 	Vector3 forwardMove = m_moveSpeed * m_physModel->GetWorld().Forward();
 	Vector3 rightMove = m_turnSpeed * m_physModel->GetWorld().Right();
 	Vector3 forwardComponent = Vector3::Zero;

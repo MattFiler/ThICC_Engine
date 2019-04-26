@@ -119,6 +119,9 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	}
 	else
 	{
+		m_colType = CollisionType::NO_TERRAIN;
+		// Wait for bit, then if no track is found start rotating to the world up
+		// TODO: Add the wait a bit
 		modifiedMaxRotation /= 5;
 		Vector forward = m_world.Forward();
 		forward.y = 0;

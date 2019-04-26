@@ -58,7 +58,9 @@ void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
 	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character.model);
 	new_model->SetScale(m_model_config_character["modelscale"]);
 	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
+	m_animationMesh->AddModel("lakitu", "DEFAULT_ITEM", Vector3::Up * 4);
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
+	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
 	m_animationMesh->SwitchModelSet("default");
 
 	m_animationMesh->Load();
@@ -468,12 +470,12 @@ void Player::setGamePad(bool _state)
 	// TEST CODE //
 	
 	
-	if (m_playerID == 0)
+	/*if (m_playerID == 0)
 	{
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);
 		Locator::getAIScheduler()->AddAI(m_ai.get());
-	}
+	}*/
 	
 	// TEST CODE //
 }
@@ -509,7 +511,14 @@ void Player::movement()
 
 void Player::RespawnLogic()
 {
+	if (m_respawning)
+	{
+		MovePlayerToTrack();
+		return;
+	}
+
 	m_posHistoryTimer += Locator::getGSD()->m_dt;
+	m_timeSinceRespawn += Locator::getGSD()->m_dt;
 	if (m_onTrack && m_colType == CollisionType::ON_TRACK)
 	{
 		if (m_posHistoryTimer >= m_posHistoryInterval)
@@ -521,7 +530,7 @@ void Player::RespawnLogic()
 	}
 	else
 	{
-		if (m_colType == CollisionType::NONE && m_posHistoryTimer >= m_noTrackRespawn)
+		if (m_colType == CollisionType::NO_TERRAIN && m_posHistoryTimer >= m_noTrackRespawn)
 		{
 			Respawn();
 		}
@@ -534,11 +543,50 @@ void Player::RespawnLogic()
 
 void Player::Respawn()
 {
+	m_move->SetEnabled(false);
+	m_animationMesh->SwitchModelSet("respawn");
+	m_respawning = true;
+	m_respawnEnd = m_posHistory.front();
+	m_respawnStart = m_world;
+
+	// Decompose the matrix
+	Vector3 pos;
+	Vector3 scale;
+	Quaternion rot;
+	m_respawnEnd.Decompose(scale, rot, pos);
+	// Add a bit of height to it to "drop" the player
+	pos += m_respawnEnd.Up() * 3;
+
+	// Rebuild the matrix
+	Matrix mat_rot = Matrix::CreateFromQuaternion(rot);
+	Matrix trans = Matrix::CreateTranslation(pos);
+	Matrix mat_scale = Matrix::CreateScale(scale);
+	m_respawnEnd = mat_scale * mat_rot * trans;
+
+	// Find the distance to the respawn point
+	float dist = Vector3::Distance(pos, m_pos);
+	m_totalRespawnTime = dist / m_respawnSpeed;
+
 	m_posHistoryTimer = 0;
-	SetWorld(m_posHistory.front());
 	m_vel = Vector::Zero;
 	m_gravVel = Vector::Zero;
 	m_velTotal = Vector::Zero;
+}
+
+void Player::MovePlayerToTrack()
+{
+	m_elapsedRespawnTime += Locator::getGSD()->m_dt;
+	if (m_elapsedRespawnTime > m_totalRespawnTime)
+	{
+		m_elapsedRespawnTime = 0;
+		SetWorld(Matrix::Lerp(m_respawnStart, m_respawnEnd, 1));
+		m_respawning = false;
+		m_move->SetEnabled(true);
+		m_animationMesh->SwitchModelSet("default");
+		return;
+	}
+
+	SetWorld(Matrix::Lerp(m_respawnStart, m_respawnEnd, m_elapsedRespawnTime / m_totalRespawnTime));
 }
 
 void Player::SetWaypoint(int _waypoint)

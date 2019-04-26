@@ -17,7 +17,7 @@ public:
 protected:
 	bool m_onTrack = false;
 	bool m_useGroundTypes = false;
-	CollisionType colType = ON_TRACK;
+	CollisionType m_colType = ON_TRACK;
 
 private:
 	void MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector _down, MeshTri * _tri);

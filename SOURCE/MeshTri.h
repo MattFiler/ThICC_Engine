@@ -11,7 +11,8 @@ enum CollisionType {
 	BOOST_PAD,
 	WALL,
 
-	NUM_OF_TYPES //must be last
+	NUM_OF_TYPES, //must be last
+	NO_TERRAIN // sneaky post-last hehe
 };
 
 struct MeshTri
