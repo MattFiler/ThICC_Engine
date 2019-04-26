@@ -128,6 +128,14 @@
 			"place_6": 12.5,
 			"place_7": 7.5,
 			"place_8": 2.5
+		},
+		"info": {
+			"boost": {
+				"amount": 40,
+				"min_velocity": 50,
+				"duration": 2,
+				"player_drag": 0.7
+			}
 		}
 	},
 	"MUSHROOM_3X": {
@@ -229,6 +237,15 @@
 			"place_10": 30,
 			"place_11": 27.5,
 			"place_12": 25
+		},
+		"info": {
+			"lifetime": 7.5,
+			"boost": {
+				"amount": 35,
+				"min_velocity": 50,
+				"duration": 1,
+				"player_drag": 0.7
+			}
 		}
 	},
 	"MUSHROOM_GIANT": {

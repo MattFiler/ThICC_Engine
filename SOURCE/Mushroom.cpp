@@ -7,6 +7,17 @@
 
 Mushroom::Mushroom()
 {
+	initItemData();
+}
+
+void Mushroom::initItemData()
+{
+	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
+	m_itemData << i;
+	m_boostData.m_boostAmount = (float)m_itemData["MUSHROOM"]["info"]["boost"]["amount"];
+	m_boostData.m_minVelo = (float)m_itemData["MUSHROOM"]["info"]["boost"]["min_velocity"];
+	m_boostData.m_boostDuration = (float)m_itemData["MUSHROOM"]["info"]["boost"]["duration"];
+	m_boostData.m_playerDrag = (float)m_itemData["MUSHROOM"]["info"]["boost"]["player_drag"];
 }
 
 void Mushroom::Use(Player* player, bool _altUse)
@@ -15,13 +26,13 @@ void Mushroom::Use(Player* player, bool _altUse)
 	m_trailingPlayerImmunity = true;
 
 	player->UseGroundTypes(false);
-	player->SetDrag(0.7f);
+	player->SetDrag(m_boostData.m_playerDrag);
 
-	if (player->getVelocity().Length() < m_minVelo)
+	if (player->getVelocity().Length() < m_boostData.m_minVelo)
 	{
 		Vector vel = m_player->getVelocity();
 		vel.Normalize();
-		vel *= m_minVelo;
+		vel *= m_boostData.m_minVelo;
 		m_player->setVelocity(vel);
 	}
 }
@@ -32,11 +43,11 @@ void Mushroom::Tick()
 	{
 		Vector vel = m_player->getVelocity();
 		vel.Normalize();
-		vel *= m_boostAmount * Locator::getGSD()->m_dt;
+		vel *= m_boostData.m_boostAmount * Locator::getGSD()->m_dt;
 		m_player->setVelocity(m_player->getVelocity() + vel);
 
-		m_boostTimeElapsed += Locator::getGSD()->m_dt;
-		if (m_boostTimeElapsed > m_boostDuration)
+		m_boostData.m_boostTimeElapsed += Locator::getGSD()->m_dt;
+		if (m_boostData.m_boostTimeElapsed > m_boostData.m_boostDuration)
 		{
 			m_player->UseGroundTypes(true);
 			m_shouldDestroy = true;

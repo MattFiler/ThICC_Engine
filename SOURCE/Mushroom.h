@@ -1,12 +1,16 @@
 #pragma once
 
 #include "Item.h"
+#include "ItemBoostData.h"
+#include <json.hpp>
+using json = nlohmann::json;
 
 class Player;
 
 class Mushroom : public Item {
 public:
 	Mushroom();
+	void initItemData();
 	~Mushroom() = default;
 
 	virtual void Tick() override;
@@ -14,8 +18,5 @@ public:
 	void Use(Player* player, bool _altUse) override;
 
 private:
-	float m_boostTimeElapsed = 0;
-	float m_boostAmount = 40;
-	float m_minVelo = 50;
-	double m_boostDuration = 2;
+	ItemBoostData m_boostData;
 };
