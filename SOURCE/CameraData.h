@@ -29,13 +29,13 @@ struct ThICC_CameraData
 		type_map[CameraType::DEBUG_CAM] = "DEBUG_CAM";
 #endif 
 
-		fov = m_camera_configs["GENERAL"]["f.o.v"];
 		m_near = m_camera_configs["GENERAL"]["view_near"];
 		m_far = m_camera_configs["GENERAL"]["view_far"];
 
 		for (size_t i = 0; i < type_map.size(); i++)
 		{
 			CameraType casted_i = static_cast<CameraType>(i);
+			fovs.push_back((m_camera_configs[type_map[casted_i]]["fov"]) * XM_PI / 180);
 			if (type_map[casted_i] != "DEBUG_CAM")
 			{
 				rotation_lerps.push_back(m_camera_configs[type_map[casted_i]]["rotation_lerp"]);
@@ -74,11 +74,10 @@ struct ThICC_CameraData
 	std::vector<DirectX::SimpleMath::Vector3> look_at_positions;
 	std::vector<DirectX::SimpleMath::Vector3> target_positions;
 	std::vector<DirectX::SimpleMath::Vector3> look_at_offsets;
-	std::vector<float> f_o_vs;
+	std::vector<float> fovs;
 	std::vector<float> rotation_lerps;
 	std::vector<float> position_lerps;
 
-	float fov;
 	float m_near;
 	float m_far;
 

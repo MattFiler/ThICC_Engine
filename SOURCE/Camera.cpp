@@ -10,7 +10,7 @@
 Camera::Camera(float _width, float _height, Vector3 _dpos, GameObject3D * _target, CameraType _behav = CameraType::FOLLOW) : cam_type (_behav)
 {
 	m_pos = Vector3::Backward;
-	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / Locator::getCD()->fov, _width / _height, Locator::getCD()->m_near, Locator::getCD()->m_far);
+	m_proj = Matrix::CreatePerspectiveFieldOfView(Locator::getCD()->fovs[static_cast<int>(cam_type)], _width / _height, Locator::getCD()->m_near, Locator::getCD()->m_far);
 
 	m_targetObject = _target;
 }

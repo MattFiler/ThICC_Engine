@@ -1,62 +1,164 @@
 {
   "GENERAL": {
-    "f.o.v": 3.0,
     "view_near": 1.0,
     "view_far": 2000.0
   },
   "FOLLOW": {
+    "fov": 60,
     "rotation_lerp": 0.1,
     "position_lerp": 0.3,
-    "look_at_position" : [0.0, 0.0, 1.0],
-    "target_position" : [0.0, 0.0, 0.0],
-    "camera_offset": [0.0, 2.0, 5.0],
-    "look_at_offset": [0.0, 2.0, 0.0]
+    "look_at_position": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "target_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "camera_offset": [
+      0.0,
+      2.0,
+      5.0
+    ],
+    "look_at_offset": [
+      0.0,
+      2.0,
+      0.0
+    ]
   },
   "ORBIT": {
+    "fov": 60,
     "rotation_lerp": 0.1,
     "position_lerp": 0.25,
-    "look_at_position" : [0.0, 0.0, 1.0],
-    "target_position" : [0.0, 0.0, 0.0],
-    "camera_offset": [6.0, 2.0, 6.0],
-    "look_at_offset": [0.0, 1.0, 0.0],
-    "spin_amount" : 30.0
+    "look_at_position": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "target_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "camera_offset": [
+      6.0,
+      2.0,
+      6.0
+    ],
+    "look_at_offset": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "spin_amount": 30.0
   },
-"CINEMATIC": {
+  "CINEMATIC": {
+    "fov": 60,
     "rotation_lerp": 0.05,
     "position_lerp": 1.0,
-    "look_at_position" : [0.0, 0.0, 1.0],
-    "target_position" : [0.0, 0.0, 0.0],
-    "camera_offset": [0.0, 0.0, 0.0],
-    "look_at_offset": [0.0, 0.0, 0.0],
-    "timeout" : 4.0
+    "look_at_position": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "target_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "camera_offset": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "look_at_offset": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "timeout": 4.0
   },
-"FIRST": {
+  "FIRST": {
+    "fov": 60,
     "rotation_lerp": 0.08,
     "position_lerp": 1.0,
-    "look_at_position" : [0.0, 0.0, 1.0],
-    "target_position" : [0.0, 0.0, 0.0],
-    "camera_offset": [0.0, 2.0, -2.5],
-    "look_at_offset": [0.0, 2.0, -10.0]
+    "look_at_position": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "target_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "camera_offset": [
+      0.0,
+      2.0,
+      -2.5
+    ],
+    "look_at_offset": [
+      0.0,
+      2.0,
+      -10.0
+    ]
   },
-"INDEPENDENT": {
+  "INDEPENDENT": {
+    "fov": 60,
     "rotation_lerp": 0.25,
     "position_lerp": 1.0,
-    "look_at_position" : [0.0, 0.0, 1.0],
-    "target_position" : [0.0, 0.0, 0.0],
-    "camera_offset": [10.0, 3.0, 10.0],
-    "look_at_offset": [0.0, 2.0, 0.0],
-    "spin_amount" : 3.0
-  },      
-"BACK_FACING": {
+    "look_at_position": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "target_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "camera_offset": [
+      10.0,
+      3.0,
+      10.0
+    ],
+    "look_at_offset": [
+      0.0,
+      2.0,
+      0.0
+    ],
+    "spin_amount": 3.0
+  },
+  "BACK_FACING": {
+    "fov": 60,
     "rotation_lerp": 0.25,
     "position_lerp": 0.95,
-    "look_at_position" : [0.0, 0.0, 1.0],
-    "target_position" : [0.0, 0.0, 0.0],
-    "camera_offset": [0.0, 3.0, -5.0],
-    "look_at_offset": [0.0, 2.0, 0.0]
+    "look_at_position": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "target_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "camera_offset": [
+      0.0,
+      3.0,
+      -5.0
+    ],
+    "look_at_offset": [
+      0.0,
+      2.0,
+      0.0
+    ]
   },
-"DEBUG_CAM": {
-    "camera_speed" : 40.0,
-    "camera_rot_speed" : 0.01
+  "DEBUG_CAM": {
+    "fov": 60,
+    "camera_speed": 40.0,
+    "camera_rot_speed": 0.01
   }
 }
