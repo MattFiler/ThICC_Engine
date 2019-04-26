@@ -5,6 +5,8 @@
 #include "ServiceLocator.h"
 #include "ItemData.h"
 #include "AnimationController.h"
+#include <json.hpp>
+using json = nlohmann::json;
 
 class Player;
 
@@ -43,6 +45,8 @@ protected:
 	TrackMagnet * m_mesh = nullptr;
 	Player* m_player = nullptr;
 
+	json m_itemData;
+
 	std::unique_ptr<AnimationController> m_displayedMesh = nullptr;
 	bool m_shouldDestroy = false;
 	bool m_itemUsed = false;
@@ -51,7 +55,7 @@ protected:
 
 	//Despawn Time
 	float m_elapsedTime = 0;
-	float m_maxDuration = 300;
+	float m_maxDuration = 0;
 
 	//Player Immunity time
 	float m_elapsedImmunityTime = 0;

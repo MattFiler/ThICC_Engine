@@ -1,0 +1,26 @@
+"GREEN_SHELL": {	
+	"lifetime": 20,
+	"player_immunity_time": 0.5,
+	"speed" = 60,
+	"use_pos_offset": 1,
+	"spin": {
+		"revolutions": 1,
+		"duration": 0.7
+	}
+	"player_collision": {
+		"velocity": [
+		0,
+		0,
+		0,
+		]			
+		"jump": {
+			"height": 1.5,
+			"duration": 1
+		}
+		"flip": {
+			"revolutions": 1,
+			"duration": 0.8
+		}
+		"vertical_pos_offset": 4
+	}			
+}

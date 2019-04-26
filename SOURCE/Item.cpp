@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Item.h"
 #include "GameStateData.h"
+#include <iostream>
 #include <fstream>
 
 Item::Item(const std::string& item_type)
@@ -13,6 +14,13 @@ Item::Item(const std::string& item_type)
 	m_displayedMesh->AddModelSet("default", std::vector<std::string>{"item"});
 	m_displayedMesh->SwitchModelSet("default");
 	m_displayedMesh->Load();
+
+	std::string item_name = item_type;
+	item_name.erase(item_name.begin(), item_name.begin() + 5); //Removing "ITEM_"
+	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
+	m_itemData << i;
+	m_maxDuration = (float)m_itemData[item_name]["info"]["lifetime"];
+	m_maxImmunityTime = (float)m_itemData[item_name]["info"]["player_immunity_time"];
 }
 
 void Item::Render()
