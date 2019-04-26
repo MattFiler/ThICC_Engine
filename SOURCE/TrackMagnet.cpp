@@ -124,6 +124,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	}
 	else
 	{
+		m_onTrack = false;
 		m_colType = CollisionType::NO_TERRAIN;
 		modifiedMaxRotation /= 5;
 

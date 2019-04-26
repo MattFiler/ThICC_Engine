@@ -59,8 +59,14 @@ void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
 	new_model->SetScale(m_model_config_character["modelscale"]);
 	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
 	m_animationMesh->AddModel("lakitu", "DEFAULT_ITEM", Vector3::Up * 4);
+	new_model = new SDKMeshGO3D("DEFAULT_ITEM");
+	new_model->SetScale(Vector3(2, 0.05f, 2));
+	m_animationMesh->AddModel("glider", new_model, Vector3::Up * 1.3f);
+
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
 	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
+	m_animationMesh->AddModelSet("gliding", std::vector < std::string>{"vehicle", "character", "glider"});
+
 	m_animationMesh->SwitchModelSet("default");
 
 	m_animationMesh->Load();
@@ -68,6 +74,7 @@ void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
 	ControlledMovement* old_movement = m_move.release();
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
+	m_normalGrav = m_maxGrav;
 	//Update TrackMagnet here too?
 }
 
@@ -136,6 +143,8 @@ void Player::Tick()
 	movement();
 
 	RespawnLogic();
+
+	GlideLogic();
 
 	if (m_controlsActive)
 	{
@@ -509,11 +518,51 @@ void Player::movement()
 
 }
 
+void Player::GlideLogic()
+{
+	if (m_colType == CollisionType::BOOST_PAD)
+	{
+		m_gliding = true;
+		m_animationMesh->SwitchModelSet("gliding");
+		m_preventRespawn = true;
+	}
+	else if (false/*m_colType == CollisionType::GLIDE_TRACK*/)
+	{
+		m_maxGrav = 0;
+		m_gravVel = Vector3::Zero;
+	}
+	else if (m_gliding)
+	{
+		m_glideTimeElapsed += Locator::getGSD()->m_dt;
+		if (m_onTrack && m_glideTimeElapsed > m_minGlideDuration)
+		{
+			m_preventRespawn = false;
+			m_gliding = false;
+			m_maxGrav = m_normalGrav;
+			m_animationMesh->SwitchModelSet("default");
+		}
+		else if (m_colType == CollisionType::NO_TERRAIN)
+		{
+			m_preventRespawn = false;
+			m_maxGrav = m_glidingGrav;
+		}
+		else
+		{
+			m_maxGrav = m_glidingGrav;
+		}
+	}
+}
+
 void Player::RespawnLogic()
 {
 	if (m_respawning)
 	{
 		MovePlayerToTrack();
+		return;
+	}
+
+	if (m_preventRespawn)
+	{
 		return;
 	}
 
@@ -561,6 +610,8 @@ void Player::RespawnLogic()
 
 void Player::Respawn()
 {
+	m_gliding = false;
+	m_maxGrav = m_normalGrav;
 	m_move->SetEnabled(false);
 	m_animationMesh->SwitchModelSet("respawn");
 	m_respawning = true;

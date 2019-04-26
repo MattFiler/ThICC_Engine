@@ -89,6 +89,8 @@ private:
 	void Respawn();
 	void MovePlayerToTrack();
 
+	void GlideLogic();
+
 	ThICC_RenderData* m_RD = nullptr;
 	KeybindManager m_keybind;
 	Matrix m_savedMatrix;
@@ -140,6 +142,7 @@ private:
 	float m_stationaryRespawn = 5; // If not moving for this long, repawn
 	float m_respawnSpeed = 30; // The speed at which lakitu moves the player back to the track
 
+	// Respawn
 	float m_posHistoryTimer = 0;
 	float m_offTrackTimer = 0;
 	float m_offTerrainTimer = 0;
@@ -152,6 +155,15 @@ private:
 	Vector3 m_respawnPos = Vector3::Zero;
 	float m_totalRespawnTime = 0;
 	float m_elapsedRespawnTime = 0;
+
+	bool m_preventRespawn = false; 
+
+	// Gliding
+	float m_minGlideDuration = 0.5f; // Gives the kart some time to leave the track so the glide doesn't immediatly end
+	float m_glideTimeElapsed = 0;
+	bool m_gliding = false;
+	float m_normalGrav = 0; // Set from physmodel on load
+	float m_glidingGrav = 5;
 
 	std::unique_ptr<MoveAI> m_ai = nullptr;
 };
