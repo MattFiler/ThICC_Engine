@@ -353,17 +353,17 @@
     <ClInclude Include="AnimationController.h">
       <Filter>Game\Components\Game Objects\3D</Filter>
     </ClInclude>
-    <ClInclude Include="ItemThrowData.h">
-      <Filter>Engine Backend\Components</Filter>
-    </ClInclude>
     <ClInclude Include="RedShell.h">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClInclude>
     <ClInclude Include="LightningCloud.h">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClInclude>
+    <ClInclude Include="ItemThrowData.h">
+      <Filter>Game\Components\Item Info</Filter>
+    </ClInclude>
     <ClInclude Include="ItemCollisionData.h">
-      <Filter>Engine Backend\Components</Filter>
+      <Filter>Game\Components\Item Info</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

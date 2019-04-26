@@ -93,7 +93,7 @@
 				"velocity_multiplier": 0.3,	
 				"jump": {
 					"height": 0,
-					"duration": 1
+					"duration": 0
 				},
 				"flip": {
 					"revolutions": 0,
@@ -154,6 +154,38 @@
 			"place_4": 7.5,
 			"place_5": 5,
 			"place_6": 5
+		},
+		"info": {
+			"lifetime": 300,
+			"player_immunity_time": 0.1,
+			"detonation_time": 4,
+			"throw": {
+				"horizontal_pos_offset": 2,
+				"vertical_pos_offset" : 3,
+				"forward_force": 100,
+				"upward_force": 1,
+				"max_gravity": 500
+			},
+			"explosion": {
+				"size_multiplier": 10,
+				"speed": 1.5,
+				"player_collision": {
+					"velocity_multiplier": 0,	
+					"jump": {
+						"height": 1.5,
+						"duration": 1
+					},
+					"flip": {
+						"revolutions": 1,
+						"duration": 0.8
+					},
+					"spin" : {
+						"revolutions": 0,
+						"duration": 0
+					},
+					"vertical_pos_offset": 4
+				}
+			}
 		}
 	},
 	"BLUE_SHELL": {

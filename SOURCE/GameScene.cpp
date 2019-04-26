@@ -800,7 +800,8 @@ Item* GameScene::CreateItem(ItemType type)
 	}
 	case BOMB:
 	{
-		Bomb* bomb = new Bomb(std::bind(&GameScene::CreateExplosion, this));
+		using namespace std::placeholders;
+		Bomb* bomb = new Bomb(std::bind(&GameScene::CreateExplosion, this, _1));
 		m_itemModels.push_back(bomb);
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(bomb->GetMesh())->getDebugCollider());
 		bomb->GetMesh()->getDebugCollider()->Load();
@@ -857,9 +858,9 @@ Item* GameScene::CreateItem(ItemType type)
 }
 
 /* Create an explosion! */
-Explosion * GameScene::CreateExplosion()
+Explosion * GameScene::CreateExplosion(ItemType _ownerType)
 {
-	Explosion* explosion = new Explosion();
+	Explosion* explosion = new Explosion(_ownerType);
 	m_3DObjects.push_back(explosion);
 	m_physModels.push_back(explosion);
 	m_3DObjects.push_back(dynamic_cast<PhysModel*>(explosion)->getDebugCollider());
