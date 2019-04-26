@@ -55,7 +55,7 @@
     "spin_amount": 30.0
   },
   "CINEMATIC": {
-    "fov": 60,
+    "fov": 40,
     "rotation_lerp": 0.05,
     "position_lerp": 1.0,
     "look_at_position": [
