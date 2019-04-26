@@ -20,7 +20,7 @@ void TrackMagnet::Render()
 /* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
 bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
-	track.SetValidCollision(true, true, true, false);
+	track.SetValidCollision(true, true, true, false, true, true, true, true);
 
 	Vector intersect;
 	Vector mid_intersect;
@@ -201,15 +201,15 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 	Vector intersect = Vector::Zero;
 	MeshTri* wallTri = nullptr;
 
-	// First check collision against walls only without angle limits
-	walls.SetValidCollision(true, true, true, true);
+	// First check collision against everything without angle limits using a ring around the object
+	walls.SetValidCollision(true, true, true, true, true, true, true, true);
 	bool hit_wall = (walls.DoesLineIntersect(leftSide, data.m_globalFrontBottomLeft + sideOffset, intersect, wallTri, 5,0) ||
 		walls.DoesLineIntersect(rightSide, data.m_globalFrontBottomRight + sideOffset, intersect, wallTri, 5,0) ||
 		walls.DoesLineIntersect(frontSide, data.m_globalFrontBottomLeft + sideOffset, intersect, wallTri, 5,0) ||
 		walls.DoesLineIntersect(backSide, data.m_globalBackBottomLeft + sideOffset, intersect, wallTri, 5,0));
 
-	// Then if no collision is found check against non-walls with verticle lines and an angle limit
-	walls.SetValidCollision(false, false, false, true);
+	// Then if no collision is found check against only walls with verticle lines and an angle limit
+	walls.SetValidCollision(false, false, false, true, false, false, false, false);
 	if (hit_wall || walls.DoesLineIntersect(frontLeft, data.m_globalFrontTopLeft + cornerOffset, intersect, wallTri, 5,m_minAngle) ||
 		walls.DoesLineIntersect(frontRight, data.m_globalFrontTopRight + cornerOffset, intersect, wallTri, 5, m_minAngle) ||
 		walls.DoesLineIntersect(backLeft, data.m_globalBackTopLeft + cornerOffset, intersect, wallTri, 5, m_minAngle) ||

@@ -117,7 +117,7 @@ void MoveAI::Update()
 void MoveAI::RecalculateLine(Track* _track)
 {
 	m_routeIndex = 0;
-	_track->SetValidCollision(true, false, true, false);
+	_track->SetValidCollision(true, false, true, false, true, true, true, false);
 	m_route.clear();
 	Matrix world = m_model->GetWorld();
 	Vector3 pos = m_model->GetPos();

@@ -520,13 +520,13 @@ void Player::movement()
 
 void Player::GlideLogic()
 {
-	if (m_colType == CollisionType::BOOST_PAD)
+	if (m_colType == CollisionType::JUMP_PAD)
 	{
 		m_gliding = true;
 		m_animationMesh->SwitchModelSet("gliding");
 		m_preventRespawn = true;
 	}
-	else if (false/*m_colType == CollisionType::GLIDE_TRACK*/)
+	else if (m_colType == CollisionType::GLIDER_TRACK)
 	{
 		m_maxGrav = 0;
 		m_gravVel = Vector3::Zero;
