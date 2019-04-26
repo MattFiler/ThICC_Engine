@@ -1,22 +1,32 @@
 #pragma once
-#include "SDKMeshGO3D.h"
 #include <queue>
+#include <map>
+#include "AnimationModel.h"
 
-class AnimationMesh : public SDKMeshGO3D
+class AnimationController
 {
 public:
-	AnimationMesh(std::string _filepath);
+	AnimationController() = default;
 
 	void Update(Matrix _parentWorld, Vector3 _rotOffsetOverride);
-	void Render() override;
+	void Render();
+
+	void UpdateWorld(Matrix& _newWorld);
 
 	void Jump(float _jumpHeight, float _duration);
 	void Spin(int _revolutions, float _duration);
 	void Flip(int _revolutions, float _duration);
 
-	void Load() override;
+	void Load();
+	void Reset();
 
-	void AddModel(GameObject3D* _gameObject, SimpleMath::Vector3 _offset);
+	void AddModel(std::string _name, std::string _filepath, Vector3 _offset);
+	void AddModel(std::string _name, SDKMeshGO3D* _model, Vector3 _offset);
+
+	void AddModelSet(std::string _setName, std::vector<std::string> models);
+	void SwitchModelSet(std::string _setName) { m_currentSet = _setName; };
+
+	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
 
 	enum direction
 	{
@@ -29,6 +39,12 @@ public:
 	};
 
 private:
+	Matrix m_world;
+	Matrix m_rot;
+	Vector3 m_pos;
+	Vector3 m_scale;
+	Quaternion m_quatRot;
+
 	void PopRotationQueue(Vector3 _targetRot);
 	Vector3 GetRotationFromDirection(direction _prevDirection, Matrix _world);
 
@@ -48,5 +64,10 @@ private:
 	float m_timeBetweenRot = 0.5f;
 	float m_rotTimeElapsed = 0;
 	
-	std::vector<std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>> m_additionalModels;
+	std::vector<std::unique_ptr<AnimationModel>> m_additionalModels;
+	std::map <std::string, std::vector<AnimationModel*>> m_modelSet;
+
+	std::string m_currentSet;
+
+	bool m_shouldRender = true;
 };

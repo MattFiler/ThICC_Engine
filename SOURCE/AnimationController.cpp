@@ -1,37 +1,64 @@
 #include "pch.h"
 #include "GameStateData.h"
-#include "AnimationMesh.h"
+#include "AnimationController.h"
 
-AnimationMesh::AnimationMesh(std::string _filename) :SDKMeshGO3D(_filename)
+void AnimationController::Render()
 {
-}
-
-void AnimationMesh::Render()
-{
-	using pair = std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>;
-	for (pair& p : m_additionalModels)
+	if (m_shouldRender)
 	{
-		p.first->Render();
-	}
-	SDKMeshGO3D::Render();
-}
-
-void AnimationMesh::AddModel(GameObject3D* _gameObject, SimpleMath::Vector3 _offset)
-{
-	using pair = std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>;
-	m_additionalModels.push_back(pair(_gameObject, _offset));
-}
-
-void AnimationMesh::Load() {
-	SDKMeshGO3D::Load();
-	using pair = std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>;
-	for (pair& p : m_additionalModels)
-	{
-		p.first->Load();
+		for (AnimationModel* model : m_modelSet[m_currentSet])
+		{
+			model->getModel()->Render();
+		}
 	}
 }
 
-void AnimationMesh::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
+void AnimationController::AddModelSet(std::string _setName, std::vector<std::string> models)
+{
+	std::vector<AnimationModel*> new_set;
+	// Loop throug all the models and find the matching model names
+	for (std::string& str : models)
+	{
+		for (auto& model : m_additionalModels)
+		{
+			if (model->getName() == str)
+			{
+				new_set.push_back(model.get());
+			}
+		}
+	}
+	using pair = std::pair<std::string, std::vector<AnimationModel*>>;
+	m_modelSet.insert(pair(_setName, new_set));
+}
+
+
+void AnimationController::AddModel(std::string _name, SDKMeshGO3D* _model, SimpleMath::Vector3 _offset)
+{
+	m_additionalModels.push_back(std::make_unique<AnimationModel>(_model, _name, _offset));
+}
+
+void AnimationController::AddModel(std::string _name, std::string _filepath, Vector3 _offset)
+{
+	m_additionalModels.push_back(std::make_unique<AnimationModel>(new SDKMeshGO3D(_filepath), _name, _offset));
+}
+
+void AnimationController::Load() 
+{
+	for (auto& model : m_additionalModels)
+	{
+		model->getModel()->Load();
+	}
+}
+
+void AnimationController::Reset()
+{
+	for (auto& model : m_additionalModels)
+	{
+		model->getModel()->Reset();
+	}
+}
+
+void AnimationController::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
 {
 	if (!m_posAnimPoints.empty())
 	{
@@ -105,25 +132,42 @@ void AnimationMesh::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
 		m_rotOffset = Vector3::Lerp(m_rotOffset, _rotOffsetOverride, m_rotAnimSpeed * Locator::getGSD()->m_dt);
 	}
 
-	SetWorld(_parentWorld);
+	/*SetWorld(_parentWorld);
 
 	SetWorld(Matrix::CreateScale(m_scale) * Matrix::CreateWorld(m_pos, m_rotOffset, m_world.Up()));
 
 	m_pos += m_posOffset;
-	UpdateWorld();
+	UpdateWorld();*/
 
-	using pair = std::pair<std::unique_ptr<GameObject3D>, SimpleMath::Vector3>;
-	for (pair& p : m_additionalModels)
+	UpdateWorld(_parentWorld);
+
+	for (AnimationModel* model : m_modelSet[m_currentSet])
 	{
-		Vector3 scale_original = p.first->GetScale();
-		p.first->SetWorld(m_world);
-		p.first->AddPos(p.second);
-		p.first->SetScale(scale_original);
-		p.first->UpdateWorld();
+		Vector3 scale_original = model->getModel()->GetScale();
+		model->getModel()->SetWorld(m_world);
+		model->getModel()->AddPos(model->getOffset());
+		model->getModel()->SetScale(scale_original);
+		model->getModel()->UpdateWorld();
 	}
 }
 
-void AnimationMesh::Jump(float _jumpHeight, float _duration)
+void AnimationController::UpdateWorld(Matrix& _newWorld)
+{
+	m_world = _newWorld;
+	m_world.Decompose(m_scale, m_quatRot, m_pos);
+	m_rot = Matrix::CreateFromQuaternion(m_quatRot);
+
+	m_world = Matrix::CreateScale(m_scale) * Matrix::CreateWorld(m_pos, m_rotOffset, m_world.Up());
+	m_world.Decompose(m_scale, m_quatRot, m_pos);
+	m_rot = Matrix::CreateFromQuaternion(m_quatRot);
+	m_pos += m_posOffset;
+
+	Matrix trans = Matrix::CreateTranslation(m_pos);
+	Matrix scale = Matrix::CreateScale(m_scale);
+	m_world = scale * m_rot * trans;
+}
+
+void AnimationController::Jump(float _jumpHeight, float _duration)
 {
 	if (m_posAnimPoints.empty())
 	{
@@ -135,7 +179,7 @@ void AnimationMesh::Jump(float _jumpHeight, float _duration)
 	}
 }
 
-void AnimationMesh::Spin(int _revolutions, float _duration)
+void AnimationController::Spin(int _revolutions, float _duration)
 {
 	if (m_rotAnimPoints.empty())
 	{
@@ -152,7 +196,7 @@ void AnimationMesh::Spin(int _revolutions, float _duration)
 	}
 }
 
-void AnimationMesh::Flip(int _revolutions, float _duration)
+void AnimationController::Flip(int _revolutions, float _duration)
 {
 	if (m_rotAnimPoints.empty())
 	{
@@ -169,7 +213,7 @@ void AnimationMesh::Flip(int _revolutions, float _duration)
 	}
 }
 
-void AnimationMesh::PopRotationQueue(Vector3 _targetRot)
+void AnimationController::PopRotationQueue(Vector3 _targetRot)
 {
 	if (Vector3::Distance(m_rotOffset, _targetRot) < 0.1f)
 	{
@@ -180,7 +224,7 @@ void AnimationMesh::PopRotationQueue(Vector3 _targetRot)
 	}
 }
 
-Vector3 AnimationMesh::GetRotationFromDirection(direction _prevDirection, Matrix _world)
+Vector3 AnimationController::GetRotationFromDirection(direction _prevDirection, Matrix _world)
 {
 	switch (_prevDirection)
 	{

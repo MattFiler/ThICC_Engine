@@ -4,7 +4,7 @@
 #include "TrackMagnet.h"
 #include "ServiceLocator.h"
 #include "ItemData.h"
-#include "AnimationMesh.h"
+#include "AnimationController.h"
 
 class Player;
 
@@ -16,6 +16,7 @@ public:
 	~Item() = default;
 	
 	virtual void Tick();
+	virtual void Render();
 	virtual void HitByPlayer(Player* _player) = 0;
 	virtual void Use(Player* _player, bool _altUse) = 0;
 
@@ -23,7 +24,6 @@ public:
 	void FlagForDestoy() { m_shouldDestroy = true; };
 
 	TrackMagnet* GetMesh() { return m_mesh; };
-	SDKMeshGO3D* GetRenderMesh() { return m_displayedMesh.get(); };
 
 	virtual void AddImmuneItem(Item* _item) { m_immuneItems.push_back(_item); };
 	virtual void addImmuneItems(std::vector<Item*> _immuneItems) { m_immuneItems = _immuneItems; };
@@ -43,7 +43,7 @@ protected:
 	TrackMagnet * m_mesh = nullptr;
 	Player* m_player = nullptr;
 
-	std::unique_ptr<AnimationMesh> m_displayedMesh = nullptr;
+	std::unique_ptr<AnimationController> m_displayedMesh = nullptr;
 	bool m_shouldDestroy = false;
 	bool m_itemUsed = false;
 	bool m_trailingPlayerImmunity = true;

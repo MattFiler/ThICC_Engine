@@ -141,7 +141,17 @@ void PhysModel::Tick()
 {
 	if (m_physicsOn)
 	{
-		m_vel = m_vel + Locator::getGSD()->m_dt * (m_acc - m_drag * m_vel);
+		if (m_acc.Length() > 1)
+		{
+			bool breakme = false;
+		}
+		m_vel = m_vel + (Locator::getGSD()->m_dt * (m_acc - (m_drag * m_vel)));
+		// Cap the movment speed to its maximum
+		if (m_vel.Length() > m_maxSpeed)
+		{
+			m_vel.Normalize();
+			m_vel *= m_maxSpeed;
+		}
 
 		m_gravVel = m_gravVel + Locator::getGSD()->m_dt * (m_gravDirection);
 		if (m_gravVel.Length() > m_maxGrav)

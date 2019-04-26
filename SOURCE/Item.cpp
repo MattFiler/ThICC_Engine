@@ -8,8 +8,19 @@ Item::Item(const std::string& item_type)
 	//Set model name
 	m_mesh = new TrackMagnet(item_type);
 	m_mesh->SetShouldRender(false);
-	m_displayedMesh = std::make_unique<AnimationMesh>(item_type);
+	m_displayedMesh = std::make_unique<AnimationController>();
+	m_displayedMesh->AddModel("item", item_type, Vector3::Zero);
+	m_displayedMesh->AddModelSet("default", std::vector<std::string>{"item"});
+	m_displayedMesh->SwitchModelSet("default");
 	m_displayedMesh->Load();
+}
+
+void Item::Render()
+{
+	if (m_displayedMesh)
+	{
+		m_displayedMesh->Render();
+	}
 }
 
 void Item::Tick()

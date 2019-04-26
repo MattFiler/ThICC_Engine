@@ -25,7 +25,6 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 
 	// Don't render this mesh, render a second one instead
 	m_shouldRender = false;
-	m_animationMesh = std::make_unique<AnimationMesh>(_character.model);
 
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
@@ -48,8 +47,8 @@ void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
 	json m_model_config_vehicle;
 	m_model_config_vehicle << i;
 
-	AnimationMesh* old_animationMesh = m_animationMesh.release();
-	m_animationMesh = std::make_unique<AnimationMesh>(_vehicle.model);
+	m_animationMesh = std::make_unique<AnimationController>();
+	m_animationMesh->AddModel("vehicle", _vehicle.model, Vector::Zero);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
 	std::ifstream x(m_filepath.generateConfigFilepath(_character.model, m_filepath.MODEL));
@@ -58,7 +57,9 @@ void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
 
 	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character.model);
 	new_model->SetScale(m_model_config_character["modelscale"]);
-	m_animationMesh->AddModel(new_model, Vector3(0,0,0));
+	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
+	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
+	m_animationMesh->SwitchModelSet("default");
 
 	m_animationMesh->Load();
 
@@ -119,7 +120,7 @@ LightningCloud* Player::GetLightningCloud()
 void Player::Render()
 {
 	m_animationMesh->Render();
-	SDKMeshGO3D::Render();
+	TrackMagnet::Render();
 
 	/*if (m_ai)
 	{
@@ -466,13 +467,13 @@ void Player::setGamePad(bool _state)
 
 	// TEST CODE //
 	
-	/*
+	
 	if (m_playerID == 0)
 	{
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);
 		Locator::getAIScheduler()->AddAI(m_ai.get());
-	}*/
+	}
 	
 	// TEST CODE //
 }

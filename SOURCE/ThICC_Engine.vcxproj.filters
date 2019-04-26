@@ -76,9 +76,6 @@
     <ClCompile Include="ControlledMovement.cpp">
       <Filter>Game\Components\Controllable</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationMesh.cpp">
-      <Filter>Game\Components\Game Objects\3D</Filter>
-    </ClCompile>
     <ClCompile Include="GameDebugToggles.cpp">
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
@@ -147,6 +144,10 @@
       <Filter>Game\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="RedShell.cpp" />
+    <ClCompile Include="AnimationModel.cpp" />
+    <ClCompile Include="AnimationController.cpp">
+      <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -248,9 +249,6 @@
     <ClInclude Include="ControlledMovement.h">
       <Filter>Game\Components\Controllable</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationMesh.h">
-      <Filter>Game\Components\Game Objects\3D</Filter>
-    </ClInclude>
     <ClInclude Include="GameDebugToggles.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
@@ -349,6 +347,10 @@
       <Filter>Engine Backend\Shared</Filter>
     </ClInclude>
     <ClInclude Include="RedShell.h" />
+    <ClInclude Include="AnimationModel.h" />
+    <ClInclude Include="AnimationController.h">
+      <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

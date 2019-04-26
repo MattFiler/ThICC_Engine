@@ -364,7 +364,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track);
-		player[i]->ResolveWallCollisions(*track);
+		//player[i]->ResolveWallCollisions(*track);
 	}
 
 	if (m_keybinds.keyReleased("Quit"))
@@ -547,10 +547,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		//Render items
 		for (Item* obj : m_itemModels)
 		{
-			if (obj->GetRenderMesh())
-			{
-				obj->GetRenderMesh()->Render();
-			}
+			obj->Render();
 		}
 
 		break;
@@ -592,7 +589,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			{
 				if (obj->GetMesh())
 				{
-					obj->GetRenderMesh()->Render();
+					obj->Render();
 				}
 			}
 		}
@@ -634,7 +631,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			{
 				if (obj->GetMesh())
 				{
-					obj->GetRenderMesh()->Render();
+					obj->Render();
 				}
 			}
 		}

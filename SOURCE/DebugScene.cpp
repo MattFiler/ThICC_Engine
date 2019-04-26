@@ -67,7 +67,9 @@ void DebugScene::ExpensiveUnload() {
 void DebugScene::create3DObjects()
 {
 	m_3DObjects.push_back(new SDKMeshGO3D("sponza"));
+	#ifdef _DEBUG
 	debug_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), nullptr, CameraType::DEBUG_CAM);
+	#endif
 }
 
 /* Update the scene */

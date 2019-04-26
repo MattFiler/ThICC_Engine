@@ -3,7 +3,7 @@
 #include "InputData.h"
 #include "GameStateData.h"
 
-ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationMesh* _animMesh) : m_physModel(_physModel), m_animMesh(_animMesh)
+ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationController* _animMesh) : m_physModel(_physModel), m_animMesh(_animMesh)
 {
 }
 
@@ -47,7 +47,7 @@ void ControlledMovement::GetControllerInput()
 		{
 			if (m_drifting)
 			{
-				m_endDrift;
+				m_endDrift = true;
 			}
 		}
 
@@ -78,6 +78,10 @@ void ControlledMovement::GetControllerInput()
 		}
 		else
 		{
+			if (!m_drifting)
+			{
+				m_isTurning = false;
+			}
 			m_right = false;
 			m_left = false;
 		}
@@ -87,8 +91,8 @@ void ControlledMovement::GetControllerInput()
 
 void ControlledMovement::ProcessInputFlags()
 {
-	Vector3 forwardMove = 25.0f * m_physModel->GetWorld().Forward();
-	Vector3 rightMove = 12.5f * m_physModel->GetWorld().Right();
+	Vector3 forwardMove = m_moveSpeed * m_physModel->GetWorld().Forward();
+	Vector3 rightMove = m_turnSpeed * m_physModel->GetWorld().Right();
 	Vector3 forwardComponent = Vector3::Zero;
 	Vector3 turnComponent = Vector3::Zero;
 	float driftMultiplier = 1;
@@ -129,12 +133,12 @@ void ControlledMovement::ProcessInputFlags()
 			if (m_driftingRight)
 			{
 				m_targetAnimRotOffset = (m_physModel->GetWorld().Forward() * 3) + m_physModel->GetWorld().Right();
-				driftMultiplier = 0.1f;
+				driftMultiplier = 0.5f;
 			}
 			else
 			{
 				m_targetAnimRotOffset = (m_physModel->GetWorld().Forward()) + m_physModel->GetWorld().Left();
-				driftMultiplier = 1.5f;
+				driftMultiplier = 2;
 			}
 		}
 		else
@@ -155,7 +159,7 @@ void ControlledMovement::ProcessInputFlags()
 			else
 			{
 				m_targetAnimRotOffset = (m_physModel->GetWorld().Forward() * 3) + m_physModel->GetWorld().Left();
-				driftMultiplier = 0.1f;
+				driftMultiplier = 0.5f;
 			}
 		}
 		else
@@ -188,8 +192,9 @@ void ControlledMovement::ProcessInputFlags()
 			}
 
 			m_timeTurning += Locator::getGSD()->m_dt * driftMultiplier;
-			turnComponent *= 1 + ((m_timeTurning / m_timeForMaxDrift)  * m_maxDriftTurnMutliplier);
-			turnComponent *= 1 + (m_timeTurning / 1.3f);
+			//turnComponent *= driftMultiplier;
+			turnComponent *= 1 + ((m_timeTurning / m_timeForMaxDrift) * driftMultiplier);
+			//turnComponent *= 1 + (m_timeTurning / 1.3f);
 		}
 		else
 		{
@@ -198,13 +203,14 @@ void ControlledMovement::ProcessInputFlags()
 				m_timeTurning = m_timeForMaxTurn;
 			}
 			m_timeTurning += Locator::getGSD()->m_dt;
-			turnComponent *= 1 + ((m_timeTurning / m_timeForMaxTurn)  * m_maxTurnRateMutliplier);
-			turnComponent *= 1 + (m_timeTurning / 1.3f);
+			//turnComponent *= 1 + ((m_timeTurning / m_timeForMaxTurn)  * m_maxTurnRateMutliplier);
+			//turnComponent *= 1 + (m_timeTurning / 1.3f);
 		}
 
 		float accLength = m_physModel->getAcceleration().Length();
 		if (turnComponent.LengthSquared() > 0)
 		{
+			// Additing additional speed when turning else it doesn't feel right
 			accLength += turnComponent.Length() / 4;
 		}
 		m_physModel->getAcceleration() += turnComponent;
@@ -222,9 +228,13 @@ void ControlledMovement::ProcessInputFlags()
 
 void ControlledMovement::EndDrift()
 {
+	Vector3 test = m_physModel->GetWorld().Forward();
 	if (m_timeTurning > m_timeForMaxDrift / 3)
 	{
-		m_physModel->setVelocity(m_physModel->GetWorld().Forward() * m_physModel->getVelocity().Length());
+		float multiplier = 1.0f + ((m_timeTurning / m_timeForMaxDrift)*m_driftBoostMultiplier);
+		multiplier *= m_physModel->getVelocity().Length();
+		Vector3 direction = m_physModel->GetWorld().Forward();
+		m_physModel->setVelocity(direction * multiplier);
 	}
 	m_timeTurning = 0;
 	m_endDrift = false;
@@ -255,7 +265,7 @@ void ControlledMovement::Drift(bool _flag)
 {
 	if (!_flag)
 	{
-		EndDrift();
+		m_endDrift = true;
 		m_drifting = false;
 	}
 	else if (!m_drifting)
