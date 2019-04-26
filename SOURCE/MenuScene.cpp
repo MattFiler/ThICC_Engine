@@ -54,7 +54,7 @@ void MenuScene::create2DObjects()
 
 	//Main menu objects
 	m_background = new ImageGO2D("MAIN_MENU_TEMP");
-	m_state_desc = new Text2D("", true);
+	m_state_desc = new Text2D("", Text2D::MIDDLE);
 	m_state_desc->SetPos(Vector2(498, 620));
 	m_state_desc->SetColour(Colors::Black);
 	m_state_desc->SetScale(0.5f);
@@ -245,7 +245,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 				Locator::getGSD()->character_selected[0] = highlighted_character; //We only support P1 choices atm!
 				Locator::getGSD()->vehicle_selected[0] = highlighted_vehicle;
 
-				Locator::getAudio()->GetSound(SOUND_TYPE::MENU, (int)SOUNDS_MENU::MENU_LOOP)->Stop();
+				Locator::getAudio()->GetSound(SoundType::MENU, (int)MenuSounds::MENU_LOOP)->Stop();
 				m_scene_manager->setCurrentScene(Scenes::GAMESCENE + highlighted_map);
 			}
 

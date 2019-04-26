@@ -23,7 +23,7 @@ void Skybox::Load() {
 
 	//Create skybox
 	skybox = GeometricPrimitive::CreateSphere(100.0f, 16U, false, true);
-	//skybox->LoadStaticBuffers(Locator::getRD()->m_d3dDevice, resourceUpload);
+	skybox->LoadStaticBuffers(Locator::getRD()->m_d3dDevice.Get(), resourceUpload);
 
 	//Find and load our skybox material
 	wchar_t radiance[_MAX_PATH] = {};

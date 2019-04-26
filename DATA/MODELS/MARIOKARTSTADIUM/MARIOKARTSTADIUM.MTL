@@ -18,8 +18,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 0
-ThICC_METALLIC False
 
 newmtl ef_dashboard
 Ns 94.117647
@@ -39,11 +37,9 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 1
-ThICC_METALLIC False
 
 newmtl ef_glideboard
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -60,11 +56,9 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 57
-ThICC_METALLIC False
 
 newmtl ef_gravityboard
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -81,8 +75,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 26
-ThICC_METALLIC False
 
 newmtl fc_ColorRoad
 Ns 94.117647
@@ -102,8 +94,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 6
-ThICC_METALLIC False
 
 newmtl fc_ConcreteOutside
 Ns 94.117647
@@ -123,8 +113,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 10
-ThICC_METALLIC False
 
 newmtl fc_Enkei_Building_3D
 Ns 94.117647
@@ -144,8 +132,6 @@ map_Kn norm_placeholder.png
 norm norm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 43
-ThICC_METALLIC False
 
 newmtl fc_Enkei_Building_Plane
 Ns 94.117647
@@ -165,8 +151,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 32
-ThICC_METALLIC False
 
 newmtl fc_Enkei_RedLight
 Ns 94.117647
@@ -186,8 +170,6 @@ map_Kn norm_placeholder.png
 norm norm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 11
-ThICC_METALLIC False
 
 newmtl fc_KabeShiro
 Ns 94.000000
@@ -207,8 +189,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 68
-ThICC_METALLIC True
 
 newmtl fc_LightObj
 Ns 94.000000
@@ -228,8 +208,6 @@ map_emissive ufc_Light_1_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 44
-ThICC_METALLIC True
 
 newmtl fc_LightObj.002
 Ns 94.000000
@@ -249,8 +227,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 62
-ThICC_METALLIC True
 
 newmtl fc_LightObj_NoBake
 Ns 94.000000
@@ -270,8 +246,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 63
-ThICC_METALLIC True
 
 newmtl fc_MARIOKART
 Ns 94.117647
@@ -291,8 +265,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 14
-ThICC_METALLIC False
 
 newmtl fc_MichiUra
 Ns 94.117647
@@ -312,8 +284,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 58
-ThICC_METALLIC False
 
 newmtl fc_Obj_01
 Ns 94.000000
@@ -333,8 +303,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 29
-ThICC_METALLIC True
 
 newmtl fc_PitYuka
 Ns 94.000000
@@ -354,8 +322,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 28
-ThICC_METALLIC False
 
 newmtl fc_RoadOther
 Ns 94.117647
@@ -375,8 +341,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 31
-ThICC_METALLIC False
 
 newmtl fc_RoadOther2
 Ns 94.000000
@@ -396,8 +360,6 @@ map_emissive ufc_RoadOther2_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 64
-ThICC_METALLIC True
 
 newmtl fc_RoadOther2.002
 Ns 94.000000
@@ -417,8 +379,6 @@ map_Ke ufc_RoadOther2_emm.png
 map_emissive ufc_RoadOther2_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 27
-ThICC_METALLIC True
 
 newmtl fc_RoadOther2_G
 Ns 94.000000
@@ -438,8 +398,6 @@ map_Ke ufc_RoadOther2_emm.png
 map_emissive ufc_RoadOther2_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 60
-ThICC_METALLIC True
 
 newmtl fc_RoofParts
 Ns 94.117647
@@ -459,8 +417,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 65
-ThICC_METALLIC False
 
 newmtl fc_ScrollingLight
 Ns 94.117647
@@ -480,8 +436,6 @@ map_emissive ufc_ScrollingLight_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 34
-ThICC_METALLIC False
 
 newmtl fc_SignPole
 Ns 94.117647
@@ -501,8 +455,6 @@ map_emissive ufc_SignPole_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 56
-ThICC_METALLIC False
 
 newmtl fc_StadiumLight
 Ns 94.117647
@@ -522,8 +474,6 @@ map_emissive ufc_StadiumLight_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 7
-ThICC_METALLIC False
 
 newmtl fc_StadiumLight_CubeMap
 Ns 94.117647
@@ -543,8 +493,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 5
-ThICC_METALLIC False
 
 newmtl fc_StadiumRoof
 Ns 94.117647
@@ -564,8 +512,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 24
-ThICC_METALLIC False
 
 newmtl fc_StadiumSignboard
 Ns 94.117647
@@ -585,8 +531,6 @@ map_emissive ufc_StadiumSignboard_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 61
-ThICC_METALLIC False
 
 newmtl fc_StartGate
 Ns 94.000000
@@ -606,8 +550,6 @@ map_emissive ufc_StartGate_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 52
-ThICC_METALLIC True
 
 newmtl fc_TV_MKTV
 Ns 94.117647
@@ -627,8 +569,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 35
-ThICC_METALLIC False
 
 newmtl fc_TV_capture
 Ns 94.117647
@@ -648,8 +588,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 8
-ThICC_METALLIC False
 
 newmtl fc_TeamLogo_nuki
 Ns 94.117647
@@ -669,8 +607,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 33
-ThICC_METALLIC False
 
 newmtl fc_WhiteLine
 Ns 94.117647
@@ -690,8 +626,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 25
-ThICC_METALLIC False
 
 newmtl fc_WhiteWall
 Ns 94.117647
@@ -711,8 +645,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 55
-ThICC_METALLIC False
 
 newmtl fc_WhiteWall_Outside
 Ns 94.117647
@@ -732,8 +664,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 38
-ThICC_METALLIC False
 
 newmtl fc_YellowWall
 Ns 94.117647
@@ -753,8 +683,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 2
-ThICC_METALLIC False
 
 newmtl fc_bench
 Ns 94.000000
@@ -774,8 +702,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 36
-ThICC_METALLIC True
 
 newmtl fc_bush_LeafBase
 Ns 94.117647
@@ -795,11 +721,9 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 16
-ThICC_METALLIC False
 
 newmtl fc_concrete_road
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -816,8 +740,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 23
-ThICC_METALLIC False
 
 newmtl fc_flower
 Ns 94.117647
@@ -837,8 +759,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 18
-ThICC_METALLIC False
 
 newmtl fc_grass_Outside
 Ns 94.117647
@@ -858,8 +778,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 49
-ThICC_METALLIC False
 
 newmtl fc_kyokyaku_1
 Ns 94.000000
@@ -879,8 +797,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 40
-ThICC_METALLIC True
 
 newmtl fc_kyokyaku_2
 Ns 94.000000
@@ -900,8 +816,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 39
-ThICC_METALLIC True
 
 newmtl fc_monument
 Ns 94.117647
@@ -921,8 +835,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 51
-ThICC_METALLIC False
 
 newmtl fc_nuki_1
 Ns 94.117647
@@ -942,8 +854,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 22
-ThICC_METALLIC False
 
 newmtl fc_nuki_2
 Ns 94.117647
@@ -963,8 +873,6 @@ map_emissive ufc_nuki_2_emm.png
 Tr 0.000001
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 17
-ThICC_METALLIC False
 
 newmtl fc_nuki_3
 Ns 94.117647
@@ -984,8 +892,6 @@ map_emissive ufc_nuki_3_emm.png
 Tr 0.000001
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 48
-ThICC_METALLIC False
 
 newmtl fc_nuki_4
 Ns 94.000000
@@ -1005,8 +911,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 4
-ThICC_METALLIC True
 
 newmtl fc_nuki_5
 Ns 94.117647
@@ -1026,8 +930,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 19
-ThICC_METALLIC False
 
 newmtl fc_obj_2
 Ns 94.117647
@@ -1047,8 +949,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 13
-ThICC_METALLIC False
 
 newmtl fc_obj_3
 Ns 94.000000
@@ -1068,8 +968,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 3
-ThICC_METALLIC True
 
 newmtl fc_obj_4
 Ns 94.117647
@@ -1089,8 +987,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 41
-ThICC_METALLIC False
 
 newmtl fc_pit
 Ns 94.117647
@@ -1110,8 +1006,6 @@ map_emissive ufc_pit_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 46
-ThICC_METALLIC False
 
 newmtl fc_road
 Ns 94.117647
@@ -1131,8 +1025,6 @@ map_emissive ufc_road_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 20
-ThICC_METALLIC False
 
 newmtl fc_road_G
 Ns 94.000000
@@ -1152,8 +1044,6 @@ map_Ke ufc_road_emm.png
 map_emissive ufc_road_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 47
-ThICC_METALLIC False
 
 newmtl fc_road_MARIOKART
 Ns 94.117647
@@ -1173,8 +1063,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 45
-ThICC_METALLIC False
 
 newmtl fc_road_WhiteLine
 Ns 94.000000
@@ -1194,8 +1082,6 @@ map_Ke ufc_road_emm.png
 map_emissive ufc_road_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 12
-ThICC_METALLIC False
 
 newmtl fc_road_WhiteLine_G
 Ns 94.000000
@@ -1215,8 +1101,6 @@ map_Ke ufc_road_emm.png
 map_emissive ufc_road_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 67
-ThICC_METALLIC False
 
 newmtl fc_saku
 Ns 94.000000
@@ -1236,8 +1120,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 53
-ThICC_METALLIC True
 
 newmtl fc_shiba
 Ns 94.117647
@@ -1257,8 +1139,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 21
-ThICC_METALLIC False
 
 newmtl fc_signboard
 Ns 94.000000
@@ -1278,8 +1158,6 @@ map_emissive emm_placeholder.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 9
-ThICC_METALLIC False
 
 newmtl fc_signboard_Emm
 Ns 94.000000
@@ -1299,8 +1177,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 37
-ThICC_METALLIC False
 
 newmtl fc_steps
 Ns 94.117647
@@ -1320,8 +1196,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 50
-ThICC_METALLIC False
 
 newmtl fc_suna
 Ns 94.117647
@@ -1341,8 +1215,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 66
-ThICC_METALLIC False
 
 newmtl fc_tetukabe
 Ns 94.117647
@@ -1362,8 +1234,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 54
-ThICC_METALLIC False
 
 newmtl fc_truck
 Ns 94.117647
@@ -1383,8 +1253,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 42
-ThICC_METALLIC False
 
 newmtl fc_window_1
 Ns 94.000000
@@ -1404,8 +1272,6 @@ map_emissive ufc_window_1_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 30
-ThICC_METALLIC True
 
 newmtl fc_window_2
 Ns 94.000000
@@ -1425,8 +1291,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 59
-ThICC_METALLIC False
 
 newmtl fc_yane
 Ns 94.117647
@@ -1446,6 +1310,4 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
-ThICC_INDEX 15
-ThICC_METALLIC False
 

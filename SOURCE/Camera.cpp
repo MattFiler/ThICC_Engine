@@ -10,7 +10,7 @@
 Camera::Camera(float _width, float _height, Vector3 _dpos, GameObject3D * _target, CameraType _behav = CameraType::FOLLOW) : cam_type (_behav)
 {
 	m_pos = Vector3::Backward;
-	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / Locator::getCD()->fov, _width / _height, Locator::getCD()->m_near, Locator::getCD()->m_far);
+	m_proj = Matrix::CreatePerspectiveFieldOfView(Locator::getCD()->fovs[static_cast<int>(cam_type)], _width / _height, Locator::getCD()->m_near, Locator::getCD()->m_far);
 
 	m_targetObject = _target;
 }
@@ -50,7 +50,14 @@ void Camera::Tick()
 	float rot_lerp;
 	float pos_lerp;
 
-	if (cam_type != CameraType::DEBUG_CAM)
+	bool checker = true;
+
+#ifdef _DEBUG
+	checker = cam_type != CameraType::DEBUG_CAM;
+#endif // DEBUG
+
+
+	if (checker)
 	{
 		m_dpos = Locator::getCD()->camera_offsets[static_cast<int>(cam_type)];
 		orientation = m_targetObject ? m_targetObject->GetOri() : GetOri();
@@ -136,9 +143,9 @@ void Camera::Tick()
 		m_pitch += Locator::getCD()->cam_rot_speed * mouse_ypos;
 
 		if (m_pitch > 1.5f)
-			m_pitch = 1.5f;
+			m_pitch = 1.49f;
 		else if (m_pitch < -1.5f)
-			m_pitch = -1.5f;
+			m_pitch = -1.49f;
 
 		last_mouse_xpos = Locator::getID()->m_mouseState.x;
 		last_mouse_ypos = Locator::getID()->m_mouseState.y;

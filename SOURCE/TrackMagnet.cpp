@@ -12,6 +12,11 @@ TrackMagnet::TrackMagnet(std::string _filename) : PhysModel(_filename)
 	m_world.Decompose(scale, m_quatRot, m_pos);
 }
 
+void TrackMagnet::Render()
+{
+	SDKMeshGO3D::Render();
+}
+
 /* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
 bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
@@ -23,20 +28,20 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	bool shouldStick = false;
 	if (tri)
 	{
-		shouldStick = tri->DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle) ||
-			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle);
+		shouldStick = tri->DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0) ||
+			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0);
 	}
 	else
 	{
-		bool shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle);
+		bool shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0);
 	}
 
 	mid_intersect = intersect;
 	if (!shouldStick)
 	{
-		shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Forward()), intersect, tri, m_maxAngle) ||
-			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Left()), intersect, tri, m_maxAngle) ||
-			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Right()), intersect, tri, m_maxAngle);
+		shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Forward()), intersect, tri, m_maxAngle,0) ||
+			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Left()), intersect, tri, m_maxAngle,0) ||
+			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Right()), intersect, tri, m_maxAngle, 0);
 	}
 
 	float modifiedMaxRotation = m_maxRotation;
@@ -102,7 +107,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		// Calculate a new rotation using 2 points on the plane that is found
 		Vector secondIntersect;
 		MeshTri* tri2 = nullptr;
-		tri->DoesLineIntersect(m_world.Down() * (data.m_height * 30), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (data.m_height / 2)), secondIntersect, tri2, m_maxAngle);
+		tri->DoesLineIntersect(m_world.Down() * (data.m_height * 30), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (data.m_height / 2)), secondIntersect, tri2, m_maxAngle,0);
 		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 
@@ -122,6 +127,16 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 		m_gravDirection = m_world.Down() * gravityMultiplier;
 	}
+
+	// Check if this new world would collide with walls
+	Matrix tempWorld = m_world;
+	m_world = targetWorld;
+	if (ResolveWallCollisions(track))
+	{
+		targetWorld = tempWorld;
+		m_world = tempWorld;
+	}
+
 	// Update the position and rotation by breaking apart m_world
 	Vector3 scale = Vector3::Zero;
 	Quaternion rot = Quaternion::Identity;
@@ -147,21 +162,43 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	return shouldStick;
 }
 
-void TrackMagnet::ResolveWallCollisions(Track& walls)
+bool TrackMagnet::ResolveWallCollisions(Track& walls)
 {
-	walls.SetValidCollision(true, true, true, true);
-	Vector leftSide = data.m_globalBackTopLeft - data.m_globalFrontTopLeft + (m_world.Down() *1);
-	Vector rightSide = data.m_globalBackTopRight - data.m_globalFrontTopRight + (m_world.Down() * 1);
-	Vector frontSide = data.m_globalFrontTopRight - data.m_globalFrontTopLeft + (m_world.Down() * 1);
-	Vector backSide = data.m_globalBackTopRight - data.m_globalBackTopLeft + (m_world.Down() * 1);
+	/*Vector leftSide = (data.m_globalBackTopLeft - data.m_globalFrontTopLeft) + (m_world.Down() *1);
+	Vector rightSide = (data.m_globalBackTopRight - data.m_globalFrontTopRight) + (m_world.Down() * 1);
+	Vector frontSide = (data.m_globalFrontTopRight - data.m_globalFrontTopLeft) + (m_world.Down() * 1);
+	Vector backSide = (data.m_globalBackTopRight - data.m_globalBackTopLeft) + (m_world.Down() * 1);*/
+
+	Vector3 sideOffset = m_world.Up() * (data.m_height / 2);
+
+	Vector leftSide = (data.m_globalBackBottomLeft + sideOffset) - (data.m_globalFrontBottomLeft + sideOffset);
+	Vector rightSide = (data.m_globalBackBottomRight + sideOffset) - (data.m_globalFrontBottomRight + sideOffset);
+	Vector frontSide = (data.m_globalFrontBottomRight + sideOffset) - (data.m_globalFrontBottomLeft + sideOffset);
+	Vector backSide = (data.m_globalBackBottomRight + sideOffset) - (data.m_globalBackBottomLeft + sideOffset);
+
+	Vector cornerOffset = m_world.Up() * data.m_height*2;
+
+	Vector frontLeft = data.m_globalFrontBottomLeft - (data.m_globalFrontTopLeft + cornerOffset);
+	Vector frontRight = data.m_globalFrontBottomRight - (data.m_globalFrontTopRight + cornerOffset);
+	Vector backLeft = data.m_globalBackBottomLeft - (data.m_globalBackTopLeft + cornerOffset);
+	Vector backRight = data.m_globalBackBottomRight - (data.m_globalBackTopRight + cornerOffset);
 
 	Vector intersect = Vector::Zero;
 	MeshTri* wallTri = nullptr;
 
-	if (walls.DoesLineIntersect(leftSide, data.m_globalFrontTopLeft, intersect, wallTri, 5) ||
-		walls.DoesLineIntersect(rightSide, data.m_globalFrontTopRight, intersect, wallTri, 5) ||
-		walls.DoesLineIntersect(frontSide, data.m_globalFrontTopLeft, intersect, wallTri, 5) ||
-		walls.DoesLineIntersect(backSide, data.m_globalBackTopLeft, intersect, wallTri, 5))
+	// First check collision against walls only without angle limits
+	walls.SetValidCollision(true, true, true, true);
+	bool hit_wall = (walls.DoesLineIntersect(leftSide, data.m_globalFrontBottomLeft + sideOffset, intersect, wallTri, 5,0) ||
+		walls.DoesLineIntersect(rightSide, data.m_globalFrontBottomRight + sideOffset, intersect, wallTri, 5,0) ||
+		walls.DoesLineIntersect(frontSide, data.m_globalFrontBottomLeft + sideOffset, intersect, wallTri, 5,0) ||
+		walls.DoesLineIntersect(backSide, data.m_globalBackBottomLeft + sideOffset, intersect, wallTri, 5,0));
+
+	// Then if no collision is found check against non-walls with verticle lines and an angle limit
+	walls.SetValidCollision(false, false, false, true);
+	if (hit_wall || walls.DoesLineIntersect(frontLeft, data.m_globalFrontTopLeft + cornerOffset, intersect, wallTri, 5,m_minAngle) ||
+		walls.DoesLineIntersect(frontRight, data.m_globalFrontTopRight + cornerOffset, intersect, wallTri, 5, m_minAngle) ||
+		walls.DoesLineIntersect(backLeft, data.m_globalBackTopLeft + cornerOffset, intersect, wallTri, 5, m_minAngle) ||
+		walls.DoesLineIntersect(backRight, data.m_globalBackTopRight + cornerOffset, intersect, wallTri, 5, m_minAngle))
 	{
 		//std::cout << std::to_string(wallTri->m_pointA.x - m_pos.x) << std::endl;
 		/*offset = (wallTri->m_pointA.x - m_pos.x) * 2;
@@ -189,9 +226,10 @@ void TrackMagnet::ResolveWallCollisions(Track& walls)
 				float dist = Vector::Distance(velNorm, prevVelNorm);
 				m_vel *= 1 - (dist / 2.4f);
 			}
+			return true;
 		}
 	}
-
+	return false;
 }
 
 void TrackMagnet::MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector _down, MeshTri * _tri)
@@ -199,6 +237,6 @@ void TrackMagnet::MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector _dow
 	Vector endPoint = _startPos + _vect;
 	Vector mappedToPlane = endPoint;
 	MeshTri* tri2 = nullptr;
-	_tri->DoesLineIntersect(_down, endPoint, mappedToPlane, tri2, 15);
+	_tri->DoesLineIntersect(_down, endPoint, mappedToPlane, tri2, 15,0);
 	_vect = mappedToPlane - m_pos;
 }

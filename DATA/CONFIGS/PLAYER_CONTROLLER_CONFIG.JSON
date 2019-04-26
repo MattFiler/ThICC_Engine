@@ -1,0 +1,7 @@
+{
+  "movement_speed": 50,
+  "turning_speed": 65,
+  "drift_boost_multiplier": 0.3,
+  "time_for_max_turn": 5,
+  "time_for_max_drift": 4
+}

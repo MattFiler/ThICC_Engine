@@ -119,7 +119,7 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	Locator::setupItemData(m_probabilities);
 
 	//Setup debug text
-	debug_text = new Text2D("", true);
+	debug_text = new Text2D("", Text2D::MIDDLE);
 	debug_text->SetPos(Vector2(50, 50));
 	debug_text->SetColour(Colors::Red);
 
@@ -133,6 +133,11 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	for (int i = 0; i < m_game_config["player_count"]; i++) {
 		Locator::getRD()->skybox[i] = new Skybox();
 	}
+
+	//Create debug console
+	#ifdef _DEBUG 
+	m_debug_console = new DebugConsole();
+	#endif
 }
 
 /* Setup our splitscreen viewport sizes */
@@ -238,6 +243,14 @@ void ThICC_Engine::Update(DX::StepTimer const& timer)
 	//Framerate monitor
 	debug_text->SetText(std::to_string(timer.GetFramesPerSecond()));
 
+	//Debug console
+	#ifdef _DEBUG 
+	m_debug_console->Tick();
+	if (m_debug_console->IsOpen()) {
+		return;
+	}
+	#endif
+
 	//Pass off to our game now we've done our engine-y stuff
 	m_game_inst.Update(timer);
 }
@@ -260,13 +273,6 @@ void ThICC_Engine::Render()
 	Clear();
 	m_device_data.m_hdrScene->EndScene(commandList);
 
-	// Render skyboxes that are loaded
-	for (int i = 0; i < m_game_config["player_count"]; i++) {
-		if (Locator::getRD()->skybox[i]->Loaded()) {
-			Locator::getRD()->skybox[i]->Render();
-		}
-	}
-
 	// Render the game 3D elements
 	m_game_inst.Render3D();
 
@@ -282,12 +288,16 @@ void ThICC_Engine::Render()
 	// Render the game 2D elements
 	m_game_inst.Render2D();
 
-	//Render FPS
+	#ifdef _DEBUG 
 	Locator::getRD()->m_2dSpriteBatch->Begin(Locator::getRD()->m_commandList.Get());
+	//Debug console
+	m_debug_console->Render();
+	//FPS
 	if (m_game_config["enable_fps"]) {
 		debug_text->Render();
 	}
 	Locator::getRD()->m_2dSpriteBatch->End();
+	#endif
 
 	// Show the new frame.
 	m_device_data.m_deviceResources->Present();

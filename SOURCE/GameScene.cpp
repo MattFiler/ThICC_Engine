@@ -73,6 +73,11 @@ void GameScene::ExpensiveLoad() {
 		);
 	}
 
+	Locator::getAudio()->addToSoundsList(map_info.audio_background_start, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info.audio_background, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info.audio_final_lap_start, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info.audio_final_lap, SoundType::GAME);
+
 	//Load in
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{
@@ -86,6 +91,8 @@ void GameScene::ExpensiveLoad() {
 			dynamic_cast<Track*>(*it)->LoadCollision();
 		}
 	}
+
+
 
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
@@ -123,6 +130,8 @@ void GameScene::ExpensiveUnload() {
 	}
 	cine_cam->Reset();
 	cine_cam->SetType(CameraType::CINEMATIC);
+
+	Locator::getAudio()->clearSoundsList(SoundType::GAME);
 
 	//We'll probably need to reset more stuff here, like race timers, etc
 	timeout = 12.f;
@@ -277,8 +286,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 	switch (state)
 	{
 	case START:
-		Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::INTRO_MUSIC)->SetVolume(1.f);
-		Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::INTRO_MUSIC);
+		Locator::getAudio()->GetSound(SoundType::MISC, (int)MiscSounds::INTRO_MUSIC)->SetVolume(1.f);
+		Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::INTRO_MUSIC);
 		state = OPENING;
 		break;
 	case OPENING:
@@ -302,7 +311,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
-			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::PRE_COUNTDOWN);
+			Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::PRE_COUNTDOWN);
 		}
 		#ifdef _DEBUG
 		if (m_keybinds.keyReleased("Activate"))
@@ -321,8 +330,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		if (m_cam[game_config["player_count"]-1]->GetType() == CameraType::FOLLOW)
 		{
-			Locator::getAudio()->GetSound(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN)->SetVolume(0.7f);
-			Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::COUNTDOWN);
+			Locator::getAudio()->GetSound(SoundType::MISC, (int)MiscSounds::COUNTDOWN)->SetVolume(0.7f);
+			Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::COUNTDOWN);
 			state = COUNTDOWN;
 		}
 		break;
@@ -343,8 +352,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			state = PLAY;
 			timeout = 3.5f;
-			Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START)->SetVolume(0.7f);
-			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_START);
+			Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_START)->SetVolume(0.7f);
+			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_START);
 			for (int i = 0; i < game_config["player_count"]; ++i)
 			{
 				player[i]->setGamePad(true);
@@ -361,13 +370,13 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		if (timeout <= 0 && track_music_start)
 		{
-			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME);
+			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_GAME);
 			track_music_start = false;
 		}
 
 		if (timeout <= 0 && final_lap_start)
 		{
-			Locator::getAudio()->Play(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_FL_GAME);
+			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_FL_GAME);
 			final_lap_start = false;
 		}
 
@@ -376,13 +385,13 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 	for (int i = 0; i < game_config["player_count"]; ++i) {
 		player[i]->ShouldStickToTrack(*track);
-		player[i]->ResolveWallCollisions(*track);
+		//player[i]->ResolveWallCollisions(*track);
 	}
 
 	if (m_keybinds.keyReleased("Quit"))
 	{
-		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
-		Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_FL_GAME)->Stop();
+		Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_GAME)->Stop();
+		Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_FL_GAME)->Stop();
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	if (m_keybinds.keyReleased("toggle orbit cam"))
@@ -559,10 +568,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		//Render items
 		for (Item* obj : m_itemModels)
 		{
-			if (obj->GetRenderMesh())
-			{
-				obj->GetRenderMesh()->Render();
-			}
+			obj->Render();
 		}
 
 		break;
@@ -604,7 +610,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			{
 				if (obj->GetMesh())
 				{
-					obj->GetRenderMesh()->Render();
+					obj->Render();
 				}
 			}
 		}
@@ -646,12 +652,21 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			{
 				if (obj->GetMesh())
 				{
-					obj->GetRenderMesh()->Render();
+					obj->Render();
 				}
 			}
 		}
 		break;
 	}
+
+	// Render skyboxes that are loaded
+	/*
+	SKYBOXES ARE DISABLED FOR NOW DUE TO A RENDERING BUG
+	for (int i = 0; i < game_config["player_count"]; i++) {
+		if (Locator::getRD()->skybox[i]->Loaded()) {
+			Locator::getRD()->skybox[i]->Render();
+		}
+	}*/
 }
 
 /* Render the 2D scene */
@@ -722,8 +737,8 @@ void GameScene::SetPlayersWaypoint()
 				}
 				else if (player[i]->GetLap() == 2 && !final_lap)
 				{
-					Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
-					Locator::getAudio()->Play(SOUND_TYPE::MISC, (int)SOUNDS_MISC::FINAL_LAP_IND);
+					Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_GAME)->Stop();
+					Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::FINAL_LAP_IND);
 					final_lap = true;
 					final_lap_start = true;
 					timeout = 3.8f;
@@ -793,8 +808,9 @@ Item* GameScene::CreateItem(ItemType type)
 	case BANANA:
 	{
 		Banana* banana = new Banana();
-		m_itemModels.push_back(banana);
+		m_itemModels.push_back(banana);		
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(banana->GetMesh())->getDebugCollider());
+		banana->GetMesh()->getDebugCollider()->Load();
 		return banana;
 	}
 	case GREEN_SHELL:
@@ -802,6 +818,7 @@ Item* GameScene::CreateItem(ItemType type)
 		GreenShell* greenShell = new GreenShell();
 		m_itemModels.push_back(greenShell);
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(greenShell->GetMesh())->getDebugCollider());
+		greenShell->GetMesh()->getDebugCollider()->Load();
 
 		return greenShell;
 	}
@@ -816,6 +833,7 @@ Item* GameScene::CreateItem(ItemType type)
 		Bomb* bomb = new Bomb(std::bind(&GameScene::CreateExplosion, this));
 		m_itemModels.push_back(bomb);
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(bomb->GetMesh())->getDebugCollider());
+		bomb->GetMesh()->getDebugCollider()->Load();
 
 		return bomb;
 	}
@@ -824,6 +842,8 @@ Item* GameScene::CreateItem(ItemType type)
 		FakeItemBox* box = new FakeItemBox();
 		m_itemModels.push_back(box);
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(box->GetMesh())->getDebugCollider());
+		box->GetMesh()->getDebugCollider()->Load();
+
 		return box;
 	}
 	case MUSHROOM_UNLIMITED:
@@ -844,6 +864,23 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(mushroom);
 		return mushroom;
 	}
+	case LIGHTNING_CLOUD:
+	{
+		LightningCloud* cloud = new LightningCloud();
+		m_itemModels.push_back(cloud);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(cloud->GetMesh())->getDebugCollider());
+		cloud->GetMesh()->getDebugCollider()->Load();
+		return cloud;
+	}
+	case RED_SHELL:
+	{
+		RedShell* redShell = new RedShell();
+		m_itemModels.push_back(redShell);
+		m_3DObjects.push_back(dynamic_cast<PhysModel*>(redShell->GetMesh())->getDebugCollider());
+		redShell->GetMesh()->getDebugCollider()->Load();
+
+		return redShell;
+	}
 	default:
 		return nullptr;
 	}
@@ -856,6 +893,8 @@ Explosion * GameScene::CreateExplosion()
 	m_3DObjects.push_back(explosion);
 	m_physModels.push_back(explosion);
 	m_3DObjects.push_back(dynamic_cast<PhysModel*>(explosion)->getDebugCollider());
+	explosion->getDebugCollider()->Load();
+
 	return explosion;
 }
 

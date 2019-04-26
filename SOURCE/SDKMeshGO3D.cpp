@@ -269,6 +269,7 @@ void SDKMeshGO3D::Load()
 		Locator::getDD()->m_deviceResources->WaitForGpu();
 		uploadResourcesFinished.wait();
 	}
+	m_loaded = true;
 }
 
 /* Reset all resources */
@@ -282,6 +283,7 @@ void SDKMeshGO3D::Reset()
 	m_resourceDescriptors.reset();
 	resourceDescriptorOffset = 0;
 	current_metalness.clear();
+	m_loaded = false;
 }
 
 /* Update */

@@ -30,7 +30,7 @@
     <RootNamespace>ThICC_Engine</RootNamespace>
     <ProjectGuid>{8d6aa92b-b106-4a67-9b1e-b93443577920}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <ProjectName>ThICC_Engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -309,7 +309,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AIScheduler.h" />
-    <ClInclude Include="AnimationMesh.h" />
+    <ClInclude Include="AnimationController.h" />
+    <ClInclude Include="AnimationModel.h" />
     <ClInclude Include="AssetComp.h" />
     <ClInclude Include="AssetCompPch.h" />
     <ClInclude Include="AudioManager.h" />
@@ -322,6 +323,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ControlledMovement.h" />
+    <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="DebugMarker.h" />
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="DebugText.h" />
@@ -349,6 +351,7 @@
     <ClInclude Include="ItemBox.h" />
     <ClInclude Include="ItemData.h" />
     <ClInclude Include="KeybindManager.h" />
+    <ClInclude Include="LightningCloud.h" />
     <ClInclude Include="LocalisationManager.h" />
     <ClInclude Include="MapInfo.h" />
     <ClInclude Include="MenuScene.h" />
@@ -359,6 +362,7 @@
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ReadData.h" />
+    <ClInclude Include="RedShell.h" />
     <ClInclude Include="RenderData.h" />
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="Scene.h" />
@@ -377,7 +381,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AIScheduler.cpp" />
-    <ClCompile Include="AnimationMesh.cpp" />
+    <ClCompile Include="AnimationController.cpp" />
+    <ClCompile Include="AnimationModel.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />
     <ClCompile Include="Bomb.cpp" />
@@ -385,6 +390,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="ControlledMovement.cpp" />
+    <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="DebugMarker.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="DeviceResourcesPC.cpp" />
@@ -404,6 +410,7 @@
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="ItemData.cpp" />
     <ClCompile Include="KeybindManager.cpp" />
+    <ClCompile Include="LightningCloud.cpp" />
     <ClCompile Include="LocalisationManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuScene.cpp" />
@@ -420,6 +427,7 @@
     </ClCompile>
     <ClCompile Include="PhysModel.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RedShell.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SDKMeshGO3D.cpp" />

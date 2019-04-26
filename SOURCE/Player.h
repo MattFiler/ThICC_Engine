@@ -5,7 +5,7 @@
 #include "GreenShell.h"
 #include "Mushroom.h"
 #include "Constants.h"
-#include "AnimationMesh.h"
+#include "AnimationController.h"
 #include "Bomb.h"
 #include "FakeItemBox.h"
 #include "ControlledMovement.h"
@@ -16,6 +16,8 @@
 #include "GiantMushroom.h"
 #include "CharacterInfo.h"
 #include "VehicleInfo.h"
+#include "LightningCloud.h"
+#include "RedShell.h"
 #include <functional>
 
 //=================================================================
@@ -55,10 +57,11 @@ public:
 	void SetFinished(bool _finished) { m_finished = _finished; }
 
 	/* Inventory Management */
-	ItemType getActiveItem() { return active_item; };
-	void setActiveItem(ItemType _item);
-	ItemType getItemInInventory() { return m_InventoryItem; };
-	void setItemInInventory(ItemType _item);
+	ItemType GetActiveItem() { return active_item; };
+	void SetActiveItem(ItemType _item);
+	ItemType GetItemInInventory() { return m_InventoryItem; };
+	void SetItemInInventory(ItemType _item);
+	LightningCloud* GetLightningCloud();
 
 	void CheckUseItem();
 	void TrailItems();
@@ -116,6 +119,8 @@ private:
 	ImageGO2D *m_imgItem = nullptr;
 
 	std::vector<Item*> m_trailingItems;
+	std::vector<Item*> m_floatingItems; //Items which renders above the player - POW, Blooper, and Lightning Cloud
+	void PositionFloatingItems();
 	bool m_aPressed = true;
 	bool m_multiItem = false;
 	const int m_maxItems = 3;
@@ -123,7 +128,7 @@ private:
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;
 
-	std::unique_ptr<AnimationMesh> m_animationMesh = nullptr;
+	std::unique_ptr<AnimationController> m_animationMesh = nullptr;
 
 	std::queue<Matrix> m_posHistory;
 	float m_posHistoryInterval = 0.1f;

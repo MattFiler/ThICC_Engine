@@ -76,9 +76,6 @@
     <ClCompile Include="ControlledMovement.cpp">
       <Filter>Game\Components\Controllable</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationMesh.cpp">
-      <Filter>Game\Components\Game Objects\3D</Filter>
-    </ClCompile>
     <ClCompile Include="GameDebugToggles.cpp">
       <Filter>Engine Backend\Components</Filter>
     </ClCompile>
@@ -142,8 +139,17 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="LightningCloud.cpp" />
     <ClCompile Include="DebugScene.cpp">
       <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="RedShell.cpp" />
+    <ClCompile Include="AnimationModel.cpp" />
+    <ClCompile Include="AnimationController.cpp">
+      <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugConsole.cpp">
+      <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -246,9 +252,6 @@
     <ClInclude Include="ControlledMovement.h">
       <Filter>Game\Components\Controllable</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationMesh.h">
-      <Filter>Game\Components\Game Objects\3D</Filter>
-    </ClInclude>
     <ClInclude Include="GameDebugToggles.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
@@ -339,11 +342,20 @@
     <ClInclude Include="Skybox.h">
       <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="LightningCloud.h" />
     <ClInclude Include="DebugScene.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="CameraData.h">
       <Filter>Engine Backend\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="RedShell.h" />
+    <ClInclude Include="AnimationModel.h" />
+    <ClInclude Include="AnimationController.h">
+      <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugConsole.h">
+      <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

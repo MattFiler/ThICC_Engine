@@ -116,23 +116,50 @@ namespace EditorTool
             default_rma_vals[1] = roughnessSlider.Value;
             default_rma_vals[2] = ambientocclusionSlider.Value;
 
+            //Before getting to the engine config, update any depreciated stuff
+            if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()] == null)
+            {
+                material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()] = false;
+            }
+            if (material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()] == null)
+            {
+                material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()] = false;
+            }
+            if (material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()] == null)
+            {
+                material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()] = false;
+            }
+
             /* Engine Config */
             if (model_type == ModelType.MAP)
             {
                 //Collision config
-                if (material_config["ThICC_COLLISION"]["0"].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK).ToString()].Value<bool>())
                 {
                     onTrack.Checked = true;
                 }
-                else if (material_config["ThICC_COLLISION"]["1"].Value<bool>())
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()].Value<bool>())
+                {
+                    onTrack.Checked = true;
+                    onTrackNoAI.Checked = true;
+                }
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.OFF_TRACK).ToString()].Value<bool>())
                 {
                     offTrack.Checked = true;
                 }
-                else if (material_config["ThICC_COLLISION"]["2"].Value<bool>())
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.BOOST_PAD).ToString()].Value<bool>())
                 {
                     boostPad.Checked = true;
                 }
-                else if (material_config["ThICC_COLLISION"]["3"].Value<bool>())
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()].Value<bool>())
+                {
+                    antiGravPad.Checked = true;
+                }
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()].Value<bool>())
+                {
+                    jumpPad.Checked = true;
+                }
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.WALL).ToString()].Value<bool>())
                 {
                     isWall.Checked = true;
                 }
@@ -157,12 +184,18 @@ namespace EditorTool
         }
         private void collisionCheckChanged(bool enabled)
         {
+            onTrackNoAI.Checked = false;
+            onTrackNoAI.Enabled = enabled;
             onTrack.Checked = enabled;
             onTrack.Enabled = enabled;
             offTrack.Checked = false;
             offTrack.Enabled = enabled;
             boostPad.Checked = false;
             boostPad.Enabled = enabled;
+            antiGravPad.Checked = false;
+            antiGravPad.Enabled = enabled;
+            jumpPad.Checked = false;
+            jumpPad.Enabled = enabled;
             isWall.Checked = false;
             isWall.Enabled = enabled;
         }
@@ -280,10 +313,13 @@ namespace EditorTool
             material_config["map_occlusionRoughnessMetallic"] = rma;
 
             //Collision config
-            material_config["ThICC_COLLISION"]["0"] = (inPlayableArea.Checked ? onTrack.Checked : false);
-            material_config["ThICC_COLLISION"]["1"] = (inPlayableArea.Checked ? offTrack.Checked : false);
-            material_config["ThICC_COLLISION"]["2"] = (inPlayableArea.Checked ? boostPad.Checked : false);
-            material_config["ThICC_COLLISION"]["3"] = (inPlayableArea.Checked ? isWall.Checked : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK).ToString()] = (inPlayableArea.Checked ? (onTrack.Checked ? !onTrackNoAI.Checked : false) : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()] = (inPlayableArea.Checked ? (onTrack.Checked ? onTrackNoAI.Checked : false) : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.OFF_TRACK).ToString()] = (inPlayableArea.Checked ? offTrack.Checked : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.BOOST_PAD).ToString()] = (inPlayableArea.Checked ? boostPad.Checked : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()] = (inPlayableArea.Checked ? antiGravPad.Checked : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()] = (inPlayableArea.Checked ? jumpPad.Checked : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.WALL).ToString()] = (inPlayableArea.Checked ? isWall.Checked : false);
 
             //Metallic
             material_config["ThICC_METALLIC"] = isMetallic.Checked;
@@ -331,7 +367,7 @@ namespace EditorTool
             temp_rma.Save(this_model_folder + rma_mat, ImageFormat.Png);
             return rma_mat;
         }
-
+        
 
 
         // stuff to be deleted
@@ -353,6 +389,9 @@ namespace EditorTool
         private void RMAMapBrowse_Click(object sender, EventArgs e)
         {
 
+        }
+        private void onTrack_CheckedChanged(object sender, EventArgs e)
+        {
         }
 
     }

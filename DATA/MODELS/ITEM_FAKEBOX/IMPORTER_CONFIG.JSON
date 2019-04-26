@@ -1,25 +1,28 @@
 {
   "lambert2SG": {
     "newmtl": "lambert2SG",
-    "illum": 1,
-    "Kd": "1.000000 1.000000 1.000000",
-    "Ka": "1.000000 1.000000 1.000000",
-    "Tf": "1.00 1.00 1.00",
-    "map_Kd": "dott.png",
-    "Ni": "1.000000",
-    "d": "0.000000",
     "Ns": "100.000000",
+    "Ka": "1.000000 1.000000 1.000000",
+    "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
-    "MARIOKART_COLLISION": {
+    "Ni": "1.000000",
+    "d": "0.000000",
+    "illum": "2",
+    "map_Kd": "dott.png",
+    "Tr": "0.000000",
+    "map_Ks": "",
+    "map_Kn": "",
+    "norm": "",
+    "map_Ke": "",
+    "map_emissive": "",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
       "3": false
-    },
-    "map_Ka": "",
-    "map_d": "dott.png",
-    "map_Ks": "",
-    "map_Ns": ""
+    }
   }
 }

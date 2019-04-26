@@ -313,6 +313,10 @@ namespace EditorTool
             JObject mariokart_properties = new JObject();
             for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
             {
+                if ((CollisionType)i == CollisionType.GLIDER_TRACK)
+                {
+                    continue; //This is auto-generated from our JSON, not manually editable
+                }
                 mariokart_properties[i.ToString()] = false; //All collision off as default
             }
             int prop_index = 0;

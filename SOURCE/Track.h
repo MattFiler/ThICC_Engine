@@ -80,7 +80,7 @@ public:
 		return debug_markers;
 	};
 
-	bool DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle);
+	bool DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle, const float& _minAngle);
 	void SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall);
 
 	Vector3 getWaypointMiddle(int index);

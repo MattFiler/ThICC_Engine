@@ -1,0 +1,14 @@
+{
+  "menu_sounds": {
+    "MENU_LOOP": "MENU LOOP",
+    "TITLE_START": "TITLE START",
+    "TITLE_LOOP": "TITLE LOOP"
+  },
+  "misc_sounds": {
+    "COURSE_INTRO": "COURSE INTRO SOUNDTRACK",
+    "PRE_COUNTDOWN": "PRE COUNTDOWN",
+    "COUNTDOWN": "COUNTDOWN",
+    "ITEMBOX_HIT": "ITEM BOX HIT",
+    "FINAL_LAP_SOUND": "FINAL LAP INDICATOR"
+  }
+}
