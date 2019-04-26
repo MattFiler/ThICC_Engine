@@ -106,6 +106,7 @@ void DebugConsole::UserInputHandles() {
 	if (Locator::getID()->m_keyboardTracker.IsKeyPressed(DirectX::Keyboard::Keys::X)) { AddInputText("X"); }
 	if (Locator::getID()->m_keyboardTracker.IsKeyPressed(DirectX::Keyboard::Keys::Y)) { AddInputText("Y"); }
 	if (Locator::getID()->m_keyboardTracker.IsKeyPressed(DirectX::Keyboard::Keys::Z)) { AddInputText("Z"); }
+	if (Locator::getID()->m_keyboardTracker.IsKeyPressed(DirectX::Keyboard::Keys::Space)) { AddInputText(" "); }
 	if (Locator::getID()->m_keyboardTracker.IsKeyPressed(DirectX::Keyboard::Keys::Back)) { RemoveInputText(1); }
 	if (Locator::getID()->m_keyboardTracker.IsKeyPressed(DirectX::Keyboard::Keys::Enter)) { SubmitCommand(); }
 }
