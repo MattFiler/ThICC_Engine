@@ -61,7 +61,7 @@ private:
 
 	//Item objects
 	Item* CreateItem(ItemType type);
-	Explosion* CreateExplosion();
+	Explosion* CreateExplosion(ItemType _ownerType);
 
 	//Game objects (and test crap)
 	Track* track = nullptr;

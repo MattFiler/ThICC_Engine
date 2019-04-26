@@ -348,8 +348,12 @@
     <ClInclude Include="GreenShell.h" />
     <ClInclude Include="ImageGO2D.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemBoostData.h" />
     <ClInclude Include="ItemBox.h" />
+    <ClInclude Include="ItemCollisionData.h" />
     <ClInclude Include="ItemData.h" />
+    <ClInclude Include="ItemGrowthData.h" />
+    <ClInclude Include="ItemThrowData.h" />
     <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="LightningCloud.h" />
     <ClInclude Include="LocalisationManager.h" />

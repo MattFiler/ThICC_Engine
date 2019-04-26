@@ -26,6 +26,32 @@
 			"place_3": 10,
 			"place_4": 5,
 			"place_5": 2.5
+		},
+		"info": {
+			"lifetime": 20,
+			"player_immunity_time": 0.5,
+			"speed": 80,
+			"use_pos_offset": 1,
+			"spin": {
+				"revolutions": 1,
+				"duration": 0.7
+			},
+			"player_collision": {
+				"velocity_multiplier": 0,		
+				"jump": {
+					"height": 1.5,
+					"duration": 1
+				},
+				"flip": {
+					"revolutions": 1,
+					"duration": 0.8
+				},
+				"spin" : {
+					"revolutions": 0,
+					"duration": 0
+				},
+				"vertical_pos_offset": 4
+			}		
 		}
 	},
 	"RED_SHELL": {
@@ -40,6 +66,33 @@
 			"place_6": 7.5,
 			"place_7": 5,
 			"place_8": 2.5
+		},
+		"info":{
+			"lifetime": 300,
+			"player_immunity_time": 2,
+			"use_pos_offset": 1,
+			"max_speed": 40,
+			"move_toward_distance_squared": 0,
+			"ai": {
+				"move_speed": 50,
+				"turn_speed": 50
+			},
+			"player_collision": {
+				"velocity_multiplier": 0,		
+				"jump": {
+					"height": 1.5,
+					"duration": 1
+				},
+				"flip": {
+					"revolutions": 1,
+					"duration": 0.8
+				},
+				"spin" : {
+					"revolutions": 0,
+					"duration": 0
+				},
+				"vertical_pos_offset": 4
+			}
 		}
 	},
 	"BANANA": {
@@ -51,6 +104,33 @@
 			"place_3": 10,
 			"place_4": 5,
 			"place_5": 2.5
+		},
+		"info": {
+			"lifetime": 300,
+			"player_immunity_time": 0.5,
+			"throw": {
+				"horizontal_pos_offset": 2,
+				"vertical_pos_offset" : 3,
+				"forward_force": 100,
+				"upward_force": 1,
+				"max_gravity": 500
+			},
+			"player_collision": {
+				"velocity_multiplier": 0.3,	
+				"jump": {
+					"height": 0,
+					"duration": 0
+				},
+				"flip": {
+					"revolutions": 0,
+					"duration": 0
+				},
+				"spin" : {
+					"revolutions": 1,
+					"duration": 0.4
+				},
+				"vertical_pos_offset": 0
+			}
 		}
 	},
 	"FAKE_BOX": {
@@ -62,6 +142,33 @@
 			"place_3": 5,
 			"place_4": 2.5,
 			"place_5": 2.5
+		},
+		"info": {
+			"lifetime": 300,
+			"player_immunity_time": 0.5,
+			"throw": {
+				"horizontal_pos_offset": 2,
+				"vertical_pos_offset" : 3,
+				"forward_force": 100,
+				"upward_force": 1,
+				"max_gravity": 500
+			},
+			"player_collision": {
+				"velocity_multiplier": 0,	
+				"jump": {
+					"height": 1.5,
+					"duration": 1
+				},
+				"flip": {
+					"revolutions": 1,
+					"duration": 0.8
+				},
+				"spin" : {
+					"revolutions": 0,
+					"duration": 0
+				},
+				"vertical_pos_offset": 4
+			}
 		}
 	},
 	"MUSHROOM": {
@@ -74,6 +181,14 @@
 			"place_6": 12.5,
 			"place_7": 7.5,
 			"place_8": 2.5
+		},
+		"info": {
+			"boost": {
+				"amount": 40,
+				"min_velocity": 50,
+				"duration": 2,
+				"player_drag": 0.7
+			}
 		}
 	},
 	"MUSHROOM_3X": {
@@ -100,6 +215,38 @@
 			"place_4": 7.5,
 			"place_5": 5,
 			"place_6": 5
+		},
+		"info": {
+			"lifetime": 300,
+			"player_immunity_time": 0.1,
+			"detonation_time": 4,
+			"throw": {
+				"horizontal_pos_offset": 2,
+				"vertical_pos_offset" : 3,
+				"forward_force": 100,
+				"upward_force": 1,
+				"max_gravity": 500
+			},
+			"explosion": {
+				"size_multiplier": 10,
+				"growth_speed": 1.5,
+				"player_collision": {
+					"velocity_multiplier": 0,	
+					"jump": {
+						"height": 1.5,
+						"duration": 1
+					},
+					"flip": {
+						"revolutions": 1,
+						"duration": 0.8
+					},
+					"spin" : {
+						"revolutions": 0,
+						"duration": 0
+					},
+					"vertical_pos_offset": 4
+				}
+			}
 		}
 	},
 	"BLUE_SHELL": {
@@ -131,6 +278,13 @@
 			"place_10": 22.5,
 			"place_11": 20,
 			"place_12": 15
+		},
+		"info": {
+			"duration": 12,
+			"boost": {
+				"amount": 40,
+				"player_drag": 0.7
+			}
 		}
 	},
 	"MUSHROOM_UNLIMITED": {
@@ -143,6 +297,15 @@
 			"place_10": 30,
 			"place_11": 27.5,
 			"place_12": 25
+		},
+		"info": {
+			"lifetime": 7.5,
+			"boost": {
+				"amount": 35,
+				"min_velocity": 50,
+				"duration": 1,
+				"player_drag": 0.7
+			}
 		}
 	},
 	"MUSHROOM_GIANT": {
@@ -153,6 +316,14 @@
 			"place_6": 10,
 			"place_7": 7.5,
 			"place_8": 5
+		},
+		"info": {
+			"grow": {
+			"size_multiplier": 2,
+			"growth_speed": 2,
+			"shrink_speed": 3,
+			"growth_duration": 12 
+			}
 		}
 	},
 	"SQUID": {
@@ -186,6 +357,16 @@
 			"place_5": 7.5,
 			"place_6": 5,
 			"place_7": 2.5
+		},
+		"info": {
+			"strike_duration": 10,
+			"player_velocity_multiplier": 0.2,
+			"shrink": {
+				"size_multiplier": 0.5,
+				"growth_speed": 2,
+				"shrink_speed": 2,
+				"max_shrink_duration": 13 
+			}		
 		}
 	},
 	"BULLET_BILL": {

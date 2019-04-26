@@ -5,7 +5,16 @@
 
 Star::Star()
 {
-	m_maxDuration = 12;
+	InitStarData();
+}
+
+void Star::InitStarData()
+{
+	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
+	m_itemData << i;
+	m_maxDuration = (float)m_itemData["STAR"]["info"]["duration"];
+	m_boostAmount = (float)m_itemData["STAR"]["info"]["boost"]["amount"];
+	m_playerDrag = (float)m_itemData["STAR"]["info"]["boost"]["player_drag"];
 }
 
 void Star::Tick()
@@ -31,5 +40,5 @@ void Star::Use(Player * player, bool _altUse)
 {
 	setItemInUse(player);
 	m_trailingPlayerImmunity = true;
-
+	player->SetDrag(m_playerDrag);
 }

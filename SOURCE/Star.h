@@ -8,6 +8,7 @@ class Star :public Item
 {
 public:
 	Star();
+	void InitStarData();
 	~Star() = default;
 
 	virtual void Tick() override;
@@ -16,5 +17,6 @@ public:
 
 private:
 	float m_boostAmount = 40;
+	float m_playerDrag = 0.7;
 };
 
