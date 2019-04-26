@@ -51,8 +51,7 @@
 					"duration": 0
 				},
 				"vertical_pos_offset": 4
-			}
-			
+			}		
 		}
 	},
 	"RED_SHELL": {
@@ -67,6 +66,33 @@
 			"place_6": 7.5,
 			"place_7": 5,
 			"place_8": 2.5
+		},
+		"info":{
+			"lifetime": 300,
+			"player_immunity_time": 2,
+			"use_pos_offset": 1,
+			"max_speed": 40,
+			"move_toward_distance_squared": 0,
+			"ai": {
+				"move_speed": 50,
+				"turn_speed": 50
+			},
+			"player_collision": {
+				"velocity_multiplier": 0,		
+				"jump": {
+					"height": 1.5,
+					"duration": 1
+				},
+				"flip": {
+					"revolutions": 1,
+					"duration": 0.8
+				},
+				"spin" : {
+					"revolutions": 0,
+					"duration": 0
+				},
+				"vertical_pos_offset": 4
+			}
 		}
 	},
 	"BANANA": {
