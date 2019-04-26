@@ -11,10 +11,10 @@ Bomb::Bomb(std::function<Explosion*(ItemType)> _CreateExplosionFunciton) : Item(
 	m_mesh->SetPhysicsOn(true);
 	m_maxImmunityTime = 0.1;
 
-	InitItemData();
+	InitBombData();
 }
 
-void Bomb::InitItemData()
+void Bomb::InitBombData()
 {
 	m_countdownTime = (float)m_itemData["BOMB"]["info"]["detonation_time"];
 

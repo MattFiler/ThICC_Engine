@@ -9,10 +9,10 @@ Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BANANA))
 	m_mesh->SetDrag(0.9f);
 	m_mesh->SetPhysicsOn(true);
 
-	InitItemData();
+	InitBananaData();
 }
 
-void Banana::InitItemData()
+void Banana::InitBananaData()
 {
 	m_throwData.m_thowHoriPosOffset = m_itemData["BANANA"]["info"]["throw"]["horizontal_pos_offset"];
 	m_throwData.m_thowVertPosOffset = m_itemData["BANANA"]["info"]["throw"]["vertical_pos_offset"];

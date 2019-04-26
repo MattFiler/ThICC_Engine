@@ -252,6 +252,13 @@
 			"place_10": 22.5,
 			"place_11": 20,
 			"place_12": 15
+		},
+		"info": {
+			"duration": 12,
+			"boost": {
+				"amount": 40,
+				"player_drag": 0.7
+			}
 		}
 	},
 	"MUSHROOM_UNLIMITED": {

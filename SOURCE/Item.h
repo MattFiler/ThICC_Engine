@@ -15,6 +15,7 @@ class Item
 public:
 	Item() = default;
 	Item(const std::string& item_type);
+	void InitItemData(const std::string & item_type);
 	~Item() = default;
 	
 	virtual void Tick();

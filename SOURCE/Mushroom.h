@@ -10,7 +10,7 @@ class Player;
 class Mushroom : public Item {
 public:
 	Mushroom();
-	void InitItemData();
+	void InitMushroomData();
 	~Mushroom() = default;
 
 	virtual void Tick() override;

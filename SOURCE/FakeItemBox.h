@@ -11,7 +11,7 @@ class FakeItemBox : public Item
 {
 public:
 	FakeItemBox();
-	void InitItemData();
+	void InitBoxData();
 	~FakeItemBox() = default;
 
 	void Tick() { Item::Tick(); };

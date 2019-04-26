@@ -10,7 +10,7 @@ class Bomb : public Item
 {
 public:
 	Bomb(std::function<Explosion*(ItemType)> _CreateExplosionFunciton);
-	void InitItemData();
+	void InitBombData();
 	~Bomb() = default;
 
 	virtual void Tick() override;

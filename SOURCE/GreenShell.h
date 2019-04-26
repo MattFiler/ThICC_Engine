@@ -9,7 +9,7 @@ class GreenShell : public Item
 {
 public:
 	GreenShell();
-	void InitItemData();
+	void InitShellData();
 	~GreenShell() = default;
 
 	virtual void Tick() override;

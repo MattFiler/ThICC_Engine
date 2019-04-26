@@ -7,10 +7,10 @@ FakeItemBox::FakeItemBox() : Item(Locator::getItemData()->GetItemModelName(FAKE_
 	m_mesh->SetDrag(0.9f);
 	m_mesh->SetPhysicsOn(true);
 
-	InitItemData();
+	InitBoxData();
 }
 
-void FakeItemBox::InitItemData()
+void FakeItemBox::InitBoxData()
 {
 	m_throwData.m_thowHoriPosOffset = m_itemData["FAKE_BOX"]["info"]["throw"]["horizontal_pos_offset"];
 	m_throwData.m_thowVertPosOffset = m_itemData["FAKE_BOX"]["info"]["throw"]["vertical_pos_offset"];
