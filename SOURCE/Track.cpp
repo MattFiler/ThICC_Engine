@@ -97,10 +97,14 @@ void Track::LoadCollision() {
 
 	// Populate the collsion map
 	using pair = std::pair<CollisionType, bool>;
-	m_validCollisions.insert(pair(CollisionType::BOOST_PAD, true));
-	m_validCollisions.insert(pair(CollisionType::OFF_TRACK, true));
 	m_validCollisions.insert(pair(CollisionType::ON_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::OFF_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::BOOST_PAD, true));
 	m_validCollisions.insert(pair(CollisionType::WALL, true));
+	m_validCollisions.insert(pair(CollisionType::GLIDER_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::ANTIGRAV_PAD, true));
+	m_validCollisions.insert(pair(CollisionType::JUMP_PAD, true));
+	m_validCollisions.insert(pair(CollisionType::ON_TRACK_NO_AI, true));
 }
 
 /* Unload the track collision info */
@@ -422,12 +426,16 @@ void Track::Clamp(float& _num, float _min, float _max)
 	}
 }
 
-void Track::SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall)
+void Track::SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall, const bool& _glider, const bool& _antigrav, const bool& _jump, const bool& _noai)
 {
 	m_validCollisions[CollisionType::BOOST_PAD] = _boost;
 	m_validCollisions[CollisionType::OFF_TRACK] = _off;
 	m_validCollisions[CollisionType::ON_TRACK] = _on;
 	m_validCollisions[CollisionType::WALL] = _wall;
+	m_validCollisions[CollisionType::GLIDER_TRACK] = _glider;
+	m_validCollisions[CollisionType::ANTIGRAV_PAD] = _antigrav;
+	m_validCollisions[CollisionType::JUMP_PAD] = _jump;
+	m_validCollisions[CollisionType::ON_TRACK_NO_AI] = _noai;
 }
 
 Vector3 Track::getWaypointMiddle(int index)

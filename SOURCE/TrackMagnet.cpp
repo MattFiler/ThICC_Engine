@@ -20,23 +20,26 @@ void TrackMagnet::Render()
 /* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
 bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
-	track.SetValidCollision(true, true, true, false);
+	track.SetValidCollision(true, true, true, false, true, true, true, true);
 
 	Vector intersect;
 	Vector mid_intersect;
 	Matrix targetWorld = Matrix::Identity;
 	bool shouldStick = false;
+	// Check the previous triangle if there was one
 	if (tri)
 	{
 		shouldStick = tri->DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0) ||
 			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0);
 	}
+	// Otherwise check down from the middle
 	else
 	{
 		bool shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0);
 	}
 
 	mid_intersect = intersect;
+	// If the middle found nothing, check 3 more points
 	if (!shouldStick)
 	{
 		shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Forward()), intersect, tri, m_maxAngle,0) ||
@@ -45,11 +48,13 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	}
 
 	float modifiedMaxRotation = m_maxRotation;
+	// If track was found
 	if (shouldStick)
 	{
+		m_timeOffTerrain = 0;
 		if (m_useGroundTypes)
 		{
-			colType = tri->GetType();
+			m_colType = tri->GetType();
 			switch (tri->GetType())
 			{
 			case ON_TRACK:
@@ -75,18 +80,18 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 			}
 		}
 
-		m_onTrack = true;
-
 		Vector adjustVel = m_vel;
 		// If velocity is opposite to direction, then the kart is reversing
 		if ((m_vel + m_world.Forward()).Length() < m_vel.Length())
 		{
 			adjustVel *= -1;
 		}
+		m_onTrack = false;
 		// If the position of the kart is within the snapping area
 		float dist = Vector::Distance(m_pos, intersect);
 		if (dist > m_minSnapDist && dist < m_maxSnapDist)
 		{
+			m_onTrack = true;
 			// Turn gravity off when within the snapping zone, this smooths out movment
 			m_gravVel = Vector3::Zero;
 			m_gravDirection = Vector3::Zero;
@@ -120,11 +125,21 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	else
 	{
 		m_onTrack = false;
+		m_colType = CollisionType::NO_TERRAIN;
 		modifiedMaxRotation /= 5;
-		Vector forward = m_world.Forward();
-		forward.y = 0;
-		targetWorld = m_world.CreateWorld(m_pos, forward, Vector::Up);
-		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
+
+		// Wait for bit, then if no track is found start rotating to the world up
+		m_timeOffTerrain += Locator::getGSD()->m_dt;
+		if (m_timeOffTerrain > m_rotationDelay)
+		{
+			targetWorld = m_world.CreateWorld(m_pos, m_vel, Vector::Up);
+			targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
+		}
+		else
+		{
+			targetWorld = m_world.CreateWorld(m_pos, m_vel, m_world.Up());
+			targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
+		}
 		m_gravDirection = m_world.Down() * gravityMultiplier;
 	}
 
@@ -133,8 +148,8 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	m_world = targetWorld;
 	if (ResolveWallCollisions(track))
 	{
-		targetWorld = tempWorld;
-		m_world = tempWorld;
+		//targetWorld = tempWorld;
+		//m_world = tempWorld;
 	}
 
 	// Update the position and rotation by breaking apart m_world
@@ -186,15 +201,15 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 	Vector intersect = Vector::Zero;
 	MeshTri* wallTri = nullptr;
 
-	// First check collision against walls only without angle limits
-	walls.SetValidCollision(true, true, true, true);
+	// First check collision against everything without angle limits using a ring around the object
+	walls.SetValidCollision(true, true, true, true, true, true, true, true);
 	bool hit_wall = (walls.DoesLineIntersect(leftSide, data.m_globalFrontBottomLeft + sideOffset, intersect, wallTri, 5,0) ||
 		walls.DoesLineIntersect(rightSide, data.m_globalFrontBottomRight + sideOffset, intersect, wallTri, 5,0) ||
 		walls.DoesLineIntersect(frontSide, data.m_globalFrontBottomLeft + sideOffset, intersect, wallTri, 5,0) ||
 		walls.DoesLineIntersect(backSide, data.m_globalBackBottomLeft + sideOffset, intersect, wallTri, 5,0));
 
-	// Then if no collision is found check against non-walls with verticle lines and an angle limit
-	walls.SetValidCollision(false, false, false, true);
+	// Then if no collision is found check against only walls with verticle lines and an angle limit
+	walls.SetValidCollision(false, false, false, true, false, false, false, false);
 	if (hit_wall || walls.DoesLineIntersect(frontLeft, data.m_globalFrontTopLeft + cornerOffset, intersect, wallTri, 5,m_minAngle) ||
 		walls.DoesLineIntersect(frontRight, data.m_globalFrontTopRight + cornerOffset, intersect, wallTri, 5, m_minAngle) ||
 		walls.DoesLineIntersect(backLeft, data.m_globalBackTopLeft + cornerOffset, intersect, wallTri, 5, m_minAngle) ||
