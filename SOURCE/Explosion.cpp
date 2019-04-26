@@ -6,14 +6,14 @@
 
 Explosion::Explosion(ItemType _ownerType) : TrackMagnet("bomb_explosion")
 {
-	initExplosionData(_ownerType);
+	InitExplosionData(_ownerType);
 
 	m_startSize = m_scale;
 	m_endSize = m_startSize * m_sizeMulti;
 	Load();
 }
 
-void Explosion::initExplosionData(ItemType _ownerType)
+void Explosion::InitExplosionData(ItemType _ownerType)
 {
 	std::string ownerName = "";
 	if (_ownerType == BOMB)

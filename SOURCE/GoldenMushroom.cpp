@@ -5,10 +5,10 @@
 
 GoldenMushroom::GoldenMushroom()
 {
-	initItemData();
+	InitItemData();
 }
 
-void GoldenMushroom::initItemData()
+void GoldenMushroom::InitItemData()
 {
 	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
 	m_itemData << i;

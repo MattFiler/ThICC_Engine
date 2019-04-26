@@ -7,10 +7,10 @@
 
 Mushroom::Mushroom()
 {
-	initItemData();
+	InitItemData();
 }
 
-void Mushroom::initItemData()
+void Mushroom::InitItemData()
 {
 	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
 	m_itemData << i;

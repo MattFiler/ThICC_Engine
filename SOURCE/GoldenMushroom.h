@@ -9,7 +9,7 @@ class GoldenMushroom : public Item
 {
 public:
 	GoldenMushroom();
-	void initItemData();
+	void InitItemData();
 	~GoldenMushroom() = default;
 
 	virtual void Tick() override;

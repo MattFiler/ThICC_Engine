@@ -9,10 +9,10 @@ GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_S
 	m_mesh->SetPhysicsOn(true);
 	m_mesh->setDampenWallReflect(false);
 
-	initItemData();
+	InitItemData();
 }
 
-void GreenShell::initItemData()
+void GreenShell::InitItemData()
 {
 	m_speed = (float)m_itemData["GREEN_SHELL"]["info"]["speed"];
 	m_usePosOffset = (float)m_itemData["GREEN_SHELL"]["info"]["use_pos_offset"];

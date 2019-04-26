@@ -11,10 +11,10 @@ Bomb::Bomb(std::function<Explosion*(ItemType)> _CreateExplosionFunciton) : Item(
 	m_mesh->SetPhysicsOn(true);
 	m_maxImmunityTime = 0.1;
 
-	initItemData();
+	InitItemData();
 }
 
-void Bomb::initItemData()
+void Bomb::InitItemData()
 {
 	m_countdownTime = (float)m_itemData["BOMB"]["info"]["detonation_time"];
 
@@ -46,17 +46,14 @@ void Bomb::Use(Player * player, bool _altUse)
 
 	if (_altUse)
 	{
-		//Positions the bomb
 		m_mesh->SetWorld(player->GetWorld());
 		m_mesh->AddPos(player->GetWorld().Right() * m_throwData.m_thowHoriPosOffset + player->GetWorld().Up() * m_throwData.m_thowVertPosOffset);
 		m_mesh->UpdateWorld();
 
-		//Yeets said bomb
 		m_mesh->setMaxGrav(m_throwData.m_maxGrav);
 		m_mesh->setGravVelocity(player->getVelocity() + (player->GetWorld().Forward() * m_throwData.m_forwardForce) + (player->GetWorld().Up() * m_throwData.m_upwardForce));
 	}
 	m_countdown = true;
-	//Detonate();
 }
 
 void Bomb::Detonate()

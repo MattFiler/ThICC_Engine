@@ -9,7 +9,7 @@ class Player;
 class Banana : public Item {
 public:
 	Banana();
-	void initItemData();
+	void InitItemData();
 	~Banana() = default;
 
 	virtual void Tick() override { Item::Tick(); };

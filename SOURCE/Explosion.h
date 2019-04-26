@@ -10,7 +10,7 @@ class Explosion : public TrackMagnet
 {
 public:
 	Explosion(ItemType _ownerType);
-	void initExplosionData(ItemType _ownerType);
+	void InitExplosionData(ItemType _ownerType);
 	~Explosion() = default;
 
 	void HitByPlayer(Player* _player);

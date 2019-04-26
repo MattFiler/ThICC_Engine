@@ -9,10 +9,10 @@ Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BANANA))
 	m_mesh->SetDrag(0.9f);
 	m_mesh->SetPhysicsOn(true);
 
-	initItemData();
+	InitItemData();
 }
 
-void Banana::initItemData()
+void Banana::InitItemData()
 {
 	m_throwData.m_thowHoriPosOffset = m_itemData["BANANA"]["info"]["throw"]["horizontal_pos_offset"];
 	m_throwData.m_thowVertPosOffset = m_itemData["BANANA"]["info"]["throw"]["vertical_pos_offset"];
@@ -36,12 +36,10 @@ void Banana::Use(Player * _player, bool _altUse)
 
 	if (_altUse)
 	{
-		//Positions the banan
 		m_mesh->SetWorld(_player->GetWorld());
 		m_mesh->AddPos(_player->GetWorld().Right() * m_throwData.m_thowHoriPosOffset + _player->GetWorld().Up() * m_throwData.m_thowVertPosOffset);
 		m_mesh->UpdateWorld();
 
-		//Yeets said banan
 		m_mesh->setMaxGrav(m_throwData.m_maxGrav);
 		m_mesh->setGravVelocity(_player->getVelocity() + (_player->GetWorld().Forward() * m_throwData.m_forwardForce) + (_player->GetWorld().Up() * m_throwData.m_upwardForce));
 	}

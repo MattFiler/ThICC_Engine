@@ -17,6 +17,12 @@ Item::Item(const std::string& item_type)
 
 	std::string item_name = item_type;
 	item_name.erase(item_name.begin(), item_name.begin() + 5); //Removing "ITEM_"
+
+	if (item_name == "FAKEBOX")
+	{
+		item_name = "FAKE_BOX";
+	}
+
 	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
 	m_itemData << i;
 	m_maxDuration = (float)m_itemData[item_name]["info"]["lifetime"];
