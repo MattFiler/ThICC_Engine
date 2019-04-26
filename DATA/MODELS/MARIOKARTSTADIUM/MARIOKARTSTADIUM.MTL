@@ -723,7 +723,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_concrete_road
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000

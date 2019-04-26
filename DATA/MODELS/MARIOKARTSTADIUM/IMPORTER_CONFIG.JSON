@@ -479,7 +479,7 @@
       "1": false,
       "2": false,
       "3": false,
-      "7": true,
+      "7": false,
       "5": false,
       "6": false
     }
@@ -1074,7 +1074,7 @@
   },
   "fc_concrete_road": {
     "newmtl": "fc_concrete_road",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "0.000000 0.000000 0.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1089,15 +1089,18 @@
     "Tr": "0.000000",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
     "ThICC_INDEX": 23,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "7": true,
+      "5": false,
+      "6": false
     }
   },
   "fc_flower": {

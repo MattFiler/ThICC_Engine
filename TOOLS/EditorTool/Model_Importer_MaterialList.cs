@@ -541,6 +541,10 @@ namespace EditorTool
                     {
                         if (collision_config[i.ToString()] != null) //support for depreciated configs
                         {
+                            if (i == 7)
+                            {
+                                bool dssdfsdf = false;
+                            }
                             if (collision_config[i.ToString()].Value<bool>())
                             {
                                 collision_enabled = true;
@@ -729,22 +733,19 @@ namespace EditorTool
                 using (BinaryReader reader = new BinaryReader(File.Open(importer_common.fileName(importer_file.COLLMAP), FileMode.Open)))
                 {
                     int collision_count = reader.ReadInt32();
-                    if (collision_count == (int)CollisionType.NUM_OF_TYPES) //check we aren't editing a depreciated collmap
+                    reader.BaseStream.Position = sizeof(int) + (sizeof(int) * (int)CollisionType.GLIDER_TRACK);
+                    int glider_vert_count = reader.ReadInt32();
+                    if (glider_vert_count > 0) //check we actually have a glider track on this map
                     {
-                        reader.BaseStream.Position = sizeof(int) + (sizeof(int) * (int)CollisionType.GLIDER_TRACK);
-                        int glider_vert_count = reader.ReadInt32();
-                        if (glider_vert_count > 0) //check we actually have a glider track on this map
+                        int offset = 0;
+                        reader.BaseStream.Position = sizeof(int);
+                        for (int i = 0; i < collision_count; i++) {
+                            offset += reader.ReadInt32();
+                        }
+                        reader.BaseStream.Position = offset * sizeof(float);
+                        for (int i = 0; i < glider_vert_count; i++)
                         {
-                            int offset = 0;
-                            reader.BaseStream.Position = sizeof(int);
-                            for (int i = 0; i < collision_count; i++) {
-                                offset += reader.ReadInt32();
-                            }
-                            reader.BaseStream.Position = offset * sizeof(float);
-                            for (int i = 0; i < glider_vert_count; i++)
-                            {
-                                all_verts.ElementAt((int)CollisionType.GLIDER_TRACK).Add(reader.ReadSingle());
-                            }
+                            all_verts.ElementAt((int)CollisionType.GLIDER_TRACK).Add(reader.ReadSingle());
                         }
                     }
                 }

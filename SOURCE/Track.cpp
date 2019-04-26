@@ -138,6 +138,7 @@ void Track::LoadVertexList(std::string _vertex_list)
 	int iterator = 0;
 	for (int len : length) {
 		if (len == 0) {
+			iterator++;
 			continue;
 		}
 		verts.at(iterator) = std::vector<float>(len);
@@ -170,6 +171,7 @@ void Track::LoadVertexList(std::string _vertex_list)
 			points_for_triangle[index] = verts.at(x)[i];
 			index++;
 		}
+		DebugText::print("Track collision group " + std::to_string(x) + " has " + std::to_string(verts.at(x).size()) + " entries.");
 	}
 
 	//Split triangles up into the grid
