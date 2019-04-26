@@ -26,8 +26,9 @@
         OFF_TRACK,
         BOOST_PAD,
         WALL,
+        GLIDER_TRACK,
 
-        NUM_OF_TYPES //must be last
+        NUM_OF_TYPES = 4 //Ignores GLIDER_TRACK as this is an automatically added value. Must be NUM_OF_TYPES+1 when writing because of this.
     }
     /* Types of available asset compilations */
     public enum AssetCompType

@@ -21,6 +21,7 @@ namespace EditorTool
         UsefulFunctions common_functions = new UsefulFunctions();
         JToken extra_json;
         bool editing;
+        List<List<double>> glider_track = new List<List<double>>();
         Model_Importer_Common importer_common;
         public Model_Importer_MaterialList(Model_Importer_Common _importer_conf, bool is_editing = false)
         {
@@ -142,16 +143,12 @@ namespace EditorTool
 
             //------
 
-            //If we're in edit mode, delete the old files
+            //If we're in edit mode, delete the old mesh
             if (importer_common.getEditMode())
             {
                 if (File.Exists(importer_common.fileName(importer_file.ENGINE_MESH)))
                 {
                     File.Delete(importer_common.fileName(importer_file.ENGINE_MESH));
-                }
-                if (File.Exists(importer_common.fileName(importer_file.COLLMAP)))
-                {
-                    File.Delete(importer_common.fileName(importer_file.COLLMAP));
                 }
             }
 
@@ -346,17 +343,8 @@ namespace EditorTool
 
             //------
 
-            //Vertex operations
-            if (!handleVertexOperations())
-            {
-                //It would be nicer to handle this in Model_Importer_AssetSelector before we get this late into the import process.
-                MessageBox.Show("An error occured while generating collision data for this model.\nMake sure the mesh is triangulated.", "Collision error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            //------
-
             //Create JSON data
-            JToken asset_json = extra_json;
+            JToken asset_json = JToken.Parse("{}");
             asset_json["asset_name"] = importer_common.modelName();
             asset_json["asset_type"] = "Models";
             asset_json["model_type"] = (int)importer_common.getModelType();
@@ -402,12 +390,34 @@ namespace EditorTool
                     {
                         itembox_array.Add(data);
                     }
+                    foreach (JArray data in model_blender_data["glider_track"])
+                    {
+                        List<double> glider_track_array = new List<double>();
+                        foreach (var vert in data)
+                        {
+                            glider_track_array.Add(vert[0].Value<double>());
+                        }
+                        glider_track.Add(glider_track_array);
+                    }
                 }
                 asset_json["map_cameras"] = camera_array;
                 asset_json["map_waypoints"] = waypoint_array;
                 asset_json["map_spawnpoints"] = spawnpoint_array;
                 asset_json["map_finishline"] = finishline_array;
                 asset_json["map_itemboxes"] = itembox_array;
+            }
+
+            //Vertex operations
+            if (!handleVertexOperations())
+            {
+                //It would be nicer to handle this in Model_Importer_AssetSelector before we get this late into the import process.
+                MessageBox.Show("An error occured while generating collision data for this model.\nMake sure the mesh is triangulated.", "Collision error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            //Add any extra JSON
+            foreach (var data in extra_json)
+            {
+                asset_json.Last.AddAfterSelf(data);
             }
 
             //Save JSON data if not in edit mode
@@ -417,7 +427,7 @@ namespace EditorTool
             }
 
             //------
-            
+
             //Comment out mtllib in OBJ for asset previewer
             obj_index = 0;
             foreach (string line in obj_file)
@@ -657,12 +667,12 @@ namespace EditorTool
 
             //Build up total model verts for collmap reader from parsed data
             List<List<float>> all_verts = new List<List<float>>();
-            for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
+            for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES + 1; i++)
             {
                 all_verts.Add(new List<float>());
             }
 
-            //Compile collision data
+            //Compile collision data from model
             int vert_index_i = 0;
             foreach (List<List<int>> these_face_indexes in model_face_indexes)
             {
@@ -677,7 +687,44 @@ namespace EditorTool
                 vert_index_i++;
             }
 
-            //Output vertex data as a binary file
+            //If we have glider data, add that
+            if (glider_track.Count != 0)
+            {
+                foreach (List<double> glider_tri in glider_track)
+                {
+                    foreach (double vert in glider_tri)
+                    {
+                        all_verts.ElementAt((int)CollisionType.GLIDER_TRACK).Add(Convert.ToSingle(vert));
+                    }
+                }
+            }
+            else if (editing)
+            {
+                using (BinaryReader reader = new BinaryReader(File.Open(importer_common.fileName(importer_file.COLLMAP), FileMode.Open)))
+                {
+                    int collision_count = reader.ReadInt32();
+                    if (collision_count == (int)CollisionType.NUM_OF_TYPES + 1) //check we aren't editing a depreciated collmap
+                    {
+                        reader.BaseStream.Position = sizeof(int) + (sizeof(int) * (int)CollisionType.GLIDER_TRACK);
+                        int glider_vert_count = reader.ReadInt32();
+                        if (glider_vert_count > 0) //check we actually have a glider track on this map
+                        {
+                            int offset = 0;
+                            reader.BaseStream.Position = sizeof(int);
+                            for (int i = 0; i < collision_count; i++) {
+                                offset += reader.ReadInt32();
+                            }
+                            reader.BaseStream.Position = offset * sizeof(float);
+                            for (int i = 0; i < glider_vert_count; i++)
+                            {
+                                all_verts.ElementAt((int)CollisionType.GLIDER_TRACK).Add(reader.ReadSingle());
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Output vertex data as a binary file (overwrite old one if it exists)
             using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.COLLMAP), FileMode.Create)))
             {
                 writer.Write(all_verts.Count); //Number of collision types to split to
