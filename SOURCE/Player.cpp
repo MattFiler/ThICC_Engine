@@ -17,9 +17,9 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 	SetPhysicsOn(true);
 	m_playerID = _playerID;
 	m_textRanking = new Text2D(std::to_string(m_ranking));
-	m_textRanking->SetScale(0.1f * Vector2::One);
+	//m_textRanking->SetScale(0.1f * Vector2::One);
 	m_textLap = new Text2D(std::to_string(m_lap) + "/3");
-	m_textCountdown = new Text2D("3");
+	m_textCountdown = new Text2D("3", true);
 	m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 	m_textFinishOrder = new Text2D("0" + m_orderIndicator[0]);
 
@@ -28,7 +28,7 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
-	for (int i = 0; i < (int)m_posHistoryLength / m_posHistoryInterval; i++)
+	for (int i = 0; i < m_posHistoryLength; i++)
 	{
 		m_posHistory.push(m_world);
 	}
@@ -482,9 +482,6 @@ void Player::movement()
 {
 	m_move->Tick();
 
-	//Disabling rumble for now :)
-	//Locator::getID()->m_gamepad->SetVibration(m_playerID, Locator::getID()->m_gamePadState[m_playerID].triggers.right * 0.1, Locator::getID()->m_gamePadState[m_playerID].triggers.right * 0.1);
-
 	// Debug code to save/load the players game state
 	if (m_keybind.keyReleased("debug save position"))
 	{
@@ -513,7 +510,7 @@ void Player::movement()
 void Player::RespawnLogic()
 {
 	m_posHistoryTimer += Locator::getGSD()->m_dt;
-	if (m_onTrack)
+	if (m_onTrack && m_colType == CollisionType::ON_TRACK)
 	{
 		if (m_posHistoryTimer >= m_posHistoryInterval)
 		{
@@ -524,15 +521,24 @@ void Player::RespawnLogic()
 	}
 	else
 	{
-		if (m_posHistoryTimer >= m_respawnDelay)
+		if (m_colType == CollisionType::NONE && m_posHistoryTimer >= m_noTrackRespawn)
 		{
-			m_posHistoryTimer = 0;
-			SetWorld(m_posHistory.front());
-			m_vel = Vector::Zero;
-			m_gravVel = Vector::Zero;
-			m_velTotal = Vector::Zero;
+			Respawn();
+		}
+		else if (m_colType == CollisionType::OFF_TRACK && m_posHistoryTimer >= m_offTrackRespawn)
+		{
+			Respawn();
 		}
 	}
+}
+
+void Player::Respawn()
+{
+	m_posHistoryTimer = 0;
+	SetWorld(m_posHistory.front());
+	m_vel = Vector::Zero;
+	m_gravVel = Vector::Zero;
+	m_velTotal = Vector::Zero;
 }
 
 void Player::SetWaypoint(int _waypoint)

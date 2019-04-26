@@ -49,7 +49,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	{
 		if (m_useGroundTypes)
 		{
-			colType = tri->GetType();
+			m_colType = tri->GetType();
 			switch (tri->GetType())
 			{
 			case ON_TRACK:
@@ -75,18 +75,18 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 			}
 		}
 
-		m_onTrack = true;
-
 		Vector adjustVel = m_vel;
 		// If velocity is opposite to direction, then the kart is reversing
 		if ((m_vel + m_world.Forward()).Length() < m_vel.Length())
 		{
 			adjustVel *= -1;
 		}
+		m_onTrack = false;
 		// If the position of the kart is within the snapping area
 		float dist = Vector::Distance(m_pos, intersect);
 		if (dist > m_minSnapDist && dist < m_maxSnapDist)
 		{
+			m_onTrack = true;
 			// Turn gravity off when within the snapping zone, this smooths out movment
 			m_gravVel = Vector3::Zero;
 			m_gravDirection = Vector3::Zero;
@@ -119,7 +119,6 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	}
 	else
 	{
-		m_onTrack = false;
 		modifiedMaxRotation /= 5;
 		Vector forward = m_world.Forward();
 		forward.y = 0;

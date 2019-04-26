@@ -86,6 +86,7 @@ private:
 	void movement();
 
 	void RespawnLogic();
+	void Respawn();
 
 	ThICC_RenderData* m_RD = nullptr;
 	KeybindManager m_keybind;
@@ -130,11 +131,15 @@ private:
 
 	std::unique_ptr<AnimationController> m_animationMesh = nullptr;
 
-	std::queue<Matrix> m_posHistory;
-	float m_posHistoryInterval = 0.1f;
+	std::queue<Matrix> m_posHistory; // All the recorded player positions
 	float m_posHistoryTimer = 0;
-	float m_posHistoryLength = 1;
-	float m_respawnDelay = 1.5f;
+	float m_posHistoryInterval = 0.2f; // How often the players position will be recorded
+	int m_posHistoryLength = 10; // The length of the position queue
+	float m_noTrackRespawn = 1; // If not on any terrain, respawn after this time
+	float m_offTrackRespawn = 5; // If off the track, but still on terain, respawn after this time
+	float m_stationaryRespawn = 5; // If not moving for this long, repawn
+	float m_timeSinceRespawn = 0;
+	float m_timeStationary = 0;
 
 	std::unique_ptr<MoveAI> m_ai = nullptr;
 };
