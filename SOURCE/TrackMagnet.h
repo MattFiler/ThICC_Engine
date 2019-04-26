@@ -35,4 +35,7 @@ private:
 	MeshTri* tri = nullptr;
 
 	bool m_dampenWallReflect = true;
+
+	float m_timeOffTerrain = 0;
+	float m_rotationDelay = 1; // Seconds spent off terrain before the kart rotates to world up
 };

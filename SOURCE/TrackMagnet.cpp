@@ -26,17 +26,20 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	Vector mid_intersect;
 	Matrix targetWorld = Matrix::Identity;
 	bool shouldStick = false;
+	// Check the previous triangle if there was one
 	if (tri)
 	{
 		shouldStick = tri->DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0) ||
 			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0);
 	}
+	// Otherwise check down from the middle
 	else
 	{
 		bool shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0);
 	}
 
 	mid_intersect = intersect;
+	// If the middle found nothing, check 3 more points
 	if (!shouldStick)
 	{
 		shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Forward()), intersect, tri, m_maxAngle,0) ||
@@ -45,8 +48,10 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	}
 
 	float modifiedMaxRotation = m_maxRotation;
+	// If track was found
 	if (shouldStick)
 	{
+		m_timeOffTerrain = 0;
 		if (m_useGroundTypes)
 		{
 			m_colType = tri->GetType();
@@ -120,13 +125,20 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	else
 	{
 		m_colType = CollisionType::NO_TERRAIN;
-		// Wait for bit, then if no track is found start rotating to the world up
-		// TODO: Add the wait a bit
 		modifiedMaxRotation /= 5;
-		Vector forward = m_world.Forward();
-		forward.y = 0;
-		targetWorld = m_world.CreateWorld(m_pos, forward, Vector::Up);
-		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
+
+		// Wait for bit, then if no track is found start rotating to the world up
+		m_timeOffTerrain += Locator::getGSD()->m_dt;
+		if (m_timeOffTerrain > m_rotationDelay)
+		{
+			targetWorld = m_world.CreateWorld(m_pos, m_vel, Vector::Up);
+			targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
+		}
+		else
+		{
+			targetWorld = m_world.CreateWorld(m_pos, m_vel, m_world.Up());
+			targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
+		}
 		m_gravDirection = m_world.Down() * gravityMultiplier;
 	}
 
@@ -135,8 +147,8 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	m_world = targetWorld;
 	if (ResolveWallCollisions(track))
 	{
-		targetWorld = tempWorld;
-		m_world = tempWorld;
+		//targetWorld = tempWorld;
+		//m_world = tempWorld;
 	}
 
 	// Update the position and rotation by breaking apart m_world

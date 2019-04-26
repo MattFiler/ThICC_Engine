@@ -141,6 +141,8 @@ private:
 	float m_respawnSpeed = 30; // The speed at which lakitu moves the player back to the track
 
 	float m_posHistoryTimer = 0;
+	float m_offTrackTimer = 0;
+	float m_offTerrainTimer = 0;
 	float m_timeSinceRespawn = 0;
 	float m_timeStationary = 0;
 	bool m_respawning = false;

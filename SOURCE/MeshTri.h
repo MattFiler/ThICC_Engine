@@ -12,7 +12,7 @@ enum CollisionType {
 	WALL,
 	GLIDER_TRACK,
 
-	NUM_OF_TYPES //must be last (we don't ignore GLIDER_TRACK in the game, unlike the tool)
+	NUM_OF_TYPES, //must be last (we don't ignore GLIDER_TRACK in the game, unlike the tool)
 	NO_TERRAIN // sneaky post-last hehe
 };
 

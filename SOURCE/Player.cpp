@@ -521,6 +521,8 @@ void Player::RespawnLogic()
 	m_timeSinceRespawn += Locator::getGSD()->m_dt;
 	if (m_onTrack && m_colType == CollisionType::ON_TRACK)
 	{
+		m_offTrackTimer = 0;
+		m_offTerrainTimer = 0;
 		if (m_posHistoryTimer >= m_posHistoryInterval)
 		{
 			m_posHistoryTimer -= m_posHistoryInterval;
@@ -530,13 +532,29 @@ void Player::RespawnLogic()
 	}
 	else
 	{
-		if (m_colType == CollisionType::NO_TERRAIN && m_posHistoryTimer >= m_noTrackRespawn)
+		if (m_colType == CollisionType::NO_TERRAIN)
 		{
-			Respawn();
+			if (m_offTrackTimer >= m_noTrackRespawn)
+			{
+				Respawn();
+				m_offTrackTimer = 0;
+			}
+			else
+			{
+				m_offTrackTimer += Locator::getGSD()->m_dt;
+			}
 		}
-		else if (m_colType == CollisionType::OFF_TRACK && m_posHistoryTimer >= m_offTrackRespawn)
+		else if (m_colType == CollisionType::OFF_TRACK)
 		{
-			Respawn();
+			if (m_offTerrainTimer >= m_offTrackRespawn)
+			{
+				Respawn();
+				m_offTerrainTimer = 0;
+			}
+			else
+			{
+				m_offTerrainTimer += Locator::getGSD()->m_dt;
+			}
 		}
 	}
 }
