@@ -478,8 +478,8 @@ void Player::setGamePad(bool _state)
 
 	// TEST CODE //
 	
-	
-	/*if (m_playerID == 0)
+	/*
+	if (m_playerID == 0)
 	{
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);

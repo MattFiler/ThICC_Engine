@@ -103,10 +103,33 @@ namespace EditorTool
 
             //Update previews of config - this is kinda hard coded, needs to be updated if enum is changed (UI!)
             JToken this_token = material_tokens.ElementAt(index);
-            isTrack.Checked = this_token["ThICC_COLLISION"]["0"].Value<bool>();
-            isOffTrack.Checked = this_token["ThICC_COLLISION"]["1"].Value<bool>();
-            isBoostPad.Checked = this_token["ThICC_COLLISION"]["2"].Value<bool>();
-            isWall.Checked = this_token["ThICC_COLLISION"]["3"].Value<bool>();
+            if (this_token["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()] != null) //supporting depreciated configs
+            {
+                isTrack.Checked = (this_token["ThICC_COLLISION"][((int)CollisionType.ON_TRACK).ToString()].Value<bool>() | this_token["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()].Value<bool>());
+            }
+            else
+            {
+                isTrack.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.ON_TRACK).ToString()].Value<bool>();
+            }
+            isOffTrack.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.OFF_TRACK).ToString()].Value<bool>();
+            isBoostPad.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.BOOST_PAD).ToString()].Value<bool>();
+            if (this_token["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()] != null) //supporting depreciated configs
+            {
+                isAntiGravPad.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()].Value<bool>();
+            }
+            else
+            {
+                isAntiGravPad.Checked = false;
+            }
+            if (this_token["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()] != null) //supporting depreciated configs
+            {
+                isJumpPad.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()].Value<bool>();
+            }
+            else
+            {
+                isJumpPad.Checked = false;
+            }
+            isWall.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.WALL).ToString()].Value<bool>();
 
             //Try find and show our material preview.
             common_functions.loadMaterialPreview(this_token, materialPreview, importer_common.importDir());
@@ -180,8 +203,8 @@ namespace EditorTool
                 //Parse MTL from JSON
                 foreach (JProperty material_prop in model_material_config[this_material_config.Key])
                 {
-                    //Ignore engine config
-                    if (material_prop.Name != "ThICC_COLLISION")
+                    //Ignore engine configs
+                    if (!(material_prop.Name.Length > 6 && material_prop.Name.Substring(0, 6) == "ThICC_"))
                     {
                         //Auto calculated alpha
                         if (material_prop.Name == "d")
@@ -516,10 +539,17 @@ namespace EditorTool
                     JToken collision_config = model_material_config[line.Substring(7)]["ThICC_COLLISION"];
                     for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
                     {
-                        if (collision_config[i.ToString()].Value<bool>())
+                        if (collision_config[i.ToString()] != null) //support for depreciated configs
                         {
-                            collision_enabled = true;
-                            collision_type = (CollisionType)i;
+                            if (i == 7)
+                            {
+                                bool dssdfsdf = false;
+                            }
+                            if (collision_config[i.ToString()].Value<bool>())
+                            {
+                                collision_enabled = true;
+                                collision_type = (CollisionType)i;
+                            }
                         }
                     }
                 }
@@ -667,7 +697,7 @@ namespace EditorTool
 
             //Build up total model verts for collmap reader from parsed data
             List<List<float>> all_verts = new List<List<float>>();
-            for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES + 1; i++)
+            for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
             {
                 all_verts.Add(new List<float>());
             }
@@ -703,22 +733,19 @@ namespace EditorTool
                 using (BinaryReader reader = new BinaryReader(File.Open(importer_common.fileName(importer_file.COLLMAP), FileMode.Open)))
                 {
                     int collision_count = reader.ReadInt32();
-                    if (collision_count == (int)CollisionType.NUM_OF_TYPES + 1) //check we aren't editing a depreciated collmap
+                    reader.BaseStream.Position = sizeof(int) + (sizeof(int) * (int)CollisionType.GLIDER_TRACK);
+                    int glider_vert_count = reader.ReadInt32();
+                    if (glider_vert_count > 0) //check we actually have a glider track on this map
                     {
-                        reader.BaseStream.Position = sizeof(int) + (sizeof(int) * (int)CollisionType.GLIDER_TRACK);
-                        int glider_vert_count = reader.ReadInt32();
-                        if (glider_vert_count > 0) //check we actually have a glider track on this map
+                        int offset = 0;
+                        reader.BaseStream.Position = sizeof(int);
+                        for (int i = 0; i < collision_count; i++) {
+                            offset += reader.ReadInt32();
+                        }
+                        reader.BaseStream.Position = offset * sizeof(float);
+                        for (int i = 0; i < glider_vert_count; i++)
                         {
-                            int offset = 0;
-                            reader.BaseStream.Position = sizeof(int);
-                            for (int i = 0; i < collision_count; i++) {
-                                offset += reader.ReadInt32();
-                            }
-                            reader.BaseStream.Position = offset * sizeof(float);
-                            for (int i = 0; i < glider_vert_count; i++)
-                            {
-                                all_verts.ElementAt((int)CollisionType.GLIDER_TRACK).Add(reader.ReadSingle());
-                            }
+                            all_verts.ElementAt((int)CollisionType.GLIDER_TRACK).Add(reader.ReadSingle());
                         }
                     }
                 }
@@ -819,8 +846,16 @@ namespace EditorTool
                 //All materials typically work best when we can see them :)
                 this_token["Kd"] = "1.000000 1.000000 1.000000";
 
-                //Materials starting with "ef_" are usually boost pads
-                if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_")
+                //Materials starting with "ef_" are usually boost/antigrav/jump pads
+                if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_GLIDEBOARD")
+                {
+                    setCollisionParam(CollisionType.JUMP_PAD, this_token);
+                }
+                if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_GRAVITYBOARD")
+                {
+                    setCollisionParam(CollisionType.ANTIGRAV_PAD, this_token);
+                }
+                if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_DASHBOARD")
                 {
                     setCollisionParam(CollisionType.BOOST_PAD, this_token);
                 }
