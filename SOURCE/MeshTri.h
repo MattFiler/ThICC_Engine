@@ -11,8 +11,11 @@ enum CollisionType {
 	BOOST_PAD,
 	WALL,
 	GLIDER_TRACK,
+	ANTIGRAV_PAD,
+	JUMP_PAD,
+	ON_TRACK_NO_AI,
 
-	NUM_OF_TYPES //must be last (we don't ignore GLIDER_TRACK in the game, unlike the tool)
+	NUM_OF_TYPES //must be last
 };
 
 struct MeshTri

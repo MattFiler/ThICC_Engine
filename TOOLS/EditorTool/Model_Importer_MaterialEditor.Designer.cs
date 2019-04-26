@@ -85,6 +85,9 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.antiGravPad = new System.Windows.Forms.RadioButton();
+            this.jumpPad = new System.Windows.Forms.RadioButton();
+            this.onTrackNoAI = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transparencySlider)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -206,6 +209,9 @@
             // 
             // collisionGroup
             // 
+            this.collisionGroup.Controls.Add(this.onTrackNoAI);
+            this.collisionGroup.Controls.Add(this.jumpPad);
+            this.collisionGroup.Controls.Add(this.antiGravPad);
             this.collisionGroup.Controls.Add(this.isWall);
             this.collisionGroup.Controls.Add(this.inPlayableArea);
             this.collisionGroup.Controls.Add(this.boostPad);
@@ -245,21 +251,22 @@
             this.onTrack.AutoSize = true;
             this.onTrack.Location = new System.Drawing.Point(6, 42);
             this.onTrack.Name = "onTrack";
-            this.onTrack.Size = new System.Drawing.Size(139, 17);
+            this.onTrack.Size = new System.Drawing.Size(70, 17);
             this.onTrack.TabIndex = 27;
             this.onTrack.TabStop = true;
-            this.onTrack.Text = "Standard Track Surface";
+            this.onTrack.Text = "On Track";
             this.onTrack.UseVisualStyleBackColor = true;
+            this.onTrack.CheckedChanged += new System.EventHandler(this.onTrack_CheckedChanged);
             // 
             // offTrack
             // 
             this.offTrack.AutoSize = true;
             this.offTrack.Location = new System.Drawing.Point(6, 65);
             this.offTrack.Name = "offTrack";
-            this.offTrack.Size = new System.Drawing.Size(110, 17);
+            this.offTrack.Size = new System.Drawing.Size(70, 17);
             this.offTrack.TabIndex = 28;
             this.offTrack.TabStop = true;
-            this.offTrack.Text = "Off-Track Surface";
+            this.offTrack.Text = "Off-Track";
             this.offTrack.UseVisualStyleBackColor = true;
             // 
             // label4
@@ -685,6 +692,38 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Extra Values";
             // 
+            // antiGravPad
+            // 
+            this.antiGravPad.AutoSize = true;
+            this.antiGravPad.Location = new System.Drawing.Point(86, 88);
+            this.antiGravPad.Name = "antiGravPad";
+            this.antiGravPad.Size = new System.Drawing.Size(101, 17);
+            this.antiGravPad.TabIndex = 31;
+            this.antiGravPad.TabStop = true;
+            this.antiGravPad.Text = "Anti-Gravity Pad";
+            this.antiGravPad.UseVisualStyleBackColor = true;
+            // 
+            // jumpPad
+            // 
+            this.jumpPad.AutoSize = true;
+            this.jumpPad.Location = new System.Drawing.Point(193, 88);
+            this.jumpPad.Name = "jumpPad";
+            this.jumpPad.Size = new System.Drawing.Size(72, 17);
+            this.jumpPad.TabIndex = 32;
+            this.jumpPad.TabStop = true;
+            this.jumpPad.Text = "Jump Pad";
+            this.jumpPad.UseVisualStyleBackColor = true;
+            // 
+            // onTrackNoAI
+            // 
+            this.onTrackNoAI.AutoSize = true;
+            this.onTrackNoAI.Location = new System.Drawing.Point(82, 43);
+            this.onTrackNoAI.Name = "onTrackNoAI";
+            this.onTrackNoAI.Size = new System.Drawing.Size(148, 17);
+            this.onTrackNoAI.TabIndex = 33;
+            this.onTrackNoAI.Text = "Exclude from AI Navmesh";
+            this.onTrackNoAI.UseVisualStyleBackColor = true;
+            // 
             // Model_Importer_MaterialEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -790,5 +829,8 @@
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.CheckBox isMetallic;
+        private System.Windows.Forms.RadioButton jumpPad;
+        private System.Windows.Forms.RadioButton antiGravPad;
+        private System.Windows.Forms.CheckBox onTrackNoAI;
     }
 }
