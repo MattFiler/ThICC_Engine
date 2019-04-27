@@ -1,13 +1,15 @@
 #pragma once
 
 #include "Item.h"
+#include "ItemGrowthData.h"
 
 class Player;
 
 class GiantMushroom :public Item
 {
 public:
-	GiantMushroom() = default;
+	GiantMushroom();
+	void InitMushroomData();
 	~GiantMushroom() = default;
 
 	virtual void Tick() override;
@@ -15,12 +17,6 @@ public:
 	void Use(Player* player, bool _altUse) override;
 
 private:
-	Vector3 m_startScale;
-	Vector3 m_endScale;
-	float m_scaleSpeed = 2;
-	float m_scalePercent = 0;
-	float m_growthTimeElapsed = 0;
-	float m_maxGrowthTime = 12;
-	enum ScaleState {GROW, MAINTIAIN, SHRINK} m_scaleState = GROW;
+	ItemGrowthData m_growthData;
 };
 

@@ -1,0 +1,24 @@
+{
+	"item_data": {
+		"triple_item_count": 3,
+		"trailing_items":{
+			"line":{
+				"first_item_trail_offset": 2.2,
+				"other_items_trail_offset": 1.5
+			},
+			"spinning": {
+				"orbit_distance": [2,0,2],
+				"orbit_speed": 350
+			},
+			"floating": {
+				"upward_pos_offset": 2
+			}
+		}
+	},
+	"respawn_data": {
+		"pos_history_interval": 0.1,
+		"pos_history_timer": 0,
+		"pos_history_length": 1,
+		"respawn_delay": 1.5
+	}
+}

@@ -29,24 +29,26 @@ void ThICC_Game::Initialize() {
 	character_config << p;
 	int index = 0;
 	for (auto& element : character_config) {
-		m_go_shared.character_instances.emplace_back(element);
-		Locator::getAudio()->addToSoundsList(m_go_shared.character_instances[index].audio, SoundType::CHARACTER);
+		CharacterInfo* new_chr_inf = new CharacterInfo(element);
+		m_go_shared.character_instances.push_back(new_chr_inf);
+		Locator::getAudio()->addToSoundsList(m_go_shared.character_instances[index]->audio, SoundType::CHARACTER);
 		index++;
 	}
 
-
-	//for (auto& inst : m_go_shared.character_instances)
-	//{
-	//	Locator::getAudio()->addToSoundsList(inst.audio, SoundType::CHARACTER);
-	//}
+	//Load all cups (must be done before maps)
+	std::ifstream g(m_filepath.generateFilepath("CUP_CONFIG", m_filepath.CONFIG));
+	cup_config << g;
+	for (auto it : cup_config.items()) {
+		CupInfo* new_cup_inf = new CupInfo(it.key(), it.value());
+		m_go_shared.cup_instances.push_back(new_cup_inf);
+	}
 
 	//Load all vehicle data
 	std::ifstream k(m_filepath.generateFilepath("VEHICLE_CONFIG", m_filepath.CONFIG));
 	vehicle_config << k;
-	index = 0;
 	for (auto& element : vehicle_config) {
-		m_go_shared.vehicle_instances.emplace_back(element);
-		index++;
+		VehicleInfo* new_veh_inf = new VehicleInfo(element);
+		m_go_shared.vehicle_instances.push_back(new_veh_inf);
 	}
 
 	//Create all game scenes (all maps) and store map preview data
@@ -54,13 +56,9 @@ void ThICC_Game::Initialize() {
 	map_config << j;
 	index = 0;
 	for (auto& element : map_config) {
-		/* TEMP FIX TO DISABLE MAPS THAT DON'T HAVE UPDATED WAYPOINTS!! */
-		if (element["friendly_name"] == "MAP_RBR") {
-			continue;
-		}
-
 		//Store map info
-		m_go_shared.map_instances.emplace_back(element, index);
+		MapInfo* new_map_inf = new MapInfo(element, index);
+		m_go_shared.map_instances.push_back(new_map_inf);
 		//Create scene
 		m_scene_manager.addScene(new GameScene(m_go_shared.map_instances.at(index)), (int)Scenes::GAMESCENE + index);
 		index++;

@@ -50,6 +50,9 @@
             this.finalLapLoop = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.skyboxChoice = new System.Windows.Forms.TextBox();
+            this.loadSkybox = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.cubemapChoice = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -58,16 +61,17 @@
             this.mapCodename = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.mapName = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.skyboxChoice = new System.Windows.Forms.TextBox();
-            this.loadSkybox = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.mapCup = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // saveMap
             // 
-            this.saveMap.Location = new System.Drawing.Point(10, 460);
+            this.saveMap.Location = new System.Drawing.Point(10, 529);
             this.saveMap.Name = "saveMap";
             this.saveMap.Size = new System.Drawing.Size(327, 23);
             this.saveMap.TabIndex = 0;
@@ -284,6 +288,33 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Core Map Elements";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 212);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(42, 13);
+            this.label9.TabIndex = 26;
+            this.label9.Text = "Skybox";
+            // 
+            // skyboxChoice
+            // 
+            this.skyboxChoice.Location = new System.Drawing.Point(9, 228);
+            this.skyboxChoice.Name = "skyboxChoice";
+            this.skyboxChoice.ReadOnly = true;
+            this.skyboxChoice.Size = new System.Drawing.Size(229, 20);
+            this.skyboxChoice.TabIndex = 24;
+            // 
+            // loadSkybox
+            // 
+            this.loadSkybox.Location = new System.Drawing.Point(244, 227);
+            this.loadSkybox.Name = "loadSkybox";
+            this.loadSkybox.Size = new System.Drawing.Size(75, 23);
+            this.loadSkybox.TabIndex = 25;
+            this.loadSkybox.Text = "Load";
+            this.loadSkybox.UseVisualStyleBackColor = true;
+            this.loadSkybox.Click += new System.EventHandler(this.loadSkybox_Click);
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -355,38 +386,41 @@
             this.mapName.Size = new System.Drawing.Size(229, 20);
             this.mapName.TabIndex = 8;
             // 
-            // label9
+            // groupBox3
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 212);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(42, 13);
-            this.label9.TabIndex = 26;
-            this.label9.Text = "Skybox";
+            this.groupBox3.Controls.Add(this.label10);
+            this.groupBox3.Controls.Add(this.mapCup);
+            this.groupBox3.Location = new System.Drawing.Point(10, 460);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(328, 63);
+            this.groupBox3.TabIndex = 22;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Other Map Configs";
             // 
-            // skyboxChoice
+            // mapCup
             // 
-            this.skyboxChoice.Location = new System.Drawing.Point(9, 228);
-            this.skyboxChoice.Name = "skyboxChoice";
-            this.skyboxChoice.ReadOnly = true;
-            this.skyboxChoice.Size = new System.Drawing.Size(229, 20);
-            this.skyboxChoice.TabIndex = 24;
+            this.mapCup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.mapCup.FormattingEnabled = true;
+            this.mapCup.Location = new System.Drawing.Point(9, 33);
+            this.mapCup.Name = "mapCup";
+            this.mapCup.Size = new System.Drawing.Size(310, 21);
+            this.mapCup.TabIndex = 0;
             // 
-            // loadSkybox
+            // label10
             // 
-            this.loadSkybox.Location = new System.Drawing.Point(244, 227);
-            this.loadSkybox.Name = "loadSkybox";
-            this.loadSkybox.Size = new System.Drawing.Size(75, 23);
-            this.loadSkybox.TabIndex = 25;
-            this.loadSkybox.Text = "Load";
-            this.loadSkybox.UseVisualStyleBackColor = true;
-            this.loadSkybox.Click += new System.EventHandler(this.loadSkybox_Click);
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(7, 17);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(26, 13);
+            this.label10.TabIndex = 1;
+            this.label10.Text = "Cup";
             // 
             // Create_Map
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 494);
+            this.ClientSize = new System.Drawing.Size(349, 560);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.saveMap);
@@ -400,6 +434,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -438,5 +474,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox skyboxChoice;
         private System.Windows.Forms.Button loadSkybox;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox mapCup;
     }
 }

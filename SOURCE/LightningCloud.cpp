@@ -4,7 +4,23 @@
 #include "GameStateData.h"
 
 LightningCloud::LightningCloud() : Item(Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD))
-{}
+{
+	m_shouldDespawn = false;
+	m_growthData.m_scaleState = ItemGrowthData::SHRINK;
+
+	initCloudData();
+}
+
+void LightningCloud::initCloudData()
+{
+	m_strikeDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["strike_duration"];
+	m_slowAmount = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_velocity_multiplier"];
+
+	m_growthData.m_scaleMulti = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["size_multiplier"];
+	m_growthData.m_growthSpeed = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["growth_speed"];
+	m_growthData.m_shrinkSpeed = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["shrink_speed"];
+	m_growthData.m_duration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["max_shrink_duration"];
+}
 
 void LightningCloud::Tick()
 {
@@ -14,45 +30,45 @@ void LightningCloud::Tick()
 	{
 		if (m_striked)
 		{
-			switch (m_scaleState)
+			switch (m_growthData.m_scaleState)
 			{
-			case GROW:
-				m_player->SetScale(Vector3::Lerp(m_startScale, m_endScale, m_scalePercent));
+			case ItemGrowthData::GROW:
+				m_player->SetScale(Vector3::Lerp(m_growthData.m_startScale, m_growthData.m_endScale, m_growthData.m_scalePercent));
 
-				m_scalePercent -= m_scaleSpeed * Locator::getGSD()->m_dt;
+				m_growthData.m_scalePercent -= m_growthData.m_growthSpeed * Locator::getGSD()->m_dt;
 
-				if (m_scalePercent <= 0)
+				if (m_growthData.m_scalePercent <= 0)
 				{
-					m_scalePercent = 0;
+					m_growthData.m_scalePercent = 0;
 					m_shouldDestroy = true;
 				}
 				break;
-			case MAINTIAIN:
+			case ItemGrowthData::MAINTIAIN:
 			{
 				Vector vel = m_player->getVelocity();
 				vel.Normalize();
 				vel *= m_slowAmount * Locator::getGSD()->m_dt;
 				m_player->setVelocity(m_player->getVelocity() + vel);
 
-				m_shrinkTimeElapsed += Locator::getGSD()->m_dt;
-				if (m_shrinkTimeElapsed >= m_shrinkDuration)
+				m_growthData.m_timeElapsed += Locator::getGSD()->m_dt;
+				if (m_growthData.m_timeElapsed >= m_growthData.m_duration)
 				{
-					m_scaleState = GROW;
+					m_growthData.m_scaleState = ItemGrowthData::GROW;
 				}
 
 				break;
 			}
-			case SHRINK:
-				m_player->SetScale(Vector3::Lerp(m_startScale, m_endScale, m_scalePercent));
+			case ItemGrowthData::SHRINK:
+				m_player->SetScale(Vector3::Lerp(m_growthData.m_startScale, m_growthData.m_endScale, m_growthData.m_scalePercent));
 
-				m_scalePercent += m_scaleSpeed * Locator::getGSD()->m_dt;
+				m_growthData.m_scalePercent += m_growthData.m_shrinkSpeed * Locator::getGSD()->m_dt;
 
 				m_player->Spin(2, 0.7);
 
-				if (m_scalePercent >= 1)
+				if (m_growthData.m_scalePercent >= 1)
 				{
-					m_scalePercent = 1;
-					m_scaleState = MAINTIAIN;
+					m_growthData.m_scalePercent = 1;
+					m_growthData.m_scaleState = ItemGrowthData::MAINTIAIN;
 				}
 				break;
 			}
@@ -63,9 +79,9 @@ void LightningCloud::Tick()
 			if (m_strikeTimeElapsed >= m_strikeDuration)
 			{
 				m_striked = true;
-				m_startScale = m_player->GetScale();
-				m_endScale = m_startScale / 2;
-				m_shrinkDuration -= m_player->GetRanking();
+				m_growthData.m_startScale = m_player->GetScale();
+				m_growthData.m_endScale = m_growthData.m_startScale * m_growthData.m_scaleMulti;
+				m_growthData.m_duration -= m_player->GetRanking();
 				m_displayedMesh->SetShouldRender(false);
 			}
 		}

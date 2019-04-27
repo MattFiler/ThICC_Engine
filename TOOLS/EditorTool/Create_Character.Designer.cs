@@ -41,11 +41,17 @@
             this.selectMapModel = new System.Windows.Forms.Button();
             this.mapModelAsset = new System.Windows.Forms.TextBox();
             this.saveMap = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.loadSound = new System.Windows.Forms.Button();
+            this.characterSound = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.loadSound);
+            this.groupBox2.Controls.Add(this.characterSound);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.loadString);
             this.groupBox2.Controls.Add(this.mapCodename);
@@ -59,7 +65,7 @@
             this.groupBox2.Controls.Add(this.mapModelAsset);
             this.groupBox2.Location = new System.Drawing.Point(11, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(327, 179);
+            this.groupBox2.Size = new System.Drawing.Size(327, 224);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Character Elements";
@@ -67,7 +73,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 17);
+            this.label8.Location = new System.Drawing.Point(6, 20);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(63, 13);
             this.label8.TabIndex = 23;
@@ -75,7 +81,7 @@
             // 
             // loadString
             // 
-            this.loadString.Location = new System.Drawing.Point(244, 71);
+            this.loadString.Location = new System.Drawing.Point(244, 74);
             this.loadString.Name = "loadString";
             this.loadString.Size = new System.Drawing.Size(75, 23);
             this.loadString.TabIndex = 11;
@@ -86,7 +92,7 @@
             // mapCodename
             // 
             this.mapCodename.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.mapCodename.Location = new System.Drawing.Point(9, 33);
+            this.mapCodename.Location = new System.Drawing.Point(9, 36);
             this.mapCodename.Name = "mapCodename";
             this.mapCodename.Size = new System.Drawing.Size(310, 20);
             this.mapCodename.TabIndex = 22;
@@ -94,7 +100,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 56);
+            this.label2.Location = new System.Drawing.Point(6, 59);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(78, 13);
             this.label2.TabIndex = 10;
@@ -102,7 +108,7 @@
             // 
             // mapName
             // 
-            this.mapName.Location = new System.Drawing.Point(9, 72);
+            this.mapName.Location = new System.Drawing.Point(9, 75);
             this.mapName.Name = "mapName";
             this.mapName.ReadOnly = true;
             this.mapName.Size = new System.Drawing.Size(229, 20);
@@ -111,7 +117,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 95);
+            this.label1.Location = new System.Drawing.Point(6, 98);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 13);
             this.label1.TabIndex = 3;
@@ -119,7 +125,7 @@
             // 
             // mapPreviewImage
             // 
-            this.mapPreviewImage.Location = new System.Drawing.Point(9, 111);
+            this.mapPreviewImage.Location = new System.Drawing.Point(9, 114);
             this.mapPreviewImage.Name = "mapPreviewImage";
             this.mapPreviewImage.ReadOnly = true;
             this.mapPreviewImage.Size = new System.Drawing.Size(229, 20);
@@ -128,7 +134,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 134);
+            this.label3.Location = new System.Drawing.Point(6, 137);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(36, 13);
             this.label3.TabIndex = 7;
@@ -136,7 +142,7 @@
             // 
             // selectImageAsset
             // 
-            this.selectImageAsset.Location = new System.Drawing.Point(244, 110);
+            this.selectImageAsset.Location = new System.Drawing.Point(244, 113);
             this.selectImageAsset.Name = "selectImageAsset";
             this.selectImageAsset.Size = new System.Drawing.Size(75, 23);
             this.selectImageAsset.TabIndex = 2;
@@ -146,7 +152,7 @@
             // 
             // selectMapModel
             // 
-            this.selectMapModel.Location = new System.Drawing.Point(244, 149);
+            this.selectMapModel.Location = new System.Drawing.Point(244, 152);
             this.selectMapModel.Name = "selectMapModel";
             this.selectMapModel.Size = new System.Drawing.Size(75, 23);
             this.selectMapModel.TabIndex = 6;
@@ -156,7 +162,7 @@
             // 
             // mapModelAsset
             // 
-            this.mapModelAsset.Location = new System.Drawing.Point(9, 150);
+            this.mapModelAsset.Location = new System.Drawing.Point(9, 153);
             this.mapModelAsset.Name = "mapModelAsset";
             this.mapModelAsset.ReadOnly = true;
             this.mapModelAsset.Size = new System.Drawing.Size(229, 20);
@@ -164,7 +170,7 @@
             // 
             // saveMap
             // 
-            this.saveMap.Location = new System.Drawing.Point(11, 197);
+            this.saveMap.Location = new System.Drawing.Point(11, 242);
             this.saveMap.Name = "saveMap";
             this.saveMap.Size = new System.Drawing.Size(327, 23);
             this.saveMap.TabIndex = 23;
@@ -172,11 +178,38 @@
             this.saveMap.UseVisualStyleBackColor = true;
             this.saveMap.Click += new System.EventHandler(this.saveMap_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 176);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(38, 13);
+            this.label4.TabIndex = 26;
+            this.label4.Text = "Sound";
+            // 
+            // loadSound
+            // 
+            this.loadSound.Location = new System.Drawing.Point(244, 191);
+            this.loadSound.Name = "loadSound";
+            this.loadSound.Size = new System.Drawing.Size(75, 23);
+            this.loadSound.TabIndex = 25;
+            this.loadSound.Text = "Load";
+            this.loadSound.UseVisualStyleBackColor = true;
+            this.loadSound.Click += new System.EventHandler(this.loadSound_Click);
+            // 
+            // characterSound
+            // 
+            this.characterSound.Location = new System.Drawing.Point(9, 192);
+            this.characterSound.Name = "characterSound";
+            this.characterSound.ReadOnly = true;
+            this.characterSound.Size = new System.Drawing.Size(229, 20);
+            this.characterSound.TabIndex = 24;
+            // 
             // Create_Character
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 229);
+            this.ClientSize = new System.Drawing.Size(349, 277);
             this.Controls.Add(this.saveMap);
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -205,5 +238,8 @@
         private System.Windows.Forms.Button selectMapModel;
         private System.Windows.Forms.TextBox mapModelAsset;
         private System.Windows.Forms.Button saveMap;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button loadSound;
+        private System.Windows.Forms.TextBox characterSound;
     }
 }

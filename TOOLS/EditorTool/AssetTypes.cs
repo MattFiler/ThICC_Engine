@@ -41,6 +41,7 @@
         CHARACTER,
         VEHICLE,
         ENGINE_FONT,
-        GLOBAL_SOUNDS
+        GLOBAL_SOUNDS,
+        CUP
     }
 }

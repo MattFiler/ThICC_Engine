@@ -590,10 +590,13 @@
     "ThICC_INDEX": 60,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "7": true,
+      "5": false,
+      "6": false
     }
   },
   "fc_RoofParts": {
