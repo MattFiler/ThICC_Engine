@@ -156,6 +156,8 @@ void Track::LoadVertexList(std::string _vertex_list)
 	for (int x = 0; x < number_of_coll_types; x++) {
 		for (size_t i = 0; i < verts.at(x).size(); ++i)
 		{
+			points_for_triangle[index] = verts.at(x)[i];
+			index++;
 			if (index == 9) {
 				Vector3 point_1 = Vector3(points_for_triangle[0], points_for_triangle[1], points_for_triangle[2]) * m_track_data.scale;
 				CompareVectorToMaximum(point_1);
@@ -172,8 +174,6 @@ void Track::LoadVertexList(std::string _vertex_list)
 				m_triangles.push_back(MeshTri(point_1, point_2, point_3, x));
 				index = 0;
 			}
-			points_for_triangle[index] = verts.at(x)[i];
-			index++;
 		}
 		DebugText::print("Track collision group " + std::to_string(x) + " has " + std::to_string(verts.at(x).size()) + " entries.");
 	}
