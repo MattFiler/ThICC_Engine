@@ -173,6 +173,8 @@ private:
 	bool m_gliding = false;
 	float m_normalGrav = 0; // Set from physmodel on load
 	float m_glidingGrav = 5;
+	float m_maxTimeGlidingOff = 3; // Max time gliding off the glide area before it respawns
+	float m_elapsedTimeOff = 0;
 
 	std::unique_ptr<MoveAI> m_ai = nullptr;
 };

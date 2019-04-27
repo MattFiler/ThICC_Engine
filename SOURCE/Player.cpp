@@ -99,6 +99,7 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
 	m_normalGrav = m_maxGrav;
+	m_animationMesh->Scale(Vector3::One * 2, 20);
 	//Update TrackMagnet here too?
 }
 
@@ -502,13 +503,13 @@ void Player::setGamePad(bool _state)
 
 	// TEST CODE //
 	
-	
+	/*
 	if (m_playerID == 0)
 	{
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);
 		Locator::getAIScheduler()->AddAI(m_ai.get());
-	}
+	}*/
 	
 	// TEST CODE //
 }
@@ -549,9 +550,12 @@ void Player::GlideLogic()
 		m_gliding = true;
 		m_animationMesh->SwitchModelSet("gliding");
 		m_preventRespawn = true;
+		m_move->SetGliding(true);
+		m_elapsedTimeOff = 0;
 	}
 	else if (m_colType == CollisionType::GLIDER_TRACK)
 	{
+		m_elapsedTimeOff = 0;
 		m_maxGrav = 0;
 		m_gravVel = Vector3::Zero;
 	}
@@ -560,16 +564,22 @@ void Player::GlideLogic()
 		m_glideTimeElapsed += Locator::getGSD()->m_dt;
 		if (m_onTrack && m_glideTimeElapsed > m_minGlideDuration)
 		{
+			m_elapsedTimeOff = 0;
 			m_glideTimeElapsed = 0;
 			m_preventRespawn = false;
 			m_gliding = false;
 			m_maxGrav = m_normalGrav;
+			m_move->SetGliding(false);
 			m_animationMesh->SwitchModelSet("default");
 		}
 		else if (m_colType == CollisionType::NO_TERRAIN)
 		{
-			m_preventRespawn = false;
-			m_maxGrav = m_glidingGrav;
+			m_elapsedTimeOff += Locator::getGSD()->m_dt;
+			if (m_elapsedTimeOff > m_maxTimeGlidingOff)
+			{
+				m_preventRespawn = false;
+				m_maxGrav = m_glidingGrav;
+			}
 		}
 		else
 		{
@@ -593,7 +603,7 @@ void Player::RespawnLogic()
 
 	m_posHistoryTimer += Locator::getGSD()->m_dt;
 	m_timeSinceRespawn += Locator::getGSD()->m_dt;
-	if (m_onTrack && m_colType == CollisionType::ON_TRACK)
+	if (!m_respawning && m_onTrack && m_colType == CollisionType::ON_TRACK)
 	{
 		m_offTrackTimer = 0;
 		m_offTerrainTimer = 0;
@@ -643,6 +653,7 @@ void Player::Respawn()
 	m_respawnEnd = m_posHistory.front();
 	m_respawnStart = m_world;
 	m_glideTimeElapsed = 0;
+	m_elapsedTimeOff = 0;
 
 	// Decompose the matrix
 	Vector3 pos;
