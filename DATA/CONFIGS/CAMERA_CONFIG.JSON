@@ -6,7 +6,7 @@
   "FOLLOW": {
     "fov": 60,
     "rotation_lerp": 0.1,
-    "position_lerp": 0.3,
+    "position_lerp": 0.05,
     "look_at_position": [
       0.0,
       0.0,

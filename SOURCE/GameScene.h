@@ -11,6 +11,7 @@
 #include "AIScheduler.h"
 #include "MapInfo.h"
 #include "Skybox.h"
+#include "ParticlePool.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -107,5 +108,6 @@ private:
 	int finished = 0;
 	bool is_paused = false;
 
+	ParticlePool* pool = nullptr;
 };
 

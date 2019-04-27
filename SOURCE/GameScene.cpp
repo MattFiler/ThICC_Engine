@@ -92,8 +92,7 @@ void GameScene::ExpensiveLoad() {
 		}
 	}
 
-
-
+	pool->init(100);
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
 
@@ -228,6 +227,9 @@ void GameScene::create3DObjects()
 		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::FOLLOW);
 		m_cam[i]->setAngle(180.0f);
 	}
+
+	pool = new ParticlePool(player[0]);
+	//particle->Load();
 
 	//Cinematic cam
 	cine_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), nullptr, CameraType::CINEMATIC);
@@ -412,6 +414,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 		m_cam[0]->SetType(CameraType::DEBUG_CAM);
 	}
 #endif
+
+	pool->Update();
 
 	// sets the players waypoint
 	SetPlayersWaypoint();
@@ -656,8 +660,12 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 				}
 			}
 		}
+
+		//particle->Render();
 		break;
 	}
+
+	pool->Render();
 
 	// Render skyboxes that are loaded
 	/*

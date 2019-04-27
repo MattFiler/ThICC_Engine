@@ -26,7 +26,7 @@ SDKMeshGO3D::~SDKMeshGO3D()
 void SDKMeshGO3D::Render()
 {
 	if (!m_model) {
-		//DebugText::print("Call to render non-loaded model: " + filename);
+		DebugText::print("Call to render non-loaded model: " + filename);
 		return;
 	}
 	if ((m_shouldRender && !isDebugMesh()) || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {

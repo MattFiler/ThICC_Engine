@@ -26,6 +26,8 @@ public:
 
 	bool IsLoaded() { return m_loaded; };
 
+	Model* GetModel() { return m_model.get();}
+
 protected:
 	//Model resources
 	std::unique_ptr<DirectX::EffectTextureFactory> m_modelResources;

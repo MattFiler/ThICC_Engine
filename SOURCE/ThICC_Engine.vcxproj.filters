@@ -151,6 +151,10 @@
     <ClCompile Include="DebugConsole.cpp">
       <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Game\Components\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticlePool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -356,6 +360,12 @@
     </ClInclude>
     <ClInclude Include="DebugConsole.h">
       <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Game\Components\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticlePool.h">
+      <Filter>Game\Components\Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
