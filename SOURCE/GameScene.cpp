@@ -92,7 +92,7 @@ void GameScene::ExpensiveLoad() {
 		}
 	}
 
-	pool->init(100);
+	pool->init(500);
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
 
@@ -415,6 +415,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 	}
 #endif
 
+	pool->ActivateNextParticle();
 	pool->Update();
 
 	// sets the players waypoint

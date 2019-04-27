@@ -16,9 +16,14 @@ public:
 
 	float GetLifetime() { return lifetime; }
 
+	bool IsDead() { return lifetime <= 0.0f; }
+
+	bool IsUsed() { return used; }
+
 private:
 
 	float speed = 0.0f;
 	float lifetime = 0.0f;
 	Vector3 direction;
+	bool used = false;
 };

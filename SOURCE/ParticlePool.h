@@ -11,13 +11,15 @@ public:
 
 	void init(int _particle_amount);
 
+	void ActivateNextParticle();
+
 	void Update();
 
 	void Render();
 
 private:
 
-	const static int pool_size = 100;
+	const static int pool_size = 500;
 
 	PhysModel* game_object = nullptr;
 
@@ -32,7 +34,8 @@ private:
 	float y_lower_limit = 1.0f;
 	float z_upper_limit = 1.0f;
 	float z_lower_limit = 0.0f;
-	float emission_rate = 100.0;
+	float emission_rate = 500.0;
 	float timer = 0.0f;
+	bool burst = false;
 
 };

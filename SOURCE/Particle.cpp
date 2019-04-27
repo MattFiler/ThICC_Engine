@@ -6,7 +6,7 @@
 
 Particle::Particle(std::string filename) : SDKMeshGO3D(filename)
 {
-	speed = 1.0f;
+	speed = 10.0f;
 }
 
 Particle::~Particle()
@@ -17,8 +17,8 @@ Particle::~Particle()
 void Particle::Tick()
 {
 	m_pos += (speed* Locator::getGSD()->m_dt) * direction;
-
 	lifetime -= Locator::getGSD()->m_dt;
+	used = true;
 
 	SDKMeshGO3D::Tick();
 }
@@ -31,6 +31,7 @@ void Particle::Render()
 
 void Particle::reset(float _lifetime, Vector3 _direction, Vector3 _start_pos)
 {
+	used = false;
 	m_pos = _start_pos;
 	lifetime = _lifetime;
 	direction = _direction;
