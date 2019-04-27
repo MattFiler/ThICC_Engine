@@ -713,9 +713,18 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 /* Set the player's current waypoint */
 void GameScene::SetPlayersWaypoint()
 {
+	Vector3 currentWaypoint;
+	Vector3 nextWaypoint;
 	for (int i = 0; i < game_config["player_count"]; i++) {
-
-		if (player[i]->GetWaypoint() < track->getWaypointsBB().size() - 1)
+		currentWaypoint = track->getWaypointMiddle(player[i]->GetWaypoint());
+		int nextWayIndex = player[i]->GetWaypoint() + 1;
+		if (nextWayIndex == track->getWaypoints().size())
+		{
+			nextWayIndex = 0;
+		}
+		nextWaypoint = track->getWaypointMiddle(nextWayIndex);
+		bool switchWaypoint = Vector3::Distance(player[i]->GetPos(), nextWaypoint) < Vector3::Distance(currentWaypoint, nextWaypoint);
+		if (switchWaypoint || player[i]->GetWaypoint() < track->getWaypointsBB().size() - 1)
 		{
 			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[player[i]->GetWaypoint() + 1]))
 			{
@@ -724,7 +733,7 @@ void GameScene::SetPlayersWaypoint()
 		}
 		else
 		{
-			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
+			if (switchWaypoint || player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
 			{
 				player[i]->SetWaypoint(0);
 				if (player[i]->GetLap() == 3)
