@@ -560,6 +560,7 @@ void Player::GlideLogic()
 		m_glideTimeElapsed += Locator::getGSD()->m_dt;
 		if (m_onTrack && m_glideTimeElapsed > m_minGlideDuration)
 		{
+			m_glideTimeElapsed = 0;
 			m_preventRespawn = false;
 			m_gliding = false;
 			m_maxGrav = m_normalGrav;
@@ -641,6 +642,7 @@ void Player::Respawn()
 	m_respawning = true;
 	m_respawnEnd = m_posHistory.front();
 	m_respawnStart = m_world;
+	m_glideTimeElapsed = 0;
 
 	// Decompose the matrix
 	Vector3 pos;
