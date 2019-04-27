@@ -15,9 +15,7 @@
     "in_use_in": []
   },
   "MAP_DRIFTWAY": {
-    "in_use_in": [
-      "Map"
-    ]
+    "in_use_in": []
   },
   "MAP_RBR": {
     "in_use_in": []
@@ -59,5 +57,10 @@
   },
   "CUP_SELECT": {
     "in_use_in": []
+  },
+  "MAP_YOSHI_CIRCUIT": {
+    "in_use_in": [
+      "Map"
+    ]
   }
 }

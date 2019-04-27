@@ -1,8 +1,8 @@
 {
-  "DRAGON DRIFTWAY": {
-    "friendly_name": "MAP_DRIFTWAY",
-    "menu_sprite": "DRAGON_DRIFTWAY_PREVIEW",
-    "model": "DRAGON_DRIFTWAY",
+  "MARIO KART STADIUM": {
+    "friendly_name": "MAP_MKS",
+    "menu_sprite": "MARIO KART STADIUM PREVIEW",
+    "model": "MARIOKARTSTADIUM",
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
@@ -13,10 +13,10 @@
       "final_lap": "MKS FINAL LAP LOOP"
     }
   },
-  "MARIO KART STADIUM": {
-    "friendly_name": "MAP_MKS",
-    "menu_sprite": "MARIO KART STADIUM PREVIEW",
-    "model": "MARIOKARTSTADIUM",
+  "YOSHI_CIRCUIT": {
+    "friendly_name": "MAP_YOSHI_CIRCUIT",
+    "menu_sprite": "YOSHI CIRCUIT",
+    "model": "YOSHI_CIRCUIT",
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
