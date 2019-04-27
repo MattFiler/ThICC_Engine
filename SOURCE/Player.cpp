@@ -6,11 +6,14 @@
 #include "ItemData.h"
 #include "AIScheduler.h"
 #include <iostream>
+#include <fstream>
 
 extern void ExitGame();
 
 Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character.model), CreateItem(_createItemFunction)
 {
+	InitPlayerData();
+
 	m_RD = Locator::getRD();
 	SetDrag(0.7);
 	m_useGroundTypes = true;
@@ -32,6 +35,27 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 	{
 		m_posHistory.push(m_world);
 	}
+}
+
+void Player::InitPlayerData()
+{
+	std::ifstream i("DATA/CONFIGS/PLAYER_CONFIG.JSON");
+	json playerData;
+	playerData << i;
+
+	m_maxItems = (float)playerData["item_data"]["triple_item_count"];
+	m_firstTrailingItemOffset = (float)playerData["item_data"]["trailing_items"]["line"]["first_item_trail_offset"];
+	m_otherTrailingItemOffset = (float)playerData["item_data"]["trailing_items"]["line"]["other_items_trail_offset"];
+	m_orbitDistance = Vector3((float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_distance"][0],
+		(float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_distance"][1],
+		(float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_distance"][2]);
+	m_orbitSpeed = (float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_speed"];
+	m_floatingItemPosOffset = (float)playerData["item_data"]["trailing_items"]["floating"]["upward_pos_offset"];
+
+	m_posHistoryInterval = (float)playerData["respawn_data"]["pos_history_interval"];
+	m_posHistoryTimer = (float)playerData["respawn_data"]["pos_history_timer"];
+	m_posHistoryLength = (float)playerData["respawn_data"]["pos_history_length"];
+	m_respawnDelay = (float)playerData["respawn_data"]["respawn_delay"];
 }
 
 Player::~Player()
@@ -185,7 +209,7 @@ void Player::PositionFloatingItems()
 	for (int i = 0; i < m_floatingItems.size(); i++)
 	{
 		m_floatingItems[i]->GetMesh()->SetWorld(m_world);
-		m_floatingItems[i]->GetMesh()->AddPos(m_world.Up() * 2);
+		m_floatingItems[i]->GetMesh()->AddPos(m_world.Up() * m_floatingItemPosOffset);
 		m_floatingItems[i]->GetMesh()->UpdateWorld();
 	}
 }
@@ -267,17 +291,16 @@ void Player::TrailItems()
 					Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
 
 					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-					m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
+					m_trailingItems[i]->GetMesh()->AddPos(backward_pos * m_firstTrailingItemOffset + (backward_pos * m_otherTrailingItemOffset * i));
 					m_trailingItems[i]->GetMesh()->UpdateWorld();
 				}
 				//Spins around the player
 				else
 				{
 					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-					Vector3 m_dpos = Vector3{ 2, 0, 2 };
-					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + 350 * Locator::getGSD()->m_dt);
+					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + m_orbitSpeed * Locator::getGSD()->m_dt);
 					m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f) 
-						* m_dpos.x, m_dpos.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_dpos.z }, m_rot));
+						* m_orbitDistance.x, m_orbitDistance.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_orbitDistance.z }, m_rot));
 				}
 			}
 

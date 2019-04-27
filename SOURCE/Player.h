@@ -19,6 +19,8 @@
 #include "LightningCloud.h"
 #include "RedShell.h"
 #include <functional>
+#include <json.hpp>
+using json = nlohmann::json;
 
 //=================================================================
 //Base Player Class (i.e. a model GO3D the player controls)
@@ -29,6 +31,7 @@ class Player : public TrackMagnet
 
 public:
 	Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
+	void InitPlayerData();
 	~Player();
 
 	virtual void Tick() override;
@@ -123,7 +126,12 @@ private:
 	void PositionFloatingItems();
 	bool m_aPressed = true;
 	bool m_multiItem = false;
-	const int m_maxItems = 3;
+	int m_maxItems = 0;
+	float m_firstTrailingItemOffset = 0;
+	float m_otherTrailingItemOffset = 0;
+	Vector3 m_orbitDistance = Vector3::Zero;
+	float m_orbitSpeed = 0;
+	float m_floatingItemPosOffset = 0;
 
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;
@@ -131,10 +139,10 @@ private:
 	std::unique_ptr<AnimationController> m_animationMesh = nullptr;
 
 	std::queue<Matrix> m_posHistory;
-	float m_posHistoryInterval = 0.1f;
+	float m_posHistoryInterval = 0;
 	float m_posHistoryTimer = 0;
-	float m_posHistoryLength = 1;
-	float m_respawnDelay = 1.5f;
+	float m_posHistoryLength = 0;
+	float m_respawnDelay = 0;
 
 	std::unique_ptr<MoveAI> m_ai = nullptr;
 };
