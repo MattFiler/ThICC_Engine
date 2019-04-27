@@ -323,6 +323,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ControlledMovement.h" />
+    <ClInclude Include="CupInfo.h" />
     <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="DebugMarker.h" />
     <ClInclude Include="DebugScene.h" />

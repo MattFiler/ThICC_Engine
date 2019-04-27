@@ -36,12 +36,17 @@ private:
 	ImageGO2D* m_background = nullptr;
 	Text2D* m_state_desc = nullptr;
 
+	//Cup select objects
+	int highlighted_cup = 0;
+	std::vector<Text2D*> m_cupTitles;
+	std::vector<ImageGO2D*> m_cupPreviews;
+
 	//Map select objects
 	int highlighted_map = 0;
 	std::vector<Text2D*> m_mapTitles;
 	std::vector<ImageGO2D*> m_mapPreviews;
 
-	//Map select objects
+	//Character select objects
 	int highlighted_character = 0;
 	std::vector<Text2D*> m_characterTitles;
 	std::vector<ImageGO2D*> m_characterPreviews;
@@ -75,7 +80,7 @@ private:
 	json game_config;
 
 	//States
-	enum menu_states { SPLASH, MAP_SELECT, CHARACTER_SELECT, VEHICLE_SELECT };
+	enum menu_states { SPLASH, CUP_SELECT, MAP_SELECT, CHARACTER_SELECT, VEHICLE_SELECT };
 	menu_states m_menu_state = menu_states::SPLASH;
 };
 

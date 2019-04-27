@@ -30,7 +30,7 @@ class Player : public TrackMagnet
 {
 
 public:
-	Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
+	Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
 	void InitPlayerData();
 	~Player();
 
@@ -78,7 +78,7 @@ public:
 	bool isInvincible() { return m_invincible; };
 	void setInvicible(bool _invincible) { m_invincible = _invincible; };
 
-	void Reload(CharacterInfo _character, VehicleInfo _vehicle);
+	void Reload(CharacterInfo* _character, VehicleInfo* _vehicle);
 
 protected:
 	int m_playerID = 0;

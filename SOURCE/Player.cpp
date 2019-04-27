@@ -10,7 +10,7 @@
 
 extern void ExitGame();
 
-Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character.model), CreateItem(_createItemFunction)
+Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character->model), CreateItem(_createItemFunction)
 {
 	InitPlayerData();
 
@@ -65,21 +65,21 @@ Player::~Player()
 }
 
 
-void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
+void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 
-	std::ifstream i(m_filepath.generateConfigFilepath(_vehicle.model, m_filepath.MODEL));
+	std::ifstream i(m_filepath.generateConfigFilepath(_vehicle->model, m_filepath.MODEL));
 	json m_model_config_vehicle;
 	m_model_config_vehicle << i;
 
 	m_animationMesh = std::make_unique<AnimationController>();
-	m_animationMesh->AddModel("vehicle", _vehicle.model, Vector::Zero);
+	m_animationMesh->AddModel("vehicle", _vehicle->model, Vector::Zero);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
-	std::ifstream x(m_filepath.generateConfigFilepath(_character.model, m_filepath.MODEL));
+	std::ifstream x(m_filepath.generateConfigFilepath(_character->model, m_filepath.MODEL));
 	json m_model_config_character;
 	m_model_config_character << x;
 
-	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character.model);
+	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character->model);
 	new_model->SetScale(m_model_config_character["modelscale"]);
 	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
 	m_animationMesh->AddModel("lakitu", "DEFAULT_ITEM", Vector3::Up * 4);
