@@ -85,7 +85,7 @@
             this.previewImage.TabIndex = 8;
             this.previewImage.TabStop = false;
             // 
-            // Map_Manager
+            // Asset_Comp_Manager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -97,9 +97,10 @@
             this.Controls.Add(this.assetList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Map_Manager";
+            this.Name = "Asset_Comp_Manager";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mario Kart Map Manager";
+            this.Load += new System.EventHandler(this.Asset_Comp_Manager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.previewImage)).EndInit();
             this.ResumeLayout(false);
 

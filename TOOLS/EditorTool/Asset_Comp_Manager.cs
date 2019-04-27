@@ -34,6 +34,9 @@ namespace EditorTool
                 case AssetCompType.VEHICLE:
                     comp_displayname = "vehicle";
                     break;
+                case AssetCompType.CUP:
+                    comp_displayname = "cup";
+                    break;
             }
 
             InitializeComponent();
@@ -67,6 +70,11 @@ namespace EditorTool
                     Create_Vehicle createVehicle = new Create_Vehicle();
                     createVehicle.FormClosed += new FormClosedEventHandler(refreshList);
                     createVehicle.Show();
+                    break;
+                case AssetCompType.CUP:
+                    Create_Cup createCup = new Create_Cup();
+                    createCup.FormClosed += new FormClosedEventHandler(refreshList);
+                    createCup.Show();
                     break;
             }
         }
@@ -131,6 +139,11 @@ namespace EditorTool
                     createVehicle.FormClosed += new FormClosedEventHandler(refreshList);
                     createVehicle.Show();
                     break;
+                case AssetCompType.CUP:
+                    Create_Cup createCup = new Create_Cup(comp_json_config, assetList.SelectedItem.ToString());
+                    createCup.FormClosed += new FormClosedEventHandler(refreshList);
+                    createCup.Show();
+                    break;
             }
         }
 
@@ -141,6 +154,31 @@ namespace EditorTool
             {
                 MessageBox.Show("Please select a " + comp_displayname + " from the list to delete.", "No " + comp_displayname + " selected.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
+            }
+
+            //Check if cup is used by any maps
+            if (this_comp_type == AssetCompType.CUP)
+            {
+                List<string> cup_useages = new List<string>();
+                JObject temp_map_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/MAP_CONFIG.JSON"));
+                foreach (var config_entry in temp_map_config)
+                {
+                    if (temp_map_config[config_entry.Key]["cup"].Value<string>() == assetList.SelectedItem.ToString())
+                    {
+                        cup_useages.Add(config_entry.Key);
+                    }
+                }
+                if (cup_useages.Count > 0)
+                {
+                    string message = "Cannot delete! In use in maps: ";
+                    foreach (string use in cup_useages)
+                    {
+                        message += use + ", ";
+                    }
+                    message = message.Substring(0, message.Length - 2);
+                    MessageBox.Show(message + ".", "Cup is in use!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
 
             //Confirm
@@ -154,13 +192,20 @@ namespace EditorTool
             JToken data_block = comp_json_config[assetList.SelectedItem.ToString()];
             common_functions.removeUseageTag(AssetType.STRING, data_block["friendly_name"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
             common_functions.removeUseageTag(AssetType.IMAGE, data_block["menu_sprite"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
-            common_functions.removeUseageTag(AssetType.MODEL, data_block["model"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
-            if (this_comp_type == AssetCompType.MAP)
+            if (this_comp_type == AssetCompType.CHARACTER || this_comp_type == AssetCompType.MAP || this_comp_type == AssetCompType.VEHICLE)
             {
-                common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["background_start"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
-                common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["background"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
-                common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["final_lap_start"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
-                common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["final_lap"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
+                common_functions.removeUseageTag(AssetType.MODEL, data_block["model"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
+                if (this_comp_type == AssetCompType.CHARACTER)
+                {
+                    common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
+                }
+                else if (this_comp_type == AssetCompType.MAP)
+                {
+                    common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["background_start"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
+                    common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["background"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
+                    common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["final_lap_start"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
+                    common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["final_lap"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
+                }
             }
 
             //Remove JToken from config
@@ -182,6 +227,11 @@ namespace EditorTool
             {
                 assetList.Items.Add(config_entry.Key.ToString());
             }
+        }
+
+        private void Asset_Comp_Manager_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

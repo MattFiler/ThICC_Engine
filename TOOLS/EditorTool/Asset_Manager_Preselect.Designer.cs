@@ -33,11 +33,12 @@
             this.openMapManager = new System.Windows.Forms.Button();
             this.openItemManager = new System.Windows.Forms.Button();
             this.openSoundManager = new System.Windows.Forms.Button();
+            this.cupManager = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openCharacterManager
             // 
-            this.openCharacterManager.Location = new System.Drawing.Point(12, 86);
+            this.openCharacterManager.Location = new System.Drawing.Point(12, 123);
             this.openCharacterManager.Name = "openCharacterManager";
             this.openCharacterManager.Size = new System.Drawing.Size(270, 31);
             this.openCharacterManager.TabIndex = 10;
@@ -47,7 +48,7 @@
             // 
             // openVehicleManager
             // 
-            this.openVehicleManager.Location = new System.Drawing.Point(12, 49);
+            this.openVehicleManager.Location = new System.Drawing.Point(12, 86);
             this.openVehicleManager.Name = "openVehicleManager";
             this.openVehicleManager.Size = new System.Drawing.Size(270, 31);
             this.openVehicleManager.TabIndex = 9;
@@ -68,7 +69,7 @@
             // openItemManager
             // 
             this.openItemManager.Enabled = false;
-            this.openItemManager.Location = new System.Drawing.Point(12, 123);
+            this.openItemManager.Location = new System.Drawing.Point(12, 160);
             this.openItemManager.Name = "openItemManager";
             this.openItemManager.Size = new System.Drawing.Size(270, 31);
             this.openItemManager.TabIndex = 11;
@@ -77,7 +78,7 @@
             // 
             // openSoundManager
             // 
-            this.openSoundManager.Location = new System.Drawing.Point(12, 160);
+            this.openSoundManager.Location = new System.Drawing.Point(12, 197);
             this.openSoundManager.Name = "openSoundManager";
             this.openSoundManager.Size = new System.Drawing.Size(270, 31);
             this.openSoundManager.TabIndex = 12;
@@ -85,11 +86,22 @@
             this.openSoundManager.UseVisualStyleBackColor = true;
             this.openSoundManager.Click += new System.EventHandler(this.openSoundManager_Click);
             // 
+            // cupManager
+            // 
+            this.cupManager.Location = new System.Drawing.Point(12, 49);
+            this.cupManager.Name = "cupManager";
+            this.cupManager.Size = new System.Drawing.Size(270, 31);
+            this.cupManager.TabIndex = 13;
+            this.cupManager.Text = "Cup Manager";
+            this.cupManager.UseVisualStyleBackColor = true;
+            this.cupManager.Click += new System.EventHandler(this.cupManager_Click);
+            // 
             // Asset_Manager_Preselect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 199);
+            this.ClientSize = new System.Drawing.Size(296, 238);
+            this.Controls.Add(this.cupManager);
             this.Controls.Add(this.openSoundManager);
             this.Controls.Add(this.openItemManager);
             this.Controls.Add(this.openCharacterManager);
@@ -110,5 +122,6 @@
         private System.Windows.Forms.Button openMapManager;
         private System.Windows.Forms.Button openItemManager;
         private System.Windows.Forms.Button openSoundManager;
+        private System.Windows.Forms.Button cupManager;
     }
 }

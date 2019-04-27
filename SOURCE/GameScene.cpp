@@ -17,7 +17,7 @@
 extern void ExitGame();
 
 /* Create! */
-GameScene::GameScene(MapInfo _track) {
+GameScene::GameScene(MapInfo* _track) {
 	//Get a ref to the scene manager for swapping scenes
 	m_scene_manager = Locator::getSM();
 	
@@ -60,9 +60,9 @@ bool GameScene::Load()
 /* Populate the expensive things! */
 void GameScene::ExpensiveLoad() {
 	//Set cubemaps
-	Locator::getRD()->current_cubemap_radiance = map_info.cubemap_radiance;
-	Locator::getRD()->current_cubemap_irradiance = map_info.cubemap_irradiance;
-	Locator::getRD()->current_cubemap_skybox = map_info.cubemap_skybox;
+	Locator::getRD()->current_cubemap_radiance = map_info->cubemap_radiance;
+	Locator::getRD()->current_cubemap_irradiance = map_info->cubemap_irradiance;
+	Locator::getRD()->current_cubemap_skybox = map_info->cubemap_skybox;
 
 	//Update characters
 	for (int i = 0; i < game_config["player_count"]; i++)
@@ -73,10 +73,10 @@ void GameScene::ExpensiveLoad() {
 		);
 	}
 
-	Locator::getAudio()->addToSoundsList(map_info.audio_background_start, SoundType::GAME);
-	Locator::getAudio()->addToSoundsList(map_info.audio_background, SoundType::GAME);
-	Locator::getAudio()->addToSoundsList(map_info.audio_final_lap_start, SoundType::GAME);
-	Locator::getAudio()->addToSoundsList(map_info.audio_final_lap, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info->audio_background_start, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info->audio_background, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap_start, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap, SoundType::GAME);
 
 	//Load in
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
@@ -191,7 +191,7 @@ void GameScene::create2DObjects()
 void GameScene::create3DObjects()
 {
 	//Load in a track
-	track = new Track(map_info.model);
+	track = new Track(map_info->model);
 	track->setWaypointBB();
 	m_3DObjects.push_back(track);
 
@@ -830,7 +830,8 @@ Item* GameScene::CreateItem(ItemType type)
 	}
 	case BOMB:
 	{
-		Bomb* bomb = new Bomb(std::bind(&GameScene::CreateExplosion, this));
+		using namespace std::placeholders;
+		Bomb* bomb = new Bomb(std::bind(&GameScene::CreateExplosion, this, _1));
 		m_itemModels.push_back(bomb);
 		m_3DObjects.push_back(dynamic_cast<PhysModel*>(bomb->GetMesh())->getDebugCollider());
 		bomb->GetMesh()->getDebugCollider()->Load();
@@ -887,9 +888,9 @@ Item* GameScene::CreateItem(ItemType type)
 }
 
 /* Create an explosion! */
-Explosion * GameScene::CreateExplosion()
+Explosion * GameScene::CreateExplosion(ItemType _ownerType)
 {
-	Explosion* explosion = new Explosion();
+	Explosion* explosion = new Explosion(_ownerType);
 	m_3DObjects.push_back(explosion);
 	m_physModels.push_back(explosion);
 	m_3DObjects.push_back(dynamic_cast<PhysModel*>(explosion)->getDebugCollider());

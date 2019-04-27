@@ -6,11 +6,14 @@
 #include "ItemData.h"
 #include "AIScheduler.h"
 #include <iostream>
+#include <fstream>
 
 extern void ExitGame();
 
-Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character.model), CreateItem(_createItemFunction)
+Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character->model), CreateItem(_createItemFunction)
 {
+	InitPlayerData();
+
 	m_RD = Locator::getRD();
 	SetDrag(0.7);
 	m_useGroundTypes = true;
@@ -19,7 +22,7 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 	m_textRanking = new Text2D(std::to_string(m_ranking));
 	//m_textRanking->SetScale(0.1f * Vector2::One);
 	m_textLap = new Text2D(std::to_string(m_lap) + "/3");
-	m_textCountdown = new Text2D("3", true);
+	m_textCountdown = new Text2D("3", Text2D::MIDDLE);
 	m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 	m_textFinishOrder = new Text2D("0" + m_orderIndicator[0]);
 
@@ -34,6 +37,27 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 	}
 }
 
+void Player::InitPlayerData()
+{
+	std::ifstream i("DATA/CONFIGS/PLAYER_CONFIG.JSON");
+	json playerData;
+	playerData << i;
+
+	m_maxItems = (float)playerData["item_data"]["triple_item_count"];
+	m_firstTrailingItemOffset = (float)playerData["item_data"]["trailing_items"]["line"]["first_item_trail_offset"];
+	m_otherTrailingItemOffset = (float)playerData["item_data"]["trailing_items"]["line"]["other_items_trail_offset"];
+	m_orbitDistance = Vector3((float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_distance"][0],
+		(float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_distance"][1],
+		(float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_distance"][2]);
+	m_orbitSpeed = (float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_speed"];
+	m_floatingItemPosOffset = (float)playerData["item_data"]["trailing_items"]["floating"]["upward_pos_offset"];
+
+	m_posHistoryInterval = (float)playerData["respawn_data"]["pos_history_interval"];
+	m_posHistoryTimer = (float)playerData["respawn_data"]["pos_history_timer"];
+	m_posHistoryLength = (float)playerData["respawn_data"]["pos_history_length"];
+	m_respawnDelay = (float)playerData["respawn_data"]["respawn_delay"];
+}
+
 Player::~Player()
 {
 	delete m_imgItem;
@@ -41,21 +65,21 @@ Player::~Player()
 }
 
 
-void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
+void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 
-	std::ifstream i(m_filepath.generateConfigFilepath(_vehicle.model, m_filepath.MODEL));
+	std::ifstream i(m_filepath.generateConfigFilepath(_vehicle->model, m_filepath.MODEL));
 	json m_model_config_vehicle;
 	m_model_config_vehicle << i;
 
 	m_animationMesh = std::make_unique<AnimationController>();
-	m_animationMesh->AddModel("vehicle", _vehicle.model, Vector::Zero);
+	m_animationMesh->AddModel("vehicle", _vehicle->model, Vector::Zero);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
-	std::ifstream x(m_filepath.generateConfigFilepath(_character.model, m_filepath.MODEL));
+	std::ifstream x(m_filepath.generateConfigFilepath(_character->model, m_filepath.MODEL));
 	json m_model_config_character;
 	m_model_config_character << x;
 
-	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character.model);
+	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character->model);
 	new_model->SetScale(m_model_config_character["modelscale"]);
 	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
 	m_animationMesh->AddModel("lakitu", "DEFAULT_ITEM", Vector3::Up * 4);
@@ -196,7 +220,7 @@ void Player::PositionFloatingItems()
 	for (int i = 0; i < m_floatingItems.size(); i++)
 	{
 		m_floatingItems[i]->GetMesh()->SetWorld(m_world);
-		m_floatingItems[i]->GetMesh()->AddPos(m_world.Up() * 2);
+		m_floatingItems[i]->GetMesh()->AddPos(m_world.Up() * m_floatingItemPosOffset);
 		m_floatingItems[i]->GetMesh()->UpdateWorld();
 	}
 }
@@ -278,17 +302,16 @@ void Player::TrailItems()
 					Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
 
 					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-					m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
+					m_trailingItems[i]->GetMesh()->AddPos(backward_pos * m_firstTrailingItemOffset + (backward_pos * m_otherTrailingItemOffset * i));
 					m_trailingItems[i]->GetMesh()->UpdateWorld();
 				}
 				//Spins around the player
 				else
 				{
 					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-					Vector3 m_dpos = Vector3{ 2, 0, 2 };
-					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + 350 * Locator::getGSD()->m_dt);
+					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + m_orbitSpeed * Locator::getGSD()->m_dt);
 					m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f) 
-						* m_dpos.x, m_dpos.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_dpos.z }, m_rot));
+						* m_orbitDistance.x, m_orbitDistance.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_orbitDistance.z }, m_rot));
 				}
 			}
 
@@ -415,6 +438,7 @@ void Player::SpawnItems(ItemType type)
 		{
 			GiantMushroom* mushroom = static_cast<GiantMushroom*>(CreateItem(MUSHROOM_GIANT));
 			mushroom->Use(this, false);
+			break;
 		}
 
 		case LIGHTNING_CLOUD:
@@ -478,8 +502,8 @@ void Player::setGamePad(bool _state)
 
 	// TEST CODE //
 	
-	/*
-	if (m_playerID == 0)
+	
+	/*if (m_playerID == 0)
 	{
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);

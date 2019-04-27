@@ -19,6 +19,8 @@
 #include "LightningCloud.h"
 #include "RedShell.h"
 #include <functional>
+#include <json.hpp>
+using json = nlohmann::json;
 
 //=================================================================
 //Base Player Class (i.e. a model GO3D the player controls)
@@ -28,7 +30,8 @@ class Player : public TrackMagnet
 {
 
 public:
-	Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
+	Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
+	void InitPlayerData();
 	~Player();
 
 	virtual void Tick() override;
@@ -75,7 +78,7 @@ public:
 	bool isInvincible() { return m_invincible; };
 	void setInvicible(bool _invincible) { m_invincible = _invincible; };
 
-	void Reload(CharacterInfo _character, VehicleInfo _vehicle);
+	void Reload(CharacterInfo* _character, VehicleInfo* _vehicle);
 
 protected:
 	int m_playerID = 0;
@@ -127,7 +130,12 @@ private:
 	void PositionFloatingItems();
 	bool m_aPressed = true;
 	bool m_multiItem = false;
-	const int m_maxItems = 3;
+	int m_maxItems = 0;
+	float m_firstTrailingItemOffset = 0;
+	float m_otherTrailingItemOffset = 0;
+	Vector3 m_orbitDistance = Vector3::Zero;
+	float m_orbitSpeed = 0;
+	float m_floatingItemPosOffset = 0;
 
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;
@@ -144,6 +152,7 @@ private:
 
 	// Respawn
 	float m_posHistoryTimer = 0;
+	float m_respawnDelay = 0;
 	float m_offTrackTimer = 0;
 	float m_offTerrainTimer = 0;
 	float m_timeSinceRespawn = 0;

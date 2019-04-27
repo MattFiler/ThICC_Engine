@@ -54,66 +54,28 @@ void MenuScene::create2DObjects()
 
 	//Main menu objects
 	m_background = new ImageGO2D("MAIN_MENU_TEMP");
-	m_state_desc = new Text2D("", true);
+	m_state_desc = new Text2D("", Text2D::MIDDLE);
 	m_state_desc->SetPos(Vector2(498, 620));
 	m_state_desc->SetColour(Colors::Black);
 	m_state_desc->SetScale(0.5f);
 
-	//position map options
+	//position cup options
 	int index = 0;
-	for (MapInfo a_map : Locator::getGOS()->map_instances) {
+	for (CupInfo* a_cup : Locator::getGOS()->cup_instances) {
 		index++;
 
 		//Text
-		Text2D* map_name = new Text2D(a_map.name);
-		map_name->SetColour(inactive_colour);
+		Text2D* cup_name = new Text2D(a_cup->name);
+		cup_name->SetColour(inactive_colour);
 		if (index == 1) {
-			map_name->SetColour(active_colour);
+			cup_name->SetColour(active_colour);
 		}
-		map_name->SetPos(Vector2(209, 55 + (index * 47)));
-		m_mapTitles.push_back(map_name);
+		cup_name->SetPos(Vector2(209, 55 + (index * 47)));
+		m_cupTitles.push_back(cup_name);
 
 		//Image
-		a_map.preview_sprite->SetPos(Vector2(812, 279));
-		m_mapPreviews.push_back(a_map.preview_sprite);
-	}
-
-	//position character options
-	index = 0;
-	for (CharacterInfo a_character : Locator::getGOS()->character_instances) {
-		index++;
-
-		//Text
-		Text2D* character_name = new Text2D(a_character.name);
-		character_name->SetColour(inactive_colour);
-		if (index == 1) {
-			character_name->SetColour(active_colour);
-		}
-		character_name->SetPos(Vector2(209, 55 + (index * 47)));
-		m_characterTitles.push_back(character_name);
-
-		//Image
-		a_character.preview_sprite->SetPos(Vector2(881, 285));
-		m_characterPreviews.push_back(a_character.preview_sprite);
-	}
-
-	//position vehicle options
-	index = 0;
-	for (VehicleInfo a_vehicle : Locator::getGOS()->vehicle_instances) {
-		index++;
-
-		//Text
-		Text2D* vehicle_name = new Text2D(a_vehicle.name);
-		vehicle_name->SetColour(inactive_colour);
-		if (index == 1) {
-			vehicle_name->SetColour(active_colour);
-		}
-		vehicle_name->SetPos(Vector2(209, 55 + (index * 47)));
-		m_vehicleTitles.push_back(vehicle_name);
-
-		//Image
-		a_vehicle.preview_sprite->SetPos(Vector2(881, 285));
-		m_vehiclePreviews.push_back(a_vehicle.preview_sprite);
+		a_cup->preview_sprite->SetPos(Vector2(812, 279));
+		m_cupPreviews.push_back(a_cup->preview_sprite);
 	}
 }
 
@@ -134,23 +96,82 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			m_logo->SetScale(Vector2(0.3 + (m_timer / 30), 0.3 + (m_timer / 30)));
 			m_timer += (float)timer.GetElapsedSeconds();
 			if (m_timer > m_timeout) {
-				m_menu_state = menu_states::MAP_SELECT;
+				m_menu_state = menu_states::CUP_SELECT;
 			}
 
 			//Allow skip
 			if (m_keybinds.keyReleased("Activate"))
 			{
-				m_menu_state = menu_states::MAP_SELECT;
+				m_menu_state = menu_states::CUP_SELECT;
 			}
 
+			break;
+		case menu_states::CUP_SELECT:
+			m_state_desc->SetText(m_localiser.getString("cup_select"));
+
+			//Exit
+			if (m_keybinds.keyReleased("Quit")) {
+				ExitGame();
+			}
+
+			//Change cup selection
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
+			{
+				if (highlighted_cup < m_cupTitles.size() - 1) {
+					m_cupTitles.at(highlighted_cup)->SetColour(inactive_colour);
+					highlighted_cup++;
+					m_cupTitles.at(highlighted_cup)->SetColour(active_colour);
+				}
+			}
+			if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
+			{
+				if (highlighted_cup > 0) {
+					m_cupTitles.at(highlighted_cup)->SetColour(inactive_colour);
+					highlighted_cup--;
+					m_cupTitles.at(highlighted_cup)->SetColour(active_colour);
+				}
+			}
+
+			//Change to map select
+			if (m_keybinds.keyReleased("Activate")) {
+				m_mapTitles.clear();
+				m_mapPreviews.clear();
+
+				//position map options
+				int index = 0;
+				for (MapInfo* a_map : Locator::getGOS()->map_instances) {
+					//Only include maps from this cup
+					if (a_map->cup->codename != Locator::getGOS()->cup_instances.at(highlighted_cup)->codename) {
+						continue;
+					}
+
+					index++;
+
+					//Text
+					Text2D* map_name = new Text2D(a_map->name);
+					map_name->SetColour(inactive_colour);
+					if (index == 1) {
+						map_name->SetColour(active_colour);
+					}
+					map_name->SetPos(Vector2(209, 55 + (index * 47)));
+					m_mapTitles.push_back(map_name);
+
+					//Image
+					a_map->preview_sprite->SetPos(Vector2(812, 279));
+					m_mapPreviews.push_back(a_map->preview_sprite);
+				}
+
+				//Swap scene
+				m_menu_state = menu_states::MAP_SELECT;
+			}
 			break;
 		case menu_states::MAP_SELECT:
 			m_state_desc->SetText(m_localiser.getString("map_select"));
 
-			//Exit
-			if (m_keybinds.keyReleased("Quit"))
+			//Back to cup select
+			if (m_keybinds.keyReleased("Back"))
 			{
-				ExitGame();
+				m_menu_state = menu_states::CUP_SELECT;
 			}
 
 			//Change map selection
@@ -174,6 +195,29 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			//Change to character select
 			if (m_keybinds.keyReleased("Activate"))
 			{
+				m_characterTitles.clear();
+				m_characterPreviews.clear();
+
+				//position character options
+				int index = 0;
+				for (CharacterInfo* a_character : Locator::getGOS()->character_instances) {
+					index++;
+
+					//Text
+					Text2D* character_name = new Text2D(a_character->name);
+					character_name->SetColour(inactive_colour);
+					if (index == 1) {
+						character_name->SetColour(active_colour);
+					}
+					character_name->SetPos(Vector2(209, 55 + (index * 47)));
+					m_characterTitles.push_back(character_name);
+
+					//Image
+					a_character->preview_sprite->SetPos(Vector2(881, 285));
+					m_characterPreviews.push_back(a_character->preview_sprite);
+				}
+
+				//swap scene
 				m_menu_state = menu_states::CHARACTER_SELECT;
 			}
 
@@ -208,6 +252,29 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			//Go to vehicle select
 			if (m_keybinds.keyReleased("Activate"))
 			{
+				m_vehicleTitles.clear();
+				m_vehiclePreviews.clear();
+
+				//position vehicle options
+				int index = 0;
+				for (VehicleInfo* a_vehicle : Locator::getGOS()->vehicle_instances) {
+					index++;
+
+					//Text
+					Text2D* vehicle_name = new Text2D(a_vehicle->name);
+					vehicle_name->SetColour(inactive_colour);
+					if (index == 1) {
+						vehicle_name->SetColour(active_colour);
+					}
+					vehicle_name->SetPos(Vector2(209, 55 + (index * 47)));
+					m_vehicleTitles.push_back(vehicle_name);
+
+					//Image
+					a_vehicle->preview_sprite->SetPos(Vector2(881, 285));
+					m_vehiclePreviews.push_back(a_vehicle->preview_sprite);
+				}
+				
+				//swap scene
 				m_menu_state = menu_states::VEHICLE_SELECT;
 			}
 
@@ -265,6 +332,12 @@ void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 	m_background->Render();
 	m_state_desc->Render();
 	switch (m_menu_state) {
+		case menu_states::CUP_SELECT:
+			m_cupPreviews.at(highlighted_cup)->Render();
+			for (std::vector<Text2D*>::iterator it = m_cupTitles.begin(); it != m_cupTitles.end(); it++) {
+				(*it)->Render();
+			}
+			break;
 		case menu_states::MAP_SELECT:
 			m_mapPreviews.at(highlighted_map)->Render();
 			for (std::vector<Text2D*>::iterator it = m_mapTitles.begin(); it != m_mapTitles.end(); it++) {
