@@ -69,5 +69,10 @@
     "in_use_in": [
       "Map"
     ]
+  },
+  "MAP_SUBWAY": {
+    "in_use_in": [
+      "Map"
+    ]
   }
 }

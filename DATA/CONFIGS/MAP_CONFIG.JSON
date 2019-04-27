@@ -54,5 +54,19 @@
       "final_lap_start": "MKS FINAL LAP START",
       "final_lap": "MKS FINAL LAP LOOP"
     }
+  },
+  "SUBWAY": {
+    "friendly_name": "MAP_SUBWAY",
+    "menu_sprite": "MAP_SUBWAY",
+    "model": "SUPERBELLSUBWAY",
+    "cubemap": "CUBEMAP_SUBWAY",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "cup": "DEMO_CUP",
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
   }
 }
