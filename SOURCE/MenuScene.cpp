@@ -54,7 +54,7 @@ void MenuScene::create2DObjects()
 
 	//Main menu objects
 	m_background = new ImageGO2D("MAIN_MENU_TEMP");
-	m_state_desc = new Text2D("", true);
+	m_state_desc = new Text2D("", Text2D::MIDDLE);
 	m_state_desc->SetPos(Vector2(498, 620));
 	m_state_desc->SetColour(Colors::Black);
 	m_state_desc->SetScale(0.5f);

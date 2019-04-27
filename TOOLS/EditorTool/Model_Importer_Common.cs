@@ -12,6 +12,7 @@ namespace EditorTool
         ENGINE_MESH,
         MATERIAL,
         CONFIG,
+        METALLIC_CONFIG,
         COLLMAP,
         IMPORTER_CONFIG
     }
@@ -29,6 +30,7 @@ namespace EditorTool
         private string config_file_name = "";
         private string collmap_file_name = "";
         private string importer_config_file_name = "";
+        private string metallic_config_file_name = "";
         private string asset_name = "";
 
         private bool did_set_paths = false;
@@ -44,6 +46,7 @@ namespace EditorTool
             config_file_name = file_prelude + ".JSON";
             collmap_file_name = file_prelude + ".COLLMAP";
             importer_config_file_name = import_directory + "IMPORTER_CONFIG.JSON";
+            metallic_config_file_name = import_directory + "REFLECTION.ThICC";
 
             did_set_paths = true;
         }
@@ -72,6 +75,8 @@ namespace EditorTool
                     return collmap_file_name;
                 case importer_file.IMPORTER_CONFIG:
                     return importer_config_file_name;
+                case importer_file.METALLIC_CONFIG:
+                    return metallic_config_file_name;
             }
             return "";
         }
@@ -132,5 +137,23 @@ namespace EditorTool
             public int vertices;
         };
         public FunFacts import_stats;
+
+        //----
+        /* Extra JSON */
+
+        private string extra_json = "{ ";
+
+        public void addToExtraJson(string _add)
+        {
+            extra_json += _add;
+        }
+        public string getExtraJson()
+        {
+            if (extra_json == "")
+            {
+                return extra_json;
+            }
+            return extra_json + " }";
+        }
     }
 }

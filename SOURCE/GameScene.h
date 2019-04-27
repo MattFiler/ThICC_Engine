@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "AIScheduler.h"
 #include "MapInfo.h"
+#include "Skybox.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;

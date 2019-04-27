@@ -10,7 +10,7 @@ Ni 1.000000
 d 0.999999
 illum 2
 map_Kd dott.png
-Tr 0.000000
+Tr 0.000001
 map_Ks spec_placeholder.png
 map_Kn norm_placeholder.png
 norm norm_placeholder.png
@@ -29,7 +29,7 @@ Ni 1.000000
 d 0.999999
 illum 2
 map_Kd dott.png
-Tr 0.000000
+Tr 0.000001
 map_Ks spec_placeholder.png
 map_Kn norm_placeholder.png
 norm norm_placeholder.png
@@ -48,7 +48,7 @@ Ni 1.000000
 d 0.999999
 illum 2
 map_Kd ef_hatenas.png
-Tr 0.000000
+Tr 0.000001
 map_Ks spec_placeholder.png
 map_Kn norm_placeholder.png
 norm norm_placeholder.png

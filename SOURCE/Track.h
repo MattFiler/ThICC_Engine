@@ -81,7 +81,7 @@ public:
 	};
 
 	bool DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle, const float& _minAngle);
-	void SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall);
+	void SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall, const bool& _glider, const bool& _antigrav, const bool& _jump, const bool& _noai);
 
 	Vector3 getWaypointMiddle(int index);
 

@@ -19,11 +19,15 @@ namespace EditorTool
         JObject model_material_config = new JObject();
         List<JToken> material_tokens = new List<JToken>();
         UsefulFunctions common_functions = new UsefulFunctions();
-        JToken extra_json = JToken.Parse("{}");
+        JToken extra_json;
+        bool editing;
+        List<List<double>> glider_track = new List<List<double>>();
         Model_Importer_Common importer_common;
-        public Model_Importer_MaterialList(Model_Importer_Common _importer_conf)
+        public Model_Importer_MaterialList(Model_Importer_Common _importer_conf, bool is_editing = false)
         {
+            editing = is_editing;
             importer_common = _importer_conf;
+            extra_json = JToken.Parse(importer_common.getExtraJson());
             model_material_config = JObject.Parse(File.ReadAllText(importer_common.fileName(importer_file.IMPORTER_CONFIG)));
             InitializeComponent();
         }
@@ -44,6 +48,48 @@ namespace EditorTool
                 editMaterial.Location = new Point(272, 125);
                 autoDetect.Visible = false;
             }
+
+            //If we're editing, check for depreciated configs
+            if (editing)
+            {
+                //Check to see if we have index update
+                if (material_tokens.ElementAt(0)["ThICC_INDEX"] == null)
+                {
+                    //Get all materials in order
+                    string[] obj_file = File.ReadAllLines(importer_common.fileName(importer_file.OBJ_MODEL));
+                    List<string> material_names = new List<string>();
+                    foreach (string line in obj_file)
+                    {
+                        if (line.Length > 7 && line.Substring(0, 7) == "usemtl ")
+                        {
+                            material_names.Add(line.Substring(7));
+                        }
+                    }
+                    //Push our order to the config file
+                    foreach (var material_object in model_material_config)
+                    {
+                        int index = 0;
+                        foreach (string material in material_names)
+                        {
+                            if (material == material_object.Key)
+                            {
+                                break;
+                            }
+                            index++;
+                        }
+                        model_material_config[material_object.Key]["ThICC_INDEX"] = index;
+                    }
+                }
+                //Check to see if we have metalness config update
+                if (material_tokens.ElementAt(0)["ThICC_METALLIC"] == null)
+                {
+                    //Push our order to the config file
+                    foreach (var material_object in model_material_config)
+                    {
+                        model_material_config[material_object.Key]["ThICC_METALLIC"] = false;
+                    }
+                }
+            }
         }
 
         private void materialList_SelectedIndexChanged(object sender, EventArgs e)
@@ -57,10 +103,33 @@ namespace EditorTool
 
             //Update previews of config - this is kinda hard coded, needs to be updated if enum is changed (UI!)
             JToken this_token = material_tokens.ElementAt(index);
-            isTrack.Checked = this_token["ThICC_COLLISION"]["0"].Value<bool>();
-            isOffTrack.Checked = this_token["ThICC_COLLISION"]["1"].Value<bool>();
-            isBoostPad.Checked = this_token["ThICC_COLLISION"]["2"].Value<bool>();
-            isWall.Checked = this_token["ThICC_COLLISION"]["3"].Value<bool>();
+            if (this_token["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()] != null) //supporting depreciated configs
+            {
+                isTrack.Checked = (this_token["ThICC_COLLISION"][((int)CollisionType.ON_TRACK).ToString()].Value<bool>() | this_token["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()].Value<bool>());
+            }
+            else
+            {
+                isTrack.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.ON_TRACK).ToString()].Value<bool>();
+            }
+            isOffTrack.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.OFF_TRACK).ToString()].Value<bool>();
+            isBoostPad.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.BOOST_PAD).ToString()].Value<bool>();
+            if (this_token["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()] != null) //supporting depreciated configs
+            {
+                isAntiGravPad.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()].Value<bool>();
+            }
+            else
+            {
+                isAntiGravPad.Checked = false;
+            }
+            if (this_token["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()] != null) //supporting depreciated configs
+            {
+                isJumpPad.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()].Value<bool>();
+            }
+            else
+            {
+                isJumpPad.Checked = false;
+            }
+            isWall.Checked = this_token["ThICC_COLLISION"][((int)CollisionType.WALL).ToString()].Value<bool>();
 
             //Try find and show our material preview.
             common_functions.loadMaterialPreview(this_token, materialPreview, importer_common.importDir());
@@ -97,16 +166,12 @@ namespace EditorTool
 
             //------
 
-            //If we're in edit mode, delete the old files
+            //If we're in edit mode, delete the old mesh
             if (importer_common.getEditMode())
             {
                 if (File.Exists(importer_common.fileName(importer_file.ENGINE_MESH)))
                 {
                     File.Delete(importer_common.fileName(importer_file.ENGINE_MESH));
-                }
-                if (File.Exists(importer_common.fileName(importer_file.COLLMAP)))
-                {
-                    File.Delete(importer_common.fileName(importer_file.COLLMAP));
                 }
             }
 
@@ -138,8 +203,8 @@ namespace EditorTool
                 //Parse MTL from JSON
                 foreach (JProperty material_prop in model_material_config[this_material_config.Key])
                 {
-                    //Ignore engine config
-                    if (material_prop.Name != "ThICC_COLLISION")
+                    //Ignore engine configs
+                    if (!(material_prop.Name.Length > 6 && material_prop.Name.Substring(0, 6) == "ThICC_"))
                     {
                         //Auto calculated alpha
                         if (material_prop.Name == "d")
@@ -204,6 +269,32 @@ namespace EditorTool
 
             //------
 
+            //Create metal config
+            List<bool> metal_config = new List<bool>();
+            for (int i = 0; i < model_material_config.Count + 1; i++)
+            {
+                foreach (var this_material_config in model_material_config)
+                {
+                    if (model_material_config[this_material_config.Key]["ThICC_INDEX"].Value<int>() == i)
+                    {
+                        metal_config.Add(model_material_config[this_material_config.Key]["ThICC_METALLIC"].Value<bool>());
+                        break;
+                    }
+                }
+            }
+            
+            //Output metal config
+            using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.METALLIC_CONFIG), FileMode.Create)))
+            {
+                writer.Write(metal_config.Count);
+                foreach (bool is_metal in metal_config)
+                {
+                    writer.Write(is_metal); 
+                }
+            }
+
+            //------
+
             //Make sure our MTL is uncommented in the OBJ
             int obj_index = 0;
             foreach (string line in obj_file)
@@ -219,7 +310,7 @@ namespace EditorTool
                 obj_index++;
             }
             File.WriteAllLines(importer_common.fileName(importer_file.OBJ_MODEL), obj_file);
-
+            
             //------
 
             //Delete old DDS materials and convert new ones
@@ -275,17 +366,8 @@ namespace EditorTool
 
             //------
 
-            //Vertex operations
-            if (!handleVertexOperations())
-            {
-                //It would be nicer to handle this in Model_Importer_AssetSelector before we get this late into the import process.
-                MessageBox.Show("An error occured while generating collision data for this model.\nMake sure the mesh is triangulated.", "Collision error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            //------
-
             //Create JSON data
-            JToken asset_json = extra_json;
+            JToken asset_json = JToken.Parse("{}");
             asset_json["asset_name"] = importer_common.modelName();
             asset_json["asset_type"] = "Models";
             asset_json["model_type"] = (int)importer_common.getModelType();
@@ -317,7 +399,7 @@ namespace EditorTool
                     }
                     foreach (JToken data in model_blender_data["waypoints"])
                     {
-                        waypoint_array.Add(data["pos"]);
+                        waypoint_array.Add(data);
                     }
                     foreach (JToken data in model_blender_data["spawns"])
                     {
@@ -331,12 +413,36 @@ namespace EditorTool
                     {
                         itembox_array.Add(data);
                     }
+                    foreach (JArray data in model_blender_data["glider_track"])
+                    {
+                        List<double> glider_track_array = new List<double>();
+                        foreach (var vert in data)
+                        {
+                            glider_track_array.Add(vert[0].Value<double>());
+                            glider_track_array.Add(vert[1].Value<double>());
+                            glider_track_array.Add(vert[2].Value<double>());
+                        }
+                        glider_track.Add(glider_track_array);
+                    }
                 }
                 asset_json["map_cameras"] = camera_array;
                 asset_json["map_waypoints"] = waypoint_array;
                 asset_json["map_spawnpoints"] = spawnpoint_array;
                 asset_json["map_finishline"] = finishline_array;
                 asset_json["map_itemboxes"] = itembox_array;
+            }
+
+            //Vertex operations
+            if (!handleVertexOperations())
+            {
+                //It would be nicer to handle this in Model_Importer_AssetSelector before we get this late into the import process.
+                MessageBox.Show("An error occured while generating collision data for this model.\nMake sure the mesh is triangulated.", "Collision error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            //Add any extra JSON
+            foreach (var data in extra_json)
+            {
+                asset_json.Last.AddAfterSelf(data);
             }
 
             //Save JSON data if not in edit mode
@@ -346,7 +452,7 @@ namespace EditorTool
             }
 
             //------
-            
+
             //Comment out mtllib in OBJ for asset previewer
             obj_index = 0;
             foreach (string line in obj_file)
@@ -435,10 +541,13 @@ namespace EditorTool
                     JToken collision_config = model_material_config[line.Substring(7)]["ThICC_COLLISION"];
                     for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
                     {
-                        if (collision_config[i.ToString()].Value<bool>())
+                        if (collision_config[i.ToString()] != null) //support for depreciated configs
                         {
-                            collision_enabled = true;
-                            collision_type = (CollisionType)i;
+                            if (collision_config[i.ToString()].Value<bool>())
+                            {
+                                collision_enabled = true;
+                                collision_type = (CollisionType)i;
+                            }
                         }
                     }
                 }
@@ -591,7 +700,7 @@ namespace EditorTool
                 all_verts.Add(new List<float>());
             }
 
-            //Compile collision data
+            //Compile collision data from model
             int vert_index_i = 0;
             foreach (List<List<int>> these_face_indexes in model_face_indexes)
             {
@@ -606,7 +715,41 @@ namespace EditorTool
                 vert_index_i++;
             }
 
-            //Output vertex data as a binary file
+            //If we have glider data, add that
+            if (glider_track.Count != 0)
+            {
+                foreach (List<double> glider_tri in glider_track)
+                {
+                    foreach (double vert in glider_tri)
+                    {
+                        all_verts.ElementAt((int)CollisionType.GLIDER_TRACK).Add(Convert.ToSingle(vert));
+                    }
+                }
+            }
+            else if (editing)
+            {
+                using (BinaryReader reader = new BinaryReader(File.Open(importer_common.fileName(importer_file.COLLMAP), FileMode.Open)))
+                {
+                    int collision_count = reader.ReadInt32();
+                    reader.BaseStream.Position = sizeof(int) + (sizeof(int) * (int)CollisionType.GLIDER_TRACK);
+                    int glider_vert_count = reader.ReadInt32();
+                    if (glider_vert_count > 0) //check we actually have a glider track on this map
+                    {
+                        int offset = 0;
+                        reader.BaseStream.Position = sizeof(int);
+                        for (int i = 0; i < (int)CollisionType.GLIDER_TRACK; i++) {
+                            offset += reader.ReadInt32();
+                        }
+                        reader.BaseStream.Position = (sizeof(int) * (collision_count + 1)) + (offset * sizeof(float));
+                        for (int i = 0; i < glider_vert_count; i++)
+                        {
+                            all_verts.ElementAt((int)CollisionType.GLIDER_TRACK).Add(reader.ReadSingle());
+                        }
+                    }
+                }
+            }
+
+            //Output vertex data as a binary file (overwrite old one if it exists)
             using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.COLLMAP), FileMode.Create)))
             {
                 writer.Write(all_verts.Count); //Number of collision types to split to
@@ -701,8 +844,16 @@ namespace EditorTool
                 //All materials typically work best when we can see them :)
                 this_token["Kd"] = "1.000000 1.000000 1.000000";
 
-                //Materials starting with "ef_" are usually boost pads
-                if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_")
+                //Materials starting with "ef_" are usually boost/antigrav/jump pads
+                if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_GLIDEBOARD")
+                {
+                    setCollisionParam(CollisionType.JUMP_PAD, this_token);
+                }
+                if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_GRAVITYBOARD")
+                {
+                    setCollisionParam(CollisionType.ANTIGRAV_PAD, this_token);
+                }
+                if (this_material_config.Key.ToUpper().Substring(0, 3) == "EF_DASHBOARD")
                 {
                     setCollisionParam(CollisionType.BOOST_PAD, this_token);
                 }

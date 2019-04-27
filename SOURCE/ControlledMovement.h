@@ -2,6 +2,7 @@
 #include "PhysModel.h"
 #include "AnimationController.h"
 #include "KeybindManager.h"
+#include "GameFilepaths.h"
 
 class ControlledMovement
 {
@@ -29,8 +30,11 @@ public:
 	void SetMoveSpeed(float _newSpeed) { m_moveSpeed = _newSpeed; };
 	void SetTurnSpeed(float _newTurn) { m_turnSpeed = _newTurn; };
 
+	void SetEnabled(bool _enabled) { m_enabled = _enabled; };
+
 private:
 	KeybindManager m_keybind;
+	GameFilepaths m_filepath;
 
 	void GetControllerInput();
 	void ProcessInputFlags();
@@ -42,21 +46,24 @@ private:
 	AnimationController* m_animMesh = nullptr;
 	Vector3 m_targetAnimRotOffset = Vector3::Zero;
 
+	bool m_enabled = true;
 	float m_acceleration = 0;
 	bool m_isTurning = false;
 	double m_timeTurning = 0;
+
+	//Values populated from configs at runtime
 	double m_timeForMaxTurn = 5;
 	double m_timeForMaxDrift = 4;
-	float m_driftBoostMultiplier = 0.5f;
+	float m_driftBoostMultiplier = 0.3f;
+	float m_moveSpeed = 50;
+	float m_turnSpeed = 65;
+	//--
 
 	bool m_left = false;
 	bool m_right = false;
 	bool m_drifting = false;
 	bool m_startDrift = false;
 	bool m_endDrift = false;
-
-	float m_moveSpeed = 50;
-	float m_turnSpeed = 65;
 
 	bool m_driftingRight = false;
 

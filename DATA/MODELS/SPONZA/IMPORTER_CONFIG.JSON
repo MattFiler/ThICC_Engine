@@ -27,7 +27,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 0,
+    "ThICC_METALLIC": false
   },
   "sp_svod_kapitel": {
     "newmtl": "sp_svod_kapitel",
@@ -57,7 +59,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 2,
+    "ThICC_METALLIC": false
   },
   "sp_01_stub_baza_": {
     "newmtl": "sp_01_stub_baza_",
@@ -84,7 +88,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 3,
+    "ThICC_METALLIC": false
   },
   "sp_01_stub_kut": {
     "newmtl": "sp_01_stub_kut",
@@ -114,7 +120,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 4,
+    "ThICC_METALLIC": false
   },
   "sp_00_stup": {
     "newmtl": "sp_00_stup",
@@ -144,7 +152,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 5,
+    "ThICC_METALLIC": false
   },
   "sp_01_stub_baza": {
     "newmtl": "sp_01_stub_baza",
@@ -174,7 +184,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 6,
+    "ThICC_METALLIC": false
   },
   "sp_00_luk_mal1": {
     "newmtl": "sp_00_luk_mal1",
@@ -204,7 +216,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 7,
+    "ThICC_METALLIC": false
   },
   "sp_01_stub": {
     "newmtl": "sp_01_stub",
@@ -234,7 +248,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 8,
+    "ThICC_METALLIC": false
   },
   "sp_01_stup": {
     "newmtl": "sp_01_stup",
@@ -262,7 +278,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 9,
+    "ThICC_METALLIC": false
   },
   "sp_vijenac": {
     "newmtl": "sp_vijenac",
@@ -292,7 +310,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 11,
+    "ThICC_METALLIC": false
   },
   "sp_00_svod": {
     "newmtl": "sp_00_svod",
@@ -322,7 +342,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 12,
+    "ThICC_METALLIC": false
   },
   "sp_02_reljef": {
     "newmtl": "sp_02_reljef",
@@ -352,7 +374,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 15,
+    "ThICC_METALLIC": false
   },
   "sp_01_luk_a": {
     "newmtl": "sp_01_luk_a",
@@ -382,7 +406,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 16,
+    "ThICC_METALLIC": false
   },
   "sp_zid_vani": {
     "newmtl": "sp_zid_vani",
@@ -412,7 +438,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 18,
+    "ThICC_METALLIC": false
   },
   "sp_01_stup_baza": {
     "newmtl": "sp_01_stup_baza",
@@ -442,7 +470,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 27,
+    "ThICC_METALLIC": false
   },
   "sp_00_zid": {
     "newmtl": "sp_00_zid",
@@ -472,7 +502,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 30,
+    "ThICC_METALLIC": false
   },
   "sp_00_prozor": {
     "newmtl": "sp_00_prozor",
@@ -502,7 +534,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 31,
+    "ThICC_METALLIC": false
   },
   "sp_00_vrata_krug": {
     "newmtl": "sp_00_vrata_krug",
@@ -532,7 +566,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 32,
+    "ThICC_METALLIC": false
   },
   "sp_00_pod": {
     "newmtl": "sp_00_pod",
@@ -562,7 +598,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 34,
+    "ThICC_METALLIC": false
   },
   "sp_00_vrata_kock": {
     "newmtl": "sp_00_vrata_kock",
@@ -592,6 +630,8 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 36,
+    "ThICC_METALLIC": false
   }
 }

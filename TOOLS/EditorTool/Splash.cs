@@ -144,6 +144,13 @@ namespace EditorTool
             }
         }
 
+        /* Open asset group preselect */
+        private void openMapManager_Click(object sender, EventArgs e)
+        {
+            Asset_Manager_Preselect assetManager = new Asset_Manager_Preselect();
+            assetManager.Show();
+        }
+
         /* Open UI Editor */
         private void openUiEditor_Click(object sender, EventArgs e)
         {
@@ -158,80 +165,11 @@ namespace EditorTool
             keybindeditor.Show();
         }
 
-        private void groupBox4_Enter(object sender, EventArgs e)
+        /* Open Engine Configs */
+        private void openEngineConfigs_Click(object sender, EventArgs e)
         {
-
-        }
-
-        /* On Load */
-        private void Splash_Load(object sender, EventArgs e)
-        {
-            /* LOAD DEBUG CONFIGURATIONS */
-            REFRESH_DEBUG_LIST();
-            JToken game_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/GAME_CORE.JSON"));
-            DEBUG_DEFAULTTRACK.SelectedItem = game_config["default_track"].Value<string>();
-            DEBUG_PLAYERCOUNT.Value = game_config["player_count"].Value<decimal>();
-        }
-
-        /* SAVE DEBUG CONFIG */
-        private void DEBUG_SAVE_Click(object sender, EventArgs e)
-        {
-            if (DEBUG_DEFAULTTRACK.SelectedIndex == -1)
-            {
-                MessageBox.Show("No track selected!", "Cannot save.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            JToken game_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/GAME_CORE.JSON"));
-            game_config["default_track"] = DEBUG_DEFAULTTRACK.SelectedItem.ToString();
-            game_config["player_count"] = DEBUG_PLAYERCOUNT.Value;
-            File.WriteAllText("DATA/CONFIGS/GAME_CORE.JSON", game_config.ToString(Formatting.Indented));
-            MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        /* UPDATE DEBUG LEVEL CHOICES */
-        void REFRESH_DEBUG_LIST()
-        {
-            string[] levels = Directory.GetFiles(common_functions.getFolder(AssetType.MODEL), "*.SDKMESH", SearchOption.AllDirectories);
-            DEBUG_DEFAULTTRACK.Items.Clear();
-            foreach (string level in levels)
-            {
-                string file_name = Path.GetFileName(level);
-                if (file_name.Length > 14 && file_name.Substring(file_name.Length - 13).ToUpper() == "DEBUG.SDKMESH")
-                {
-                    continue; //Skip over collision debug meshes
-                }
-                JToken game_config = JToken.Parse(File.ReadAllText(common_functions.getFolder(AssetType.MODEL) + Path.GetFileNameWithoutExtension(level) + "/" + Path.GetFileNameWithoutExtension(level) + ".JSON"));
-                if (game_config["model_type"] == null || game_config["model_type"].Type != JTokenType.Integer || game_config["model_type"].Value<int>() != (int)ModelType.MAP)
-                {
-                    continue;
-                }
-                DEBUG_DEFAULTTRACK.Items.Add(Path.GetFileNameWithoutExtension(level));
-            }
-        }
-
-        /* Open Map Manager */
-        private void openMapManager_Click(object sender, EventArgs e)
-        {
-            openManager(AssetCompType.MAP);
-        }
-
-        /* Open Vehicle Manager */
-        private void openVehicleManager_Click(object sender, EventArgs e)
-        {
-            openManager(AssetCompType.VEHICLE);
-        }
-
-        /* Open Character Manager */
-        private void openCharacterManager_Click(object sender, EventArgs e)
-        {
-            openManager(AssetCompType.CHARACTER);
-        }
-
-        /* Open A Manager */
-        private void openManager(AssetCompType type)
-        {
-            Asset_Comp_Manager manager = new Asset_Comp_Manager(type);
-            manager.Show();
+            Game_Config_Preselect engineConfigs = new Game_Config_Preselect();
+            engineConfigs.Show();
         }
 
         /* Open VS Project */
@@ -355,12 +293,25 @@ namespace EditorTool
             importer.Show();
         }
 
-        private void reloadDebugList_Click(object sender, EventArgs e)
+
+
+
+
+
+        private void Splash_Load(object sender, EventArgs e)
         {
-            REFRESH_DEBUG_LIST();
         }
 
+        private void DEBUG_SAVE_Click(object sender, EventArgs e)
+        {
+        }
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
 
+        }
+        private void reloadDebugList_Click(object sender, EventArgs e)
+        {
+        }
         private void debug_button_Click(object sender, EventArgs e)
         {
 
@@ -372,6 +323,12 @@ namespace EditorTool
         private void button2_Click(object sender, EventArgs e)
         {
 
+        }
+        private void openVehicleManager_Click(object sender, EventArgs e)
+        {
+        }
+        private void openCharacterManager_Click(object sender, EventArgs e)
+        {
         }
     }
 }

@@ -30,7 +30,7 @@
     <RootNamespace>ThICC_Engine</RootNamespace>
     <ProjectGuid>{8d6aa92b-b106-4a67-9b1e-b93443577920}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <ProjectName>ThICC_Engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -323,6 +323,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ControlledMovement.h" />
+    <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="DebugMarker.h" />
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="DebugText.h" />
@@ -393,6 +394,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="ControlledMovement.cpp" />
+    <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="DebugMarker.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="DeviceResourcesPC.cpp" />

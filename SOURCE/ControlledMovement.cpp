@@ -2,9 +2,22 @@
 #include "ControlledMovement.h"
 #include "InputData.h"
 #include "GameStateData.h"
+#include <json.hpp>
+using json = nlohmann::json;
 
 ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationController* _animMesh) : m_physModel(_physModel), m_animMesh(_animMesh)
 {
+	//movement config
+	std::ifstream i(m_filepath.generateFilepath("PLAYER_CONTROLLER_CONFIG", m_filepath.CONFIG));
+	json movement_config;
+	movement_config << i;
+
+	//populate values
+	m_timeForMaxTurn = movement_config["time_for_max_turn"];
+	m_timeForMaxDrift = movement_config["time_for_max_drift"];
+	m_driftBoostMultiplier = movement_config["drift_boost_multiplier"];
+	m_moveSpeed = movement_config["movement_speed"];
+	m_turnSpeed = movement_config["turning_speed"];
 }
 
 void ControlledMovement::Tick()
@@ -91,11 +104,20 @@ void ControlledMovement::GetControllerInput()
 
 void ControlledMovement::ProcessInputFlags()
 {
+	if (!m_enabled)
+	{
+		m_animMesh->Update(m_physModel->GetWorld(), m_targetAnimRotOffset);
+		return;
+	}
+
 	Vector3 forwardMove = m_moveSpeed * m_physModel->GetWorld().Forward();
 	Vector3 rightMove = m_turnSpeed * m_physModel->GetWorld().Right();
 	Vector3 forwardComponent = Vector3::Zero;
 	Vector3 turnComponent = Vector3::Zero;
 	float driftMultiplier = 1;
+
+	//ToDo: add in rumble here for controllers dependant on action (drifiting, on grass, etc)
+	//Locator::getID()->m_gamepad->SetVibration(m_playerID, 0.1, 0.1);
 
 	Matrix rotMove = Matrix::CreateRotationY(m_physModel->GetYaw());
 	forwardMove = Vector3::Transform(forwardMove, rotMove);
@@ -231,7 +253,7 @@ void ControlledMovement::EndDrift()
 	Vector3 test = m_physModel->GetWorld().Forward();
 	if (m_timeTurning > m_timeForMaxDrift / 3)
 	{
-		float multiplier = 1.0f + ((m_timeTurning / m_timeForMaxDrift)*m_driftBoostMultiplier);
+		float multiplier = 1.0f + ((m_timeTurning / m_timeForMaxDrift));
 		multiplier *= m_physModel->getVelocity().Length();
 		Vector3 direction = m_physModel->GetWorld().Forward();
 		m_physModel->setVelocity(direction * multiplier);

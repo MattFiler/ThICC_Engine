@@ -37,10 +37,10 @@
             // 
             // isMap
             // 
-            this.isMap.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.isMap.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.isMap.Location = new System.Drawing.Point(12, 12);
             this.isMap.Name = "isMap";
-            this.isMap.Size = new System.Drawing.Size(233, 43);
+            this.isMap.Size = new System.Drawing.Size(270, 31);
             this.isMap.TabIndex = 0;
             this.isMap.Text = "Map";
             this.isMap.UseVisualStyleBackColor = true;
@@ -48,10 +48,10 @@
             // 
             // isProp
             // 
-            this.isProp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.isProp.Location = new System.Drawing.Point(12, 159);
+            this.isProp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.isProp.Location = new System.Drawing.Point(12, 123);
             this.isProp.Name = "isProp";
-            this.isProp.Size = new System.Drawing.Size(233, 43);
+            this.isProp.Size = new System.Drawing.Size(270, 31);
             this.isProp.TabIndex = 1;
             this.isProp.Text = "Prop";
             this.isProp.UseVisualStyleBackColor = true;
@@ -59,10 +59,10 @@
             // 
             // isItem
             // 
-            this.isItem.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.isItem.Location = new System.Drawing.Point(12, 61);
+            this.isItem.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.isItem.Location = new System.Drawing.Point(12, 49);
             this.isItem.Name = "isItem";
-            this.isItem.Size = new System.Drawing.Size(233, 43);
+            this.isItem.Size = new System.Drawing.Size(270, 31);
             this.isItem.TabIndex = 2;
             this.isItem.Text = "Item";
             this.isItem.UseVisualStyleBackColor = true;
@@ -70,10 +70,10 @@
             // 
             // isPlayer
             // 
-            this.isPlayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.isPlayer.Location = new System.Drawing.Point(12, 110);
+            this.isPlayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.isPlayer.Location = new System.Drawing.Point(12, 86);
             this.isPlayer.Name = "isPlayer";
-            this.isPlayer.Size = new System.Drawing.Size(233, 43);
+            this.isPlayer.Size = new System.Drawing.Size(270, 31);
             this.isPlayer.TabIndex = 3;
             this.isPlayer.Text = "Player";
             this.isPlayer.UseVisualStyleBackColor = true;
@@ -83,7 +83,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(258, 213);
+            this.ClientSize = new System.Drawing.Size(296, 164);
             this.Controls.Add(this.isPlayer);
             this.Controls.Add(this.isItem);
             this.Controls.Add(this.isProp);

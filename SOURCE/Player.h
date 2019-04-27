@@ -89,6 +89,10 @@ private:
 	void movement();
 
 	void RespawnLogic();
+	void Respawn();
+	void MovePlayerToTrack();
+
+	void GlideLogic();
 
 	ThICC_RenderData* m_RD = nullptr;
 	KeybindManager m_keybind;
@@ -138,11 +142,37 @@ private:
 
 	std::unique_ptr<AnimationController> m_animationMesh = nullptr;
 
-	std::queue<Matrix> m_posHistory;
-	float m_posHistoryInterval = 0;
+	std::queue<Matrix> m_posHistory; // All the recorded player positions
+	float m_posHistoryInterval = 0.2f; // How often the players position will be recorded
+	int m_posHistoryLength = 4; // The length of the position queue
+	float m_noTrackRespawn = 1; // If not on any terrain, respawn after this time
+	float m_offTrackRespawn = 5; // If off the track, but still on terain, respawn after this time
+	float m_stationaryRespawn = 5; // If not moving for this long, repawn
+	float m_respawnSpeed = 30; // The speed at which lakitu moves the player back to the track
+
+	// Respawn
 	float m_posHistoryTimer = 0;
-	float m_posHistoryLength = 0;
 	float m_respawnDelay = 0;
+	float m_offTrackTimer = 0;
+	float m_offTerrainTimer = 0;
+	float m_timeSinceRespawn = 0;
+	float m_timeStationary = 0;
+	bool m_respawning = false;
+
+	Matrix m_respawnStart = Matrix::Identity;
+	Matrix m_respawnEnd = Matrix::Identity;
+	Vector3 m_respawnPos = Vector3::Zero;
+	float m_totalRespawnTime = 0;
+	float m_elapsedRespawnTime = 0;
+
+	bool m_preventRespawn = false; 
+
+	// Gliding
+	float m_minGlideDuration = 0.5f; // Gives the kart some time to leave the track so the glide doesn't immediatly end
+	float m_glideTimeElapsed = 0;
+	bool m_gliding = false;
+	float m_normalGrav = 0; // Set from physmodel on load
+	float m_glidingGrav = 5;
 
 	std::unique_ptr<MoveAI> m_ai = nullptr;
 };

@@ -152,6 +152,9 @@
     <ClCompile Include="RedShell.cpp">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClCompile>
+    <ClCompile Include="DebugConsole.cpp">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -352,6 +355,9 @@
     <ClInclude Include="AnimationModel.h" />
     <ClInclude Include="AnimationController.h">
       <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugConsole.h">
+      <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="RedShell.h">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>

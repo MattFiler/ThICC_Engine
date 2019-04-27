@@ -22,18 +22,25 @@
     /* Modular collision types for models */
     public enum CollisionType
     {
+        //NEW COLLISION TYPES SHOULD ALWAYS BE ADDED TO THE BOTTOM OF THE LIST ABOVE NUM_OF_TYPES!
         ON_TRACK,
         OFF_TRACK,
         BOOST_PAD,
         WALL,
+        GLIDER_TRACK, //This should be ignored in any manual configurations, it's an auto-generated property.
+        ANTIGRAV_PAD,
+        JUMP_PAD,
+        ON_TRACK_NO_AI,
 
-        NUM_OF_TYPES //must be last
+        NUM_OF_TYPES //must always be last
     }
     /* Types of available asset compilations */
     public enum AssetCompType
     {
         MAP,
         CHARACTER,
-        VEHICLE
+        VEHICLE,
+        ENGINE_FONT,
+        GLOBAL_SOUNDS
     }
 }

@@ -23,7 +23,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 3,
+    "ThICC_METALLIC": false
   },
   "kumo_eye_m": {
     "newmtl": "kumo_eye_m",
@@ -49,7 +51,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 1,
+    "ThICC_METALLIC": false
   },
   "thunder_m": {
     "newmtl": "thunder_m",
@@ -75,6 +79,8 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 0,
+    "ThICC_METALLIC": false
   }
 }

@@ -97,10 +97,14 @@ void Track::LoadCollision() {
 
 	// Populate the collsion map
 	using pair = std::pair<CollisionType, bool>;
-	m_validCollisions.insert(pair(CollisionType::BOOST_PAD, true));
-	m_validCollisions.insert(pair(CollisionType::OFF_TRACK, true));
 	m_validCollisions.insert(pair(CollisionType::ON_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::OFF_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::BOOST_PAD, true));
 	m_validCollisions.insert(pair(CollisionType::WALL, true));
+	m_validCollisions.insert(pair(CollisionType::GLIDER_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::ANTIGRAV_PAD, true));
+	m_validCollisions.insert(pair(CollisionType::JUMP_PAD, true));
+	m_validCollisions.insert(pair(CollisionType::ON_TRACK_NO_AI, true));
 }
 
 /* Unload the track collision info */
@@ -138,6 +142,7 @@ void Track::LoadVertexList(std::string _vertex_list)
 	int iterator = 0;
 	for (int len : length) {
 		if (len == 0) {
+			iterator++;
 			continue;
 		}
 		verts.at(iterator) = std::vector<float>(len);
@@ -170,6 +175,7 @@ void Track::LoadVertexList(std::string _vertex_list)
 			points_for_triangle[index] = verts.at(x)[i];
 			index++;
 		}
+		DebugText::print("Track collision group " + std::to_string(x) + " has " + std::to_string(verts.at(x).size()) + " entries.");
 	}
 
 	//Split triangles up into the grid
@@ -314,9 +320,9 @@ void Track::SplitTrisIntoGrid()
 	m_triGridX = static_cast<int>(ceilf(trackSize.x / m_triSegSize));
 	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
 	m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
-	m_triGridYX = m_triGridY*m_triGridX;
-	m_triGrid.reserve((m_triGridX+1)*(m_triGridY + 1)*(m_triGridZ + 1));
-	
+	m_triGridYX = m_triGridY * m_triGridX;
+	m_triGrid.reserve((m_triGridX + 1)*(m_triGridY + 1)*(m_triGridZ + 1));
+
 	for (int i = 0; i < m_triGrid.capacity(); i++)
 	{
 		std::vector<MeshTri*> vec;
@@ -420,12 +426,16 @@ void Track::Clamp(float& _num, float _min, float _max)
 	}
 }
 
-void Track::SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall)
+void Track::SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall, const bool& _glider, const bool& _antigrav, const bool& _jump, const bool& _noai)
 {
 	m_validCollisions[CollisionType::BOOST_PAD] = _boost;
 	m_validCollisions[CollisionType::OFF_TRACK] = _off;
 	m_validCollisions[CollisionType::ON_TRACK] = _on;
 	m_validCollisions[CollisionType::WALL] = _wall;
+	m_validCollisions[CollisionType::GLIDER_TRACK] = _glider;
+	m_validCollisions[CollisionType::ANTIGRAV_PAD] = _antigrav;
+	m_validCollisions[CollisionType::JUMP_PAD] = _jump;
+	m_validCollisions[CollisionType::ON_TRACK_NO_AI] = _noai;
 }
 
 Vector3 Track::getWaypointMiddle(int index)
