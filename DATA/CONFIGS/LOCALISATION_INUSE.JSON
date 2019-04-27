@@ -15,7 +15,9 @@
     "in_use_in": []
   },
   "MAP_DRIFTWAY": {
-    "in_use_in": []
+    "in_use_in": [
+      "Map"
+    ]
   },
   "MAP_RBR": {
     "in_use_in": []

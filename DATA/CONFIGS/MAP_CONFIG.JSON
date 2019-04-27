@@ -40,5 +40,19 @@
       "final_lap_start": "MKS FINAL LAP START",
       "final_lap": "MKS FINAL LAP LOOP"
     }
+  },
+  "DRAGON_DRIFTWAY": {
+    "friendly_name": "MAP_DRIFTWAY",
+    "menu_sprite": "DRAGON_DRIFTWAY_PREVIEW",
+    "model": "DRAGON_DRIFTWAY",
+    "cubemap": "SUNSUBMIXER",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "cup": "DEMO_CUP",
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
   }
 }
