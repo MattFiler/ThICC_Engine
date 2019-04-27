@@ -41,13 +41,13 @@ namespace EditorTool
             //Name and material preview
             materialName.Text = material_config["newmtl"].Value<string>();
             common_functions.loadMaterialPreview(material_config, materialPreview, this_model_folder);
-            
+
             //Ambient Colour (RGB)
             common_functions.loadMaterialColourPreview(material_config, "Ka", ambientColour);
 
             //Diffuse Colour (RGB)
             common_functions.loadMaterialColourPreview(material_config, "Kd", diffuseColour);
-            
+
             //Specular Colour (RGB)
             common_functions.loadMaterialColourPreview(material_config, "Ks", specularColour);
 
@@ -55,16 +55,16 @@ namespace EditorTool
             common_functions.loadMaterialColourPreview(material_config, "Ke", emissiveColour);
 
             //Transparency (1 = completely invisible)
-            transparencySlider.Value = Convert.ToInt32(material_config["Tr"].Value<float>() * 10);
+            transparencySlider.Value = Convert.ToInt32(Convert.ToSingle(material_config["Tr"].Value<string>()) * 10);
             transparencyValue.Text = sliderToString(transparencySlider, 10);
 
             //Shininess (0-1000)
-            specExSlider.Value = Convert.ToInt32(material_config["Ns"].Value<float>());
+            specExSlider.Value = Convert.ToInt32(Convert.ToSingle(material_config["Ns"].Value<string>()));
             specExValue.Text = sliderToString(specExSlider);
 
             //Specular on/off
-            hasSpec.Checked = (material_config["illum"].Value<int>() == 2);
-            
+            hasSpec.Checked = (material_config["illum"].Value<string>() == "2");
+
             //Diffuse Texture
             diffuseMap.Text = material_config["map_Kd"].Value<string>();
 
@@ -116,23 +116,50 @@ namespace EditorTool
             default_rma_vals[1] = roughnessSlider.Value;
             default_rma_vals[2] = ambientocclusionSlider.Value;
 
+            //Before getting to the engine config, update any depreciated stuff
+            if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()] == null)
+            {
+                material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()] = false;
+            }
+            if (material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()] == null)
+            {
+                material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()] = false;
+            }
+            if (material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()] == null)
+            {
+                material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()] = false;
+            }
+
             /* Engine Config */
             if (model_type == ModelType.MAP)
             {
                 //Collision config
-                if (material_config["ThICC_COLLISION"]["0"].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK).ToString()].Value<bool>())
                 {
                     onTrack.Checked = true;
                 }
-                else if (material_config["ThICC_COLLISION"]["1"].Value<bool>())
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()].Value<bool>())
+                {
+                    onTrack.Checked = true;
+                    onTrackNoAI.Checked = true;
+                }
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.OFF_TRACK).ToString()].Value<bool>())
                 {
                     offTrack.Checked = true;
                 }
-                else if (material_config["ThICC_COLLISION"]["2"].Value<bool>())
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.BOOST_PAD).ToString()].Value<bool>())
                 {
                     boostPad.Checked = true;
                 }
-                else if (material_config["ThICC_COLLISION"]["3"].Value<bool>())
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()].Value<bool>())
+                {
+                    antiGravPad.Checked = true;
+                }
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()].Value<bool>())
+                {
+                    jumpPad.Checked = true;
+                }
+                else if (material_config["ThICC_COLLISION"][((int)CollisionType.WALL).ToString()].Value<bool>())
                 {
                     isWall.Checked = true;
                 }
@@ -146,6 +173,8 @@ namespace EditorTool
                 //Hide collision options for non-track models
                 collisionGroup.Visible = false;
             }
+            //Metallic
+            isMetallic.Checked = material_config["ThICC_METALLIC"].Value<bool>();
         }
 
         /* Collision selection */
@@ -155,12 +184,18 @@ namespace EditorTool
         }
         private void collisionCheckChanged(bool enabled)
         {
+            onTrackNoAI.Checked = false;
+            onTrackNoAI.Enabled = enabled;
             onTrack.Checked = enabled;
             onTrack.Enabled = enabled;
             offTrack.Checked = false;
             offTrack.Enabled = enabled;
             boostPad.Checked = false;
             boostPad.Enabled = enabled;
+            antiGravPad.Checked = false;
+            antiGravPad.Enabled = enabled;
+            jumpPad.Checked = false;
+            jumpPad.Enabled = enabled;
             isWall.Checked = false;
             isWall.Enabled = enabled;
         }
@@ -240,7 +275,7 @@ namespace EditorTool
             /* ^ this is now done later to save performance */
 
             //Transparency (1 = completely invisible)
-            material_config["Tr"] = (transparencySlider.Value / 10).ToString("0.000000");
+            material_config["Tr"] = (Convert.ToSingle(transparencySlider.Value) / 10.0f).ToString("0.000000");
 
             //Shininess (0-1000)
             material_config["Ns"] = specExSlider.Value.ToString("0.000000");
@@ -278,10 +313,16 @@ namespace EditorTool
             material_config["map_occlusionRoughnessMetallic"] = rma;
 
             //Collision config
-            material_config["ThICC_COLLISION"]["0"] = (inPlayableArea.Checked ? onTrack.Checked : false);
-            material_config["ThICC_COLLISION"]["1"] = (inPlayableArea.Checked ? offTrack.Checked : false);
-            material_config["ThICC_COLLISION"]["2"] = (inPlayableArea.Checked ? boostPad.Checked : false);
-            material_config["ThICC_COLLISION"]["3"] = (inPlayableArea.Checked ? isWall.Checked : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK).ToString()] = (inPlayableArea.Checked ? (onTrack.Checked ? !onTrackNoAI.Checked : false) : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()] = (inPlayableArea.Checked ? (onTrack.Checked ? onTrackNoAI.Checked : false) : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.OFF_TRACK).ToString()] = (inPlayableArea.Checked ? offTrack.Checked : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.BOOST_PAD).ToString()] = (inPlayableArea.Checked ? boostPad.Checked : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()] = (inPlayableArea.Checked ? antiGravPad.Checked : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()] = (inPlayableArea.Checked ? jumpPad.Checked : false);
+            material_config["ThICC_COLLISION"][((int)CollisionType.WALL).ToString()] = (inPlayableArea.Checked ? isWall.Checked : false);
+
+            //Metallic
+            material_config["ThICC_METALLIC"] = isMetallic.Checked;
 
             MessageBox.Show("Material edits saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             DialogResult = DialogResult.OK; 
@@ -297,7 +338,7 @@ namespace EditorTool
         /* Colour box to JSON data */
         private void colourToJSON(string key, PictureBox colour)
         {
-            material_config[key] = (colour.BackColor.R/255).ToString("0.000000") + " " + (colour.BackColor.G/255).ToString("0.000000") + " " + (colour.BackColor.B/255).ToString("0.000000");
+            material_config[key] = (Convert.ToSingle(colour.BackColor.R) / 255.0f).ToString("0.000000") + " " + (Convert.ToSingle(colour.BackColor.G) / 255.0f).ToString("0.000000") + " " + (Convert.ToSingle(colour.BackColor.B) / 255.0f).ToString("0.000000");
         }
         
         /* Copy new material to our model's directory */
@@ -326,7 +367,7 @@ namespace EditorTool
             temp_rma.Save(this_model_folder + rma_mat, ImageFormat.Png);
             return rma_mat;
         }
-
+        
 
 
         // stuff to be deleted
@@ -348,6 +389,9 @@ namespace EditorTool
         private void RMAMapBrowse_Click(object sender, EventArgs e)
         {
 
+        }
+        private void onTrack_CheckedChanged(object sender, EventArgs e)
+        {
         }
 
     }

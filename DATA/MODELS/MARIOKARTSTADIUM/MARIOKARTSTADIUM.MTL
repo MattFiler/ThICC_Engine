@@ -39,7 +39,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl ef_glideboard
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -58,7 +58,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl ef_gravityboard
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -172,7 +172,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_KabeShiro
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -191,7 +191,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_LightObj
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -210,7 +210,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_LightObj.002
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -229,7 +229,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_LightObj_NoBake
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -305,7 +305,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_PitYuka
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -324,7 +324,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_RoadOther
-Ns 94.000000
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -332,13 +332,13 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_roadother_alb.png
-map_Ks ufc_roadother_spm.png
-map_Kn ufc_roadother_nrm.png
-norm ufc_roadother_nrm.png
+map_Kd ufc_RoadOther_Alb.png
+map_Ks ufc_RoadOther_spm.png
+map_Kn ufc_RoadOther_nrm.png
+norm ufc_RoadOther_nrm.png
 Tr 0.000000
-map_Ke ufc_roadother_spm.png
-map_emissive ufc_roadother_spm.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -355,8 +355,8 @@ map_Kd ufc_RoadOther2_Alb.png
 map_Ks ufc_RoadOther2_spm.png
 map_Kn ufc_RoadOther2_nrm.png
 norm ufc_RoadOther2_nrm.png
-map_Ke ufc_roadother2_emm.png
-map_emissive ufc_roadother2_emm.png
+map_Ke ufc_RoadOther2_emm.png
+map_emissive ufc_RoadOther2_emm.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
@@ -370,13 +370,13 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_roadother2_alb.png
+map_Kd ufc_RoadOther2_Alb.png
 Tr 0.000000
-map_Ks ufc_roadother2_spm.png
-map_Kn ufc_roadother2_nrm.png
-norm ufc_roadother2_nrm.png
-map_Ke ufc_roadother2_emm.png
-map_emissive ufc_roadother2_emm.png
+map_Ks ufc_RoadOther2_spm.png
+map_Kn ufc_RoadOther2_nrm.png
+norm ufc_RoadOther2_nrm.png
+map_Ke ufc_RoadOther2_emm.png
+map_emissive ufc_RoadOther2_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -389,13 +389,13 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_roadother2_alb.png
+map_Kd ufc_RoadOther2_Alb.png
 Tr 0.000000
-map_Ks ufc_roadother2_spm.png
-map_Kn ufc_roadother2_nrm.png
-norm ufc_roadother2_nrm.png
-map_Ke ufc_roadother2_emm.png
-map_emissive ufc_roadother2_emm.png
+map_Ks ufc_RoadOther2_spm.png
+map_Kn ufc_RoadOther2_nrm.png
+norm ufc_RoadOther2_nrm.png
+map_Ke ufc_RoadOther2_emm.png
+map_emissive ufc_RoadOther2_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -685,7 +685,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_bench
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -723,7 +723,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_concrete_road
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -780,7 +780,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_kyokyaku_1
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -799,7 +799,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_kyokyaku_2
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -894,7 +894,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_nuki_4
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -951,7 +951,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_obj_3
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1008,7 +1008,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_road
-Ns 0.000000
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1016,7 +1016,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_road_alb.png
+map_Kd ufc_road_Alb.png
 map_Ks ufc_road_spm.png
 map_Kn ufc_road_nrm.png
 norm ufc_road_nrm.png
@@ -1035,11 +1035,11 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_road_alb.png
+map_Kd ufc_road_Alb.png
 Tr 0.000000
 map_Ks ufc_road_spm.png
-map_Kn ufc_road_mariokart_nrm.png
-norm ufc_road_mariokart_nrm.png
+map_Kn ufc_road_nrm.png
+norm ufc_road_nrm.png
 map_Ke ufc_road_emm.png
 map_emissive ufc_road_emm.png
 map_RMA rma_placeholder.png
@@ -1073,11 +1073,11 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_road_alb.png
+map_Kd ufc_road_Alb2.png
 Tr 0.000000
 map_Ks ufc_road_spm.png
-map_Kn ufc_road_mariokart_nrm.png
-norm ufc_road_mariokart_nrm.png
+map_Kn ufc_road_nrm.png
+norm ufc_road_nrm.png
 map_Ke ufc_road_emm.png
 map_emissive ufc_road_emm.png
 map_RMA rma_placeholder.png
@@ -1092,11 +1092,11 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ufc_road_alb.png
+map_Kd ufc_road_Alb2.png
 Tr 0.000000
 map_Ks ufc_road_spm.png
-map_Kn ufc_road_mariokart_nrm.png
-norm ufc_road_mariokart_nrm.png
+map_Kn ufc_road_nrm.png
+norm ufc_road_nrm.png
 map_Ke ufc_road_emm.png
 map_emissive ufc_road_emm.png
 map_RMA rma_placeholder.png
@@ -1122,28 +1122,28 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_shiba
-Ns 0.000000
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
-illum 0
-map_Kd ufc_siba_alb.png
+illum 2
+map_Kd ufc_siba_Alb.png
 Tr 0.000000
 map_Ks spec_placeholder.png
-map_Kn ufc_siba_nrm.png
-norm ufc_siba_nrm.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_signboard
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
-Kd 1.000000 1.000000 1.000000
+Kd 0.682353 0.682353 0.682353
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
@@ -1153,16 +1153,16 @@ map_Kd ufc_signboard_Alb.png
 map_Ks ufc_signboard_spm.png
 map_Kn ufc_signboard_nrm.png
 norm ufc_signboard_nrm.png
-map_Ke ufc_signboard_emm.png
-map_emissive ufc_signboard_emm.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
 Tr 0.000000
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_signboard_Emm
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
-Kd 1.000000 1.000000 1.000000
+Kd 0.615686 0.615686 0.615686
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
@@ -1170,9 +1170,9 @@ d 0.000000
 illum 2
 map_Kd ufc_signboard_Alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
+map_Ks ufc_signboard_spm.png
+map_Kn ufc_signboard_nrm.png
+norm ufc_signboard_nrm.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
@@ -1198,7 +1198,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_suna
-Ns 94.000000
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1210,7 +1210,7 @@ map_Kd ufc_suna_Alb.png
 map_Kn ufc_suna_nrm.png
 norm ufc_suna_nrm.png
 Tr 0.000000
-map_Ks ufc_suna_alb.png
+map_Ks spec_placeholder.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
@@ -1255,7 +1255,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_window_1
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1274,7 +1274,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl fc_window_2
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1283,7 +1283,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd ufc_window_1_Alb.png
-Tr 0.000000
+Tr 0.500000
 map_Ks spec_placeholder.png
 map_Kn norm_placeholder.png
 norm norm_placeholder.png

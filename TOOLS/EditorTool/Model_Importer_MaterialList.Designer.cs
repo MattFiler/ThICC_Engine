@@ -41,6 +41,8 @@
             this.configPreview = new System.Windows.Forms.GroupBox();
             this.isWall = new System.Windows.Forms.CheckBox();
             this.autoDetect = new System.Windows.Forms.Button();
+            this.isAntiGravPad = new System.Windows.Forms.CheckBox();
+            this.isJumpPad = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             this.configPreview.SuspendLayout();
             this.SuspendLayout();
@@ -56,9 +58,9 @@
             // 
             // editMaterial
             // 
-            this.editMaterial.Location = new System.Drawing.Point(272, 240);
+            this.editMaterial.Location = new System.Drawing.Point(272, 284);
             this.editMaterial.Name = "editMaterial";
-            this.editMaterial.Size = new System.Drawing.Size(94, 36);
+            this.editMaterial.Size = new System.Drawing.Size(94, 34);
             this.editMaterial.TabIndex = 2;
             this.editMaterial.Text = "Edit";
             this.editMaterial.UseVisualStyleBackColor = true;
@@ -98,9 +100,9 @@
             this.isTrack.AutoSize = true;
             this.isTrack.Location = new System.Drawing.Point(6, 19);
             this.isTrack.Name = "isTrack";
-            this.isTrack.Size = new System.Drawing.Size(65, 17);
+            this.isTrack.Size = new System.Drawing.Size(71, 17);
             this.isTrack.TabIndex = 15;
-            this.isTrack.Text = "Is Track";
+            this.isTrack.Text = "On Track";
             this.isTrack.UseVisualStyleBackColor = true;
             // 
             // isBoostPad
@@ -109,9 +111,9 @@
             this.isBoostPad.AutoSize = true;
             this.isBoostPad.Location = new System.Drawing.Point(6, 65);
             this.isBoostPad.Name = "isBoostPad";
-            this.isBoostPad.Size = new System.Drawing.Size(86, 17);
+            this.isBoostPad.Size = new System.Drawing.Size(75, 17);
             this.isBoostPad.TabIndex = 16;
-            this.isBoostPad.Text = "Is Boost Pad";
+            this.isBoostPad.Text = "Boost Pad";
             this.isBoostPad.UseVisualStyleBackColor = true;
             // 
             // isOffTrack
@@ -120,9 +122,9 @@
             this.isOffTrack.AutoSize = true;
             this.isOffTrack.Location = new System.Drawing.Point(6, 42);
             this.isOffTrack.Name = "isOffTrack";
-            this.isOffTrack.Size = new System.Drawing.Size(82, 17);
+            this.isOffTrack.Size = new System.Drawing.Size(71, 17);
             this.isOffTrack.TabIndex = 17;
-            this.isOffTrack.Text = "Is Off-Track";
+            this.isOffTrack.Text = "Off-Track";
             this.isOffTrack.UseVisualStyleBackColor = true;
             // 
             // shouldFlipUVs
@@ -139,13 +141,15 @@
             // 
             // configPreview
             // 
+            this.configPreview.Controls.Add(this.isJumpPad);
+            this.configPreview.Controls.Add(this.isAntiGravPad);
             this.configPreview.Controls.Add(this.isWall);
             this.configPreview.Controls.Add(this.isTrack);
             this.configPreview.Controls.Add(this.isBoostPad);
             this.configPreview.Controls.Add(this.isOffTrack);
-            this.configPreview.Location = new System.Drawing.Point(272, 125);
+            this.configPreview.Location = new System.Drawing.Point(272, 122);
             this.configPreview.Name = "configPreview";
-            this.configPreview.Size = new System.Drawing.Size(94, 109);
+            this.configPreview.Size = new System.Drawing.Size(94, 156);
             this.configPreview.TabIndex = 19;
             this.configPreview.TabStop = false;
             this.configPreview.Text = "Config";
@@ -154,11 +158,11 @@
             // 
             this.isWall.AutoCheck = false;
             this.isWall.AutoSize = true;
-            this.isWall.Location = new System.Drawing.Point(6, 88);
+            this.isWall.Location = new System.Drawing.Point(6, 134);
             this.isWall.Name = "isWall";
-            this.isWall.Size = new System.Drawing.Size(58, 17);
+            this.isWall.Size = new System.Drawing.Size(47, 17);
             this.isWall.TabIndex = 18;
-            this.isWall.Text = "Is Wall";
+            this.isWall.Text = "Wall";
             this.isWall.UseVisualStyleBackColor = true;
             // 
             // autoDetect
@@ -170,6 +174,28 @@
             this.autoDetect.Text = "Auto Detect";
             this.autoDetect.UseVisualStyleBackColor = true;
             this.autoDetect.Click += new System.EventHandler(this.autoDetect_Click);
+            // 
+            // isAntiGravPad
+            // 
+            this.isAntiGravPad.AutoCheck = false;
+            this.isAntiGravPad.AutoSize = true;
+            this.isAntiGravPad.Location = new System.Drawing.Point(6, 88);
+            this.isAntiGravPad.Name = "isAntiGravPad";
+            this.isAntiGravPad.Size = new System.Drawing.Size(77, 17);
+            this.isAntiGravPad.TabIndex = 19;
+            this.isAntiGravPad.Text = "Hover Pad";
+            this.isAntiGravPad.UseVisualStyleBackColor = true;
+            // 
+            // isJumpPad
+            // 
+            this.isJumpPad.AutoCheck = false;
+            this.isJumpPad.AutoSize = true;
+            this.isJumpPad.Location = new System.Drawing.Point(6, 111);
+            this.isJumpPad.Name = "isJumpPad";
+            this.isJumpPad.Size = new System.Drawing.Size(73, 17);
+            this.isJumpPad.TabIndex = 20;
+            this.isJumpPad.Text = "Jump Pad";
+            this.isJumpPad.UseVisualStyleBackColor = true;
             // 
             // Model_Importer_MaterialList
             // 
@@ -212,5 +238,7 @@
         private System.Windows.Forms.GroupBox configPreview;
         private System.Windows.Forms.Button autoDetect;
         private System.Windows.Forms.CheckBox isWall;
+        private System.Windows.Forms.CheckBox isJumpPad;
+        private System.Windows.Forms.CheckBox isAntiGravPad;
     }
 }

@@ -6,8 +6,9 @@ class TrackMagnet : public PhysModel
 public:
 	TrackMagnet(std::string _filename);
 	bool ShouldStickToTrack(Track& track);
-	void ResolveWallCollisions(Track& walls);
+	bool ResolveWallCollisions(Track& walls);
 	virtual void Tick() override { PhysModel::Tick(); };
+	virtual void Render() override;
 
 	void setDampenWallReflect(bool _toggle) { m_dampenWallReflect = _toggle; };
 
@@ -26,6 +27,7 @@ private:
 	float m_maxSnapSnep = 10; // The max distance to snap by each second
 
 	float m_maxAngle = 0.4; // The steepest angle that will be considered a viable floor collision
+	float m_minAngle = 0; // The minimum angle for a wall collision against track
 	float m_maxRotation = 5; // The maximum amount to rotate by each second
 
 	float gravityMultiplier = 35;

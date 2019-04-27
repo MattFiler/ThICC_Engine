@@ -36,6 +36,7 @@
             this.transparencySlider = new System.Windows.Forms.TrackBar();
             this.inPlayableArea = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.isMetallic = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.collisionGroup = new System.Windows.Forms.GroupBox();
             this.isWall = new System.Windows.Forms.RadioButton();
@@ -84,8 +85,11 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
+            this.antiGravPad = new System.Windows.Forms.RadioButton();
+            this.jumpPad = new System.Windows.Forms.RadioButton();
+            this.onTrackNoAI = new System.Windows.Forms.CheckBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transparencySlider)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -103,6 +107,8 @@
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialPreview
@@ -166,6 +172,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.isMetallic);
             this.groupBox1.Controls.Add(this.label15);
             this.groupBox1.Controls.Add(this.collisionGroup);
             this.groupBox1.Controls.Add(this.label4);
@@ -185,6 +192,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Properties";
             // 
+            // isMetallic
+            // 
+            this.isMetallic.AutoSize = true;
+            this.isMetallic.Location = new System.Drawing.Point(119, 201);
+            this.isMetallic.Name = "isMetallic";
+            this.isMetallic.Size = new System.Drawing.Size(73, 17);
+            this.isMetallic.TabIndex = 35;
+            this.isMetallic.Text = "Is Metallic";
+            this.isMetallic.UseVisualStyleBackColor = true;
+            // 
             // label15
             // 
             this.label15.AutoSize = true;
@@ -196,11 +213,10 @@
             // 
             // collisionGroup
             // 
-            this.collisionGroup.Controls.Add(this.isWall);
+            this.collisionGroup.Controls.Add(this.groupBox8);
+            this.collisionGroup.Controls.Add(this.groupBox3);
+            this.collisionGroup.Controls.Add(this.onTrackNoAI);
             this.collisionGroup.Controls.Add(this.inPlayableArea);
-            this.collisionGroup.Controls.Add(this.boostPad);
-            this.collisionGroup.Controls.Add(this.onTrack);
-            this.collisionGroup.Controls.Add(this.offTrack);
             this.collisionGroup.Location = new System.Drawing.Point(9, 62);
             this.collisionGroup.Name = "collisionGroup";
             this.collisionGroup.Size = new System.Drawing.Size(285, 133);
@@ -211,7 +227,7 @@
             // isWall
             // 
             this.isWall.AutoSize = true;
-            this.isWall.Location = new System.Drawing.Point(6, 110);
+            this.isWall.Location = new System.Drawing.Point(158, 17);
             this.isWall.Name = "isWall";
             this.isWall.Size = new System.Drawing.Size(46, 17);
             this.isWall.TabIndex = 30;
@@ -222,7 +238,7 @@
             // boostPad
             // 
             this.boostPad.AutoSize = true;
-            this.boostPad.Location = new System.Drawing.Point(6, 88);
+            this.boostPad.Location = new System.Drawing.Point(6, 17);
             this.boostPad.Name = "boostPad";
             this.boostPad.Size = new System.Drawing.Size(74, 17);
             this.boostPad.TabIndex = 29;
@@ -233,23 +249,24 @@
             // onTrack
             // 
             this.onTrack.AutoSize = true;
-            this.onTrack.Location = new System.Drawing.Point(6, 42);
+            this.onTrack.Location = new System.Drawing.Point(6, 17);
             this.onTrack.Name = "onTrack";
-            this.onTrack.Size = new System.Drawing.Size(139, 17);
+            this.onTrack.Size = new System.Drawing.Size(70, 17);
             this.onTrack.TabIndex = 27;
             this.onTrack.TabStop = true;
-            this.onTrack.Text = "Standard Track Surface";
+            this.onTrack.Text = "On Track";
             this.onTrack.UseVisualStyleBackColor = true;
+            this.onTrack.CheckedChanged += new System.EventHandler(this.onTrack_CheckedChanged);
             // 
             // offTrack
             // 
             this.offTrack.AutoSize = true;
-            this.offTrack.Location = new System.Drawing.Point(6, 65);
+            this.offTrack.Location = new System.Drawing.Point(82, 17);
             this.offTrack.Name = "offTrack";
-            this.offTrack.Size = new System.Drawing.Size(110, 17);
+            this.offTrack.Size = new System.Drawing.Size(70, 17);
             this.offTrack.TabIndex = 28;
             this.offTrack.TabStop = true;
-            this.offTrack.Text = "Off-Track Surface";
+            this.offTrack.Text = "Off-Track";
             this.offTrack.UseVisualStyleBackColor = true;
             // 
             // label4
@@ -276,9 +293,9 @@
             this.hasSpec.AutoSize = true;
             this.hasSpec.Location = new System.Drawing.Point(9, 201);
             this.hasSpec.Name = "hasSpec";
-            this.hasSpec.Size = new System.Drawing.Size(88, 17);
+            this.hasSpec.Size = new System.Drawing.Size(104, 17);
             this.hasSpec.TabIndex = 34;
-            this.hasSpec.Text = "Enable Gloss";
+            this.hasSpec.Text = "Enable Specular";
             this.hasSpec.UseVisualStyleBackColor = true;
             // 
             // label6
@@ -287,9 +304,9 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(6, 230);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(60, 13);
+            this.label6.Size = new System.Drawing.Size(49, 13);
             this.label6.TabIndex = 18;
-            this.label6.Text = "Glossyness";
+            this.label6.Text = "Specular";
             // 
             // specExValue
             // 
@@ -647,7 +664,6 @@
             // 
             // groupBox6
             // 
-            this.groupBox6.Controls.Add(this.label5);
             this.groupBox6.Controls.Add(this.specularColourBrowse);
             this.groupBox6.Controls.Add(this.specularMap);
             this.groupBox6.Controls.Add(this.specularMapBrowse);
@@ -663,7 +679,6 @@
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.label16);
             this.groupBox7.Controls.Add(this.ambientColourBrowse);
             this.groupBox7.Controls.Add(this.normalMapBrowse);
             this.groupBox7.Controls.Add(this.label12);
@@ -677,23 +692,61 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Extra Values";
             // 
-            // label5
+            // antiGravPad
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(58, 77);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(140, 13);
-            this.label5.TabIndex = 47;
-            this.label5.Text = "I THINK THIS IS IGNORED";
+            this.antiGravPad.AutoSize = true;
+            this.antiGravPad.Location = new System.Drawing.Point(86, 17);
+            this.antiGravPad.Name = "antiGravPad";
+            this.antiGravPad.Size = new System.Drawing.Size(101, 17);
+            this.antiGravPad.TabIndex = 31;
+            this.antiGravPad.TabStop = true;
+            this.antiGravPad.Text = "Anti-Gravity Pad";
+            this.antiGravPad.UseVisualStyleBackColor = true;
             // 
-            // label16
+            // jumpPad
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(58, 79);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(140, 13);
-            this.label16.TabIndex = 48;
-            this.label16.Text = "I THINK THIS IS IGNORED";
+            this.jumpPad.AutoSize = true;
+            this.jumpPad.Location = new System.Drawing.Point(193, 17);
+            this.jumpPad.Name = "jumpPad";
+            this.jumpPad.Size = new System.Drawing.Size(72, 17);
+            this.jumpPad.TabIndex = 32;
+            this.jumpPad.TabStop = true;
+            this.jumpPad.Text = "Jump Pad";
+            this.jumpPad.UseVisualStyleBackColor = true;
+            // 
+            // onTrackNoAI
+            // 
+            this.onTrackNoAI.AutoSize = true;
+            this.onTrackNoAI.Location = new System.Drawing.Point(126, 19);
+            this.onTrackNoAI.Name = "onTrackNoAI";
+            this.onTrackNoAI.Size = new System.Drawing.Size(148, 17);
+            this.onTrackNoAI.TabIndex = 33;
+            this.onTrackNoAI.Text = "Exclude from AI Navmesh";
+            this.onTrackNoAI.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.onTrack);
+            this.groupBox3.Controls.Add(this.offTrack);
+            this.groupBox3.Controls.Add(this.isWall);
+            this.groupBox3.Location = new System.Drawing.Point(6, 42);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(273, 40);
+            this.groupBox3.TabIndex = 34;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Regular";
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.boostPad);
+            this.groupBox8.Controls.Add(this.antiGravPad);
+            this.groupBox8.Controls.Add(this.jumpPad);
+            this.groupBox8.Location = new System.Drawing.Point(6, 87);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(273, 40);
+            this.groupBox8.TabIndex = 35;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Special";
             // 
             // Model_Importer_MaterialEditor
             // 
@@ -738,6 +791,10 @@
             this.groupBox6.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -799,7 +856,11 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.CheckBox isMetallic;
+        private System.Windows.Forms.RadioButton jumpPad;
+        private System.Windows.Forms.RadioButton antiGravPad;
+        private System.Windows.Forms.CheckBox onTrackNoAI;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }

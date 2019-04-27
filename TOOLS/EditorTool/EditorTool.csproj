@@ -88,6 +88,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asset_Manager_Preselect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Asset_Manager_Preselect.Designer.cs">
+      <DependentUpon>Asset_Manager_Preselect.cs</DependentUpon>
+    </Compile>
     <Compile Include="AssetTypes.cs" />
     <Compile Include="Asset_Browser.cs">
       <SubType>Form</SubType>
@@ -100,6 +106,12 @@
     </Compile>
     <Compile Include="Create_Character.Designer.cs">
       <DependentUpon>Create_Character.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Create_Global_Sounds.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Create_Global_Sounds.Designer.cs">
+      <DependentUpon>Create_Global_Sounds.cs</DependentUpon>
     </Compile>
     <Compile Include="Create_Map.cs">
       <SubType>Form</SubType>
@@ -118,6 +130,30 @@
     </Compile>
     <Compile Include="Cubemap_Creator.Designer.cs">
       <DependentUpon>Cubemap_Creator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Game_Config_Camera.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game_Config_Camera.Designer.cs">
+      <DependentUpon>Game_Config_Camera.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Game_Config_Character.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game_Config_Character.Designer.cs">
+      <DependentUpon>Game_Config_Character.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Game_Config_Misc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game_Config_Misc.Designer.cs">
+      <DependentUpon>Game_Config_Misc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Game_Config_Preselect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game_Config_Preselect.Designer.cs">
+      <DependentUpon>Game_Config_Preselect.cs</DependentUpon>
     </Compile>
     <Compile Include="Generic_Importer.cs">
       <SubType>Form</SubType>
@@ -219,8 +255,14 @@
     <EmbeddedResource Include="Asset_Browser.resx">
       <DependentUpon>Asset_Browser.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Asset_Manager_Preselect.resx">
+      <DependentUpon>Asset_Manager_Preselect.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Create_Character.resx">
       <DependentUpon>Create_Character.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Create_Global_Sounds.resx">
+      <DependentUpon>Create_Global_Sounds.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Create_Map.resx">
       <DependentUpon>Create_Map.cs</DependentUpon>
@@ -230,6 +272,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Cubemap_Creator.resx">
       <DependentUpon>Cubemap_Creator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game_Config_Camera.resx">
+      <DependentUpon>Game_Config_Camera.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game_Config_Character.resx">
+      <DependentUpon>Game_Config_Character.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game_Config_Misc.resx">
+      <DependentUpon>Game_Config_Misc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game_Config_Preselect.resx">
+      <DependentUpon>Game_Config_Preselect.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generic_Importer.resx">
       <DependentUpon>Generic_Importer.cs</DependentUpon>

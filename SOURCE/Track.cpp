@@ -138,6 +138,7 @@ void Track::LoadVertexList(std::string _vertex_list)
 	int iterator = 0;
 	for (int len : length) {
 		if (len == 0) {
+			iterator++;
 			continue;
 		}
 		verts.at(iterator) = std::vector<float>(len);
@@ -170,6 +171,7 @@ void Track::LoadVertexList(std::string _vertex_list)
 			points_for_triangle[index] = verts.at(x)[i];
 			index++;
 		}
+		DebugText::print("Track collision group " + std::to_string(x) + " has " + std::to_string(verts.at(x).size()) + " entries.");
 	}
 
 	//Split triangles up into the grid
@@ -213,7 +215,7 @@ void Track::setWaypointBB()
 
 /* Checks through all triangles to see if this line intersects any of them.
    The point of intersecion is stored in _intersect */
-bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle)
+bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle, const float& _minAngle)
 {
 	// Check to see if the position is within the grid
 	if (!IsPointInBounds(_startPos, m_smallest, m_largest))
@@ -245,7 +247,7 @@ bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos,
 			{
 				for (MeshTri* tri : m_triGrid[index + k])
 				{
-					if (m_validCollisions[tri->GetType()] && tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle))
+					if (m_validCollisions[tri->GetType()] && tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle, _minAngle))
 					{
 						float dist = Vector::Distance(_startPos, _intersect);
 						if (dist < bestDist)
@@ -314,9 +316,9 @@ void Track::SplitTrisIntoGrid()
 	m_triGridX = static_cast<int>(ceilf(trackSize.x / m_triSegSize));
 	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
 	m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
-	m_triGridYX = m_triGridY*m_triGridX;
-	m_triGrid.reserve((m_triGridX+1)*(m_triGridY + 1)*(m_triGridZ + 1));
-	
+	m_triGridYX = m_triGridY * m_triGridX;
+	m_triGrid.reserve((m_triGridX + 1)*(m_triGridY + 1)*(m_triGridZ + 1));
+
 	for (int i = 0; i < m_triGrid.capacity(); i++)
 	{
 		std::vector<MeshTri*> vec;

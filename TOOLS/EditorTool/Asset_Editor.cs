@@ -444,7 +444,7 @@ namespace EditorTool
                     common_importer.setEditMode(true);
 
                     //Load editor
-                    Model_Importer_MaterialList modelEditor = new Model_Importer_MaterialList(common_importer);
+                    Model_Importer_MaterialList modelEditor = new Model_Importer_MaterialList(common_importer, true);
                     modelEditor.FormClosed += new FormClosedEventHandler(refreshOnClose);
                     modelEditor.Show();
                     break;

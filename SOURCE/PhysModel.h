@@ -76,6 +76,8 @@ public:
 
 	SDKMeshGO3D* getDebugCollider() { return m_colliderDebug; };
 
+	void SetMaxSpeed(float _maxSpeed) { m_maxSpeed = _maxSpeed; };
+
 	const PhysModelData& data = m_physData;
 
 	bool debug_print = false;
@@ -97,6 +99,8 @@ protected:
 
 	bool m_hasCollider = false;
 	BoundingOrientedBox m_collider; //Bounding box of the model
+
+	float m_maxSpeed = 130;
 
 	SDKMeshGO3D* m_colliderDebug = nullptr;
 	Vector3 MatrixDecomposeYawPitchRoll(Matrix  mat);

@@ -313,6 +313,10 @@ namespace EditorTool
             JObject mariokart_properties = new JObject();
             for (int i = 0; i < (int)CollisionType.NUM_OF_TYPES; i++)
             {
+                if ((CollisionType)i == CollisionType.GLIDER_TRACK)
+                {
+                    continue; //This is auto-generated from our JSON, not manually editable
+                }
                 mariokart_properties[i.ToString()] = false; //All collision off as default
             }
             int prop_index = 0;
@@ -356,6 +360,21 @@ namespace EditorTool
                 addPropIfNotAlready("map_emissive", "", this_mat_jobject, props); //Emissive Texture (alt def)
                 addPropIfNotAlready("map_RMA", "", this_mat_jobject, props); //RMA Texture
                 addPropIfNotAlready("map_occlusionRoughnessMetallic", "", this_mat_jobject, props); //RMA Texture (alt def)
+
+                //Store our index in the OBJ to apply dx render-time configs
+                int index = 0;
+                foreach (string material in material_names)
+                {
+                    if (material == referenced_materials[i])
+                    {
+                        break;
+                    }
+                    index++;
+                }
+                this_mat_jobject["ThICC_INDEX"] = index;
+
+                //Set our default metallic value
+                this_mat_jobject["ThICC_METALLIC"] = false;
 
                 //Auto calculate alpha
                 //this_mat_jobject["d"] = (function_library.hasTransparency(this_mat_jobject["map_Kd"].Value<string>()) ? "0.999999" : "0.000000");

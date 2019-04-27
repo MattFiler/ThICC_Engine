@@ -1,9 +1,9 @@
 ### CREATED BY THE ThICC TOOLKIT ###
 
 newmtl m_Body
-Ns 94.117647
+Ns 94.000000
 Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.000000 0.000000 0.000000
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
@@ -18,4 +18,6 @@ map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
+ThICC_INDEX 0
+ThICC_METALLIC True
 

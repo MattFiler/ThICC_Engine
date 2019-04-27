@@ -24,6 +24,8 @@ public:
 
 	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
 
+	bool IsLoaded() { return m_loaded; };
+
 protected:
 	//Model resources
 	std::unique_ptr<DirectX::EffectTextureFactory> m_modelResources;
@@ -35,6 +37,9 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_radianceIBL;
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_irradianceIBL;
 
+	//Current metalness config
+	std::vector<bool> current_metalness;
+
 	//Engine features
 	GameFilepaths m_filepath;
 
@@ -45,5 +50,7 @@ protected:
 	int irradiance_index = -1;
 	bool is_debug_mesh = false;
 	bool m_shouldRender = true;
+
+	bool m_loaded = false;
 };
 
