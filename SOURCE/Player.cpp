@@ -99,7 +99,6 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
 	m_normalGrav = m_maxGrav;
-	m_animationMesh->Scale(Vector3::One * 2, 20);
 	//Update TrackMagnet here too?
 }
 

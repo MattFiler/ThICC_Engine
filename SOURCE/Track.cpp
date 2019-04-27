@@ -258,7 +258,7 @@ bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos,
 	{
 		for (int j = lower.y; j <= upper.y; j++)
 		{
-			int index = (i*m_triGridYX) + (j*m_triGridX);
+			size_t index = (i*m_triGridYX) + (j*m_triGridX);
 			for (int k = lower.x; k <= upper.x; k++)
 			{
 				for (MeshTri* tri : m_triGrid[index + k])
@@ -333,13 +333,14 @@ void Track::SplitTrisIntoGrid()
 {
 	Vector trackSize = m_largest - m_smallest;
 	// Reserve space in the references vector based on the size of the track
-	m_triGridX = static_cast<int>(ceilf(trackSize.x / m_triSegSize));
-	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
-	m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
+	m_triGridX = static_cast<size_t>(ceilf(trackSize.x / m_triSegSize));
+	m_triGridY = static_cast<size_t>(ceilf(trackSize.y / m_triSegSize));
+	m_triGridZ = static_cast<size_t>(ceilf(trackSize.z / m_triSegSize));
 	m_triGridYX = m_triGridY * m_triGridX;
+
 	m_triGrid.reserve((m_triGridX + 1)*(m_triGridY + 1)*(m_triGridZ + 1));
 
-	for (int i = 0; i < m_triGrid.capacity(); i++)
+	for (size_t i = 0; i < m_triGrid.capacity(); i++)
 	{
 		std::vector<MeshTri*> vec;
 		m_triGrid.push_back(vec);
@@ -359,7 +360,7 @@ void Track::SplitTrisIntoGrid()
 		{
 			for (int j = lower.y; j <= upper.y; j++)
 			{
-				int index = (i*m_triGridYX) + (j*m_triGridX);
+				size_t index = (i*m_triGridYX) + (j*m_triGridX);
 				for (int k = lower.x; k <= upper.x; k++)
 				{
 					m_triGrid[index + k].push_back(&tri);
