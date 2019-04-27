@@ -20,7 +20,6 @@ Item::Item(const std::string& item_type)
 
 void Item::InitItemData(const std::string & item_type)
 {
-	
 		std::string item_name = item_type;
 		item_name.erase(item_name.begin(), item_name.begin() + 5); //Removing "ITEM_"
 
