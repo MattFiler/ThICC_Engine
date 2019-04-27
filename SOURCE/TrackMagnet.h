@@ -26,7 +26,7 @@ private:
 	float m_maxSnapDist = 2; // Over this distance the kart wont snap to the track
 	float m_maxSnapSnep = 10; // The max distance to snap by each second
 
-	float m_maxAngle = 14; // The steepest angle that will be considered a viable floor collision
+	float m_maxAngle = 0.6; // The steepest angle that will be considered a viable floor collision
 	float m_minAngle = 0; // The minimum angle for a wall collision against track
 	float m_maxRotation = 5; // The maximum amount to rotate by each second
 
