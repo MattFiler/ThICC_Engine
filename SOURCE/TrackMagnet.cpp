@@ -20,7 +20,9 @@ void TrackMagnet::Render()
 /* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
 bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
-	track.SetValidCollision(true, true, true, false, true, true, true, true);
+	DebugText::print(std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + "\n");
+
+	track.SetValidCollision(true, true, true, true, true, true, true, true);
 
 	Vector intersect;
 	Vector mid_intersect;

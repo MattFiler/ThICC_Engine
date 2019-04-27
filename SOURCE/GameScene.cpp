@@ -660,8 +660,8 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 	}
 
 	// Render skyboxes that are loaded
-	/*
-	SKYBOXES ARE DISABLED FOR NOW DUE TO A RENDERING BUG
+	
+	/*SKYBOXES ARE DISABLED FOR NOW DUE TO A RENDERING BUG
 	for (int i = 0; i < game_config["player_count"]; i++) {
 		if (Locator::getRD()->skybox[i]->Loaded()) {
 			Locator::getRD()->skybox[i]->Render();

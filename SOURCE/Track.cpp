@@ -156,6 +156,8 @@ void Track::LoadVertexList(std::string _vertex_list)
 	for (int x = 0; x < number_of_coll_types; x++) {
 		for (size_t i = 0; i < verts.at(x).size(); ++i)
 		{
+			points_for_triangle[index] = verts.at(x)[i];
+			index++;
 			if (index == 9) {
 				Vector3 point_1 = Vector3(points_for_triangle[0], points_for_triangle[1], points_for_triangle[2]) * m_track_data.scale;
 				CompareVectorToMaximum(point_1);
@@ -169,11 +171,21 @@ void Track::LoadVertexList(std::string _vertex_list)
 				CompareVectorToMaximum(point_3);
 				CompareVectorToMinimum(point_3);
 
+				if (x == 4)
+				{
+					point_1 = blender_vector.ConvertPosition(point_1);
+					point_2 = blender_vector.ConvertPosition(point_2);
+					point_3 = blender_vector.ConvertPosition(point_3);
+				}
+
 				m_triangles.push_back(MeshTri(point_1, point_2, point_3, x));
+
+				if (x == 4)
+				{
+					m_triangles.back().m_plane.Normal(m_triangles.back().m_plane.Normal()*-1);
+				}
 				index = 0;
 			}
-			points_for_triangle[index] = verts.at(x)[i];
-			index++;
 		}
 		DebugText::print("Track collision group " + std::to_string(x) + " has " + std::to_string(verts.at(x).size()) + " entries.");
 	}
@@ -253,6 +265,10 @@ bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos,
 				{
 					if (m_validCollisions[tri->GetType()] && tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle, _minAngle))
 					{
+						if (tri->m_type == GLIDER_TRACK)
+						{
+							bool breakme = false;
+						}
 						float dist = Vector::Distance(_startPos, _intersect);
 						if (dist < bestDist)
 						{
@@ -330,6 +346,10 @@ void Track::SplitTrisIntoGrid()
 	}
 	for (MeshTri& tri : m_triangles)
 	{
+		if (tri.m_type == GLIDER_TRACK)
+		{
+			bool breakme = false;
+		}
 		Vector upper = tri.GetUpperBound();
 		Vector lower = tri.GetLowerBound();
 		GetXYZIndexAtPoint(upper);
