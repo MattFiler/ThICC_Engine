@@ -2,6 +2,7 @@
 #include "ParticlePool.h"
 #include "GameStateData.h"
 #include "random"
+#include "DebugText.h"
 
 
 
@@ -59,7 +60,7 @@ void ParticlePool::ActivateNextParticle()
 
 				}
 
-				particles[i]->reset(0.1f, dir, game_object ? pos : start_pos);
+				particles[i]->reset(1.f, dir, game_object ? pos : start_pos);
 				particles[i]->SetScale(0.2f);
 				timer = 1.0f;
 				break;
@@ -70,15 +71,21 @@ void ParticlePool::ActivateNextParticle()
 
 void ParticlePool::Update()
 {
+	//int am = 0;
 	for (int i = 0; i < particle_amount; i++)
 	{
 		if (particles[i]->GetLifetime() <= 0.0f)
 			continue;
 
-		particles[i]->Tick();
-		particles[i]->SetPos(particles[i]->GetPos() + game_object->GetWorld().Down() * Locator::getGSD()->m_dt);
+		//particles[i]->Tick(game_object ? game_object->GetOri() : Matrix::Identity);
+		//particles[i]->SetOffset(particles[i]->GetOffset() + particles[i]->GetDirection() * (1.f * Locator::getGSD()->m_dt));
+		//m_pos = *start_pos + Vector3::Transform(offset, world);
+		//am++;
+		//particles[i]->SetOffset(particles[i]->GetOffset() + game_object->GetWorld().Down() * Locator::getGSD()->m_dt);
 
 	}
+
+	//DebugText::print(std::to_string(am));
 }
 
 void ParticlePool::Render()

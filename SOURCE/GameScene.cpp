@@ -92,7 +92,7 @@ void GameScene::ExpensiveLoad() {
 		}
 	}
 
-	pool->init(500);
+	pool->init(1);
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
 

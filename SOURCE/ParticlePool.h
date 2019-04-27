@@ -34,7 +34,7 @@ private:
 	float y_lower_limit = 1.0f;
 	float z_upper_limit = 1.0f;
 	float z_lower_limit = 0.0f;
-	float emission_rate = 500.0;
+	float emission_rate = 100.0;
 	float timer = 0.0f;
 	bool burst = false;
 
