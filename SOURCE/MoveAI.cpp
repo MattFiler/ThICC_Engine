@@ -191,9 +191,6 @@ void MoveAI::RecalculateLine(Track* _track)
 
 	condensedRoute.push_back(m_route.back());
 	m_route = condensedRoute;
-
-
-
 }
 
 bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int _iterations, bool _allowTurn, int _waypointIndex)

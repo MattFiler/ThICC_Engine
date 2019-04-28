@@ -72,7 +72,7 @@ void GameScene::ExpensiveLoad() {
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i])
 		);
 	}
-	for (int i = game_config["player_count"]; i < 12; i++)
+	for (int i = game_config["player_count"]; i < m_maxPlayers; i++)
 	{
 		player[i]->Reload(
 			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
@@ -135,7 +135,7 @@ void GameScene::ExpensiveUnload() {
 		m_cam[i]->Reset();
 		m_cam[i]->SetType(CameraType::ORBIT);
 	}
-	for (int i = game_config["player_count"]; i < 12; i++) {
+	for (int i = game_config["player_count"]; i < m_maxPlayers; i++) {
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 	}
 
@@ -241,7 +241,7 @@ void GameScene::create3DObjects()
 	}
 
 	// Spawn in the AI
-	for (int i = game_config["player_count"]; i < 12; i++) {
+	for (int i = game_config["player_count"]; i < m_maxPlayers; i++) {
 
 		//Create a player and position on track
 		using std::placeholders::_1;
@@ -380,7 +380,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 			timeout = 3.5f;
 			Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_START)->SetVolume(0.7f);
 			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_START);
-			for (int i = 0; i < 12; ++i)
+			for (int i = 0; i < m_maxPlayers; ++i)
 			{
 				player[i]->setGamePad(true);
 			}
@@ -410,7 +410,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		break;
 	}
 
-	for (int i = 0; i < 12; ++i) {
+	for (int i = 0; i < m_maxPlayers; ++i) {
 		player[i]->ShouldStickToTrack(*track);
 		//player[i]->ResolveWallCollisions(*track);
 	}
@@ -742,7 +742,7 @@ void GameScene::SetPlayersWaypoint()
 {
 	Vector3 currentWaypoint;
 	Vector3 nextWaypoint;
-	for (int i = 0; i < 12; i++) {
+	for (int i = 0; i < m_maxPlayers; i++) {
 		currentWaypoint = track->getWaypointMiddle(player[i]->GetWaypoint());
 		int nextWayIndex = player[i]->GetWaypoint() + 1;
 		if (nextWayIndex == track->getWaypoints().size())
@@ -789,14 +789,14 @@ void GameScene::SetPlayersWaypoint()
 /* Set the player's current position in the race */
 void GameScene::SetPlayerRanking()
 {
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < m_maxPlayers; i++)
 	{
 		player[i]->SetRanking(1);
 	}
 
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < m_maxPlayers; i++)
 	{
-		for (int j = 0; j < 12; j++)
+		for (int j = 0; j < m_maxPlayers; j++)
 		{
 			if (i != j)
 			{
