@@ -65,7 +65,7 @@ private:
 
 	//Game objects (and test crap)
 	Track* track = nullptr;
-	Player* player[4] = { nullptr };
+	Player* player[12] = { nullptr };
 	std::vector<Item*> m_itemModels;
 	Text2D* countdown_text = nullptr;
 

@@ -35,6 +35,12 @@ Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, 
 	{
 		m_posHistory.push(m_world);
 	}
+
+	// If AI
+	if (m_playerID == -1)
+	{
+		m_move->SetEnabled(false);
+	}
 }
 
 void Player::InitPlayerData()
@@ -496,21 +502,18 @@ void Player::ReleaseItem()
 
 void Player::setGamePad(bool _state)
 {
-	m_move->SetGamepadActive(_state);
-	m_move->SetPlayerID(m_playerID);
-	m_controlsActive = _state;
-
-	// TEST CODE //
-	
-	/*
-	if (m_playerID == 0)
+	// If AI
+	if (m_playerID == -1)
 	{
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);
 		Locator::getAIScheduler()->AddAI(m_ai.get());
-	}*/
-	
-	// TEST CODE //
+		m_move->SetEnabled(true);
+		return;
+	}
+	m_move->SetGamepadActive(_state);
+	m_move->SetPlayerID(m_playerID);
+	m_controlsActive = _state;
 }
 
 void Player::movement()
