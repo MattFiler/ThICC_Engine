@@ -86,10 +86,12 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	new_model = new SDKMeshGO3D("DEFAULT_ITEM");
 	new_model->SetScale(Vector3(2, 0.05f, 2));
 	m_animationMesh->AddModel("glider", new_model, Vector3::Up * 1.3f);
+	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL), Vector3::Up);
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
 	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
 	m_animationMesh->AddModelSet("gliding", std::vector < std::string>{"vehicle", "character", "glider"});
+	m_animationMesh->AddModelSet("Bullet Bill", std::vector < std::string>{"Bullet Bill"});
 
 	m_animationMesh->SwitchModelSet("default");
 
@@ -101,8 +103,6 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_normalGrav = m_maxGrav;
 	//Update TrackMagnet here too?
 }
-
-
 void Player::SetActiveItem(ItemType _item) {
 	if (m_InventoryItem == _item) {
 		active_item = _item;
@@ -454,6 +454,13 @@ void Player::SpawnItems(ItemType type)
 			RedShell* shell = static_cast<RedShell*>(CreateItem(RED_SHELL));
 			m_trailingItems.push_back(shell);
 			TrailItems();
+			break;
+		}
+
+		case BULLET_BILL:
+		{
+			BulletBill* bullet = static_cast<BulletBill*>(CreateItem(BULLET_BILL));
+			bullet->Use(this, false);
 			break;
 		}
 

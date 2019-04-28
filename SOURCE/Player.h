@@ -18,6 +18,7 @@
 #include "VehicleInfo.h"
 #include "LightningCloud.h"
 #include "RedShell.h"
+#include "BulletBill.h"
 #include <functional>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -36,6 +37,8 @@ public:
 
 	virtual void Tick() override;
 	virtual void Render() override;
+
+	int GetPlayerId() { return m_playerID; };
 
 	int GetWaypoint() { return m_waypoint; }
 	int GetRanking() { return m_ranking; }
@@ -79,6 +82,13 @@ public:
 	void setInvicible(bool _invincible) { m_invincible = _invincible; };
 
 	void Reload(CharacterInfo* _character, VehicleInfo* _vehicle);
+
+	AnimationController* GetAnimController() { return m_animationMesh.get(); };
+
+	void CreateAi() { m_ai = std::make_unique<MoveAI>(this, m_move.get()); };
+	void DeleteAi() { m_ai.release(); };
+
+	ControlledMovement* GetControlledMovement() { return m_move.get(); };
 
 protected:
 	int m_playerID = 0;

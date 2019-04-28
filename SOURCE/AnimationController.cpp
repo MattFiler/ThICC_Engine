@@ -31,6 +31,14 @@ void AnimationController::AddModelSet(std::string _setName, std::vector<std::str
 	m_modelSet.insert(pair(_setName, new_set));
 }
 
+void AnimationController::SwitchModelSet(std::string _setName)
+{
+	if (!m_lockSet)
+	{
+		m_currentSet = _setName;
+	}
+}
+
 
 void AnimationController::AddModel(std::string _name, SDKMeshGO3D* _model, SimpleMath::Vector3 _offset)
 {

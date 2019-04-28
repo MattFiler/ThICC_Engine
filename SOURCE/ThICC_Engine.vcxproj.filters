@@ -155,7 +155,9 @@
     <ClCompile Include="DebugConsole.cpp">
       <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="BulletBill.cpp" />
+    <ClCompile Include="BulletBill.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -381,7 +383,12 @@
     <ClInclude Include="CupInfo.h">
       <Filter>Engine Backend\AssetComps</Filter>
     </ClInclude>
-    <ClInclude Include="BulletBill.h" />
+    <ClInclude Include="BulletBill.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemAiData.h">
+      <Filter>Game\Components\Item Info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

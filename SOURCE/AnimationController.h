@@ -25,11 +25,14 @@ public:
 	void AddModel(std::string _name, SDKMeshGO3D* _model, Vector3 _offset);
 
 	void AddModelSet(std::string _setName, std::vector<std::string> models);
-	void SwitchModelSet(std::string _setName) { m_currentSet = _setName; };
+	void SwitchModelSet(std::string _setName);
 
 	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
 
 	Vector3 GetScaleOffset() { return m_scaleOffset; };
+
+	void setLockSet(bool _lockSet) { m_lockSet = _lockSet; };
+	bool getLockSet() { return m_lockSet; };
 
 	enum direction
 	{
@@ -81,4 +84,5 @@ private:
 	std::string m_currentSet;
 
 	bool m_shouldRender = true;
+	bool m_lockSet = false;
 };

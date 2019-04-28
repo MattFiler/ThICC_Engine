@@ -11,20 +11,20 @@ RedShell::RedShell() : Item(Locator::getItemData()->GetItemModelName(RED_SHELL))
 	m_mesh->SetDrag(0);
 	m_mesh->SetPhysicsOn(true);
 	m_mesh->setDampenWallReflect(false);
-	m_mesh->SetMaxSpeed(m_maxSpeed);
+	m_mesh->SetMaxSpeed(m_aiData.m_maxSpeed);
 
 	m_move = std::make_unique<ControlledMovement>(m_mesh, m_displayedMesh.get());
-	m_move->SetMoveSpeed(m_moveSpeed);
-	m_move->SetTurnSpeed(m_turnSpeed);
+	m_move->SetMoveSpeed(m_aiData.m_moveSpeed);
+	m_move->SetTurnSpeed(m_aiData.m_turnSpeed);
 }
 
 void RedShell::InitShellData()
 {
-	m_maxSpeed = (float)m_itemData["RED_SHELL"]["info"]["max_speed"];
+	m_aiData.m_maxSpeed = (float)m_itemData["RED_SHELL"]["info"]["max_speed"];
 	m_usePosOffset = (float)m_itemData["RED_SHELL"]["info"]["use_pos_offset"];
-	m_moveTowardDistSqrd = (float)m_itemData["RED_SHELL"]["info"]["move_toward_distance_squared"];
-	m_moveSpeed = (float)m_itemData["RED_SHELL"]["info"]["ai"]["move_speed"];
-	m_turnSpeed = (float)m_itemData["RED_SHELL"]["info"]["ai"]["turn_speed"];
+	m_aiData.m_moveTowardDistSqrd = (float)m_itemData["RED_SHELL"]["info"]["move_toward_distance_squared"];
+	m_aiData.m_moveSpeed = (float)m_itemData["RED_SHELL"]["info"]["ai"]["move_speed"];
+	m_aiData.m_turnSpeed = (float)m_itemData["RED_SHELL"]["info"]["ai"]["turn_speed"];
 
 	m_collisionData.m_playerVelMulti = (float)m_itemData["RED_SHELL"]["info"]["player_collision"]["velocity_multiplier"];
 	m_collisionData.m_jumpHeight = (float)m_itemData["RED_SHELL"]["info"]["player_collision"]["jump"]["height"];
@@ -76,7 +76,7 @@ void RedShell::Use(Player * _player, bool _altUse)
 	m_mesh->UpdateWorld();
 	Vector3 normVel = _player->getVelocity();
 	normVel.Normalize();
-	m_mesh->setVelocity(normVel * (_altUse? -m_moveSpeed : 1));
+	m_mesh->setVelocity(normVel * (_altUse? -m_aiData.m_moveSpeed : 1));
 
 	if (!_altUse)
 	{

@@ -891,6 +891,12 @@ Item* GameScene::CreateItem(ItemType type)
 
 		return redShell;
 	}
+	case BULLET_BILL:
+	{
+		BulletBill* bullet = new BulletBill();
+		m_itemModels.push_back(bullet);
+		return bullet;
+	}
 	default:
 		return nullptr;
 	}
