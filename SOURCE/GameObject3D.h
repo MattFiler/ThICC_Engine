@@ -62,6 +62,7 @@ public:
 	float GetRoll() { return m_roll; }
 	Matrix GetOri() { return m_rot; }
 	Matrix GetWorld() { return m_world; }
+	Quaternion GetQuatRot() { return m_quatRot; }
 	GO3D_Render_Type GetType() { return m_type; }
 	bool ShouldDestroy() { return m_shouldDestroy; };
 

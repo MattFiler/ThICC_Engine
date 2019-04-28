@@ -92,7 +92,7 @@ void GameScene::ExpensiveLoad() {
 		}
 	}
 
-	pool->init(1);
+	pool->init(100);
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
 
@@ -170,7 +170,6 @@ void GameScene::create2DObjects()
 		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
 		//m_2DObjects.push_back(player[i]->GetLapText());
 	}
-
 
 	// player countdown text
 	for (int i = 0; i < game_config["player_count"]; i++)
@@ -624,9 +623,9 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		for (int i = 0; i < game_config["player_count"]; ++i)
 		{
 			//Setup viewport
+			Locator::getRD()->m_cam = m_cam[i];
 			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[i]);
 			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[i]);
-			Locator::getRD()->m_cam = m_cam[i];
 
 			//Render 3D objects
 			for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)

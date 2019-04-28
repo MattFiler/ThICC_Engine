@@ -3,6 +3,7 @@
 #include "GameStateData.h"
 #include "random"
 #include "DebugText.h"
+#include "Player.h"
 
 
 
@@ -10,7 +11,7 @@ ParticlePool::ParticlePool(PhysModel* object) : game_object(object)
 {
 	for (size_t i = 0; i < pool_size; i++)
 	{
-		particles[i] = new Particle("KART_KNUCKLES");
+		particles[i] = new Particle("yo");
 	}
 }
 
@@ -25,6 +26,8 @@ void ParticlePool::init(int _particle_amount)
 	for (size_t i = 0; i < pool_size; i++)
 	{
 		dynamic_cast<GameObject3D*>(particles[i])->Load();
+
+		particles[i]->SetScale(0.05f);
 	}
 }
 
@@ -37,8 +40,8 @@ void ParticlePool::ActivateNextParticle()
 		{
 			if (particles[i]->IsDead() && (burst ? !particles[i]->IsUsed() : true))
 			{
-				std::random_device rd; // obtain a random number from hardware
-				std::mt19937 eng(rd()); // seed the generator
+				std::random_device rd;
+				std::mt19937 eng(rd());
 				std::uniform_real_distribution<float> x_distr(x_lower_limit, x_upper_limit);
 				std::uniform_real_distribution<float> y_distr(y_lower_limit, y_upper_limit);
 				std::uniform_real_distribution<float> z_distr(z_lower_limit, z_upper_limit);
@@ -50,18 +53,20 @@ void ParticlePool::ActivateNextParticle()
 
 				if (game_object)
 				{
-					std::uniform_int_distribution<int> int_dist(0, 1);
-
-					if (int_dist(eng) == 0)
-						pos = game_object->data.m_globalFrontBottomLeft;
-
-					else if (int_dist(eng) == 1)
-						pos = game_object->data.m_globalFrontBottomRight;
-
+					if (dynamic_cast<Player*>(game_object))
+					{
+						std::uniform_int_distribution<int> int_dist(0, 1);
+						int ran_num = int_dist(eng);
+						particles[i]->SetLeftWheel(ran_num);
+						if (ran_num == 0)
+							dir.x *= -1;
+					}
+					particles[i]->reset(0.2f, dir, game_object);
 				}
+				else
+					particles[i]->reset(0.01f, dir, start_pos);
 
-				particles[i]->reset(1.f, dir, game_object ? pos : start_pos);
-				particles[i]->SetScale(0.2f);
+
 				timer = 1.0f;
 				break;
 			}
@@ -77,10 +82,9 @@ void ParticlePool::Update()
 		if (particles[i]->GetLifetime() <= 0.0f)
 			continue;
 
-		//particles[i]->Tick(game_object ? game_object->GetOri() : Matrix::Identity);
-		//particles[i]->SetOffset(particles[i]->GetOffset() + particles[i]->GetDirection() * (1.f * Locator::getGSD()->m_dt));
-		//m_pos = *start_pos + Vector3::Transform(offset, world);
-		//am++;
+
+		particles[i]->Tick(game_object ? game_object->GetOri() : Matrix::Identity);
+
 		//particles[i]->SetOffset(particles[i]->GetOffset() + game_object->GetWorld().Down() * Locator::getGSD()->m_dt);
 
 	}

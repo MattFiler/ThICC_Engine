@@ -29,7 +29,7 @@ private:
 	int particle_amount = 0;
 
 	float x_upper_limit = 1.0f;
-	float x_lower_limit = -1.0f;
+	float x_lower_limit = 0.0f;
 	float y_upper_limit = 3.0f;
 	float y_lower_limit = 1.0f;
 	float z_upper_limit = 1.0f;

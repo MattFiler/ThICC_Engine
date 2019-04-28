@@ -1,0 +1,33 @@
+{
+  "Material": {
+    "newmtl": "Material",
+    "Ns": "96.000000",
+    "Ka": "1.000000 1.000000 1.000000",
+    "Kd": "0.639216 0.639216 0.639216",
+    "Ks": "0.501961 0.501961 0.501961",
+    "Ke": "0.000000 0.000000 0.000000",
+    "Ni": "1.000000",
+    "d": "1.000000",
+    "illum": "0",
+    "map_Kd": "spaks.png",
+    "Tr": "0.000000",
+    "map_Ks": "",
+    "map_Kn": "",
+    "norm": "",
+    "map_Ke": "",
+    "map_emissive": "",
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "ThICC_INDEX": 0,
+    "ThICC_METALLIC": false,
+    "ThICC_COLLISION": {
+      "0": false,
+      "1": false,
+      "2": false,
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
+    }
+  }
+}

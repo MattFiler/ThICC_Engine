@@ -1,0 +1,21 @@
+### CREATED BY THE ThICC TOOLKIT ###
+
+newmtl Material
+Ns 96.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.501961 0.501961 0.501961
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 0
+map_Kd spaks.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
