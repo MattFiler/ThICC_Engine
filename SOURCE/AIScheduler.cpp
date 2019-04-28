@@ -43,7 +43,10 @@ void AIScheduler::Update()
 
 	for (MoveAI* ai : m_aiList)
 	{
-		ai->Update();
+		if (ai->Update())
+		{
+			ai->RecalculateLine(m_track);
+		}
 	}
 }
 

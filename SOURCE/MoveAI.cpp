@@ -47,7 +47,7 @@ void MoveAI::DebugRender()
 	#endif*/
 }
 
-void MoveAI::Update()
+bool MoveAI::Update()
 {
 	// If there at least 2 waypoints left
 	if (m_routeIndex < m_route.size()-1 && !m_route.empty())
@@ -64,7 +64,7 @@ void MoveAI::Update()
 			// This shouldn't happen often, but if we reach the end of the waypoints don't continue
 			if (m_routeIndex == m_route.size())
 			{
-				return;
+				return true;
 			}
 		}
 	}
@@ -79,7 +79,7 @@ void MoveAI::Update()
 	if (m_route.empty())
 	{
 		m_move->setAcceleration(1);
-		return;
+		return true;
 	}
 
 	Vector3 normDiff = m_route[m_routeIndex].position - m_model->GetPos();
@@ -120,16 +120,29 @@ void MoveAI::Update()
 		m_move->Drift(false);
 		m_move->DontTurn();
 	}
+	return false;
 }
 
 void MoveAI::RecalculateLine(Track* _track)
 {
-	m_routeIndex = 0;
-	_track->SetValidCollision(true, false, true, false, true, true, true, false);
-	m_route.clear();
 	Matrix world = m_model->GetWorld();
 	Vector3 pos = m_model->GetPos();
 	Vector3 direction = world.Forward();
+	// Find the current track
+	_track->SetValidCollision(true, true, true, false, true, true, true, true);
+	Vector3 intersect = Vector3::Zero;
+	MeshTri* tri = nullptr;
+	if (!m_route.empty() && _track->DoesLineIntersect(world.Down()*(m_model->data.m_height * 2), world.Down() * 10, intersect, tri, 0.4f, 0))
+	{
+		if (tri->GetType() == CollisionType::OFF_TRACK || tri->GetType() == CollisionType::ON_TRACK_NO_AI)
+		{
+			// If we're off track, don't re-calcultae the route and let the kart get back on track
+			return;
+		}
+	}
+
+	m_routeIndex = 0;
+	m_route.clear();
 	int iterations = 0;
 
 	m_waypointPos = m_move->GetWaypoint();
@@ -142,13 +155,15 @@ void MoveAI::RecalculateLine(Track* _track)
 		m_debugNextWaypoint[i]->UpdateWorld();
 	}
 
+
+
+	_track->SetValidCollision(true, false, true, false, true, true, true, false);
 	if (!FindRoute(_track, world, pos, direction, iterations, true, m_waypointPos))
 	{
 		// If no route is found this is probably a jump so head to the next waypoint
 		m_route.clear();
 		m_route.push_back(RouteNode(_track->getWaypointMiddle(m_waypointPos), m_move->GetWaypoint()));
 	}
-
 	if (m_route.size() < 3)
 	{
 		return;
@@ -191,6 +206,11 @@ void MoveAI::RecalculateLine(Track* _track)
 
 	condensedRoute.push_back(m_route.back());
 	m_route = condensedRoute;
+}
+
+void MoveAI::FindRouteToTrack(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int _iterations, bool _allowTurn, int _waypointIndex)
+{
+
 }
 
 bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int _iterations, bool _allowTurn, int _waypointIndex)
