@@ -361,10 +361,15 @@
 		"info": {
 			"strike_duration": 10,
 			"player_velocity_multiplier": 0.2,
+			"player_max_velocity_multiplier": 0.1,
+			"player_spin": {
+				"revolutions": 1,
+				"duration": 0.2
+			},
 			"shrink": {
 				"size_multiplier": 0.5,
-				"growth_speed": 2,
-				"shrink_speed": 2,
+				"growth_duration": 0.5,
+				"shrink_duraion": 0.5,
 				"max_shrink_duration": 13 
 			}		
 		}

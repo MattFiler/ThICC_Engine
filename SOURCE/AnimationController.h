@@ -34,6 +34,7 @@ public:
 	void setLockSet(bool _lockSet) { m_lockSet = _lockSet; };
 	bool getLockSet() { return m_lockSet; };
 
+	bool FinishedScale() { return m_scaleTimeElapsed >= m_timeForScale; };
 	enum direction
 	{
 		FORWARD,
