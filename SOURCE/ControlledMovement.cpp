@@ -111,7 +111,6 @@ void ControlledMovement::ProcessInputFlags()
 {
 	if (!m_enabled)
 	{
-		m_animMesh->Update(m_physModel->GetWorld(), m_targetAnimRotOffset);
 		return;
 	}
 
@@ -255,7 +254,7 @@ void ControlledMovement::ProcessInputFlags()
 		m_targetAnimRotOffset = m_physModel->GetWorld().Forward();
 	}
 
-	m_animMesh->Update(m_physModel->GetWorld(), m_targetAnimRotOffset);
+	m_animMesh->SetRotOffset(m_targetAnimRotOffset);
 }
 
 void ControlledMovement::EndDrift()

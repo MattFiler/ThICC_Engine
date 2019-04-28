@@ -58,7 +58,7 @@ void AnimationController::Reset()
 	}
 }
 
-void AnimationController::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
+void AnimationController::Update(Matrix _parentWorld)
 {
 	UpdateScale();
 
@@ -131,7 +131,7 @@ void AnimationController::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride
 	}
 	else
 	{
-		m_rotOffset = Vector3::Lerp(m_rotOffset, _rotOffsetOverride, m_rotAnimSpeed * Locator::getGSD()->m_dt);
+		m_rotOffset = Vector3::Lerp(m_rotOffset, m_rotOffsetOverride, m_rotAnimSpeed * Locator::getGSD()->m_dt);
 	}
 
 	/*SetWorld(_parentWorld);

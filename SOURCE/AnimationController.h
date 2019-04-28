@@ -8,7 +8,7 @@ class AnimationController
 public:
 	AnimationController() = default;
 
-	void Update(Matrix _parentWorld, Vector3 _rotOffsetOverride);
+	void Update(Matrix _parentWorld);
 	void Render();
 
 	void UpdateWorld(Matrix& _newWorld);
@@ -30,6 +30,8 @@ public:
 	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
 
 	Vector3 GetScaleOffset() { return m_scaleOffset; };
+
+	void SetRotOffset(Vector3 _offset) { m_rotOffsetOverride = _offset; };
 
 	enum direction
 	{
@@ -81,4 +83,7 @@ private:
 	std::string m_currentSet;
 
 	bool m_shouldRender = true;
+
+	Vector3 m_rotOffsetOverride = Vector3::Zero;
+
 };

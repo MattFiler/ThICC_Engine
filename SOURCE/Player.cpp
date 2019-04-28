@@ -224,6 +224,8 @@ void Player::Tick()
 
 	//apply my base behaviour
 	TrackMagnet::Tick();
+
+	m_animationMesh->Update(m_world);
 }
 
 void Player::PositionFloatingItems()
