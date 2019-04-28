@@ -72,6 +72,13 @@ void GameScene::ExpensiveLoad() {
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i])
 		);
 	}
+	for (int i = game_config["player_count"]; i < m_maxPlayers; i++)
+	{
+		player[i]->Reload(
+			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
+			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[0])
+		);
+	}
 
 	Locator::getAudio()->addToSoundsList(map_info->audio_background_start, SoundType::GAME);
 	Locator::getAudio()->addToSoundsList(map_info->audio_background, SoundType::GAME);
@@ -128,6 +135,10 @@ void GameScene::ExpensiveUnload() {
 		m_cam[i]->Reset();
 		m_cam[i]->SetType(CameraType::ORBIT);
 	}
+	for (int i = game_config["player_count"]; i < m_maxPlayers; i++) {
+		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+	}
+
 	cine_cam->Reset();
 	cine_cam->SetType(CameraType::CINEMATIC);
 
@@ -227,6 +238,21 @@ void GameScene::create3DObjects()
 		//Create a camera to follow the player
 		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::FOLLOW);
 		m_cam[i]->setAngle(180.0f);
+	}
+
+	// Spawn in the AI
+	for (int i = game_config["player_count"]; i < m_maxPlayers; i++) {
+
+		//Create a player and position on track
+		using std::placeholders::_1;
+		player[i] = new Player(
+			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
+			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[0]),
+			-1, std::bind(&GameScene::CreateItem, this, _1)
+		);
+		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		player[i]->setMass(10);
+		m_3DObjects.push_back(player[i]);
 	}
 
 	//Cinematic cam
@@ -354,10 +380,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 			timeout = 3.5f;
 			Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_START)->SetVolume(0.7f);
 			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_START);
-			for (int i = 0; i < game_config["player_count"]; ++i)
+			for (int i = 0; i < m_maxPlayers; ++i)
 			{
 				player[i]->setGamePad(true);
 			}
+
 		}
 		break;
 	case PLAY:
@@ -383,7 +410,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		break;
 	}
 
-	for (int i = 0; i < game_config["player_count"]; ++i) {
+	for (int i = 0; i < m_maxPlayers; ++i) {
 		player[i]->ShouldStickToTrack(*track);
 		//player[i]->ResolveWallCollisions(*track);
 	}
@@ -713,9 +740,18 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 /* Set the player's current waypoint */
 void GameScene::SetPlayersWaypoint()
 {
-	for (int i = 0; i < game_config["player_count"]; i++) {
-
-		if (player[i]->GetWaypoint() < track->getWaypointsBB().size() - 1)
+	Vector3 currentWaypoint;
+	Vector3 nextWaypoint;
+	for (int i = 0; i < m_maxPlayers; i++) {
+		currentWaypoint = track->getWaypointMiddle(player[i]->GetWaypoint());
+		int nextWayIndex = player[i]->GetWaypoint() + 1;
+		if (nextWayIndex == track->getWaypoints().size())
+		{
+			nextWayIndex = 0;
+		}
+		nextWaypoint = track->getWaypointMiddle(nextWayIndex);
+		bool switchWaypoint = Vector3::Distance(player[i]->GetPos(), nextWaypoint) < Vector3::Distance(currentWaypoint, nextWaypoint);
+		if (switchWaypoint || player[i]->GetWaypoint() < track->getWaypointsBB().size() - 1)
 		{
 			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[player[i]->GetWaypoint() + 1]))
 			{
@@ -724,18 +760,19 @@ void GameScene::SetPlayersWaypoint()
 		}
 		else
 		{
-			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
+			if (switchWaypoint || player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
 			{
 				player[i]->SetWaypoint(0);
 				if (player[i]->GetLap() == 3)
 				{
 					player[i]->SetFinished(true);
 					player[i]->GetFinishOrder()->SetText(std::to_string(player[i]->GetRanking()) + player[i]->GetOrderIndicator()[player[i]->GetRanking() - 1]);
-					m_cam[i]->SetType(CameraType::ORBIT);
+					if(i < game_config["player_count"])
+						m_cam[i]->SetType(CameraType::ORBIT);
 					player[i]->setGamePad(false);
 					finished++;
 				}
-				else if (player[i]->GetLap() == 2 && !final_lap)
+				else if (i < game_config["player_count"] && player[i]->GetLap() == 2 && !final_lap)
 				{
 					Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_GAME)->Stop();
 					Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::FINAL_LAP_IND);
@@ -752,14 +789,14 @@ void GameScene::SetPlayersWaypoint()
 /* Set the player's current position in the race */
 void GameScene::SetPlayerRanking()
 {
-	for (int i = 0; i < game_config["player_count"]; i++)
+	for (int i = 0; i < m_maxPlayers; i++)
 	{
 		player[i]->SetRanking(1);
 	}
 
-	for (int i = 0; i < game_config["player_count"]; i++)
+	for (int i = 0; i < m_maxPlayers; i++)
 	{
-		for (int j = 0; j < game_config["player_count"]; j++)
+		for (int j = 0; j < m_maxPlayers; j++)
 		{
 			if (i != j)
 			{

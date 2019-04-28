@@ -32,6 +32,8 @@ public:
 
 	void SetEnabled(bool _enabled) { m_enabled = _enabled; };
 
+	void SetGliding(bool _gliding) { m_gliding = _gliding; };
+
 private:
 	KeybindManager m_keybind;
 	GameFilepaths m_filepath;
@@ -71,5 +73,7 @@ private:
 	int m_playerID = 0;
 
 	int m_waypoint = 0;
+
+	bool m_gliding = false;
 
 };

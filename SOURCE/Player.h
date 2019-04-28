@@ -111,7 +111,7 @@ private:
 	bool m_finished = false;
 	bool m_invincible = false;
 
-	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th" };
+	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th", "th","th","th","th","th","th","th","th"};
 
 	// Player items:
 	//	A player can have an ACTIVE item (e.g. holding a banana behind themselves) AND also an INVENTORY item.
@@ -163,6 +163,7 @@ private:
 	Matrix m_respawnEnd = Matrix::Identity;
 	Vector3 m_respawnPos = Vector3::Zero;
 	float m_totalRespawnTime = 0;
+	float m_maxRespawnTime = 2;
 	float m_elapsedRespawnTime = 0;
 
 	bool m_preventRespawn = false; 
@@ -173,6 +174,8 @@ private:
 	bool m_gliding = false;
 	float m_normalGrav = 0; // Set from physmodel on load
 	float m_glidingGrav = 5;
+	float m_maxTimeGlidingOff = 3; // Max time gliding off the glide area before it respawns
+	float m_elapsedTimeOff = 0;
 
 	std::unique_ptr<MoveAI> m_ai = nullptr;
 };

@@ -8,7 +8,7 @@ class AnimationController
 public:
 	AnimationController() = default;
 
-	void Update(Matrix _parentWorld, Vector3 _rotOffsetOverride);
+	void Update(Matrix _parentWorld);
 	void Render();
 
 	void UpdateWorld(Matrix& _newWorld);
@@ -16,6 +16,7 @@ public:
 	void Jump(float _jumpHeight, float _duration);
 	void Spin(int _revolutions, float _duration);
 	void Flip(int _revolutions, float _duration);
+	void Scale(Vector3 _newScale, float _duration);
 
 	void Load();
 	void Reset();
@@ -28,6 +29,10 @@ public:
 
 	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
 
+	Vector3 GetScaleOffset() { return m_scaleOffset; };
+
+	void SetRotOffset(Vector3 _offset) { m_rotOffsetOverride = _offset; };
+
 	enum direction
 	{
 		FORWARD,
@@ -39,6 +44,8 @@ public:
 	};
 
 private:
+	void UpdateScale();
+
 	Matrix m_world;
 	Matrix m_rot;
 	Vector3 m_pos;
@@ -63,6 +70,12 @@ private:
 	direction m_prevDirection = FORWARD;
 	float m_timeBetweenRot = 0.5f;
 	float m_rotTimeElapsed = 0;
+
+	Vector3 m_startScale = Vector3::One;
+	Vector3 m_scaleOffset = Vector3::One;
+	Vector3 m_targetScale = Vector3::One;
+	float m_timeForScale = 1;
+	float m_scaleTimeElapsed = 0;
 	
 	std::vector<std::unique_ptr<AnimationModel>> m_additionalModels;
 	std::map <std::string, std::vector<AnimationModel*>> m_modelSet;
@@ -70,4 +83,7 @@ private:
 	std::string m_currentSet;
 
 	bool m_shouldRender = true;
+
+	Vector3 m_rotOffsetOverride = Vector3::Zero;
+
 };
