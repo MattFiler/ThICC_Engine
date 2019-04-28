@@ -378,6 +378,13 @@
 			"place_10": 15,
 			"place_11": 20,
 			"place_12": 25
+		},
+		"info": {
+			"duration_multiplier": 1,
+			"ai": {
+				"player_move_speed": 75,
+				"player_turn_speed": 150
+			}
 		}
 	},
 	"GREEN_SHELL_3X": {

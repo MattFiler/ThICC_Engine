@@ -1,12 +1,22 @@
 #include "pch.h"
 #include "BulletBill.h"
 #include "Player.h"
-
+#include <iostream>
+#include <fstream>
 
 BulletBill::BulletBill()
 {
-	m_aiData.m_moveSpeed = 75;
-	m_aiData.m_turnSpeed = 150;
+	InitBulletData();
+}
+
+void BulletBill::InitBulletData()
+{
+	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
+	m_itemData << i;
+
+	m_durationMulti = m_itemData["BULLET_BILL"]["info"]["duration_multiplier"];
+	m_aiData.m_moveSpeed = m_itemData["BULLET_BILL"]["info"]["ai"]["player_move_speed"];
+	m_aiData.m_turnSpeed = m_itemData["BULLET_BILL"]["info"]["ai"]["player_turn_speed"];
 }
 
 void BulletBill::Tick()
