@@ -1,5 +1,4 @@
 {
-  "has_box_collider": false,
   "asset_name": "DRAGON_DRIFTWAY",
   "asset_type": "Models",
   "model_type": 0,
@@ -763,5 +762,6 @@
         0.0
       ]
     }
-  ]
+  ],
+  "has_box_collider": false
 }

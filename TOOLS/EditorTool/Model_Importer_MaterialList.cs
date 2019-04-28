@@ -413,16 +413,19 @@ namespace EditorTool
                     {
                         itembox_array.Add(data);
                     }
-                    foreach (JArray data in model_blender_data["glider_track"])
+                    if (model_blender_data["glider_track"] != null)
                     {
-                        List<double> glider_track_array = new List<double>();
-                        foreach (var vert in data)
+                        foreach (JArray data in model_blender_data["glider_track"])
                         {
-                            glider_track_array.Add(vert[0].Value<double>());
-                            glider_track_array.Add(vert[1].Value<double>());
-                            glider_track_array.Add(vert[2].Value<double>());
+                            List<double> glider_track_array = new List<double>();
+                            foreach (var vert in data)
+                            {
+                                glider_track_array.Add(vert[0].Value<double>());
+                                glider_track_array.Add(vert[1].Value<double>());
+                                glider_track_array.Add(vert[2].Value<double>());
+                            }
+                            glider_track.Add(glider_track_array);
                         }
-                        glider_track.Add(glider_track_array);
                     }
                 }
                 asset_json["map_cameras"] = camera_array;
