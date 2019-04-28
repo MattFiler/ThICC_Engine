@@ -112,9 +112,11 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 void Player::SetActiveItem(ItemType _item) {
 	if (m_InventoryItem == _item) {
 		active_item = _item;
-		m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
-		m_imgItem->SetPos(m_itemPos);
-
+		if (m_playerID != -1)
+		{
+			m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
+			m_imgItem->SetPos(m_itemPos);
+		}
 
 		m_InventoryItem = ItemType::NONE;
 		
@@ -130,8 +132,11 @@ void Player::SetActiveItem(ItemType _item) {
 void Player::SetItemInInventory(ItemType _item) {
 	if (m_InventoryItem == ItemType::NONE) {
 		m_InventoryItem = _item;
-		m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
-		m_imgItem->SetPos(m_itemPos);
+		if (m_playerID != -1)
+		{
+			m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
+			m_imgItem->SetPos(m_itemPos);
+		}
 		DebugText::print("PLAYER " + std::to_string(m_playerID) + " HAS ACQUIRED ITEM: " + std::to_string(_item));
 
 		//Lightning cloud spawns as soon as it gets picked up
@@ -503,11 +508,11 @@ void Player::ReleaseItem()
 void Player::setGamePad(bool _state)
 {
 	// If AI
-	if (m_playerID == -1)
+	if (!m_ai && (m_playerID == -1 || m_lap == 3))
 	{
+		m_move->SetGamepadActive(false);
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);
-		Locator::getAIScheduler()->AddAI(m_ai.get());
 		m_move->SetEnabled(true);
 		return;
 	}
