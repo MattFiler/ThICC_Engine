@@ -83,7 +83,6 @@ void RedShell::Use(Player * _player, bool _altUse)
 		m_move->SetWaypoint(_player->GetWaypoint());
 		m_ai = std::make_unique<MoveAI>(m_mesh, m_move.get());
 		m_ai->SetAutoUpdateWaypoints(true);
-		Locator::getAIScheduler()->AddAI(m_ai.get());
 	}
 
 	m_altUse = _altUse;

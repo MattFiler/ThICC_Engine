@@ -182,7 +182,7 @@ class ThICC_ItemBox(bpy.types.Operator):
         
         #Set to selected object's position if we can
         if bpy.context.active_object != None:
-            finish_line.location = bpy.context.scene.objects.active.location
+            itembox_spawn.location = bpy.context.scene.objects.active.location
             
         #Select it
         itembox_spawn.select = True

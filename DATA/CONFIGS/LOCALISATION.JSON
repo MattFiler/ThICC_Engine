@@ -16,7 +16,10 @@
     "CHARACTER_SELECT": "Character Selection",
     "VEHICLE_SELECT": "Vehicle Selection",
     "DEMO_CUP": "Demo Cup",
-    "CUP_SELECT": "Cup Selection"
+    "CUP_SELECT": "Cup Selection",
+    "MAP_YOSHI_CIRCUIT": "GCN Yoshi Circuit",
+    "MAP_MEADOWS": "Moo Moo Meadows",
+    "MAP_SUBWAY": "Super Bell Subway"
   },
   "SPANISH": {},
   "FRENCH": {}

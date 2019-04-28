@@ -211,6 +211,7 @@ namespace EditorTool
             //Remove JToken from config
             comp_json_config.Remove(assetList.SelectedItem.ToString());
             File.WriteAllText("DATA/CONFIGS/" + comp_displayname.ToUpper() + "_CONFIG.JSON", comp_json_config.ToString(Formatting.Indented));
+            refreshList();
             MessageBox.Show(common_functions.makeCapitalised(comp_displayname) + " successfully deleted!", "Deleted.", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         

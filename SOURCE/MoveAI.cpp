@@ -1,10 +1,14 @@
 #include "pch.h"
 #include "MoveAI.h"
+#include "ServiceLocator.h"
+#include "AIScheduler.h"
 #include <stack>
 #include <iostream>
 
 MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), m_move(_move)
 {
+	Locator::getAIScheduler()->AddAI(this);
+	/*
 	#ifdef _DEBUG
 	for (int i = 0; i < m_maxPathIterations; i++)
 	{
@@ -21,13 +25,17 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 		m_debugNextWaypoint.back()->SetScale(0.2f);
 		m_debugNextWaypoint.back()->UpdateWorld();
 	}
-	#endif
-	m_move->SetGamepadActive(false);
+	#endif*/
+}
+
+MoveAI::~MoveAI()
+{
+	Locator::getAIScheduler()->AddAI(false);
 }
 
 void MoveAI::DebugRender()
 {
-	#ifdef _DEBUG
+	/*#ifdef _DEBUG
 	for (SDKMeshGO3D* mesh : m_debugRaceLine)
 	{
 		mesh->Render();
@@ -36,7 +44,7 @@ void MoveAI::DebugRender()
 	{
 		//mesh->Render();
 	}
-	#endif
+	#endif*/
 }
 
 void MoveAI::Update()
@@ -167,7 +175,7 @@ void MoveAI::RecalculateLine(Track* _track)
 			}
 		}
 	}
-	
+	/*
 	#ifdef _DEBUG
 	for (int i = 0; i < m_route.size(); i++)
 	{
@@ -179,7 +187,7 @@ void MoveAI::RecalculateLine(Track* _track)
 	{
 		m_debugRaceLine[i]->SetShouldRender(false);
 	}
-	#endif
+	#endif*/
 
 	condensedRoute.push_back(m_route.back());
 	m_route = condensedRoute;

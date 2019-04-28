@@ -8,6 +8,7 @@ class MoveAI
 {
 public:
 	MoveAI(PhysModel* _model, ControlledMovement* _move);
+	~MoveAI();
 
 	void Update();
 	void RecalculateLine(Track* _track);

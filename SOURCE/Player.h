@@ -121,7 +121,7 @@ private:
 	bool m_finished = false;
 	bool m_invincible = false;
 
-	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th" };
+	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th", "th","th","th","th","th","th","th","th"};
 
 	// Player items:
 	//	A player can have an ACTIVE item (e.g. holding a banana behind themselves) AND also an INVENTORY item.

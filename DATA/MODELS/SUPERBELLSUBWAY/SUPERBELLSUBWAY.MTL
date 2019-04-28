@@ -1,0 +1,1123 @@
+### CREATED BY THE ThICC TOOLKIT ###
+
+newmtl ef_WallWater01
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_WallWater01_Alb.png
+map_Kn ef_WallWater01_nrm.png
+norm ef_WallWater01_nrm.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl ef_dashboard
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_dashboard02_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl ef_glideboard
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_glideboard02_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl ef_waterF
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_water_Nrm.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Arrow
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Arrow_Alb.png
+map_Ks mtr_Arrow_spm.png
+map_Kn mtr_Arrow_nrm.png
+norm mtr_Arrow_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_CeilingRepeat
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_CeilingRepeat_Alb.png
+map_Ks mtr_CeilingRepeat_spm.png
+map_Kn mtr_CeilingRepeat_nrm.png
+norm mtr_CeilingRepeat_nrm.png
+map_Ke mtr_CeilingRepeat_emm.png
+map_emissive mtr_CeilingRepeat_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_ClearParts
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd mtr_ClearParts_Alb.png
+map_Ks mtr_ClearParts_spm.png
+Tr 0.000001
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_CubemapOnly
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_CubemapOnly_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Dirt
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Dirt_Alb.png
+map_Ks mtr_Dirt_spm.png
+map_Kn mtr_Dirt_nrm.png
+norm mtr_Dirt_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_DirtAO
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd mtr_DirtAO_Alb.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Floor
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Floor_Alb.png
+map_Ks mtr_Floor_spm.png
+map_Kn mtr_Floor_nrm.png
+norm mtr_Floor_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Flowers
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd mtr_Flowers_Alb.png
+map_Ks mtr_Flowers_spm.png
+map_Kn mtr_Flowers_nrm.png
+norm mtr_Flowers_nrm.png
+Tr 0.000001
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Graffiti
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd mtr_Graffiti_Alb.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_IronStairs
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_IronStairs1_Alb.png
+map_Ks mtr_IronStairs1_spm.png
+map_Kn mtr_IronStairs1_nrm.png
+norm mtr_IronStairs1_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_MetrObj
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_MetroObj_Alb.png
+map_Ks mtr_MetroObj_spm.png
+map_Kn mtr_MetroObj_nrm.png
+norm mtr_MetroObj_nrm.png
+map_Ke mtr_MetroObj_emm.png
+map_emissive mtr_MetroObj_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_MetroLoopParts
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_MetroLoopParts_Alb.png
+map_Ks mtr_MetroLoopParts_spm.png
+map_Kn mtr_MetroLoopParts_nrm.png
+norm mtr_MetroLoopParts_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_MetroObj2
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_MetroObj2_Alb.png
+map_Ks mtr_MetroObj2_spm.png
+map_Kn mtr_MetroObj2_nrm.png
+norm mtr_MetroObj2_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_MetroRoadAmi_
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd mtr_MetroRoadAmi_Alb.png
+map_Ks mtr_MetroRoadAmi_spm.png
+map_Kn mtr_MetroRoadAmi_nrm.png
+norm mtr_MetroRoadAmi_nrm.png
+Tr 0.000001
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_MetroRoadParts
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_MetroRoadParts_Alb.png
+map_Ks mtr_MetroRoadParts_spm.png
+map_Kn mtr_MetroRoadParts_nrm.png
+norm mtr_MetroRoadParts_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Mud
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Mud_Alb.png
+map_Ks mtr_Mud_spm.png
+map_Kn mtr_Mud_nrm.png
+norm mtr_Mud_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Rail
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Rail_Alb.png
+map_Ks mtr_Rail_spm.png
+map_Kn mtr_Rail_nrm.png
+norm mtr_Rail_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_RoadA
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_RoadA_Alb.png
+map_Ks mtr_RoadA_spm.png
+map_Kn mtr_RoadA_nrm.png
+norm mtr_RoadA_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Road_Main
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Road_Main_Alb.png
+map_Ks mtr_Road_Main_spm.png
+map_Kn mtr_Road_Main_nrm.png
+norm mtr_Road_Main_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Road_Slope
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Road_Slope_Alb.png
+map_Ks mtr_Road_Slope_spm.png
+map_Kn mtr_Road_Slope_nrm.png
+norm mtr_Road_Slope_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Road_StartLine
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Road_StartLine_Alb.png
+map_Ks mtr_Road_StartLine_spm.png
+map_Kn mtr_Road_StartLine_nrm.png
+norm mtr_Road_StartLine_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Shiba
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Shiba_Alb.png
+map_Ks mtr_Shiba_spm.png
+map_Kn mtr_Shiba_nrm.png
+norm mtr_Shiba_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Shop
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Shop_Alb.png
+map_Ks mtr_Shop_spm.png
+map_Kn mtr_Shop_nrm.png
+norm mtr_Shop_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_ShopRepeatA
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_ShopRepeatA_Alb.png
+map_Ks mtr_ShopRepeatA_spm.png
+map_Kn mtr_ShopRepeatA_nrm.png
+norm mtr_ShopRepeatA_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_ShopRepeatB
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_ShopRepeatB_Alb.png
+map_Ks mtr_ShopRepeatB_spm.png
+map_Kn mtr_ShopRepeatB_nrm.png
+norm mtr_ShopRepeatB_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_ShopSignBoard
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_ShopSignBoard_Alb.png
+map_Ks mtr_ShopSignBoard_spm.png
+map_Kn mtr_ShopSignBoard_nrm.png
+norm mtr_ShopSignBoard_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_StartGate
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_StartGate_Alb.png
+map_Ks mtr_StartGate_spm.png
+map_Kn mtr_StartGate_nrm.png
+norm mtr_StartGate_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_StartGatePlate
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_StartGatePlate_Alb.png
+map_Ks mtr_StartGatePlate_spm.png
+map_Kn mtr_StartGatePlate_nrm.png
+norm mtr_StartGatePlate_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_StationObj
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_StationObj_Alb.png
+map_Ks mtr_StationObj_spm.png
+map_Kn mtr_StationObj_nrm.png
+norm mtr_StationObj_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_StationObj2
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_StartionObj2_Alb.png
+map_Ks mtr_StartionObj2_spm.png
+map_Kn mtr_StartionObj2_nrm.png
+norm mtr_StartionObj2_nrm.png
+map_Ke mtr_StartionObj2_emm.png
+map_emissive mtr_StartionObj2_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_StationObj3
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_StartionObj3_Alb.png
+map_Ks mtr_StartionObj3_spm.png
+map_Kn mtr_StartionObj3_nrm.png
+norm mtr_StartionObj3_nrm.png
+map_Ke mtr_StartionObj3_emm.png
+map_emissive mtr_StartionObj3_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_StationObj4
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_StationObj4_Alb.png
+map_Ks mtr_StationObj4_spm.png
+map_Kn mtr_StationObj4_nrm.png
+norm mtr_StationObj4_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_StationObj5
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_StartionObj5_Alb.png
+map_Ks mtr_StartionObj5_spm.png
+map_Kn mtr_StartionObj5_nrm.png
+norm mtr_StartionObj5_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_Wall_Saku
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_Wall_Saku_Alb.png
+map_Ks mtr_Wall_Saku_spm.png
+map_Kn mtr_Wall_Saku_nrm.png
+norm mtr_Wall_Saku_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_WoodRepeat
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_WoodRepeat_Alb.png
+map_Ks mtr_WoodRepeat_spm.png
+map_Kn mtr_WoodRepeat_nrm.png
+norm mtr_WoodRepeat_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_kanban
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_kanban_Alb.png
+map_Ks mtr_kanban_spm.png
+Tr 0.000000
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_kanban2
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_kanban2_Alb.png
+map_Ks mtr_kanban2_spm.png
+Tr 0.000000
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_kanban3
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_kanban3_Alb.png
+map_Ks mtr_kanban3_spm.png
+Tr 0.000000
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_makuragi
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_makuragi_Alb.png
+map_Ks mtr_makuragi_spm.png
+map_Kn mtr_makuragi_nrm.png
+norm mtr_makuragi_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_renga
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_renga_Alb.png
+map_Ks mtr_renga_spm.png
+map_Kn mtr_renga_nrm.png
+norm mtr_renga_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_road_home
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_road_home_Alb.png
+map_Ks mtr_road_home_spm.png
+map_Kn mtr_road_home_nrm.png
+norm mtr_road_home_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_road_metro
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_road_metro_Alb.png
+map_Ks mtr_road_metro_spm.png
+map_Kn mtr_road_metro_nrm.png
+norm mtr_road_metro_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_HomeRenga
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_HomeRenga_Alb.png
+map_Ks mtr_wall_HomeRenga_spm.png
+map_Kn mtr_wall_HomeRenga_nrm.png
+norm mtr_wall_HomeRenga_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_ceiling
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_ceiling_Alb.png
+map_Ks mtr_wall_ceiling_spm.png
+map_Kn mtr_wall_ceiling_nrm.png
+norm mtr_wall_ceiling_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_conkuri
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_conkuri_Alb.png
+map_Ks mtr_wall_conkuri_spm.png
+map_Kn mtr_wall_conkuri_nrm.png
+norm mtr_wall_conkuri_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_green_sp1
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_green_sp1_Alb.png
+map_Ks mtr_wall_green_sp1_spm.png
+map_Kn mtr_wall_green_sp1_nrm.png
+norm mtr_wall_green_sp1_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_green_sp1Metro
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_green_sp1Metro_Alb.png
+map_Ks mtr_wall_green_sp1Metro_spm.png
+map_Kn mtr_wall_green_sp1Metro_nrm.png
+norm mtr_wall_green_sp1Metro_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_green_sp2
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_green_sp2_Alb.png
+map_Ks mtr_wall_green_sp2_spm.png
+map_Kn mtr_wall_green_sp2_nrm.png
+norm mtr_wall_green_sp2_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_green_sp2Metro
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_green_sp2Metro_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_green_sp3
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_green_sp3_Alb.png
+map_Ks mtr_wall_green_sp3_spm.png
+map_Kn mtr_wall_green_sp3_nrm.png
+norm mtr_wall_green_sp3_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_metro
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_metro_Alb.png
+map_Ks mtr_wall_metro_spm.png
+map_Kn mtr_wall_metro_nrm.png
+norm mtr_wall_metro_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_renga
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_renga_Alb.png
+map_Ks mtr_wall_renga_spm.png
+map_Kn mtr_wall_renga_nrm.png
+norm mtr_wall_renga_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wall_renga_sp1
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wall_renga_sp1_Alb.png
+map_Ks mtr_wall_renga_sp1_spm.png
+map_Kn mtr_wall_renga_sp1_nrm.png
+norm mtr_wall_renga_sp1_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl mtr_wallglass
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mtr_wallglass_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl seiteki
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd sn_damWall01_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
