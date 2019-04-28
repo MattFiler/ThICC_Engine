@@ -30,7 +30,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 
 MoveAI::~MoveAI()
 {
-	Locator::getAIScheduler()->AddAI(false);
+	Locator::getAIScheduler()->RemoveAI(this);
 }
 
 void MoveAI::DebugRender()
