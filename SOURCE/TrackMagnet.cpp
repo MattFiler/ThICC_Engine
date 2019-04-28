@@ -52,9 +52,9 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	if (shouldStick)
 	{
 		m_timeOffTerrain = 0;
+		m_colType = tri->GetType();
 		if (m_useGroundTypes && m_onTrack)
 		{
-			m_colType = tri->GetType();
 			switch (tri->GetType())
 			{
 			case ON_TRACK:

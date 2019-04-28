@@ -86,9 +86,13 @@ public:
 	AnimationController* GetAnimController() { return m_animationMesh.get(); };
 
 	void CreateAi() { m_ai = std::make_unique<MoveAI>(this, m_move.get()); };
-	void DeleteAi() { m_ai.release(); };
+	void DeleteAi() { m_ai.reset(); };
 
 	ControlledMovement* GetControlledMovement() { return m_move.get(); };
+	MoveAI* GetMoveAi() { return m_ai.get(); };
+
+	bool IsGliding() { return m_gliding; };
+	bool IsRespawning() { return m_respawning; };
 
 protected:
 	int m_playerID = 0;

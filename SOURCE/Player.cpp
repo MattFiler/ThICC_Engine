@@ -333,8 +333,8 @@ void Player::TrailItems()
 
 void Player::SpawnItems(ItemType type)
 {
-	//Triple mushrooms and Golden Mushroom still in inventory after use
-	if (type != MUSHROOM_3X && type != MUSHROOM_UNLIMITED)
+	//Triple mushrooms, Golden Mushroom and Bullet Bill still in inventory after use
+	if (type != MUSHROOM_3X && type != MUSHROOM_UNLIMITED && type != BULLET_BILL)
 	{
 		SetActiveItem(type);
 	}
