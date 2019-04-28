@@ -163,6 +163,7 @@ private:
 	Matrix m_respawnEnd = Matrix::Identity;
 	Vector3 m_respawnPos = Vector3::Zero;
 	float m_totalRespawnTime = 0;
+	float m_maxRespawnTime = 2;
 	float m_elapsedRespawnTime = 0;
 
 	bool m_preventRespawn = false; 

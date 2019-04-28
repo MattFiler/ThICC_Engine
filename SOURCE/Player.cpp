@@ -679,6 +679,10 @@ void Player::Respawn()
 	// Find the distance to the respawn point
 	float dist = Vector3::Distance(pos, m_pos);
 	m_totalRespawnTime = dist / m_respawnSpeed;
+	if (m_totalRespawnTime > m_maxRespawnTime)
+	{
+		m_totalRespawnTime = m_maxRespawnTime;
+	}
 
 	m_posHistoryTimer = 0;
 	m_vel = Vector::Zero;
