@@ -296,6 +296,8 @@ namespace EditorTool
                     return "Engine Font";
                 case AssetCompType.GLOBAL_SOUNDS:
                     return "Global Sound";
+                case AssetCompType.CUP:
+                    return "Cup";
             }
             return "";
         }

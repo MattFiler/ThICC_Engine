@@ -99,6 +99,11 @@ void ControlledMovement::GetControllerInput()
 			m_left = false;
 		}
 	}
+
+	if (m_gliding)
+	{
+		m_acceleration = 1;
+	}
 }
 
 
@@ -243,6 +248,11 @@ void ControlledMovement::ProcessInputFlags()
 	else
 	{
 		EndDrift();
+	}
+
+	if (m_gliding)
+	{
+		m_targetAnimRotOffset = m_physModel->GetWorld().Forward();
 	}
 
 	m_animMesh->Update(m_physModel->GetWorld(), m_targetAnimRotOffset);

@@ -26,6 +26,7 @@ private:
 	json game_config;
 	json map_config;
 	json character_config;
+	json cup_config;
 	json vehicle_config;
 
 	GameObjectShared m_go_shared;

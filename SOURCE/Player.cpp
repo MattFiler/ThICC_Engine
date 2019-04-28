@@ -10,7 +10,7 @@
 
 extern void ExitGame();
 
-Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character.model), CreateItem(_createItemFunction)
+Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character->model), CreateItem(_createItemFunction)
 {
 	InitPlayerData();
 
@@ -65,21 +65,21 @@ Player::~Player()
 }
 
 
-void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
+void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 
-	std::ifstream i(m_filepath.generateConfigFilepath(_vehicle.model, m_filepath.MODEL));
+	std::ifstream i(m_filepath.generateConfigFilepath(_vehicle->model, m_filepath.MODEL));
 	json m_model_config_vehicle;
 	m_model_config_vehicle << i;
 
 	m_animationMesh = std::make_unique<AnimationController>();
-	m_animationMesh->AddModel("vehicle", _vehicle.model, Vector::Zero);
+	m_animationMesh->AddModel("vehicle", _vehicle->model, Vector::Zero);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
-	std::ifstream x(m_filepath.generateConfigFilepath(_character.model, m_filepath.MODEL));
+	std::ifstream x(m_filepath.generateConfigFilepath(_character->model, m_filepath.MODEL));
 	json m_model_config_character;
 	m_model_config_character << x;
 
-	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character.model);
+	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character->model);
 	new_model->SetScale(m_model_config_character["modelscale"]);
 	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
 	m_animationMesh->AddModel("lakitu", "DEFAULT_ITEM", Vector3::Up * 4);
@@ -502,8 +502,8 @@ void Player::setGamePad(bool _state)
 
 	// TEST CODE //
 	
-	
-	/*if (m_playerID == 0)
+	/*
+	if (m_playerID == 0)
 	{
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());
 		m_ai->UseDrift(true);
@@ -549,9 +549,12 @@ void Player::GlideLogic()
 		m_gliding = true;
 		m_animationMesh->SwitchModelSet("gliding");
 		m_preventRespawn = true;
+		m_move->SetGliding(true);
+		m_elapsedTimeOff = 0;
 	}
 	else if (m_colType == CollisionType::GLIDER_TRACK)
 	{
+		m_elapsedTimeOff = 0;
 		m_maxGrav = 0;
 		m_gravVel = Vector3::Zero;
 	}
@@ -560,15 +563,22 @@ void Player::GlideLogic()
 		m_glideTimeElapsed += Locator::getGSD()->m_dt;
 		if (m_onTrack && m_glideTimeElapsed > m_minGlideDuration)
 		{
+			m_elapsedTimeOff = 0;
+			m_glideTimeElapsed = 0;
 			m_preventRespawn = false;
 			m_gliding = false;
 			m_maxGrav = m_normalGrav;
+			m_move->SetGliding(false);
 			m_animationMesh->SwitchModelSet("default");
 		}
 		else if (m_colType == CollisionType::NO_TERRAIN)
 		{
-			m_preventRespawn = false;
-			m_maxGrav = m_glidingGrav;
+			m_elapsedTimeOff += Locator::getGSD()->m_dt;
+			if (m_elapsedTimeOff > m_maxTimeGlidingOff)
+			{
+				m_preventRespawn = false;
+				m_maxGrav = m_glidingGrav;
+			}
 		}
 		else
 		{
@@ -592,7 +602,7 @@ void Player::RespawnLogic()
 
 	m_posHistoryTimer += Locator::getGSD()->m_dt;
 	m_timeSinceRespawn += Locator::getGSD()->m_dt;
-	if (m_onTrack && m_colType == CollisionType::ON_TRACK)
+	if (!m_respawning && m_onTrack && m_colType == CollisionType::ON_TRACK)
 	{
 		m_offTrackTimer = 0;
 		m_offTerrainTimer = 0;
@@ -641,6 +651,8 @@ void Player::Respawn()
 	m_respawning = true;
 	m_respawnEnd = m_posHistory.front();
 	m_respawnStart = m_world;
+	m_glideTimeElapsed = 0;
+	m_elapsedTimeOff = 0;
 
 	// Decompose the matrix
 	Vector3 pos;

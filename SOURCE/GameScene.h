@@ -18,7 +18,7 @@ using json = nlohmann::json;
 class GameScene : public Scene
 {
 public:
-	GameScene(MapInfo _track);
+	GameScene(MapInfo* _track);
 	~GameScene() override;
 
 	//Core update/render/load functions
@@ -76,7 +76,7 @@ private:
 	//Random data stores
 	json game_config;
 	json track_config;
-	MapInfo map_info;
+	MapInfo* map_info;
 
 	//Referenced stuff
 	RenderData* m_RD;

@@ -51,5 +51,13 @@
   },
   "VEHICLE_SELECT": {
     "in_use_in": []
+  },
+  "DEMO_CUP": {
+    "in_use_in": [
+      "Cup"
+    ]
+  },
+  "CUP_SELECT": {
+    "in_use_in": []
   }
 }
