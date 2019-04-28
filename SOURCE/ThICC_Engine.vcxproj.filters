@@ -380,6 +380,9 @@
     <ClInclude Include="CupInfo.h">
       <Filter>Engine Backend\AssetComps</Filter>
     </ClInclude>
+    <ClInclude Include="MaterialConfig.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

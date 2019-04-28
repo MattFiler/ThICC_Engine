@@ -295,6 +295,56 @@ namespace EditorTool
 
             //------
 
+            //Create animation config
+            List<int> anim_mat_index = new List<int>();
+            List<List<string>> anim_mat_textures = new List<List<string>>();
+            List<float> anim_mat_anim_time = new List<float>();
+            for (int i = 0; i < model_material_config.Count + 1; i++)
+            {
+                foreach (var this_material_config in model_material_config)
+                {
+                    if (model_material_config[this_material_config.Key]["ThICC_INDEX"].Value<int>() == i)
+                    {
+                        if (model_material_config[this_material_config.Key]["ThICC_ANIMATION_ENABLED"] != null &&
+                            model_material_config[this_material_config.Key]["ThICC_ANIMATION_ENABLED"].Value<bool>() == true)
+                        {
+                            anim_mat_index.Add(i);
+                            List<string> these_textures = new List<string>();
+                            foreach (string texture in model_material_config[this_material_config.Key]["ThICC_ANIMATION"].Value<JArray>())
+                            {
+                                these_textures.Add(texture);
+                            }
+                            anim_mat_textures.Add(these_textures);
+                            anim_mat_anim_time.Add(model_material_config[this_material_config.Key]["ThICC_ANIMATION_TIME"].Value<float>());
+                        }
+                        break;
+                    }
+                }
+            }
+
+            //Output anim config
+            using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.ANIMATION_CONFIG), FileMode.Create)))
+            {
+                writer.Write(anim_mat_index.Count);
+                for (int i = 0; i < anim_mat_index.Count; i++)
+                {
+                    writer.Write(anim_mat_index.ElementAt(i));
+                    writer.Write(anim_mat_textures.ElementAt(i).Count);
+                    writer.Write(anim_mat_anim_time.ElementAt(i));
+                    foreach (string texture in anim_mat_textures.ElementAt(i))
+                    {
+                        string updated_texture = Path.GetFileNameWithoutExtension(texture) + ".DDS";
+                        writer.Write(updated_texture.Length);
+                        for (int x = 0; x < updated_texture.Length; x++)
+                        {
+                            writer.Write(updated_texture[x]);
+                        }
+                    }
+                }
+            }
+
+            //------
+
             //Make sure our MTL is uncommented in the OBJ
             int obj_index = 0;
             foreach (string line in obj_file)

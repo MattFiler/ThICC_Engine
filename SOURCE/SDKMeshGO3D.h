@@ -2,6 +2,7 @@
 #include "GameObject3D.h"
 #include "GameFilepaths.h"
 #include "Constants.h"
+#include "MaterialConfig.h"
 #include <string>
 struct RenderData;
 
@@ -37,8 +38,8 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_radianceIBL;
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_irradianceIBL;
 
-	//Current metalness config
-	std::vector<bool> current_metalness;
+	//Material config
+	std::vector<MaterialConfig> m_material_config;
 
 	//Engine features
 	GameFilepaths m_filepath;

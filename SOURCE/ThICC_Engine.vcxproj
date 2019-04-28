@@ -361,6 +361,7 @@
     <ClInclude Include="MapInfo.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="MeshTri.h" />
+    <ClInclude Include="MaterialConfig.h" />
     <ClInclude Include="MoveAI.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="pch.h" />

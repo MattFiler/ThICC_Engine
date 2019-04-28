@@ -653,6 +653,13 @@ void PBREffect::SetEmissiveTexture(D3D12_GPU_DESCRIPTOR_HANDLE emissive)
 }
 
 
+//Added by MattF: 28/04/19 - NOT STANDARD DXTK12
+void PBREffect::SetAlbedoTexture(D3D12_GPU_DESCRIPTOR_HANDLE albedo)
+{
+	pImpl->descriptors[Impl::RootParameterIndex::AlbedoTexture] = albedo;
+}
+
+
 // Additional settings.
 void PBREffect::SetRenderTargetSizeInPixels(int width, int height)
 {
