@@ -31,11 +31,6 @@ public:
 	virtual void Load() {}; //for manually loading expensive items at runtime
 
 	void SetPos(Vector3 _pos) {
-		if (_pos == Vector3::Zero)
-		{
-			throw std::runtime_error("error");
-		}
-
 		m_pos = _pos;
 	}
 	void AddPos(Vector3 _vec) { m_pos += _vec; }

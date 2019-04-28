@@ -155,6 +155,7 @@
     <ClCompile Include="DebugConsole.cpp">
       <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="BulletBill.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -380,6 +381,7 @@
     <ClInclude Include="CupInfo.h">
       <Filter>Engine Backend\AssetComps</Filter>
     </ClInclude>
+    <ClInclude Include="BulletBill.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

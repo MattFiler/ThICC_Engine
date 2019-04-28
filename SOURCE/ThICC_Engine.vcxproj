@@ -317,6 +317,7 @@
     <ClInclude Include="Banana.h" />
     <ClInclude Include="BlenderToDirectX.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="BulletBill.h" />
     <ClInclude Include="CameraData.h" />
     <ClInclude Include="CharacterInfo.h" />
     <ClInclude Include="Collision.h" />
@@ -391,6 +392,7 @@
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="BulletBill.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Constants.cpp" />

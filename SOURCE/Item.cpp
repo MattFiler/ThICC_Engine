@@ -21,11 +21,13 @@ Item::Item(const std::string& item_type)
 void Item::InitItemData(const std::string & item_type)
 {
 		std::string item_name = item_type;
-		item_name.erase(item_name.begin(), item_name.begin() + 5); //Removing "ITEM_"
-
 		if (item_name == Locator::getItemData()->GetItemModelName(FAKE_BOX))
 		{
 			item_name = "FAKE_BOX";
+		}
+		else
+		{
+			item_name.erase(item_name.begin(), item_name.begin() + 5); //Removing "ITEM_"
 		}
 
 		std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
@@ -35,6 +37,7 @@ void Item::InitItemData(const std::string & item_type)
 			m_maxDuration = (float)m_itemData[item_name]["info"]["lifetime"];
 			m_maxImmunityTime = (float)m_itemData[item_name]["info"]["player_immunity_time"];
 		}
+
 }
 
 void Item::Render()
