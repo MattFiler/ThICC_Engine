@@ -129,10 +129,8 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	//Setup viewports for splitscreen mode
 	SetupSplitscreenViewports();
 
-	//Load skybox objects
-	for (int i = 0; i < m_game_config["player_count"]; i++) {
-		Locator::getRD()->skybox[i] = new Skybox();
-	}
+	//Load skybox object
+	Locator::getRD()->skybox = new Skybox();
 
 	//Create debug console
 	#ifdef _DEBUG 

@@ -14,6 +14,18 @@
 SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 {
 	filename = _filename;
+
+	if (_filename.length() > 5 && _filename.substr(_filename.length() - 5) != "DEBUG") {
+		//Fetch config
+		std::ifstream x(m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL));
+		nlohmann::json model_config;
+		model_config << x;
+
+		//Apply config
+		SetScale(model_config["modelscale"]);
+		SetPos(Vector3(model_config["start_x"], model_config["start_y"], model_config["start_z"]));
+		SetRotationInDegrees(Vector3(model_config["rot_x"], model_config["rot_y"], model_config["rot_z"]));
+	}
 }
 
 /* Destroy everything */
@@ -78,18 +90,43 @@ void SDKMeshGO3D::Render()
 						}
 						m_material_config.at(i).animation_timer += (float)Locator::getGSD()->m_timer.GetElapsedSeconds();
 					}
+					/* ALBEDO OVERRIDE */
+					if (albedo_override_index != -1 && !albedo_override_applied) {
+						pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(albedo_override_index));
+					}
 					i++;
 				}
+			}
+			if (albedo_override_index != -1 && !albedo_override_applied) {
+				albedo_override_applied = true;
 			}
 		}
 
 		//Update effects and draw
 		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
-		m_model->Draw(commandList, m_modelNormal.cbegin());
+		m_model->Draw(Locator::getDD()->m_deviceResources->GetCommandList(), m_modelNormal.cbegin());
 
 		//End scene
 		Locator::getDD()->m_hdrScene->EndScene(commandList);
 	}
+}
+
+/* Override every albedo material for this model (indended for skybox use) */
+void SDKMeshGO3D::AlbedoOverride(std::wstring path) {
+	if (resourceDescriptorOffset < 10) {
+		resourceDescriptorOffset += m_modelNormal.size() * 4;
+	}
+	auto device = Locator::getDD()->m_deviceResources->GetD3DDevice();
+	ResourceUploadBatch resourceUpload(device);
+	resourceUpload.Begin(); 
+	wchar_t override_tex[_MAX_PATH] = {};
+	DX::FindMediaFile(override_tex, _MAX_PATH, path.c_str());
+	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, override_tex, m_albedoOverride.ReleaseAndGetAddressOf()));
+	CreateShaderResourceView(device, m_albedoOverride.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
+	albedo_override_index = resourceDescriptorOffset;
+	resourceDescriptorOffset++;
+	auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
+	uploadResourcesFinished.wait();
 }
 
 /* Load the model */
@@ -233,24 +270,47 @@ void SDKMeshGO3D::Load()
 			Locator::getRD()->m_fxFactoryPBR = std::make_unique<PBREffectFactory>(m_modelResources->Heap(), Locator::getRD()->m_states->Heap());
 			fxFactory = Locator::getRD()->m_fxFactoryPBR.get();
 
-			//Opaque materials
-			EffectPipelineStateDescription pd(
-				nullptr,
-				CommonStates::Opaque,
-				CommonStates::DepthDefault,
-				CommonStates::CullClockwise,
-				hdrState);
+			if (enable_depth_default) {
+				//Opaque materials
+				EffectPipelineStateDescription pd(
+					nullptr,
+					CommonStates::Opaque,
+					CommonStates::DepthDefault,
+					CommonStates::CullClockwise,
+					hdrState);
 
-			//Transparent materials
-			EffectPipelineStateDescription pdAlpha(
-				nullptr,
-				CommonStates::AlphaBlend,
-				CommonStates::DepthDefault,
-				CommonStates::CullClockwise,
-				hdrState);
+				//Transparent materials
+				EffectPipelineStateDescription pdAlpha(
+					nullptr,
+					CommonStates::AlphaBlend,
+					CommonStates::DepthDefault,
+					CommonStates::CullClockwise,
+					hdrState);
 
-			//Create effects for materials
-			m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, resourceDescriptorOffset);
+				//Create effects for materials
+				m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, resourceDescriptorOffset);
+			}
+			else
+			{
+				//Opaque materials
+				EffectPipelineStateDescription pd(
+					nullptr,
+					CommonStates::Opaque,
+					CommonStates::DepthNone,
+					CommonStates::CullClockwise,
+					hdrState);
+
+				//Transparent materials
+				EffectPipelineStateDescription pdAlpha(
+					nullptr,
+					CommonStates::AlphaBlend,
+					CommonStates::DepthNone,
+					CommonStates::CullClockwise,
+					hdrState);
+
+				//Create effects for materials
+				m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, resourceDescriptorOffset);
+			}
 
 			//Load our engine configs
 			if (!is_debug_mesh) {

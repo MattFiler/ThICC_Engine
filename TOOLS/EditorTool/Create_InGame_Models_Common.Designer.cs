@@ -42,11 +42,17 @@
             this.label4 = new System.Windows.Forms.Label();
             this.debugMarker = new System.Windows.Forms.TextBox();
             this.loadDebugMarker = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.skybox = new System.Windows.Forms.TextBox();
+            this.loadSkybox = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.skybox);
+            this.groupBox2.Controls.Add(this.loadSkybox);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.debugMarker);
             this.groupBox2.Controls.Add(this.loadDebugMarker);
@@ -61,7 +67,7 @@
             this.groupBox2.Controls.Add(this.loadGlider);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(327, 183);
+            this.groupBox2.Size = new System.Drawing.Size(327, 222);
             this.groupBox2.TabIndex = 25;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Common Models";
@@ -123,7 +129,7 @@
             // 
             // saveModels
             // 
-            this.saveModels.Location = new System.Drawing.Point(12, 201);
+            this.saveModels.Location = new System.Drawing.Point(12, 240);
             this.saveModels.Name = "saveModels";
             this.saveModels.Size = new System.Drawing.Size(327, 23);
             this.saveModels.TabIndex = 26;
@@ -185,11 +191,38 @@
             this.loadDebugMarker.UseVisualStyleBackColor = true;
             this.loadDebugMarker.Click += new System.EventHandler(this.loadDebugMarker_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 177);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(74, 13);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "Skybox Model";
+            // 
+            // skybox
+            // 
+            this.skybox.Location = new System.Drawing.Point(9, 193);
+            this.skybox.Name = "skybox";
+            this.skybox.ReadOnly = true;
+            this.skybox.Size = new System.Drawing.Size(229, 20);
+            this.skybox.TabIndex = 18;
+            // 
+            // loadSkybox
+            // 
+            this.loadSkybox.Location = new System.Drawing.Point(244, 192);
+            this.loadSkybox.Name = "loadSkybox";
+            this.loadSkybox.Size = new System.Drawing.Size(75, 23);
+            this.loadSkybox.TabIndex = 19;
+            this.loadSkybox.Text = "Load";
+            this.loadSkybox.UseVisualStyleBackColor = true;
+            this.loadSkybox.Click += new System.EventHandler(this.loadSkybox_Click);
+            // 
             // Create_InGame_Models_Common
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(352, 234);
+            this.ClientSize = new System.Drawing.Size(352, 271);
             this.Controls.Add(this.saveModels);
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -218,5 +251,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox debugMarker;
         private System.Windows.Forms.Button loadDebugMarker;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox skybox;
+        private System.Windows.Forms.Button loadSkybox;
     }
 }

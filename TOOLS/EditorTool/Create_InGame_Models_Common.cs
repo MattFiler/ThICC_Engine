@@ -27,6 +27,7 @@ namespace EditorTool
             glider.Text = controller_config["glider"].Value<string>();
             itemBox.Text = controller_config["itembox"].Value<string>();
             debugMarker.Text = controller_config["debug_marker"].Value<string>();
+            skybox.Text = controller_config["skybox"].Value<string>();
         }
 
         /* Select assets */
@@ -46,12 +47,16 @@ namespace EditorTool
         {
             function_libary.assetSelectHandler(debugMarker, AssetType.MODEL);
         }
+        private void loadSkybox_Click(object sender, EventArgs e)
+        {
+            function_libary.assetSelectHandler(skybox, AssetType.MODEL);
+        }
 
         /* Save */
         private void saveModels_Click(object sender, EventArgs e)
         {
             //All inputs required
-            if (courseReferee.Text == "" || glider.Text == "" || itemBox.Text == "")
+            if (courseReferee.Text == "" || glider.Text == "" || itemBox.Text == "" || skybox.Text == "")
             {
                 MessageBox.Show("Please complete all fields before trying to save.", "Can't save.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -65,6 +70,7 @@ namespace EditorTool
             controller_config["glider"] = glider.Text;
             controller_config["itembox"] = itemBox.Text;
             controller_config["debug_marker"] = debugMarker.Text;
+            controller_config["skybox"] = skybox.Text;
 
             //Save
             File.WriteAllText("DATA/CONFIGS/COMMON_MODELS_CONFIG.JSON", controller_config.ToString(Formatting.Indented));
