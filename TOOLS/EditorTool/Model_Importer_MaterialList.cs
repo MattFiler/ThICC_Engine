@@ -286,6 +286,7 @@ namespace EditorTool
             //Output metal config
             using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.METALLIC_CONFIG), FileMode.Create)))
             {
+                addThiccSignature(writer);
                 writer.Write(metal_config.Count);
                 foreach (bool is_metal in metal_config)
                 {
@@ -325,6 +326,7 @@ namespace EditorTool
             //Output anim config
             using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.ANIMATION_CONFIG), FileMode.Create)))
             {
+                addThiccSignature(writer);
                 writer.Write(anim_mat_index.Count);
                 for (int i = 0; i < anim_mat_index.Count; i++)
                 {
@@ -979,11 +981,23 @@ namespace EditorTool
             }
         }
 
+        /* Delete a file if it exists (this is safer than just calling delete!) */
         private void deleteIfExists(string file)
         {
             if (File.Exists(file))
             {
                 File.Delete(file);
+            }
+        }
+
+        /* Add the ThICC file signature, this is used by the game to check we're reading an up-to-date file. */
+        private void addThiccSignature(BinaryWriter writer)
+        {
+            writer.Write(common_functions.ThICC_FILE_VERSION);
+            string signature = "ThICC";
+            foreach (char character in signature)
+            {
+                writer.Write(character); //This verifies the legitimacy of the file.
             }
         }
     }

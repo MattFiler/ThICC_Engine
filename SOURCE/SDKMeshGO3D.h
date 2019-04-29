@@ -51,7 +51,6 @@ protected:
 	int irradiance_index = -1;
 	bool is_debug_mesh = false;
 	bool m_shouldRender = true;
-
 	bool m_loaded = false;
 };
 
