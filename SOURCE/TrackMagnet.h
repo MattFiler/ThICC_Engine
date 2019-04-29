@@ -21,6 +21,7 @@ protected:
 	CollisionType m_colType = ON_TRACK;
 
 private:
+	bool TryCollision(Track& _track, const Vector3& _location, MeshTri*& _closestTri, Vector3& _closestPos);
 	void MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector _down, MeshTri * _tri);
 
 	float m_minSnapDist = 0.001f; // Under this distance the kart wont snap to the track
