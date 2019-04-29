@@ -70,6 +70,7 @@ namespace EditorTool
             this.soundPreview = new NAudio.Gui.WaveViewer();
             this.assetUseageGroup = new System.Windows.Forms.GroupBox();
             this.assetUseages = new System.Windows.Forms.ListBox();
+            this.refresh = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
@@ -127,6 +128,7 @@ namespace EditorTool
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.refresh);
             this.groupBox2.Controls.Add(this.editAsset);
             this.groupBox2.Controls.Add(this.loadAssetType);
             this.groupBox2.Controls.Add(this.deleteAsset);
@@ -143,7 +145,7 @@ namespace EditorTool
             // 
             this.editAsset.Location = new System.Drawing.Point(6, 443);
             this.editAsset.Name = "editAsset";
-            this.editAsset.Size = new System.Drawing.Size(202, 23);
+            this.editAsset.Size = new System.Drawing.Size(100, 23);
             this.editAsset.TabIndex = 6;
             this.editAsset.Text = "Edit";
             this.editAsset.UseVisualStyleBackColor = true;
@@ -513,6 +515,16 @@ namespace EditorTool
             this.assetUseages.Size = new System.Drawing.Size(214, 30);
             this.assetUseages.TabIndex = 0;
             // 
+            // refresh
+            // 
+            this.refresh.Location = new System.Drawing.Point(108, 443);
+            this.refresh.Name = "refresh";
+            this.refresh.Size = new System.Drawing.Size(100, 23);
+            this.refresh.TabIndex = 7;
+            this.refresh.Text = "Refresh";
+            this.refresh.UseVisualStyleBackColor = true;
+            this.refresh.Click += new System.EventHandler(this.refresh_Click);
+            // 
             // Asset_Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -583,5 +595,6 @@ namespace EditorTool
         private Label depreciationWarning;
         private GroupBox assetUseageGroup;
         private ListBox assetUseages;
+        private Button refresh;
     }
 }

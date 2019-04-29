@@ -88,10 +88,8 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character->model);
 	new_model->SetScale(m_model_config_character["modelscale"]);
 	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
-	m_animationMesh->AddModel("lakitu", "DEFAULT_ITEM", Vector3::Up * 4);
-	new_model = new SDKMeshGO3D("DEFAULT_ITEM");
-	new_model->SetScale(Vector3(2, 0.05f, 2));
-	m_animationMesh->AddModel("glider", new_model, Vector3::Up * 1.3f);
+	m_animationMesh->AddModel("lakitu", "referee", Vector3::Up * 4);
+	m_animationMesh->AddModel("glider", "kite", Vector3::Up * 0.4f);
 	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL), Vector3::Up);
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
