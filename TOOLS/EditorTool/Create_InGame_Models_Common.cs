@@ -26,6 +26,7 @@ namespace EditorTool
             courseReferee.Text = controller_config["referee"].Value<string>();
             glider.Text = controller_config["glider"].Value<string>();
             itemBox.Text = controller_config["itembox"].Value<string>();
+            debugMarker.Text = controller_config["debug_marker"].Value<string>();
         }
 
         /* Select assets */
@@ -40,6 +41,10 @@ namespace EditorTool
         private void selectItemBox_Click(object sender, EventArgs e)
         {
             function_libary.assetSelectHandler(itemBox, AssetType.MODEL);
+        }
+        private void loadDebugMarker_Click(object sender, EventArgs e)
+        {
+            function_libary.assetSelectHandler(debugMarker, AssetType.MODEL);
         }
 
         /* Save */
@@ -59,11 +64,20 @@ namespace EditorTool
             controller_config["referee"] = courseReferee.Text;
             controller_config["glider"] = glider.Text;
             controller_config["itembox"] = itemBox.Text;
+            controller_config["debug_marker"] = debugMarker.Text;
 
             //Save
             File.WriteAllText("DATA/CONFIGS/COMMON_MODELS_CONFIG.JSON", controller_config.ToString(Formatting.Indented));
             MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Close();
         }
+
+
+        
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

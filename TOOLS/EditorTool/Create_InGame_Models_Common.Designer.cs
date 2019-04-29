@@ -39,11 +39,17 @@
             this.label3 = new System.Windows.Forms.Label();
             this.itemBox = new System.Windows.Forms.TextBox();
             this.selectItemBox = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.debugMarker = new System.Windows.Forms.TextBox();
+            this.loadDebugMarker = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.debugMarker);
+            this.groupBox2.Controls.Add(this.loadDebugMarker);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.itemBox);
             this.groupBox2.Controls.Add(this.selectItemBox);
@@ -55,10 +61,11 @@
             this.groupBox2.Controls.Add(this.loadGlider);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(327, 144);
+            this.groupBox2.Size = new System.Drawing.Size(327, 183);
             this.groupBox2.TabIndex = 25;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Common Models";
+            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // loadReferee
             // 
@@ -116,7 +123,7 @@
             // 
             // saveModels
             // 
-            this.saveModels.Location = new System.Drawing.Point(12, 162);
+            this.saveModels.Location = new System.Drawing.Point(12, 201);
             this.saveModels.Name = "saveModels";
             this.saveModels.Size = new System.Drawing.Size(327, 23);
             this.saveModels.TabIndex = 26;
@@ -151,11 +158,38 @@
             this.selectItemBox.UseVisualStyleBackColor = true;
             this.selectItemBox.Click += new System.EventHandler(this.selectItemBox_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 138);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(75, 13);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "Debug Marker";
+            // 
+            // debugMarker
+            // 
+            this.debugMarker.Location = new System.Drawing.Point(9, 154);
+            this.debugMarker.Name = "debugMarker";
+            this.debugMarker.ReadOnly = true;
+            this.debugMarker.Size = new System.Drawing.Size(229, 20);
+            this.debugMarker.TabIndex = 15;
+            // 
+            // loadDebugMarker
+            // 
+            this.loadDebugMarker.Location = new System.Drawing.Point(244, 153);
+            this.loadDebugMarker.Name = "loadDebugMarker";
+            this.loadDebugMarker.Size = new System.Drawing.Size(75, 23);
+            this.loadDebugMarker.TabIndex = 16;
+            this.loadDebugMarker.Text = "Load";
+            this.loadDebugMarker.UseVisualStyleBackColor = true;
+            this.loadDebugMarker.Click += new System.EventHandler(this.loadDebugMarker_Click);
+            // 
             // Create_InGame_Models_Common
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(352, 194);
+            this.ClientSize = new System.Drawing.Size(352, 234);
             this.Controls.Add(this.saveModels);
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -181,5 +215,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox itemBox;
         private System.Windows.Forms.Button selectItemBox;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox debugMarker;
+        private System.Windows.Forms.Button loadDebugMarker;
     }
 }

@@ -1,5 +1,6 @@
 {
   "referee": "REFEREE",
   "glider": "KITE",
-  "itembox": "ITEM_BOX"
+  "itembox": "ITEM_BOX",
+  "debug_marker": "DEFAULT_ITEM"
 }
