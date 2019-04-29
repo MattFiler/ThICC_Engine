@@ -13,6 +13,7 @@ public:
 	void setDampenWallReflect(bool _toggle) { m_dampenWallReflect = _toggle; };
 
 	void UseGroundTypes(bool _flag) { m_useGroundTypes = _flag; };
+	CollisionType GetGroundType() { return m_colType; };
 
 protected:
 	bool m_onTrack = false;

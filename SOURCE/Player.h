@@ -80,6 +80,8 @@ public:
 
 	void Reload(CharacterInfo* _character, VehicleInfo* _vehicle);
 
+	Matrix GetLastOnTrack() { return m_posHistory.front(); };
+
 protected:
 	int m_playerID = 0;
 
