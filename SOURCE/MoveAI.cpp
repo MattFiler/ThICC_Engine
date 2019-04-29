@@ -2,12 +2,16 @@
 #include "MoveAI.h"
 #include "ServiceLocator.h"
 #include "AIScheduler.h"
+#include "Player.h"
 #include <stack>
 #include <iostream>
 
 MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), m_move(_move)
 {
 	Locator::getAIScheduler()->AddAI(this);
+
+	m_player = dynamic_cast<Player*>(_model);
+
 	/*
 	#ifdef _DEBUG
 	for (int i = 0; i < m_maxPathIterations; i++)
@@ -49,6 +53,21 @@ void MoveAI::DebugRender()
 
 bool MoveAI::Update()
 {
+	if (m_player)
+	{
+		if (m_player->GetGroundType() == OFF_TRACK)
+		{
+			// If off the track, go back to where we were last on the track
+			Matrix world = m_player->GetLastOnTrack();
+			Vector pos;
+			Vector scale;
+			Quaternion rot;
+			world.Decompose(scale, rot, pos);
+
+			m_route.clear();
+			m_route.push_back(RouteNode(pos, m_move->GetWaypoint()));
+		}
+	}
 	// If there at least 2 waypoints left
 	if (m_routeIndex < m_route.size()-1 && !m_route.empty())
 	{
@@ -89,7 +108,7 @@ bool MoveAI::Update()
 	float dist = Vector3::Distance(normVelo, normDiff);
 	if (dist  > m_lineLeeway)
 	{
-		m_move->setAcceleration(0.75f);
+		m_move->setAcceleration(1);
 		// If left would reduce the difference
 		if (Vector3::Distance(normVeloLeft, normDiff) < dist)
 		{
@@ -110,7 +129,7 @@ bool MoveAI::Update()
 		}
 		if (dist > m_driftThreshold)
 		{
-			m_move->setAcceleration(0.5f);
+			m_move->setAcceleration(0.7f);
 			m_move->Drift(true);
 		}
 	}
@@ -128,18 +147,6 @@ void MoveAI::RecalculateLine(Track* _track)
 	Matrix world = m_model->GetWorld();
 	Vector3 pos = m_model->GetPos();
 	Vector3 direction = world.Forward();
-	// Find the current track
-	_track->SetValidCollision(true, true, true, false, true, true, true, true);
-	Vector3 intersect = Vector3::Zero;
-	MeshTri* tri = nullptr;
-	if (!m_route.empty() && _track->DoesLineIntersect(world.Down()*(m_model->data.m_height * 2), world.Down() * 10, intersect, tri, 0.4f, 0))
-	{
-		if (tri->GetType() == CollisionType::OFF_TRACK || tri->GetType() == CollisionType::ON_TRACK_NO_AI)
-		{
-			// If we're off track, don't re-calcultae the route and let the kart get back on track
-			return;
-		}
-	}
 
 	m_routeIndex = 0;
 	m_route.clear();

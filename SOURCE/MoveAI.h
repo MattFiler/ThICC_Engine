@@ -57,4 +57,6 @@ private:
 	bool m_autoUpdateWaypoints = false;
 
 	int m_findTrackMaxSteps = 10; // The maximum steps to take while searching for track
+
+	Player* m_player = nullptr;
 };

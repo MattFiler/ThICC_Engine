@@ -617,10 +617,11 @@ void Player::RespawnLogic()
 		return;
 	}
 
-	m_posHistoryTimer += Locator::getGSD()->m_dt;
 	m_timeSinceRespawn += Locator::getGSD()->m_dt;
 	if (!m_respawning && m_onTrack && m_colType == CollisionType::ON_TRACK)
 	{
+
+		m_posHistoryTimer += Locator::getGSD()->m_dt;
 		m_offTrackTimer = 0;
 		m_offTerrainTimer = 0;
 		if (m_posHistoryTimer >= m_posHistoryInterval)
@@ -705,7 +706,7 @@ void Player::MovePlayerToTrack()
 	if (m_elapsedRespawnTime > m_totalRespawnTime)
 	{
 		m_elapsedRespawnTime = 0;
-		SetWorld(Matrix::Lerp(m_respawnStart, m_respawnEnd, 1));
+		SetWorld(m_respawnEnd);
 		m_respawning = false;
 		m_move->SetEnabled(true);
 		m_animationMesh->SwitchModelSet("default");

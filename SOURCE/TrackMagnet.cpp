@@ -22,40 +22,30 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
 	track.SetValidCollision(true, true, true, false, true, true, true, true);
 
-	Vector intersect;
-	Vector mid_intersect;
+	Vector3 midIntersect;
+	Vector3 closestIntersect = Vector3(100000, 100000, 100000);
 	Matrix targetWorld = Matrix::Identity;
-	bool shouldStick = false;
-	// Check the previous triangle if there was one
-	if (tri)
-	{
-		shouldStick = tri->DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0) ||
-			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0);
-	}
-	// Otherwise check down from the middle
-	else
-	{
-		bool shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)), intersect, tri, m_maxAngle, 0);
-	}
+	MeshTri* closestTri = nullptr;
 
-	mid_intersect = intersect;
-	// If the middle found nothing, check 3 more points
-	if (!shouldStick)
-	{
-		shouldStick = track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Forward()), intersect, tri, m_maxAngle,0) ||
-			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Left()), intersect, tri, m_maxAngle,0) ||
-			track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Right()), intersect, tri, m_maxAngle, 0);
-	}
-
+	// Try several locations around the object
+	bool shouldStick = TryCollision(track, m_pos + (m_world.Up() * (data.m_height / 2)), closestTri, closestIntersect);
+	shouldStick = TryCollision(track, m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Forward()), closestTri, closestIntersect) ? true : shouldStick;
+	shouldStick = TryCollision(track, m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Left()), closestTri, closestIntersect) ? true : shouldStick;
+	shouldStick = TryCollision(track, m_pos + (m_world.Up() * (data.m_height / 2)) + (m_world.Right()), closestTri, closestIntersect) ? true : shouldStick;
+	tri = closestTri;
 	float modifiedMaxRotation = m_maxRotation;
 	// If track was found
 	if (shouldStick)
 	{
+		// Find a the point on the found trinagle beneath this object (stored in midIntersect)
+		closestTri->DoesLineIntersect(m_world.Down(), m_pos + (m_world.Up() * (data.m_height / 2)), midIntersect, closestTri, m_maxAngle, 0);
+		m_colType = closestTri->GetType();
 		m_timeOffTerrain = 0;
 		m_colType = tri->GetType();
 		if (m_useGroundTypes && m_onTrack)
 		{
-			switch (tri->GetType())
+
+			switch (closestTri->GetType())
 			{
 			case ON_TRACK:
 			{
@@ -88,14 +78,14 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		}
 		m_onTrack = false;
 		// If the position of the kart is within the snapping area
-		float dist = Vector::Distance(m_pos, intersect);
+		float dist = Vector::Distance(m_pos, midIntersect);
 		if (dist > m_minSnapDist && dist < m_maxSnapDist)
 		{
 			m_onTrack = true;
 			// Turn gravity off when within the snapping zone, this smooths out movment
 			m_gravVel = Vector3::Zero;
 			m_gravDirection = Vector3::Zero;
-			Vector3 moveVector = mid_intersect - m_pos;
+			Vector3 moveVector = midIntersect - m_pos;
 			if (moveVector.Length() > m_maxSnapSnep* Locator::getGSD()->m_dt)
 			{
 				moveVector.Normalize();
@@ -112,14 +102,14 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		// Calculate a new rotation using 2 points on the plane that is found
 		Vector secondIntersect;
 		MeshTri* tri2 = nullptr;
-		tri->DoesLineIntersect(m_world.Down() * (data.m_height * 30), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (data.m_height / 2)), secondIntersect, tri2, m_maxAngle,0);
-		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - intersect, tri->m_plane.Normal());
+		closestTri->DoesLineIntersect(m_world.Down() * (data.m_height * 30), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (data.m_height / 2)), secondIntersect, tri2, m_maxAngle,0);
+		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - midIntersect, closestTri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 
 		if (dist > m_minSnapDist && dist < m_maxSnapDist)
 		{
 			// Map the veclocity onto the track so the kart doesn't fly off or decellerate
-			MapVectorOntoTri(m_vel, m_pos, targetWorld.Down(), tri);
+			MapVectorOntoTri(m_vel, m_pos, targetWorld.Down(), closestTri);
 		}
 	}
 	else
@@ -228,7 +218,10 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 			m_vel = Vector::Reflect(m_vel, wallTri->m_plane.Normal());
 
 			// Map the end point of the vector back onto the track plane
-			MapVectorOntoTri(m_vel, m_pos, m_world.Down(), tri);
+			if (tri)
+			{
+				MapVectorOntoTri(m_vel, m_pos, m_world.Down(), tri);
+			}
 
 			Vector velNorm = m_vel;
 			velNorm.Normalize();
@@ -245,6 +238,24 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 		}
 	}
 	return false;
+}
+
+// Checks a collsion with the passed location and updates the closest values if this collision is closer
+bool TrackMagnet::TryCollision(Track& _track, const Vector3& _location, MeshTri*& _closestTri, Vector3& _closestPos )
+{
+	MeshTri* triangle = nullptr;
+	Vector3 intersect = Vector3::Zero;
+	if (_track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), _location, intersect, triangle, m_maxAngle, 0))
+	{
+		if ((m_pos - intersect).LengthSquared() < (m_pos-_closestPos).LengthSquared())
+		{
+			_closestTri = triangle;
+			_closestPos = intersect;
+			return true;
+		}
+	}
+	return false;
+
 }
 
 void TrackMagnet::MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector _down, MeshTri * _tri)
