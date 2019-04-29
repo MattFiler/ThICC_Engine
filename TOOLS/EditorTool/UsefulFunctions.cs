@@ -304,6 +304,8 @@ namespace EditorTool
                     return "Global Sound";
                 case AssetCompType.CUP:
                     return "Cup";
+                case AssetCompType.GLOBAL_MODELS:
+                    return "Common Models";
             }
             return "";
         }

@@ -81,15 +81,13 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModel("vehicle", _vehicle->model, Vector::Zero);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
-	std::ifstream x(m_filepath.generateConfigFilepath(_character->model, m_filepath.MODEL));
-	json m_model_config_character;
-	m_model_config_character << x;
+	std::ifstream x(m_filepath.generateConfigFilepath("COMMON_MODELS_CONFIG", m_filepath.CONFIG));
+	json common_model_config;
+	common_model_config << x;
 
-	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character->model);
-	new_model->SetScale(m_model_config_character["modelscale"]);
-	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
-	m_animationMesh->AddModel("lakitu", "referee", Vector3::Up * 4);
-	m_animationMesh->AddModel("glider", "kite", Vector3::Up * 0.4f);
+	m_animationMesh->AddModel("character", _character->model);
+	m_animationMesh->AddModel("lakitu", common_model_config["referee"]);
+	m_animationMesh->AddModel("glider", common_model_config["glider"]);
 	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL), Vector3::Up);
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});

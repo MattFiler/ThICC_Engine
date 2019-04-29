@@ -6,12 +6,14 @@
   "start_x": 0.0,
   "start_y": 0.0,
   "start_z": 0.0,
-  "modelscale": 0.6,
+  "modelscale": 0.35,
   "rot_x": 0.0,
   "rot_y": 0.0,
   "rot_z": 0.0,
   "segment_size": 10.0,
-  "in_use_in": [],
+  "in_use_in": [
+    "Common Models"
+  ],
   "has_box_collider": true,
   "collision_box": {
     "front_top_left": [

@@ -34,6 +34,7 @@
             this.openItemManager = new System.Windows.Forms.Button();
             this.openSoundManager = new System.Windows.Forms.Button();
             this.cupManager = new System.Windows.Forms.Button();
+            this.commonModelManager = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openCharacterManager
@@ -96,11 +97,22 @@
             this.cupManager.UseVisualStyleBackColor = true;
             this.cupManager.Click += new System.EventHandler(this.cupManager_Click);
             // 
+            // commonModelManager
+            // 
+            this.commonModelManager.Location = new System.Drawing.Point(12, 234);
+            this.commonModelManager.Name = "commonModelManager";
+            this.commonModelManager.Size = new System.Drawing.Size(270, 31);
+            this.commonModelManager.TabIndex = 14;
+            this.commonModelManager.Text = "Common In-Game Models Manager";
+            this.commonModelManager.UseVisualStyleBackColor = true;
+            this.commonModelManager.Click += new System.EventHandler(this.commonModelManager_Click);
+            // 
             // Asset_Manager_Preselect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 238);
+            this.ClientSize = new System.Drawing.Size(296, 273);
+            this.Controls.Add(this.commonModelManager);
             this.Controls.Add(this.cupManager);
             this.Controls.Add(this.openSoundManager);
             this.Controls.Add(this.openItemManager);
@@ -123,5 +135,6 @@
         private System.Windows.Forms.Button openItemManager;
         private System.Windows.Forms.Button openSoundManager;
         private System.Windows.Forms.Button cupManager;
+        private System.Windows.Forms.Button commonModelManager;
     }
 }
