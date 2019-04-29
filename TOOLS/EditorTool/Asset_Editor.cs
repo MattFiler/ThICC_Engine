@@ -413,6 +413,12 @@ namespace EditorTool
             Cursor.Current = Cursors.Default;
         }
 
+        /* refresh the list (a fix for the auto-reload issue with new model importer) */
+        private void refresh_Click(object sender, EventArgs e)
+        {
+            refreshList();
+        }
+
         /* Edit selected asset */
         private void editAsset_Click(object sender, EventArgs e)
         {

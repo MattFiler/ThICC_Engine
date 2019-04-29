@@ -119,6 +119,12 @@
     <Compile Include="Create_Global_Sounds.Designer.cs">
       <DependentUpon>Create_Global_Sounds.cs</DependentUpon>
     </Compile>
+    <Compile Include="Create_InGame_Models_Common.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Create_InGame_Models_Common.Designer.cs">
+      <DependentUpon>Create_InGame_Models_Common.cs</DependentUpon>
+    </Compile>
     <Compile Include="Create_Map.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,6 +278,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Create_Global_Sounds.resx">
       <DependentUpon>Create_Global_Sounds.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Create_InGame_Models_Common.resx">
+      <DependentUpon>Create_InGame_Models_Common.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Create_Map.resx">
       <DependentUpon>Create_Map.cs</DependentUpon>

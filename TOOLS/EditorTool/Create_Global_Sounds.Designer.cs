@@ -41,6 +41,12 @@
             this.titlescreenLoop = new System.Windows.Forms.TextBox();
             this.saveSounds = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.itemboxHit = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.loadItemboxHit = new System.Windows.Forms.Button();
+            this.loadFinalLapIntro = new System.Windows.Forms.Button();
+            this.finalLapIntro = new System.Windows.Forms.TextBox();
             this.loadLevelIntro = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.levelIntro = new System.Windows.Forms.TextBox();
@@ -50,12 +56,6 @@
             this.loadCountdownIntro = new System.Windows.Forms.Button();
             this.loadCountdown = new System.Windows.Forms.Button();
             this.countdown = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.itemboxHit = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.loadItemboxHit = new System.Windows.Forms.Button();
-            this.loadFinalLapIntro = new System.Windows.Forms.Button();
-            this.finalLapIntro = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -165,7 +165,7 @@
             this.saveSounds.Name = "saveSounds";
             this.saveSounds.Size = new System.Drawing.Size(327, 23);
             this.saveSounds.TabIndex = 22;
-            this.saveSounds.Text = "Create";
+            this.saveSounds.Text = "Save";
             this.saveSounds.UseVisualStyleBackColor = true;
             this.saveSounds.Click += new System.EventHandler(this.saveSounds_Click);
             // 
@@ -193,6 +193,60 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "In-Game Sounds";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 138);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(60, 13);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "Hit Itembox";
+            // 
+            // itemboxHit
+            // 
+            this.itemboxHit.Location = new System.Drawing.Point(9, 154);
+            this.itemboxHit.Name = "itemboxHit";
+            this.itemboxHit.ReadOnly = true;
+            this.itemboxHit.Size = new System.Drawing.Size(229, 20);
+            this.itemboxHit.TabIndex = 12;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 177);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(74, 13);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "Final Lap Intro";
+            // 
+            // loadItemboxHit
+            // 
+            this.loadItemboxHit.Location = new System.Drawing.Point(244, 153);
+            this.loadItemboxHit.Name = "loadItemboxHit";
+            this.loadItemboxHit.Size = new System.Drawing.Size(75, 23);
+            this.loadItemboxHit.TabIndex = 13;
+            this.loadItemboxHit.Text = "Load";
+            this.loadItemboxHit.UseVisualStyleBackColor = true;
+            this.loadItemboxHit.Click += new System.EventHandler(this.loadItemboxHit_Click);
+            // 
+            // loadFinalLapIntro
+            // 
+            this.loadFinalLapIntro.Location = new System.Drawing.Point(244, 192);
+            this.loadFinalLapIntro.Name = "loadFinalLapIntro";
+            this.loadFinalLapIntro.Size = new System.Drawing.Size(75, 23);
+            this.loadFinalLapIntro.TabIndex = 16;
+            this.loadFinalLapIntro.Text = "Load";
+            this.loadFinalLapIntro.UseVisualStyleBackColor = true;
+            this.loadFinalLapIntro.Click += new System.EventHandler(this.loadFinalLapIntro_Click);
+            // 
+            // finalLapIntro
+            // 
+            this.finalLapIntro.Location = new System.Drawing.Point(9, 193);
+            this.finalLapIntro.Name = "finalLapIntro";
+            this.finalLapIntro.ReadOnly = true;
+            this.finalLapIntro.Size = new System.Drawing.Size(229, 20);
+            this.finalLapIntro.TabIndex = 15;
             // 
             // loadLevelIntro
             // 
@@ -274,60 +328,6 @@
             this.countdown.ReadOnly = true;
             this.countdown.Size = new System.Drawing.Size(229, 20);
             this.countdown.TabIndex = 5;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 138);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(60, 13);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "Hit Itembox";
-            // 
-            // itemboxHit
-            // 
-            this.itemboxHit.Location = new System.Drawing.Point(9, 154);
-            this.itemboxHit.Name = "itemboxHit";
-            this.itemboxHit.ReadOnly = true;
-            this.itemboxHit.Size = new System.Drawing.Size(229, 20);
-            this.itemboxHit.TabIndex = 12;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 177);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(74, 13);
-            this.label8.TabIndex = 17;
-            this.label8.Text = "Final Lap Intro";
-            // 
-            // loadItemboxHit
-            // 
-            this.loadItemboxHit.Location = new System.Drawing.Point(244, 153);
-            this.loadItemboxHit.Name = "loadItemboxHit";
-            this.loadItemboxHit.Size = new System.Drawing.Size(75, 23);
-            this.loadItemboxHit.TabIndex = 13;
-            this.loadItemboxHit.Text = "Load";
-            this.loadItemboxHit.UseVisualStyleBackColor = true;
-            this.loadItemboxHit.Click += new System.EventHandler(this.loadItemboxHit_Click);
-            // 
-            // loadFinalLapIntro
-            // 
-            this.loadFinalLapIntro.Location = new System.Drawing.Point(244, 192);
-            this.loadFinalLapIntro.Name = "loadFinalLapIntro";
-            this.loadFinalLapIntro.Size = new System.Drawing.Size(75, 23);
-            this.loadFinalLapIntro.TabIndex = 16;
-            this.loadFinalLapIntro.Text = "Load";
-            this.loadFinalLapIntro.UseVisualStyleBackColor = true;
-            this.loadFinalLapIntro.Click += new System.EventHandler(this.loadFinalLapIntro_Click);
-            // 
-            // finalLapIntro
-            // 
-            this.finalLapIntro.Location = new System.Drawing.Point(9, 193);
-            this.finalLapIntro.Name = "finalLapIntro";
-            this.finalLapIntro.ReadOnly = true;
-            this.finalLapIntro.Size = new System.Drawing.Size(229, 20);
-            this.finalLapIntro.TabIndex = 15;
             // 
             // Create_Global_Sounds
             // 

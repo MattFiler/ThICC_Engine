@@ -3,6 +3,7 @@
 #include "math.h"
 #include "Track.h"
 #include "DebugMarker.h"
+#include "RenderData.h"
 #include <iostream>
 #include <iomanip>
 #include <fstream>

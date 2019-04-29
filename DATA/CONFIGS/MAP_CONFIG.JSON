@@ -1,18 +1,4 @@
 {
-  "MARIO KART STADIUM": {
-    "friendly_name": "MAP_MKS",
-    "menu_sprite": "MARIO KART STADIUM PREVIEW",
-    "model": "MARIOKARTSTADIUM",
-    "cubemap": "SUNSUBMIXER",
-    "skybox": "SKYBOX_HYRULE_CIRCUIT",
-    "cup": "DEMO_CUP",
-    "audio": {
-      "background_start": "MKS START MUSIC",
-      "background": "MKS MAIN MUSIC",
-      "final_lap_start": "MKS FINAL LAP START",
-      "final_lap": "MKS FINAL LAP LOOP"
-    }
-  },
   "YOSHI_CIRCUIT": {
     "friendly_name": "MAP_YOSHI_CIRCUIT",
     "menu_sprite": "YOSHI CIRCUIT",
@@ -60,6 +46,20 @@
     "menu_sprite": "MAP_SUBWAY",
     "model": "SUPERBELLSUBWAY",
     "cubemap": "CUBEMAP_SUBWAY",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "cup": "DEMO_CUP",
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
+  },
+  "MARIO KART STADIUM": {
+    "friendly_name": "MAP_MKS",
+    "menu_sprite": "MARIO KART STADIUM PREVIEW",
+    "model": "MARIOKARTSTADIUM",
+    "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
     "audio": {

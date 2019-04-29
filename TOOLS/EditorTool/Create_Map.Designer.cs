@@ -62,8 +62,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.mapName = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.mapCup = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.mapCup = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -397,15 +397,6 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Other Map Configs";
             // 
-            // mapCup
-            // 
-            this.mapCup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.mapCup.FormattingEnabled = true;
-            this.mapCup.Location = new System.Drawing.Point(9, 33);
-            this.mapCup.Name = "mapCup";
-            this.mapCup.Size = new System.Drawing.Size(310, 21);
-            this.mapCup.TabIndex = 0;
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -414,6 +405,15 @@
             this.label10.Size = new System.Drawing.Size(26, 13);
             this.label10.TabIndex = 1;
             this.label10.Text = "Cup";
+            // 
+            // mapCup
+            // 
+            this.mapCup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.mapCup.FormattingEnabled = true;
+            this.mapCup.Location = new System.Drawing.Point(9, 33);
+            this.mapCup.Name = "mapCup";
+            this.mapCup.Size = new System.Drawing.Size(310, 21);
+            this.mapCup.TabIndex = 0;
             // 
             // Create_Map
             // 

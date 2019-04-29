@@ -1,0 +1,58 @@
+{
+  "asset_name": "ITEM_BOX_V2",
+  "asset_type": "Models",
+  "model_type": 3,
+  "visible": true,
+  "start_x": 0,
+  "start_y": 0,
+  "start_z": 0,
+  "modelscale": 1.0,
+  "rot_x": 0,
+  "rot_y": 0,
+  "rot_z": 0,
+  "segment_size": 10,
+  "in_use_in": [],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      10,
+      10,
+      10
+    ],
+    "front_top_right": [
+      -10,
+      10,
+      10
+    ],
+    "front_bottom_right": [
+      -10,
+      -10,
+      10
+    ],
+    "front_bottom_left": [
+      10,
+      -10,
+      10
+    ],
+    "back_top_left": [
+      10,
+      10,
+      -10
+    ],
+    "back_top_right": [
+      -10,
+      10,
+      -10
+    ],
+    "back_bottom_right": [
+      -10,
+      -10,
+      -10
+    ],
+    "back_bottom_left": [
+      10,
+      -10,
+      -10
+    ]
+  }
+}

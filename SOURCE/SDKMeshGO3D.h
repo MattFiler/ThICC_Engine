@@ -26,6 +26,11 @@ public:
 	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
 
 	bool IsLoaded() { return m_loaded; };
+	
+	//These functions are intended for skybox use
+	void DisableDepthDefault() { enable_depth_default = false; }
+	void AlbedoOverride(std::wstring path);
+	//---
 
 protected:
 	//Model resources
@@ -37,6 +42,14 @@ protected:
 	//Our IBL cubemaps
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_radianceIBL;
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_irradianceIBL;
+
+	//Optional albedo override
+	Microsoft::WRL::ComPtr<ID3D12Resource> m_albedoOverride;
+	int albedo_override_index = -1;
+	bool albedo_override_applied = false;
+
+	//Should use DepthDefault? (available to change mainly b/c of skyboxes)
+	bool enable_depth_default = true;
 
 	//Material config
 	std::vector<MaterialConfig> m_material_config;
@@ -51,7 +64,6 @@ protected:
 	int irradiance_index = -1;
 	bool is_debug_mesh = false;
 	bool m_shouldRender = true;
-
 	bool m_loaded = false;
 };
 

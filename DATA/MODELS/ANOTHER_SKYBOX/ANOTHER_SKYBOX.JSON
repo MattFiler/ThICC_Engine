@@ -1,0 +1,60 @@
+{
+  "asset_name": "ANOTHER_SKYBOX",
+  "asset_type": "Models",
+  "model_type": 3,
+  "visible": true,
+  "start_x": 0.0,
+  "start_y": 0.0,
+  "start_z": 0.0,
+  "modelscale": 0.04,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 10.0,
+  "in_use_in": [
+    "Common Models"
+  ],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      10037.34,
+      7002.79,
+      10037.34
+    ],
+    "front_top_right": [
+      -10037.33,
+      7002.79,
+      10037.34
+    ],
+    "front_bottom_right": [
+      -10037.33,
+      -7002.79,
+      10037.34
+    ],
+    "front_bottom_left": [
+      10037.34,
+      -7002.79,
+      10037.34
+    ],
+    "back_top_left": [
+      10037.34,
+      7002.79,
+      -10037.33
+    ],
+    "back_top_right": [
+      -10037.33,
+      7002.79,
+      -10037.33
+    ],
+    "back_bottom_right": [
+      -10037.33,
+      -7002.79,
+      -10037.33
+    ],
+    "back_bottom_left": [
+      10037.34,
+      -7002.79,
+      -10037.33
+    ]
+  }
+}

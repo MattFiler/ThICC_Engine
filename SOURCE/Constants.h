@@ -1,6 +1,13 @@
 #pragma once
 #include <vector>
 
+//Current engine file config - this identifies the up-to-date binary signature. 
+//We can optionally add handles for older versions per-config.
+struct ThICC_File {
+	const static int ThICC_FILE_VERSION;
+	const static std::string ThICC_FILE_IDENTIFIER;
+};
+
 /*
 
 	!!!		DO NOT REORDER ANY OF THESE ENUMS!		!!!

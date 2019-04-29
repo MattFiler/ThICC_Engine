@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "DebugMarker.h"
+#include "GameObjectShared.h"
 
-DebugMarker::DebugMarker(Vector3 position, Vector3 rotation) : PhysModel("Default_Item") {
+DebugMarker::DebugMarker(Vector3 position, Vector3 rotation) : PhysModel(Locator::getGOS()->common_model_config["debug_marker"]) {
 	SetPos(position);
 	SetRotation(rotation);
 

@@ -24,6 +24,10 @@ void ThICC_Game::Initialize() {
 	m_aiScheduler = std::make_unique<AIScheduler>();
 	Locator::setupAIScheduler(m_aiScheduler.get());
 
+	//Load all common model names
+	std::ifstream x(m_filepath.generateConfigFilepath("COMMON_MODELS_CONFIG", m_filepath.CONFIG));
+	m_go_shared.common_model_config << x;
+
 	//Load all character data
 	std::ifstream p(m_filepath.generateFilepath("CHARACTER_CONFIG", m_filepath.CONFIG));
 	character_config << p;

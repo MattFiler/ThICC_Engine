@@ -7,12 +7,25 @@
 #include "SDKMesh.h"
 #include "DeviceData.h"
 #include "FindMedia.h"
+#include "Constants.h"
 #include <experimental/filesystem>
 
 /* Create object */
 SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 {
 	filename = _filename;
+
+	if (_filename.length() > 5 && _filename.substr(_filename.length() - 5) != "DEBUG") {
+		//Fetch config
+		std::ifstream x(m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL));
+		nlohmann::json model_config;
+		model_config << x;
+
+		//Apply config
+		SetScale(model_config["modelscale"]);
+		SetPos(Vector3(model_config["start_x"], model_config["start_y"], model_config["start_z"]));
+		SetRotationInDegrees(Vector3(model_config["rot_x"], model_config["rot_y"], model_config["rot_z"]));
+	}
 }
 
 /* Destroy everything */
@@ -77,18 +90,43 @@ void SDKMeshGO3D::Render()
 						}
 						m_material_config.at(i).animation_timer += (float)Locator::getGSD()->m_timer.GetElapsedSeconds();
 					}
+					/* ALBEDO OVERRIDE */
+					if (albedo_override_index != -1 && !albedo_override_applied) {
+						pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(albedo_override_index));
+					}
 					i++;
 				}
+			}
+			if (albedo_override_index != -1 && !albedo_override_applied) {
+				albedo_override_applied = true;
 			}
 		}
 
 		//Update effects and draw
 		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
-		m_model->Draw(commandList, m_modelNormal.cbegin());
+		m_model->Draw(Locator::getDD()->m_deviceResources->GetCommandList(), m_modelNormal.cbegin());
 
 		//End scene
 		Locator::getDD()->m_hdrScene->EndScene(commandList);
 	}
+}
+
+/* Override every albedo material for this model (indended for skybox use) */
+void SDKMeshGO3D::AlbedoOverride(std::wstring path) {
+	if (resourceDescriptorOffset < 10) {
+		resourceDescriptorOffset += m_modelNormal.size() * 4;
+	}
+	auto device = Locator::getDD()->m_deviceResources->GetD3DDevice();
+	ResourceUploadBatch resourceUpload(device);
+	resourceUpload.Begin(); 
+	wchar_t override_tex[_MAX_PATH] = {};
+	DX::FindMediaFile(override_tex, _MAX_PATH, path.c_str());
+	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, override_tex, m_albedoOverride.ReleaseAndGetAddressOf()));
+	CreateShaderResourceView(device, m_albedoOverride.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
+	albedo_override_index = resourceDescriptorOffset;
+	resourceDescriptorOffset++;
+	auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
+	uploadResourcesFinished.wait();
 }
 
 /* Load the model */
@@ -232,24 +270,47 @@ void SDKMeshGO3D::Load()
 			Locator::getRD()->m_fxFactoryPBR = std::make_unique<PBREffectFactory>(m_modelResources->Heap(), Locator::getRD()->m_states->Heap());
 			fxFactory = Locator::getRD()->m_fxFactoryPBR.get();
 
-			//Opaque materials
-			EffectPipelineStateDescription pd(
-				nullptr,
-				CommonStates::Opaque,
-				CommonStates::DepthDefault,
-				CommonStates::CullClockwise,
-				hdrState);
+			if (enable_depth_default) {
+				//Opaque materials
+				EffectPipelineStateDescription pd(
+					nullptr,
+					CommonStates::Opaque,
+					CommonStates::DepthDefault,
+					CommonStates::CullClockwise,
+					hdrState);
 
-			//Transparent materials
-			EffectPipelineStateDescription pdAlpha(
-				nullptr,
-				CommonStates::AlphaBlend,
-				CommonStates::DepthDefault,
-				CommonStates::CullClockwise,
-				hdrState);
+				//Transparent materials
+				EffectPipelineStateDescription pdAlpha(
+					nullptr,
+					CommonStates::AlphaBlend,
+					CommonStates::DepthDefault,
+					CommonStates::CullClockwise,
+					hdrState);
 
-			//Create effects for materials
-			m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, resourceDescriptorOffset);
+				//Create effects for materials
+				m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, resourceDescriptorOffset);
+			}
+			else
+			{
+				//Opaque materials
+				EffectPipelineStateDescription pd(
+					nullptr,
+					CommonStates::Opaque,
+					CommonStates::DepthNone,
+					CommonStates::CullClockwise,
+					hdrState);
+
+				//Transparent materials
+				EffectPipelineStateDescription pdAlpha(
+					nullptr,
+					CommonStates::AlphaBlend,
+					CommonStates::DepthNone,
+					CommonStates::CullClockwise,
+					hdrState);
+
+				//Create effects for materials
+				m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, resourceDescriptorOffset);
+			}
 
 			//Load our engine configs
 			if (!is_debug_mesh) {
@@ -257,86 +318,126 @@ void SDKMeshGO3D::Load()
 				std::string filepath = m_filepath.getFolder(GameFilepaths::MODEL) + filename + "/REFLECTION.ThICC";
 				std::ifstream metal_config(filepath, std::ios::binary);
 				if (metal_config.good()) {
-					//Get number of materials in config
+					//Verify our config is legit
+					bool config_is_legit = false;
 					metal_config.seekg(0);
-					int number_of_materials = 0;
-					metal_config.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
+					int config_version = 0;
+					metal_config.read(reinterpret_cast<char*>(&config_version), sizeof(int));
+					if (config_version == ThICC_File::ThICC_FILE_VERSION) { //We error out on depreciated configs here, but might be nice to handle some older setups just in case.
+						char* read_confirmation_identifier = new char[ThICC_File::ThICC_FILE_IDENTIFIER.length()];
+						metal_config.read(read_confirmation_identifier, ThICC_File::ThICC_FILE_IDENTIFIER.length());
+						std::string this_signature;
+						this_signature.append(read_confirmation_identifier, ThICC_File::ThICC_FILE_IDENTIFIER.length());
+						if (ThICC_File::ThICC_FILE_IDENTIFIER == this_signature) {
+							config_is_legit = true;
+						}
+					}
 
-					//Go through config for number of materials
-					for (int i = 0; i < number_of_materials; i++) {
-						char data;
-						metal_config.read(&data, sizeof(bool));
+					if (config_is_legit) {
+						//Get number of materials in config
+						int number_of_materials = 0;
+						metal_config.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
 
-						MaterialConfig this_mat;
-						this_mat.material_index = i;
-						this_mat.is_metallic = static_cast<bool>(data);
-						m_material_config.push_back(this_mat);
+						//Go through config for number of materials
+						for (int i = 0; i < number_of_materials; i++) {
+							char data;
+							metal_config.read(&data, sizeof(bool));
+
+							MaterialConfig this_mat;
+							this_mat.material_index = i;
+							this_mat.is_metallic = static_cast<bool>(data);
+							m_material_config.push_back(this_mat);
+						}
+					}
+					else
+					{
+						DebugText::print("MODEL '" + filename + "' USES A DEPRECIATED METAL CONFIGURATION.");
 					}
 				}
 				else
 				{
-					DebugText::print("MODEL '" + filename + "' USES A DEPRECIATED CONFIGURATION - NO METAL.");
+					DebugText::print("MODEL '" + filename + "' DOES NOT HAVE A METAL CONFIGURATION.");
 				}
 
 				/* Load animation config */
 				filepath = m_filepath.getFolder(GameFilepaths::MODEL) + filename + "/ANIMATION.ThICC";
 				std::ifstream anim_config(filepath, std::ios::binary); 
 				if (anim_config.good()) {
-					//Get number of materials in config
+					//Verify our config is legit
+					bool config_is_legit = false;
 					anim_config.seekg(0);
-					int number_of_materials = 0;
-					anim_config.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
-
-					//Update offset
-					resourceDescriptorOffset += m_modelNormal.size() * 4; //materials * 4 (max texture count) - THIS IS A BIG OL HACKY FIX, a way to count actual resources would be nice :)
-
-					for (int i = 0; i < number_of_materials; i++) {
-						//Get this material's index, and fetch our config object
-						int material_index;
-						anim_config.read(reinterpret_cast<char*>(&material_index), sizeof(int));
-						MaterialConfig& this_mat = m_material_config.at(material_index);
-						this_mat.is_animated = true;
-
-						//Get the number of textures in this animation
-						int num_of_textures;
-						anim_config.read(reinterpret_cast<char*>(&num_of_textures), sizeof(int));
-
-						//Get the animation time
-						anim_config.read(reinterpret_cast<char*>(&this_mat.animation_time), sizeof(float));
-
-						//Get each texture to animate
-						for (int x = 0; x < num_of_textures; x++) {
-							//Fetch texture name
-							int this_tex_len;
-							anim_config.read(reinterpret_cast<char*>(&this_tex_len), sizeof(int));
-							char* this_tex_char = new char[this_tex_len];
-							anim_config.read(this_tex_char, this_tex_len);
-							std::string this_tex;
-							this_tex.append(this_tex_char, this_tex_len);
-							this_mat.texture_names.push_back(this_tex);
-
-							//Convert texture name to wstring
-							std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-							this_tex = dirpath + this_tex;
-							std::wstring this_tex_wstring = converter.from_bytes(this_tex.c_str());
-
-							//Load actual texture by name & store its GPU index
-							Microsoft::WRL::ComPtr<ID3D12Resource> this_tex_d3d12;
-							wchar_t this_tex_wchar[_MAX_PATH] = {};
-							DX::FindMediaFile(this_tex_wchar, _MAX_PATH, this_tex_wstring.c_str());
-							DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, this_tex_wchar, this_tex_d3d12.ReleaseAndGetAddressOf()));
-							CreateShaderResourceView(device, this_tex_d3d12.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
-							this_mat.gpu_indexes.push_back(resourceDescriptorOffset);
-							this_mat.d3d12_textures.push_back(this_tex_d3d12);
-							resourceDescriptorOffset++;
+					int config_version = 0;
+					anim_config.read(reinterpret_cast<char*>(&config_version), sizeof(int));
+					if (config_version == ThICC_File::ThICC_FILE_VERSION) { //We error out on depreciated configs here, but might be nice to handle some older setups just in case.
+						char* read_confirmation_identifier = new char[ThICC_File::ThICC_FILE_IDENTIFIER.length()];
+						anim_config.read(read_confirmation_identifier, ThICC_File::ThICC_FILE_IDENTIFIER.length());
+						std::string this_signature;
+						this_signature.append(read_confirmation_identifier, ThICC_File::ThICC_FILE_IDENTIFIER.length());
+						if (ThICC_File::ThICC_FILE_IDENTIFIER == this_signature) {
+							config_is_legit = true;
 						}
 					}
 
-					DebugText::print("Model '" + filename + "' has " + std::to_string(number_of_materials) + " animated materials.");
+					if (config_is_legit) {
+						//Get number of materials in config
+						int number_of_materials = 0;
+						anim_config.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
+
+						//Update offset
+						resourceDescriptorOffset += m_modelNormal.size() * 4; //materials * 4 (max texture count) - THIS IS A BIG OL HACKY FIX, a way to count actual resources would be nice :)
+
+						for (int i = 0; i < number_of_materials; i++) {
+							//Get this material's index, and fetch our config object
+							int material_index;
+							anim_config.read(reinterpret_cast<char*>(&material_index), sizeof(int));
+							MaterialConfig& this_mat = m_material_config.at(material_index);
+							this_mat.is_animated = true;
+
+							//Get the number of textures in this animation
+							int num_of_textures;
+							anim_config.read(reinterpret_cast<char*>(&num_of_textures), sizeof(int));
+
+							//Get the animation time
+							anim_config.read(reinterpret_cast<char*>(&this_mat.animation_time), sizeof(float));
+
+							//Get each texture to animate
+							for (int x = 0; x < num_of_textures; x++) {
+								//Fetch texture name
+								int this_tex_len;
+								anim_config.read(reinterpret_cast<char*>(&this_tex_len), sizeof(int));
+								char* this_tex_char = new char[this_tex_len];
+								anim_config.read(this_tex_char, this_tex_len);
+								std::string this_tex;
+								this_tex.append(this_tex_char, this_tex_len);
+								this_mat.texture_names.push_back(this_tex);
+
+								//Convert texture name to wstring
+								std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+								this_tex = dirpath + this_tex;
+								std::wstring this_tex_wstring = converter.from_bytes(this_tex.c_str());
+
+								//Load actual texture by name & store its GPU index
+								Microsoft::WRL::ComPtr<ID3D12Resource> this_tex_d3d12;
+								wchar_t this_tex_wchar[_MAX_PATH] = {};
+								DX::FindMediaFile(this_tex_wchar, _MAX_PATH, this_tex_wstring.c_str());
+								DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, this_tex_wchar, this_tex_d3d12.ReleaseAndGetAddressOf()));
+								CreateShaderResourceView(device, this_tex_d3d12.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
+								this_mat.gpu_indexes.push_back(resourceDescriptorOffset);
+								this_mat.d3d12_textures.push_back(this_tex_d3d12);
+								resourceDescriptorOffset++;
+							}
+						}
+
+						DebugText::print("Model '" + filename + "' has " + std::to_string(number_of_materials) + " animated materials.");
+					}
+					else
+					{
+						DebugText::print("MODEL '" + filename + "' USES A DEPRECIATED ANIMATION CONFIGURATION.");
+					}
 				}
 				else
 				{
-					DebugText::print("MODEL '" + filename + "' USES A DEPRECIATED CONFIGURATION - NO ANIMATION.");
+					DebugText::print("MODEL '" + filename + "' DOES NOT HAVE AN ANIMATION CONFIGURATION.");
 				}
 			}
 		}
