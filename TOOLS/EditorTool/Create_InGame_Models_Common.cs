@@ -25,6 +25,7 @@ namespace EditorTool
             controller_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/COMMON_MODELS_CONFIG.JSON"));
             courseReferee.Text = controller_config["referee"].Value<string>();
             glider.Text = controller_config["glider"].Value<string>();
+            itemBox.Text = controller_config["itembox"].Value<string>();
         }
 
         /* Select assets */
@@ -36,12 +37,16 @@ namespace EditorTool
         {
             function_libary.assetSelectHandler(glider, AssetType.MODEL);
         }
+        private void selectItemBox_Click(object sender, EventArgs e)
+        {
+            function_libary.assetSelectHandler(itemBox, AssetType.MODEL);
+        }
 
         /* Save */
         private void saveModels_Click(object sender, EventArgs e)
         {
             //All inputs required
-            if (courseReferee.Text == "" || glider.Text == "")
+            if (courseReferee.Text == "" || glider.Text == "" || itemBox.Text == "")
             {
                 MessageBox.Show("Please complete all fields before trying to save.", "Can't save.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -53,6 +58,7 @@ namespace EditorTool
             //Update config
             controller_config["referee"] = courseReferee.Text;
             controller_config["glider"] = glider.Text;
+            controller_config["itembox"] = itemBox.Text;
 
             //Save
             File.WriteAllText("DATA/CONFIGS/COMMON_MODELS_CONFIG.JSON", controller_config.ToString(Formatting.Indented));

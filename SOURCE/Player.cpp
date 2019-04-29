@@ -5,6 +5,7 @@
 #include "InputData.h"
 #include "ItemData.h"
 #include "AIScheduler.h"
+#include "GameObjectShared.h"
 #include <iostream>
 #include <fstream>
 
@@ -81,13 +82,9 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModel("vehicle", _vehicle->model, Vector::Zero);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
-	std::ifstream x(m_filepath.generateConfigFilepath("COMMON_MODELS_CONFIG", m_filepath.CONFIG));
-	json common_model_config;
-	common_model_config << x;
-
 	m_animationMesh->AddModel("character", _character->model);
-	m_animationMesh->AddModel("lakitu", common_model_config["referee"]);
-	m_animationMesh->AddModel("glider", common_model_config["glider"]);
+	m_animationMesh->AddModel("lakitu", Locator::getGOS()->common_model_config["referee"]);
+	m_animationMesh->AddModel("glider", Locator::getGOS()->common_model_config["glider"]);
 	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL), Vector3::Up);
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});

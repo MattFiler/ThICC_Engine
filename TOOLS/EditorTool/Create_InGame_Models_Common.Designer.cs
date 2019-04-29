@@ -36,11 +36,17 @@
             this.glider = new System.Windows.Forms.TextBox();
             this.loadGlider = new System.Windows.Forms.Button();
             this.saveModels = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.itemBox = new System.Windows.Forms.TextBox();
+            this.selectItemBox = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.itemBox);
+            this.groupBox2.Controls.Add(this.selectItemBox);
             this.groupBox2.Controls.Add(this.loadReferee);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.courseReferee);
@@ -49,7 +55,7 @@
             this.groupBox2.Controls.Add(this.loadGlider);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(327, 104);
+            this.groupBox2.Size = new System.Drawing.Size(327, 144);
             this.groupBox2.TabIndex = 25;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Common Models";
@@ -110,7 +116,7 @@
             // 
             // saveModels
             // 
-            this.saveModels.Location = new System.Drawing.Point(12, 122);
+            this.saveModels.Location = new System.Drawing.Point(12, 162);
             this.saveModels.Name = "saveModels";
             this.saveModels.Size = new System.Drawing.Size(327, 23);
             this.saveModels.TabIndex = 26;
@@ -118,11 +124,38 @@
             this.saveModels.UseVisualStyleBackColor = true;
             this.saveModels.Click += new System.EventHandler(this.saveModels_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 99);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(48, 13);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Item Box";
+            // 
+            // itemBox
+            // 
+            this.itemBox.Location = new System.Drawing.Point(9, 115);
+            this.itemBox.Name = "itemBox";
+            this.itemBox.ReadOnly = true;
+            this.itemBox.Size = new System.Drawing.Size(229, 20);
+            this.itemBox.TabIndex = 12;
+            // 
+            // selectItemBox
+            // 
+            this.selectItemBox.Location = new System.Drawing.Point(244, 114);
+            this.selectItemBox.Name = "selectItemBox";
+            this.selectItemBox.Size = new System.Drawing.Size(75, 23);
+            this.selectItemBox.TabIndex = 13;
+            this.selectItemBox.Text = "Load";
+            this.selectItemBox.UseVisualStyleBackColor = true;
+            this.selectItemBox.Click += new System.EventHandler(this.selectItemBox_Click);
+            // 
             // Create_InGame_Models_Common
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(352, 157);
+            this.ClientSize = new System.Drawing.Size(352, 194);
             this.Controls.Add(this.saveModels);
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -145,5 +178,8 @@
         private System.Windows.Forms.TextBox glider;
         private System.Windows.Forms.Button loadGlider;
         private System.Windows.Forms.Button saveModels;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox itemBox;
+        private System.Windows.Forms.Button selectItemBox;
     }
 }
