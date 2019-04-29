@@ -97,10 +97,14 @@ void Track::LoadCollision() {
 
 	// Populate the collsion map
 	using pair = std::pair<CollisionType, bool>;
-	m_validCollisions.insert(pair(CollisionType::BOOST_PAD, true));
-	m_validCollisions.insert(pair(CollisionType::OFF_TRACK, true));
 	m_validCollisions.insert(pair(CollisionType::ON_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::OFF_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::BOOST_PAD, true));
 	m_validCollisions.insert(pair(CollisionType::WALL, true));
+	m_validCollisions.insert(pair(CollisionType::GLIDER_TRACK, true));
+	m_validCollisions.insert(pair(CollisionType::ANTIGRAV_PAD, true));
+	m_validCollisions.insert(pair(CollisionType::JUMP_PAD, true));
+	m_validCollisions.insert(pair(CollisionType::ON_TRACK_NO_AI, true));
 }
 
 /* Unload the track collision info */
@@ -152,6 +156,8 @@ void Track::LoadVertexList(std::string _vertex_list)
 	for (int x = 0; x < number_of_coll_types; x++) {
 		for (size_t i = 0; i < verts.at(x).size(); ++i)
 		{
+			points_for_triangle[index] = verts.at(x)[i];
+			index++;
 			if (index == 9) {
 				Vector3 point_1 = Vector3(points_for_triangle[0], points_for_triangle[1], points_for_triangle[2]) * m_track_data.scale;
 				CompareVectorToMaximum(point_1);
@@ -165,11 +171,21 @@ void Track::LoadVertexList(std::string _vertex_list)
 				CompareVectorToMaximum(point_3);
 				CompareVectorToMinimum(point_3);
 
+				if (x == 4)
+				{
+					point_1 = blender_vector.ConvertPosition(point_1);
+					point_2 = blender_vector.ConvertPosition(point_2);
+					point_3 = blender_vector.ConvertPosition(point_3);
+				}
+
 				m_triangles.push_back(MeshTri(point_1, point_2, point_3, x));
+
+				if (x == 4)
+				{
+					m_triangles.back().m_plane.Normal(m_triangles.back().m_plane.Normal()*-1);
+				}
 				index = 0;
 			}
-			points_for_triangle[index] = verts.at(x)[i];
-			index++;
 		}
 		DebugText::print("Track collision group " + std::to_string(x) + " has " + std::to_string(verts.at(x).size()) + " entries.");
 	}
@@ -242,13 +258,17 @@ bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos,
 	{
 		for (int j = lower.y; j <= upper.y; j++)
 		{
-			int index = (i*m_triGridYX) + (j*m_triGridX);
+			size_t index = (i*m_triGridYX) + (j*m_triGridX);
 			for (int k = lower.x; k <= upper.x; k++)
 			{
 				for (MeshTri* tri : m_triGrid[index + k])
 				{
 					if (m_validCollisions[tri->GetType()] && tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle, _minAngle))
 					{
+						if (tri->m_type == GLIDER_TRACK)
+						{
+							bool breakme = false;
+						}
 						float dist = Vector::Distance(_startPos, _intersect);
 						if (dist < bestDist)
 						{
@@ -313,19 +333,24 @@ void Track::SplitTrisIntoGrid()
 {
 	Vector trackSize = m_largest - m_smallest;
 	// Reserve space in the references vector based on the size of the track
-	m_triGridX = static_cast<int>(ceilf(trackSize.x / m_triSegSize));
-	m_triGridY = static_cast<int>(ceilf(trackSize.y / m_triSegSize));
-	m_triGridZ = static_cast<int>(ceilf(trackSize.z / m_triSegSize));
+	m_triGridX = static_cast<size_t>(ceilf(trackSize.x / m_triSegSize));
+	m_triGridY = static_cast<size_t>(ceilf(trackSize.y / m_triSegSize));
+	m_triGridZ = static_cast<size_t>(ceilf(trackSize.z / m_triSegSize));
 	m_triGridYX = m_triGridY * m_triGridX;
+
 	m_triGrid.reserve((m_triGridX + 1)*(m_triGridY + 1)*(m_triGridZ + 1));
 
-	for (int i = 0; i < m_triGrid.capacity(); i++)
+	for (size_t i = 0; i < m_triGrid.capacity(); i++)
 	{
 		std::vector<MeshTri*> vec;
 		m_triGrid.push_back(vec);
 	}
 	for (MeshTri& tri : m_triangles)
 	{
+		if (tri.m_type == GLIDER_TRACK)
+		{
+			bool breakme = false;
+		}
 		Vector upper = tri.GetUpperBound();
 		Vector lower = tri.GetLowerBound();
 		GetXYZIndexAtPoint(upper);
@@ -335,7 +360,7 @@ void Track::SplitTrisIntoGrid()
 		{
 			for (int j = lower.y; j <= upper.y; j++)
 			{
-				int index = (i*m_triGridYX) + (j*m_triGridX);
+				size_t index = (i*m_triGridYX) + (j*m_triGridX);
 				for (int k = lower.x; k <= upper.x; k++)
 				{
 					m_triGrid[index + k].push_back(&tri);
@@ -422,12 +447,16 @@ void Track::Clamp(float& _num, float _min, float _max)
 	}
 }
 
-void Track::SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall)
+void Track::SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall, const bool& _glider, const bool& _antigrav, const bool& _jump, const bool& _noai)
 {
 	m_validCollisions[CollisionType::BOOST_PAD] = _boost;
 	m_validCollisions[CollisionType::OFF_TRACK] = _off;
 	m_validCollisions[CollisionType::ON_TRACK] = _on;
 	m_validCollisions[CollisionType::WALL] = _wall;
+	m_validCollisions[CollisionType::GLIDER_TRACK] = _glider;
+	m_validCollisions[CollisionType::ANTIGRAV_PAD] = _antigrav;
+	m_validCollisions[CollisionType::JUMP_PAD] = _jump;
+	m_validCollisions[CollisionType::ON_TRACK_NO_AI] = _noai;
 }
 
 Vector3 Track::getWaypointMiddle(int index)

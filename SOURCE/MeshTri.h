@@ -15,7 +15,8 @@ enum CollisionType {
 	JUMP_PAD,
 	ON_TRACK_NO_AI,
 
-	NUM_OF_TYPES //must be last
+	NUM_OF_TYPES, //must be last
+	NO_TERRAIN // sneaky post-last hehe
 };
 
 struct MeshTri

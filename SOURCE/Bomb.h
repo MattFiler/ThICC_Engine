@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Item.h"
+#include "ItemThrowData.h"
 
 class Explosion;
 class Player;
@@ -8,7 +9,8 @@ class Player;
 class Bomb : public Item
 {
 public:
-	Bomb(std::function<Explosion*()> _CreateExplosionFunciton);
+	Bomb(std::function<Explosion*(ItemType)> _CreateExplosionFunciton);
+	void InitBombData();
 	~Bomb() = default;
 
 	virtual void Tick() override;
@@ -18,9 +20,11 @@ public:
 	void HitByPlayer(Player* player) override;
 
 private:
-	std::function<Explosion*()> CreateExplosion;
+	std::function<Explosion*(ItemType)> CreateExplosion;
 	Explosion* explosion;
 	float m_current_time = 0;
-	float m_countdown_time = 4;
+	float m_countdownTime = 0;
 	bool m_countdown = false;
+
+	ItemThrowData m_throwData;
 };

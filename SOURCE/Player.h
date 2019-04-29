@@ -18,7 +18,10 @@
 #include "VehicleInfo.h"
 #include "LightningCloud.h"
 #include "RedShell.h"
+#include "BulletBill.h"
 #include <functional>
+#include <json.hpp>
+using json = nlohmann::json;
 
 //=================================================================
 //Base Player Class (i.e. a model GO3D the player controls)
@@ -28,11 +31,14 @@ class Player : public TrackMagnet
 {
 
 public:
-	Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
+	Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
+	void InitPlayerData();
 	~Player();
 
 	virtual void Tick() override;
 	virtual void Render() override;
+
+	int GetPlayerId() { return m_playerID; };
 
 	int GetWaypoint() { return m_waypoint; }
 	int GetRanking() { return m_ranking; }
@@ -75,7 +81,20 @@ public:
 	bool isInvincible() { return m_invincible; };
 	void setInvicible(bool _invincible) { m_invincible = _invincible; };
 
-	void Reload(CharacterInfo _character, VehicleInfo _vehicle);
+	void Reload(CharacterInfo* _character, VehicleInfo* _vehicle);
+
+	AnimationController* GetAnimController() { return m_animationMesh.get(); };
+
+	void CreateAi() { m_ai = std::make_unique<MoveAI>(this, m_move.get()); };
+	void DeleteAi() { m_ai.reset(); };
+
+	ControlledMovement* GetControlledMovement() { return m_move.get(); };
+	MoveAI* GetMoveAi() { return m_ai.get(); };
+
+	bool IsGliding() { return m_gliding; };
+	bool IsRespawning() { return m_respawning; };
+
+	Matrix GetLastOnTrack() { return m_posHistory.front(); };
 
 protected:
 	int m_playerID = 0;
@@ -86,6 +105,10 @@ private:
 	void movement();
 
 	void RespawnLogic();
+	void Respawn();
+	void MovePlayerToTrack();
+
+	void GlideLogic();
 
 	ThICC_RenderData* m_RD = nullptr;
 	KeybindManager m_keybind;
@@ -104,7 +127,7 @@ private:
 	bool m_finished = false;
 	bool m_invincible = false;
 
-	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th" };
+	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th", "th","th","th","th","th","th","th","th"};
 
 	// Player items:
 	//	A player can have an ACTIVE item (e.g. holding a banana behind themselves) AND also an INVENTORY item.
@@ -123,18 +146,53 @@ private:
 	void PositionFloatingItems();
 	bool m_aPressed = true;
 	bool m_multiItem = false;
-	const int m_maxItems = 3;
+	int m_maxItems = 0;
+	float m_firstTrailingItemOffset = 0;
+	float m_otherTrailingItemOffset = 0;
+	Vector3 m_orbitDistance = Vector3::Zero;
+	float m_orbitSpeed = 0;
+	float m_floatingItemPosOffset = 0;
 
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;
 
 	std::unique_ptr<AnimationController> m_animationMesh = nullptr;
 
-	std::queue<Matrix> m_posHistory;
-	float m_posHistoryInterval = 0.1f;
+
+	// Respawn
+	std::queue<Matrix> m_posHistory; // All the recorded player positions
+	float m_posHistoryInterval = 0.2f; // How often the players position will be recorded
+	int m_posHistoryLength = 10; // The length of the position queue
+	float m_noTrackRespawn = 1; // If not on any terrain, respawn after this time
+	float m_offTrackRespawn = 5; // If off the track, but still on terain, respawn after this time
+	float m_stationaryRespawn = 5; // If not moving for this long, repawn
+	float m_respawnSpeed = 30; // The speed at which lakitu moves the player back to the track
+
 	float m_posHistoryTimer = 0;
-	float m_posHistoryLength = 1;
-	float m_respawnDelay = 1.5f;
+	float m_respawnDelay = 0;
+	float m_offTrackTimer = 0;
+	float m_offTerrainTimer = 0;
+	float m_timeSinceRespawn = 0;
+	float m_timeStationary = 0;
+	bool m_respawning = false;
+
+	Matrix m_respawnStart = Matrix::Identity;
+	Matrix m_respawnEnd = Matrix::Identity;
+	Vector3 m_respawnPos = Vector3::Zero;
+	float m_totalRespawnTime = 0;
+	float m_maxRespawnTime = 2;
+	float m_elapsedRespawnTime = 0;
+
+	bool m_preventRespawn = false; 
+
+	// Gliding
+	float m_minGlideDuration = 0.5f; // Gives the kart some time to leave the track so the glide doesn't immediatly end
+	float m_glideTimeElapsed = 0;
+	bool m_gliding = false;
+	float m_normalGrav = 0; // Set from physmodel on load
+	float m_glidingGrav = 5;
+	float m_maxTimeGlidingOff = 3; // Max time gliding off the glide area before it respawns
+	float m_elapsedTimeOff = 0;
 
 	std::unique_ptr<MoveAI> m_ai = nullptr;
 };

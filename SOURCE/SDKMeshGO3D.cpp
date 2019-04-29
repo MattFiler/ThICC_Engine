@@ -34,16 +34,12 @@ void SDKMeshGO3D::Render()
 		auto commandList = Locator::getDD()->m_deviceResources->GetCommandList();
 		Locator::getDD()->m_hdrScene->BeginScene(commandList);
 
-		//Set to our model's heaps
+		//Set to our model's heaps (including anim textures)
 		ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), Locator::getRD()->m_states->Heap() };
 		commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
-		//Load PBR data per PBREffect
+		//Load material configs per PBREffect (including IBL)
 		{
-			/* 
-			Continuing work on custom metal/non-metal render definitions.
-			Current only applies to track, but will be extended to all models.
-			*/
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(radiance_index);
 			auto diffuseDesc = m_radianceIBL->GetDesc();
 			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(irradiance_index);
@@ -54,15 +50,32 @@ void SDKMeshGO3D::Render()
 				auto pbr = dynamic_cast<PBREffect*>(it.get());
 				if (pbr)
 				{
-					//Set IBL textures
-					if (current_metalness.size() != 0 && current_metalness.at(i)) {
+					/* METALLIC CONFIG */
+					if (m_material_config.size() != 0 && m_material_config.at(i).is_metallic) {
 						//Metal
+						pbr->SetConstantMetallic(1.0f);
+						pbr->SetConstantRoughness(0.0f);
 						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, irradianceTex, Locator::getRD()->m_states->AnisotropicClamp());
 					}
 					else
 					{
 						//Non-metal
+						pbr->SetConstantMetallic(0.0f);
+						pbr->SetConstantRoughness(1.0f);
 						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, radianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+					}
+					/* ANIMATION CONFIG */
+					if (m_material_config.size() != 0 && m_material_config.at(i).is_animated) {
+						MaterialConfig& this_mat = m_material_config.at(i);
+						pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(this_mat.gpu_indexes.at(this_mat.current_anim_index)));
+						if (this_mat.animation_timer > this_mat.animation_time) {
+							this_mat.current_anim_index++;
+							if (this_mat.texture_names.size() == this_mat.current_anim_index) {
+								this_mat.current_anim_index = 0;
+							}
+							this_mat.animation_timer = 0;
+						}
+						m_material_config.at(i).animation_timer += (float)Locator::getGSD()->m_timer.GetElapsedSeconds();
 					}
 					i++;
 				}
@@ -151,7 +164,7 @@ void SDKMeshGO3D::Load()
 			if (!(hdr->Version >= 200))
 			{
 				//The SDKMESH isn't V2 - we can't load it! This should never happen by the time we get to ship :)
-				DebugText::print("TRIED TO LOAD '" + filename + "' WHICH IS DEPRECIATED (V1) - UPDATE YOUR MODELS FFS!");
+				DebugText::print("TRIED TO LOAD '" + filename + "' WHICH IS DEPRECIATED (V1) - UPDATE YOUR MODELS!");
 				return;
 			}
 		}
@@ -238,28 +251,92 @@ void SDKMeshGO3D::Load()
 			//Create effects for materials
 			m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, resourceDescriptorOffset);
 
+			//Load our engine configs
 			if (!is_debug_mesh) {
-				//Load current metalness config
+				/* Load metalness config */
 				std::string filepath = m_filepath.getFolder(GameFilepaths::MODEL) + filename + "/REFLECTION.ThICC";
-				std::ifstream fin(filepath, std::ios::binary);
-
-				if (fin.good()) {
+				std::ifstream metal_config(filepath, std::ios::binary);
+				if (metal_config.good()) {
 					//Get number of materials in config
-					fin.seekg(0);
+					metal_config.seekg(0);
 					int number_of_materials = 0;
-					fin.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
+					metal_config.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
 
 					//Go through config for number of materials
 					for (int i = 0; i < number_of_materials; i++) {
 						char data;
-						fin.read(&data, sizeof(bool));
-						bool choice = static_cast<bool>(data);
-						current_metalness.push_back(choice);
+						metal_config.read(&data, sizeof(bool));
+
+						MaterialConfig this_mat;
+						this_mat.material_index = i;
+						this_mat.is_metallic = static_cast<bool>(data);
+						m_material_config.push_back(this_mat);
 					}
 				}
 				else
 				{
-					DebugText::print("Model '" + filename + "' uses a depreciated configuration.");
+					DebugText::print("MODEL '" + filename + "' USES A DEPRECIATED CONFIGURATION - NO METAL.");
+				}
+
+				/* Load animation config */
+				filepath = m_filepath.getFolder(GameFilepaths::MODEL) + filename + "/ANIMATION.ThICC";
+				std::ifstream anim_config(filepath, std::ios::binary); 
+				if (anim_config.good()) {
+					//Get number of materials in config
+					anim_config.seekg(0);
+					int number_of_materials = 0;
+					anim_config.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
+
+					//Update offset
+					resourceDescriptorOffset += m_modelNormal.size() * 4; //materials * 4 (max texture count) - THIS IS A BIG OL HACKY FIX, a way to count actual resources would be nice :)
+
+					for (int i = 0; i < number_of_materials; i++) {
+						//Get this material's index, and fetch our config object
+						int material_index;
+						anim_config.read(reinterpret_cast<char*>(&material_index), sizeof(int));
+						MaterialConfig& this_mat = m_material_config.at(material_index);
+						this_mat.is_animated = true;
+
+						//Get the number of textures in this animation
+						int num_of_textures;
+						anim_config.read(reinterpret_cast<char*>(&num_of_textures), sizeof(int));
+
+						//Get the animation time
+						anim_config.read(reinterpret_cast<char*>(&this_mat.animation_time), sizeof(float));
+
+						//Get each texture to animate
+						for (int x = 0; x < num_of_textures; x++) {
+							//Fetch texture name
+							int this_tex_len;
+							anim_config.read(reinterpret_cast<char*>(&this_tex_len), sizeof(int));
+							char* this_tex_char = new char[this_tex_len];
+							anim_config.read(this_tex_char, this_tex_len);
+							std::string this_tex;
+							this_tex.append(this_tex_char, this_tex_len);
+							this_mat.texture_names.push_back(this_tex);
+
+							//Convert texture name to wstring
+							std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+							this_tex = dirpath + this_tex;
+							std::wstring this_tex_wstring = converter.from_bytes(this_tex.c_str());
+
+							//Load actual texture by name & store its GPU index
+							Microsoft::WRL::ComPtr<ID3D12Resource> this_tex_d3d12;
+							wchar_t this_tex_wchar[_MAX_PATH] = {};
+							DX::FindMediaFile(this_tex_wchar, _MAX_PATH, this_tex_wstring.c_str());
+							DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, this_tex_wchar, this_tex_d3d12.ReleaseAndGetAddressOf()));
+							CreateShaderResourceView(device, this_tex_d3d12.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
+							this_mat.gpu_indexes.push_back(resourceDescriptorOffset);
+							this_mat.d3d12_textures.push_back(this_tex_d3d12);
+							resourceDescriptorOffset++;
+						}
+					}
+
+					DebugText::print("Model '" + filename + "' has " + std::to_string(number_of_materials) + " animated materials.");
+				}
+				else
+				{
+					DebugText::print("MODEL '" + filename + "' USES A DEPRECIATED CONFIGURATION - NO ANIMATION.");
 				}
 			}
 		}
@@ -282,7 +359,7 @@ void SDKMeshGO3D::Reset()
 	m_modelNormal.clear();
 	m_resourceDescriptors.reset();
 	resourceDescriptorOffset = 0;
-	current_metalness.clear();
+	m_material_config.clear();
 	m_loaded = false;
 }
 

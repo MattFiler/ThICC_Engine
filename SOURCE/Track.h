@@ -81,7 +81,7 @@ public:
 	};
 
 	bool DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle, const float& _minAngle);
-	void SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall);
+	void SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall, const bool& _glider, const bool& _antigrav, const bool& _jump, const bool& _noai);
 
 	Vector3 getWaypointMiddle(int index);
 
@@ -141,10 +141,10 @@ private:
 	std::string filename;
 
 	// Size of each dimension of the vector
-	int m_triGridX = 0;
-	int m_triGridY = 0;
-	int m_triGridZ = 0;
-	int m_triGridYX = 0; // Set to m_triGridY * m_triGridX as this number is used lots
+	size_t m_triGridX = 0;
+	size_t m_triGridY = 0;
+	size_t m_triGridZ = 0;
+	size_t m_triGridYX = 0; // Set to m_triGridY * m_triGridX as this number is used lots
 
 	std::map<CollisionType, bool> m_validCollisions;
 };

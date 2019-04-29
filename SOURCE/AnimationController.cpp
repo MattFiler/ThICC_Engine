@@ -8,7 +8,7 @@ void AnimationController::Render()
 	{
 		for (AnimationModel* model : m_modelSet[m_currentSet])
 		{
-			model->getModel()->Render();
+			model->GetModel()->Render();
 		}
 	}
 }
@@ -21,7 +21,7 @@ void AnimationController::AddModelSet(std::string _setName, std::vector<std::str
 	{
 		for (auto& model : m_additionalModels)
 		{
-			if (model->getName() == str)
+			if (model->GetName() == str)
 			{
 				new_set.push_back(model.get());
 			}
@@ -29,6 +29,14 @@ void AnimationController::AddModelSet(std::string _setName, std::vector<std::str
 	}
 	using pair = std::pair<std::string, std::vector<AnimationModel*>>;
 	m_modelSet.insert(pair(_setName, new_set));
+}
+
+void AnimationController::SwitchModelSet(std::string _setName)
+{
+	if (!m_lockSet)
+	{
+		m_currentSet = _setName;
+	}
 }
 
 
@@ -46,7 +54,7 @@ void AnimationController::Load()
 {
 	for (auto& model : m_additionalModels)
 	{
-		model->getModel()->Load();
+		model->GetModel()->Load();
 	}
 }
 
@@ -54,12 +62,14 @@ void AnimationController::Reset()
 {
 	for (auto& model : m_additionalModels)
 	{
-		model->getModel()->Reset();
+		model->GetModel()->Reset();
 	}
 }
 
-void AnimationController::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
+void AnimationController::Update(Matrix _parentWorld)
 {
+	UpdateScale();
+
 	if (!m_posAnimPoints.empty())
 	{
 		m_posTimeElapsed += Locator::getGSD()->m_dt;
@@ -129,7 +139,7 @@ void AnimationController::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride
 	}
 	else
 	{
-		m_rotOffset = Vector3::Lerp(m_rotOffset, _rotOffsetOverride, m_rotAnimSpeed * Locator::getGSD()->m_dt);
+		m_rotOffset = Vector3::Lerp(m_rotOffset, m_rotOffsetOverride, m_rotAnimSpeed * Locator::getGSD()->m_dt);
 	}
 
 	/*SetWorld(_parentWorld);
@@ -143,11 +153,10 @@ void AnimationController::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride
 
 	for (AnimationModel* model : m_modelSet[m_currentSet])
 	{
-		Vector3 scale_original = model->getModel()->GetScale();
-		model->getModel()->SetWorld(m_world);
-		model->getModel()->AddPos(model->getOffset());
-		model->getModel()->SetScale(scale_original);
-		model->getModel()->UpdateWorld();
+		Vector3 scale_original = model->GetModel()->GetScale();
+		model->GetModel()->SetWorld(m_world);
+		model->GetModel()->AddPos(Vector3::Transform(model->GetOffset(), m_rot));
+		model->SetScaleOffset(m_scaleOffset);
 	}
 }
 
@@ -169,7 +178,7 @@ void AnimationController::UpdateWorld(Matrix& _newWorld)
 
 void AnimationController::Jump(float _jumpHeight, float _duration)
 {
-	if (m_posAnimPoints.empty())
+	if (m_posAnimPoints.empty() && _duration > 0)
 	{
 		m_timeBetweenPos = _duration / 2;
 		m_posTimeElapsed = 0;
@@ -181,7 +190,7 @@ void AnimationController::Jump(float _jumpHeight, float _duration)
 
 void AnimationController::Spin(int _revolutions, float _duration)
 {
-	if (m_rotAnimPoints.empty())
+	if (m_rotAnimPoints.empty() && _duration > 0)
 	{
 		m_timeBetweenRot = _duration / (4 * _revolutions);
 		m_rotTimeElapsed = 0;
@@ -198,7 +207,7 @@ void AnimationController::Spin(int _revolutions, float _duration)
 
 void AnimationController::Flip(int _revolutions, float _duration)
 {
-	if (m_rotAnimPoints.empty())
+	if (m_rotAnimPoints.empty() && _duration > 0)
 	{
 		m_timeBetweenRot = _duration / (4 * _revolutions);
 		m_rotTimeElapsed = 0;
@@ -253,4 +262,22 @@ Vector3 AnimationController::GetRotationFromDirection(direction _prevDirection, 
 		return _world.Down();
 	}
 	}
+}
+
+void AnimationController::Scale(Vector3 _newScale, float _duration)
+{
+	m_startScale = m_scaleOffset;
+	m_targetScale = _newScale;
+	m_timeForScale = _duration;
+	m_scaleTimeElapsed = 0;
+}
+
+void AnimationController::UpdateScale()
+{
+	m_scaleTimeElapsed += Locator::getGSD()->m_dt;
+	if (m_scaleTimeElapsed > m_timeForScale)
+	{
+		m_scaleTimeElapsed = m_timeForScale;
+	}
+	m_scaleOffset = Vector3::Lerp(m_startScale, m_targetScale, m_scaleTimeElapsed / m_timeForScale);
 }

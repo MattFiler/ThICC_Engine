@@ -28,6 +28,12 @@ namespace EditorTool
             edit_mode = (json_data != null && object_key != "");
 
             InitializeComponent();
+            
+            //Populate cups
+            foreach (var config_entry in JObject.Parse(File.ReadAllText("DATA/CONFIGS/CUP_CONFIG.JSON")))
+            {
+                mapCup.Items.Add(config_entry.Key.ToString());
+            }
         }
 
         /* On Load */
@@ -43,6 +49,7 @@ namespace EditorTool
                 mapModelAsset.Text = maps_json_config[map_json_key]["model"].Value<string>();
                 cubemapChoice.Text = maps_json_config[map_json_key]["cubemap"].Value<string>();
                 skyboxChoice.Text = maps_json_config[map_json_key]["skybox"].Value<string>();
+                mapCup.SelectedItem = maps_json_config[map_json_key]["cup"].Value<string>();
                 soundtrackIntro.Text = maps_json_config[map_json_key]["audio"]["background_start"].Value<string>();
                 soundtrackIntroLoop.Text = maps_json_config[map_json_key]["audio"]["background"].Value<string>();
                 finalLapIntro.Text = maps_json_config[map_json_key]["audio"]["final_lap_start"].Value<string>();
@@ -99,7 +106,7 @@ namespace EditorTool
             if (mapCodename.Text == "" || mapName.Text == "" || mapPreviewImage.Text == "" || 
                 mapModelAsset.Text == "" || cubemapChoice.Text == "" || 
                 soundtrackIntro.Text == "" || soundtrackIntroLoop.Text == "" || 
-                finalLapIntro.Text == "" || finalLapLoop.Text == "")
+                finalLapIntro.Text == "" || finalLapLoop.Text == "" || mapCup.SelectedIndex == -1)
             {
                 MessageBox.Show("Please complete all fields before trying to save.", "Can't save.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -127,6 +134,7 @@ namespace EditorTool
             maps_json_config[map_name]["model"] = mapModelAsset.Text;
             maps_json_config[map_name]["cubemap"] = cubemapChoice.Text;
             maps_json_config[map_name]["skybox"] = skyboxChoice.Text;
+            maps_json_config[map_name]["cup"] = mapCup.SelectedItem.ToString();
             maps_json_config[map_name]["audio"] = JObject.Parse("{}");
             maps_json_config[map_name]["audio"]["background_start"] = soundtrackIntro.Text;
             maps_json_config[map_name]["audio"]["background"] = soundtrackIntroLoop.Text;

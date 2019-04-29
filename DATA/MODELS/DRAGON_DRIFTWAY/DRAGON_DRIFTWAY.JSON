@@ -1,5 +1,4 @@
 {
-  "has_box_collider": false,
   "asset_name": "DRAGON_DRIFTWAY",
   "asset_type": "Models",
   "model_type": 0,
@@ -11,7 +10,7 @@
   "rot_x": 0.0,
   "rot_y": 0.0,
   "rot_z": 0.0,
-  "segment_size": 10.0,
+  "segment_size": 60.0,
   "in_use_in": [
     "Map"
   ],
@@ -763,5 +762,6 @@
         0.0
       ]
     }
-  ]
+  ],
+  "has_box_collider": false
 }

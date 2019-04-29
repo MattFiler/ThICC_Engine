@@ -99,11 +99,21 @@ void ControlledMovement::GetControllerInput()
 			m_left = false;
 		}
 	}
+
+	if (m_gliding)
+	{
+		m_acceleration = 1;
+	}
 }
 
 
 void ControlledMovement::ProcessInputFlags()
 {
+	if (!m_enabled)
+	{
+		return;
+	}
+
 	Vector3 forwardMove = m_moveSpeed * m_physModel->GetWorld().Forward();
 	Vector3 rightMove = m_turnSpeed * m_physModel->GetWorld().Right();
 	Vector3 forwardComponent = Vector3::Zero;
@@ -239,7 +249,12 @@ void ControlledMovement::ProcessInputFlags()
 		EndDrift();
 	}
 
-	m_animMesh->Update(m_physModel->GetWorld(), m_targetAnimRotOffset);
+	if (m_gliding)
+	{
+		m_targetAnimRotOffset = m_physModel->GetWorld().Forward();
+	}
+
+	m_animMesh->SetRotOffset(m_targetAnimRotOffset);
 }
 
 void ControlledMovement::EndDrift()

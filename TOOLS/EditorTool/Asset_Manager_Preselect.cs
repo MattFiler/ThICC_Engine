@@ -23,6 +23,12 @@ namespace EditorTool
             openManager(AssetCompType.MAP);
         }
 
+        /* Open Cup Manager */
+        private void cupManager_Click(object sender, EventArgs e)
+        {
+            openManager(AssetCompType.CUP);
+        }
+
         /* Open Vehicle Manager */
         private void openVehicleManager_Click(object sender, EventArgs e)
         {

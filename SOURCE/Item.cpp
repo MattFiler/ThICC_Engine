@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Item.h"
 #include "GameStateData.h"
+#include <iostream>
 #include <fstream>
 
 Item::Item(const std::string& item_type)
@@ -13,6 +14,30 @@ Item::Item(const std::string& item_type)
 	m_displayedMesh->AddModelSet("default", std::vector<std::string>{"item"});
 	m_displayedMesh->SwitchModelSet("default");
 	m_displayedMesh->Load();
+
+	InitItemData(item_type);
+}
+
+void Item::InitItemData(const std::string & item_type)
+{
+		std::string item_name = item_type;
+		if (item_name == Locator::getItemData()->GetItemModelName(FAKE_BOX))
+		{
+			item_name = "FAKE_BOX";
+		}
+		else
+		{
+			item_name.erase(item_name.begin(), item_name.begin() + 5); //Removing "ITEM_"
+		}
+
+		std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
+		m_itemData << i;
+		if (item_type != Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD))
+		{
+			m_maxDuration = (float)m_itemData[item_name]["info"]["lifetime"];
+			m_maxImmunityTime = (float)m_itemData[item_name]["info"]["player_immunity_time"];
+		}
+
 }
 
 void Item::Render()
@@ -28,16 +53,19 @@ void Item::Tick()
 	if (m_mesh)
 	{
 		m_mesh->Tick();
-		m_displayedMesh->Update(m_mesh->GetWorld(), m_mesh->GetWorld().Forward());
+		m_displayedMesh->Update(m_mesh->GetWorld());
 	}
 
 	if (m_itemUsed)
 	{
-		//Despawn time
-		m_elapsedTime += Locator::getGSD()->m_dt;
-		if (m_elapsedTime > m_maxDuration)
+		if (m_shouldDespawn)
 		{
-			m_shouldDestroy = true;
+			//Despawn time
+			m_elapsedTime += Locator::getGSD()->m_dt;
+			if (m_elapsedTime > m_maxDuration)
+			{
+				m_shouldDestroy = true;
+			}
 		}
 
 		//Player immunity time

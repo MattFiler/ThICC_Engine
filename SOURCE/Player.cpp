@@ -6,11 +6,14 @@
 #include "ItemData.h"
 #include "AIScheduler.h"
 #include <iostream>
+#include <fstream>
 
 extern void ExitGame();
 
-Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character.model), CreateItem(_createItemFunction)
+Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction) : TrackMagnet(_character->model), CreateItem(_createItemFunction)
 {
+	InitPlayerData();
+
 	m_RD = Locator::getRD();
 	SetDrag(0.7);
 	m_useGroundTypes = true;
@@ -28,10 +31,37 @@ Player::Player(CharacterInfo _character, VehicleInfo _vehicle, int _playerID, st
 
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
-	for (int i = 0; i < (int)m_posHistoryLength / m_posHistoryInterval; i++)
+	for (int i = 0; i < m_posHistoryLength; i++)
 	{
 		m_posHistory.push(m_world);
 	}
+
+	// If AI
+	if (m_playerID == -1)
+	{
+		m_move->SetEnabled(false);
+	}
+}
+
+void Player::InitPlayerData()
+{
+	std::ifstream i("DATA/CONFIGS/PLAYER_CONFIG.JSON");
+	json playerData;
+	playerData << i;
+
+	m_maxItems = (float)playerData["item_data"]["triple_item_count"];
+	m_firstTrailingItemOffset = (float)playerData["item_data"]["trailing_items"]["line"]["first_item_trail_offset"];
+	m_otherTrailingItemOffset = (float)playerData["item_data"]["trailing_items"]["line"]["other_items_trail_offset"];
+	m_orbitDistance = Vector3((float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_distance"][0],
+		(float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_distance"][1],
+		(float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_distance"][2]);
+	m_orbitSpeed = (float)playerData["item_data"]["trailing_items"]["spinning"]["orbit_speed"];
+	m_floatingItemPosOffset = (float)playerData["item_data"]["trailing_items"]["floating"]["upward_pos_offset"];
+
+	m_posHistoryInterval = (float)playerData["respawn_data"]["pos_history_interval"];
+	m_posHistoryTimer = (float)playerData["respawn_data"]["pos_history_timer"];
+	m_posHistoryLength = (float)playerData["respawn_data"]["pos_history_length"];
+	m_respawnDelay = (float)playerData["respawn_data"]["respawn_delay"];
 }
 
 Player::~Player()
@@ -41,24 +71,34 @@ Player::~Player()
 }
 
 
-void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
+void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 
-	std::ifstream i(m_filepath.generateConfigFilepath(_vehicle.model, m_filepath.MODEL));
+	std::ifstream i(m_filepath.generateConfigFilepath(_vehicle->model, m_filepath.MODEL));
 	json m_model_config_vehicle;
 	m_model_config_vehicle << i;
 
 	m_animationMesh = std::make_unique<AnimationController>();
-	m_animationMesh->AddModel("vehicle", _vehicle.model, Vector::Zero);
+	m_animationMesh->AddModel("vehicle", _vehicle->model, Vector::Zero);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
-	std::ifstream x(m_filepath.generateConfigFilepath(_character.model, m_filepath.MODEL));
+	std::ifstream x(m_filepath.generateConfigFilepath(_character->model, m_filepath.MODEL));
 	json m_model_config_character;
 	m_model_config_character << x;
 
-	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character.model);
+	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character->model);
 	new_model->SetScale(m_model_config_character["modelscale"]);
 	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
+	m_animationMesh->AddModel("lakitu", "DEFAULT_ITEM", Vector3::Up * 4);
+	new_model = new SDKMeshGO3D("DEFAULT_ITEM");
+	new_model->SetScale(Vector3(2, 0.05f, 2));
+	m_animationMesh->AddModel("glider", new_model, Vector3::Up * 1.3f);
+	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL), Vector3::Up);
+
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
+	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
+	m_animationMesh->AddModelSet("gliding", std::vector < std::string>{"vehicle", "character", "glider"});
+	m_animationMesh->AddModelSet("Bullet Bill", std::vector < std::string>{"Bullet Bill"});
+
 	m_animationMesh->SwitchModelSet("default");
 
 	m_animationMesh->Load();
@@ -66,16 +106,17 @@ void Player::Reload(CharacterInfo _character, VehicleInfo _vehicle) {
 	ControlledMovement* old_movement = m_move.release();
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
+	m_normalGrav = m_maxGrav;
 	//Update TrackMagnet here too?
 }
-
-
 void Player::SetActiveItem(ItemType _item) {
 	if (m_InventoryItem == _item) {
 		active_item = _item;
-		m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
-		m_imgItem->SetPos(m_itemPos);
-
+		if (m_playerID != -1)
+		{
+			m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
+			m_imgItem->SetPos(m_itemPos);
+		}
 
 		m_InventoryItem = ItemType::NONE;
 		
@@ -91,8 +132,11 @@ void Player::SetActiveItem(ItemType _item) {
 void Player::SetItemInInventory(ItemType _item) {
 	if (m_InventoryItem == ItemType::NONE) {
 		m_InventoryItem = _item;
-		m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
-		m_imgItem->SetPos(m_itemPos);
+		if (m_playerID != -1)
+		{
+			m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
+			m_imgItem->SetPos(m_itemPos);
+		}
 		DebugText::print("PLAYER " + std::to_string(m_playerID) + " HAS ACQUIRED ITEM: " + std::to_string(_item));
 
 		//Lightning cloud spawns as soon as it gets picked up
@@ -134,6 +178,8 @@ void Player::Tick()
 	movement();
 
 	RespawnLogic();
+
+	GlideLogic();
 
 	if (m_controlsActive)
 	{
@@ -178,6 +224,8 @@ void Player::Tick()
 
 	//apply my base behaviour
 	TrackMagnet::Tick();
+
+	m_animationMesh->Update(m_world);
 }
 
 void Player::PositionFloatingItems()
@@ -185,7 +233,7 @@ void Player::PositionFloatingItems()
 	for (int i = 0; i < m_floatingItems.size(); i++)
 	{
 		m_floatingItems[i]->GetMesh()->SetWorld(m_world);
-		m_floatingItems[i]->GetMesh()->AddPos(m_world.Up() * 2);
+		m_floatingItems[i]->GetMesh()->AddPos(m_world.Up() * m_floatingItemPosOffset);
 		m_floatingItems[i]->GetMesh()->UpdateWorld();
 	}
 }
@@ -267,17 +315,16 @@ void Player::TrailItems()
 					Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
 
 					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-					m_trailingItems[i]->GetMesh()->AddPos(backward_pos * 2.2 + (backward_pos * 1.5 * i));
+					m_trailingItems[i]->GetMesh()->AddPos(backward_pos * m_firstTrailingItemOffset + (backward_pos * m_otherTrailingItemOffset * i));
 					m_trailingItems[i]->GetMesh()->UpdateWorld();
 				}
 				//Spins around the player
 				else
 				{
 					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-					Vector3 m_dpos = Vector3{ 2, 0, 2 };
-					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + 350 * Locator::getGSD()->m_dt);
+					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + m_orbitSpeed * Locator::getGSD()->m_dt);
 					m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f) 
-						* m_dpos.x, m_dpos.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_dpos.z }, m_rot));
+						* m_orbitDistance.x, m_orbitDistance.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_orbitDistance.z }, m_rot));
 				}
 			}
 
@@ -288,8 +335,8 @@ void Player::TrailItems()
 
 void Player::SpawnItems(ItemType type)
 {
-	//Triple mushrooms and Golden Mushroom still in inventory after use
-	if (type != MUSHROOM_3X && type != MUSHROOM_UNLIMITED)
+	//Triple mushrooms, Golden Mushroom and Bullet Bill still in inventory after use
+	if (type != MUSHROOM_3X && type != MUSHROOM_UNLIMITED && type != BULLET_BILL)
 	{
 		SetActiveItem(type);
 	}
@@ -404,6 +451,7 @@ void Player::SpawnItems(ItemType type)
 		{
 			GiantMushroom* mushroom = static_cast<GiantMushroom*>(CreateItem(MUSHROOM_GIANT));
 			mushroom->Use(this, false);
+			break;
 		}
 
 		case LIGHTNING_CLOUD:
@@ -419,6 +467,13 @@ void Player::SpawnItems(ItemType type)
 			RedShell* shell = static_cast<RedShell*>(CreateItem(RED_SHELL));
 			m_trailingItems.push_back(shell);
 			TrailItems();
+			break;
+		}
+
+		case BULLET_BILL:
+		{
+			BulletBill* bullet = static_cast<BulletBill*>(CreateItem(BULLET_BILL));
+			bullet->Use(this, false);
 			break;
 		}
 
@@ -461,21 +516,18 @@ void Player::ReleaseItem()
 
 void Player::setGamePad(bool _state)
 {
+	// If AI
+	if (!m_ai && (m_playerID == -1 || m_lap == 3))
+	{
+		m_move->SetGamepadActive(false);
+		m_ai = std::make_unique<MoveAI>(this, m_move.get());
+		m_ai->UseDrift(true);
+		m_move->SetEnabled(true);
+		return;
+	}
 	m_move->SetGamepadActive(_state);
 	m_move->SetPlayerID(m_playerID);
 	m_controlsActive = _state;
-
-	// TEST CODE //
-	
-	/*
-	if (m_playerID == 0)
-	{
-		m_ai = std::make_unique<MoveAI>(this, m_move.get());
-		m_ai->UseDrift(true);
-		Locator::getAIScheduler()->AddAI(m_ai.get());
-	}*/
-	
-	// TEST CODE //
 }
 
 void Player::movement()
@@ -507,11 +559,71 @@ void Player::movement()
 
 }
 
+void Player::GlideLogic()
+{
+	if (m_colType == CollisionType::JUMP_PAD)
+	{
+		m_gliding = true;
+		m_animationMesh->SwitchModelSet("gliding");
+		m_preventRespawn = true;
+		m_move->SetGliding(true);
+		m_elapsedTimeOff = 0;
+	}
+	else if (m_colType == CollisionType::GLIDER_TRACK)
+	{
+		m_elapsedTimeOff = 0;
+		m_maxGrav = 0;
+		m_gravVel = Vector3::Zero;
+	}
+	else if (m_gliding)
+	{
+		m_glideTimeElapsed += Locator::getGSD()->m_dt;
+		if (m_onTrack && m_glideTimeElapsed > m_minGlideDuration)
+		{
+			m_elapsedTimeOff = 0;
+			m_glideTimeElapsed = 0;
+			m_preventRespawn = false;
+			m_gliding = false;
+			m_maxGrav = m_normalGrav;
+			m_move->SetGliding(false);
+			m_animationMesh->SwitchModelSet("default");
+		}
+		else if (m_colType == CollisionType::NO_TERRAIN)
+		{
+			m_elapsedTimeOff += Locator::getGSD()->m_dt;
+			if (m_elapsedTimeOff > m_maxTimeGlidingOff)
+			{
+				m_preventRespawn = false;
+				m_maxGrav = m_glidingGrav;
+			}
+		}
+		else
+		{
+			m_maxGrav = m_glidingGrav;
+		}
+	}
+}
+
 void Player::RespawnLogic()
 {
-	m_posHistoryTimer += Locator::getGSD()->m_dt;
-	if (m_onTrack)
+	if (m_respawning)
 	{
+		MovePlayerToTrack();
+		return;
+	}
+
+	if (m_preventRespawn)
+	{
+		return;
+	}
+
+	m_timeSinceRespawn += Locator::getGSD()->m_dt;
+	if (!m_respawning && m_onTrack && m_colType == CollisionType::ON_TRACK)
+	{
+
+		m_posHistoryTimer += Locator::getGSD()->m_dt;
+		m_offTrackTimer = 0;
+		m_offTerrainTimer = 0;
 		if (m_posHistoryTimer >= m_posHistoryInterval)
 		{
 			m_posHistoryTimer -= m_posHistoryInterval;
@@ -521,15 +633,87 @@ void Player::RespawnLogic()
 	}
 	else
 	{
-		if (m_posHistoryTimer >= m_respawnDelay)
+		if (m_colType == CollisionType::NO_TERRAIN)
 		{
-			m_posHistoryTimer = 0;
-			SetWorld(m_posHistory.front());
-			m_vel = Vector::Zero;
-			m_gravVel = Vector::Zero;
-			m_velTotal = Vector::Zero;
+			if (m_offTrackTimer >= m_noTrackRespawn)
+			{
+				Respawn();
+				m_offTrackTimer = 0;
+			}
+			else
+			{
+				m_offTrackTimer += Locator::getGSD()->m_dt;
+			}
+		}
+		else if (m_colType == CollisionType::OFF_TRACK)
+		{
+			if (m_offTerrainTimer >= m_offTrackRespawn)
+			{
+				Respawn();
+				m_offTerrainTimer = 0;
+			}
+			else
+			{
+				m_offTerrainTimer += Locator::getGSD()->m_dt;
+			}
 		}
 	}
+}
+
+void Player::Respawn()
+{
+	m_gliding = false;
+	m_maxGrav = m_normalGrav;
+	m_move->SetEnabled(false);
+	m_animationMesh->SwitchModelSet("respawn");
+	m_respawning = true;
+	m_respawnEnd = m_posHistory.front();
+	m_respawnStart = m_world;
+	m_glideTimeElapsed = 0;
+	m_elapsedTimeOff = 0;
+
+	// Decompose the matrix
+	Vector3 pos;
+	Vector3 scale;
+	Quaternion rot;
+	m_respawnEnd.Decompose(scale, rot, pos);
+	// Add a bit of height to it to "drop" the player
+	pos += m_respawnEnd.Up() * 3;
+
+	// Rebuild the matrix
+	Matrix mat_rot = Matrix::CreateFromQuaternion(rot);
+	Matrix trans = Matrix::CreateTranslation(pos);
+	Matrix mat_scale = Matrix::CreateScale(scale);
+	m_respawnEnd = mat_scale * mat_rot * trans;
+
+	// Find the distance to the respawn point
+	float dist = Vector3::Distance(pos, m_pos);
+	m_totalRespawnTime = dist / m_respawnSpeed;
+	if (m_totalRespawnTime > m_maxRespawnTime)
+	{
+		m_totalRespawnTime = m_maxRespawnTime;
+	}
+
+	m_posHistoryTimer = 0;
+	m_vel = Vector::Zero;
+	m_gravVel = Vector::Zero;
+	m_velTotal = Vector::Zero;
+}
+
+void Player::MovePlayerToTrack()
+{
+	m_elapsedRespawnTime += Locator::getGSD()->m_dt;
+	if (m_elapsedRespawnTime > m_totalRespawnTime)
+	{
+		m_elapsedRespawnTime = 0;
+		SetWorld(m_respawnEnd);
+		m_respawning = false;
+		m_move->SetEnabled(true);
+		m_animationMesh->SwitchModelSet("default");
+		return;
+	}
+
+	SetWorld(Matrix::Lerp(m_respawnStart, m_respawnEnd, m_elapsedRespawnTime / m_totalRespawnTime));
 }
 
 void Player::SetWaypoint(int _waypoint)

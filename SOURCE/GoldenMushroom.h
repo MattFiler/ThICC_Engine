@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Item.h"
+#include "ItemBoostData.h"
 
 class Player;
 
@@ -8,6 +9,7 @@ class GoldenMushroom : public Item
 {
 public:
 	GoldenMushroom();
+	void InitMushroomData();
 	~GoldenMushroom() = default;
 
 	virtual void Tick() override;
@@ -15,9 +17,6 @@ public:
 	void Use(Player* player, bool _altUse) override;
 
 private:
-	float m_boostTimeElapsed = 0;
-	float m_boostAmount = 35;
-	float m_minVelo = 50;
-	double m_boostDuration = 1;
+	ItemBoostData m_boostData;
 };
 

@@ -23,7 +23,9 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 0,
+    "ThICC_METALLIC": false
   },
   "Material.004": {
     "newmtl": "Material.004",
@@ -49,6 +51,8 @@
       "1": false,
       "2": false,
       "3": false
-    }
+    },
+    "ThICC_INDEX": 1,
+    "ThICC_METALLIC": false
   }
 }

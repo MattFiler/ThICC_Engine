@@ -1,32 +1,4 @@
 {
-  "Material.001": {
-    "newmtl": "Material.001",
-    "Ns": "92.000000",
-    "Ka": "1.000000 1.000000 1.000000",
-    "Kd": "1.000000 1.000000 1.000000",
-    "Ks": "0.000000 0.000000 0.000000",
-    "Ke": "0.000000 0.000000 0.000000",
-    "Ni": "1.000000",
-    "d": "1.000000",
-    "illum": "2",
-    "map_Kd": "debug_grid.jpg",
-    "Tr": "0.000000",
-    "map_Ks": "",
-    "map_Kn": "",
-    "norm": "",
-    "map_Ke": "",
-    "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 0,
-    "ThICC_METALLIC": false,
-    "ThICC_COLLISION": {
-      "0": true,
-      "1": false,
-      "2": false,
-      "3": false
-    }
-  },
   "ef_dashboard": {
     "newmtl": "ef_dashboard",
     "Ns": "94.117647",
@@ -46,7 +18,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 1,
+    "ThICC_INDEX": 0,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -74,7 +46,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 57,
+    "ThICC_INDEX": 56,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -105,7 +77,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 26,
+    "ThICC_INDEX": 25,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -136,7 +108,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 6,
+    "ThICC_INDEX": 5,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -164,7 +136,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 10,
+    "ThICC_INDEX": 9,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -192,7 +164,7 @@
     "norm": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 43,
+    "ThICC_INDEX": 42,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -220,7 +192,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 32,
+    "ThICC_INDEX": 31,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -248,7 +220,7 @@
     "norm": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 11,
+    "ThICC_INDEX": 10,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -276,7 +248,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 68,
+    "ThICC_INDEX": 67,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -304,7 +276,7 @@
     "Tr": "0.000000",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 44,
+    "ThICC_INDEX": 43,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -332,7 +304,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 62,
+    "ThICC_INDEX": 61,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -360,7 +332,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 63,
+    "ThICC_INDEX": 62,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -388,7 +360,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 14,
+    "ThICC_INDEX": 13,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -416,7 +388,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 58,
+    "ThICC_INDEX": 57,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -444,7 +416,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 29,
+    "ThICC_INDEX": 28,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -472,7 +444,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 28,
+    "ThICC_INDEX": 27,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -503,7 +475,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 31,
+    "ThICC_INDEX": 30,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -531,7 +503,7 @@
     "Tr": "0.000000",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 64,
+    "ThICC_INDEX": 63,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": true,
@@ -559,7 +531,7 @@
     "map_emissive": "ufc_RoadOther2_emm.png",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 27,
+    "ThICC_INDEX": 26,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": true,
@@ -587,13 +559,16 @@
     "map_emissive": "ufc_RoadOther2_emm.png",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 60,
+    "ThICC_INDEX": 59,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "7": true,
+      "5": false,
+      "6": false
     }
   },
   "fc_RoofParts": {
@@ -615,7 +590,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 65,
+    "ThICC_INDEX": 64,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -643,7 +618,7 @@
     "Tr": "0.000000",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 34,
+    "ThICC_INDEX": 33,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -671,7 +646,7 @@
     "Tr": "0.000000",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 56,
+    "ThICC_INDEX": 55,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -699,7 +674,7 @@
     "Tr": "0.000000",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 7,
+    "ThICC_INDEX": 6,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -727,7 +702,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 5,
+    "ThICC_INDEX": 4,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -755,7 +730,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 24,
+    "ThICC_INDEX": 23,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -783,7 +758,7 @@
     "Tr": "0.000000",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 61,
+    "ThICC_INDEX": 60,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -811,7 +786,7 @@
     "Tr": "0.000000",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 52,
+    "ThICC_INDEX": 51,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -822,7 +797,7 @@
   },
   "fc_TV_MKTV": {
     "newmtl": "fc_TV_MKTV",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "0.000000 0.000000 0.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -837,16 +812,74 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 35,
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "ThICC_INDEX": 34,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": false
-    }
+      "3": false,
+      "7": false,
+      "5": false,
+      "6": false
+    },
+    "ThICC_ANIMATION": [
+      "MKTV.0.png",
+      "mktv.1.png",
+      "mktv.2.png",
+      "mktv.3.png",
+      "mktv.4.png",
+      "mktv.5.png",
+      "mktv.6.png",
+      "mktv.7.png",
+      "mktv.8.png",
+      "mktv.9.png",
+      "mktv.10.png",
+      "mktv.11.png",
+      "mktv.12.png",
+      "mktv.13.png",
+      "mktv.14.png",
+      "mktv.15.png",
+      "mktv.16.png",
+      "mktv.17.png",
+      "mktv.18.png",
+      "mktv.19.png",
+      "mktv.20.png",
+      "mktv.21.png",
+      "mktv.22.png",
+      "mktv.23.png",
+      "mktv.24.png",
+      "mktv.25.png",
+      "mktv.26.png",
+      "mktv.27.png",
+      "mktv.28.png",
+      "mktv.29.png",
+      "mktv.30.png",
+      "mktv.31.png",
+      "mktv.32.png",
+      "mktv.33.png",
+      "mktv.34.png",
+      "mktv.35.png",
+      "mktv.36.png",
+      "mktv.37.png",
+      "mktv.38.png",
+      "mktv.39.png",
+      "mktv.40.png",
+      "mktv.41.png",
+      "mktv.42.png",
+      "mktv.43.png",
+      "mktv.44.png",
+      "mktv.45.png",
+      "mktv.46.png",
+      "mktv.47.png",
+      "mktv.48.png",
+      "mktv.49.png",
+      "mktv.50.png"
+    ],
+    "ThICC_ANIMATION_ENABLED": true,
+    "ThICC_ANIMATION_TIME": 0.05
   },
   "fc_TV_capture": {
     "newmtl": "fc_TV_capture",
@@ -867,7 +900,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 8,
+    "ThICC_INDEX": 7,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -895,7 +928,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 33,
+    "ThICC_INDEX": 32,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -923,7 +956,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 25,
+    "ThICC_INDEX": 24,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -951,7 +984,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 55,
+    "ThICC_INDEX": 54,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -979,7 +1012,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 38,
+    "ThICC_INDEX": 37,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1007,7 +1040,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 2,
+    "ThICC_INDEX": 1,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1035,7 +1068,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 36,
+    "ThICC_INDEX": 35,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -1063,7 +1096,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 16,
+    "ThICC_INDEX": 15,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1091,7 +1124,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 23,
+    "ThICC_INDEX": 22,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1122,7 +1155,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 18,
+    "ThICC_INDEX": 17,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1150,7 +1183,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 49,
+    "ThICC_INDEX": 48,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1178,7 +1211,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 40,
+    "ThICC_INDEX": 39,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -1206,7 +1239,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 39,
+    "ThICC_INDEX": 38,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -1234,7 +1267,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 51,
+    "ThICC_INDEX": 50,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1262,7 +1295,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 22,
+    "ThICC_INDEX": 21,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1290,7 +1323,7 @@
     "Tr": "0.000000",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 17,
+    "ThICC_INDEX": 16,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1318,7 +1351,7 @@
     "Tr": "0.000000",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 48,
+    "ThICC_INDEX": 47,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1346,7 +1379,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 4,
+    "ThICC_INDEX": 3,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -1374,7 +1407,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 19,
+    "ThICC_INDEX": 18,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1402,7 +1435,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 13,
+    "ThICC_INDEX": 12,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1430,7 +1463,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 3,
+    "ThICC_INDEX": 2,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -1458,7 +1491,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 41,
+    "ThICC_INDEX": 40,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1486,7 +1519,7 @@
     "Tr": "0.000000",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 46,
+    "ThICC_INDEX": 45,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1514,7 +1547,7 @@
     "Tr": "0.000000",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 20,
+    "ThICC_INDEX": 19,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -1542,7 +1575,7 @@
     "map_emissive": "ufc_road_emm.png",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 47,
+    "ThICC_INDEX": 46,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -1570,7 +1603,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 45,
+    "ThICC_INDEX": 44,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -1598,7 +1631,7 @@
     "map_emissive": "ufc_road_emm.png",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 12,
+    "ThICC_INDEX": 11,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -1626,7 +1659,7 @@
     "map_emissive": "ufc_road_emm.png",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 67,
+    "ThICC_INDEX": 66,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -1654,7 +1687,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 53,
+    "ThICC_INDEX": 52,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -1682,7 +1715,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 21,
+    "ThICC_INDEX": 20,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1710,7 +1743,7 @@
     "Tr": "0.000000",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 9,
+    "ThICC_INDEX": 8,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1738,7 +1771,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 37,
+    "ThICC_INDEX": 36,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1766,7 +1799,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 50,
+    "ThICC_INDEX": 49,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1794,7 +1827,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 66,
+    "ThICC_INDEX": 65,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1822,7 +1855,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 54,
+    "ThICC_INDEX": 53,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1850,7 +1883,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 42,
+    "ThICC_INDEX": 41,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1878,7 +1911,7 @@
     "Tr": "0.000000",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 30,
+    "ThICC_INDEX": 29,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
@@ -1906,7 +1939,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 59,
+    "ThICC_INDEX": 58,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1934,7 +1967,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 15,
+    "ThICC_INDEX": 14,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,

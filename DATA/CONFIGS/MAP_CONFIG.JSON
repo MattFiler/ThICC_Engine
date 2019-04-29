@@ -1,10 +1,11 @@
 {
-  "DRAGON DRIFTWAY": {
-    "friendly_name": "MAP_DRIFTWAY",
-    "menu_sprite": "DRAGON_DRIFTWAY_PREVIEW",
-    "model": "DRAGON_DRIFTWAY",
+  "MARIO KART STADIUM": {
+    "friendly_name": "MAP_MKS",
+    "menu_sprite": "MARIO KART STADIUM PREVIEW",
+    "model": "MARIOKARTSTADIUM",
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "cup": "DEMO_CUP",
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",
@@ -12,12 +13,55 @@
       "final_lap": "MKS FINAL LAP LOOP"
     }
   },
-  "MARIO KART STADIUM": {
-    "friendly_name": "MAP_MKS",
-    "menu_sprite": "MARIO KART STADIUM PREVIEW",
-    "model": "MARIOKARTSTADIUM",
+  "YOSHI_CIRCUIT": {
+    "friendly_name": "MAP_YOSHI_CIRCUIT",
+    "menu_sprite": "YOSHI CIRCUIT",
+    "model": "YOSHI_CIRCUIT",
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "cup": "DEMO_CUP",
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
+  },
+  "MOO_MOO_MEADOWS": {
+    "friendly_name": "MAP_MEADOWS",
+    "menu_sprite": "MAP_MEADOWS",
+    "model": "MOOMOOMEADOWS",
+    "cubemap": "SUNSUBMIXER",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "cup": "DEMO_CUP",
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
+  },
+  "DRAGON_DRIFTWAY": {
+    "friendly_name": "MAP_DRIFTWAY",
+    "menu_sprite": "DRAGON_DRIFTWAY_PREVIEW",
+    "model": "DRAGON_DRIFTWAY",
+    "cubemap": "SUNSUBMIXER",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "cup": "DEMO_CUP",
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
+  },
+  "SUBWAY": {
+    "friendly_name": "MAP_SUBWAY",
+    "menu_sprite": "MAP_SUBWAY",
+    "model": "SUPERBELLSUBWAY",
+    "cubemap": "CUBEMAP_SUBWAY",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "cup": "DEMO_CUP",
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",

@@ -1,0 +1,14 @@
+# Blender MTL File: 'crowd.blend'
+# Material Count: 1
+
+newmtl ws_NS2_Gallery_00
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd D:\Downloads\Wii U - Mario Kart 8 - DS Wario Stadium\dsws_ry_Gallery_00_Alb.0.png
+map_d D:\\Downloads\\Wii U - Mario Kart 8 - DS Wario Stadium\\dsws_ry_Gallery_00_Alb.0.png

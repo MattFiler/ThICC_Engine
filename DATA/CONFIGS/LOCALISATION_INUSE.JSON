@@ -51,5 +51,28 @@
   },
   "VEHICLE_SELECT": {
     "in_use_in": []
+  },
+  "DEMO_CUP": {
+    "in_use_in": [
+      "Cup"
+    ]
+  },
+  "CUP_SELECT": {
+    "in_use_in": []
+  },
+  "MAP_YOSHI_CIRCUIT": {
+    "in_use_in": [
+      "Map"
+    ]
+  },
+  "MAP_MEADOWS": {
+    "in_use_in": [
+      "Map"
+    ]
+  },
+  "MAP_SUBWAY": {
+    "in_use_in": [
+      "Map"
+    ]
   }
 }

@@ -18,7 +18,7 @@ using json = nlohmann::json;
 class GameScene : public Scene
 {
 public:
-	GameScene(MapInfo _track);
+	GameScene(MapInfo* _track);
 	~GameScene() override;
 
 	//Core update/render/load functions
@@ -61,11 +61,11 @@ private:
 
 	//Item objects
 	Item* CreateItem(ItemType type);
-	Explosion* CreateExplosion();
+	Explosion* CreateExplosion(ItemType _ownerType);
 
 	//Game objects (and test crap)
 	Track* track = nullptr;
-	Player* player[4] = { nullptr };
+	Player* player[12] = { nullptr };
 	std::vector<Item*> m_itemModels;
 	Text2D* countdown_text = nullptr;
 
@@ -76,7 +76,7 @@ private:
 	//Random data stores
 	json game_config;
 	json track_config;
-	MapInfo map_info;
+	MapInfo* map_info;
 
 	//Referenced stuff
 	RenderData* m_RD;
@@ -106,6 +106,8 @@ private:
 	bool final_lap = false;
 	int finished = 0;
 	bool is_paused = false;
+
+	int m_maxPlayers = 1;
 
 };
 
