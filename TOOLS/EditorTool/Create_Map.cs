@@ -21,6 +21,7 @@ namespace EditorTool
         JObject maps_json_config = null;
         string map_json_key = "";
         bool edit_mode = false;
+        bool hide_popup = false;
         public Create_Map(JObject json_data = null, string object_key = "")
         {
             maps_json_config = json_data;
@@ -41,6 +42,8 @@ namespace EditorTool
         {
             if (edit_mode)
             {
+                hide_popup = maps_json_config[map_json_key]["arcade_only"].Value<bool>();
+
                 // If in edit mode, load existing config
                 mapCodename.Text = map_json_key;
                 mapCodename.ReadOnly = true;
@@ -51,6 +54,7 @@ namespace EditorTool
                 skyboxChoice.Text = maps_json_config[map_json_key]["skybox"].Value<string>();
                 mapCup.SelectedItem = maps_json_config[map_json_key]["cup"].Value<string>();
                 isArcadeOnly.Checked = maps_json_config[map_json_key]["arcade_only"].Value<bool>();
+                isOnPC.Checked = !isArcadeOnly.Checked;
                 soundtrackIntro.Text = maps_json_config[map_json_key]["audio"]["background_start"].Value<string>();
                 soundtrackIntroLoop.Text = maps_json_config[map_json_key]["audio"]["background"].Value<string>();
                 finalLapIntro.Text = maps_json_config[map_json_key]["audio"]["final_lap_start"].Value<string>();
@@ -105,13 +109,23 @@ namespace EditorTool
         {
             if (isArcadeOnly.Checked)
             {
-                DialogResult showErrorInfo = MessageBox.Show("This option will make the map arcade exclusive.\nExclusivity is a potentially destructive action.\nAre you sure this map should be exclusive to the arcade?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (showErrorInfo == DialogResult.Yes)
+                isOnPC.Checked = false;
+                if (!hide_popup)
                 {
-                    return;
+                    DialogResult showErrorInfo = MessageBox.Show("This option will make the map arcade exclusive.\nExclusivity is a potentially destructive action.\nAre you sure this map should be exclusive to the arcade?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (showErrorInfo == DialogResult.Yes)
+                    {
+                        return;
+                    }
+                    isArcadeOnly.Checked = false;
+                    isOnPC.Checked = true;
                 }
-                isArcadeOnly.Checked = false;
+                hide_popup = false;
             }
+        }
+        private void isOnPC_CheckedChanged(object sender, EventArgs e)
+        {
+            isArcadeOnly.Checked = !isOnPC.Checked;
         }
 
         /* Save map to config */
@@ -164,5 +178,6 @@ namespace EditorTool
             MessageBox.Show("Saved map configuration!", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
+
     }
 }
