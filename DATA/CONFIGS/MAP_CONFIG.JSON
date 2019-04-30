@@ -6,6 +6,7 @@
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
+    "arcade_only": false,
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",
@@ -20,6 +21,7 @@
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
+    "arcade_only": false,
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",
@@ -34,6 +36,7 @@
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
+    "arcade_only": false,
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",
@@ -48,6 +51,7 @@
     "cubemap": "CUBEMAP_SUBWAY",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
+    "arcade_only": false,
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",
@@ -62,6 +66,7 @@
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
+    "arcade_only": false,
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",

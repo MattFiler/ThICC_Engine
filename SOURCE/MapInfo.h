@@ -23,6 +23,8 @@ struct MapInfo : public AssetComp {
 		preview_sprite = new ImageGO2D(_element["menu_sprite"]);
 		scene_index = _index;
 
+		is_arcade_exclusive = _element["arcade_only"];
+
 		for (CupInfo* this_cup : Locator::getGOS()->cup_instances) {
 			if (this_cup->codename == _element["cup"]) {
 				cup = this_cup;
@@ -47,6 +49,8 @@ struct MapInfo : public AssetComp {
 	std::string model = "";
 	CupInfo* cup = nullptr;
 	int scene_index = -1;
+
+	bool is_arcade_exclusive = false;
 
 	std::wstring cubemap_radiance;
 	std::wstring cubemap_irradiance;

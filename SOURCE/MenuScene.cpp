@@ -145,6 +145,17 @@ void MenuScene::Update(DX::StepTimer const& timer)
 						continue;
 					}
 
+					//Show/hide map options based on arcade exclusivity
+					#ifdef _ARCADE
+					if (!a_map->is_arcade_exclusive) {
+						return;
+					}
+					#else
+					if (a_map->is_arcade_exclusive) {
+						return;
+					}
+					#endif
+
 					index++;
 
 					//Text
