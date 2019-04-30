@@ -62,7 +62,6 @@ void ThICC_Game::Initialize() {
 	for (auto& element : map_config) {
 		//Store map info
 		MapInfo* new_map_inf = new MapInfo(element, index);
-		m_go_shared.map_instances.push_back(new_map_inf);
 		#ifndef _DEBUG
 		#ifdef _ARCADE
 		if (!new_map_inf->is_arcade_exclusive) {
@@ -74,6 +73,7 @@ void ThICC_Game::Initialize() {
 		}
 		#endif
 		#endif
+		m_go_shared.map_instances.push_back(new_map_inf);
 		//Create scene
 		m_scene_manager.addScene(new GameScene(m_go_shared.map_instances.at(index)), (int)Scenes::GAMESCENE + index);
 		index++;
