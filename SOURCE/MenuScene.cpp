@@ -40,6 +40,10 @@ void MenuScene::ExpensiveLoad() {
 	m_menu_state = menu_states::SPLASH;
 	m_timer = 0.0f;
 	m_keybinds.Reset();
+	highlighted_character = 0;
+	highlighted_cup = 0;
+	highlighted_map = 0;
+	highlighted_vehicle = 0;
 }
 
 /* Create all 2D objects for the scene */
