@@ -368,8 +368,13 @@ void ThICC_Engine::OnWindowSizeChanged(int width, int height)
 /* Window properties */
 void ThICC_Engine::GetDefaultSize(int& width, int& height) const
 {
+	#ifdef _ARCADE
+	width = 320;
+	height = 240;
+	#else
 	width = m_game_config["window_width"];
 	height = m_game_config["window_height"];
+	#endif
 }
 
 /* These are the resources that depend on the device. */
