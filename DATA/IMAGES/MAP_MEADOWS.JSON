@@ -1,0 +1,13 @@
+{
+  "asset_name": "MAP_MEADOWS",
+  "asset_type": "Images",
+  "visible": true,
+  "is_2d": true,
+  "res_x": 288,
+  "res_y": 162,
+  "x_pos": 0,
+  "y_pos": 0,
+  "in_use_in": [
+    "Map"
+  ]
+}

@@ -35,6 +35,12 @@ Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, 
 	{
 		m_posHistory.push(m_world);
 	}
+
+	// If AI
+	if (m_playerID == -1)
+	{
+		m_move->SetEnabled(false);
+	}
 }
 
 void Player::InitPlayerData()
@@ -106,9 +112,11 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 void Player::SetActiveItem(ItemType _item) {
 	if (m_InventoryItem == _item) {
 		active_item = _item;
-		m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
-		m_imgItem->SetPos(m_itemPos);
-
+		if (m_playerID != -1)
+		{
+			m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
+			m_imgItem->SetPos(m_itemPos);
+		}
 
 		m_InventoryItem = ItemType::NONE;
 		
@@ -124,8 +132,11 @@ void Player::SetActiveItem(ItemType _item) {
 void Player::SetItemInInventory(ItemType _item) {
 	if (m_InventoryItem == ItemType::NONE) {
 		m_InventoryItem = _item;
-		m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
-		m_imgItem->SetPos(m_itemPos);
+		if (m_playerID != -1)
+		{
+			m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
+			m_imgItem->SetPos(m_itemPos);
+		}
 		DebugText::print("PLAYER " + std::to_string(m_playerID) + " HAS ACQUIRED ITEM: " + std::to_string(_item));
 
 		//Lightning cloud spawns as soon as it gets picked up
@@ -213,6 +224,8 @@ void Player::Tick()
 
 	//apply my base behaviour
 	TrackMagnet::Tick();
+
+	m_animationMesh->Update(m_world);
 }
 
 void Player::PositionFloatingItems()
@@ -496,21 +509,18 @@ void Player::ReleaseItem()
 
 void Player::setGamePad(bool _state)
 {
+	// If AI
+	if (!m_ai && (m_playerID == -1 || m_lap == 3))
+	{
+		m_move->SetGamepadActive(false);
+		m_ai = std::make_unique<MoveAI>(this, m_move.get());
+		m_ai->UseDrift(true);
+		m_move->SetEnabled(true);
+		return;
+	}
 	m_move->SetGamepadActive(_state);
 	m_move->SetPlayerID(m_playerID);
 	m_controlsActive = _state;
-
-	// TEST CODE //
-	
-	
-	//if (m_playerID == 0)
-	//{
-	//	m_ai = std::make_unique<MoveAI>(this, m_move.get());
-	//	m_ai->UseDrift(true);
-	//	Locator::getAIScheduler()->AddAI(m_ai.get());
-	//}
-	
-	// TEST CODE //
 }
 
 void Player::movement()
@@ -549,9 +559,12 @@ void Player::GlideLogic()
 		m_gliding = true;
 		m_animationMesh->SwitchModelSet("gliding");
 		m_preventRespawn = true;
+		m_move->SetGliding(true);
+		m_elapsedTimeOff = 0;
 	}
 	else if (m_colType == CollisionType::GLIDER_TRACK)
 	{
+		m_elapsedTimeOff = 0;
 		m_maxGrav = 0;
 		m_gravVel = Vector3::Zero;
 	}
@@ -560,16 +573,22 @@ void Player::GlideLogic()
 		m_glideTimeElapsed += Locator::getGSD()->m_dt;
 		if (m_onTrack && m_glideTimeElapsed > m_minGlideDuration)
 		{
+			m_elapsedTimeOff = 0;
 			m_glideTimeElapsed = 0;
 			m_preventRespawn = false;
 			m_gliding = false;
 			m_maxGrav = m_normalGrav;
+			m_move->SetGliding(false);
 			m_animationMesh->SwitchModelSet("default");
 		}
 		else if (m_colType == CollisionType::NO_TERRAIN)
 		{
-			m_preventRespawn = false;
-			m_maxGrav = m_glidingGrav;
+			m_elapsedTimeOff += Locator::getGSD()->m_dt;
+			if (m_elapsedTimeOff > m_maxTimeGlidingOff)
+			{
+				m_preventRespawn = false;
+				m_maxGrav = m_glidingGrav;
+			}
 		}
 		else
 		{
@@ -591,10 +610,11 @@ void Player::RespawnLogic()
 		return;
 	}
 
-	m_posHistoryTimer += Locator::getGSD()->m_dt;
 	m_timeSinceRespawn += Locator::getGSD()->m_dt;
-	if (m_onTrack && m_colType == CollisionType::ON_TRACK)
+	if (!m_respawning && m_onTrack && m_colType == CollisionType::ON_TRACK)
 	{
+
+		m_posHistoryTimer += Locator::getGSD()->m_dt;
 		m_offTrackTimer = 0;
 		m_offTerrainTimer = 0;
 		if (m_posHistoryTimer >= m_posHistoryInterval)
@@ -643,6 +663,7 @@ void Player::Respawn()
 	m_respawnEnd = m_posHistory.front();
 	m_respawnStart = m_world;
 	m_glideTimeElapsed = 0;
+	m_elapsedTimeOff = 0;
 
 	// Decompose the matrix
 	Vector3 pos;
@@ -661,6 +682,10 @@ void Player::Respawn()
 	// Find the distance to the respawn point
 	float dist = Vector3::Distance(pos, m_pos);
 	m_totalRespawnTime = dist / m_respawnSpeed;
+	if (m_totalRespawnTime > m_maxRespawnTime)
+	{
+		m_totalRespawnTime = m_maxRespawnTime;
+	}
 
 	m_posHistoryTimer = 0;
 	m_vel = Vector::Zero;
@@ -674,7 +699,7 @@ void Player::MovePlayerToTrack()
 	if (m_elapsedRespawnTime > m_totalRespawnTime)
 	{
 		m_elapsedRespawnTime = 0;
-		SetWorld(Matrix::Lerp(m_respawnStart, m_respawnEnd, 1));
+		SetWorld(m_respawnEnd);
 		m_respawning = false;
 		m_move->SetEnabled(true);
 		m_animationMesh->SwitchModelSet("default");

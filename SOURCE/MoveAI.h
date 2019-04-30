@@ -8,8 +8,9 @@ class MoveAI
 {
 public:
 	MoveAI(PhysModel* _model, ControlledMovement* _move);
+	~MoveAI();
 
-	void Update();
+	bool Update();
 	void RecalculateLine(Track* _track);
 	void DebugRender();
 
@@ -27,6 +28,7 @@ public:
 private:
 	bool FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int _iterations, bool _allowTurn, int _waypointIndex);
 	int FindWorld(Track* _track, const Matrix& _startWorld, Matrix& _endWorld, const Vector3& _startPos, Vector3& _endPos, Vector3 _direction, const int& _steps, const int& _iteration, int &_waypointIndex);
+	void FindRouteToTrack(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int _iterations, bool _allowTurn, int _waypointIndex);
 
 	PhysModel* m_model = nullptr;
 	ControlledMovement* m_move = nullptr;
@@ -53,4 +55,8 @@ private:
 	float m_deflectionLimit = 2; // The maximum deflection allowed when merging waypoint nodes
 
 	bool m_autoUpdateWaypoints = false;
+
+	int m_findTrackMaxSteps = 10; // The maximum steps to take while searching for track
+
+	Player* m_player = nullptr;
 };

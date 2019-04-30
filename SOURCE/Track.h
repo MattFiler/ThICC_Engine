@@ -141,10 +141,10 @@ private:
 	std::string filename;
 
 	// Size of each dimension of the vector
-	int m_triGridX = 0;
-	int m_triGridY = 0;
-	int m_triGridZ = 0;
-	int m_triGridYX = 0; // Set to m_triGridY * m_triGridX as this number is used lots
+	size_t m_triGridX = 0;
+	size_t m_triGridY = 0;
+	size_t m_triGridZ = 0;
+	size_t m_triGridYX = 0; // Set to m_triGridY * m_triGridX as this number is used lots
 
 	std::map<CollisionType, bool> m_validCollisions;
 };

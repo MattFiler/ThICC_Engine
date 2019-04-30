@@ -24,12 +24,15 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Bridge": {
     "newmtl": "dr_Bridge",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -44,15 +47,18 @@
     "map_Ke": "udr_Bridge_emm.png",
     "map_emissive": "udr_Bridge_emm.png",
     "Tr": "0.000000",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
     "ThICC_INDEX": 29,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_CubeMap_Light4": {
@@ -80,7 +86,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_CubeMap_Light5": {
@@ -108,7 +117,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_CubeMap_Light6": {
@@ -136,7 +148,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_CubeMap_Light7": {
@@ -164,7 +179,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_CubeMap_SunSet": {
@@ -192,7 +210,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_DragonAbdomen": {
@@ -220,7 +241,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_DragonBody": {
@@ -248,7 +272,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_DragonBody_Face": {
@@ -276,7 +303,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_DragonParts1": {
@@ -301,15 +331,18 @@
     "ThICC_INDEX": 6,
     "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_DragonParts2": {
     "newmtl": "dr_DragonParts2",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -324,20 +357,23 @@
     "map_Ke": "udr_DragonParts2_emm.png",
     "map_emissive": "udr_DragonParts2_emm.png",
     "Tr": "0.000000",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
     "ThICC_INDEX": 59,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_DragonParts3": {
     "newmtl": "dr_DragonParts3",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -352,15 +388,18 @@
     "Tr": "0.000000",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
     "ThICC_INDEX": 45,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": true,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_DragonParts3_OutSide": {
@@ -388,7 +427,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_EnkeiBlock": {
@@ -416,7 +458,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_EnkeiBrock_Repeat": {
@@ -444,12 +489,15 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_EnkeiGlass": {
     "newmtl": "dr_EnkeiGlass",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -464,20 +512,23 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 33,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
-      "1": true,
+      "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_EnkeiGlass2": {
     "newmtl": "dr_EnkeiGlass2",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -492,15 +543,18 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 1,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
-      "1": true,
+      "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_EnkeiJugem": {
@@ -528,7 +582,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_EnkeiMatsu_Kusa": {
@@ -556,7 +613,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_EnkeiTuribashi": {
@@ -584,12 +644,15 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Enkei_Mori": {
     "newmtl": "dr_Enkei_Mori",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -604,15 +667,18 @@
     "map_Ks": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 61,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
-      "1": true,
+      "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Enkei_Tatemono": {
@@ -640,7 +706,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Field_Enkei": {
@@ -668,12 +737,15 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_FlagPole": {
     "newmtl": "dr_FlagPole",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -688,20 +760,23 @@
     "Tr": "0.000000",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 25,
-    "ThICC_METALLIC": true,
+    "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Glass": {
     "newmtl": "dr_Glass",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -716,15 +791,18 @@
     "Tr": "0.000000",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 42,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
-      "1": true,
+      "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_JugemPicture": {
@@ -752,7 +830,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Kakiwari": {
@@ -780,7 +861,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Marumado": {
@@ -808,7 +892,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_PlantA_m": {
@@ -836,7 +923,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_PlantB": {
@@ -864,7 +954,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Road1": {
@@ -892,7 +985,11 @@
       "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false,
+      "4": false
     }
   },
   "dr_Road1_G": {
@@ -920,7 +1017,11 @@
       "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false,
+      "4": false
     }
   },
   "dr_Road2A": {
@@ -948,7 +1049,11 @@
       "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false,
+      "4": false
     }
   },
   "dr_Road2B": {
@@ -976,7 +1081,11 @@
       "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false,
+      "4": false
     }
   },
   "dr_Road3": {
@@ -1004,7 +1113,11 @@
       "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false,
+      "4": false
     }
   },
   "dr_Road4": {
@@ -1032,7 +1145,11 @@
       "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false,
+      "4": false
     }
   },
   "dr_RoadSideParts": {
@@ -1060,7 +1177,11 @@
       "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false,
+      "4": false
     }
   },
   "dr_Rock": {
@@ -1088,7 +1209,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Rock2": {
@@ -1116,7 +1240,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_RockStart": {
@@ -1144,12 +1271,15 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Saku1": {
     "newmtl": "dr_Saku1",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1164,20 +1294,23 @@
     "map_Ke": "udr_Saku1_emm.png",
     "map_emissive": "udr_Saku1_emm.png",
     "Tr": "0.000000",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 36,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Saku2": {
     "newmtl": "dr_Saku2",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1192,20 +1325,23 @@
     "Tr": "0.000000",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 60,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Sebire": {
     "newmtl": "dr_Sebire",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1220,20 +1356,23 @@
     "Tr": "0.000000",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 19,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Sebire_Back": {
     "newmtl": "dr_Sebire_Back",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1248,15 +1387,18 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 27,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_StartGate": {
@@ -1279,12 +1421,15 @@
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
     "ThICC_INDEX": 31,
-    "ThICC_METALLIC": true,
+    "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true
+      "3": true,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_StartParts": {
@@ -1312,7 +1457,10 @@
       "0": true,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_StaticShadow": {
@@ -1340,7 +1488,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_StomachParts": {
@@ -1368,7 +1519,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Tenjyo": {
@@ -1396,7 +1550,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Tourou": {
@@ -1424,7 +1581,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Tourou_Group2": {
@@ -1452,12 +1612,15 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Tyochin": {
     "newmtl": "dr_Tyochin",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1472,20 +1635,23 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 47,
-    "ThICC_METALLIC": true,
+    "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Tyochin2": {
     "newmtl": "dr_Tyochin2",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1500,15 +1666,18 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
     "ThICC_INDEX": 28,
-    "ThICC_METALLIC": true,
+    "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Tyochin_Nuki": {
@@ -1536,7 +1705,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_Tyochin_Nuki_Group2": {
@@ -1564,7 +1736,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_WhiteWood": {
@@ -1592,7 +1767,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_YellowWood": {
@@ -1620,7 +1798,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "dr_YellowWood_Horn": {
@@ -1648,7 +1829,10 @@
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "ef_gravityboard": {
@@ -1675,13 +1859,16 @@
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
-      "2": true,
-      "3": false
+      "2": false,
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "ef_river02_Dragon": {
     "newmtl": "ef_river02_Dragon",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1696,15 +1883,18 @@
     "map_Ks": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
     "ThICC_INDEX": 52,
-    "ThICC_METALLIC": false,
+    "ThICC_METALLIC": true,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
-      "2": true,
-      "3": false
+      "2": false,
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   },
   "ef_waterfall04_Dragon": {
@@ -1731,8 +1921,11 @@
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
-      "2": true,
-      "3": false
+      "2": false,
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     }
   }
 }
