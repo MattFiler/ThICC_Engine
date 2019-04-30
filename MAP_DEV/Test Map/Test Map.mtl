@@ -1,0 +1,86 @@
+# Blender MTL File: 'Test Map.blend'
+# Material Count: 7
+
+newmtl Distance_1Material.003
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd \\nstu-nas01.uwe.ac.uk\users3$\m2-filer\Windows\Downloads\Wii U - Mario Kart 8 - test_WiFiTest1\test_WiFiTest1\Textures\Distance.png
+map_d \\\\nstu-nas01.uwe.ac.uk\\users3$\\m2-filer\\Windows\\Downloads\\Wii U - Mario Kart 8 - test_WiFiTest1\\test_WiFiTest1\\Textures\\Distance.png
+
+newmtl ROAD.003
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd \\nstu-nas01.uwe.ac.uk\users3$\m2-filer\Windows\Downloads\Wii U - Mario Kart 8 - test_WiFiTest1\test_WiFiTest1\Textures\nasi_06_02.png
+map_d \\\\nstu-nas01.uwe.ac.uk\\users3$\\m2-filer\\Windows\\Downloads\\Wii U - Mario Kart 8 - test_WiFiTest1\\test_WiFiTest1\\Textures\\nasi_06_02.png
+
+newmtl ROAD_SJ.003
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd \\nstu-nas01.uwe.ac.uk\users3$\m2-filer\Windows\Downloads\Wii U - Mario Kart 8 - test_WiFiTest1\test_WiFiTest1\Textures\katachi_g_02.png
+map_d \\\\nstu-nas01.uwe.ac.uk\\users3$\\m2-filer\\Windows\\Downloads\\Wii U - Mario Kart 8 - test_WiFiTest1\\test_WiFiTest1\\Textures\\katachi_g_02.png
+
+newmtl ROAD_asphaft.003
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd \\nstu-nas01.uwe.ac.uk\users3$\m2-filer\Windows\Downloads\Wii U - Mario Kart 8 - test_WiFiTest1\test_WiFiTest1\Textures\grid_ROAD_asphalt.png
+map_d \\\\nstu-nas01.uwe.ac.uk\\users3$\\m2-filer\\Windows\\Downloads\\Wii U - Mario Kart 8 - test_WiFiTest1\\test_WiFiTest1\\Textures\\grid_ROAD_asphalt.png
+
+newmtl StartLine.003
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd \\nstu-nas01.uwe.ac.uk\users3$\m2-filer\Windows\Downloads\Wii U - Mario Kart 8 - test_WiFiTest1\test_WiFiTest1\Textures\di_StartLine_Alb.png
+map_d \\\\nstu-nas01.uwe.ac.uk\\users3$\\m2-filer\\Windows\\Downloads\\Wii U - Mario Kart 8 - test_WiFiTest1\\test_WiFiTest1\\Textures\\di_StartLine_Alb.png
+
+newmtl colortex_1Material.003
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd \\nstu-nas01.uwe.ac.uk\users3$\m2-filer\Windows\Downloads\Wii U - Mario Kart 8 - test_WiFiTest1\test_WiFiTest1\Textures\colortex.png
+map_d \\\\nstu-nas01.uwe.ac.uk\\users3$\\m2-filer\\Windows\\Downloads\\Wii U - Mario Kart 8 - test_WiFiTest1\\test_WiFiTest1\\Textures\\colortex.png
+
+newmtl rc_comb_both01.003
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd \\nstu-nas01.uwe.ac.uk\users3$\m2-filer\Windows\Downloads\Wii U - Mario Kart 8 - test_WiFiTest1\test_WiFiTest1\Textures\rc_comb_both01.png
+map_d \\\\nstu-nas01.uwe.ac.uk\\users3$\\m2-filer\\Windows\\Downloads\\Wii U - Mario Kart 8 - test_WiFiTest1\\test_WiFiTest1\\Textures\\rc_comb_both01.png
