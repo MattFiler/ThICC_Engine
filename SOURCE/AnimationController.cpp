@@ -264,6 +264,16 @@ void AnimationController::Scale(Vector3 _newScale, float _duration)
 	m_scaleTimeElapsed = 0;
 }
 
+AnimationModel * AnimationController::GetAnimationModel(const std::string & _name)
+{
+	for (size_t i = 0; i < m_additionalModels.size(); i++)
+	{
+		if(m_additionalModels[i]->GetName() == _name)
+			return m_additionalModels[i].get();
+	}
+	return nullptr;
+}
+
 void AnimationController::UpdateScale()
 {
 	m_scaleTimeElapsed += Locator::getGSD()->m_dt;

@@ -158,7 +158,9 @@
     <ClCompile Include="Particle.cpp">
       <Filter>Game\Components\Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="ParticlePool.cpp" />
+    <ClCompile Include="ParticlePool.cpp">
+      <Filter>Game\Components\Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">

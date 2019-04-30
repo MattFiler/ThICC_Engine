@@ -14,7 +14,7 @@ public:
 
 	void Render();
 
-	void reset(float _lifetime, Vector3 _direction, PhysModel* object);
+	void reset(float _lifetime, Vector3 _direction, SDKMeshGO3D * object, PhysModel* _offsets);
 
 	void reset(float _lifetime, Vector3 _direction, Vector3 _start_pos);
 
@@ -32,7 +32,7 @@ public:
 
 	bool IsUsed() { return used; }
 
-	void SetLeftWheel(bool _left_wheel) { left_wheel = _left_wheel; }
+	void SetRightWheel(bool _right_wheel) { right_wheel = _right_wheel; }
 
 private:
 
@@ -42,6 +42,7 @@ private:
 	Vector3 offset{0,0,0};
 	Vector3 direction;
 	bool used = false;
-	PhysModel* game_object = nullptr;
-	bool left_wheel = false;
+	SDKMeshGO3D* game_object = nullptr;
+	PhysModel* offsets = nullptr;
+	bool right_wheel = false;
 };

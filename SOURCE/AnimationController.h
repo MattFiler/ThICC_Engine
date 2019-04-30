@@ -17,7 +17,7 @@ public:
 	void Spin(int _revolutions, float _duration);
 	void Flip(int _revolutions, float _duration);
 	void Scale(Vector3 _newScale, float _duration);
-
+	AnimationModel* GetAnimationModel(const std::string & _name);
 	void Load();
 	void Reset();
 

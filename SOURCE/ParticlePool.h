@@ -6,7 +6,7 @@
 class ParticlePool
 {
 public:
-	ParticlePool(PhysModel* object);
+	ParticlePool(SDKMeshGO3D* object, PhysModel* _offsets);
 	~ParticlePool();
 
 	void init(int _particle_amount);
@@ -21,7 +21,8 @@ private:
 
 	const static int pool_size = 500;
 
-	PhysModel* game_object = nullptr;
+	SDKMeshGO3D* game_object = nullptr;
+	PhysModel* offsets = nullptr;
 
 	Particle* particles[pool_size]{nullptr};
 	Vector3 start_pos{ 0, 0, 0 };

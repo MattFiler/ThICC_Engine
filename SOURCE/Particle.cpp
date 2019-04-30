@@ -26,11 +26,11 @@ void Particle::Tick(const Matrix& world)
 
 	if (game_object)
 	{
-		if (dynamic_cast<Player*>(game_object))
-		{
+		//if (dynamic_cast<Player*>(game_object))
+		//{
 			m_rot = game_object->GetOri();
-			m_pos = (left_wheel ? game_object->data.m_globalFrontBottomLeft : game_object->data.m_globalFrontBottomRight) + Vector3::Transform(offset, game_object->GetOri());
-		}
+			m_pos = (right_wheel ? game_object->GetPos() + (offsets->data.m_globalFrontBottomLeft - offsets->GetPos()) : game_object->GetPos() + (offsets->data.m_globalFrontBottomRight - offsets->GetPos())) + Vector3::Transform(offset, game_object->GetOri());
+	//	}
 	}
 		//else
 		//	m_pos = game_object->GetPos() + Vector3::Transform(offset, game_object->GetWorld());
@@ -51,7 +51,7 @@ void Particle::Render()
 	SDKMeshGO3D::Render();
 }
 
-void Particle::reset(float _lifetime, Vector3 _direction, PhysModel * object)
+void Particle::reset(float _lifetime, Vector3 _direction, SDKMeshGO3D * object, PhysModel * _offsets)
 {
 	used = false;
 	lifetime = _lifetime;
@@ -59,6 +59,7 @@ void Particle::reset(float _lifetime, Vector3 _direction, PhysModel * object)
 	direction = _direction;
 	direction.Normalize();
 	game_object = object;
+	offsets = _offsets;
 }
 
 void Particle::reset(float _lifetime, Vector3 _direction, Vector3 _start_pos)

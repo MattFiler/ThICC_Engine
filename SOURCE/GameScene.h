@@ -109,7 +109,7 @@ private:
 	bool is_paused = false;
 
 	ParticlePool* pool = nullptr;
-	int m_maxPlayers = 12;
+	int m_maxPlayers = 1;
 
 };
 

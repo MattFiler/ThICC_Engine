@@ -7,7 +7,7 @@
 
 
 
-ParticlePool::ParticlePool(PhysModel* object) : game_object(object)
+ParticlePool::ParticlePool(SDKMeshGO3D* object, PhysModel* _offsets) : game_object(object), offsets(_offsets)
 {
 	for (size_t i = 0; i < pool_size; i++)
 	{
@@ -53,15 +53,12 @@ void ParticlePool::ActivateNextParticle()
 
 				if (game_object)
 				{
-					if (dynamic_cast<Player*>(game_object))
-					{
-						std::uniform_int_distribution<int> int_dist(0, 1);
-						int ran_num = int_dist(eng);
-						particles[i]->SetLeftWheel(ran_num);
-						if (ran_num == 0)
-							dir.x *= -1;
-					}
-					particles[i]->reset(0.2f, dir, game_object);
+					std::uniform_int_distribution<int> int_dist(0, 1);
+					int ran_num = int_dist(eng);
+					particles[i]->SetRightWheel(ran_num);
+					if (ran_num == 0)
+						dir.x *= -1;
+					particles[i]->reset(0.2f, dir, game_object, offsets);
 				}
 				else
 					particles[i]->reset(0.01f, dir, start_pos);

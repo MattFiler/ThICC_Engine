@@ -48,6 +48,7 @@ public:
 	ImageGO2D* GetItemImg() { return m_imgItem; }
 	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
 	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
+	AnimationController* GetAnimationMesh() { return m_animationMesh.get(); }
 
 	void ExpensiveLoad() {
 		m_animationMesh->Load();

@@ -97,9 +97,9 @@ void GameScene::ExpensiveLoad() {
 		if (dynamic_cast<Track*>(*it)) {
 			dynamic_cast<Track*>(*it)->LoadCollision();
 		}
+
 	}
 
-	pool->init(100);
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
 
@@ -111,6 +111,9 @@ void GameScene::ExpensiveLoad() {
 		Locator::getRD()->skybox[i]->Load();
 	}
 
+	pool = new ParticlePool(player[0]->GetAnimationMesh()->GetAnimationModel("vehicle")->GetModel(), player[0]);
+
+	pool->init(100);
 	//Load the map's audio here using map_info's data
 }
 
@@ -252,8 +255,6 @@ void GameScene::create3DObjects()
 		player[i]->setMass(10);
 		m_3DObjects.push_back(player[i]);
 	}
-
-	pool = new ParticlePool(player[0]);
 	//particle->Load();
 
 	//Cinematic cam
@@ -441,9 +442,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 	}
 #endif
 
-	pool->ActivateNextParticle();
-	pool->Update();
-
 	// sets the players waypoint
 	SetPlayersWaypoint();
 
@@ -515,6 +513,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels);
 
 	UpdateItems();
+	pool->ActivateNextParticle();
+	pool->Update();
 }
 
 /* Update the items in the scene specifically */
