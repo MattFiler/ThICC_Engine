@@ -744,7 +744,7 @@ void GameScene::SetPlayersWaypoint()
 {
 	for (int i = 0; i < m_maxPlayers; i++) {
 		Matrix world = player[i]->GetWorld();
-		Vector3 difference = (player[i]->GetLastFramePos()+(world.Up()*3) + (world.Backward())) - (player[i]->GetPos()+(world.Up()*3) + (world.Forward()));
+		Vector3 difference = (player[i]->GetLastFramePos()+(world.Up()*2) + (world.Backward())) - (player[i]->GetPos()+(world.Up()*2) + (world.Forward()));
 		float length = difference.Length();
 		if (length == 0)
 			continue;
@@ -754,14 +754,14 @@ void GameScene::SetPlayersWaypoint()
 
 		if (player[i]->GetWaypoint() < track->getWaypointsBB().size() - 1)
 		{
-			if (track->getWaypointsBB()[player[i]->GetWaypoint()+1].Intersects(player[i]->GetPos() + (world.Up()*3), difference, length))
+			if (track->getWaypointsBB()[player[i]->GetWaypoint()+1].Intersects(player[i]->GetPos() + (world.Up()*2), difference, length))
 			{
 				player[i]->SetWaypoint(player[i]->GetWaypoint()+1);
 			}
 		}
 		else
 		{
-			if (track->getWaypointsBB()[0].Intersects(player[i]->GetPos(), difference, length))
+			if (track->getWaypointsBB()[0].Intersects(player[i]->GetPos() + (world.Up()*2), difference, length))
 			{
 				player[i]->SetWaypoint(0);
 				if (player[i]->GetLap() == 3)
