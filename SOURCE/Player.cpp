@@ -105,6 +105,8 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
 	m_normalGrav = m_maxGrav;
+
+	m_lastFramePos = m_pos;
 	//Update TrackMagnet here too?
 }
 
@@ -226,6 +228,8 @@ void Player::Tick()
 	TrackMagnet::Tick();
 
 	m_animationMesh->Update(m_world);
+
+	m_lastFramePos = m_pos;
 }
 
 void Player::PositionFloatingItems()
@@ -510,7 +514,7 @@ void Player::ReleaseItem()
 void Player::setGamePad(bool _state)
 {
 	// If AI
-	if (!m_ai && (m_playerID == -1 || m_lap == 3))
+	if (!m_ai && (m_playerID == 0 || m_lap == 3))
 	{
 		m_move->SetGamepadActive(false);
 		m_ai = std::make_unique<MoveAI>(this, m_move.get());

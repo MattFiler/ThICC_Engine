@@ -59,4 +59,7 @@ private:
 	int m_findTrackMaxSteps = 10; // The maximum steps to take while searching for track
 
 	Player* m_player = nullptr;
+	bool m_goingBackToTrack = false;
+
+	Vector3 m_wayMiddle = Vector3::Zero;
 };

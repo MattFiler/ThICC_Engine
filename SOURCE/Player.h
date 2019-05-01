@@ -82,6 +82,8 @@ public:
 
 	Matrix GetLastOnTrack() { return m_posHistory.front(); };
 
+	Vector3 GetLastFramePos() { return m_lastFramePos; };
+
 protected:
 	int m_playerID = 0;
 
@@ -181,4 +183,6 @@ private:
 	float m_elapsedTimeOff = 0;
 
 	std::unique_ptr<MoveAI> m_ai = nullptr;
+
+	Vector3 m_lastFramePos = Vector3::Zero;
 };

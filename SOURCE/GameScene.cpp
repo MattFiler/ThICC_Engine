@@ -9,6 +9,7 @@
 #include "DebugMarker.h"
 #include "Explosion.h"
 #include "GameObjectShared.h"
+#include "AIScheduler.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
@@ -643,6 +644,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		}
 		break;
 	case PLAY:
+		Locator::getAIScheduler()->DebugRender();
 		for (int i = 0; i < game_config["player_count"]; ++i)
 		{
 			//Setup viewport
@@ -740,27 +742,26 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 /* Set the player's current waypoint */
 void GameScene::SetPlayersWaypoint()
 {
-	Vector3 currentWaypoint;
-	Vector3 nextWaypoint;
 	for (int i = 0; i < m_maxPlayers; i++) {
-		currentWaypoint = track->getWaypointMiddle(player[i]->GetWaypoint());
-		int nextWayIndex = player[i]->GetWaypoint() + 1;
-		if (nextWayIndex == track->getWaypoints().size())
+		Matrix world = player[i]->GetWorld();
+		Vector3 difference = (player[i]->GetLastFramePos()+(world.Up()*3) + (world.Backward())) - (player[i]->GetPos()+(world.Up()*3) + (world.Forward()));
+		float length = difference.Length();
+		if (length == 0)
+			continue;
+		if (length > 2)
+			length = 2;
+		difference.Normalize();
+
+		if (player[i]->GetWaypoint() < track->getWaypointsBB().size() - 1)
 		{
-			nextWayIndex = 0;
-		}
-		nextWaypoint = track->getWaypointMiddle(nextWayIndex);
-		bool switchWaypoint = Vector3::Distance(player[i]->GetPos(), nextWaypoint) < Vector3::Distance(currentWaypoint, nextWaypoint);
-		if (switchWaypoint || player[i]->GetWaypoint() < track->getWaypointsBB().size() - 1)
-		{
-			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[player[i]->GetWaypoint() + 1]))
+			if (track->getWaypointsBB()[player[i]->GetWaypoint()+1].Intersects(player[i]->GetPos() + (world.Up()*3), difference, length))
 			{
-				player[i]->SetWaypoint(player[i]->GetWaypoint() + 1);
+				player[i]->SetWaypoint(player[i]->GetWaypoint()+1);
 			}
 		}
 		else
 		{
-			if (switchWaypoint || player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
+			if (track->getWaypointsBB()[0].Intersects(player[i]->GetPos(), difference, length))
 			{
 				player[i]->SetWaypoint(0);
 				if (player[i]->GetLap() == 3)

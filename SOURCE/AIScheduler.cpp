@@ -15,6 +15,15 @@ void AIScheduler::UpdateTrack(Track* _track) {
 	m_track = _track;
 }
 
+void AIScheduler::DebugRender()
+{
+
+	for (MoveAI* ai : m_aiList)
+	{
+		ai->DebugRender();
+	}
+}
+
 void AIScheduler::Update()
 {
 	m_elapsedTime += Locator::getGSD()->m_dt;

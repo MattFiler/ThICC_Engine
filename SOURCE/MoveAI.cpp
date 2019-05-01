@@ -13,7 +13,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 	m_player = dynamic_cast<Player*>(_model);
 
 	/*
-	#ifdef _DEBUG
+
 	for (int i = 0; i < m_maxPathIterations; i++)
 	{
 		m_debugRaceLine.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
@@ -21,7 +21,8 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 		Vector3 new_scale = m_debugRaceLine.back()->GetScale() * ((float)(i+1) / m_maxPathIterations);
 		m_debugRaceLine.back()->SetScale(1);
 		m_debugRaceLine.back()->UpdateWorld();
-	}
+	}*/
+	#ifdef _DEBUG
 	for (int i = 0; i < 20; i++)
 	{
 		m_debugNextWaypoint.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
@@ -29,7 +30,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 		m_debugNextWaypoint.back()->SetScale(0.2f);
 		m_debugNextWaypoint.back()->UpdateWorld();
 	}
-	#endif*/
+	#endif
 }
 
 MoveAI::~MoveAI()
@@ -39,20 +40,30 @@ MoveAI::~MoveAI()
 
 void MoveAI::DebugRender()
 {
-	/*#ifdef _DEBUG
+	/*
 	for (SDKMeshGO3D* mesh : m_debugRaceLine)
 	{
 		mesh->Render();
-	}
+	}*/
+	#ifdef _DEBUG
 	for (SDKMeshGO3D* mesh : m_debugNextWaypoint)
 	{
-		//mesh->Render();
+		mesh->Render();
 	}
-	#endif*/
+	#endif
 }
 
 bool MoveAI::Update()
 {
+	Vector3 step = m_wayMiddle - m_model->GetPos();
+	step *= 0.05;
+	for (int i = 0; i < 20; i++)
+	{
+		m_debugNextWaypoint[i]->SetPos(m_model->GetPos() + step*i);
+		m_debugNextWaypoint[i]->UpdateWorld();
+	}
+
+
 	if (m_player)
 	{
 		if (m_player->GetGroundType() == OFF_TRACK)
@@ -66,6 +77,12 @@ bool MoveAI::Update()
 
 			m_route.clear();
 			m_route.push_back(RouteNode(pos, m_move->GetWaypoint()));
+			m_goingBackToTrack = true;
+		}
+		else if (m_goingBackToTrack)
+		{
+			m_goingBackToTrack = false;
+			return true;
 		}
 	}
 	// If there at least 2 waypoints left
@@ -80,12 +97,13 @@ bool MoveAI::Update()
 			{
 				m_move->SetWaypoint(m_route[m_routeIndex].waypoint);
 			}
-			// This shouldn't happen often, but if we reach the end of the waypoints don't continue
-			if (m_routeIndex == m_route.size())
-			{
-				return true;
-			}
 		}
+	}
+
+	// This shouldn't happen often, but if we reach the end of the waypoints don't continue
+	if (m_routeIndex == m_route.size())
+	{
+		return true;
 	}
 
 	Vector3 normVelo = m_model->getVelocity();
@@ -144,6 +162,9 @@ bool MoveAI::Update()
 
 void MoveAI::RecalculateLine(Track* _track)
 {
+	m_waypointPos = m_move->GetWaypoint();
+	m_wayMiddle = _track->getWaypointMiddle(m_waypointPos);
+
 	Matrix world = m_model->GetWorld();
 	Vector3 pos = m_model->GetPos();
 	Vector3 direction = world.Forward();
