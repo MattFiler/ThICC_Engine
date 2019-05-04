@@ -16,12 +16,13 @@ void AIScheduler::UpdateTrack(Track* _track) {
 }
 
 void AIScheduler::DebugRender()
-{
-
+{ 
+#ifdef _DEBUG
 	for (MoveAI* ai : m_aiList)
 	{
 		ai->DebugRender();
 	}
+#endif
 }
 
 void AIScheduler::Update()

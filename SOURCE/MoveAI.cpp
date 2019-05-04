@@ -55,6 +55,7 @@ void MoveAI::DebugRender()
 
 bool MoveAI::Update()
 {
+#ifdef _DEBUG
 	Vector3 step = m_wayMiddle - m_model->GetPos();
 	step *= 0.05;
 	for (int i = 0; i < 20; i++)
@@ -62,8 +63,8 @@ bool MoveAI::Update()
 		m_debugNextWaypoint[i]->SetPos(m_model->GetPos() + step*i);
 		m_debugNextWaypoint[i]->UpdateWorld();
 	}
-
-
+#endif
+	return false;
 	if (m_player)
 	{
 		if (m_player->GetGroundType() == OFF_TRACK)
@@ -162,9 +163,10 @@ bool MoveAI::Update()
 
 void MoveAI::RecalculateLine(Track* _track)
 {
+
 	m_waypointPos = m_move->GetWaypoint();
 	m_wayMiddle = _track->getWaypointMiddle(m_waypointPos);
-
+	return;
 	Matrix world = m_model->GetWorld();
 	Vector3 pos = m_model->GetPos();
 	Vector3 direction = world.Forward();
