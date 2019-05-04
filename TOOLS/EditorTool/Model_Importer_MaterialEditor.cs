@@ -248,10 +248,10 @@ namespace EditorTool
         /* New diffuse list handles */
         private void addNewDiffuse_Click(object sender, EventArgs e)
         {
-            string newDiffMap = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
-            if (newDiffMap != "")
+            string[] newDiffMaps = common_functions.userLocatedFiles("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
+            foreach (string diffuse_map in newDiffMaps)
             {
-                diffuseMapList.Items.Add(newDiffMap);
+                diffuseMapList.Items.Add(diffuse_map);
             }
             isDiffuseAnimated.Checked = (diffuseMapList.Items.Count > 1);
         }

@@ -1,0 +1,814 @@
+# Blender MTL File: 'Mute City.blend'
+# Material Count: 68
+
+newmtl CubeAntigravity
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Antigravity_Alb.png
+map_d Fz_Antigravity_Alb.png
+
+newmtl CubeAntigravity.002
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Antigravity_Alb.png
+map_d Fz_Antigravity_Alb.png
+
+newmtl CubeBattery
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Battery_Alb.png
+map_d Fz_Battery_Alb.png
+
+newmtl CubeBillEmmLine
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillEmmLine_Alb.png
+map_d Fz_BillEmmLine_Alb.png
+
+newmtl CubePipering
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd DL_MCPipeRing_Alb.png
+map_d DL_MCPipeRing_Alb.png
+
+newmtl CubeRoadLight
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadLight_Alb.png
+map_d Fz_RoadLight_Alb.png
+
+newmtl CubeRoadMainMesh
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadMainMesh_Alb.png
+map_d Fz_RoadMainMesh_Alb.png
+
+newmtl CubeRoadPipe
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadPipe_Alb.png
+map_d Fz_RoadPipe_Alb.png
+
+newmtl CubeRoadVectorClear
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadVecorClear_Alb.png
+map_d Fz_RoadVecorClear_Alb.png
+
+newmtl CubeRotaryBoardA
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd DL_MCRotaryBoardA_Alb.png
+map_d DL_MCRotaryBoardA_Alb.png
+
+newmtl CubeWallEmmjoge
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_WallMain_Alb.png
+map_d Fz_WallMain_Alb.png
+
+newmtl E_Fz_BldgWindowA
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgWindowA_Alb.png
+map_d Fz_BldgWindowA_Alb.png
+
+newmtl E_M_Enkei_road2
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_EnkeiRoad_M_Alb.png
+map_d ME_EnkeiRoad_M_Alb.png
+
+newmtl Fz_Antigravity
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Antigravity_Alb.png
+map_d Fz_Antigravity_Alb.png
+
+newmtl Fz_BFBuilding
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BFBuilding_Alb.png
+map_d Fz_BFBuilding_Alb.png
+
+newmtl Fz_BFBuildingY
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BFBuilding_Y_Alb.png
+map_d Fz_BFBuilding_Y_Alb.png
+
+newmtl Fz_Battery
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Battery_Alb.png
+map_d Fz_Battery_Alb.png
+
+newmtl Fz_BigWallBar
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BigWallBar_Alb.png
+map_d Fz_BigWallBar_Alb.png
+
+newmtl Fz_BillBodyW2
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillBodyW2_Alb.png
+map_d Fz_BillBodyW2_Alb.png
+
+newmtl Fz_BillBodyW3
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillBodyW3_Alb.png
+map_d Fz_BillBodyW3_Alb.png
+
+newmtl Fz_BldgBLack
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgBLack_Alb.png
+map_d Fz_BldgBLack_Alb.png
+
+newmtl Fz_BldgBLack_Tire
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgBLack_Gray_Alb.png
+map_d Fz_BldgBLack_Gray_Alb.png
+
+newmtl Fz_BldgBodyA
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgBodyA_Alb.png
+map_d Fz_BldgBodyA_Alb.png
+
+newmtl Fz_BldgWindowA
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgWindowA_Alb.png
+map_d Fz_BldgWindowA_Alb.png
+
+newmtl Fz_BldgWindowA.001
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgWindowA_Alb.png
+map_d Fz_BldgWindowA_Alb.png
+
+newmtl Fz_BldgWindowBNear
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgWindowA_Alb.png
+map_d Fz_BldgWindowA_Alb.png
+
+newmtl Fz_DartLine
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_DartLine_Alb.png
+map_d Fz_DartLine_Alb.png
+
+newmtl Fz_Enkei_BillBody_Tire
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Enkei_BillBody_Alb.png
+map_d Fz_Enkei_BillBody_Alb.png
+
+newmtl Fz_GoalLine
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_GoalLine_Alb.png
+map_d Fz_GoalLine_Alb.png
+
+newmtl Fz_GoalTape
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_GoalTape_Alb.png
+map_d Fz_GoalTape_Alb.png
+
+newmtl Fz_GoalgateClear
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_GoalgateClear_Alb.png
+map_d Fz_GoalgateClear_Alb.png
+
+newmtl Fz_GoalgateFlame
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_GoalgateFlame_Alb.png
+map_d Fz_GoalgateFlame_Alb.png
+
+newmtl Fz_Gold
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Gold_Alb.png
+map_d Fz_Gold_Alb.png
+
+newmtl Fz_KanbanFlame
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_KanbanFlame_Alb.png
+map_d Fz_KanbanFlame_Alb.png
+
+newmtl Fz_KanbanScreen
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_KanbanScreen_Alb.png
+map_d Fz_KanbanScreen_Alb.png
+
+newmtl Fz_PanelFlame
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_PanelFlame_Alb.png
+map_d Fz_PanelFlame_Alb.png
+
+newmtl Fz_PipeGold
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_PipeGold_Alb.png
+map_d Fz_PipeGold_Alb.png
+
+newmtl Fz_RoadEnd
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadEnd_Alb.png
+map_d Fz_RoadEnd_Alb.png
+
+newmtl Fz_RoadEndLight
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadEndLight_Alb.png
+map_d Fz_RoadEndLight_Alb.png
+
+newmtl Fz_RoadEnergy
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadEnergyZone_Alb01.png
+map_d Fz_RoadEnergyZone_Alb01.png
+
+newmtl Fz_RoadJunp
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadJunp_Emm.png
+map_d Fz_RoadJunp_Emm.png
+
+newmtl Fz_RoadLight
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadLight_Alb.png
+map_d Fz_RoadLight_Alb.png
+
+newmtl Fz_RoadMain
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadMain_Alb.png
+map_d Fz_RoadMain_Alb.png
+
+newmtl Fz_RoadMainEmm
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadMainEmm_Alb.png
+map_d Fz_RoadMainEmm_Alb.png
+
+newmtl Fz_RoadMainMesh
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadMainMesh_Alb.png
+map_d Fz_RoadMainMesh_Alb.png
+
+newmtl Fz_RoadPipe
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadPipe_Alb.png
+map_d Fz_RoadPipe_Alb.png
+
+newmtl Fz_RoadPipeCap
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadPipeCap_Alb.png
+map_d Fz_RoadPipeCap_Alb.png
+
+newmtl Fz_RoadSide
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadSide_Alb.png
+map_d Fz_RoadSide_Alb.png
+
+newmtl Fz_RoadVector
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadVector_Alb.png
+map_d Fz_RoadVector_Alb.png
+
+newmtl Fz_RoadVectorClear
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadVecorClear_Alb.png
+map_d Fz_RoadVecorClear_Alb.png
+
+newmtl Fz_RoadVectorEmm
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadVectorEmm_Alb.png
+map_d Fz_RoadVectorEmm_Alb.png
+
+newmtl Fz_StartGrid
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_StartGrid_Alb.png
+map_d Fz_StartGrid_Alb.png
+
+newmtl Fz_WallAndWindow
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_WallAndWindow_Alb.png
+map_d Fz_WallAndWindow_Alb.png
+
+newmtl Fz_WallMain
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_WallMain_Scr_Emm.png
+map_d Fz_WallMain_Scr_Emm.png
+
+newmtl Fz_WallPipeCap
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_WallPipeCap_Alb.png
+map_d Fz_WallPipeCap_Alb.png
+
+newmtl MCTV
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd MCTV.000.png
+map_d MCTV.000.png
+
+newmtl MCTV_S
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd MCTV.000.png
+map_d MCTV.000.png
+
+newmtl M_Building1
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_Building1_Alb.png
+map_d ME_Building1_Alb.png
+
+newmtl M_Grass
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_grass_Alb.png
+map_d ME_grass_Alb.png
+
+newmtl M_KikaiWALL
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_KikaiWALL1_Alb.png
+map_d ME_KikaiWALL1_Alb.png
+
+newmtl M_RedLight
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_RedLight_Alb.png
+map_d ME_RedLight_Alb.png
+
+newmtl M_kusa1
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_kusa1_Alb.png
+map_d ME_kusa1_Alb.png
+
+newmtl M_map
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_KikaiJimen1_Alb.png
+map_d ME_KikaiJimen1_Alb.png
+
+newmtl M_sand
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_sand_Alb.png
+map_d ME_sand_Alb.png
+
+newmtl None
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+
+newmtl ef_dashboard
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_dashboard02_Alb.png
+map_d ef_dashboard02_Alb.png
+
+newmtl ef_dashboard03
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_dashboard03_Spm.png
+map_d ef_dashboard03_Spm.png
+
+newmtl ef_sea04
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_sea04_Alb.png
+map_d ef_sea04_Alb.png

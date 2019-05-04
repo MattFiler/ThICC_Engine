@@ -46,6 +46,7 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));
 	}
+	/*
 	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
 		Vector3 box_pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
 		Vector3 box_rot = blender_vector.ConvertAngle(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
@@ -55,7 +56,7 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 
 		ItemBox* new_item_box = new ItemBox(box_pos, box_rot);
 		item_boxes.push_back(new_item_box);
-	}
+	}*/
 	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
 		Vector3 top_left = blender_vector.ConvertPosition(Vector3(it.value()["top_left"][0], it.value()["top_left"][1], it.value()["top_left"][2]) * m_track_data.scale);
 		Vector3 top_right = blender_vector.ConvertPosition(Vector3(it.value()["top_right"][0], it.value()["top_right"][1], it.value()["top_right"][2]) * m_track_data.scale);
@@ -333,6 +334,8 @@ ordered by position and grouped into a grid space (defined by m_triSegSize) */
 void Track::SplitTrisIntoGrid()
 {
 	Vector trackSize = m_largest - m_smallest;
+	DebugText::print("trackSize - X:" + std::to_string(trackSize.x) + ", Y:" + std::to_string(trackSize.y) + ", Z:" + std::to_string(trackSize.z));
+
 	// Reserve space in the references vector based on the size of the track
 	m_triGridX = static_cast<size_t>(ceilf(trackSize.x / m_triSegSize));
 	m_triGridY = static_cast<size_t>(ceilf(trackSize.y / m_triSegSize));

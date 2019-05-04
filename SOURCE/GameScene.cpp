@@ -85,6 +85,13 @@ void GameScene::ExpensiveLoad() {
 	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap_start, SoundType::GAME);
 	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap, SoundType::GAME);
 
+	std::string current_cubemap_radiance_s(Locator::getRD()->current_cubemap_radiance.begin(), Locator::getRD()->current_cubemap_radiance.end());
+	std::string current_cubemap_irradiance_s(Locator::getRD()->current_cubemap_irradiance.begin(), Locator::getRD()->current_cubemap_irradiance.end());
+	std::string current_cubemap_skybox_s(Locator::getRD()->current_cubemap_skybox.begin(), Locator::getRD()->current_cubemap_skybox.end());
+	DebugText::print(current_cubemap_radiance_s);
+	DebugText::print(current_cubemap_irradiance_s);
+	DebugText::print(current_cubemap_skybox_s);
+
 	//Load in
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 	{

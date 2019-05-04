@@ -1,0 +1,1465 @@
+### CREATED BY THE ThICC TOOLKIT ###
+
+newmtl CubeAntigravity
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Antigravity_Alb.png
+map_Ks Fz_Antigravity_spm.png
+map_Kn Fz_Antigravity_nrm.png
+norm Fz_Antigravity_nrm.png
+map_Ke Fz_Antigravity_emm.png
+map_emissive Fz_Antigravity_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl CubeAntigravity.002
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Antigravity_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl CubeBattery
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Battery_Alb.png
+map_Ks Fz_Battery_spm.png
+map_Kn Fz_Battery_nrm.png
+norm Fz_Battery_nrm.png
+map_Ke Fz_Battery_emm.png
+map_emissive Fz_Battery_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl CubeBillEmmLine
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillEmmLine_Alb.png
+map_Ks Fz_BillEmmLine_spm.png
+map_Kn Fz_BillEmmLine_nrm.png
+norm Fz_BillEmmLine_nrm.png
+map_Ke Fz_BillEmmLine_emm.png
+map_emissive Fz_BillEmmLine_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl CubePipering
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd DL_MCPipeRing_Alb.png
+map_Ks DL_MCPipeRing_spm.png
+map_Kn DL_MCPipeRing_nrm.png
+norm DL_MCPipeRing_nrm.png
+map_Ke DL_MCPipeRing_emm.png
+map_emissive DL_MCPipeRing_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl CubeRoadLight
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadLight_Alb.png
+map_Ks Fz_RoadLight_spm.png
+map_Kn Fz_RoadLight_nrm.png
+norm Fz_RoadLight_nrm.png
+map_Ke Fz_RoadLight_emm.png
+map_emissive Fz_RoadLight_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl CubeRoadMainMesh
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd Fz_RoadMainMesh_Alb.png
+map_Ks Fz_RoadMainMesh_spm.png
+map_Kn Fz_RoadMainMesh_nrm.png
+norm Fz_RoadMainMesh_nrm.png
+map_Ke Fz_RoadMainMesh_emm.png
+map_emissive Fz_RoadMainMesh_emm.png
+Tr 0.000001
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl CubeRoadPipe
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadPipe_Alb.png
+map_Ks Fz_RoadPipe_spm.png
+map_Kn Fz_RoadPipe_nrm.png
+norm Fz_RoadPipe_nrm.png
+map_Ke Fz_RoadPipe_emm.png
+map_emissive Fz_RoadPipe_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl CubeRoadVectorClear
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadVecorClear_Alb.png
+map_Ke Fz_RoadVecorClear_emm.png
+map_emissive Fz_RoadVecorClear_emm.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl CubeRotaryBoardA
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd DL_MCRotaryBoardA_Alb.png
+map_Ks DL_MCRotaryBoardA_spm.png
+map_Kn DL_MCRotaryBoardA_nrm.png
+norm DL_MCRotaryBoardA_nrm.png
+Tr 0.000001
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl CubeWallEmmjoge
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_WallMain_Alb.png
+map_Ks Fz_WallMain_spm.png
+map_Kn Fz_WallMain_nrm.png
+norm Fz_WallMain_nrm.png
+map_Ke Fz_WallMain_emm.png
+map_emissive Fz_WallMain_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl E_Fz_BillBodyW1
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillBodyW1_Alb.png
+map_Ks Fz_BillBodyW1_spm.png
+map_Kn Fz_BillBodyW1_nrm.png
+norm Fz_BillBodyW1_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl E_Fz_BillBodyW2
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillBodyW2_Alb.png
+map_Ks Fz_BillBodyW2_spm.png
+map_Kn Fz_BillBodyW2_nrm.png
+norm Fz_BillBodyW2_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl E_Fz_BillBodyW3
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillBodyW3_Alb.png
+map_Ks Fz_BillBodyW3_spm.png
+map_Kn Fz_BillBodyW3_nrm.png
+norm Fz_BillBodyW3_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl E_Fz_BldgWindowA
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgWindowA_Alb.png
+map_Ks Fz_BldgWindowA_spm.png
+map_Kn Fz_BldgWindowA_nrm.png
+norm Fz_BldgWindowA_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl E_M_Building1
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_Building1_Alb.png
+map_Ks ME_Building1_spm.png
+map_Kn ME_Building1_nrm.png
+norm ME_Building1_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl E_M_Enkei_road2
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_EnkeiRoad_M_Alb.png
+map_Ks ME_EnkeiRoad_M_spm.png
+map_Ke ME_EnkeiRoad_M_emm.png
+map_emissive ME_EnkeiRoad_M_emm.png
+Tr 0.000000
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl FZM_E_Silet
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd ME_EnkeiKakiwari_Alb.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_Antigravity
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Antigravity_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BFBuilding
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BFBuilding_Alb.png
+map_Ks Fz_BFBuilding_spm.png
+map_Kn Fz_BFBuilding_nrm.png
+norm Fz_BFBuilding_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BFBuildingY
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BFBuilding_Y_Alb.png
+map_Ks Fz_BFBuilding_Y_spm.png
+Tr 0.000000
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_Battery
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Battery_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BigWallBar
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BigWallBar_Alb.png
+map_Ks Fz_BigWallBar_spm.png
+map_Kn Fz_BigWallBar_nrm.png
+norm Fz_BigWallBar_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BillBodyW1
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillBodyW1_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BillBodyW2
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillBodyW2_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BillBodyW3
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillBodyW3_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BillEmmLine
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BillEmmLine_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BldgBLack
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgBLack_Alb.png
+map_Ks Fz_BldgBLack_spm.png
+map_Kn Fz_BldgBLack_nrm.png
+norm Fz_BldgBLack_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BldgBLack_Tire
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgBLack_Gray_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BldgBodyA
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgBodyA_Alb.png
+map_Ks Fz_BldgBodyA_spm.png
+map_Kn Fz_BldgBodyA_nrm.png
+norm Fz_BldgBodyA_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BldgWindowA
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgWindowA_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BldgWindowA.001
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgWindowA_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_BldgWindowBNear
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_BldgWindowA_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_DartLine
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_DartLine_Alb.png
+map_Ks Fz_DartLine_spm.png
+map_Kn Fz_DartLine_nrm.png
+norm Fz_DartLine_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_Enkei_BillBody
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Enkei_BillBody_Alb.png
+map_Ks Fz_Enkei_BillBody_spm.png
+map_Kn Fz_Enkei_BillBody_nrm.png
+norm Fz_Enkei_BillBody_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_Enkei_BillBody_Tire
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Enkei_BillBody_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_GoalLine
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_GoalLine_Alb.png
+map_Ks Fz_GoalLine_spm.png
+map_Kn Fz_GoalLine_nrm.png
+norm Fz_GoalLine_nrm.png
+map_Ke Fz_GoalLine_emm.png
+map_emissive Fz_GoalLine_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_GoalTape
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd Fz_GoalTape_Alb.png
+map_Ke Fz_GoalTape_emm.png
+map_emissive Fz_GoalTape_emm.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_GoalgateClear
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_GoalgateClear_Alb.png
+map_Ke Fz_GoalgateClear_emm.png
+map_emissive Fz_GoalgateClear_emm.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_GoalgateFlame
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_GoalgateFlame_Alb.png
+map_Ks Fz_GoalgateFlame_spm.png
+map_Kn Fz_GoalgateFlame_nrm.png
+norm Fz_GoalgateFlame_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_Gold
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_Gold_Alb.png
+map_Ks Fz_Gold_spm.png
+map_Kn Fz_Gold_nrm.png
+norm Fz_Gold_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_KanbanFlame
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_KanbanFlame_Alb.png
+map_Ks Fz_KanbanFlame_spm.png
+map_Kn Fz_KanbanFlame_nrm.png
+norm Fz_KanbanFlame_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_KanbanScreen
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd Fz_KanbanScreen_Alb.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_PanelFlame
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_PanelFlame_Alb.png
+map_Ks Fz_PanelFlame_spm.png
+map_Kn Fz_PanelFlame_nrm.png
+norm Fz_PanelFlame_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_PipeGold
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_PipeGold_Alb.png
+map_Ks Fz_PipeGold_spm.png
+map_Kn Fz_PipeGold_nrm.png
+norm Fz_PipeGold_nrm.png
+map_Ke Fz_PipeGold_emm.png
+map_emissive Fz_PipeGold_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadEnd
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadEnd_Alb.png
+map_Ks Fz_RoadEnd_spm.png
+map_Kn Fz_RoadEnd_nrm.png
+norm Fz_RoadEnd_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadEndLight
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd Fz_RoadEndLight_Alb.png
+map_Ks Fz_RoadEndLight_spm.png
+map_Kn Fz_RoadEndLight_nrm.png
+norm Fz_RoadEndLight_nrm.png
+map_Ke Fz_RoadEndLight_emm.png
+map_emissive Fz_RoadEndLight_emm.png
+Tr 0.000001
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadEnergy
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadEnergyZone_Alb01.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadJunp
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadJunp_Emm.png
+map_Ks Fz_RoadJunp_spm.png
+map_Kn Fz_RoadJunp_nrm.png
+norm Fz_RoadJunp_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadLight
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadLight_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadMain
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadMain_Alb.png
+map_Ks Fz_RoadMain_spm.png
+map_Kn Fz_RoadMain_nrm.png
+norm Fz_RoadMain_nrm.png
+map_Ke Fz_RoadMain_emm.png
+map_emissive Fz_RoadMain_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadMainEmm
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadMainEmm_Alb.png
+map_Ks Fz_RoadMainEmm_spm.png
+map_Kn Fz_RoadMainEmm_nrm.png
+norm Fz_RoadMainEmm_nrm.png
+map_Ke Fz_RoadMainEmm_emm.png
+map_emissive Fz_RoadMainEmm_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadMainMesh
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd Fz_RoadMainMesh_Alb.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadPipe
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadPipe_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadPipeCap
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadPipeCap_Alb.png
+map_Ks Fz_RoadPipeCap_spm.png
+map_Kn Fz_RoadPipeCap_nrm.png
+norm Fz_RoadPipeCap_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadSide
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadSide_Alb.png
+map_Ks Fz_RoadSide_spm.png
+map_Kn Fz_RoadSide_nrm.png
+norm Fz_RoadSide_nrm.png
+map_Ke Fz_RoadSide_emm.png
+map_emissive Fz_RoadSide_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadVector
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadVector_Alb.png
+map_Ks Fz_RoadVector_spm.png
+map_Kn Fz_RoadVector_nrm.png
+norm Fz_RoadVector_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadVectorClear
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadVecorClear_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_RoadVectorEmm
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_RoadVectorEmm_Alb.png
+map_Ks Fz_RoadVectorEmm_spm.png
+map_Kn Fz_RoadVectorEmm_nrm.png
+norm Fz_RoadVectorEmm_nrm.png
+map_Ke Fz_RoadVectorEmm_emm.png
+map_emissive Fz_RoadVectorEmm_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_StartGrid
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_StartGrid_Alb.png
+map_Ks Fz_StartGrid_spm.png
+map_Kn Fz_StartGrid_nrm.png
+norm Fz_StartGrid_nrm.png
+map_Ke Fz_StartGrid_emm.png
+map_emissive Fz_StartGrid_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_WallAndWindow
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_WallAndWindow_Alb.png
+map_Ks Fz_WallAndWindow_spm.png
+map_Kn Fz_WallAndWindow_nrm.png
+norm Fz_WallAndWindow_nrm.png
+Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_WallMain
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_WallMain_Scr_Emm.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Fz_WallPipeCap
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd Fz_WallPipeCap_Alb.png
+map_Ks Fz_WallPipeCap_spm.png
+map_Kn Fz_WallPipeCap_nrm.png
+norm Fz_WallPipeCap_nrm.png
+map_Ke Fz_WallPipeCap_emm.png
+map_emissive Fz_WallPipeCap_emm.png
+Tr 0.000000
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl MCTV
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd MCTV.000.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl MCTV_S
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd MCTV.000.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl M_Building1
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_Building1_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl M_Enkei_road2
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_EnkeiRoad_M_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl M_Grass
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_grass_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl M_KikaiWALL
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_KikaiWALL1_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl M_RedLight
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd ME_RedLight_Alb.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl M_kusa1
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd ME_kusa1_Alb.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl M_map
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_KikaiJimen1_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl M_rock
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_rock_Alb.png
+map_Kn ME_rock_nrm.png
+norm ME_rock_nrm.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl M_sand
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_sand_Alb.png
+map_Kn ME_sand_nrm.png
+norm ME_sand_nrm.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl ef_dashboard
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_dashboard02_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl ef_dashboard03
+Ns 94.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 2
+map_Kd ef_dashboard03_Spm.png
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl ef_sea04
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_sea04_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+

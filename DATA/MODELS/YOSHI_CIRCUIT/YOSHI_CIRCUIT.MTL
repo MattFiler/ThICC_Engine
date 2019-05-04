@@ -704,7 +704,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_Grass_m02
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -723,7 +723,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_Grass_t01
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -742,7 +742,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_Grass_t02
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1141,7 +1141,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_RoadWhite_t01
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1160,7 +1160,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_RoadWhite_t01_a1
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1179,7 +1179,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_Road_t01
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1198,7 +1198,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_Road_t01_a1
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1217,7 +1217,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_Road_t01_a1_SpmG
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1540,7 +1540,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_Wall_t01
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1559,7 +1559,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_Wall_t02
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1578,7 +1578,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_WhiteWall_m01
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -1654,7 +1654,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_WoodWall_m01
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000

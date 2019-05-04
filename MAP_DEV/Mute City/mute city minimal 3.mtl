@@ -1,0 +1,50 @@
+# Blender MTL File: 'Mute City.blend'
+# Material Count: 4
+
+newmtl M_KikaiWALL
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_KikaiWALL1_Alb.png
+map_d ME_KikaiWALL1_Alb.png
+
+newmtl M_map
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_KikaiJimen1_Alb.png
+map_d ME_KikaiJimen1_Alb.png
+
+newmtl M_sand
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ME_sand_Alb.png
+map_d ME_sand_Alb.png
+
+newmtl ef_sea04
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_sea04_Alb.png
+map_d ef_sea04_Alb.png
