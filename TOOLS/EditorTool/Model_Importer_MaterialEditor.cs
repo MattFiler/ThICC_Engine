@@ -80,6 +80,15 @@ namespace EditorTool
             {
                 diffuseMapList.Items.Add(material_config["map_Kd"].Value<string>());
             }
+            int diffuse_index = 0;
+            foreach (string entry in diffuseMapList.Items)
+            {
+                if (entry == "")
+                {
+                    diffuseMapList.Items.RemoveAt(diffuse_index);
+                }
+                diffuse_index++;
+            }
 
             //Specular Texture
             specularMap.Text = material_config["map_Ks"].Value<string>();
@@ -248,10 +257,10 @@ namespace EditorTool
         /* New diffuse list handles */
         private void addNewDiffuse_Click(object sender, EventArgs e)
         {
-            string newDiffMap = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
-            if (newDiffMap != "")
+            string[] newDiffMaps = common_functions.userLocatedFiles("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
+            foreach (string diffuse_map in newDiffMaps)
             {
-                diffuseMapList.Items.Add(newDiffMap);
+                diffuseMapList.Items.Add(diffuse_map);
             }
             isDiffuseAnimated.Checked = (diffuseMapList.Items.Count > 1);
         }
