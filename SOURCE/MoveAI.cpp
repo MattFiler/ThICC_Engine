@@ -26,7 +26,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 	#ifdef _DEBUG
 	for (int i = 0; i < 20; i++)
 	{
-		m_debugNextWaypoint.push_back(new SDKMeshGO3D(Locator::getGOS()->common_model_config["itembox"]));
+		m_debugNextWaypoint.push_back(new SDKMeshGO3D(Locator::getGOS()->common_model_config["debug_marker"]));
 		m_debugNextWaypoint.back()->Load();
 		m_debugNextWaypoint.back()->SetScale(0.2f);
 		m_debugNextWaypoint.back()->UpdateWorld();
@@ -65,10 +65,10 @@ bool MoveAI::Update()
 		m_debugNextWaypoint[i]->UpdateWorld();
 	}
 #endif
-	return false;
+	//return false;
 	if (m_player)
 	{
-		if (m_player->GetGroundType() == OFF_TRACK)
+		if (m_player->GetGroundType() == OFF_TRACK || m_player->GetGroundType() == ON_TRACK_NO_AI)
 		{
 			// If off the track, go back to where we were last on the track
 			Matrix world = m_player->GetLastOnTrack();
@@ -167,7 +167,7 @@ void MoveAI::RecalculateLine(Track* _track)
 
 	m_waypointPos = m_move->GetWaypoint();
 	m_wayMiddle = _track->getWaypointMiddle(m_waypointPos);
-	return;
+	//return;
 	Matrix world = m_model->GetWorld();
 	Vector3 pos = m_model->GetPos();
 	Vector3 direction = world.Forward();

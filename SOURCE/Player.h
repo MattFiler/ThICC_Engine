@@ -94,7 +94,7 @@ public:
 	bool IsGliding() { return m_gliding; };
 	bool IsRespawning() { return m_respawning; };
 
-	Matrix GetLastOnTrack() { return m_posHistory.front(); };
+	Matrix GetLastOnTrack() { return m_matrixHistory.front(); };
 
 	Vector3 GetLastFramePos() { return m_lastFramePos; };
 	Vector3 GetPosHistoryBack();
