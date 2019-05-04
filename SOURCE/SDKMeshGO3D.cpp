@@ -241,6 +241,10 @@ void SDKMeshGO3D::Load()
 	{
 		std::string error(ex.what());
 		DebugText::print("EXCEPTION WHILE LOADING '" + filename + "': " + error);
+		if (error == "Out of memory.") {
+			DebugText::print(" >>>> THIS MODEL SHOULD BE REMOVED FROM THE GAME! IT IS TOO LARGE TO HANDLE! <<<< ");
+			throw std::runtime_error("Cannot continue! Remove model '" + filename + "'!");
+		}
 		m_model.reset();
 		return;
 	}
