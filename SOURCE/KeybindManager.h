@@ -178,6 +178,7 @@ private:
 
 	/* Gamepad button held */
 	bool gamepadButton(const std::string& this_keybind, int i, DX_BUTTON_STATE button_state) {
+		if (!m_ID->m_gamepad->GetState(i).connected) { return false; }
 		if (config[this_keybind]["Gamepad"] == "A") { if (m_ID->m_gamepadButtonTracker[i].a == button_state) { return true; } }
 		if (config[this_keybind]["Gamepad"] == "B") { if (m_ID->m_gamepadButtonTracker[i].b == button_state) { return true; } }
 		if (config[this_keybind]["Gamepad"] == "X") { if (m_ID->m_gamepadButtonTracker[i].x == button_state) { return true; } }

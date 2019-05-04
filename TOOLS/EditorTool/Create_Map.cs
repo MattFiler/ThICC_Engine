@@ -21,6 +21,7 @@ namespace EditorTool
         JObject maps_json_config = null;
         string map_json_key = "";
         bool edit_mode = false;
+        bool hide_popup = false;
         public Create_Map(JObject json_data = null, string object_key = "")
         {
             maps_json_config = json_data;
@@ -41,6 +42,8 @@ namespace EditorTool
         {
             if (edit_mode)
             {
+                hide_popup = maps_json_config[map_json_key]["arcade_only"].Value<bool>();
+
                 // If in edit mode, load existing config
                 mapCodename.Text = map_json_key;
                 mapCodename.ReadOnly = true;
@@ -50,6 +53,8 @@ namespace EditorTool
                 cubemapChoice.Text = maps_json_config[map_json_key]["cubemap"].Value<string>();
                 skyboxChoice.Text = maps_json_config[map_json_key]["skybox"].Value<string>();
                 mapCup.SelectedItem = maps_json_config[map_json_key]["cup"].Value<string>();
+                isArcadeOnly.Checked = maps_json_config[map_json_key]["arcade_only"].Value<bool>();
+                isOnPC.Checked = !isArcadeOnly.Checked;
                 soundtrackIntro.Text = maps_json_config[map_json_key]["audio"]["background_start"].Value<string>();
                 soundtrackIntroLoop.Text = maps_json_config[map_json_key]["audio"]["background"].Value<string>();
                 finalLapIntro.Text = maps_json_config[map_json_key]["audio"]["final_lap_start"].Value<string>();
@@ -99,6 +104,30 @@ namespace EditorTool
             function_libary.assetSelectHandler(mapName, AssetType.STRING);
         }
 
+        /* Make map exclusive to Arcade */
+        private void isArcadeOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (isArcadeOnly.Checked)
+            {
+                isOnPC.Checked = false;
+                if (!hide_popup)
+                {
+                    DialogResult showErrorInfo = MessageBox.Show("This option will make the map arcade exclusive.\nExclusivity is a potentially destructive action.\nAre you sure this map should be exclusive to the arcade?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (showErrorInfo == DialogResult.Yes)
+                    {
+                        return;
+                    }
+                    isArcadeOnly.Checked = false;
+                    isOnPC.Checked = true;
+                }
+                hide_popup = false;
+            }
+        }
+        private void isOnPC_CheckedChanged(object sender, EventArgs e)
+        {
+            isArcadeOnly.Checked = !isOnPC.Checked;
+        }
+
         /* Save map to config */
         private void saveMap_Click(object sender, EventArgs e)
         {
@@ -135,6 +164,7 @@ namespace EditorTool
             maps_json_config[map_name]["cubemap"] = cubemapChoice.Text;
             maps_json_config[map_name]["skybox"] = skyboxChoice.Text;
             maps_json_config[map_name]["cup"] = mapCup.SelectedItem.ToString();
+            maps_json_config[map_name]["arcade_only"] = isArcadeOnly.Checked;
             maps_json_config[map_name]["audio"] = JObject.Parse("{}");
             maps_json_config[map_name]["audio"]["background_start"] = soundtrackIntro.Text;
             maps_json_config[map_name]["audio"]["background"] = soundtrackIntroLoop.Text;
@@ -148,5 +178,6 @@ namespace EditorTool
             MessageBox.Show("Saved map configuration!", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
+
     }
 }

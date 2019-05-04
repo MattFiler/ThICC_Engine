@@ -54,5 +54,7 @@
   "rot_y": 0,
   "rot_z": 0,
   "segment_size": 10,
-  "in_use_in": []
+  "in_use_in": [
+    "Common Models"
+  ]
 }

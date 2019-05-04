@@ -34,6 +34,9 @@ public:
 
 	void SetGliding(bool _gliding) { m_gliding = _gliding; };
 
+	float GetMoveSpeed() { return m_moveSpeed; };
+	float GetTurnSpeed() { return m_turnSpeed; };
+
 private:
 	KeybindManager m_keybind;
 	GameFilepaths m_filepath;

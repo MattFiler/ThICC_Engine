@@ -136,9 +136,6 @@
     <ClCompile Include="Sound.cpp">
       <Filter>Game\Components\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="Skybox.cpp">
-      <Filter>Engine Backend\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="DebugScene.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
@@ -153,6 +150,12 @@
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClCompile>
     <ClCompile Include="DebugConsole.cpp">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletBill.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
       <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
@@ -343,9 +346,6 @@
     <ClInclude Include="GameObjectShared.h">
       <Filter>Game\Shared Data</Filter>
     </ClInclude>
-    <ClInclude Include="Skybox.h">
-      <Filter>Engine Backend\Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="DebugScene.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
@@ -379,6 +379,18 @@
     </ClInclude>
     <ClInclude Include="CupInfo.h">
       <Filter>Engine Backend\AssetComps</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialConfig.h">
+      <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletBill.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemAiData.h">
+      <Filter>Game\Components\Item Info</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

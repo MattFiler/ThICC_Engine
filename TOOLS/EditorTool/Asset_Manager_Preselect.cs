@@ -49,6 +49,14 @@ namespace EditorTool
             Close();
         }
 
+        /* Open Common Model Manager */
+        private void commonModelManager_Click(object sender, EventArgs e)
+        {
+            Create_InGame_Models_Common commonModelEditor = new Create_InGame_Models_Common();
+            commonModelEditor.Show();
+            Close();
+        }
+
         /* Open A Manager */
         private void openManager(AssetCompType type)
         {

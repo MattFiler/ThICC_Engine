@@ -536,6 +536,9 @@ namespace DirectX
             D3D12_GPU_DESCRIPTOR_HANDLE irradiance,
             D3D12_GPU_DESCRIPTOR_HANDLE sampler);
 
+		//Added by MattF: 28/04/19 - NOT STANDARD DXTK12
+		void __cdecl SetAlbedoTexture(D3D12_GPU_DESCRIPTOR_HANDLE albedo);
+
         void __cdecl SetEmissiveTexture(D3D12_GPU_DESCRIPTOR_HANDLE emissive);
 
         // Render target size, required for velocity buffer output.

@@ -3,6 +3,7 @@
 #include "ServiceLocator.h"
 #include "AIScheduler.h"
 #include "Player.h"
+#include "GameObjectShared.h"
 #include <stack>
 #include <iostream>
 
@@ -16,7 +17,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 
 	for (int i = 0; i < m_maxPathIterations; i++)
 	{
-		m_debugRaceLine.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
+		m_debugRaceLine.push_back(new SDKMeshGO3D(Locator::getGOS()->common_model_config["itembox"]));
 		m_debugRaceLine.back()->Load();
 		Vector3 new_scale = m_debugRaceLine.back()->GetScale() * ((float)(i+1) / m_maxPathIterations);
 		m_debugRaceLine.back()->SetScale(1);
@@ -25,7 +26,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 	#ifdef _DEBUG
 	for (int i = 0; i < 20; i++)
 	{
-		m_debugNextWaypoint.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
+		m_debugNextWaypoint.push_back(new SDKMeshGO3D(Locator::getGOS()->common_model_config["itembox"]));
 		m_debugNextWaypoint.back()->Load();
 		m_debugNextWaypoint.back()->SetScale(0.2f);
 		m_debugNextWaypoint.back()->UpdateWorld();
@@ -35,7 +36,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 
 MoveAI::~MoveAI()
 {
-	Locator::getAIScheduler()->AddAI(false);
+	Locator::getAIScheduler()->RemoveAI(this);
 }
 
 void MoveAI::DebugRender()

@@ -18,6 +18,7 @@
 #include "VehicleInfo.h"
 #include "LightningCloud.h"
 #include "RedShell.h"
+#include "BulletBill.h"
 #include <functional>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -36,6 +37,8 @@ public:
 
 	virtual void Tick() override;
 	virtual void Render() override;
+
+	int GetPlayerId() { return m_playerID; };
 
 	int GetWaypoint() { return m_waypoint; }
 	int GetRanking() { return m_ranking; }
@@ -80,7 +83,18 @@ public:
 
 	void Reload(CharacterInfo* _character, VehicleInfo* _vehicle);
 
-	Matrix GetLastOnTrack() { return m_matrixHistory.front(); };
+	AnimationController* GetAnimController() { return m_animationMesh.get(); };
+
+	void CreateAi() { m_ai = std::make_unique<MoveAI>(this, m_move.get()); };
+	void DeleteAi() { m_ai.reset(); };
+
+	ControlledMovement* GetControlledMovement() { return m_move.get(); };
+	MoveAI* GetMoveAi() { return m_ai.get(); };
+
+	bool IsGliding() { return m_gliding; };
+	bool IsRespawning() { return m_respawning; };
+
+	Matrix GetLastOnTrack() { return m_posHistory.front(); };
 
 	Vector3 GetLastFramePos() { return m_lastFramePos; };
 	Vector3 GetPosHistoryBack();

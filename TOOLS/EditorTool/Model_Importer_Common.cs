@@ -13,6 +13,7 @@ namespace EditorTool
         MATERIAL,
         CONFIG,
         METALLIC_CONFIG,
+        ANIMATION_CONFIG,
         COLLMAP,
         IMPORTER_CONFIG
     }
@@ -31,6 +32,7 @@ namespace EditorTool
         private string collmap_file_name = "";
         private string importer_config_file_name = "";
         private string metallic_config_file_name = "";
+        private string tex_anim_config_file_name = "";
         private string asset_name = "";
 
         private bool did_set_paths = false;
@@ -47,6 +49,7 @@ namespace EditorTool
             collmap_file_name = file_prelude + ".COLLMAP";
             importer_config_file_name = import_directory + "IMPORTER_CONFIG.JSON";
             metallic_config_file_name = import_directory + "REFLECTION.ThICC";
+            tex_anim_config_file_name = import_directory + "ANIMATION.ThICC";
 
             did_set_paths = true;
         }
@@ -77,6 +80,8 @@ namespace EditorTool
                     return importer_config_file_name;
                 case importer_file.METALLIC_CONFIG:
                     return metallic_config_file_name;
+                case importer_file.ANIMATION_CONFIG:
+                    return tex_anim_config_file_name;
             }
             return "";
         }

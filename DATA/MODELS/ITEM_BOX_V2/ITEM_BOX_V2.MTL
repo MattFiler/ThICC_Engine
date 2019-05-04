@@ -1,0 +1,59 @@
+### CREATED BY THE ThICC TOOLKIT ###
+
+newmtl M_ItemBoxRef
+Ns 96.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.501961 0.501961 0.501961
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ItemBoxRefraction_Alb_.png
+Tr 0.500000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Material__26
+Ns 96.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.501961 0.501961 0.501961
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ItemBox_Alb_.png
+Tr 0.500000
+map_Ks spec_placeholder.png
+map_Kn ItemBox_Nrm .png
+norm ItemBox_Nrm .png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl Material__27
+Ns 96.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.639216 0.639216 0.639216
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ItemBoxFont_Alb_.png
+Tr 0.000000
+map_Ks ItemBoxFont_Spm .png
+map_Kn ItemBoxFont_Nrm .png
+norm ItemBoxFont_Nrm .png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+

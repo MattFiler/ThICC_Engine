@@ -39,17 +39,22 @@
             this.isMetallic = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.collisionGroup = new System.Windows.Forms.GroupBox();
-            this.isWall = new System.Windows.Forms.RadioButton();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.boostPad = new System.Windows.Forms.RadioButton();
+            this.antiGravPad = new System.Windows.Forms.RadioButton();
+            this.jumpPad = new System.Windows.Forms.RadioButton();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.onTrack = new System.Windows.Forms.RadioButton();
             this.offTrack = new System.Windows.Forms.RadioButton();
+            this.isWall = new System.Windows.Forms.RadioButton();
+            this.onTrackNoAI = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.transparencyValue = new System.Windows.Forms.Label();
             this.hasSpec = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.specExValue = new System.Windows.Forms.Label();
             this.specExSlider = new System.Windows.Forms.TrackBar();
-            this.button1 = new System.Windows.Forms.Button();
+            this.saveMatConfig = new System.Windows.Forms.Button();
             this.emissiveColourBrowse = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
             this.emissiveColour = new System.Windows.Forms.PictureBox();
@@ -72,8 +77,6 @@
             this.emissiveMapBrowse = new System.Windows.Forms.Button();
             this.emissiveMap = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.diffuseMapBrowse = new System.Windows.Forms.Button();
-            this.diffuseMap = new System.Windows.Forms.TextBox();
             this.metalnessSlider = new System.Windows.Forms.TrackBar();
             this.label3 = new System.Windows.Forms.Label();
             this.roughnessSlider = new System.Windows.Forms.TrackBar();
@@ -81,19 +84,21 @@
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.antiGravPad = new System.Windows.Forms.RadioButton();
-            this.jumpPad = new System.Windows.Forms.RadioButton();
-            this.onTrackNoAI = new System.Windows.Forms.CheckBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.diffuseMapList = new System.Windows.Forms.ListBox();
+            this.addNewDiffuse = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.isDiffuseAnimated = new System.Windows.Forms.CheckBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.diffuseAnimTime = new System.Windows.Forms.NumericUpDown();
+            this.removeSelectedDiffuse = new System.Windows.Forms.Button();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transparencySlider)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.collisionGroup.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.specExSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.emissiveColour)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.specularColour)).BeginInit();
@@ -103,17 +108,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.roughnessSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ambientocclusionSlider)).BeginInit();
             this.groupBox2.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            this.groupBox6.SuspendLayout();
-            this.groupBox7.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox8.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.diffuseAnimTime)).BeginInit();
+            this.groupBox10.SuspendLayout();
+            this.groupBox11.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialPreview
             // 
-            this.materialPreview.Location = new System.Drawing.Point(12, 12);
+            this.materialPreview.Location = new System.Drawing.Point(416, 12);
             this.materialPreview.Name = "materialPreview";
             this.materialPreview.Size = new System.Drawing.Size(300, 300);
             this.materialPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -185,7 +188,7 @@
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.specExValue);
             this.groupBox1.Controls.Add(this.specExSlider);
-            this.groupBox1.Location = new System.Drawing.Point(12, 316);
+            this.groupBox1.Location = new System.Drawing.Point(416, 316);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(300, 353);
             this.groupBox1.TabIndex = 25;
@@ -195,7 +198,7 @@
             // isMetallic
             // 
             this.isMetallic.AutoSize = true;
-            this.isMetallic.Location = new System.Drawing.Point(119, 201);
+            this.isMetallic.Location = new System.Drawing.Point(119, 202);
             this.isMetallic.Name = "isMetallic";
             this.isMetallic.Size = new System.Drawing.Size(73, 17);
             this.isMetallic.TabIndex = 35;
@@ -224,16 +227,17 @@
             this.collisionGroup.TabStop = false;
             this.collisionGroup.Text = "Collision Config";
             // 
-            // isWall
+            // groupBox8
             // 
-            this.isWall.AutoSize = true;
-            this.isWall.Location = new System.Drawing.Point(158, 17);
-            this.isWall.Name = "isWall";
-            this.isWall.Size = new System.Drawing.Size(46, 17);
-            this.isWall.TabIndex = 30;
-            this.isWall.TabStop = true;
-            this.isWall.Text = "Wall";
-            this.isWall.UseVisualStyleBackColor = true;
+            this.groupBox8.Controls.Add(this.boostPad);
+            this.groupBox8.Controls.Add(this.antiGravPad);
+            this.groupBox8.Controls.Add(this.jumpPad);
+            this.groupBox8.Location = new System.Drawing.Point(6, 87);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(273, 40);
+            this.groupBox8.TabIndex = 35;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Special";
             // 
             // boostPad
             // 
@@ -245,6 +249,40 @@
             this.boostPad.TabStop = true;
             this.boostPad.Text = "Boost Pad";
             this.boostPad.UseVisualStyleBackColor = true;
+            // 
+            // antiGravPad
+            // 
+            this.antiGravPad.AutoSize = true;
+            this.antiGravPad.Location = new System.Drawing.Point(86, 17);
+            this.antiGravPad.Name = "antiGravPad";
+            this.antiGravPad.Size = new System.Drawing.Size(101, 17);
+            this.antiGravPad.TabIndex = 31;
+            this.antiGravPad.TabStop = true;
+            this.antiGravPad.Text = "Anti-Gravity Pad";
+            this.antiGravPad.UseVisualStyleBackColor = true;
+            // 
+            // jumpPad
+            // 
+            this.jumpPad.AutoSize = true;
+            this.jumpPad.Location = new System.Drawing.Point(193, 17);
+            this.jumpPad.Name = "jumpPad";
+            this.jumpPad.Size = new System.Drawing.Size(72, 17);
+            this.jumpPad.TabIndex = 32;
+            this.jumpPad.TabStop = true;
+            this.jumpPad.Text = "Jump Pad";
+            this.jumpPad.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.onTrack);
+            this.groupBox3.Controls.Add(this.offTrack);
+            this.groupBox3.Controls.Add(this.isWall);
+            this.groupBox3.Location = new System.Drawing.Point(6, 42);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(273, 40);
+            this.groupBox3.TabIndex = 34;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Regular";
             // 
             // onTrack
             // 
@@ -269,6 +307,27 @@
             this.offTrack.Text = "Off-Track";
             this.offTrack.UseVisualStyleBackColor = true;
             // 
+            // isWall
+            // 
+            this.isWall.AutoSize = true;
+            this.isWall.Location = new System.Drawing.Point(158, 17);
+            this.isWall.Name = "isWall";
+            this.isWall.Size = new System.Drawing.Size(46, 17);
+            this.isWall.TabIndex = 30;
+            this.isWall.TabStop = true;
+            this.isWall.Text = "Wall";
+            this.isWall.UseVisualStyleBackColor = true;
+            // 
+            // onTrackNoAI
+            // 
+            this.onTrackNoAI.AutoSize = true;
+            this.onTrackNoAI.Location = new System.Drawing.Point(126, 19);
+            this.onTrackNoAI.Name = "onTrackNoAI";
+            this.onTrackNoAI.Size = new System.Drawing.Size(148, 17);
+            this.onTrackNoAI.TabIndex = 33;
+            this.onTrackNoAI.Text = "Exclude from AI Navmesh";
+            this.onTrackNoAI.UseVisualStyleBackColor = true;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -291,7 +350,7 @@
             // hasSpec
             // 
             this.hasSpec.AutoSize = true;
-            this.hasSpec.Location = new System.Drawing.Point(9, 201);
+            this.hasSpec.Location = new System.Drawing.Point(9, 202);
             this.hasSpec.Name = "hasSpec";
             this.hasSpec.Size = new System.Drawing.Size(104, 17);
             this.hasSpec.TabIndex = 34;
@@ -331,19 +390,19 @@
             this.specExSlider.TickStyle = System.Windows.Forms.TickStyle.None;
             this.specExSlider.Scroll += new System.EventHandler(this.specExSlider_Scroll);
             // 
-            // button1
+            // saveMatConfig
             // 
-            this.button1.Location = new System.Drawing.Point(502, 638);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(116, 31);
-            this.button1.TabIndex = 21;
-            this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.saveMatConfig.Location = new System.Drawing.Point(416, 676);
+            this.saveMatConfig.Name = "saveMatConfig";
+            this.saveMatConfig.Size = new System.Drawing.Size(300, 31);
+            this.saveMatConfig.TabIndex = 21;
+            this.saveMatConfig.Text = "Save";
+            this.saveMatConfig.UseVisualStyleBackColor = true;
+            this.saveMatConfig.Click += new System.EventHandler(this.button1_Click);
             // 
             // emissiveColourBrowse
             // 
-            this.emissiveColourBrowse.Location = new System.Drawing.Point(219, 74);
+            this.emissiveColourBrowse.Location = new System.Drawing.Point(317, 160);
             this.emissiveColourBrowse.Name = "emissiveColourBrowse";
             this.emissiveColourBrowse.Size = new System.Drawing.Size(75, 22);
             this.emissiveColourBrowse.TabIndex = 49;
@@ -354,23 +413,23 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 58);
+            this.label14.Location = new System.Drawing.Point(3, 144);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(37, 13);
+            this.label14.Size = new System.Drawing.Size(81, 13);
             this.label14.TabIndex = 48;
-            this.label14.Text = "Colour";
+            this.label14.Text = "Emissive Colour";
             // 
             // emissiveColour
             // 
-            this.emissiveColour.Location = new System.Drawing.Point(9, 74);
+            this.emissiveColour.Location = new System.Drawing.Point(6, 160);
             this.emissiveColour.Name = "emissiveColour";
-            this.emissiveColour.Size = new System.Drawing.Size(204, 22);
+            this.emissiveColour.Size = new System.Drawing.Size(305, 22);
             this.emissiveColour.TabIndex = 47;
             this.emissiveColour.TabStop = false;
             // 
             // specularColourBrowse
             // 
-            this.specularColourBrowse.Location = new System.Drawing.Point(219, 73);
+            this.specularColourBrowse.Location = new System.Drawing.Point(317, 119);
             this.specularColourBrowse.Name = "specularColourBrowse";
             this.specularColourBrowse.Size = new System.Drawing.Size(75, 22);
             this.specularColourBrowse.TabIndex = 46;
@@ -381,23 +440,23 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 57);
+            this.label13.Location = new System.Drawing.Point(3, 103);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(37, 13);
+            this.label13.Size = new System.Drawing.Size(82, 13);
             this.label13.TabIndex = 45;
-            this.label13.Text = "Colour";
+            this.label13.Text = "Specular Colour";
             // 
             // specularColour
             // 
-            this.specularColour.Location = new System.Drawing.Point(9, 73);
+            this.specularColour.Location = new System.Drawing.Point(6, 119);
             this.specularColour.Name = "specularColour";
-            this.specularColour.Size = new System.Drawing.Size(204, 22);
+            this.specularColour.Size = new System.Drawing.Size(305, 22);
             this.specularColour.TabIndex = 44;
             this.specularColour.TabStop = false;
             // 
             // ambientColourBrowse
             // 
-            this.ambientColourBrowse.Location = new System.Drawing.Point(219, 74);
+            this.ambientColourBrowse.Location = new System.Drawing.Point(317, 78);
             this.ambientColourBrowse.Name = "ambientColourBrowse";
             this.ambientColourBrowse.Size = new System.Drawing.Size(75, 22);
             this.ambientColourBrowse.TabIndex = 43;
@@ -408,7 +467,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 58);
+            this.label12.Location = new System.Drawing.Point(3, 62);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(78, 13);
             this.label12.TabIndex = 42;
@@ -416,15 +475,15 @@
             // 
             // ambientColour
             // 
-            this.ambientColour.Location = new System.Drawing.Point(9, 74);
+            this.ambientColour.Location = new System.Drawing.Point(6, 78);
             this.ambientColour.Name = "ambientColour";
-            this.ambientColour.Size = new System.Drawing.Size(204, 22);
+            this.ambientColour.Size = new System.Drawing.Size(305, 22);
             this.ambientColour.TabIndex = 41;
             this.ambientColour.TabStop = false;
             // 
             // diffuseColourBrowse
             // 
-            this.diffuseColourBrowse.Location = new System.Drawing.Point(219, 74);
+            this.diffuseColourBrowse.Location = new System.Drawing.Point(317, 36);
             this.diffuseColourBrowse.Name = "diffuseColourBrowse";
             this.diffuseColourBrowse.Size = new System.Drawing.Size(75, 22);
             this.diffuseColourBrowse.TabIndex = 40;
@@ -435,7 +494,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 58);
+            this.label11.Location = new System.Drawing.Point(3, 20);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(73, 13);
             this.label11.TabIndex = 39;
@@ -443,16 +502,16 @@
             // 
             // diffuseColour
             // 
-            this.diffuseColour.Location = new System.Drawing.Point(9, 74);
+            this.diffuseColour.Location = new System.Drawing.Point(6, 36);
             this.diffuseColour.Name = "diffuseColour";
-            this.diffuseColour.Size = new System.Drawing.Size(204, 22);
+            this.diffuseColour.Size = new System.Drawing.Size(305, 22);
             this.diffuseColour.TabIndex = 38;
             this.diffuseColour.TabStop = false;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 19);
+            this.label10.Location = new System.Drawing.Point(3, 96);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(64, 13);
             this.label10.TabIndex = 36;
@@ -461,23 +520,23 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 18);
+            this.label9.Location = new System.Drawing.Point(3, 18);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(67, 13);
+            this.label9.Size = new System.Drawing.Size(73, 13);
             this.label9.TabIndex = 33;
-            this.label9.Text = "Texture Map";
+            this.label9.Text = "Specular Map";
             // 
             // normalMap
             // 
-            this.normalMap.Location = new System.Drawing.Point(9, 35);
+            this.normalMap.Location = new System.Drawing.Point(6, 112);
             this.normalMap.Name = "normalMap";
             this.normalMap.ReadOnly = true;
-            this.normalMap.Size = new System.Drawing.Size(204, 20);
+            this.normalMap.Size = new System.Drawing.Size(305, 20);
             this.normalMap.TabIndex = 37;
             // 
             // normalMapBrowse
             // 
-            this.normalMapBrowse.Location = new System.Drawing.Point(219, 34);
+            this.normalMapBrowse.Location = new System.Drawing.Point(317, 111);
             this.normalMapBrowse.Name = "normalMapBrowse";
             this.normalMapBrowse.Size = new System.Drawing.Size(75, 22);
             this.normalMapBrowse.TabIndex = 35;
@@ -487,7 +546,7 @@
             // 
             // specularMapBrowse
             // 
-            this.specularMapBrowse.Location = new System.Drawing.Point(219, 33);
+            this.specularMapBrowse.Location = new System.Drawing.Point(317, 33);
             this.specularMapBrowse.Name = "specularMapBrowse";
             this.specularMapBrowse.Size = new System.Drawing.Size(75, 22);
             this.specularMapBrowse.TabIndex = 32;
@@ -497,24 +556,24 @@
             // 
             // specularMap
             // 
-            this.specularMap.Location = new System.Drawing.Point(9, 34);
+            this.specularMap.Location = new System.Drawing.Point(6, 34);
             this.specularMap.Name = "specularMap";
             this.specularMap.ReadOnly = true;
-            this.specularMap.Size = new System.Drawing.Size(204, 20);
+            this.specularMap.Size = new System.Drawing.Size(305, 20);
             this.specularMap.TabIndex = 34;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 19);
+            this.label8.Location = new System.Drawing.Point(3, 57);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(67, 13);
+            this.label8.Size = new System.Drawing.Size(72, 13);
             this.label8.TabIndex = 30;
-            this.label8.Text = "Texture Map";
+            this.label8.Text = "Emissive Map";
             // 
             // emissiveMapBrowse
             // 
-            this.emissiveMapBrowse.Location = new System.Drawing.Point(219, 34);
+            this.emissiveMapBrowse.Location = new System.Drawing.Point(317, 72);
             this.emissiveMapBrowse.Name = "emissiveMapBrowse";
             this.emissiveMapBrowse.Size = new System.Drawing.Size(75, 22);
             this.emissiveMapBrowse.TabIndex = 29;
@@ -524,38 +583,20 @@
             // 
             // emissiveMap
             // 
-            this.emissiveMap.Location = new System.Drawing.Point(9, 35);
+            this.emissiveMap.Location = new System.Drawing.Point(6, 73);
             this.emissiveMap.Name = "emissiveMap";
             this.emissiveMap.ReadOnly = true;
-            this.emissiveMap.Size = new System.Drawing.Size(204, 20);
+            this.emissiveMap.Size = new System.Drawing.Size(305, 20);
             this.emissiveMap.TabIndex = 31;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 19);
+            this.label7.Location = new System.Drawing.Point(3, 19);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(67, 13);
             this.label7.TabIndex = 27;
             this.label7.Text = "Texture Map";
-            // 
-            // diffuseMapBrowse
-            // 
-            this.diffuseMapBrowse.Location = new System.Drawing.Point(219, 34);
-            this.diffuseMapBrowse.Name = "diffuseMapBrowse";
-            this.diffuseMapBrowse.Size = new System.Drawing.Size(75, 22);
-            this.diffuseMapBrowse.TabIndex = 21;
-            this.diffuseMapBrowse.Text = "Browse";
-            this.diffuseMapBrowse.UseVisualStyleBackColor = true;
-            this.diffuseMapBrowse.Click += new System.EventHandler(this.diffuseMapBrowse_Click);
-            // 
-            // diffuseMap
-            // 
-            this.diffuseMap.Location = new System.Drawing.Point(9, 35);
-            this.diffuseMap.Name = "diffuseMap";
-            this.diffuseMap.ReadOnly = true;
-            this.diffuseMap.Size = new System.Drawing.Size(204, 20);
-            this.diffuseMap.TabIndex = 28;
             // 
             // metalnessSlider
             // 
@@ -563,7 +604,7 @@
             this.metalnessSlider.Location = new System.Drawing.Point(9, 34);
             this.metalnessSlider.Maximum = 255;
             this.metalnessSlider.Name = "metalnessSlider";
-            this.metalnessSlider.Size = new System.Drawing.Size(285, 45);
+            this.metalnessSlider.Size = new System.Drawing.Size(383, 45);
             this.metalnessSlider.TabIndex = 35;
             this.metalnessSlider.TickStyle = System.Windows.Forms.TickStyle.None;
             // 
@@ -583,7 +624,7 @@
             this.roughnessSlider.Location = new System.Drawing.Point(9, 136);
             this.roughnessSlider.Maximum = 255;
             this.roughnessSlider.Name = "roughnessSlider";
-            this.roughnessSlider.Size = new System.Drawing.Size(285, 45);
+            this.roughnessSlider.Size = new System.Drawing.Size(383, 45);
             this.roughnessSlider.TabIndex = 36;
             this.roughnessSlider.TickStyle = System.Windows.Forms.TickStyle.None;
             // 
@@ -593,7 +634,7 @@
             this.ambientocclusionSlider.Location = new System.Drawing.Point(9, 85);
             this.ambientocclusionSlider.Maximum = 255;
             this.ambientocclusionSlider.Name = "ambientocclusionSlider";
-            this.ambientocclusionSlider.Size = new System.Drawing.Size(285, 45);
+            this.ambientocclusionSlider.Size = new System.Drawing.Size(383, 45);
             this.ambientocclusionSlider.TabIndex = 37;
             this.ambientocclusionSlider.TickStyle = System.Windows.Forms.TickStyle.None;
             // 
@@ -625,142 +666,136 @@
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.ambientocclusionSlider);
             this.groupBox2.Controls.Add(this.roughnessSlider);
-            this.groupBox2.Location = new System.Drawing.Point(318, 6);
+            this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(300, 185);
+            this.groupBox2.Size = new System.Drawing.Size(398, 185);
             this.groupBox2.TabIndex = 40;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "RMA Values";
             // 
-            // groupBox4
+            // diffuseMapList
             // 
-            this.groupBox4.Controls.Add(this.label7);
-            this.groupBox4.Controls.Add(this.diffuseMap);
-            this.groupBox4.Controls.Add(this.diffuseMapBrowse);
-            this.groupBox4.Controls.Add(this.diffuseColour);
-            this.groupBox4.Controls.Add(this.label11);
-            this.groupBox4.Controls.Add(this.diffuseColourBrowse);
-            this.groupBox4.Location = new System.Drawing.Point(318, 193);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(300, 105);
-            this.groupBox4.TabIndex = 41;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Diffuse Properties";
+            this.diffuseMapList.FormattingEnabled = true;
+            this.diffuseMapList.Location = new System.Drawing.Point(6, 35);
+            this.diffuseMapList.Name = "diffuseMapList";
+            this.diffuseMapList.Size = new System.Drawing.Size(260, 121);
+            this.diffuseMapList.TabIndex = 44;
             // 
-            // groupBox5
+            // addNewDiffuse
             // 
-            this.groupBox5.Controls.Add(this.emissiveColourBrowse);
-            this.groupBox5.Controls.Add(this.label14);
-            this.groupBox5.Controls.Add(this.emissiveMap);
-            this.groupBox5.Controls.Add(this.emissiveColour);
-            this.groupBox5.Controls.Add(this.emissiveMapBrowse);
-            this.groupBox5.Controls.Add(this.label8);
-            this.groupBox5.Location = new System.Drawing.Point(318, 304);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(300, 105);
-            this.groupBox5.TabIndex = 42;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Emissive Properties";
+            this.addNewDiffuse.Location = new System.Drawing.Point(272, 105);
+            this.addNewDiffuse.Name = "addNewDiffuse";
+            this.addNewDiffuse.Size = new System.Drawing.Size(120, 23);
+            this.addNewDiffuse.TabIndex = 46;
+            this.addNewDiffuse.Text = "Add New";
+            this.addNewDiffuse.UseVisualStyleBackColor = true;
+            this.addNewDiffuse.Click += new System.EventHandler(this.addNewDiffuse_Click);
             // 
-            // groupBox6
+            // label5
             // 
-            this.groupBox6.Controls.Add(this.specularColourBrowse);
-            this.groupBox6.Controls.Add(this.specularMap);
-            this.groupBox6.Controls.Add(this.specularMapBrowse);
-            this.groupBox6.Controls.Add(this.label9);
-            this.groupBox6.Controls.Add(this.label13);
-            this.groupBox6.Controls.Add(this.specularColour);
-            this.groupBox6.Location = new System.Drawing.Point(318, 415);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(300, 105);
-            this.groupBox6.TabIndex = 43;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Specular Properties";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(269, 63);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(113, 13);
+            this.label5.TabIndex = 47;
+            this.label5.Text = "Secs Between Frames";
             // 
-            // groupBox7
+            // isDiffuseAnimated
             // 
-            this.groupBox7.Controls.Add(this.ambientColourBrowse);
-            this.groupBox7.Controls.Add(this.normalMapBrowse);
-            this.groupBox7.Controls.Add(this.label12);
-            this.groupBox7.Controls.Add(this.normalMap);
-            this.groupBox7.Controls.Add(this.ambientColour);
-            this.groupBox7.Controls.Add(this.label10);
-            this.groupBox7.Location = new System.Drawing.Point(318, 526);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(300, 105);
-            this.groupBox7.TabIndex = 43;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Extra Values";
+            this.isDiffuseAnimated.AutoCheck = false;
+            this.isDiffuseAnimated.AutoSize = true;
+            this.isDiffuseAnimated.Location = new System.Drawing.Point(272, 35);
+            this.isDiffuseAnimated.Name = "isDiffuseAnimated";
+            this.isDiffuseAnimated.Size = new System.Drawing.Size(81, 17);
+            this.isDiffuseAnimated.TabIndex = 48;
+            this.isDiffuseAnimated.Text = "Is Animated";
+            this.isDiffuseAnimated.UseVisualStyleBackColor = true;
             // 
-            // antiGravPad
+            // groupBox9
             // 
-            this.antiGravPad.AutoSize = true;
-            this.antiGravPad.Location = new System.Drawing.Point(86, 17);
-            this.antiGravPad.Name = "antiGravPad";
-            this.antiGravPad.Size = new System.Drawing.Size(101, 17);
-            this.antiGravPad.TabIndex = 31;
-            this.antiGravPad.TabStop = true;
-            this.antiGravPad.Text = "Anti-Gravity Pad";
-            this.antiGravPad.UseVisualStyleBackColor = true;
+            this.groupBox9.Controls.Add(this.diffuseAnimTime);
+            this.groupBox9.Controls.Add(this.removeSelectedDiffuse);
+            this.groupBox9.Controls.Add(this.diffuseMapList);
+            this.groupBox9.Controls.Add(this.label7);
+            this.groupBox9.Controls.Add(this.isDiffuseAnimated);
+            this.groupBox9.Controls.Add(this.addNewDiffuse);
+            this.groupBox9.Controls.Add(this.label5);
+            this.groupBox9.Location = new System.Drawing.Point(12, 203);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(398, 164);
+            this.groupBox9.TabIndex = 49;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Diffuse Texture(s)";
             // 
-            // jumpPad
+            // diffuseAnimTime
             // 
-            this.jumpPad.AutoSize = true;
-            this.jumpPad.Location = new System.Drawing.Point(193, 17);
-            this.jumpPad.Name = "jumpPad";
-            this.jumpPad.Size = new System.Drawing.Size(72, 17);
-            this.jumpPad.TabIndex = 32;
-            this.jumpPad.TabStop = true;
-            this.jumpPad.Text = "Jump Pad";
-            this.jumpPad.UseVisualStyleBackColor = true;
+            this.diffuseAnimTime.DecimalPlaces = 3;
+            this.diffuseAnimTime.Location = new System.Drawing.Point(272, 79);
+            this.diffuseAnimTime.Name = "diffuseAnimTime";
+            this.diffuseAnimTime.Size = new System.Drawing.Size(120, 20);
+            this.diffuseAnimTime.TabIndex = 52;
             // 
-            // onTrackNoAI
+            // removeSelectedDiffuse
             // 
-            this.onTrackNoAI.AutoSize = true;
-            this.onTrackNoAI.Location = new System.Drawing.Point(126, 19);
-            this.onTrackNoAI.Name = "onTrackNoAI";
-            this.onTrackNoAI.Size = new System.Drawing.Size(148, 17);
-            this.onTrackNoAI.TabIndex = 33;
-            this.onTrackNoAI.Text = "Exclude from AI Navmesh";
-            this.onTrackNoAI.UseVisualStyleBackColor = true;
+            this.removeSelectedDiffuse.Location = new System.Drawing.Point(272, 134);
+            this.removeSelectedDiffuse.Name = "removeSelectedDiffuse";
+            this.removeSelectedDiffuse.Size = new System.Drawing.Size(120, 23);
+            this.removeSelectedDiffuse.TabIndex = 49;
+            this.removeSelectedDiffuse.Text = "Remove Selected";
+            this.removeSelectedDiffuse.UseVisualStyleBackColor = true;
+            this.removeSelectedDiffuse.Click += new System.EventHandler(this.removeSelectedDiffuse_Click);
             // 
-            // groupBox3
+            // groupBox10
             // 
-            this.groupBox3.Controls.Add(this.onTrack);
-            this.groupBox3.Controls.Add(this.offTrack);
-            this.groupBox3.Controls.Add(this.isWall);
-            this.groupBox3.Location = new System.Drawing.Point(6, 42);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(273, 40);
-            this.groupBox3.TabIndex = 34;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Regular";
+            this.groupBox10.Controls.Add(this.emissiveColourBrowse);
+            this.groupBox10.Controls.Add(this.specularColourBrowse);
+            this.groupBox10.Controls.Add(this.label14);
+            this.groupBox10.Controls.Add(this.ambientColourBrowse);
+            this.groupBox10.Controls.Add(this.emissiveColour);
+            this.groupBox10.Controls.Add(this.diffuseColour);
+            this.groupBox10.Controls.Add(this.label12);
+            this.groupBox10.Controls.Add(this.label13);
+            this.groupBox10.Controls.Add(this.diffuseColourBrowse);
+            this.groupBox10.Controls.Add(this.specularColour);
+            this.groupBox10.Controls.Add(this.label11);
+            this.groupBox10.Controls.Add(this.ambientColour);
+            this.groupBox10.Location = new System.Drawing.Point(12, 518);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(398, 189);
+            this.groupBox10.TabIndex = 50;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Colours";
             // 
-            // groupBox8
+            // groupBox11
             // 
-            this.groupBox8.Controls.Add(this.boostPad);
-            this.groupBox8.Controls.Add(this.antiGravPad);
-            this.groupBox8.Controls.Add(this.jumpPad);
-            this.groupBox8.Location = new System.Drawing.Point(6, 87);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(273, 40);
-            this.groupBox8.TabIndex = 35;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Special";
+            this.groupBox11.Controls.Add(this.normalMapBrowse);
+            this.groupBox11.Controls.Add(this.emissiveMap);
+            this.groupBox11.Controls.Add(this.normalMap);
+            this.groupBox11.Controls.Add(this.specularMap);
+            this.groupBox11.Controls.Add(this.label10);
+            this.groupBox11.Controls.Add(this.emissiveMapBrowse);
+            this.groupBox11.Controls.Add(this.label9);
+            this.groupBox11.Controls.Add(this.label8);
+            this.groupBox11.Controls.Add(this.specularMapBrowse);
+            this.groupBox11.Location = new System.Drawing.Point(12, 373);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(398, 139);
+            this.groupBox11.TabIndex = 51;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "Texture Maps";
             // 
             // Model_Importer_MaterialEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(626, 679);
-            this.Controls.Add(this.groupBox7);
-            this.Controls.Add(this.groupBox6);
-            this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.groupBox4);
+            this.ClientSize = new System.Drawing.Size(732, 717);
+            this.Controls.Add(this.groupBox11);
+            this.Controls.Add(this.groupBox10);
+            this.Controls.Add(this.groupBox9);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.materialPreview);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.saveMatConfig);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Model_Importer_MaterialEditor";
@@ -773,6 +808,10 @@
             this.groupBox1.PerformLayout();
             this.collisionGroup.ResumeLayout(false);
             this.collisionGroup.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.specExSlider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.emissiveColour)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.specularColour)).EndInit();
@@ -783,18 +822,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.ambientocclusionSlider)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.diffuseAnimTime)).EndInit();
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -809,7 +843,7 @@
         private System.Windows.Forms.CheckBox inPlayableArea;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button saveMatConfig;
         private System.Windows.Forms.Label specExValue;
         private System.Windows.Forms.Button emissiveColourBrowse;
         private System.Windows.Forms.Label label14;
@@ -833,8 +867,6 @@
         private System.Windows.Forms.Button emissiveMapBrowse;
         private System.Windows.Forms.TextBox emissiveMap;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button diffuseMapBrowse;
-        private System.Windows.Forms.TextBox diffuseMap;
         private System.Windows.Forms.RadioButton boostPad;
         private System.Windows.Forms.RadioButton offTrack;
         private System.Windows.Forms.RadioButton onTrack;
@@ -852,15 +884,20 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.CheckBox isMetallic;
         private System.Windows.Forms.RadioButton jumpPad;
         private System.Windows.Forms.RadioButton antiGravPad;
         private System.Windows.Forms.CheckBox onTrackNoAI;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ListBox diffuseMapList;
+        private System.Windows.Forms.Button addNewDiffuse;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox isDiffuseAnimated;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.Button removeSelectedDiffuse;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.NumericUpDown diffuseAnimTime;
     }
 }

@@ -1,0 +1,14 @@
+# Blender MTL File: 'crowd.blend'
+# Material Count: 1
+
+newmtl m_VRFirst_CubeMap
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd I:\\New folder\\game\\content\\mapobj\\VRFirst\\VRFirst.bfres.work\\dds\\VRFirst_Emm_CubeMap.dds
+map_d I:\\New folder\\game\\content\\mapobj\\VRFirst\\VRFirst.bfres.work\\dds\\VRFirst_Emm_CubeMap.dds

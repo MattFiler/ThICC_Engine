@@ -109,9 +109,7 @@ void GameScene::ExpensiveLoad() {
 	m_keybinds.Reset();
 
 	//Load skybox
-	for (int i = 0; i < game_config["player_count"]; i++) {
-		Locator::getRD()->skybox[i]->Load();
-	}
+	Locator::getRD()->skybox->Load();
 
 	//Load the map's audio here using map_info's data
 }
@@ -156,9 +154,7 @@ void GameScene::ExpensiveUnload() {
 	is_paused = false;
 
 	//Unload skybox
-	for (int i = 0; i < game_config["player_count"]; i++) {
-		Locator::getRD()->skybox[i]->Reset();
-	}
+	Locator::getRD()->skybox->Reset();
 }
 
 /* Create all 2D objects for the scene */
@@ -322,11 +318,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			timeout -= Locator::getGSD()->m_dt;
 			cine_cam->Tick();
-			Locator::getRD()->skybox[0]->Tick(cine_cam);
 			if (timeout <= Locator::getGSD()->m_dt + 0.1) {
 				for (int i = 0; i < game_config["player_count"]; ++i) {
 					m_cam[i]->Tick(); 
-					Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 				}
 			}
 		}
@@ -334,7 +328,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			for (int i = 0; i < game_config["player_count"]; ++i) {
 				m_cam[i]->Tick();
-				Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
@@ -351,7 +344,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case CAM_OPEN:
 		for (int i = 0; i < game_config["player_count"]; ++i) {
 			m_cam[i]->Tick();
-			Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 		}
 		cine_cam->Tick();
 
@@ -391,7 +383,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case PLAY:
 		for (int i = 0; i < game_config["player_count"]; ++i) {
 			m_cam[i]->Tick();
-			Locator::getRD()->skybox[i]->Tick(m_cam[i]);
 		}
 
 		timeout -= Locator::getGSD()->m_dt;
@@ -561,6 +552,7 @@ void GameScene::UpdateItems()
 /* Render the 3D scene */
 void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
+
 	switch (state)
 	{
 	case OPENING:
@@ -568,6 +560,9 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
 		m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
 		Locator::getRD()->m_cam = cine_cam;
+
+		// Render skybox
+		Locator::getRD()->skybox->Render();
 
 		//Render 3D objects
 		for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
@@ -608,6 +603,9 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[i]);
 			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[i]);
 			Locator::getRD()->m_cam = m_cam[i];
+
+			// Render skybox
+			Locator::getRD()->skybox->Render();
 
 			//Render 3D objects
 			for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
@@ -652,6 +650,9 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[i]);
 			Locator::getRD()->m_cam = m_cam[i];
 
+			// Render skybox
+			Locator::getRD()->skybox->Render();
+
 			//Render 3D objects
 			for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
 			{
@@ -687,15 +688,6 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		}
 		break;
 	}
-
-	// Render skyboxes that are loaded
-	
-	/*SKYBOXES ARE DISABLED FOR NOW DUE TO A RENDERING BUG
-	for (int i = 0; i < game_config["player_count"]; i++) {
-		if (Locator::getRD()->skybox[i]->Loaded()) {
-			Locator::getRD()->skybox[i]->Render();
-		}
-	}*/
 }
 
 /* Render the 2D scene */
@@ -918,6 +910,12 @@ Item* GameScene::CreateItem(ItemType type)
 		redShell->GetMesh()->getDebugCollider()->Load();
 
 		return redShell;
+	}
+	case BULLET_BILL:
+	{
+		BulletBill* bullet = new BulletBill();
+		m_itemModels.push_back(bullet);
+		return bullet;
 	}
 	default:
 		return nullptr;

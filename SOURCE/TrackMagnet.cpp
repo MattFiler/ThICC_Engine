@@ -41,6 +41,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		closestTri->DoesLineIntersect(m_world.Down(), m_pos + (m_world.Up() * (data.m_height / 2)), midIntersect, closestTri, m_maxAngle, 0);
 		m_colType = closestTri->GetType();
 		m_timeOffTerrain = 0;
+		m_colType = tri->GetType();
 		if (m_useGroundTypes && m_onTrack)
 		{
 

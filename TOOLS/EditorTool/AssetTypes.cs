@@ -42,6 +42,7 @@
         VEHICLE,
         ENGINE_FONT,
         GLOBAL_SOUNDS,
-        CUP
+        CUP,
+        GLOBAL_MODELS
     }
 }

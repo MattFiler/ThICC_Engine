@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <json.hpp>
+using json = nlohmann::json;
 
 class MapInfo;
 class VehicleInfo;
@@ -12,4 +14,6 @@ struct GameObjectShared {
 	std::vector<VehicleInfo*> vehicle_instances;
 	std::vector<CharacterInfo*> character_instances;
 	std::vector<CupInfo*> cup_instances;
+
+	json common_model_config;
 };

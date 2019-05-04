@@ -44,7 +44,6 @@ void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _ph
 			}
 		}
 	}
-
 }
 
 void CollisionManager::ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox)

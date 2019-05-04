@@ -201,6 +201,8 @@ namespace EditorTool
                 }
                 else if (this_comp_type == AssetCompType.MAP)
                 {
+                    common_functions.removeUseageTag(AssetType.CUBEMAP, data_block["cubemap"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
+                    common_functions.removeUseageTag(AssetType.IMAGE, data_block["skybox"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
                     common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["background_start"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
                     common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["background"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));
                     common_functions.removeUseageTag(AssetType.SOUND, data_block["audio"]["final_lap_start"].Value<string>(), common_functions.getUseageTagFor(this_comp_type));

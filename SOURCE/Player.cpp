@@ -5,6 +5,7 @@
 #include "InputData.h"
 #include "ItemData.h"
 #include "AIScheduler.h"
+#include "GameObjectShared.h"
 #include <iostream>
 #include <fstream>
 
@@ -76,21 +77,15 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModel("vehicle", _vehicle->model, Vector::Zero);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
-	std::ifstream x(m_filepath.generateConfigFilepath(_character->model, m_filepath.MODEL));
-	json m_model_config_character;
-	m_model_config_character << x;
-
-	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character->model);
-	new_model->SetScale(m_model_config_character["modelscale"]);
-	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
-	m_animationMesh->AddModel("lakitu", "DEFAULT_ITEM", Vector3::Up * 4);
-	new_model = new SDKMeshGO3D("DEFAULT_ITEM");
-	new_model->SetScale(Vector3(2, 0.05f, 2));
-	m_animationMesh->AddModel("glider", new_model, Vector3::Up * 1.3f);
+	m_animationMesh->AddModel("character", _character->model);
+	m_animationMesh->AddModel("lakitu", Locator::getGOS()->common_model_config["referee"]);
+	m_animationMesh->AddModel("glider", Locator::getGOS()->common_model_config["glider"]);
+	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL), Vector3::Up);
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
 	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
 	m_animationMesh->AddModelSet("gliding", std::vector < std::string>{"vehicle", "character", "glider"});
+	m_animationMesh->AddModelSet("Bullet Bill", std::vector < std::string>{"Bullet Bill"});
 
 	m_animationMesh->SwitchModelSet("default");
 
@@ -104,8 +99,6 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_lastFramePos = m_pos;
 	//Update TrackMagnet here too?
 }
-
-
 void Player::SetActiveItem(ItemType _item) {
 	if (m_InventoryItem == _item) {
 		active_item = _item;
@@ -334,8 +327,8 @@ void Player::TrailItems()
 
 void Player::SpawnItems(ItemType type)
 {
-	//Triple mushrooms and Golden Mushroom still in inventory after use
-	if (type != MUSHROOM_3X && type != MUSHROOM_UNLIMITED)
+	//Triple mushrooms, Golden Mushroom and Bullet Bill still in inventory after use
+	if (type != MUSHROOM_3X && type != MUSHROOM_UNLIMITED && type != BULLET_BILL)
 	{
 		SetActiveItem(type);
 	}
@@ -466,6 +459,13 @@ void Player::SpawnItems(ItemType type)
 			RedShell* shell = static_cast<RedShell*>(CreateItem(RED_SHELL));
 			m_trailingItems.push_back(shell);
 			TrailItems();
+			break;
+		}
+
+		case BULLET_BILL:
+		{
+			BulletBill* bullet = static_cast<BulletBill*>(CreateItem(BULLET_BILL));
+			bullet->Use(this, false);
 			break;
 		}
 

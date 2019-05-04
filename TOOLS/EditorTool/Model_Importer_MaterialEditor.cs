@@ -65,8 +65,21 @@ namespace EditorTool
             //Specular on/off
             hasSpec.Checked = (material_config["illum"].Value<string>() == "2");
 
-            //Diffuse Texture
-            diffuseMap.Text = material_config["map_Kd"].Value<string>();
+            //Diffuse texture(s)
+            if (material_config["ThICC_ANIMATION_ENABLED"] != null) //support for non-edited mats (old config setup)
+            {
+                JArray animated_textures = material_config["ThICC_ANIMATION"].Value<JArray>();
+                foreach (string item in animated_textures)
+                {
+                    diffuseMapList.Items.Add(item);
+                }
+                diffuseAnimTime.Value = material_config["ThICC_ANIMATION_TIME"].Value<decimal>();
+                isDiffuseAnimated.Checked = material_config["ThICC_ANIMATION_ENABLED"].Value<bool>();
+            }
+            else
+            {
+                diffuseMapList.Items.Add(material_config["map_Kd"].Value<string>());
+            }
 
             //Specular Texture
             specularMap.Text = material_config["map_Ks"].Value<string>();
@@ -219,10 +232,6 @@ namespace EditorTool
         }
 
         /* Map file selection */
-        private void diffuseMapBrowse_Click(object sender, EventArgs e)
-        {
-            diffuseMap.Text = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
-        }
         private void ambientMapBrowse_Click(object sender, EventArgs e)
         {
             emissiveMap.Text = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
@@ -234,6 +243,27 @@ namespace EditorTool
         private void normalMapBrowse_Click(object sender, EventArgs e)
         {
             normalMap.Text = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
+        }
+
+        /* New diffuse list handles */
+        private void addNewDiffuse_Click(object sender, EventArgs e)
+        {
+            string newDiffMap = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
+            if (newDiffMap != "")
+            {
+                diffuseMapList.Items.Add(newDiffMap);
+            }
+            isDiffuseAnimated.Checked = (diffuseMapList.Items.Count > 1);
+        }
+        private void removeSelectedDiffuse_Click(object sender, EventArgs e)
+        {
+            if (diffuseMapList.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a diffuse map to remove.", "No diffuse map selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            diffuseMapList.Items.RemoveAt(diffuseMapList.SelectedIndex);
+            isDiffuseAnimated.Checked = (diffuseMapList.Items.Count > 1);
         }
 
         /* Slider interaction */
@@ -249,9 +279,14 @@ namespace EditorTool
         /* Save new config */
         private void button1_Click(object sender, EventArgs e)
         {
-            if (diffuseMap.Text == "")
+            if (diffuseMapList.Items.Count == 0)
             {
                 MessageBox.Show("All materials must have a diffuse map.", "Could not save changes.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (diffuseMapList.Items.Count > 1 && diffuseAnimTime.Value == 0)
+            {
+                MessageBox.Show("This material features animated diffuse maps.\nAnimation time cannot be zero.", "Animation time cannot be zero.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -283,9 +318,20 @@ namespace EditorTool
             //Specular on/off (2=on)
             material_config["illum"] = (hasSpec.Checked ? "2" : "0");
 
-            //Diffuse Texture
-            material_config["map_Kd"] = Path.GetFileName(diffuseMap.Text);
-            copyNewMat(diffuseMap.Text);
+            //Default Diffuse Texture
+            material_config["map_Kd"] = Path.GetFileName(diffuseMapList.Items[0].ToString());
+            copyNewMat(diffuseMapList.Items[0].ToString());
+
+            //Diffuse texture(s) and animation properties (if enabled)
+            JArray animated_textures = new JArray();
+            foreach (string item in diffuseMapList.Items)
+            {
+                animated_textures.Add(Path.GetFileName(item.ToString()));
+                copyNewMat(item.ToString());
+            }
+            material_config["ThICC_ANIMATION"] = animated_textures;
+            material_config["ThICC_ANIMATION_ENABLED"] = (diffuseMapList.Items.Count > 1);
+            material_config["ThICC_ANIMATION_TIME"] = diffuseAnimTime.Value;
 
             //Specular Texture
             material_config["map_Ks"] = Path.GetFileName(specularMap.Text);
@@ -394,5 +440,12 @@ namespace EditorTool
         {
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void diffuseMapBrowse_Click(object sender, EventArgs e)
+        {
+        }
     }
 }
