@@ -282,7 +282,7 @@
 		"info": {
 			"duration": 12,
 			"boost": {
-				"amount": 40,
+				"amount": 75,
 				"player_drag": 0.7
 			}
 		}
