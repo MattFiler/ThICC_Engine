@@ -31,11 +31,6 @@ Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, 
 
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
-	for (int i = 0; i < m_posHistoryLength; i++)
-	{
-		m_posHistory.push(m_world);
-	}
-
 	// If AI
 	if (m_playerID == -1)
 	{
@@ -624,8 +619,14 @@ void Player::RespawnLogic()
 		if (m_posHistoryTimer >= m_posHistoryInterval)
 		{
 			m_posHistoryTimer -= m_posHistoryInterval;
-			m_posHistory.push(m_world);
-			m_posHistory.pop();
+			m_matrixHistory.push(m_world);
+			m_posHistory.push(m_pos);
+
+			if (m_matrixHistory.size() > m_posHistoryLength)
+			{
+				m_matrixHistory.pop();
+				m_posHistory.pop();
+			}
 		}
 	}
 	else
@@ -657,6 +658,18 @@ void Player::RespawnLogic()
 	}
 }
 
+Vector3 Player::GetPosHistoryBack()
+{
+	if (m_posHistory.empty())
+	{
+		return m_pos;
+	}
+	else
+	{
+		return m_posHistory.back();
+	}
+}
+
 void Player::Respawn()
 {
 	m_gliding = false;
@@ -664,7 +677,7 @@ void Player::Respawn()
 	m_move->SetEnabled(false);
 	m_animationMesh->SwitchModelSet("respawn");
 	m_respawning = true;
-	m_respawnEnd = m_posHistory.front();
+	m_respawnEnd = m_matrixHistory.front();
 	m_respawnStart = m_world;
 	m_glideTimeElapsed = 0;
 	m_elapsedTimeOff = 0;

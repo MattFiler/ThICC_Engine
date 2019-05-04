@@ -30,8 +30,10 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 		Vector3 bottom_left = blender_vector.ConvertPosition(Vector3(it.value()["bottom_left"][0], it.value()["bottom_left"][1], it.value()["bottom_left"][2]) * m_track_data.scale);
 		Vector3 bottom_right = blender_vector.ConvertPosition(Vector3(it.value()["bottom_right"][0], it.value()["bottom_right"][1], it.value()["bottom_right"][2]) * m_track_data.scale);
 		Vector3 middle_bottom = bottom_left + ((bottom_right - bottom_left)*0.5f);
+		Vector3 middle_top = top_left + ((top_right - top_left)*0.5f);
+		Vector3 middle = middle_bottom + ((middle_top - middle_bottom)*0.5f);
 
-		Waypoint new_waypoint = Waypoint(top_left, top_right, bottom_left, bottom_right, middle_bottom);
+		Waypoint new_waypoint = Waypoint(top_left, top_right, bottom_left, bottom_right, middle);
 		map_waypoints.push_back(new_waypoint);
 
 		//Calculate debug marker position as the mid-point of top left and bottom right!
@@ -465,5 +467,5 @@ Vector3 Track::getWaypointMiddle(int index)
 	{
 		index -= map_waypoints.size();
 	}
-	return map_waypoints[index].middle_bottom;
+	return map_waypoints[index].middle;
 }

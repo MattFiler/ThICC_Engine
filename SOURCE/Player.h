@@ -80,9 +80,10 @@ public:
 
 	void Reload(CharacterInfo* _character, VehicleInfo* _vehicle);
 
-	Matrix GetLastOnTrack() { return m_posHistory.front(); };
+	Matrix GetLastOnTrack() { return m_matrixHistory.front(); };
 
 	Vector3 GetLastFramePos() { return m_lastFramePos; };
+	Vector3 GetPosHistoryBack();
 
 protected:
 	int m_playerID = 0;
@@ -148,7 +149,8 @@ private:
 
 
 	// Respawn
-	std::queue<Matrix> m_posHistory; // All the recorded player positions
+	std::queue<Matrix> m_matrixHistory; // All the recorded player positions
+	std::queue<Vector3> m_posHistory;
 	float m_posHistoryInterval = 0.2f; // How often the players position will be recorded
 	int m_posHistoryLength = 10; // The length of the position queue
 	float m_noTrackRespawn = 1; // If not on any terrain, respawn after this time
