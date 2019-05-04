@@ -103,7 +103,7 @@ bool MoveAI::Update()
 	}
 
 	// This shouldn't happen often, but if we reach the end of the waypoints don't continue
-	if (m_routeIndex == m_route.size())
+	if (m_routeIndex >= m_route.size())
 	{
 		return true;
 	}

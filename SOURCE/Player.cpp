@@ -6,6 +6,7 @@
 #include "ItemData.h"
 #include "AIScheduler.h"
 #include "GameObjectShared.h"
+#include "KartAI.h"
 #include <iostream>
 #include <fstream>
 
@@ -232,6 +233,10 @@ void Player::PositionFloatingItems()
 
 void Player::CheckUseItem()
 {
+	if (m_ai)
+	{
+		return;
+	}
 	if (m_multiItem)
 	{
 		TrailItems();
@@ -512,7 +517,7 @@ void Player::setGamePad(bool _state)
 	if (!m_ai && (m_playerID == 0 || m_lap == 3))
 	{
 		m_move->SetGamepadActive(false);
-		m_ai = std::make_unique<MoveAI>(this, m_move.get());
+		m_ai = std::make_unique<KartAI>(this, m_move.get());
 		m_ai->UseDrift(true);
 		m_move->SetEnabled(true);
 		return;

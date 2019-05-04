@@ -735,19 +735,20 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 void GameScene::SetPlayersWaypoint()
 {
 	for (int i = 0; i < m_maxPlayers; i++) {
-		Matrix world = player[i]->GetWorld();
-		//Vector3 difference = (player[i]->GetLastFramePos()+(world.Up()*2) + (world.Backward())) - (player[i]->GetPos()+(world.Up()*2) + (world.Forward()));
 		Vector3 difference = player[i]->GetPosHistoryBack() - player[i]->GetPos();
-		float length = difference.Length();
-		if (length == 0)
-			continue;
+		float maxLength = difference.Length();
+		float length = 0;
+		if (maxLength == 0)
+			return;
+
 		difference.Normalize();
 
 		if (player[i]->GetWaypoint() < track->getWaypointsBB().size() - 1)
 		{
 			if (track->getWaypointsBB()[player[i]->GetWaypoint() + 1].Intersects(player[i]->GetPos(), difference, length))
 			{
-				player[i]->SetWaypoint(player[i]->GetWaypoint() + 1);
+				if(length <= maxLength)
+					player[i]->SetWaypoint(player[i]->GetWaypoint() + 1);
 			}
 		}
 		else

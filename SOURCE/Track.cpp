@@ -203,15 +203,19 @@ void Track::setWaypointBB()
 {
 	for (size_t i = 0; i < map_finishline.size(); ++i)
 	{
-		Vector3 vertices[4] =
+		Vector3 vertices[8] =
 		{
 			Vector3(static_cast<float>(map_finishline[i].top_left.x), static_cast<float>(map_finishline[i].top_left.y), static_cast<float>(map_finishline[i].top_left.z)),
 			Vector3(static_cast<float>(map_finishline[i].top_right.x), static_cast<float>(map_finishline[i].top_right.y), static_cast<float>(map_finishline[i].top_right.z)),
 			Vector3(static_cast<float>(map_finishline[i].bottom_left.x), static_cast<float>(map_finishline[i].bottom_left.y), static_cast<float>(map_finishline[i].bottom_left.z)),
-			Vector3(static_cast<float>(map_finishline[i].bottom_right.x), static_cast<float>(map_finishline[i].bottom_right.y), static_cast<float>(map_finishline[i].bottom_right.z))
+			Vector3(static_cast<float>(map_finishline[i].bottom_right.x), static_cast<float>(map_finishline[i].bottom_right.y), static_cast<float>(map_finishline[i].bottom_right.z)),
+			Vector3(static_cast<float>(map_finishline[i].top_left.x+1), static_cast<float>(map_finishline[i].top_left.y + 1), static_cast<float>(map_finishline[i].top_left.z + 1)),
+			Vector3(static_cast<float>(map_finishline[i].top_right.x + 1), static_cast<float>(map_finishline[i].top_right.y + 1), static_cast<float>(map_finishline[i].top_right.z + 1)),
+			Vector3(static_cast<float>(map_finishline[i].bottom_left.x + 1), static_cast<float>(map_finishline[i].bottom_left.y + 1), static_cast<float>(map_finishline[i].bottom_left.z + 1)),
+			Vector3(static_cast<float>(map_finishline[i].bottom_right.x + 1), static_cast<float>(map_finishline[i].bottom_right.y + 1), static_cast<float>(map_finishline[i].bottom_right.z + 1))
 		};
 		BoundingOrientedBox box;
-		BoundingOrientedBox::CreateFromPoints(box, 4, (const XMFLOAT3*)&vertices[0], 3 * sizeof(float));
+		BoundingOrientedBox::CreateFromPoints(box, 8, (const XMFLOAT3*)&vertices[0], 3 * sizeof(float));
 
 		waypoint_bb.push_back(box);
 	}

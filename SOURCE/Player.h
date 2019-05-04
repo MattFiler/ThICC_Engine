@@ -99,6 +99,8 @@ public:
 	Vector3 GetLastFramePos() { return m_lastFramePos; };
 	Vector3 GetPosHistoryBack();
 
+	bool IsTrailingItem() { return !m_trailingItems.empty(); };
+
 protected:
 	int m_playerID = 0;
 
