@@ -5,6 +5,7 @@
 #include "InputData.h"
 #include "ItemData.h"
 #include "AIScheduler.h"
+#include "GameObjectShared.h"
 #include <iostream>
 #include <fstream>
 
@@ -81,17 +82,9 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModel("vehicle", _vehicle->model, Vector::Zero);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
-	std::ifstream x(m_filepath.generateConfigFilepath(_character->model, m_filepath.MODEL));
-	json m_model_config_character;
-	m_model_config_character << x;
-
-	SDKMeshGO3D* new_model = new SDKMeshGO3D(_character->model);
-	new_model->SetScale(m_model_config_character["modelscale"]);
-	m_animationMesh->AddModel("character", new_model, Vector3(0,0,0));
-	m_animationMesh->AddModel("lakitu", "DEFAULT_ITEM", Vector3::Up * 4);
-	new_model = new SDKMeshGO3D("DEFAULT_ITEM");
-	new_model->SetScale(Vector3(2, 0.05f, 2));
-	m_animationMesh->AddModel("glider", new_model, Vector3::Up * 1.3f);
+	m_animationMesh->AddModel("character", _character->model);
+	m_animationMesh->AddModel("lakitu", Locator::getGOS()->common_model_config["referee"]);
+	m_animationMesh->AddModel("glider", Locator::getGOS()->common_model_config["glider"]);
 	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL), Vector3::Up);
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
@@ -224,6 +217,8 @@ void Player::Tick()
 
 	//apply my base behaviour
 	TrackMagnet::Tick();
+
+	m_animationMesh->Update(m_world);
 }
 
 void Player::PositionFloatingItems()
@@ -615,10 +610,11 @@ void Player::RespawnLogic()
 		return;
 	}
 
-	m_posHistoryTimer += Locator::getGSD()->m_dt;
 	m_timeSinceRespawn += Locator::getGSD()->m_dt;
 	if (!m_respawning && m_onTrack && m_colType == CollisionType::ON_TRACK)
 	{
+
+		m_posHistoryTimer += Locator::getGSD()->m_dt;
 		m_offTrackTimer = 0;
 		m_offTerrainTimer = 0;
 		if (m_posHistoryTimer >= m_posHistoryInterval)
@@ -686,6 +682,10 @@ void Player::Respawn()
 	// Find the distance to the respawn point
 	float dist = Vector3::Distance(pos, m_pos);
 	m_totalRespawnTime = dist / m_respawnSpeed;
+	if (m_totalRespawnTime > m_maxRespawnTime)
+	{
+		m_totalRespawnTime = m_maxRespawnTime;
+	}
 
 	m_posHistoryTimer = 0;
 	m_vel = Vector::Zero;
@@ -699,7 +699,7 @@ void Player::MovePlayerToTrack()
 	if (m_elapsedRespawnTime > m_totalRespawnTime)
 	{
 		m_elapsedRespawnTime = 0;
-		SetWorld(Matrix::Lerp(m_respawnStart, m_respawnEnd, 1));
+		SetWorld(m_respawnEnd);
 		m_respawning = false;
 		m_move->SetEnabled(true);
 		m_animationMesh->SwitchModelSet("default");

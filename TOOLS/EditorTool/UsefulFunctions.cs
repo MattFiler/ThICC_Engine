@@ -29,6 +29,12 @@ namespace EditorTool
     /* Common functionality library */
     class UsefulFunctions
     {
+        /* CONSTANTS */
+        public int ThICC_FILE_VERSION = 2; //Used to identify file versions to the engine. Allows backwards compatibility with older configurations.
+
+        ///////////////////////////////////////////////
+        ///////////////////////////////////////////////
+        
         /*
          * 
          * Asset Previewing Functionality
@@ -298,6 +304,8 @@ namespace EditorTool
                     return "Global Sound";
                 case AssetCompType.CUP:
                     return "Cup";
+                case AssetCompType.GLOBAL_MODELS:
+                    return "Common Models";
             }
             return "";
         }

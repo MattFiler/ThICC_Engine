@@ -1,0 +1,78 @@
+### CREATED BY THE ThICC TOOLKIT ###
+
+newmtl VRFirst_Enkei_Far_Plane
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.999999
+illum 1
+map_Kd vrfirst_enkei_far_plane_alb.PNG
+map_Ke vrfirst_enkei_far_plane_emm.PNG
+Tr 0.000001
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl VRFirst_Enkei_Ground
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd vrfirst_enkei_ground_alb.PNG
+map_Ke vrfirst_enkei_ground_emm.PNG
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl m_VRFirst
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd vrfirst_alb.PNG
+map_Ke vrfirst_emm.PNG
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl m_VRFirst_CubeMap
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd vrfirst_emm_cubemap.PNG
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+

@@ -53,7 +53,7 @@ void Item::Tick()
 	if (m_mesh)
 	{
 		m_mesh->Tick();
-		m_displayedMesh->Update(m_mesh->GetWorld(), m_mesh->GetWorld().Forward());
+		m_displayedMesh->Update(m_mesh->GetWorld());
 	}
 
 	if (m_itemUsed)

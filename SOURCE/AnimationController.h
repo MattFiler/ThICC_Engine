@@ -2,13 +2,14 @@
 #include <queue>
 #include <map>
 #include "AnimationModel.h"
+#include "GameFilepaths.h"
 
 class AnimationController
 {
 public:
 	AnimationController() = default;
 
-	void Update(Matrix _parentWorld, Vector3 _rotOffsetOverride);
+	void Update(Matrix _parentWorld);
 	void Render();
 
 	void UpdateWorld(Matrix& _newWorld);
@@ -21,7 +22,7 @@ public:
 	void Load();
 	void Reset();
 
-	void AddModel(std::string _name, std::string _filepath, Vector3 _offset);
+	void AddModel(std::string _name, std::string _filepath, Vector3 _offset = Vector3::Zero);
 	void AddModel(std::string _name, SDKMeshGO3D* _model, Vector3 _offset);
 
 	void AddModelSet(std::string _setName, std::vector<std::string> models);
@@ -33,6 +34,8 @@ public:
 
 	void setLockSet(bool _lockSet) { m_lockSet = _lockSet; };
 	bool getLockSet() { return m_lockSet; };
+
+	void SetRotOffset(Vector3 _offset) { m_rotOffsetOverride = _offset; };
 
 	bool FinishedScale() { return m_scaleTimeElapsed >= m_timeForScale; };
 	enum direction
@@ -86,4 +89,9 @@ private:
 
 	bool m_shouldRender = true;
 	bool m_lockSet = false;
+
+	GameFilepaths m_filepath;
+
+	Vector3 m_rotOffsetOverride = Vector3::Zero;
+
 };

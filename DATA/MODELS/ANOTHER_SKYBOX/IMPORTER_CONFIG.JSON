@@ -1,0 +1,38 @@
+{
+  "m_VR64Peach": {
+    "newmtl": "m_VR64Peach",
+    "Ns": "0.000000",
+    "Ka": "1.000000 1.000000 1.000000",
+    "Kd": "1.000000 1.000000 1.000000",
+    "Ks": "1.000000 1.000000 1.000000",
+    "Ke": "1.000000 1.000000 1.000000",
+    "Ni": "1.000000",
+    "d": "0.000000",
+    "illum": "0",
+    "map_Kd": "vrwiimoo_alb.PNG",
+    "map_Ke": "",
+    "Tr": "0.000000",
+    "map_Ks": "",
+    "map_Kn": "",
+    "norm": "",
+    "map_emissive": "",
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 0,
+    "ThICC_METALLIC": false,
+    "ThICC_COLLISION": {
+      "0": false,
+      "1": false,
+      "2": false,
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
+    },
+    "ThICC_ANIMATION": [
+      "vrwiimoo_alb.PNG"
+    ],
+    "ThICC_ANIMATION_ENABLED": false,
+    "ThICC_ANIMATION_TIME": 0.0
+  }
+}

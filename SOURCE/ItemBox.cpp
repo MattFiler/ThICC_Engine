@@ -5,8 +5,9 @@
 #include "ItemData.h"
 #include "Constants.h"
 #include "GameStateData.h"
+#include "GameObjectShared.h"
 
-ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel("ITEM_BOX") {
+ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel(Locator::getGOS()->common_model_config["itembox"]) {
 	SetPos(position);
 	SetRotation(rotation);
 

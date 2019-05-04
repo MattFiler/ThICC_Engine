@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "GameStateData.h"
 #include "AnimationController.h"
+#include <fstream>
+#include <json.hpp>
 
 void AnimationController::Render()
 {
@@ -47,7 +49,19 @@ void AnimationController::AddModel(std::string _name, SDKMeshGO3D* _model, Simpl
 
 void AnimationController::AddModel(std::string _name, std::string _filepath, Vector3 _offset)
 {
-	m_additionalModels.push_back(std::make_unique<AnimationModel>(new SDKMeshGO3D(_filepath), _name, _offset));
+	std::ifstream x(m_filepath.generateConfigFilepath(_filepath, m_filepath.MODEL));
+	nlohmann::json model_config;
+	model_config << x;
+
+	SDKMeshGO3D* new_model = new SDKMeshGO3D(_filepath);
+	new_model->SetScale(model_config["modelscale"]);
+	new_model->SetRotationInDegrees(Vector3(model_config["rot_x"], model_config["rot_y"], model_config["rot_z"]));
+
+	if (_offset == Vector3::Zero) {
+		_offset = Vector3(model_config["start_x"], model_config["start_y"], model_config["start_z"]);
+	}
+
+	m_additionalModels.push_back(std::make_unique<AnimationModel>(new_model, _name, _offset));
 }
 
 void AnimationController::Load() 
@@ -66,7 +80,7 @@ void AnimationController::Reset()
 	}
 }
 
-void AnimationController::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride)
+void AnimationController::Update(Matrix _parentWorld)
 {
 	UpdateScale();
 
@@ -139,7 +153,7 @@ void AnimationController::Update(Matrix _parentWorld, Vector3 _rotOffsetOverride
 	}
 	else
 	{
-		m_rotOffset = Vector3::Lerp(m_rotOffset, _rotOffsetOverride, m_rotAnimSpeed * Locator::getGSD()->m_dt);
+		m_rotOffset = Vector3::Lerp(m_rotOffset, m_rotOffsetOverride, m_rotAnimSpeed * Locator::getGSD()->m_dt);
 	}
 
 	/*SetWorld(_parentWorld);

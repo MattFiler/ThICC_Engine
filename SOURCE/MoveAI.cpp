@@ -2,17 +2,22 @@
 #include "MoveAI.h"
 #include "ServiceLocator.h"
 #include "AIScheduler.h"
+#include "Player.h"
+#include "GameObjectShared.h"
 #include <stack>
 #include <iostream>
 
 MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), m_move(_move)
 {
 	Locator::getAIScheduler()->AddAI(this);
+
+	m_player = dynamic_cast<Player*>(_model);
+
 	/*
 	#ifdef _DEBUG
 	for (int i = 0; i < m_maxPathIterations; i++)
 	{
-		m_debugRaceLine.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
+		m_debugRaceLine.push_back(new SDKMeshGO3D(Locator::getGOS()->common_model_config["itembox"]));
 		m_debugRaceLine.back()->Load();
 		Vector3 new_scale = m_debugRaceLine.back()->GetScale() * ((float)(i+1) / m_maxPathIterations);
 		m_debugRaceLine.back()->SetScale(1);
@@ -20,7 +25,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 	}
 	for (int i = 0; i < 20; i++)
 	{
-		m_debugNextWaypoint.push_back(new SDKMeshGO3D("DEFAULT_ITEM"));
+		m_debugNextWaypoint.push_back(new SDKMeshGO3D(Locator::getGOS()->common_model_config["itembox"]));
 		m_debugNextWaypoint.back()->Load();
 		m_debugNextWaypoint.back()->SetScale(0.2f);
 		m_debugNextWaypoint.back()->UpdateWorld();
@@ -47,8 +52,23 @@ void MoveAI::DebugRender()
 	#endif*/
 }
 
-void MoveAI::Update()
+bool MoveAI::Update()
 {
+	if (m_player)
+	{
+		if (m_player->GetGroundType() == OFF_TRACK)
+		{
+			// If off the track, go back to where we were last on the track
+			Matrix world = m_player->GetLastOnTrack();
+			Vector pos;
+			Vector scale;
+			Quaternion rot;
+			world.Decompose(scale, rot, pos);
+
+			m_route.clear();
+			m_route.push_back(RouteNode(pos, m_move->GetWaypoint()));
+		}
+	}
 	// If there at least 2 waypoints left
 	if (m_routeIndex < m_route.size()-1 && !m_route.empty())
 	{
@@ -64,7 +84,7 @@ void MoveAI::Update()
 			// This shouldn't happen often, but if we reach the end of the waypoints don't continue
 			if (m_routeIndex == m_route.size())
 			{
-				return;
+				return true;
 			}
 		}
 	}
@@ -79,7 +99,7 @@ void MoveAI::Update()
 	if (m_route.empty())
 	{
 		m_move->setAcceleration(1);
-		return;
+		return true;
 	}
 
 	Vector3 normDiff = m_route[m_routeIndex].position - m_model->GetPos();
@@ -89,7 +109,7 @@ void MoveAI::Update()
 	float dist = Vector3::Distance(normVelo, normDiff);
 	if (dist  > m_lineLeeway)
 	{
-		m_move->setAcceleration(0.75f);
+		m_move->setAcceleration(1);
 		// If left would reduce the difference
 		if (Vector3::Distance(normVeloLeft, normDiff) < dist)
 		{
@@ -110,7 +130,7 @@ void MoveAI::Update()
 		}
 		if (dist > m_driftThreshold)
 		{
-			m_move->setAcceleration(0.5f);
+			m_move->setAcceleration(0.7f);
 			m_move->Drift(true);
 		}
 	}
@@ -120,16 +140,17 @@ void MoveAI::Update()
 		m_move->Drift(false);
 		m_move->DontTurn();
 	}
+	return false;
 }
 
 void MoveAI::RecalculateLine(Track* _track)
 {
-	m_routeIndex = 0;
-	_track->SetValidCollision(true, false, true, false, true, true, true, false);
-	m_route.clear();
 	Matrix world = m_model->GetWorld();
 	Vector3 pos = m_model->GetPos();
 	Vector3 direction = world.Forward();
+
+	m_routeIndex = 0;
+	m_route.clear();
 	int iterations = 0;
 
 	m_waypointPos = m_move->GetWaypoint();
@@ -142,13 +163,15 @@ void MoveAI::RecalculateLine(Track* _track)
 		m_debugNextWaypoint[i]->UpdateWorld();
 	}
 
+
+
+	_track->SetValidCollision(true, false, true, false, true, true, true, false);
 	if (!FindRoute(_track, world, pos, direction, iterations, true, m_waypointPos))
 	{
 		// If no route is found this is probably a jump so head to the next waypoint
 		m_route.clear();
 		m_route.push_back(RouteNode(_track->getWaypointMiddle(m_waypointPos), m_move->GetWaypoint()));
 	}
-
 	if (m_route.size() < 3)
 	{
 		return;
@@ -191,6 +214,11 @@ void MoveAI::RecalculateLine(Track* _track)
 
 	condensedRoute.push_back(m_route.back());
 	m_route = condensedRoute;
+}
+
+void MoveAI::FindRouteToTrack(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int _iterations, bool _allowTurn, int _waypointIndex)
+{
+
 }
 
 bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _direction, int _iterations, bool _allowTurn, int _waypointIndex)

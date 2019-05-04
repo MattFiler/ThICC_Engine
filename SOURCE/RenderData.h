@@ -79,6 +79,6 @@ struct ThICC_RenderData {
 	std::wstring current_cubemap_irradiance;
 	std::wstring current_cubemap_skybox;
 
-	//Skyboxes
-	Skybox* skybox[4];
+	//Skybox
+	Skybox* skybox = nullptr;
 };
