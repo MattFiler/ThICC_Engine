@@ -9,7 +9,8 @@
 struct ThICC_RenderData {
 	//States and FX factory
 	std::unique_ptr<DirectX::CommonStates> m_states;
-	std::unique_ptr<DirectX::PBREffectFactory> m_fxFactoryPBR;
+	std::unique_ptr<DirectX::EffectFactory> m_fxFactory; //Used for non IBL models in arcade mode
+	std::unique_ptr<DirectX::PBREffectFactory> m_fxFactoryPBR; //Used for PC build
 
 	//Back-buffer tracking
 	static const size_t MAX_BACK_BUFFER_COUNT = 3;
@@ -78,6 +79,7 @@ struct ThICC_RenderData {
 	std::wstring current_cubemap_radiance;
 	std::wstring current_cubemap_irradiance;
 	std::wstring current_cubemap_skybox;
+	std::wstring arcade_cubemap;
 
 	//Skybox
 	Skybox* skybox = nullptr;

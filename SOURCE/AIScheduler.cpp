@@ -17,6 +17,7 @@ void AIScheduler::UpdateTrack(Track* _track) {
 
 void AIScheduler::Update()
 {
+	#ifndef _ARCADE
 	m_elapsedTime += Locator::getGSD()->m_dt;
 
 	for (size_t i = 0; i < m_aiList.size(); i++)
@@ -48,16 +49,20 @@ void AIScheduler::Update()
 			ai->RecalculateLine(m_track);
 		}
 	}
+	#endif
 }
 
 void AIScheduler::AddAI(MoveAI* _ai)
 {
+	#ifndef _ARCADE
 	m_aiList.push_back(_ai);
 	m_totalFrequency = m_lineUpdateFrequency / m_aiList.size();
+	#endif
 }
 
 void AIScheduler::RemoveAI(MoveAI* _ai)
 {
+	#ifndef _ARCADE
 	for (int i = 0; i < m_aiList.size(); i++)
 	{
 		if (m_aiList[i] == _ai)
@@ -67,6 +72,7 @@ void AIScheduler::RemoveAI(MoveAI* _ai)
 		}
 	}
 	m_totalFrequency = m_lineUpdateFrequency / m_aiList.size();
+	#endif
 }
 
 

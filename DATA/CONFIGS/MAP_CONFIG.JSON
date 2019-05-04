@@ -6,6 +6,7 @@
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
+    "arcade_only": false,
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",
@@ -20,6 +21,7 @@
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
+    "arcade_only": false,
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",
@@ -34,6 +36,7 @@
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
+    "arcade_only": false,
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",
@@ -48,6 +51,7 @@
     "cubemap": "CUBEMAP_SUBWAY",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
+    "arcade_only": false,
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",
@@ -62,6 +66,22 @@
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
+    "arcade_only": false,
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
+  },
+  "TEST MAP": {
+    "friendly_name": "TEST MAP",
+    "menu_sprite": "TEST TRACK",
+    "model": "TEST_MAP",
+    "cubemap": "SUNSUBMIXER",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "cup": "DEMO_CUP",
+    "arcade_only": true,
     "audio": {
       "background_start": "MKS START MUSIC",
       "background": "MKS MAIN MUSIC",

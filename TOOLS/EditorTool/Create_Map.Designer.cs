@@ -62,8 +62,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.mapName = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.isArcadeOnly = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.mapCup = new System.Windows.Forms.ComboBox();
+            this.isOnPC = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -71,7 +73,7 @@
             // 
             // saveMap
             // 
-            this.saveMap.Location = new System.Drawing.Point(10, 529);
+            this.saveMap.Location = new System.Drawing.Point(10, 561);
             this.saveMap.Name = "saveMap";
             this.saveMap.Size = new System.Drawing.Size(327, 23);
             this.saveMap.TabIndex = 0;
@@ -388,14 +390,27 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.isOnPC);
+            this.groupBox3.Controls.Add(this.isArcadeOnly);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.mapCup);
             this.groupBox3.Location = new System.Drawing.Point(10, 460);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(328, 63);
+            this.groupBox3.Size = new System.Drawing.Size(328, 95);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Other Map Configs";
+            // 
+            // isArcadeOnly
+            // 
+            this.isArcadeOnly.AutoSize = true;
+            this.isArcadeOnly.Location = new System.Drawing.Point(9, 66);
+            this.isArcadeOnly.Name = "isArcadeOnly";
+            this.isArcadeOnly.Size = new System.Drawing.Size(60, 17);
+            this.isArcadeOnly.TabIndex = 2;
+            this.isArcadeOnly.Text = "Arcade";
+            this.isArcadeOnly.UseVisualStyleBackColor = true;
+            this.isArcadeOnly.CheckedChanged += new System.EventHandler(this.isArcadeOnly_CheckedChanged);
             // 
             // label10
             // 
@@ -415,11 +430,24 @@
             this.mapCup.Size = new System.Drawing.Size(310, 21);
             this.mapCup.TabIndex = 0;
             // 
+            // isOnPC
+            // 
+            this.isOnPC.AutoSize = true;
+            this.isOnPC.Checked = true;
+            this.isOnPC.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.isOnPC.Location = new System.Drawing.Point(75, 66);
+            this.isOnPC.Name = "isOnPC";
+            this.isOnPC.Size = new System.Drawing.Size(40, 17);
+            this.isOnPC.TabIndex = 3;
+            this.isOnPC.Text = "PC";
+            this.isOnPC.UseVisualStyleBackColor = true;
+            this.isOnPC.CheckedChanged += new System.EventHandler(this.isOnPC_CheckedChanged);
+            // 
             // Create_Map
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 560);
+            this.ClientSize = new System.Drawing.Size(349, 592);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -477,5 +505,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox mapCup;
+        private System.Windows.Forms.CheckBox isArcadeOnly;
+        private System.Windows.Forms.CheckBox isOnPC;
     }
 }

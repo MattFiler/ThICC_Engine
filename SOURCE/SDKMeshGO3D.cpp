@@ -55,7 +55,9 @@ void SDKMeshGO3D::Render()
 		{
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(radiance_index);
 			auto diffuseDesc = m_radianceIBL->GetDesc();
+			#ifndef _ARCADE
 			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(irradiance_index);
+			#endif
 
 			int i = 0;
 			for (auto& it : m_modelNormal)
@@ -63,6 +65,9 @@ void SDKMeshGO3D::Render()
 				auto pbr = dynamic_cast<PBREffect*>(it.get());
 				if (pbr)
 				{
+					#ifdef _ARCADE
+					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, radianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+					#else
 					/* METALLIC CONFIG */
 					if (m_material_config.size() != 0 && m_material_config.at(i).is_metallic) {
 						//Metal
@@ -94,6 +99,7 @@ void SDKMeshGO3D::Render()
 					if (albedo_override_index != -1 && !albedo_override_applied) {
 						pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(albedo_override_index));
 					}
+					#endif
 					i++;
 				}
 			}
@@ -156,6 +162,17 @@ void SDKMeshGO3D::Load()
 		1024,
 		0);
 
+	#ifdef _ARCADE
+	//Find env map and load
+	wchar_t radiance[_MAX_PATH] = {};
+	DX::FindMediaFile(radiance, _MAX_PATH, Locator::getRD()->arcade_cubemap.c_str());
+	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, radiance, m_radianceIBL.ReleaseAndGetAddressOf()));
+
+	//Push radiance texture to resource stores
+	radiance_index = resourceDescriptorOffset;
+	CreateShaderResourceView(device, m_radianceIBL.Get(), m_resourceDescriptors->GetCpuHandle(radiance_index), true);
+	resourceDescriptorOffset++;
+	#else
 	//Find our current env maps
 	wchar_t radiance[_MAX_PATH] = {};
 	wchar_t irradiance[_MAX_PATH] = {};
@@ -175,6 +192,7 @@ void SDKMeshGO3D::Load()
 	irradiance_index = resourceDescriptorOffset;
 	CreateShaderResourceView(device, m_irradianceIBL.Get(), m_resourceDescriptors->GetCpuHandle(irradiance_index), true);
 	resourceDescriptorOffset++;
+	#endif
 
 	//End the upload and wait for it to finish
 	auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
@@ -267,6 +285,7 @@ void SDKMeshGO3D::Load()
 		{
 			//Get effect factory - shouldn't this be per model?! It's currently shared around everything which seems a little odd
 			IEffectFactory *fxFactory = nullptr;
+
 			Locator::getRD()->m_fxFactoryPBR = std::make_unique<PBREffectFactory>(m_modelResources->Heap(), Locator::getRD()->m_states->Heap());
 			fxFactory = Locator::getRD()->m_fxFactoryPBR.get();
 
@@ -312,6 +331,7 @@ void SDKMeshGO3D::Load()
 				m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, resourceDescriptorOffset);
 			}
 
+			#ifndef _ARCADE
 			//Load our engine configs
 			if (!is_debug_mesh) {
 				/* Load metalness config */
@@ -440,6 +460,7 @@ void SDKMeshGO3D::Load()
 					DebugText::print("MODEL '" + filename + "' DOES NOT HAVE AN ANIMATION CONFIGURATION.");
 				}
 			}
+			#endif
 		}
 
 		//Finish upload and wait for it to end

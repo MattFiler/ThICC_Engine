@@ -36,6 +36,7 @@ namespace EditorTool
             this.deleteAsset = new System.Windows.Forms.Button();
             this.importAsset = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.refresh = new System.Windows.Forms.Button();
             this.editAsset = new System.Windows.Forms.Button();
             this.modelConfigs = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -70,7 +71,15 @@ namespace EditorTool
             this.soundPreview = new NAudio.Gui.WaveViewer();
             this.assetUseageGroup = new System.Windows.Forms.GroupBox();
             this.assetUseages = new System.Windows.Forms.ListBox();
-            this.refresh = new System.Windows.Forms.Button();
+            this.soundConfigs = new System.Windows.Forms.GroupBox();
+            this.saveSoundConfig = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.soundVolume = new System.Windows.Forms.TrackBar();
+            this.soundPitch = new System.Windows.Forms.TrackBar();
+            this.label14 = new System.Windows.Forms.Label();
+            this.soundPan = new System.Windows.Forms.TrackBar();
+            this.label15 = new System.Windows.Forms.Label();
+            this.soundLooping = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
@@ -78,6 +87,10 @@ namespace EditorTool
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).BeginInit();
             this.assetUseageGroup.SuspendLayout();
+            this.soundConfigs.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.soundVolume)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.soundPitch)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.soundPan)).BeginInit();
             this.SuspendLayout();
             // 
             // loadAssetType
@@ -140,6 +153,16 @@ namespace EditorTool
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Asset Browser";
+            // 
+            // refresh
+            // 
+            this.refresh.Location = new System.Drawing.Point(108, 443);
+            this.refresh.Name = "refresh";
+            this.refresh.Size = new System.Drawing.Size(100, 23);
+            this.refresh.TabIndex = 7;
+            this.refresh.Text = "Refresh";
+            this.refresh.UseVisualStyleBackColor = true;
+            this.refresh.Click += new System.EventHandler(this.refresh_Click);
             // 
             // editAsset
             // 
@@ -515,21 +538,102 @@ namespace EditorTool
             this.assetUseages.Size = new System.Drawing.Size(214, 30);
             this.assetUseages.TabIndex = 0;
             // 
-            // refresh
+            // soundConfigs
             // 
-            this.refresh.Location = new System.Drawing.Point(108, 443);
-            this.refresh.Name = "refresh";
-            this.refresh.Size = new System.Drawing.Size(100, 23);
-            this.refresh.TabIndex = 7;
-            this.refresh.Text = "Refresh";
-            this.refresh.UseVisualStyleBackColor = true;
-            this.refresh.Click += new System.EventHandler(this.refresh_Click);
+            this.soundConfigs.Controls.Add(this.soundLooping);
+            this.soundConfigs.Controls.Add(this.soundPan);
+            this.soundConfigs.Controls.Add(this.label15);
+            this.soundConfigs.Controls.Add(this.soundPitch);
+            this.soundConfigs.Controls.Add(this.label14);
+            this.soundConfigs.Controls.Add(this.soundVolume);
+            this.soundConfigs.Controls.Add(this.label1);
+            this.soundConfigs.Controls.Add(this.saveSoundConfig);
+            this.soundConfigs.Location = new System.Drawing.Point(233, 234);
+            this.soundConfigs.Name = "soundConfigs";
+            this.soundConfigs.Size = new System.Drawing.Size(226, 250);
+            this.soundConfigs.TabIndex = 35;
+            this.soundConfigs.TabStop = false;
+            this.soundConfigs.Text = "Sound Configuration";
+            this.soundConfigs.Visible = false;
+            // 
+            // saveSoundConfig
+            // 
+            this.saveSoundConfig.Location = new System.Drawing.Point(145, 221);
+            this.saveSoundConfig.Name = "saveSoundConfig";
+            this.saveSoundConfig.Size = new System.Drawing.Size(75, 23);
+            this.saveSoundConfig.TabIndex = 25;
+            this.saveSoundConfig.Text = "Save";
+            this.saveSoundConfig.UseVisualStyleBackColor = true;
+            this.saveSoundConfig.Click += new System.EventHandler(this.saveSoundConfig_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(42, 13);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "Volume";
+            // 
+            // soundVolume
+            // 
+            this.soundVolume.Location = new System.Drawing.Point(6, 47);
+            this.soundVolume.Name = "soundVolume";
+            this.soundVolume.Size = new System.Drawing.Size(214, 45);
+            this.soundVolume.TabIndex = 27;
+            // 
+            // soundPitch
+            // 
+            this.soundPitch.LargeChange = 1;
+            this.soundPitch.Location = new System.Drawing.Point(6, 98);
+            this.soundPitch.Minimum = -10;
+            this.soundPitch.Name = "soundPitch";
+            this.soundPitch.Size = new System.Drawing.Size(214, 45);
+            this.soundPitch.TabIndex = 29;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 82);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(31, 13);
+            this.label14.TabIndex = 28;
+            this.label14.Text = "Pitch";
+            // 
+            // soundPan
+            // 
+            this.soundPan.LargeChange = 1;
+            this.soundPan.Location = new System.Drawing.Point(6, 149);
+            this.soundPan.Minimum = -10;
+            this.soundPan.Name = "soundPan";
+            this.soundPan.Size = new System.Drawing.Size(214, 45);
+            this.soundPan.TabIndex = 31;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(6, 133);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(26, 13);
+            this.label15.TabIndex = 30;
+            this.label15.Text = "Pan";
+            // 
+            // soundLooping
+            // 
+            this.soundLooping.AutoSize = true;
+            this.soundLooping.Location = new System.Drawing.Point(6, 194);
+            this.soundLooping.Name = "soundLooping";
+            this.soundLooping.Size = new System.Drawing.Size(64, 17);
+            this.soundLooping.TabIndex = 32;
+            this.soundLooping.Text = "Looping";
+            this.soundLooping.UseVisualStyleBackColor = true;
             // 
             // Asset_Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(469, 493);
+            this.ClientSize = new System.Drawing.Size(468, 493);
+            this.Controls.Add(this.soundConfigs);
             this.Controls.Add(this.assetUseageGroup);
             this.Controls.Add(this.depreciationWarning);
             this.Controls.Add(this.modelConfigs);
@@ -550,6 +654,11 @@ namespace EditorTool
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).EndInit();
             this.assetUseageGroup.ResumeLayout(false);
+            this.soundConfigs.ResumeLayout(false);
+            this.soundConfigs.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.soundVolume)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.soundPitch)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.soundPan)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -596,5 +705,14 @@ namespace EditorTool
         private GroupBox assetUseageGroup;
         private ListBox assetUseages;
         private Button refresh;
+        private GroupBox soundConfigs;
+        private TrackBar soundVolume;
+        private Label label1;
+        private Button saveSoundConfig;
+        private CheckBox soundLooping;
+        private TrackBar soundPan;
+        private Label label15;
+        private TrackBar soundPitch;
+        private Label label14;
     }
 }
