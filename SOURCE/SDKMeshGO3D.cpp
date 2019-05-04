@@ -228,9 +228,28 @@ void SDKMeshGO3D::Load()
 		//Load as SDKMESH
 		m_model = Model::CreateFromSDKMESH(modelBin.data(), modelBin.size());
 	}
+
+	//Catch any issues when loading the model
+	catch (const std::runtime_error& re)
+	{
+		std::string error(re.what());
+		DebugText::print("RUNTIME ERROR WHILE LOADING '" + filename + "': " + error);
+		m_model.reset();
+		return;
+	}
+	catch (const std::exception& ex)
+	{
+		std::string error(ex.what());
+		DebugText::print("EXCEPTION WHILE LOADING '" + filename + "': " + error);
+		if (error == "Out of memory.") {
+			DebugText::print(" >>>> THIS MODEL SHOULD BE REMOVED FROM THE GAME! IT IS TOO LARGE TO HANDLE! <<<< ");
+			throw std::runtime_error("Cannot continue! Remove model '" + filename + "'!");
+		}
+		m_model.reset();
+		return;
+	}
 	catch (...)
 	{
-		//Couldn't load model - not good! Might be trying to load a non-sdkmesh, or have the wrong filepath.
 		DebugText::print("TRIED TO LOAD '" + filename + "' BUT IT FAILED. IS IT A SDKMESH?");
 		m_model.reset();
 		return;
