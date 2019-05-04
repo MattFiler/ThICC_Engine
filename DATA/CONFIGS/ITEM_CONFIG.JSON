@@ -282,7 +282,8 @@
 		"info": {
 			"duration": 12,
 			"boost": {
-				"amount": 75,
+				"move_speed": 60,
+				"turn_speed": 70,
 				"player_drag": 0.7
 			}
 		}
