@@ -21,6 +21,7 @@ AudioManager::AudioManager()
 	addToSoundsList(m_sound_configs["misc_sounds"]["COUNTDOWN"], SoundType::MISC);
 	addToSoundsList(m_sound_configs["misc_sounds"]["ITEMBOX_HIT"], SoundType::MISC);
 	addToSoundsList(m_sound_configs["misc_sounds"]["FINAL_LAP_SOUND"], SoundType::MISC);
+	addToSoundsList(m_sound_configs["item_sounds"]["STAR_SOUND"], SoundType::ITEMS);
 
 	//for (int i = 0; i <= (int)SOUNDS_MENU::TTLE_LOOP; i++)
 	//{
@@ -56,7 +57,7 @@ void AudioManager::addToSoundsList(std::string asset, SoundType type)
 	m_config << j;
 
 	Sound* new_sound = new Sound(m_audEngine.get(), m_config["asset_name"]);
-	new_sound->SetLoop(m_config["is_looping"] == "true" ? true : false);
+	new_sound->SetLoop(m_config["is_looping"]);
 	new_sound->SetVolume(m_config["volume"]);
 	new_sound->SetPitch(m_config["pitch"]);
 	new_sound->SetPan(m_config["pan"]);
@@ -76,6 +77,9 @@ void AudioManager::addToSoundsList(std::string asset, SoundType type)
 	case SoundType::MISC:
 		m_miscSounds.emplace_back(new_sound);
 		break;
+	case SoundType::ITEMS:
+		m_itemSounds.emplace_back(new_sound);
+		break;
 	}
 }
 
@@ -94,6 +98,9 @@ void AudioManager::clearSoundsList(SoundType type)
 		break;
 	case SoundType::MISC:
 		m_miscSounds.clear();
+		break;
+	case SoundType::ITEMS:
+		m_itemSounds.clear();
 		break;
 	}
 
@@ -115,6 +122,9 @@ void AudioManager::eraseElementInSoundsList(SoundType type, int i)
 	case SoundType::MISC:
 		m_miscSounds.erase(m_menuSounds.begin() + i);
 		break;
+	case SoundType::ITEMS:
+		m_itemSounds.erase(m_menuSounds.begin() + i);
+		break;
 	}
 }
 
@@ -134,6 +144,53 @@ void AudioManager::Play(SoundType type, int i)
 	case SoundType::MISC:
 		m_miscSounds[i]->Play();
 		break;
+	case SoundType::ITEMS:
+		m_itemSounds[i]->Play();
+		break;
+	}
+}
+
+void AudioManager::Stop(SoundType type, int i)
+{
+	switch (type)
+	{
+	case SoundType::MENU:
+		m_menuSounds[i]->Stop();
+		break;
+	case SoundType::GAME:
+		m_gameSounds[i]->Stop();
+		break;
+	case SoundType::CHARACTER:
+		m_characterSounds[i]->Stop();
+		break;
+	case SoundType::MISC:
+		m_miscSounds[i]->Stop();
+		break;
+	case SoundType::ITEMS:
+		m_itemSounds[i]->Stop();
+		break;
+	}
+}
+
+void AudioManager::Pause(SoundType type, int i)
+{
+	switch (type)
+	{
+	case SoundType::MENU:
+		m_menuSounds[i]->Pause();
+		break;
+	case SoundType::GAME:
+		m_gameSounds[i]->Pause();
+		break;
+	case SoundType::CHARACTER:
+		m_characterSounds[i]->Pause();
+		break;
+	case SoundType::MISC:
+		m_miscSounds[i]->Pause();
+		break;
+	case SoundType::ITEMS:
+		m_itemSounds[i]->Pause();
+		break;
 	}
 }
 
@@ -143,16 +200,14 @@ Sound* AudioManager::GetSound(SoundType type, int i)
 	{
 	case SoundType::MENU:
 		return m_menuSounds[i];
-		break;
 	case SoundType::GAME:
 		return m_gameSounds[i];
-		break;
 	case SoundType::CHARACTER:
 		return m_characterSounds[i];
-		break;
 	case SoundType::MISC:
 		return m_miscSounds[i];
-		break;
+	case SoundType::ITEMS:
+		return m_itemSounds[i];
 	}
 	return nullptr;
 }

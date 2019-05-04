@@ -30,6 +30,8 @@ public:
 
 	bool IsPlaying() { return m_sfx->IsInUse(); }
 
+	void Pause();
+
 protected:
 	std::unique_ptr<DirectX::SoundEffect> m_sfx;
 	std::unique_ptr<DirectX::SoundEffectInstance> m_loop;

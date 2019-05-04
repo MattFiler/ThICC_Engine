@@ -2,6 +2,7 @@
 #include "Star.h"
 #include "Player.h"
 #include "GameStateData.h"
+#include "AudioManager.h"
 
 Star::Star()
 {
@@ -30,6 +31,8 @@ void Star::Tick()
 			m_player->setInvicible(false);
 			m_player->UseGroundTypes(true);
 			m_player->GetControlledMovement()->SetMoveSpeed(m_playerMoveSpeed);
+			Locator::getAudio()->Stop(SoundType::ITEMS, static_cast<int>(ItemSounds::STAR_SOUND));
+			Locator::getAudio()->Play(SoundType::GAME, static_cast<int>(GameSounds::MKS_GAME));
 			FlagForDestoy();
 		}
 	}
@@ -44,4 +47,7 @@ void Star::Use(Player * player, bool _altUse)
 	m_player->setInvicible(true);
 	m_player->UseGroundTypes(false);
 	m_player->GetControlledMovement()->SetMoveSpeed(m_boostAmount);
+	Locator::getAudio()->Pause(SoundType::GAME, static_cast<int>(GameSounds::MKS_GAME));
+	Locator::getAudio()->Play(SoundType::ITEMS, static_cast<int>(ItemSounds::STAR_SOUND));
+
 }

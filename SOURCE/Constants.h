@@ -94,6 +94,7 @@ enum class SoundType : int
 	GAME = 1,
 	CHARACTER = 2,
 	MISC = 3,
+	ITEMS = 4
 };
 
 // game sounds
@@ -130,4 +131,10 @@ enum class MiscSounds : int
 	COUNTDOWN = 2,
 	ITEM_BOX_HIT = 3,
 	FINAL_LAP_IND = 4,
+};
+
+enum class ItemSounds : int
+{
+	STAR_SOUND = 0,
+
 };
