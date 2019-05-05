@@ -529,6 +529,8 @@ void Player::setGamePad(bool _state)
 
 void Player::movement()
 {
+	// Disable drifting off the track
+	m_move->EnableDrifting(!(m_colType == OFF_TRACK || m_colType == GLIDER_TRACK || m_colType == NO_TERRAIN));
 	m_move->Tick();
 
 	// Debug code to save/load the players game state

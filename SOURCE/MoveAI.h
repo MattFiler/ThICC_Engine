@@ -37,6 +37,7 @@ private:
 
 	PhysModel* m_model = nullptr;
 	ControlledMovement* m_move = nullptr;
+	Track* m_track = nullptr;
 
 	float m_aiPathStep = 5;
 	int m_maxPathIterations = 25;

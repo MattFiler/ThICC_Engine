@@ -16,6 +16,8 @@ public:
 
 	// Setters so that the AI can move the physObject
 	void setAcceleration(float _acc) { m_acceleration = _acc;};
+	float GetAcceleration() { return m_acceleration; };
+
 	void TurnLeft();
 	void TurnRight();
 	void DontTurn();
@@ -36,6 +38,8 @@ public:
 
 	float GetMoveSpeed() { return m_moveSpeed; };
 	float GetTurnSpeed() { return m_turnSpeed; };
+
+	void EnableDrifting(bool _shouldDrift);
 
 private:
 	KeybindManager m_keybind;
@@ -78,5 +82,5 @@ private:
 	int m_waypoint = 0;
 
 	bool m_gliding = false;
-
+	bool m_driftingEnabled = true;
 };

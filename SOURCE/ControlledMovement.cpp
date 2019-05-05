@@ -259,7 +259,6 @@ void ControlledMovement::ProcessInputFlags()
 
 void ControlledMovement::EndDrift()
 {
-	Vector3 test = m_physModel->GetWorld().Forward();
 	if (m_timeTurning > m_timeForMaxDrift / 3)
 	{
 		float multiplier = 1.0f + ((m_timeTurning / m_timeForMaxDrift));
@@ -311,5 +310,16 @@ void ControlledMovement::Drift(bool _flag)
 		{
 			m_driftingRight = true;
 		}
+	}
+}
+
+void ControlledMovement::EnableDrifting(bool _shouldDrift)
+{
+	m_driftingEnabled = _shouldDrift;
+	// Cancel any speed boost if turning drift off
+	if (!_shouldDrift)
+	{
+		m_timeTurning = 0;
+		EndDrift();
 	}
 }

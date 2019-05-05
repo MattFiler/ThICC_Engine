@@ -64,6 +64,7 @@ bool MoveAI::Update()
 		m_debugNextWaypoint[i]->SetPos(m_model->GetPos() + step*i);
 		m_debugNextWaypoint[i]->UpdateWorld();
 	}
+	DebugText::print(std::to_string(m_move->GetAcceleration()));
 #endif
 	//return false;
 	if (m_player)
@@ -130,11 +131,13 @@ bool MoveAI::Update()
 	{
 		m_move->setAcceleration(1);
 		// If left would reduce the difference
+		bool canDrift = true;
 		if (Vector3::Distance(normVeloLeft, normDiff) < dist)
 		{
 			// Make sure to exit any current drift if switching directions
 			if (m_move->IsTurningRight())
 			{
+				canDrift = false;
 				m_move->Drift(false);
 			}
 			m_move->TurnLeft();
@@ -143,11 +146,12 @@ bool MoveAI::Update()
 		{
 			if (m_move->IsTurningLeft())
 			{
+				canDrift = false;
 				m_move->Drift(false);
 			}
 			m_move->TurnRight();
 		}
-		if (dist > m_driftThreshold)
+		if (dist > m_driftThreshold && canDrift)
 		{
 			m_move->setAcceleration(0.7f);
 			m_move->Drift(true);
@@ -159,12 +163,23 @@ bool MoveAI::Update()
 		m_move->Drift(false);
 		m_move->DontTurn();
 	}
+
+	// Check to see if this direction diverges from the waypoint
+	float diff = Vector3::DistanceSquared(m_model->GetPos(), m_track->getWaypointMiddle(m_route[m_routeIndex].waypoint)) -
+		Vector3::DistanceSquared(m_model->GetPos() + m_model->getVelocity(), m_track->getWaypointMiddle(m_route[m_routeIndex].waypoint));
+	// If diverging and not going back to track
+	if (diff < m_model->getVelocity().Length()/-2 && !m_goingBackToTrack)
+	{
+		// Slow the kart down
+		m_move->setAcceleration(0.3f);
+	}
+
 	return false;
 }
 
 void MoveAI::RecalculateLine(Track* _track)
 {
-
+	m_track = _track;
 	m_waypointPos = m_move->GetWaypoint();
 	m_wayMiddle = _track->getWaypointMiddle(m_waypointPos);
 	//return;
