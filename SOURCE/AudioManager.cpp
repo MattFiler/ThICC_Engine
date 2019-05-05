@@ -22,6 +22,7 @@ AudioManager::AudioManager()
 	addToSoundsList(m_sound_configs["misc_sounds"]["ITEMBOX_HIT"], SoundType::MISC);
 	addToSoundsList(m_sound_configs["misc_sounds"]["FINAL_LAP_SOUND"], SoundType::MISC);
 	addToSoundsList(m_sound_configs["item_sounds"]["STAR_SOUND"], SoundType::ITEMS);
+	addToSoundsList(m_sound_configs["item_sounds"]["LIGHTNING_SOUND"], SoundType::ITEMS);
 
 	//for (int i = 0; i <= (int)SOUNDS_MENU::TTLE_LOOP; i++)
 	//{

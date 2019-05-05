@@ -136,5 +136,5 @@ enum class MiscSounds : int
 enum class ItemSounds : int
 {
 	STAR_SOUND = 0,
-
+	LIGHTNING_SOUND = 1,
 };

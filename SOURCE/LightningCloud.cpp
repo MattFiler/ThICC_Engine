@@ -2,6 +2,7 @@
 #include "LightningCloud.h"
 #include "Player.h"
 #include "GameStateData.h"
+#include "AudioManager.h"
 
 LightningCloud::LightningCloud() : Item(Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD))
 {
@@ -71,6 +72,7 @@ void LightningCloud::Tick()
 				{
 					m_player->Scale(m_growthData.m_shrinkScale, m_growthData.m_shrinkDuration);
 					m_growthData.m_shrinking = true;
+					Locator::getAudio()->Play(SoundType::ITEMS, static_cast<int>(ItemSounds::LIGHTNING_SOUND));
 				}
 				m_player->Spin(m_playerSpinRev, m_playerSpinDuration);
 
