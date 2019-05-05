@@ -20,15 +20,15 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl CubeRotaryBoardA
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.639216 0.639216 0.639216
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.999999
 illum 2
-map_Kd DL_MCRotaryBoardA_Alb.png
+map_Kd rotaryboard1.png
 map_Ks DL_MCRotaryBoardA_spm.png
 map_Kn DL_MCRotaryBoardA_nrm.png
 norm DL_MCRotaryBoardA_nrm.png
@@ -172,9 +172,9 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_BillBodyW1
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.639216 0.639216 0.639216
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
@@ -191,9 +191,9 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_BillBodyW2
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.639216 0.639216 0.639216
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
@@ -210,9 +210,9 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_BillBodyW3
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.639216 0.639216 0.639216
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
@@ -305,9 +305,9 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_Enkei_BillBody
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.639216 0.639216 0.639216
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000

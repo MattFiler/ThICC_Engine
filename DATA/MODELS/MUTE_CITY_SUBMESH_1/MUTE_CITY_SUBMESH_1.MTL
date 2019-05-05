@@ -77,7 +77,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl CubeRoadEnergy
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -86,7 +86,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd Fz_RoadEnergyZone_Alb02.png
-Tr 0.000000
+Tr 1.000000
 map_Ks spec_placeholder.png
 map_Kn norm_placeholder.png
 norm norm_placeholder.png
@@ -210,7 +210,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_Antigravity
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -220,11 +220,11 @@ d 0.000000
 illum 2
 map_Kd Fz_Antigravity_Alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ks fz_antigravity_spm.png
+map_Kn fz_antigravity_nrm.png
+norm fz_antigravity_nrm.png
+map_Ke fz_antigravity_emm.png
+map_emissive fz_antigravity_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -267,7 +267,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_Battery
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -277,11 +277,11 @@ d 0.000000
 illum 2
 map_Kd Fz_Battery_Alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ks fz_battery_spm.png
+map_Kn fz_battery_nrm.png
+norm fz_battery_nrm.png
+map_Ke fz_battery_emm.png
+map_emissive fz_battery_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -305,7 +305,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_BldgBLack
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -324,7 +324,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_BldgBLack_Tire
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -334,16 +334,16 @@ d 0.000000
 illum 2
 map_Kd Fz_BldgBLack_Gray_Alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
+map_Ks fz_bldgblack_spm.png
+map_Kn fz_bldgblack_nrm.png
+norm fz_bldgblack_nrm.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_BldgBodyA
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -457,7 +457,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_GoalgateFlame
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -525,8 +525,8 @@ illum 2
 map_Kd screen01.VLpmB.png
 Tr 0.000001
 map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
+map_Kn fz_kanbanscreen_ind.png
+norm fz_kanbanscreen_ind.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
@@ -641,8 +641,8 @@ map_Ks Fz_RoadJunp_spm.png
 map_Kn Fz_RoadJunp_nrm.png
 norm Fz_RoadJunp_nrm.png
 Tr 0.000000
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ke fz_roadjunp_emm.png
+map_emissive fz_roadjunp_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -666,7 +666,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_RoadMain
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -685,7 +685,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_RoadMainEmm
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -704,7 +704,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_RoadMainMesh
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -714,16 +714,16 @@ d 0.999999
 illum 2
 map_Kd Fz_RoadMainMesh_Alb.png
 Tr 0.000001
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ks fz_roadmainmesh_spm.png
+map_Kn fz_roadmainmesh_nrm.png
+norm fz_roadmainmesh_nrm.png
+map_Ke fz_roadmainmesh_emm.png
+map_emissive fz_roadmainmesh_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_RoadPipe
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -808,17 +808,17 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd arrow1.png
-Tr 0.000000
-map_Ks spec_placeholder.png
+Tr 0.200000
+map_Ks fz_roadvector_spm.png
 map_Kn norm_placeholder.png
 norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ke fz_roadvecorclear_emm.png
+map_emissive fz_roadvecorclear_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_RoadVectorEmm
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -828,11 +828,11 @@ d 0.000000
 illum 2
 map_Kd Fz_RoadVectorEmm_Alb.png
 Tr 0.000000
-map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Ks fz_roadvectoremm_spm.png
+map_Kn fz_roadvectoremm_nrm.png
+norm fz_roadvectoremm_nrm.png
+map_Ke fz_roadvectoremm_emm.png
+map_emissive fz_roadvectoremm_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
@@ -856,7 +856,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_WallMain
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -864,18 +864,18 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd Fz_WallMain_Scr_Emm.png
+map_Kd fz_wallmain_alb.png
 Tr 0.000000
 map_Ks spec_placeholder.png
-map_Kn norm_placeholder.png
-norm norm_placeholder.png
-map_Ke emm_placeholder.png
-map_emissive emm_placeholder.png
+map_Kn fz_wallmain_nrm.png
+norm fz_wallmain_nrm.png
+map_Ke fz_wallmain_scr_emm.png
+map_emissive fz_wallmain_scr_emm.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_WallPipeCap
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000

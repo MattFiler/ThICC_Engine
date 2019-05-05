@@ -156,39 +156,44 @@ namespace EditorTool
             if (model_type == ModelType.MAP)
             {
                 //Collision config
+                bool isInPlayable = false;
                 if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK).ToString()].Value<bool>())
                 {
                     onTrack.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()].Value<bool>())
                 {
                     onTrack.Checked = true;
                     onTrackNoAI.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.OFF_TRACK).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.OFF_TRACK).ToString()].Value<bool>())
                 {
                     offTrack.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.BOOST_PAD).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.BOOST_PAD).ToString()].Value<bool>())
                 {
                     boostPad.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()].Value<bool>())
                 {
                     antiGravPad.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()].Value<bool>())
                 {
                     jumpPad.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.WALL).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.WALL).ToString()].Value<bool>())
                 {
                     isWall.Checked = true;
+                    isInPlayable = true;
                 }
-                else
-                {
-                    inPlayableArea.Checked = false;
-                }
+                inPlayableArea.Checked = isInPlayable;
             }
             else
             {
