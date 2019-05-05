@@ -50,19 +50,22 @@
             this.rightStick = new System.Windows.Forms.TextBox();
             this.rightStickLoad = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.leftTriggerLoad = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.leftTrigger = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.rightTrigger = new System.Windows.Forms.TextBox();
-            this.rightTriggerLoad = new System.Windows.Forms.Button();
             this.leftBumperLoad = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.leftBumper = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.rightBumper = new System.Windows.Forms.TextBox();
             this.rightBumperLoad = new System.Windows.Forms.Button();
+            this.leftTriggerLoad = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.leftTrigger = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.rightTrigger = new System.Windows.Forms.TextBox();
+            this.rightTriggerLoad = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.dpadGeneric = new System.Windows.Forms.TextBox();
+            this.dpadGenericLoad = new System.Windows.Forms.Button();
             this.dpadUpLoad = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.dpadUp = new System.Windows.Forms.TextBox();
@@ -75,9 +78,6 @@
             this.label14 = new System.Windows.Forms.Label();
             this.dpadRight = new System.Windows.Forms.TextBox();
             this.dpadRightLoad = new System.Windows.Forms.Button();
-            this.label15 = new System.Windows.Forms.Label();
-            this.dpadGeneric = new System.Windows.Forms.TextBox();
-            this.dpadGenericLoad = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.btnBackLoad = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
@@ -321,60 +321,6 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Xbox 360 Gamepad Triggers/Shoulders";
             // 
-            // leftTriggerLoad
-            // 
-            this.leftTriggerLoad.Location = new System.Drawing.Point(244, 33);
-            this.leftTriggerLoad.Name = "leftTriggerLoad";
-            this.leftTriggerLoad.Size = new System.Drawing.Size(75, 23);
-            this.leftTriggerLoad.TabIndex = 11;
-            this.leftTriggerLoad.Text = "Load";
-            this.leftTriggerLoad.UseVisualStyleBackColor = true;
-            this.leftTriggerLoad.Click += new System.EventHandler(this.leftTriggerLoad_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 18);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(61, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Left Trigger";
-            // 
-            // leftTrigger
-            // 
-            this.leftTrigger.Location = new System.Drawing.Point(9, 34);
-            this.leftTrigger.Name = "leftTrigger";
-            this.leftTrigger.ReadOnly = true;
-            this.leftTrigger.Size = new System.Drawing.Size(229, 20);
-            this.leftTrigger.TabIndex = 8;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 57);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(68, 13);
-            this.label8.TabIndex = 3;
-            this.label8.Text = "Right Trigger";
-            // 
-            // rightTrigger
-            // 
-            this.rightTrigger.Location = new System.Drawing.Point(9, 73);
-            this.rightTrigger.Name = "rightTrigger";
-            this.rightTrigger.ReadOnly = true;
-            this.rightTrigger.Size = new System.Drawing.Size(229, 20);
-            this.rightTrigger.TabIndex = 1;
-            // 
-            // rightTriggerLoad
-            // 
-            this.rightTriggerLoad.Location = new System.Drawing.Point(244, 72);
-            this.rightTriggerLoad.Name = "rightTriggerLoad";
-            this.rightTriggerLoad.Size = new System.Drawing.Size(75, 23);
-            this.rightTriggerLoad.TabIndex = 2;
-            this.rightTriggerLoad.Text = "Load";
-            this.rightTriggerLoad.UseVisualStyleBackColor = true;
-            this.rightTriggerLoad.Click += new System.EventHandler(this.rightTriggerLoad_Click);
-            // 
             // leftBumperLoad
             // 
             this.leftBumperLoad.Location = new System.Drawing.Point(244, 111);
@@ -429,6 +375,60 @@
             this.rightBumperLoad.UseVisualStyleBackColor = true;
             this.rightBumperLoad.Click += new System.EventHandler(this.rightBumperLoad_Click);
             // 
+            // leftTriggerLoad
+            // 
+            this.leftTriggerLoad.Location = new System.Drawing.Point(244, 33);
+            this.leftTriggerLoad.Name = "leftTriggerLoad";
+            this.leftTriggerLoad.Size = new System.Drawing.Size(75, 23);
+            this.leftTriggerLoad.TabIndex = 11;
+            this.leftTriggerLoad.Text = "Load";
+            this.leftTriggerLoad.UseVisualStyleBackColor = true;
+            this.leftTriggerLoad.Click += new System.EventHandler(this.leftTriggerLoad_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 18);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(61, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Left Trigger";
+            // 
+            // leftTrigger
+            // 
+            this.leftTrigger.Location = new System.Drawing.Point(9, 34);
+            this.leftTrigger.Name = "leftTrigger";
+            this.leftTrigger.ReadOnly = true;
+            this.leftTrigger.Size = new System.Drawing.Size(229, 20);
+            this.leftTrigger.TabIndex = 8;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 57);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(68, 13);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "Right Trigger";
+            // 
+            // rightTrigger
+            // 
+            this.rightTrigger.Location = new System.Drawing.Point(9, 73);
+            this.rightTrigger.Name = "rightTrigger";
+            this.rightTrigger.ReadOnly = true;
+            this.rightTrigger.Size = new System.Drawing.Size(229, 20);
+            this.rightTrigger.TabIndex = 1;
+            // 
+            // rightTriggerLoad
+            // 
+            this.rightTriggerLoad.Location = new System.Drawing.Point(244, 72);
+            this.rightTriggerLoad.Name = "rightTriggerLoad";
+            this.rightTriggerLoad.Size = new System.Drawing.Size(75, 23);
+            this.rightTriggerLoad.TabIndex = 2;
+            this.rightTriggerLoad.Text = "Load";
+            this.rightTriggerLoad.UseVisualStyleBackColor = true;
+            this.rightTriggerLoad.Click += new System.EventHandler(this.rightTriggerLoad_Click);
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.label15);
@@ -452,6 +452,33 @@
             this.groupBox4.TabIndex = 29;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Xbox 360 Gamepad D-Pad";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(6, 174);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(77, 13);
+            this.label15.TabIndex = 20;
+            this.label15.Text = "D-Pad Generic";
+            // 
+            // dpadGeneric
+            // 
+            this.dpadGeneric.Location = new System.Drawing.Point(9, 190);
+            this.dpadGeneric.Name = "dpadGeneric";
+            this.dpadGeneric.ReadOnly = true;
+            this.dpadGeneric.Size = new System.Drawing.Size(229, 20);
+            this.dpadGeneric.TabIndex = 18;
+            // 
+            // dpadGenericLoad
+            // 
+            this.dpadGenericLoad.Location = new System.Drawing.Point(244, 189);
+            this.dpadGenericLoad.Name = "dpadGenericLoad";
+            this.dpadGenericLoad.Size = new System.Drawing.Size(75, 23);
+            this.dpadGenericLoad.TabIndex = 19;
+            this.dpadGenericLoad.Text = "Load";
+            this.dpadGenericLoad.UseVisualStyleBackColor = true;
+            this.dpadGenericLoad.Click += new System.EventHandler(this.dpadGenericLoad_Click);
             // 
             // dpadUpLoad
             // 
@@ -561,33 +588,6 @@
             this.dpadRightLoad.UseVisualStyleBackColor = true;
             this.dpadRightLoad.Click += new System.EventHandler(this.dpadRightLoad_Click);
             // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(6, 174);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(77, 13);
-            this.label15.TabIndex = 20;
-            this.label15.Text = "D-Pad Generic";
-            // 
-            // dpadGeneric
-            // 
-            this.dpadGeneric.Location = new System.Drawing.Point(9, 190);
-            this.dpadGeneric.Name = "dpadGeneric";
-            this.dpadGeneric.ReadOnly = true;
-            this.dpadGeneric.Size = new System.Drawing.Size(229, 20);
-            this.dpadGeneric.TabIndex = 18;
-            // 
-            // dpadGenericLoad
-            // 
-            this.dpadGenericLoad.Location = new System.Drawing.Point(244, 189);
-            this.dpadGenericLoad.Name = "dpadGenericLoad";
-            this.dpadGenericLoad.Size = new System.Drawing.Size(75, 23);
-            this.dpadGenericLoad.TabIndex = 19;
-            this.dpadGenericLoad.Text = "Load";
-            this.dpadGenericLoad.UseVisualStyleBackColor = true;
-            this.dpadGenericLoad.Click += new System.EventHandler(this.dpadGenericLoad_Click);
-            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.btnBackLoad);
@@ -671,7 +671,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Create_Gamepad_Icons";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Create_Gamepad_Icons";
+            this.Text = "Gamepad Icons";
             this.Load += new System.EventHandler(this.Create_Gamepad_Icons_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();

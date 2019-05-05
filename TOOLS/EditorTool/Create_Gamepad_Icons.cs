@@ -28,18 +28,18 @@ namespace EditorTool
             btnX.Text = controller_config["btn_x"].Value<string>();
             btnY.Text = controller_config["btn_y"].Value<string>();
             btnStart.Text = controller_config["btn_start"].Value<string>();
-            btnBack.Text = controller_config["btn_back"].Value<string>();
-            dpadLeft.Text = controller_config["dpad_left"].Value<string>();
-            dpadRight.Text = controller_config["dpad_right"].Value<string>();
-            dpadUp.Text = controller_config["dpad_up"].Value<string>();
-            dpadDown.Text = controller_config["dpad_down"].Value<string>();
+            btnBack.Text = controller_config["D-Pad Back"].Value<string>();
+            dpadLeft.Text = controller_config["D-Pad Left"].Value<string>();
+            dpadRight.Text = controller_config["D-Pad Right"].Value<string>();
+            dpadUp.Text = controller_config["D-Pad Up"].Value<string>();
+            dpadDown.Text = controller_config["D-Pad Down"].Value<string>();
             dpadGeneric.Text = controller_config["dpad_generic"].Value<string>();
-            leftStick.Text = controller_config["stick_left"].Value<string>();
-            rightStick.Text = controller_config["stick_right"].Value<string>();
-            leftBumper.Text = controller_config["bumper_left"].Value<string>();
-            rightBumper.Text = controller_config["bumper_right"].Value<string>();
-            leftTrigger.Text = controller_config["trigger_left"].Value<string>();
-            rightTrigger.Text = controller_config["trigger_right"].Value<string>();
+            leftStick.Text = controller_config["Left Stick"].Value<string>();
+            rightStick.Text = controller_config["Right Stick"].Value<string>();
+            leftBumper.Text = controller_config["Left Shoulder"].Value<string>();
+            rightBumper.Text = controller_config["Right Shoulder"].Value<string>();
+            leftTrigger.Text = controller_config["Left Trigger"].Value<string>();
+            rightTrigger.Text = controller_config["Right Trigger"].Value<string>();
         }
 
         /* On Load */
@@ -135,27 +135,27 @@ namespace EditorTool
             function_libary.executeUseageQueueForTag(function_libary.getUseageTagFor(AssetCompType.GAMEPAD_GLPYHS));
 
             //Add to config
-            controller_config["btn_a"] = btnA.Text;
-            controller_config["btn_b"] = btnB.Text;
-            controller_config["btn_x"] = btnX.Text;
-            controller_config["btn_y"] = btnY.Text;
-            controller_config["btn_start"] = btnStart.Text;
-            controller_config["btn_back"] = btnBack.Text;
-            controller_config["dpad_left"] = dpadLeft.Text;
-            controller_config["dpad_right"] = dpadRight.Text;
-            controller_config["dpad_up"] = dpadUp.Text;
-            controller_config["dpad_down"] = dpadDown.Text;
+            controller_config["A"] = btnA.Text;
+            controller_config["B"] = btnB.Text;
+            controller_config["X"] = btnX.Text;
+            controller_config["Y"] = btnY.Text;
+            controller_config["Start"] = btnStart.Text;
+            controller_config["Back"] = btnBack.Text;
+            controller_config["D-Pad Left"] = dpadLeft.Text;
+            controller_config["D-Pad Right"] = dpadRight.Text;
+            controller_config["D-Pad Up"] = dpadUp.Text;
+            controller_config["D-Pad Down"] = dpadDown.Text;
             controller_config["dpad_generic"] = dpadGeneric.Text;
-            controller_config["stick_left"] = leftStick.Text;
-            controller_config["stick_right"] = rightStick.Text;
-            controller_config["bumper_left"] = leftBumper.Text;
-            controller_config["bumper_right"] = rightBumper.Text;
-            controller_config["trigger_left"] = leftTrigger.Text;
-            controller_config["trigger_right"] = rightTrigger.Text;
+            controller_config["Left Stick"] = leftStick.Text;
+            controller_config["Right Stick"] = rightStick.Text;
+            controller_config["Left Shoulder"] = leftBumper.Text;
+            controller_config["Right Shoulder"] = rightBumper.Text;
+            controller_config["Left Trigger"] = leftTrigger.Text;
+            controller_config["Right Trigger"] = rightTrigger.Text;
 
             //Save
             File.WriteAllText("DATA/CONFIGS/CONTROLLER_GLYPH_CONFIG.JSON", controller_config.ToString(Formatting.Indented));
-            MessageBox.Show("Saved character configuration!", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Saved gamepad configuration!", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
     }
