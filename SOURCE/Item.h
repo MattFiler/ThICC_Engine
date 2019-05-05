@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameFilepaths.h"
-#include "TrackMagnet.h"
+#include "ItemMesh.h"
 #include "ServiceLocator.h"
 #include "ItemData.h"
 #include "AnimationController.h"
@@ -14,7 +14,7 @@ class Item
 {
 public:
 	Item() = default;
-	Item(const std::string& item_type);
+	Item(ItemType _type);
 	void InitItemData(const std::string & item_type);
 	~Item() = default;
 	
@@ -26,7 +26,7 @@ public:
 	bool ShouldDestroy() { return m_shouldDestroy; };
 	void FlagForDestoy() { m_shouldDestroy = true; };
 
-	TrackMagnet* GetMesh() { return m_mesh; };
+	TrackMagnet* GetMesh() { return m_itemMesh->m_mesh.get(); };
 
 	virtual void AddImmuneItem(Item* _item) { m_immuneItems.push_back(_item); };
 	virtual void addImmuneItems(std::vector<Item*> _immuneItems) { m_immuneItems = _immuneItems; };
@@ -42,13 +42,15 @@ public:
 	bool isTrailing() { return m_trailing; };
 	void setTrailing(bool _trailing) { m_trailing = _trailing; };
 
+	ItemType GetItemType() { return m_itemType; };
+	ItemMesh* GetItemMesh() { return m_itemMesh; };
+
 protected:
-	TrackMagnet * m_mesh = nullptr;
 	Player* m_player = nullptr;
 
 	json m_itemData;
-
-	std::unique_ptr<AnimationController> m_displayedMesh = nullptr;
+	ItemType m_itemType;
+	ItemMesh* m_itemMesh = nullptr;
 	bool m_shouldDestroy = false;
 	bool m_itemUsed = false;
 	bool m_shouldDespawn = true;

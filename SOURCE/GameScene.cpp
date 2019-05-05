@@ -100,7 +100,9 @@ void GameScene::ExpensiveLoad() {
 		}
 	}
 
-
+	//Setup item pools
+	m_itemPools = new ItemPools();
+	Locator::setupItemPools(m_itemPools);
 
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
@@ -155,6 +157,14 @@ void GameScene::ExpensiveUnload() {
 
 	//Unload skybox
 	Locator::getRD()->skybox->Reset();
+
+	//Unload item pools
+	for (auto& item : m_itemModels)
+	{
+		Locator::getItemPools()->AddItemMesh(item->GetItemType(), item->GetItemMesh());
+		delete item;
+	}
+	Locator::getItemPools()->Reset();
 }
 
 /* Create all 2D objects for the scene */
@@ -508,44 +518,22 @@ void GameScene::Update(DX::StepTimer const& timer)
 /* Update the items in the scene specifically */
 void GameScene::UpdateItems()
 {
-	int delIndex = -1;
-	int end = m_itemModels.size();
-	for (int i = 0; i < end; i++)
+	for (int i = 0; i < m_itemModels.size(); i++)
 	{
 		if (m_itemModels[i]->GetMesh())
 		{
 			m_itemModels[i]->GetMesh()->ShouldStickToTrack(*track);
 			m_itemModels[i]->GetMesh()->ResolveWallCollisions(*track);
 		}
-		/*for (int j = 0; j < game_config["player_count"]; ++j) {
-			if (m_itemModels[i]->GetMesh() && player[j]->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
-			{
-				m_itemModels[i]->HitByPlayer(player[j]);
-			}
-		}*/
 		m_itemModels[i]->Tick();
 		if (m_itemModels[i]->ShouldDestroy())
 		{
-			delIndex = i;
-		}
-
-		/*if (m_itemModels[i]->GetMesh())
-		{
-			int end2 = m_itemModels.size();
-			for (int j = 0; j < end2; j++)
+			if (m_itemModels[i]->GetItemMesh())
 			{
-				if (m_itemModels[i] != m_itemModels[j] && m_itemModels[j]->GetMesh() && m_itemModels[j]->GetMesh()->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
-				{
-					m_itemModels[i]->FlagForDestoy();
-					m_itemModels[j]->FlagForDestoy();
-				}
+				Locator::getItemPools()->AddItemMesh(m_itemModels[i]->GetItemType(), m_itemModels[i]->GetItemMesh());
 			}
-		}*/
-	}
-	if (delIndex != -1)
-	{
-		//Locator::getGarbageCollector()->DeletePointer(m_itemModels[delIndex]);
-		m_itemModels.erase(m_itemModels.begin() + delIndex);
+			m_itemModels.erase(m_itemModels.begin() + i);
+		}
 	}
 }
 
@@ -838,18 +826,15 @@ Item* GameScene::CreateItem(ItemType type)
 	case BANANA:
 	{
 		Banana* banana = new Banana();
-		m_itemModels.push_back(banana);		
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(banana->GetMesh())->getDebugCollider());
-		banana->GetMesh()->getDebugCollider()->Load();
+		m_itemModels.push_back(banana);
+		loadItemDebugCollider(banana);
 		return banana;
 	}
 	case GREEN_SHELL:
 	{
 		GreenShell* greenShell = new GreenShell();
 		m_itemModels.push_back(greenShell);
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(greenShell->GetMesh())->getDebugCollider());
-		greenShell->GetMesh()->getDebugCollider()->Load();
-
+		loadItemDebugCollider(greenShell);
 		return greenShell;
 	}
 	case MUSHROOM:
@@ -863,18 +848,14 @@ Item* GameScene::CreateItem(ItemType type)
 		using namespace std::placeholders;
 		Bomb* bomb = new Bomb(std::bind(&GameScene::CreateExplosion, this, _1));
 		m_itemModels.push_back(bomb);
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(bomb->GetMesh())->getDebugCollider());
-		bomb->GetMesh()->getDebugCollider()->Load();
-
+		loadItemDebugCollider(bomb);
 		return bomb;
 	}
 	case FAKE_BOX:
 	{
 		FakeItemBox* box = new FakeItemBox();
 		m_itemModels.push_back(box);
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(box->GetMesh())->getDebugCollider());
-		box->GetMesh()->getDebugCollider()->Load();
-
+		loadItemDebugCollider(box);
 		return box;
 	}
 	case MUSHROOM_UNLIMITED:
@@ -899,28 +880,34 @@ Item* GameScene::CreateItem(ItemType type)
 	{
 		LightningCloud* cloud = new LightningCloud();
 		m_itemModels.push_back(cloud);
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(cloud->GetMesh())->getDebugCollider());
-		cloud->GetMesh()->getDebugCollider()->Load();
+		loadItemDebugCollider(cloud);
 		return cloud;
 	}
 	case RED_SHELL:
 	{
 		RedShell* redShell = new RedShell();
 		m_itemModels.push_back(redShell);
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(redShell->GetMesh())->getDebugCollider());
-		redShell->GetMesh()->getDebugCollider()->Load();
-
+		loadItemDebugCollider(redShell);
 		return redShell;
 	}
 	case BULLET_BILL:
 	{
 		BulletBill* bullet = new BulletBill();
 		m_itemModels.push_back(bullet);
+		loadItemDebugCollider(bullet);
 		return bullet;
 	}
 	default:
 		return nullptr;
 	}
+}
+
+void GameScene::loadItemDebugCollider(Item* item)
+{
+#ifdef DEBUG
+	m_3DObjects.push_back(dynamic_cast<PhysModel*>(item->GetMesh())->getDebugCollider());
+	item->GetMesh()->getDebugCollider()->Load();
+#endif DEBUG
 }
 
 /* Create an explosion! */
@@ -929,9 +916,10 @@ Explosion * GameScene::CreateExplosion(ItemType _ownerType)
 	Explosion* explosion = new Explosion(_ownerType);
 	m_3DObjects.push_back(explosion);
 	m_physModels.push_back(explosion);
+#ifdef DEBUG
 	m_3DObjects.push_back(dynamic_cast<PhysModel*>(explosion)->getDebugCollider());
 	explosion->getDebugCollider()->Load();
-
+#endif DEBUG
 	return explosion;
 }
 

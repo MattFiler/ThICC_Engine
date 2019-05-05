@@ -4,7 +4,7 @@
 #include "GameStateData.h"
 #include "AudioManager.h"
 
-LightningCloud::LightningCloud() : Item(Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD))
+LightningCloud::LightningCloud() : Item(LIGHTNING_CLOUD)
 {
 	m_shouldDespawn = false;
 	m_growthData.m_scaleState = ItemGrowthData::SHRINK;
@@ -92,7 +92,7 @@ void LightningCloud::Tick()
 				m_growthData.m_growScale = m_player->GetScale();
 				m_growthData.m_shrinkScale = m_growthData.m_growScale * m_growthData.m_scaleMulti;
 				m_growthData.m_sizeChangeDuration -= m_player->GetRanking();
-				m_displayedMesh->SetShouldRender(false);
+				m_itemMesh->m_displayedMesh->SetShouldRender(false);
 			}
 		}
 	}
