@@ -153,7 +153,7 @@
             // 
             this.farClip.Location = new System.Drawing.Point(156, 35);
             this.farClip.Maximum = new decimal(new int[] {
-            5000,
+            50000,
             0,
             0,
             0});
