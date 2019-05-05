@@ -20,15 +20,15 @@ namespace EditorTool
         public Create_Gamepad_Icons()
         {
             InitializeComponent();
-
+            
             //Original config
             controller_config = JToken.Parse(File.ReadAllText("DATA/CONFIGS/CONTROLLER_GLYPH_CONFIG.JSON"));
-            btnA.Text = controller_config["btn_a"].Value<string>();
-            btnB.Text = controller_config["btn_b"].Value<string>();
-            btnX.Text = controller_config["btn_x"].Value<string>();
-            btnY.Text = controller_config["btn_y"].Value<string>();
-            btnStart.Text = controller_config["btn_start"].Value<string>();
-            btnBack.Text = controller_config["D-Pad Back"].Value<string>();
+            btnA.Text = controller_config["A"].Value<string>();
+            btnB.Text = controller_config["B"].Value<string>();
+            btnX.Text = controller_config["X"].Value<string>();
+            btnY.Text = controller_config["Y"].Value<string>();
+            btnStart.Text = controller_config["Start"].Value<string>();
+            btnBack.Text = controller_config["Back"].Value<string>();
             dpadLeft.Text = controller_config["D-Pad Left"].Value<string>();
             dpadRight.Text = controller_config["D-Pad Right"].Value<string>();
             dpadUp.Text = controller_config["D-Pad Up"].Value<string>();

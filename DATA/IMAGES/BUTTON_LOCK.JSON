@@ -7,5 +7,8 @@
   "res_y": 32,
   "x_pos": 0,
   "y_pos": 0,
-  "in_use_in": []
+  "in_use_in": [
+    "Arcade Icons",
+    "Gamepad Icons"
+  ]
 }
