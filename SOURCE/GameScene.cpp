@@ -162,6 +162,10 @@ void GameScene::ExpensiveUnload() {
 	for (auto& item : m_itemModels)
 	{
 		Locator::getItemPools()->AddItemMesh(item->GetItemType(), item->GetItemMesh());
+		if (item->GetItemType() == BOMB)
+		{
+			Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(item)->GetExplosion()->GetDisplayedMesh());
+		}
 		delete item;
 	}
 	Locator::getItemPools()->Reset();
@@ -463,6 +467,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 		m_3DObjects[i]->Tick();
 		if (m_3DObjects[i]->ShouldDestroy())
 		{
+			if (dynamic_cast<Explosion*>(m_3DObjects[i]))
+			{
+				Locator::getItemPools()->AddExplosion(dynamic_cast<Explosion*>(m_3DObjects[i])->GetDisplayedMesh());
+			}
+
 			delIndex = i;
 		}
 	}
@@ -568,6 +577,10 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 						(*it)->Render();
 					}
 				}
+				else if (dynamic_cast<Explosion*>(*it))
+				{
+					(*it)->Render();
+				}
 				#endif
 				else
 				{
@@ -612,6 +625,10 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 						}
 					}
 					#endif
+					else if (dynamic_cast<Explosion*>(*it))
+					{
+						(*it)->Render();
+					}
 					else
 					{
 						(*it)->Render();
@@ -657,6 +674,10 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 						}
 					}
 					#endif
+					else if (dynamic_cast<Explosion*>(*it))
+					{
+						(*it)->Render();
+					}
 					else
 					{
 						(*it)->Render();

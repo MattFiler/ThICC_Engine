@@ -240,7 +240,7 @@
 			},
 			"explosion": {
 				"size_multiplier": 10,
-				"growth_speed": 1.5,
+				"growth_duration": 0.5,
 				"player_collision": {
 					"velocity_multiplier": 0,	
 					"jump": {

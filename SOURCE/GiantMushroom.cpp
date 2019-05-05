@@ -35,6 +35,7 @@ void GiantMushroom::Tick()
 				m_growthData.m_growing = true;
 
 			}
+			m_player->SetScale(m_player->GetAnimController()->GetScaleOffset());
 
 			if (m_player->GetAnimController()->FinishedScale())
 			{
@@ -59,6 +60,7 @@ void GiantMushroom::Tick()
 				m_player->setInvicible(false);
 				m_growthData.m_shrinking = true;
 			}
+			m_player->SetScale(m_player->GetAnimController()->GetScaleOffset());
 
 			if (m_player->GetAnimController()->FinishedScale())
 			{

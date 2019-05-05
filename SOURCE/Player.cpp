@@ -125,6 +125,12 @@ void Player::SetActiveItem(ItemType _item) {
 void Player::SetItemInInventory(ItemType _item) {
 	if (m_InventoryItem == ItemType::NONE) {
 		m_InventoryItem = _item;
+
+		if (m_InventoryItem == LIGHTNING_CLOUD && GetLightningCloud())
+		{
+			m_InventoryItem == BANANA;
+		}
+
 		if (m_playerID != -1)
 		{
 			m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);

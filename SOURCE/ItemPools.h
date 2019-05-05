@@ -13,9 +13,14 @@ public:
 
 	ItemMesh* GetItemMesh(ItemType _type);
 	void AddItemMesh(ItemType _type, ItemMesh* _mesh);
+
+	AnimationController* GetExplosion();
+	void AddExplosion(AnimationController* _explosion);
+
 	void Reset();
 private:
 	void CreateItemPool(ItemType _type, int _poolSize);
+	AnimationController * CreateExplosion();
 	ItemMesh* CreateItemMesh(ItemType _type);
 
 	struct ItemPool
@@ -25,5 +30,6 @@ private:
 	};
 
 	std::map<ItemType, ItemPool> m_itemPoolMap;
+	std::stack<AnimationController*> m_explosions;
 };
 

@@ -59,9 +59,9 @@ void Bomb::Use(Player * player, bool _altUse)
 void Bomb::Detonate()
 {
 	m_countdown = false;
-	explosion = CreateExplosion(BOMB);
-	explosion->SetWorld(m_itemMesh->m_mesh->GetWorld());
-	explosion->explode();
+	m_explosion = CreateExplosion(BOMB);
+	m_explosion->SetWorld(m_itemMesh->m_mesh->GetWorld());
+	m_explosion->Explode();
 	FlagForDestoy();
 }
 

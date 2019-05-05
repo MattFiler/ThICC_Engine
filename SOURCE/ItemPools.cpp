@@ -13,7 +13,7 @@ ItemPools::ItemPools()
 	for (int i = 0; i < (int)ItemType::PLACEHOLDER; i++)
 	{
 		ItemType type = (ItemType)i;
-		if (type == NONE)
+		if (type == NONE || type == BULLET_BILL) //Bullet Bills Are Part of the player class
 		{
 			continue;
 		}
@@ -69,6 +69,28 @@ void ItemPools::AddItemMesh(ItemType _type, ItemMesh* _mesh)
 	m_itemPoolMap[_type].m_itemMeshes.push(_mesh);
 }
 
+AnimationController * ItemPools::GetExplosion()
+{
+	AnimationController * explosion;
+
+	if (!m_explosions.empty())
+	{
+		explosion = m_explosions.top();
+		m_explosions.pop();
+	}
+	else
+	{
+		explosion = CreateExplosion();
+	}
+
+	return explosion;
+}
+
+void ItemPools::AddExplosion(AnimationController * _explosion)
+{
+	m_explosions.push(_explosion);
+}
+
 void ItemPools::Reset()
 {
 	for (auto& kv : m_itemPoolMap)
@@ -78,6 +100,12 @@ void ItemPools::Reset()
 			delete kv.second.m_itemMeshes.top();
 			kv.second.m_itemMeshes.pop();
 		}
+	}
+
+	for (int i = 0; i < m_explosions.size(); i++)
+	{
+		delete m_explosions.top();
+		m_explosions.pop();
 	}
 }
 
@@ -94,9 +122,24 @@ void ItemPools::CreateItemPool(ItemType _type, int _poolSize)
 	for (int i = 0; i < itemPool.m_size; i++)
 	{
 		itemPool.m_itemMeshes.push(CreateItemMesh(_type));
+
+		if (_type == BOMB || _type == BLUE_SHELL)
+		{
+			m_explosions.push(CreateExplosion());
+		}
 	}
 
 	m_itemPoolMap.insert(std::pair<ItemType, ItemPool>(_type, itemPool));
+}
+
+AnimationController * ItemPools::CreateExplosion()
+{
+	AnimationController* explosion = new AnimationController();
+	explosion->AddModel("Explosion", "bomb_explosion", Vector3::Zero);
+	explosion->AddModelSet("default", std::vector<std::string>{"Explosion"});
+	explosion->SwitchModelSet("default");
+	explosion->Load();
+	return explosion;
 }
 
 ItemMesh * ItemPools::CreateItemMesh(ItemType _type)

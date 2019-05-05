@@ -44,6 +44,8 @@ void LightningCloud::Tick()
 					m_growthData.m_growing = true;
 				}
 
+				m_player->SetScale(m_player->GetAnimController()->GetScaleOffset());
+
 				if (m_player->GetAnimController()->FinishedScale())
 				{
 					m_shouldDestroy = true;
@@ -75,6 +77,7 @@ void LightningCloud::Tick()
 					Locator::getAudio()->Play(SoundType::ITEMS, static_cast<int>(ItemSounds::LIGHTNING_SOUND));
 				}
 				m_player->Spin(m_playerSpinRev, m_playerSpinDuration);
+				m_player->SetScale(m_player->GetAnimController()->GetScaleOffset());
 
 				if (m_player->GetAnimController()->FinishedScale())
 				{
