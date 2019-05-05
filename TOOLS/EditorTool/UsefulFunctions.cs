@@ -258,6 +258,19 @@ namespace EditorTool
             }
             return "";
         }
+        
+        /* Allow user to locate multiple files */
+        public string[] userLocatedFiles(string filter)
+        {
+            OpenFileDialog filePicker = new OpenFileDialog();
+            filePicker.Filter = filter;
+            filePicker.Multiselect = true;
+            if (filePicker.ShowDialog() == DialogResult.OK)
+            {
+                return filePicker.FileNames;
+            }
+            return null;
+        }
 
         /* Load a colour picker with default colour */
         public void userChosenColour(PictureBox preview_window)
