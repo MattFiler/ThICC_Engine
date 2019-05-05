@@ -234,6 +234,7 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 				float dist = Vector::Distance(velNorm, prevVelNorm);
 				m_vel *= 1 - (dist / 2.4f);
 			}
+			m_hasHitWall = true;
 			return true;
 		}
 	}
