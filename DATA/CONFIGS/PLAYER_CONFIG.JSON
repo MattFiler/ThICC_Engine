@@ -18,7 +18,7 @@
 	"respawn_data": {
 		"pos_history_interval": 0.1,
 		"pos_history_timer": 0,
-		"pos_history_length": 1,
+		"pos_history_length": 10,
 		"respawn_delay": 1.5
 	}
 }

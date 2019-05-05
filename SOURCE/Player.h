@@ -171,7 +171,7 @@ private:
 	int m_posHistoryLength = 10; // The length of the position queue
 	float m_noTrackRespawn = 1; // If not on any terrain, respawn after this time
 	float m_offTrackRespawn = 5; // If off the track, but still on terain, respawn after this time
-	float m_stationaryRespawn = 5; // If not moving for this long, repawn
+	float m_stationaryRespawn = 30; // If not moving for this long, repawn
 	float m_respawnSpeed = 30; // The speed at which lakitu moves the player back to the track
 
 	float m_posHistoryTimer = 0;

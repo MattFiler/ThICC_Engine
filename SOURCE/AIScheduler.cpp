@@ -34,7 +34,7 @@ void AIScheduler::Update()
 	{
 		if (i == m_currentIndex)
 		{
-			if (m_elapsedTime >= (m_totalFrequency*i))
+			if (m_elapsedTime >= (m_totalFrequency*i) && m_aiList[i])
 			{
 				m_aiList[i]->RecalculateLine(m_track);
 				m_currentIndex++;
@@ -56,7 +56,10 @@ void AIScheduler::Update()
 	{
 		if (ai->Update())
 		{
-			ai->RecalculateLine(m_track);
+			if (ai)
+			{
+				ai->RecalculateLine(m_track);
+			}
 		}
 	}
 	#endif

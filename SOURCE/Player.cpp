@@ -617,6 +617,7 @@ void Player::RespawnLogic()
 	}
 
 	m_timeSinceRespawn += Locator::getGSD()->m_dt;
+
 	if (!m_respawning && m_onTrack && m_colType == CollisionType::ON_TRACK)
 	{
 
