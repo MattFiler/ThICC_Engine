@@ -180,7 +180,7 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 
 	for (Item* item1 : _items)
 	{
-		if (item1->GetMesh())
+		if (item1->GetItemMesh())
 		{
 			bool hit_player = false;
 
@@ -210,7 +210,7 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 				//Item x Item Collision
 				for (Item* item2 : _items)
 				{
-					if (item1 != item2 && item2->GetMesh() && Vector3::DistanceSquared(item1->GetMesh()->GetPos(), item2->GetMesh()->GetPos()) < m_thresholdDistSqrd
+					if (item1 != item2 && item2->GetItemMesh() && Vector3::DistanceSquared(item1->GetMesh()->GetPos(), item2->GetMesh()->GetPos()) < m_thresholdDistSqrd
 						&& !CheckItemImmunity(item1, item2) && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
 					{
 						//Checking for bombs

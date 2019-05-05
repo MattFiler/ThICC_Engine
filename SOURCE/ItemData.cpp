@@ -39,7 +39,7 @@ ItemData::ItemData() {
 /* Get a random item based on the player position */
 ItemType ItemData::GetRandomItem(int _position) {
 
-	return GREEN_SHELL;
+	return MUSHROOM_GIANT;
 
 	float random_out_of_100 = (rand() % 101);
 

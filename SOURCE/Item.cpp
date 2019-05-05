@@ -34,7 +34,7 @@ void Item::InitItemData(const std::string & item_type)
 
 void Item::Render()
 {
-	if (m_itemMesh->m_displayedMesh)
+	if (m_itemMesh)
 	{
 		m_itemMesh->m_displayedMesh->Render();
 	}
@@ -42,7 +42,7 @@ void Item::Render()
 
 void Item::Tick()
 {
-	if (m_itemMesh->m_mesh)
+	if (m_itemMesh)
 	{
 		m_itemMesh->m_mesh->Tick();
 		m_itemMesh->m_displayedMesh->Update(m_itemMesh->m_mesh->GetWorld());

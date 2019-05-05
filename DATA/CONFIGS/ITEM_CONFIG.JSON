@@ -338,10 +338,10 @@
 		},
 		"info": {
 			"grow": {
-			"size_multiplier": 2,
-			"growth_speed": 2,
-			"shrink_speed": 3,
-			"growth_duration": 12 
+				"size_multiplier": 2,
+				"growth_duration": 1,
+				"shrink_duraion": 0.5,
+				"max_growth_duration": 12 
 			}
 		},
         "implemented": true 

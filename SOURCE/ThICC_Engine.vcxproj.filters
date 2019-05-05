@@ -158,7 +158,9 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Engine Backend\Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="ItemPools.cpp" />
+    <ClCompile Include="ItemPools.cpp">
+      <Filter>Game\Components\Item Info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -392,11 +394,13 @@
     <ClInclude Include="Skybox.h">
       <Filter>Engine Backend\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="ItemPools.h" />
     <ClInclude Include="AnimationModel.h">
       <Filter>Game\Components\Item Info</Filter>
     </ClInclude>
     <ClInclude Include="ItemMesh.h">
+      <Filter>Game\Components\Item Info</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemPools.h">
       <Filter>Game\Components\Item Info</Filter>
     </ClInclude>
   </ItemGroup>

@@ -294,7 +294,7 @@ void Player::TrailItems()
 				continue;
 			}
 
-			if (m_trailingItems[i]->GetMesh())
+			if (m_trailingItems[i]->GetItemMesh())
 			{
 				if (m_trailingItems[i]->ShouldDestroy())
 				{

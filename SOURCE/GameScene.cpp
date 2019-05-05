@@ -520,7 +520,7 @@ void GameScene::UpdateItems()
 {
 	for (int i = 0; i < m_itemModels.size(); i++)
 	{
-		if (m_itemModels[i]->GetMesh())
+		if (m_itemModels[i]->GetItemMesh())
 		{
 			m_itemModels[i]->GetMesh()->ShouldStickToTrack(*track);
 			m_itemModels[i]->GetMesh()->ResolveWallCollisions(*track);
@@ -622,7 +622,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			//Render items
 			for (Item* obj : m_itemModels)
 			{
-				if (obj->GetMesh())
+				if (obj->GetItemMesh())
 				{
 					obj->Render();
 				}
@@ -667,7 +667,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			//Render items
 			for (Item* obj : m_itemModels)
 			{
-				if (obj->GetMesh())
+				if (obj->GetItemMesh())
 				{
 					obj->Render();
 				}
