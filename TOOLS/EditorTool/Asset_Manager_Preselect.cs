@@ -57,6 +57,14 @@ namespace EditorTool
             Close();
         }
 
+        /* Open Gamepad Icon Manager */
+        private void gamepadIconManager_Click(object sender, EventArgs e)
+        {
+            Create_Gamepad_Icons gamepadIconEditor = new Create_Gamepad_Icons();
+            gamepadIconEditor.Show();
+            Close();
+        }
+
         /* Open A Manager */
         private void openManager(AssetCompType type)
         {

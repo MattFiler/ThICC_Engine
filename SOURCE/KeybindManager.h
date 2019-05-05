@@ -26,6 +26,8 @@ public:
 
 		//Save static pointer to keybind event data
 		m_ID = _GSD;
+
+		//Load in all available gamepad icons
 	};
 
 	/* Reset internal trackers */

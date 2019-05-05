@@ -35,6 +35,7 @@
             this.openSoundManager = new System.Windows.Forms.Button();
             this.cupManager = new System.Windows.Forms.Button();
             this.commonModelManager = new System.Windows.Forms.Button();
+            this.gamepadIconManager = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openCharacterManager
@@ -43,7 +44,7 @@
             this.openCharacterManager.Name = "openCharacterManager";
             this.openCharacterManager.Size = new System.Drawing.Size(270, 31);
             this.openCharacterManager.TabIndex = 10;
-            this.openCharacterManager.Text = "Character Manager";
+            this.openCharacterManager.Text = "Characters";
             this.openCharacterManager.UseVisualStyleBackColor = true;
             this.openCharacterManager.Click += new System.EventHandler(this.openCharacterManager_Click);
             // 
@@ -53,7 +54,7 @@
             this.openVehicleManager.Name = "openVehicleManager";
             this.openVehicleManager.Size = new System.Drawing.Size(270, 31);
             this.openVehicleManager.TabIndex = 9;
-            this.openVehicleManager.Text = "Vehicle Manager";
+            this.openVehicleManager.Text = "Vehicles";
             this.openVehicleManager.UseVisualStyleBackColor = true;
             this.openVehicleManager.Click += new System.EventHandler(this.openVehicleManager_Click);
             // 
@@ -63,7 +64,7 @@
             this.openMapManager.Name = "openMapManager";
             this.openMapManager.Size = new System.Drawing.Size(270, 31);
             this.openMapManager.TabIndex = 8;
-            this.openMapManager.Text = "Map Manager";
+            this.openMapManager.Text = "Maps";
             this.openMapManager.UseVisualStyleBackColor = true;
             this.openMapManager.Click += new System.EventHandler(this.openMapManager_Click);
             // 
@@ -74,7 +75,7 @@
             this.openItemManager.Name = "openItemManager";
             this.openItemManager.Size = new System.Drawing.Size(270, 31);
             this.openItemManager.TabIndex = 11;
-            this.openItemManager.Text = "In-Game Item Manager";
+            this.openItemManager.Text = "In-Game Items";
             this.openItemManager.UseVisualStyleBackColor = true;
             // 
             // openSoundManager
@@ -83,7 +84,7 @@
             this.openSoundManager.Name = "openSoundManager";
             this.openSoundManager.Size = new System.Drawing.Size(270, 31);
             this.openSoundManager.TabIndex = 12;
-            this.openSoundManager.Text = "Shared Global Sounds Manager";
+            this.openSoundManager.Text = "Shared Global Sounds";
             this.openSoundManager.UseVisualStyleBackColor = true;
             this.openSoundManager.Click += new System.EventHandler(this.openSoundManager_Click);
             // 
@@ -93,7 +94,7 @@
             this.cupManager.Name = "cupManager";
             this.cupManager.Size = new System.Drawing.Size(270, 31);
             this.cupManager.TabIndex = 13;
-            this.cupManager.Text = "Cup Manager";
+            this.cupManager.Text = "Cups";
             this.cupManager.UseVisualStyleBackColor = true;
             this.cupManager.Click += new System.EventHandler(this.cupManager_Click);
             // 
@@ -103,15 +104,26 @@
             this.commonModelManager.Name = "commonModelManager";
             this.commonModelManager.Size = new System.Drawing.Size(270, 31);
             this.commonModelManager.TabIndex = 14;
-            this.commonModelManager.Text = "Common In-Game Models Manager";
+            this.commonModelManager.Text = "Common In-Game Models";
             this.commonModelManager.UseVisualStyleBackColor = true;
             this.commonModelManager.Click += new System.EventHandler(this.commonModelManager_Click);
+            // 
+            // gamepadIconManager
+            // 
+            this.gamepadIconManager.Location = new System.Drawing.Point(12, 271);
+            this.gamepadIconManager.Name = "gamepadIconManager";
+            this.gamepadIconManager.Size = new System.Drawing.Size(270, 31);
+            this.gamepadIconManager.TabIndex = 15;
+            this.gamepadIconManager.Text = "Gamepad Icons";
+            this.gamepadIconManager.UseVisualStyleBackColor = true;
+            this.gamepadIconManager.Click += new System.EventHandler(this.gamepadIconManager_Click);
             // 
             // Asset_Manager_Preselect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 273);
+            this.ClientSize = new System.Drawing.Size(296, 311);
+            this.Controls.Add(this.gamepadIconManager);
             this.Controls.Add(this.commonModelManager);
             this.Controls.Add(this.cupManager);
             this.Controls.Add(this.openSoundManager);
@@ -136,5 +148,6 @@
         private System.Windows.Forms.Button openSoundManager;
         private System.Windows.Forms.Button cupManager;
         private System.Windows.Forms.Button commonModelManager;
+        private System.Windows.Forms.Button gamepadIconManager;
     }
 }

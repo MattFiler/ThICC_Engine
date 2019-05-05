@@ -43,6 +43,7 @@
         ENGINE_FONT,
         GLOBAL_SOUNDS,
         CUP,
-        GLOBAL_MODELS
+        GLOBAL_MODELS,
+        GAMEPAD_GLPYHS
     }
 }

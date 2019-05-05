@@ -1,0 +1,19 @@
+{
+  "btn_a": "GLYPH_360_A",
+  "btn_b": "GLYPH_360_B",
+  "btn_x": "GLYPH_360_X",
+  "btn_y": "GLYPH_360_Y",
+  "btn_start": "GLYPH_360_START",
+  "btn_back": "GLYPH_360_BACK",
+  "dpad_left": "GLYPH_360_DLEFT",
+  "dpad_right": "GLYPH_360_DRIGHT",
+  "dpad_up": "GLYPH_360_DUP",
+  "dpad_down": "GLYPH_360_DDOWN",
+  "dpad_generic": "GLYPH_360_DPAD",
+  "stick_left": "GLYPH_360_LS",
+  "stick_right": "GLYPH_360_RS",
+  "bumper_left": "GLYPH_360_LB",
+  "bumper_right": "GLYPH_360_RB",
+  "trigger_left": "GLYPH_360_LT",
+  "trigger_right": "GLYPH_360_RT"
+}

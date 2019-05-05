@@ -319,6 +319,8 @@ namespace EditorTool
                     return "Cup";
                 case AssetCompType.GLOBAL_MODELS:
                     return "Common Models";
+                case AssetCompType.GAMEPAD_GLPYHS:
+                    return "Gamepad Icons";
             }
             return "";
         }
