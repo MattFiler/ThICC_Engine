@@ -17,7 +17,7 @@ namespace EditorTool
     {
         UsefulFunctions function_libary = new UsefulFunctions();
         JToken controller_config;
-        public Create_Gamepad_Icons(JObject json_data = null, string object_key = "")
+        public Create_Gamepad_Icons()
         {
             InitializeComponent();
 
@@ -40,6 +40,7 @@ namespace EditorTool
             rightBumper.Text = controller_config["Right Shoulder"].Value<string>();
             leftTrigger.Text = controller_config["Left Trigger"].Value<string>();
             rightTrigger.Text = controller_config["Right Trigger"].Value<string>();
+            disabled.Text = controller_config["DISABLED"].Value<string>();
         }
 
         /* On Load */
@@ -116,6 +117,10 @@ namespace EditorTool
         {
             function_libary.assetSelectHandler(dpadGeneric, AssetType.IMAGE);
         }
+        private void disabledLoad_Click(object sender, EventArgs e)
+        {
+            function_libary.assetSelectHandler(disabled, AssetType.IMAGE);
+        }
 
         /* Save character to config */
         private void saveGamepadIcons_Click(object sender, EventArgs e)
@@ -125,7 +130,7 @@ namespace EditorTool
                 btnStart.Text == "" || btnBack.Text == "" || dpadLeft.Text == "" || dpadRight.Text == "" ||
                 dpadUp.Text == "" || dpadDown.Text == "" || dpadGeneric.Text == "" || leftStick.Text == "" ||
                 rightStick.Text == "" || leftBumper.Text == "" || rightBumper.Text == "" || leftTrigger.Text == "" ||
-                rightTrigger.Text == "")
+                rightTrigger.Text == "" || disabled.Text == "")
             {
                 MessageBox.Show("Please complete all fields before trying to save.", "Can't save.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -152,11 +157,13 @@ namespace EditorTool
             controller_config["Right Shoulder"] = rightBumper.Text;
             controller_config["Left Trigger"] = leftTrigger.Text;
             controller_config["Right Trigger"] = rightTrigger.Text;
+            controller_config["DISABLED"] = disabled.Text;
 
             //Save
             File.WriteAllText("DATA/CONFIGS/CONTROLLER_GLYPH_CONFIG.JSON", controller_config.ToString(Formatting.Indented));
             MessageBox.Show("Saved gamepad configuration!", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
+
     }
 }

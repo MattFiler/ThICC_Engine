@@ -50,14 +50,17 @@ public:
 		//If it exists, generate the image
 		if (checkKeybind(this_keybind, false))
 		{
-			std::string input_type = "Gamepad";
+			//Get name of glyph
 			#ifdef _ARCADE
-			input_type = "Arcade";
+			std::string glpyh_name = config[this_keybind]["Arcade"];
+			if (glpyh_name.substr(0, 5) == "Left ") { glpyh_name = glpyh_name.substr(5); }
+			else if (glpyh_name.substr(0, 6) == "Right ") { glpyh_name = glpyh_name.substr(6); }
+			#else
+			std::string glpyh_name = config[this_keybind]["Gamepad"];
+			if (glpyh_name.substr(0, 10) == "Left Stick") { glpyh_name = "Left Stick"; }
+			else if (glpyh_name.substr(0, 11) == "Right Stick") { glpyh_name = "Right Stick"; }
 			#endif
-			std::string input_name = config[this_keybind][input_type];
-			std::string glpyh_name = input_name;
-			if (input_name.substr(0, 10) == "Left Stick") { glpyh_name = "Left Stick"; }
-			if (input_name.substr(0, 11) == "Right Stick") { glpyh_name = "Right Stick"; }
+			//Create glyph image if it exists
 			if (!glyph_config[glpyh_name].is_null()) {
 				return new ImageGO2D(glyph_config[glpyh_name]);
 			}

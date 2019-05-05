@@ -101,6 +101,12 @@
     <Compile Include="Asset_Browser.Designer.cs">
       <DependentUpon>Asset_Browser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Create_Arcade_Icons.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Create_Arcade_Icons.Designer.cs">
+      <DependentUpon>Create_Arcade_Icons.cs</DependentUpon>
+    </Compile>
     <Compile Include="Create_Character.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -275,6 +281,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Asset_Manager_Preselect.resx">
       <DependentUpon>Asset_Manager_Preselect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Create_Arcade_Icons.resx">
+      <DependentUpon>Create_Arcade_Icons.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Create_Character.resx">
       <DependentUpon>Create_Character.cs</DependentUpon>

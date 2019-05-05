@@ -15,5 +15,17 @@
   "Left Shoulder": "GLYPH_360_LB",
   "Right Shoulder": "GLYPH_360_RB",
   "Left Trigger": "GLYPH_360_LT",
-  "Right Trigger": "GLYPH_360_RT"
+  "Right Trigger": "GLYPH_360_RT",
+  "DISABLED": "BUTTON_LOCK",
+  "Joystick Up": "BUTTON_LOCK",
+  "Joystick Down": "BUTTON_LOCK",
+  "Joystick Left": "BUTTON_LOCK",
+  "Joystick Right": "BUTTON_LOCK",
+  "Blue Button": "BUTTON_LOCK",
+  "Yellow Button": "BUTTON_LOCK",
+  "Grey Top Button": "BUTTON_LOCK",
+  "Green Button": "BUTTON_LOCK",
+  "Red Button": "BUTTON_LOCK",
+  "Grey Bottom Button": "BUTTON_LOCK",
+  "Side Button": "BUTTON_LOCK"
 }

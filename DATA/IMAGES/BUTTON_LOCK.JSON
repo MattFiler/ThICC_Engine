@@ -1,0 +1,11 @@
+{
+  "asset_name": "BUTTON_LOCK",
+  "asset_type": "Images",
+  "visible": true,
+  "is_2d": true,
+  "res_x": 32,
+  "res_y": 32,
+  "x_pos": 0,
+  "y_pos": 0,
+  "in_use_in": []
+}

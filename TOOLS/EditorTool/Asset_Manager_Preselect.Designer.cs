@@ -36,6 +36,7 @@
             this.cupManager = new System.Windows.Forms.Button();
             this.commonModelManager = new System.Windows.Forms.Button();
             this.gamepadIconManager = new System.Windows.Forms.Button();
+            this.arcadeInputIcons = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openCharacterManager
@@ -114,15 +115,26 @@
             this.gamepadIconManager.Name = "gamepadIconManager";
             this.gamepadIconManager.Size = new System.Drawing.Size(270, 31);
             this.gamepadIconManager.TabIndex = 15;
-            this.gamepadIconManager.Text = "Gamepad Icons";
+            this.gamepadIconManager.Text = "Gamepad Input Icons";
             this.gamepadIconManager.UseVisualStyleBackColor = true;
             this.gamepadIconManager.Click += new System.EventHandler(this.gamepadIconManager_Click);
+            // 
+            // arcadeInputIcons
+            // 
+            this.arcadeInputIcons.Location = new System.Drawing.Point(12, 308);
+            this.arcadeInputIcons.Name = "arcadeInputIcons";
+            this.arcadeInputIcons.Size = new System.Drawing.Size(270, 31);
+            this.arcadeInputIcons.TabIndex = 16;
+            this.arcadeInputIcons.Text = "Arcade Input Icons";
+            this.arcadeInputIcons.UseVisualStyleBackColor = true;
+            this.arcadeInputIcons.Click += new System.EventHandler(this.arcadeInputIcons_Click);
             // 
             // Asset_Manager_Preselect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 311);
+            this.ClientSize = new System.Drawing.Size(296, 349);
+            this.Controls.Add(this.arcadeInputIcons);
             this.Controls.Add(this.gamepadIconManager);
             this.Controls.Add(this.commonModelManager);
             this.Controls.Add(this.cupManager);
@@ -149,5 +161,6 @@
         private System.Windows.Forms.Button cupManager;
         private System.Windows.Forms.Button commonModelManager;
         private System.Windows.Forms.Button gamepadIconManager;
+        private System.Windows.Forms.Button arcadeInputIcons;
     }
 }

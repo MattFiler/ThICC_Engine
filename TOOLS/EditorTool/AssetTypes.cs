@@ -44,6 +44,7 @@
         GLOBAL_SOUNDS,
         CUP,
         GLOBAL_MODELS,
-        GAMEPAD_GLPYHS
+        GAMEPAD_GLPYHS,
+        ARCADE_GLPYHS
     }
 }

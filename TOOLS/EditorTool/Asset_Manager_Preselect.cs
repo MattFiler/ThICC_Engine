@@ -65,6 +65,14 @@ namespace EditorTool
             Close();
         }
 
+        /* Open Arcade Input Manager */
+        private void arcadeInputIcons_Click(object sender, EventArgs e)
+        {
+            Create_Arcade_Icons arcadeIconEditor = new Create_Arcade_Icons();
+            arcadeIconEditor.Show();
+            Close();
+        }
+
         /* Open A Manager */
         private void openManager(AssetCompType type)
         {

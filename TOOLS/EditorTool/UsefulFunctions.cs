@@ -321,6 +321,8 @@ namespace EditorTool
                     return "Common Models";
                 case AssetCompType.GAMEPAD_GLPYHS:
                     return "Gamepad Icons";
+                case AssetCompType.ARCADE_GLPYHS:
+                    return "Arcade Icons";
             }
             return "";
         }

@@ -85,11 +85,16 @@
             this.label17 = new System.Windows.Forms.Label();
             this.btnStart = new System.Windows.Forms.TextBox();
             this.btnStartLoad = new System.Windows.Forms.Button();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.disabledLoad = new System.Windows.Forms.Button();
+            this.label21 = new System.Windows.Forms.Label();
+            this.disabled = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // saveGamepadIcons
@@ -657,11 +662,51 @@
             this.btnStartLoad.UseVisualStyleBackColor = true;
             this.btnStartLoad.Click += new System.EventHandler(this.btnStartLoad_Click);
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.disabledLoad);
+            this.groupBox6.Controls.Add(this.label21);
+            this.groupBox6.Controls.Add(this.disabled);
+            this.groupBox6.Location = new System.Drawing.Point(345, 344);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(327, 62);
+            this.groupBox6.TabIndex = 30;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Generic Input Disabled";
+            // 
+            // disabledLoad
+            // 
+            this.disabledLoad.Location = new System.Drawing.Point(244, 33);
+            this.disabledLoad.Name = "disabledLoad";
+            this.disabledLoad.Size = new System.Drawing.Size(75, 23);
+            this.disabledLoad.TabIndex = 11;
+            this.disabledLoad.Text = "Load";
+            this.disabledLoad.UseVisualStyleBackColor = true;
+            this.disabledLoad.Click += new System.EventHandler(this.disabledLoad_Click);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(6, 18);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(75, 13);
+            this.label21.TabIndex = 10;
+            this.label21.Text = "Input Disabled";
+            // 
+            // disabled
+            // 
+            this.disabled.Location = new System.Drawing.Point(9, 34);
+            this.disabled.Name = "disabled";
+            this.disabled.ReadOnly = true;
+            this.disabled.Size = new System.Drawing.Size(229, 20);
+            this.disabled.TabIndex = 8;
+            // 
             // Create_Gamepad_Icons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(681, 493);
+            this.ClientSize = new System.Drawing.Size(685, 493);
+            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -683,6 +728,8 @@
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -746,5 +793,9 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox btnStart;
         private System.Windows.Forms.Button btnStartLoad;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Button disabledLoad;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox disabled;
     }
 }
