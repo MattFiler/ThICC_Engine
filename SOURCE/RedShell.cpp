@@ -4,7 +4,7 @@
 #include "Player.h"
 
 
-RedShell::RedShell() : Item(RED_SHELL)
+RedShell::RedShell(std::vector<Player*> _players) : Item(RED_SHELL), m_players(_players)
 {
 	InitShellData();
 
@@ -45,6 +45,15 @@ void RedShell::Tick()
 		if (!m_altUse)
 		{
 			m_move->Tick();
+
+			if (!m_hasMoveTowards && Vector3::DistanceSquared(m_itemMesh->m_mesh->GetPos(), m_targetPlayer->GetPos()) < m_aiData.m_moveTowardDistSqrd)
+			{
+				m_ai.release();
+				Vector3 moveTowards = m_targetPlayer->GetPos() - m_itemMesh->m_mesh->GetPos();
+				moveTowards.Normalize();
+				m_itemMesh->m_mesh->setVelocity(moveTowards * m_move->GetMoveSpeed());
+				m_hasMoveTowards = true;
+			}
 		}
 	}
 }
@@ -83,7 +92,58 @@ void RedShell::Use(Player * _player, bool _altUse)
 		m_move->SetWaypoint(_player->GetWaypoint());
 		m_ai = std::make_unique<MoveAI>(m_itemMesh->m_mesh.get(), m_move.get());
 		m_ai->SetAutoUpdateWaypoints(true);
+
+		FindTargetPlayer();
 	}
 
 	m_altUse = _altUse;
+}
+
+void RedShell::FindTargetPlayer()
+{
+	for (auto& player : m_players)
+	{
+		if (player->GetRanking() >= m_player->GetRanking())
+		{
+			continue;
+		}
+		else if (m_targetPlayer)
+		{
+			if (player->GetRanking() > m_targetPlayer->GetRanking())
+			{
+				m_targetPlayer = player;
+			}
+			else
+			{
+				continue;
+			}
+		}
+		else
+		{
+			m_targetPlayer = player;
+		}
+	}
+
+	if (m_targetPlayer)
+	{
+		m_players.clear();
+	}
+	else
+	{
+		for (auto& player : m_players)
+		{
+			if (m_targetPlayer)
+			{
+				if (player->GetRanking() > m_targetPlayer->GetRanking())
+				{
+					m_targetPlayer = player;
+				}
+			}
+			else
+			{
+				m_targetPlayer = player;
+			}
+		}
+
+	}
 }

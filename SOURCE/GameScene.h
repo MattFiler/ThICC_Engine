@@ -50,6 +50,8 @@ private:
 	void create3DObjects() override;
 	void pushBackObjects() override;
 
+	std::vector<Player*> GetPlayers();
+
 	//Structures for the scene's objects
 	std::vector<GameObject2D*> m_2DObjects;
 	std::vector<GameObject3D*> m_3DObjects;
@@ -110,7 +112,7 @@ private:
 	int finished = 0;
 	bool is_paused = false;
 
-	int m_maxPlayers = 1;
+	int m_maxPlayers = 3;
 
 };
 
