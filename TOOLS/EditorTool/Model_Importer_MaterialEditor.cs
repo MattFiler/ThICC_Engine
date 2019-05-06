@@ -80,6 +80,15 @@ namespace EditorTool
             {
                 diffuseMapList.Items.Add(material_config["map_Kd"].Value<string>());
             }
+            int diffuse_index = 0;
+            foreach (string entry in diffuseMapList.Items)
+            {
+                if (entry == "")
+                {
+                    diffuseMapList.Items.RemoveAt(diffuse_index);
+                }
+                diffuse_index++;
+            }
 
             //Specular Texture
             specularMap.Text = material_config["map_Ks"].Value<string>();
@@ -147,39 +156,44 @@ namespace EditorTool
             if (model_type == ModelType.MAP)
             {
                 //Collision config
+                bool isInPlayable = false;
                 if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK).ToString()].Value<bool>())
                 {
                     onTrack.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.ON_TRACK_NO_AI).ToString()].Value<bool>())
                 {
                     onTrack.Checked = true;
                     onTrackNoAI.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.OFF_TRACK).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.OFF_TRACK).ToString()].Value<bool>())
                 {
                     offTrack.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.BOOST_PAD).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.BOOST_PAD).ToString()].Value<bool>())
                 {
                     boostPad.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.ANTIGRAV_PAD).ToString()].Value<bool>())
                 {
                     antiGravPad.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.JUMP_PAD).ToString()].Value<bool>())
                 {
                     jumpPad.Checked = true;
+                    isInPlayable = true;
                 }
-                else if (material_config["ThICC_COLLISION"][((int)CollisionType.WALL).ToString()].Value<bool>())
+                if (material_config["ThICC_COLLISION"][((int)CollisionType.WALL).ToString()].Value<bool>())
                 {
                     isWall.Checked = true;
+                    isInPlayable = true;
                 }
-                else
-                {
-                    inPlayableArea.Checked = false;
-                }
+                inPlayableArea.Checked = isInPlayable;
             }
             else
             {
@@ -248,10 +262,10 @@ namespace EditorTool
         /* New diffuse list handles */
         private void addNewDiffuse_Click(object sender, EventArgs e)
         {
-            string newDiffMap = common_functions.userLocatedFile("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
-            if (newDiffMap != "")
+            string[] newDiffMaps = common_functions.userLocatedFiles("Image (PNG/JPG/JPEG)|*.PNG;*.JPG;*.JPEG");
+            foreach (string diffuse_map in newDiffMaps)
             {
-                diffuseMapList.Items.Add(newDiffMap);
+                diffuseMapList.Items.Add(diffuse_map);
             }
             isDiffuseAnimated.Checked = (diffuseMapList.Items.Count > 1);
         }

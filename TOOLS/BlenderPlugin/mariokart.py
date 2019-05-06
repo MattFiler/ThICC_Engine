@@ -192,34 +192,60 @@ class ThICC_ItemBox(bpy.types.Operator):
         
         
 # Add a cinematic camera start/end pos for course intro cutscenes
-cinecam_types = [
-    ("ThICC_CINECAM_1_START", "Course Intro Cam 1 - Start", "Course intro cam start position to animate from.", 1),
-    ("ThICC_CINECAM_1_END", "Course Intro Cam 1 - End", "Course intro cam start position to animate to.", 2),
-    ("ThICC_CINECAM_2_START", "Course Intro Cam 2 - Start", "Course intro cam start position to animate from.", 3),
-    ("ThICC_CINECAM_2_END", "Course Intro Cam 2 - End", "Course intro cam start position to animate to.", 4),
-    ("ThICC_CINECAM_3_START", "Course Intro Cam 3 - Start", "Course intro cam start position to animate from.", 5),
-    ("ThICC_CINECAM_3_END", "Course Intro Cam 3 - End", "Course intro cam start position to animate to.", 6),
-    ("ThICC_CINECAM_4_START", "Course Intro Cam 4 - Start", "Course intro cam start position to animate from.", 7),
-    ("ThICC_CINECAM_4_END", "Course Intro Cam 4 - End", "Course intro cam start position to animate to.", 8),
-    ]
 class ThICC_CourseIntroCam(bpy.types.Operator):
     """Add a New Course Intro Cinematic Camera"""
     bl_idname = "object.thicc_cinecam_add"
     bl_label = "Course Intro Camera"
     bl_options = {'REGISTER', 'UNDO'}
 
-    #WIP FEATURE TO SELECT THE CAM'S ROLE (E.G. END CAM IN TWEEN OF INTRO CINEMATIC)
-    cam_role = bpy.props.EnumProperty(name="Cam Role", items=cinecam_types)
-
     def execute(self, context):
-        bpy.ops.object.camera_add(location=bpy.context.scene.objects.active.location,rotation=[3.15/2,0,0])
-        bpy.context.active_object.name = "Course Intro Cam"
-        #bpy.context.active_object["cam_role"] = cam_role
+        # Work out a valid camera name
+        camera_name = "Course Intro Cam - Start 1"
+        camera_valid = True
+        camera_update = 0
+        location = (0,0,0)
+        for object in bpy.data.objects:
+            if object.type == "CAMERA":
+                if camera_update < 1 and object.name == "Course Intro Cam - Start 1":
+                    camera_name = "Course Intro Cam - End 1"
+                    camera_update = 1
+                if camera_update < 2 and object.name == "Course Intro Cam - End 1":
+                    camera_name = "Course Intro Cam - Start 2"
+                    camera_update = 2
+                if camera_update < 3 and object.name == "Course Intro Cam - Start 2":
+                    camera_name = "Course Intro Cam - End 2"
+                    camera_update = 3
+                if camera_update < 4 and object.name == "Course Intro Cam - End 2":
+                    camera_name = "Course Intro Cam - Start 3"
+                    camera_update = 4
+                if camera_update < 5 and object.name == "Course Intro Cam - Start 3":
+                    camera_name = "Course Intro Cam - End 3"
+                    camera_update = 5
+                if camera_update < 6  and object.name == "Course Intro Cam - End 3":
+                    camera_name = "Course Intro Cam - Start 4"
+                    camera_update = 6
+                if camera_update < 7 and object.name == "Course Intro Cam - Start 4":
+                    camera_name = "Course Intro Cam - End 4"
+                    camera_update = 7
+                if camera_update < 8 and object.name == "Course Intro Cam - End 4":
+                    camera_valid = False
+                    
+        # If we've reached the max cameras, don't add more
+        if camera_valid == False:
+            return {'CANCELLED'}
+        
+        # Set to selected object's position if we can
+        if bpy.context.active_object != None:
+            location = bpy.context.scene.objects.active.location
+        
+        # Ceate camera with calculated name
+        bpy.ops.object.camera_add(location=location,rotation=[3.15/2,0,0])
+        bpy.context.active_object.name = camera_name
         
         return {'FINISHED'}
+    
         
-        
-# Save all cinematic camss
+# Save all config content
 class ThICC_ExportConfig(bpy.types.Operator, ExportHelper):
     """Save ThICC Config"""
     bl_idname = "export_test.thicc_export"
@@ -255,10 +281,9 @@ class ThICC_ExportConfig(bpy.types.Operator, ExportHelper):
                     })
                     
             if object.type == "CAMERA":
-                #Cinematic cam (WIP)
+                #Cinematic cam 
                 thicc_json["cams"].append({
-                    "name": object.name, 
-                    "role": "WIP", 
+                    "role": object.name[19:], 
                     "pos": [object.location[0], object.location[1], object.location[2]], 
                     "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]
                 })

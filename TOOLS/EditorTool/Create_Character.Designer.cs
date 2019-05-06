@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.loadSound = new System.Windows.Forms.Button();
+            this.characterSound = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.loadString = new System.Windows.Forms.Button();
             this.mapCodename = new System.Windows.Forms.TextBox();
@@ -41,9 +44,6 @@
             this.selectMapModel = new System.Windows.Forms.Button();
             this.mapModelAsset = new System.Windows.Forms.TextBox();
             this.saveMap = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.loadSound = new System.Windows.Forms.Button();
-            this.characterSound = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +69,33 @@
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Character Elements";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 176);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(38, 13);
+            this.label4.TabIndex = 26;
+            this.label4.Text = "Sound";
+            // 
+            // loadSound
+            // 
+            this.loadSound.Location = new System.Drawing.Point(244, 191);
+            this.loadSound.Name = "loadSound";
+            this.loadSound.Size = new System.Drawing.Size(75, 23);
+            this.loadSound.TabIndex = 25;
+            this.loadSound.Text = "Load";
+            this.loadSound.UseVisualStyleBackColor = true;
+            this.loadSound.Click += new System.EventHandler(this.loadSound_Click);
+            // 
+            // characterSound
+            // 
+            this.characterSound.Location = new System.Drawing.Point(9, 192);
+            this.characterSound.Name = "characterSound";
+            this.characterSound.ReadOnly = true;
+            this.characterSound.Size = new System.Drawing.Size(229, 20);
+            this.characterSound.TabIndex = 24;
             // 
             // label8
             // 
@@ -177,33 +204,6 @@
             this.saveMap.Text = "Create";
             this.saveMap.UseVisualStyleBackColor = true;
             this.saveMap.Click += new System.EventHandler(this.saveMap_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 176);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(38, 13);
-            this.label4.TabIndex = 26;
-            this.label4.Text = "Sound";
-            // 
-            // loadSound
-            // 
-            this.loadSound.Location = new System.Drawing.Point(244, 191);
-            this.loadSound.Name = "loadSound";
-            this.loadSound.Size = new System.Drawing.Size(75, 23);
-            this.loadSound.TabIndex = 25;
-            this.loadSound.Text = "Load";
-            this.loadSound.UseVisualStyleBackColor = true;
-            this.loadSound.Click += new System.EventHandler(this.loadSound_Click);
-            // 
-            // characterSound
-            // 
-            this.characterSound.Location = new System.Drawing.Point(9, 192);
-            this.characterSound.Name = "characterSound";
-            this.characterSound.ReadOnly = true;
-            this.characterSound.Size = new System.Drawing.Size(229, 20);
-            this.characterSound.TabIndex = 24;
             // 
             // Create_Character
             // 

@@ -1,0 +1,13 @@
+{
+  "asset_name": "DL_VRYOSHICIRCUIT_01_ALB",
+  "asset_type": "Images",
+  "visible": true,
+  "is_2d": true,
+  "res_x": 2048,
+  "res_y": 512,
+  "x_pos": 0,
+  "y_pos": 0,
+  "in_use_in": [
+    "Map"
+  ]
+}

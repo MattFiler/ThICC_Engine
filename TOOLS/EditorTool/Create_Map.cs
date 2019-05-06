@@ -50,6 +50,7 @@ namespace EditorTool
                 mapName.Text = maps_json_config[map_json_key]["friendly_name"].Value<string>();
                 mapPreviewImage.Text = maps_json_config[map_json_key]["menu_sprite"].Value<string>();
                 mapModelAsset.Text = maps_json_config[map_json_key]["model"].Value<string>();
+                decorationModel.Text = maps_json_config[map_json_key]["decoration_model"].Value<string>();
                 cubemapChoice.Text = maps_json_config[map_json_key]["cubemap"].Value<string>();
                 skyboxChoice.Text = maps_json_config[map_json_key]["skybox"].Value<string>();
                 mapCup.SelectedItem = maps_json_config[map_json_key]["cup"].Value<string>();
@@ -71,13 +72,16 @@ namespace EditorTool
         {
             function_libary.assetSelectHandler(mapModelAsset, AssetType.MODEL);
         }
+        private void loadDecorationModel_Click(object sender, EventArgs e)
+        {
+            //This is a somewhat hacky fix for the out-of-memory exception when loading large maps.
+            //For the degree show, this will be refactored massively with an update to the model importer supporting auto submesh generation.
+            //Ran out of time to do that for the deadline however, so this works good enough to get larger maps imported.
+            function_libary.assetSelectHandler(decorationModel, AssetType.MODEL);
+        }
         private void loadRadiance_Click(object sender, EventArgs e)
         {
             function_libary.assetSelectHandler(cubemapChoice, AssetType.CUBEMAP);
-        }
-        private void loadIrradiance_Click(object sender, EventArgs e)
-        {
-            //depreciated
         }
         private void loadSkybox_Click(object sender, EventArgs e)
         {
@@ -133,7 +137,7 @@ namespace EditorTool
         {
             //All inputs required
             if (mapCodename.Text == "" || mapName.Text == "" || mapPreviewImage.Text == "" || 
-                mapModelAsset.Text == "" || cubemapChoice.Text == "" || 
+                mapModelAsset.Text == "" || cubemapChoice.Text == "" || decorationModel.Text == "" ||
                 soundtrackIntro.Text == "" || soundtrackIntroLoop.Text == "" || 
                 finalLapIntro.Text == "" || finalLapLoop.Text == "" || mapCup.SelectedIndex == -1)
             {
@@ -161,6 +165,7 @@ namespace EditorTool
             maps_json_config[map_name]["friendly_name"] = mapName.Text;
             maps_json_config[map_name]["menu_sprite"] = mapPreviewImage.Text;
             maps_json_config[map_name]["model"] = mapModelAsset.Text;
+            maps_json_config[map_name]["decoration_model"] = decorationModel.Text;
             maps_json_config[map_name]["cubemap"] = cubemapChoice.Text;
             maps_json_config[map_name]["skybox"] = skyboxChoice.Text;
             maps_json_config[map_name]["cup"] = mapCup.SelectedItem.ToString();
@@ -179,5 +184,11 @@ namespace EditorTool
             this.Close();
         }
 
+
+
+        private void loadIrradiance_Click(object sender, EventArgs e)
+        {
+            //depreciated
+        }
     }
 }

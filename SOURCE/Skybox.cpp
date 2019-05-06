@@ -18,7 +18,7 @@ void Skybox::Load() {
 	model = new SDKMeshGO3D(Locator::getGOS()->common_model_config["skybox"]);
 	model->DisableDepthDefault();
 	model->Load();
-	model->AlbedoOverride(Locator::getRD()->current_cubemap_skybox);
+	model->AlbedoEmissiveOverride(Locator::getRD()->current_cubemap_skybox);
 	#endif
 }
 

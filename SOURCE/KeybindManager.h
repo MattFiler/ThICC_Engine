@@ -3,10 +3,13 @@
 #include "InputData.h"
 #include "GameFilepaths.h"
 #include "GameStateData.h"
+#include "ImageGO2D.h"
+#include "Constants.h"
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <string>
+#include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
 using DX_BUTTON_STATE = DirectX::GamePad::ButtonStateTracker::ButtonState;
@@ -20,12 +23,16 @@ public:
 
 	/* Initial setup of keybind values */
 	void setup(ThICC_InputData* _GSD) {
-		//Read in config
+		//Read in keybind config
 		std::ifstream i(m_filepath.generateConfigFilepath("Keybinds_Config", m_filepath.CONFIG));
 		config << i;
 
 		//Save static pointer to keybind event data
 		m_ID = _GSD;
+
+		//Read gamepad glyph config
+		std::ifstream x(m_filepath.generateConfigFilepath("Controller_Glyph_Config", m_filepath.CONFIG));
+		glyph_config << x;
 	};
 
 	/* Reset internal trackers */
@@ -33,6 +40,34 @@ public:
 		for (int i = 0; i < 254; i++) {
 			key_held[i] = false;
 		}
+	}
+
+	/* Get the glyph associated with the keybind */
+	ImageGO2D* getInputIcon(const std::string& keybind) {
+		//Format keybind
+		std::string this_keybind = formatKeybind(keybind);
+
+		//If it exists, generate the image
+		if (checkKeybind(this_keybind, false))
+		{
+			//Get name of glyph
+			#ifdef _ARCADE
+			std::string glpyh_name = config[this_keybind]["Arcade"];
+			if (glpyh_name.substr(0, 5) == "Left ") { glpyh_name = glpyh_name.substr(5); }
+			else if (glpyh_name.substr(0, 6) == "Right ") { glpyh_name = glpyh_name.substr(6); }
+			#else
+			std::string glpyh_name = config[this_keybind]["Gamepad"];
+			if (glpyh_name.substr(0, 10) == "Left Stick") { glpyh_name = "Left Stick"; }
+			else if (glpyh_name.substr(0, 11) == "Right Stick") { glpyh_name = "Right Stick"; }
+			#endif
+			//Create glyph image if it exists
+			if (!glyph_config[glpyh_name].is_null()) {
+				return new ImageGO2D(glyph_config[glpyh_name]);
+			}
+		}
+
+		DebugText::print("Couldn't find glpyh for keybind '" + this_keybind + "'!!");
+		return nullptr;
 	}
 
 	/* Check to see if key was released */
@@ -137,10 +172,10 @@ public:
 
 private:
 	/* Check keybind validity */
-	bool checkKeybind(const std::string& keybind)
+	bool checkKeybind(const std::string& keybind, bool wait_frames = true)
 	{
 		//Ignore first 5 frames because DirectX inputs are brilliant.
-		if (Locator::getGSD()->m_timer.GetFrameCount() < 5)
+		if (wait_frames && Locator::getGSD()->m_timer.GetFrameCount() < 5)
 		{
 			return false; 
 		}
@@ -207,6 +242,7 @@ private:
 
 	static ThICC_InputData* m_ID;
 	static json config;
+	static json glyph_config;
 	GameFilepaths m_filepath;
 	bool key_held[254] = { 0 };
 };

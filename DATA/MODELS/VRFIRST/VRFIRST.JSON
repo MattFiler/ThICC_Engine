@@ -1,0 +1,60 @@
+{
+  "asset_name": "VRFIRST",
+  "asset_type": "Models",
+  "model_type": 3,
+  "visible": true,
+  "start_x": 0.0,
+  "start_y": 0.0,
+  "start_z": 0.0,
+  "modelscale": 0.15,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 10.0,
+  "in_use_in": [
+    "Map"
+  ],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      49384.44,
+      4877.878,
+      49384.45
+    ],
+    "front_top_right": [
+      -49384.43,
+      4877.878,
+      49384.45
+    ],
+    "front_bottom_right": [
+      -49384.43,
+      0,
+      49384.45
+    ],
+    "front_bottom_left": [
+      49384.44,
+      0,
+      49384.45
+    ],
+    "back_top_left": [
+      49384.44,
+      4877.878,
+      -49384.44
+    ],
+    "back_top_right": [
+      -49384.43,
+      4877.878,
+      -49384.44
+    ],
+    "back_bottom_right": [
+      -49384.43,
+      0,
+      -49384.44
+    ],
+    "back_bottom_left": [
+      49384.44,
+      0,
+      -49384.44
+    ]
+  }
+}

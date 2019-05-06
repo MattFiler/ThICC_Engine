@@ -199,7 +199,7 @@ void GameScene::create2DObjects()
 void GameScene::create3DObjects()
 {
 	//Load in a track
-	track = new Track(map_info->model);
+	track = new Track(map_info);
 	track->setWaypointBB();
 	m_3DObjects.push_back(track);
 

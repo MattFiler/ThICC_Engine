@@ -63,6 +63,9 @@ void MenuScene::create2DObjects()
 	m_state_desc->SetColour(Colors::Black);
 	m_state_desc->SetScale(0.5f);
 
+	//TEST SPRITE
+	GamepadTestSprite = m_keybinds.getInputIcon("Activate");
+
 	//position cup options
 	int index = 0;
 	for (CupInfo* a_cup : Locator::getGOS()->cup_instances) {
@@ -373,5 +376,11 @@ void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 				(*it)->Render();
 			}
 			break;
+	}
+
+
+	//TEST
+	if (GamepadTestSprite != nullptr) {
+		GamepadTestSprite->Render();
 	}
 }

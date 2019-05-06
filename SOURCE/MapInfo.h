@@ -20,6 +20,7 @@ struct MapInfo : public AssetComp {
 
 		name = m_localiser.getString(_element["friendly_name"]);
 		model = _element["model"];
+		decoration_model = _element["decoration_model"];
 		preview_sprite = new ImageGO2D(_element["menu_sprite"]);
 		scene_index = _index;
 
@@ -47,6 +48,7 @@ struct MapInfo : public AssetComp {
 	ImageGO2D* preview_sprite = nullptr;
 	std::string name = "";
 	std::string model = "";
+	std::string decoration_model = "";
 	CupInfo* cup = nullptr;
 	int scene_index = -1;
 

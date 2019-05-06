@@ -10,10 +10,10 @@
 #include <vector>
 #include <sstream>
 
-Track::Track(std::string _filename) : PhysModel(_filename)
+Track::Track(MapInfo* _track) : PhysModel(_track->model)
 {
 	//Read in track config
-	std::ifstream i(m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL));
+	std::ifstream i(m_filepath.generateConfigFilepath(_track->model, m_filepath.MODEL));
 	json m_track_data_j;
 	m_track_data_j << i;
 
@@ -23,8 +23,10 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	m_track_data.start_rot = Vector3(m_track_data_j["rot_x"], m_track_data_j["rot_y"], m_track_data_j["rot_z"]); //Hmm, allow this? Will mess with collision.
 	m_triSegSize = m_track_data_j["segment_size"];
 
-	//Parse loaded arrays from config
+	//Load decoration model
+	m_decoration_model = new SDKMeshGO3D(_track->decoration_model);
 
+	//Parse loaded arrays from config
 	for (json::iterator it = m_track_data_j["map_waypoints"].begin(); it != m_track_data_j["map_waypoints"].end(); ++it) {
 		Vector3 top_left = blender_vector.ConvertPosition(Vector3(it.value()["top_left"][0], it.value()["top_left"][1], it.value()["top_left"][2]) * m_track_data.scale);
 		Vector3 top_right = blender_vector.ConvertPosition(Vector3(it.value()["top_right"][0], it.value()["top_right"][1], it.value()["top_right"][2]) * m_track_data.scale);
@@ -48,6 +50,7 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));
 	}
+	/*
 	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
 		Vector3 box_pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
 		Vector3 box_rot = blender_vector.ConvertAngle(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
@@ -57,7 +60,7 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 
 		ItemBox* new_item_box = new ItemBox(box_pos, box_rot);
 		item_boxes.push_back(new_item_box);
-	}
+	}*/
 	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
 		Vector3 top_left = blender_vector.ConvertPosition(Vector3(it.value()["top_left"][0], it.value()["top_left"][1], it.value()["top_left"][2]) * m_track_data.scale);
 		Vector3 top_right = blender_vector.ConvertPosition(Vector3(it.value()["top_right"][0], it.value()["top_right"][1], it.value()["top_right"][2]) * m_track_data.scale);
@@ -87,9 +90,9 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	SetRotationInDegrees(m_track_data.start_rot);
 
 	//Debug output
-	DebugText::print("Loaded data for track: " + _filename);
+	DebugText::print("Loaded data for track: " + _track->model);
 	//DebugText::print("Suitable spawn spot: (" + std::to_string(m_track_data.spawn_pos.x) + ", " + std::to_string(m_track_data.spawn_pos.y) + ", " + std::to_string(m_track_data.spawn_pos.z) + ")");
-	filename = _filename;
+	filename = _track->model;
 }
 
 /* Load the track collision info */
@@ -108,13 +111,21 @@ void Track::LoadCollision() {
 	m_validCollisions.insert(pair(CollisionType::ANTIGRAV_PAD, true));
 	m_validCollisions.insert(pair(CollisionType::JUMP_PAD, true));
 	m_validCollisions.insert(pair(CollisionType::ON_TRACK_NO_AI, true));
+
+	//Load decoration model if we have one
+	if (m_decoration_model != nullptr) {
+		m_decoration_model->Load();
+	}
 }
 
-/* Unload the track collision info */
+/* Unload the track collision info and decoration mesh if we have one */
 void Track::UnloadCollision() {
 	m_validCollisions.clear();
 	m_triangles.clear();
 	m_triGrid.clear();
+	if (m_decoration_model != nullptr) {
+		m_decoration_model->Reset();
+	}
 	DebugText::print("Unloaded track tri map for '" + filename + "'.");
 }
 
@@ -473,4 +484,18 @@ Vector3 Track::getWaypointMiddle(int index)
 		index -= map_waypoints.size();
 	}
 	return map_waypoints[index].middle;
+}
+
+//Allow our decoration model to update and render if we have one
+void Track::Render() {
+	if (m_decoration_model != nullptr) {
+		m_decoration_model->Render();
+	}
+	PhysModel::Render();
+}
+void Track::Tick() {
+	if (m_decoration_model != nullptr) {
+		m_decoration_model->Tick();
+	}
+	PhysModel::Tick();
 }
