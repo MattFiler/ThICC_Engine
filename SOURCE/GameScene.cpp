@@ -124,7 +124,7 @@ void GameScene::ExpensiveLoad() {
 		camera_pos.push_back(camera.start_pos);
 		camera_pos.push_back(camera.end_pos);
 		Locator::getCD()->points.push_back(camera_pos);
-		Locator::getCD()->look_points.push_back(camera.look_at);
+		Locator::getCD()->look_points.push_back(camera.look_at != Vector3(0, 0, 0) ? camera.look_at : Vector3(1, 1, 1));
 	}
 }
 
@@ -439,7 +439,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		if (timeout <= 0 && track_music_start)
 		{
-			Locator::getAudio()->Play("TRACK_START");
+			Locator::getAudio()->Play("TRACK_LOOP");
 			track_music_start = false;
 		}
 
