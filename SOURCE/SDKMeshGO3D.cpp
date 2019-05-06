@@ -95,16 +95,17 @@ void SDKMeshGO3D::Render()
 						}
 						m_material_config.at(i).animation_timer += (float)Locator::getGSD()->m_timer.GetElapsedSeconds();
 					}
-					/* ALBEDO OVERRIDE */
-					if (albedo_override_index != -1 && !albedo_override_applied) {
-						pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(albedo_override_index));
+					/* MATERIAL OVERRIDE (ALBEDO + EMISSIVE) */
+					if (material_override_index != -1 && !material_override_applied) {
+						pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(material_override_index));
+						pbr->SetEmissiveTexture(m_resourceDescriptors->GetGpuHandle(material_override_index));
 					}
 					#endif
 					i++;
 				}
 			}
-			if (albedo_override_index != -1 && !albedo_override_applied) {
-				albedo_override_applied = true;
+			if (material_override_index != -1 && !material_override_applied) {
+				material_override_applied = true;
 			}
 		}
 
@@ -118,7 +119,7 @@ void SDKMeshGO3D::Render()
 }
 
 /* Override every albedo material for this model (indended for skybox use) */
-void SDKMeshGO3D::AlbedoOverride(std::wstring path) {
+void SDKMeshGO3D::AlbedoEmissiveOverride(std::wstring path) {
 	if (resourceDescriptorOffset < 10) {
 		resourceDescriptorOffset += m_modelNormal.size() * 4;
 	}
@@ -127,9 +128,9 @@ void SDKMeshGO3D::AlbedoOverride(std::wstring path) {
 	resourceUpload.Begin(); 
 	wchar_t override_tex[_MAX_PATH] = {};
 	DX::FindMediaFile(override_tex, _MAX_PATH, path.c_str());
-	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, override_tex, m_albedoOverride.ReleaseAndGetAddressOf()));
-	CreateShaderResourceView(device, m_albedoOverride.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
-	albedo_override_index = resourceDescriptorOffset;
+	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, override_tex, m_materialOverride.ReleaseAndGetAddressOf()));
+	CreateShaderResourceView(device, m_materialOverride.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
+	material_override_index = resourceDescriptorOffset;
 	resourceDescriptorOffset++;
 	auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
 	uploadResourcesFinished.wait();

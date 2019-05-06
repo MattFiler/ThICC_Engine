@@ -101,7 +101,7 @@
     "model": "MARIOKARTSTADIUM",
     "decoration_model": "VRFIRST",
     "cubemap": "GARAGE",
-    "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "skybox": "VRFIRST_ALB",
     "cup": "DEMO_CUP",
     "arcade_only": false,
     "audio": {
