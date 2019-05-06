@@ -63,7 +63,7 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));
 	}
-	/*
+	
 	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
 		Vector3 box_pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
 		Vector3 box_rot = blender_vector.ConvertAngle(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
@@ -73,7 +73,7 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 
 		ItemBox* new_item_box = new ItemBox(box_pos, box_rot);
 		item_boxes.push_back(new_item_box);
-	}*/
+	}
 	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
 		Vector3 top_left = blender_vector.ConvertPosition(Vector3(it.value()["top_left"][0], it.value()["top_left"][1], it.value()["top_left"][2]) * m_track_data.scale);
 		Vector3 top_right = blender_vector.ConvertPosition(Vector3(it.value()["top_right"][0], it.value()["top_right"][1], it.value()["top_right"][2]) * m_track_data.scale);

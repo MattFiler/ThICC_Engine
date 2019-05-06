@@ -3,7 +3,8 @@
 #include "StepTimer.h"
 #include "Scene.h"
 #include "LocalisationManager.h"
-#include "Banana.h" //test
+#include "ItemPools.h"
+#include "Banana.h"
 #include "Mushroom.h"
 #include "GreenShell.h"
 #include "CollisionManager.h"
@@ -61,6 +62,7 @@ private:
 
 	//Item objects
 	Item* CreateItem(ItemType type);
+	void loadItemDebugCollider(Item* item);
 	Explosion* CreateExplosion(ItemType _ownerType);
 
 	//Game objects (and test crap)
@@ -77,6 +79,7 @@ private:
 	json game_config;
 	json track_config;
 	MapInfo* map_info;
+	ItemPools* m_itemPools = nullptr;
 
 	//Referenced stuff
 	RenderData* m_RD;

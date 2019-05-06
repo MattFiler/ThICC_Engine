@@ -77,6 +77,7 @@ public:
 	SDKMeshGO3D* getDebugCollider() { return m_colliderDebug; };
 
 	void SetMaxSpeed(float _maxSpeed) { m_maxSpeed = _maxSpeed; };
+	float GetMaxSpeed() { return m_maxSpeed; };
 
 	const PhysModelData& data = m_physData;
 

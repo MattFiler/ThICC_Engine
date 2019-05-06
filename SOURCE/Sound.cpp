@@ -85,3 +85,15 @@ void Sound::SetLoop(bool _loop) {
 	loop = _loop;
 	m_loop = m_sfx->CreateInstance();
 }
+
+void Sound::Pause()
+{
+	if (m_sfx)
+	{
+		if (loop)
+		{
+			m_loop->Pause();
+			m_playing = false;
+		}
+	}
+}
