@@ -488,7 +488,7 @@ namespace EditorTool
                     }
                 }
                 asset_json["map_cameras"] = camera_array;
-                asset_json["map_cam_lookat"] = lookat_array;
+                asset_json["look_at_points"] = lookat_array;
                 asset_json["map_waypoints"] = waypoint_array;
                 asset_json["map_spawnpoints"] = spawnpoint_array;
                 asset_json["map_finishline"] = finishline_array;
