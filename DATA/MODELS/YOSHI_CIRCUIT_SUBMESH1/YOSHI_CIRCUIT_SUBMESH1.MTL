@@ -39,17 +39,17 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl ef_waterfall06_Ocean_NB
-Ns 94.117647
+Ns 438.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.639216 0.639216 0.639216
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd ef_waterfall06_Alb.png
-map_Kn ef_waterfall06_nrm.png
-norm ef_waterfall06_nrm.png
+map_Kd waterfall65.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
 Tr 0.000000
 map_Ks spec_placeholder.png
 map_Ke emm_placeholder.png
