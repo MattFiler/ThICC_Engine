@@ -8,5 +8,5 @@
   "itembox_respawn_time": 4.0,
   "enable_fps": true,
   "font": "NEUEHAASGROTESKDISP PRO BD",
-  "threshold_collision_distance_squared": 10  
+  "threshold_collision_distance_squared": 10
 }
