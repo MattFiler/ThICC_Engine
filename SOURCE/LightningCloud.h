@@ -21,8 +21,8 @@ public:
 private:
 	float m_strikeTimeElapsed = 0;
 	float m_strikeDuration = 0;
-	float m_slowAmount = 0;
-	float m_maxSpeedMutli = 0;
+	float m_playerMoveSpeed = 0;
+	float m_playerTurnSpeed = 0;
 	float m_playerSpinRev = 0;
 	float m_playerSpinDuration = 0;
 
