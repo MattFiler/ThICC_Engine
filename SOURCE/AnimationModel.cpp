@@ -2,12 +2,14 @@
 #include "AnimationModel.h"
 
 
-AnimationModel::AnimationModel(SDKMeshGO3D* _model, std::string _name, Vector3 _offset)
+AnimationModel::AnimationModel(SDKMeshGO3D* _model, std::string _name)
 {
 	m_model = std::unique_ptr<SDKMeshGO3D>(_model);
 	m_name = _name;
-	m_offset = _offset;
+	m_offset = m_model->GetPos();
 	m_originalScale = m_model->GetScale();
+
+	m_originalRotation = m_model->GetRotation();
 }
 
 
@@ -15,14 +17,11 @@ AnimationModel::~AnimationModel()
 {
 }
 
-void AnimationModel::SetScaleOffset(Vector3 _scaleOffset)
+void AnimationModel::SetWorld(Matrix _newWorld)
 {
-	m_scaleOffset = _scaleOffset;
-	m_model->SetScale(m_scaleOffset * m_originalScale);
+	m_model->SetWorld(_newWorld);
+	m_model->AddPos(Vector3::Transform(m_offset * m_scaleOffset, m_model->GetOri()));
+	m_model->SetScale(m_model->GetScale() * m_originalScale);
+	m_model->SetRotation(m_model->GetRotation() + m_originalRotation);
 	m_model->UpdateWorld();
-}
-
-Vector3 AnimationModel::GetOffset()
-{
-	return m_offset * m_scaleOffset;
 }

@@ -247,7 +247,7 @@ class ThICC_CourseIntroCam(bpy.types.Operator):
 
 
 # Add a look-at for the cinematic cams
-class ThICC_IntroCamLookAt(bpy.types.Operator, ExportHelper):  
+class ThICC_IntroCamLookAt(bpy.types.Operator):  
     """Add a New Look-At for Cinematic Cams"""
     bl_idname = "object.thicc_cinecam_lookat_add"
     bl_label = "Intro Cam Look-At"
@@ -260,30 +260,36 @@ class ThICC_IntroCamLookAt(bpy.types.Operator, ExportHelper):
         camera_update = 0
         location = (0,0,0)
         for object in bpy.data.objects:
-            if object.type == "CAMERA":
-                if camera_update < 1 and object.name == "Intro Cam Look-At - 1":
-                    camera_name = "Intro Cam Look-At - 2"
-                    camera_update = 1
-                if camera_update < 2 and object.name == "Intro Cam Look-At - 2":
-                    camera_name = "Intro Cam Look-At - 3"
-                    camera_update = 2
-                if camera_update < 3 and object.name == "Intro Cam Look-At - 3":
-                    camera_name = "Course Intro Cam - End 4"
-                    camera_update = 3
-                if camera_update < 4 and object.name == "Intro Cam Look-At - 4":
-                    camera_valid = False
+            if camera_update < 1 and object.name == "Intro Cam Look-At - 1":
+                camera_name = "Intro Cam Look-At - 2"
+                camera_update = 1
+            if camera_update < 2 and object.name == "Intro Cam Look-At - 2":
+                camera_name = "Intro Cam Look-At - 3"
+                camera_update = 2
+            if camera_update < 3 and object.name == "Intro Cam Look-At - 3":
+                camera_name = "Intro Cam Look-At - 4"
+                camera_update = 3
+            if camera_update < 4 and object.name == "Intro Cam Look-At - 4":
+                camera_valid = False
                     
         # If we've reached the max look-at points, don't add more
         if camera_valid == False:
             return {'CANCELLED'}
-        
-        # Set to selected object's position if we can
+			
+        #Set to selected object's position if we can
         if bpy.context.active_object != None:
             location = bpy.context.scene.objects.active.location
-        
-        # Ceate camera with calculated name
-        bpy.ops.object.camera_add(location=location,rotation=[3.15/2,0,0])
-        bpy.context.active_object.name = camera_name
+			
+        #Create look-at marker
+        look_at = bpy.data.objects.new(name=camera_name, object_data=None)
+        bpy.context.scene.objects.link(look_at)
+        look_at.location = location
+		
+        #Select the marker
+        for item in bpy.context.selectable_objects:  
+            item.select = False  
+        look_at.select = True
+        bpy.context.scene.objects.active = look_at
         
         return {'FINISHED'}
     
@@ -304,7 +310,7 @@ class ThICC_ExportConfig(bpy.types.Operator, ExportHelper):
 
     def execute(self, context):
         #JSON template
-        thicc_json = {'cams': [], 'spawns': [], 'waypoints': [], 'finish_line': [], 'item_boxes': [], 'glider_track': []}
+        thicc_json = {'cams': [], 'look_at_points': [], 'spawns': [], 'waypoints': [], 'finish_line': [], 'item_boxes': [], 'glider_track': []}
         waypoint_index = 0
         
         for object in bpy.data.objects:
@@ -322,13 +328,19 @@ class ThICC_ExportConfig(bpy.types.Operator, ExportHelper):
                         "pos": [object.location[0], object.location[1], object.location[2]], 
                         "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]
                     })
+                #Look-at position
+                if object.name[:17] == "Intro Cam Look-At":
+                    thicc_json["look_at_points"].append({
+                        "index": object.name[-1:],
+                        "pos": [object.location[0], object.location[1], object.location[2]]
+                    })
                     
             if object.type == "CAMERA":
                 #Cinematic cam 
                 thicc_json["cams"].append({
-                    "role": object.name[19:], 
-                    "pos": [object.location[0], object.location[1], object.location[2]], 
-                    "rotation": [object.rotation_euler[0], object.rotation_euler[1], object.rotation_euler[2]]
+                    "index": object.name[-1:],
+                    "role": object.name[19:-2], 
+                    "pos": [object.location[0], object.location[1], object.location[2]]
                 })
                 
             if object.type == "MESH":

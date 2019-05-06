@@ -17,6 +17,8 @@ public:
 
 	bool HasHitWall() { return m_hasHitWall; };
 
+	void UseMagnet(bool _shouldUse) { m_useMagnet = _shouldUse; };
+
 protected:
 	bool m_onTrack = false;
 	bool m_useGroundTypes = false;
@@ -25,6 +27,8 @@ protected:
 private:
 	bool TryCollision(Track& _track, const Vector3& _location, MeshTri*& _closestTri, Vector3& _closestPos);
 	void MapVectorOntoTri(Vector& _vect, Vector& _startPos, Vector _down, MeshTri * _tri);
+
+	bool m_useMagnet = true;
 
 	float m_minSnapDist = 0.001f; // Under this distance the kart wont snap to the track
 	float m_maxSnapDist = 2; // Over this distance the kart wont snap to the track
