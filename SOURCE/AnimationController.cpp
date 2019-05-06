@@ -166,12 +166,7 @@ void AnimationController::UpdateWorld(Matrix& _newWorld)
 	m_world.Decompose(m_scale, m_quatRot, m_pos);
 	m_rot = Matrix::CreateFromQuaternion(m_quatRot);
 
-	Vector3 rotOffset = m_rotOffset;
-	if (rotOffset.LengthSquared() == 0)
-	{
-		rotOffset = _newWorld.Forward();
-	}
-	m_world = Matrix::CreateScale(m_scale) * Matrix::CreateWorld(m_pos, rotOffset, m_world.Up());
+	m_world = Matrix::CreateScale(m_scale) * Matrix::CreateWorld(m_pos, m_rotOffset, m_world.Up());
 	m_world.Decompose(m_scale, m_quatRot, m_pos);
 	m_rot = Matrix::CreateFromQuaternion(m_quatRot);
 	m_pos += m_posOffset;

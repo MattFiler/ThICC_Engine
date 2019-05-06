@@ -676,7 +676,6 @@
             // diffuseMapList
             // 
             this.diffuseMapList.FormattingEnabled = true;
-            this.diffuseMapList.HorizontalScrollbar = true;
             this.diffuseMapList.Location = new System.Drawing.Point(6, 35);
             this.diffuseMapList.Name = "diffuseMapList";
             this.diffuseMapList.Size = new System.Drawing.Size(260, 121);

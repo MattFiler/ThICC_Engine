@@ -4,10 +4,10 @@
 #include "ItemData.h"
 #include <iostream>
 
-Banana::Banana() : Item(BANANA)
+Banana::Banana() : Item(Locator::getItemData()->GetItemModelName(BANANA))
 {
-	m_itemMesh->m_mesh->SetDrag(0.9f);
-	m_itemMesh->m_mesh->SetPhysicsOn(true);
+	m_mesh->SetDrag(0.9f);
+	m_mesh->SetPhysicsOn(true);
 
 	InitBananaData();
 }
@@ -36,12 +36,12 @@ void Banana::Use(Player * _player, bool _altUse)
 
 	if (_altUse)
 	{
-		m_itemMesh->m_mesh->SetWorld(_player->GetWorld());
-		m_itemMesh->m_mesh->AddPos(_player->GetWorld().Right() * m_throwData.m_thowHoriPosOffset + _player->GetWorld().Up() * m_throwData.m_thowVertPosOffset);
-		m_itemMesh->m_mesh->UpdateWorld();
+		m_mesh->SetWorld(_player->GetWorld());
+		m_mesh->AddPos(_player->GetWorld().Right() * m_throwData.m_thowHoriPosOffset + _player->GetWorld().Up() * m_throwData.m_thowVertPosOffset);
+		m_mesh->UpdateWorld();
 
-		m_itemMesh->m_mesh->setMaxGrav(m_throwData.m_maxGrav);
-		m_itemMesh->m_mesh->setGravVelocity(_player->getVelocity() + (_player->GetWorld().Forward() * m_throwData.m_forwardForce) + (_player->GetWorld().Up() * m_throwData.m_upwardForce));
+		m_mesh->setMaxGrav(m_throwData.m_maxGrav);
+		m_mesh->setGravVelocity(_player->getVelocity() + (_player->GetWorld().Forward() * m_throwData.m_forwardForce) + (_player->GetWorld().Up() * m_throwData.m_upwardForce));
 	}
 }
 

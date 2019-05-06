@@ -438,7 +438,6 @@ namespace EditorTool
             if (importer_common.getModelType() == ModelType.MAP)
             {
                 JArray camera_array = new JArray();
-                JArray lookat_array = new JArray();
                 JArray waypoint_array = new JArray();
                 JArray spawnpoint_array = new JArray();
                 JArray finishline_array = new JArray();
@@ -449,10 +448,6 @@ namespace EditorTool
                     foreach (JToken data in model_blender_data["cams"])
                     {
                         camera_array.Add(data);
-                    }
-                    foreach (JToken data in model_blender_data["look_at_points"])
-                    {
-                        lookat_array.Add(data);
                     }
                     foreach (JToken data in model_blender_data["waypoints"])
                     {
@@ -486,7 +481,6 @@ namespace EditorTool
                     }
                 }
                 asset_json["map_cameras"] = camera_array;
-                asset_json["map_cam_lookat"] = lookat_array;
                 asset_json["map_waypoints"] = waypoint_array;
                 asset_json["map_spawnpoints"] = spawnpoint_array;
                 asset_json["map_finishline"] = finishline_array;

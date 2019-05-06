@@ -10,8 +10,6 @@ public:
 	CollisionManager() = default;
 	~CollisionManager() = default;
 
-	static void SetThresholdDistance(float _dist);
-
 	static void CollisionDetectionAndResponse(std::vector<PhysModel*> _physModel, std::vector<Item*> _items);
 private:
 	static std::vector<Collision> CheckPhysModelCollisions(std::vector<PhysModel*> _physModels);
@@ -27,7 +25,5 @@ private:
 	static void ExplosionCollision(PhysModel*& _player, PhysModel*& _explosion);
 
 	static Plane getPlane(Vector3 _corner1, Vector3 _corner2, float height);
-
-	static float m_thresholdDistSqrd;
 };
 

@@ -4,16 +4,16 @@
 #include "Player.h"
 
 
-RedShell::RedShell() : Item(RED_SHELL)
+RedShell::RedShell() : Item(Locator::getItemData()->GetItemModelName(RED_SHELL))
 {
 	InitShellData();
 
-	m_itemMesh->m_mesh->SetDrag(0);
-	m_itemMesh->m_mesh->SetPhysicsOn(true);
-	m_itemMesh->m_mesh->setDampenWallReflect(false);
-	m_itemMesh->m_mesh->SetMaxSpeed(m_aiData.m_maxSpeed);
+	m_mesh->SetDrag(0);
+	m_mesh->SetPhysicsOn(true);
+	m_mesh->setDampenWallReflect(false);
+	m_mesh->SetMaxSpeed(m_aiData.m_maxSpeed);
 
-	m_move = std::make_unique<ControlledMovement>(m_itemMesh->m_mesh.get(), m_itemMesh->m_displayedMesh.get());
+	m_move = std::make_unique<ControlledMovement>(m_mesh, m_displayedMesh.get());
 	m_move->SetMoveSpeed(m_aiData.m_moveSpeed);
 	m_move->SetTurnSpeed(m_aiData.m_turnSpeed);
 }
@@ -70,18 +70,18 @@ void RedShell::Use(Player * _player, bool _altUse)
 {
 	setItemInUse(_player);
 	
-	m_itemMesh->m_mesh->SetWorld(_player->GetWorld());
-	m_itemMesh->m_mesh->AddPos(_player->GetWorld().Right() * m_usePosOffset);
-	m_itemMesh->m_mesh->SetOri(m_player->GetOri());
-	m_itemMesh->m_mesh->UpdateWorld();
+	m_mesh->SetWorld(_player->GetWorld());
+	m_mesh->AddPos(_player->GetWorld().Right() * m_usePosOffset);
+	m_mesh->SetOri(m_player->GetOri());
+	m_mesh->UpdateWorld();
 	Vector3 normVel = _player->getVelocity();
 	normVel.Normalize();
-	m_itemMesh->m_mesh->setVelocity(normVel * (_altUse? -m_aiData.m_moveSpeed : 1));
+	m_mesh->setVelocity(normVel * (_altUse? -m_aiData.m_moveSpeed : 1));
 
 	if (!_altUse)
 	{
 		m_move->SetWaypoint(_player->GetWaypoint());
-		m_ai = std::make_unique<MoveAI>(m_itemMesh->m_mesh.get(), m_move.get());
+		m_ai = std::make_unique<MoveAI>(m_mesh, m_move.get());
 		m_ai->SetAutoUpdateWaypoints(true);
 	}
 

@@ -52,9 +52,7 @@
 				},
 				"vertical_pos_offset": 4
 			}		
-		},
-        "pool_size" : 30,
-        "implemented": true
+		}
 	},
 	"RED_SHELL": {
 		"ui_sprite": "ITEM_RED_SHELL",
@@ -95,9 +93,7 @@
 				},
 				"vertical_pos_offset": 4
 			}
-		},
-        "pool_size" : 30,
-        "implemented": true  
+		}
 	},
 	"BANANA": {
 		"ui_sprite": "ITEM_BANANA",
@@ -135,9 +131,7 @@
 				},
 				"vertical_pos_offset": 0
 			}
-		},
-        "pool_size" : 30,
-        "implemented": true  
+		}
 	},
 	"FAKE_BOX": {
 		"ui_sprite": "ITEM_FAKEBOX",
@@ -175,9 +169,7 @@
 				},
 				"vertical_pos_offset": 4
 			}
-		},
-        "pool_size" : 30,
-        "implemented": true  
+		}
 	},
 	"MUSHROOM": {
 		"ui_sprite": "ITEM_MUSHROOM",
@@ -197,9 +189,7 @@
 				"duration": 2,
 				"player_drag": 0.7
 			}
-		},
-        "pool_size" : 0,
-        "implemented": true
+		}
 	},
 	"MUSHROOM_3X": {
 		"ui_sprite": "ITEM_MUSHROOM_3X",
@@ -214,8 +204,7 @@
 			"place_10": 25,
 			"place_11": 20,
 			"place_12": 12.5
-		},
-        "pool_size" : 0  
+		}
 	},
 	"BOMB": {
 		"ui_sprite": "ITEM_BOMB",
@@ -240,7 +229,7 @@
 			},
 			"explosion": {
 				"size_multiplier": 10,
-				"growth_duration": 0.5,
+				"growth_speed": 1.5,
 				"player_collision": {
 					"velocity_multiplier": 0,	
 					"jump": {
@@ -258,9 +247,7 @@
 					"vertical_pos_offset": 4
 				}
 			}
-		},
-        "pool_size" : 30,
-        "implemented": true  
+		}
 	},
 	"BLUE_SHELL": {
 		"ui_sprite": "ITEM_BLUE_SHELL",
@@ -271,9 +258,7 @@
 			"place_6": 7.5,
 			"place_7": 5,
 			"place_8": 2.5
-		},
-        "pool_size" : 0,
-        "implemented": false     
+		}
 	},
 	"LIGHTNING_BOLT": {
 		"ui_sprite": "ITEM_LIGHTNING",
@@ -282,8 +267,7 @@
 			"place_10": 7.5,
 			"place_11": 12.5,
 			"place_12": 22.5
-		},
-        "pool_size" : 0 
+		}
 	},
 	"STAR": {
 		"ui_sprite": "ITEM_STAR",
@@ -298,12 +282,10 @@
 		"info": {
 			"duration": 12,
 			"boost": {
-				"move_speed": 60,
-				"turn_speed": 70,
+				"amount": 40,
 				"player_drag": 0.7
 			}
-		},
-        "implemented": true 
+		}
 	},
 	"MUSHROOM_UNLIMITED": {
 		"ui_sprite": "ITEM_MUSHROOM_UNLIMITED",
@@ -324,8 +306,7 @@
 				"duration": 1,
 				"player_drag": 0.7
 			}
-		},
-        "implemented": true
+		}
 	},
 	"MUSHROOM_GIANT": {
 		"ui_sprite": "ITEM_MUSHROOM_GIANT",
@@ -338,13 +319,12 @@
 		},
 		"info": {
 			"grow": {
-				"size_multiplier": 2,
-				"growth_duration": 1,
-				"shrink_duraion": 0.5,
-				"max_growth_duration": 12 
+			"size_multiplier": 2,
+			"growth_speed": 2,
+			"shrink_speed": 3,
+			"growth_duration": 12 
 			}
-		},
-        "implemented": true 
+		}
 	},
 	"SQUID": {
 		"ui_sprite": "ITEM_SQUID",
@@ -356,9 +336,7 @@
 			"place_7": 7.5,
 			"place_8": 5,
 			"place_9": 2.5
-		},
-        "pool_size" : 0,
-        "implemented": false 
+		}
 	},
 	"POW": {
 		"ui_sprite": "ITEM_POW",
@@ -368,9 +346,7 @@
 			"place_7": 7.5,
 			"place_8": 5,
 			"place_9": 2.5
-		},
-        "pool_size" : 0,
-        "implemented": false 
+		}
 	},
 	"LIGHTNING_CLOUD": {
 		"ui_sprite": "ITEM_LIGHTNING_CLOUD",
@@ -385,20 +361,13 @@
 		"info": {
 			"strike_duration": 10,
 			"player_velocity_multiplier": 0.2,
-			"player_max_velocity_multiplier": 0.1,
-			"player_spin": {
-				"revolutions": 1,
-				"duration": 0.2
-			},
 			"shrink": {
 				"size_multiplier": 0.5,
-				"growth_duration": 0.5,
-				"shrink_duraion": 0.5,
+				"growth_speed": 2,
+				"shrink_speed": 2,
 				"max_shrink_duration": 13 
 			}		
-		},
-        "pool_size" : 30,
-        "implemented": true 
+		}
 	},
 	"BULLET_BILL": {
 		"ui_sprite": "ITEM_BULLET_BILL",
@@ -416,9 +385,7 @@
 				"player_move_speed": 75,
 				"player_turn_speed": 150
 			}
-		},
-        "pool_size" : 30,
-        "implemented": true 
+		}
 	},
 	"GREEN_SHELL_3X": {
 		"ui_sprite": "ITEM_GREEN_SHELL_3X",
@@ -427,8 +394,7 @@
 			"place_3": 12.5,
 			"place_4": 10,
 			"place_5": 5
-		},
-        "implemented": true 
+		}
 	},
 	"RED_SHELL_3X": {
 		"ui_sprite": "ITEM_RED_SHELL_3X",
@@ -438,8 +404,7 @@
 			"place_6": 10,
 			"place_7": 7.5,
 			"place_8": 5
-		},
-        "implemented": false 
+		}
 	},
 	"BANANA_3X": {
 		"ui_sprite": "ITEM_BANANAS_X3",
@@ -448,7 +413,6 @@
 			"place_2": 12.5,
 			"place_3": 7.5,
 			"place_4": 2.5
-		},
-        "implemented": true 
+		}
 	}
 }

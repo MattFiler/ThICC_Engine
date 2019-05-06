@@ -16,10 +16,7 @@ public:
 	void Use(Player* player, bool _altUse) override;
 
 private:
-	float m_moveSpeed = 0;
-	float m_turnSpeed = 0;
-	float m_playerDrag = 0;
-	float m_playerMoveSpeed = 0;
-	float m_playerTurnSpeed = 0;
+	float m_boostAmount = 40;
+	float m_playerDrag = 0.7;
 };
 

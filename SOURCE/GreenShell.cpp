@@ -3,11 +3,11 @@
 #include "Player.h"
 #include "ServiceLocator.h"
 
-GreenShell::GreenShell() : Item(GREEN_SHELL)
+GreenShell::GreenShell() : Item(Locator::getItemData()->GetItemModelName(GREEN_SHELL))
 {
-	m_itemMesh->m_mesh->SetDrag(0);
-	m_itemMesh->m_mesh->SetPhysicsOn(true);
-	m_itemMesh->m_mesh->setDampenWallReflect(false);
+	m_mesh->SetDrag(0);
+	m_mesh->SetPhysicsOn(true);
+	m_mesh->setDampenWallReflect(false);
 
 	InitShellData();
 }
@@ -51,17 +51,17 @@ void GreenShell::Use(Player * player, bool _altUse)
 {
 	Item::setItemInUse(player);
 
-	m_itemMesh->m_mesh->SetWorld(player->GetWorld());
-	m_itemMesh->m_mesh->AddPos(player->GetWorld().Right() * m_usePosOffset);
-	m_itemMesh->m_mesh->UpdateWorld();
-	m_itemMesh->m_mesh->setVelocity(m_speed * player->GetWorld().Forward() * (_altUse ? -1 : 1));
+	m_mesh->SetWorld(player->GetWorld());
+	m_mesh->AddPos(player->GetWorld().Right() * m_usePosOffset);
+	m_mesh->UpdateWorld();
+	m_mesh->setVelocity(m_speed * player->GetWorld().Forward() * (_altUse ? -1 : 1));
 }
 
 void GreenShell::Tick()
 {
 	if (m_itemUsed)
 	{
-		m_itemMesh->m_displayedMesh->Spin(m_spinRev, m_spinDuration);
+		m_displayedMesh->Spin(m_spinRev, m_spinDuration);
 	}
 	Item::Tick();
 }

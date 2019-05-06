@@ -160,9 +160,6 @@
     <ClCompile Include="KartAI.cpp">
       <Filter>Game\Components\Controllable\AI</Filter>
     </ClCompile>
-    <ClCompile Include="ItemPools.cpp">
-      <Filter>Game\Components\Item Info</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationModel.cpp">
       <Filter>Game\Components\Game Objects\3D</Filter>
     </ClCompile>
@@ -398,12 +395,6 @@
     </ClInclude>
     <ClInclude Include="Skybox.h">
       <Filter>Engine Backend\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemMesh.h">
-      <Filter>Game\Components\Item Info</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemPools.h">
-      <Filter>Game\Components\Item Info</Filter>
     </ClInclude>
     <ClInclude Include="KartAI.h">
       <Filter>Game\Components\Controllable\AI</Filter>

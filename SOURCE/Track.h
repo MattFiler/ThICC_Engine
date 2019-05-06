@@ -32,22 +32,6 @@ struct Waypoint {
 	Vector3 middle = Vector3(0, 0, 0);
 };
 
-struct IntroCamGroup {
-	IntroCamGroup() {
-		start_pos = Vector3(0, 0, 0);
-		end_pos = Vector3(0, 0, 0);
-		look_at = Vector3(0, 0, 0);
-	}
-	IntroCamGroup(Vector3 _start, Vector3 _end, Vector3 _lookat) {
-		start_pos = _start;
-		end_pos = _end;
-		look_at = _lookat;
-	}
-	Vector3 start_pos;
-	Vector3 end_pos;
-	Vector3 look_at;
-};
-
 /* A type of PhysModel that stores a reference to their triangles, used so that TrackMagnet objects
    can calculate the exact point of collision with this mesh. */
 class Track : public PhysModel
@@ -66,8 +50,11 @@ public:
 	std::vector<Vector3> getSpawnpoints() {
 		return map_spawnpoints;
 	};
-	std::vector<IntroCamGroup> getIntroCams() {
-		return map_intro_cams;
+	std::vector<Vector3> getCamerasPos() {
+		return map_cams_pos;
+	};
+	std::vector<Vector3> getCamerasRot() {
+		return map_cams_rot;
 	};
 	std::vector<BoundingOrientedBox> getWaypointsBB() {
 		return waypoint_bb;
@@ -138,7 +125,8 @@ private:
 	// Map config data from Blender
 	std::vector<Waypoint> map_waypoints;
 	std::vector<Vector3> map_spawnpoints;
-	std::vector<IntroCamGroup> map_intro_cams = std::vector<IntroCamGroup>(4);
+	std::vector<Vector3> map_cams_pos;
+	std::vector<Vector3> map_cams_rot; //broken
 	std::vector<Vector3> map_itemboxes_pos;
 	std::vector<Vector3> map_itemboxes_rot; //broken
 	std::vector<Waypoint> map_finishline;

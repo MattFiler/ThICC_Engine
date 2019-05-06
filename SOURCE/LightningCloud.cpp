@@ -2,9 +2,8 @@
 #include "LightningCloud.h"
 #include "Player.h"
 #include "GameStateData.h"
-#include "AudioManager.h"
 
-LightningCloud::LightningCloud() : Item(LIGHTNING_CLOUD)
+LightningCloud::LightningCloud() : Item(Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD))
 {
 	m_shouldDespawn = false;
 	m_growthData.m_scaleState = ItemGrowthData::SHRINK;
@@ -16,14 +15,11 @@ void LightningCloud::initCloudData()
 {
 	m_strikeDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["strike_duration"];
 	m_slowAmount = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_velocity_multiplier"];
-	m_maxSpeedMutli = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_max_velocity_multiplier"];
-	m_playerSpinRev = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_spin"]["revolutions"];
-	m_playerSpinDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_spin"]["duration"];
 
 	m_growthData.m_scaleMulti = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["size_multiplier"];
-	m_growthData.m_growthDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["growth_duration"];
-	m_growthData.m_shrinkDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["shrink_duraion"];
-	m_growthData.m_sizeChangeDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["max_shrink_duration"];
+	m_growthData.m_growthSpeed = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["growth_speed"];
+	m_growthData.m_shrinkSpeed = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["shrink_speed"];
+	m_growthData.m_duration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["max_shrink_duration"];
 }
 
 void LightningCloud::Tick()
@@ -37,32 +33,25 @@ void LightningCloud::Tick()
 			switch (m_growthData.m_scaleState)
 			{
 			case ItemGrowthData::GROW:
-				if (!m_growthData.m_growing)
-				{
-					m_player->Scale(m_growthData.m_growScale, m_growthData.m_growthDuration);
-					m_player->SetMaxSpeed(m_player->GetMaxSpeed() / m_slowAmount);
-					m_growthData.m_growing = true;
-				}
+				m_player->SetScale(Vector3::Lerp(m_growthData.m_startScale, m_growthData.m_endScale, m_growthData.m_scalePercent));
 
-				m_player->SetScale(m_player->GetAnimController()->GetScaleOffset());
+				m_growthData.m_scalePercent -= m_growthData.m_growthSpeed * Locator::getGSD()->m_dt;
 
-				if (m_player->GetAnimController()->FinishedScale())
+				if (m_growthData.m_scalePercent <= 0)
 				{
+					m_growthData.m_scalePercent = 0;
 					m_shouldDestroy = true;
 				}
 				break;
-
 			case ItemGrowthData::MAINTIAIN:
 			{
-				if (!m_slowed)
-				{
-					m_player->setVelocity(m_player->getVelocity() * m_slowAmount);
-					m_player->SetMaxSpeed(m_player->GetMaxSpeed() * m_maxSpeedMutli);
-					m_slowed = true;
-				}
+				Vector vel = m_player->getVelocity();
+				vel.Normalize();
+				vel *= m_slowAmount * Locator::getGSD()->m_dt;
+				m_player->setVelocity(m_player->getVelocity() + vel);
 
-				m_growthData.m_sizeChangeTimeElapsed += Locator::getGSD()->m_dt;
-				if (m_growthData.m_sizeChangeTimeElapsed >= m_growthData.m_sizeChangeDuration)
+				m_growthData.m_timeElapsed += Locator::getGSD()->m_dt;
+				if (m_growthData.m_timeElapsed >= m_growthData.m_duration)
 				{
 					m_growthData.m_scaleState = ItemGrowthData::GROW;
 				}
@@ -70,17 +59,15 @@ void LightningCloud::Tick()
 				break;
 			}
 			case ItemGrowthData::SHRINK:
-				if (!m_growthData.m_shrinking)
-				{
-					m_player->Scale(m_growthData.m_shrinkScale, m_growthData.m_shrinkDuration);
-					m_growthData.m_shrinking = true;
-					Locator::getAudio()->Play(SoundType::ITEMS, static_cast<int>(ItemSounds::LIGHTNING_SOUND));
-				}
-				m_player->Spin(m_playerSpinRev, m_playerSpinDuration);
-				m_player->SetScale(m_player->GetAnimController()->GetScaleOffset());
+				m_player->SetScale(Vector3::Lerp(m_growthData.m_startScale, m_growthData.m_endScale, m_growthData.m_scalePercent));
 
-				if (m_player->GetAnimController()->FinishedScale())
+				m_growthData.m_scalePercent += m_growthData.m_shrinkSpeed * Locator::getGSD()->m_dt;
+
+				m_player->Spin(2, 0.7);
+
+				if (m_growthData.m_scalePercent >= 1)
 				{
+					m_growthData.m_scalePercent = 1;
 					m_growthData.m_scaleState = ItemGrowthData::MAINTIAIN;
 				}
 				break;
@@ -92,10 +79,10 @@ void LightningCloud::Tick()
 			if (m_strikeTimeElapsed >= m_strikeDuration)
 			{
 				m_striked = true;
-				m_growthData.m_growScale = m_player->GetScale();
-				m_growthData.m_shrinkScale = m_growthData.m_growScale * m_growthData.m_scaleMulti;
-				m_growthData.m_sizeChangeDuration -= m_player->GetRanking();
-				m_itemMesh->m_displayedMesh->SetShouldRender(false);
+				m_growthData.m_startScale = m_player->GetScale();
+				m_growthData.m_endScale = m_growthData.m_startScale * m_growthData.m_scaleMulti;
+				m_growthData.m_duration -= m_player->GetRanking();
+				m_displayedMesh->SetShouldRender(false);
 			}
 		}
 	}
@@ -103,9 +90,9 @@ void LightningCloud::Tick()
 
 void LightningCloud::Use(Player * player, bool _altUse)
 {
-	if (player->isInvincible())
+	if (player->isInvincible() || player->GetLightningCloud())
 	{
-		m_shouldDestroy = true;
+		m_shouldDestroy = false;
 		return;
 	}
 

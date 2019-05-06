@@ -72,14 +72,14 @@ namespace EditorTool
             this.assetUseageGroup = new System.Windows.Forms.GroupBox();
             this.assetUseages = new System.Windows.Forms.ListBox();
             this.soundConfigs = new System.Windows.Forms.GroupBox();
-            this.soundLooping = new System.Windows.Forms.CheckBox();
-            this.soundPan = new System.Windows.Forms.TrackBar();
-            this.label15 = new System.Windows.Forms.Label();
+            this.saveSoundConfig = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.soundVolume = new System.Windows.Forms.TrackBar();
             this.soundPitch = new System.Windows.Forms.TrackBar();
             this.label14 = new System.Windows.Forms.Label();
-            this.soundVolume = new System.Windows.Forms.TrackBar();
-            this.label1 = new System.Windows.Forms.Label();
-            this.saveSoundConfig = new System.Windows.Forms.Button();
+            this.soundPan = new System.Windows.Forms.TrackBar();
+            this.label15 = new System.Windows.Forms.Label();
+            this.soundLooping = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
             this.modelConfigs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.model_segmentsize)).BeginInit();
@@ -88,9 +88,9 @@ namespace EditorTool
             ((System.ComponentModel.ISupportInitialize)(this.imagePreview)).BeginInit();
             this.assetUseageGroup.SuspendLayout();
             this.soundConfigs.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.soundPan)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.soundPitch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.soundVolume)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.soundPitch)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.soundPan)).BeginInit();
             this.SuspendLayout();
             // 
             // loadAssetType
@@ -113,7 +113,6 @@ namespace EditorTool
             // assetList
             // 
             this.assetList.FormattingEnabled = true;
-            this.assetList.HorizontalScrollbar = true;
             this.assetList.Location = new System.Drawing.Point(6, 46);
             this.assetList.Name = "assetList";
             this.assetList.Size = new System.Drawing.Size(202, 368);
@@ -557,33 +556,31 @@ namespace EditorTool
             this.soundConfigs.Text = "Sound Configuration";
             this.soundConfigs.Visible = false;
             // 
-            // soundLooping
+            // saveSoundConfig
             // 
-            this.soundLooping.AutoSize = true;
-            this.soundLooping.Location = new System.Drawing.Point(6, 194);
-            this.soundLooping.Name = "soundLooping";
-            this.soundLooping.Size = new System.Drawing.Size(64, 17);
-            this.soundLooping.TabIndex = 32;
-            this.soundLooping.Text = "Looping";
-            this.soundLooping.UseVisualStyleBackColor = true;
+            this.saveSoundConfig.Location = new System.Drawing.Point(145, 221);
+            this.saveSoundConfig.Name = "saveSoundConfig";
+            this.saveSoundConfig.Size = new System.Drawing.Size(75, 23);
+            this.saveSoundConfig.TabIndex = 25;
+            this.saveSoundConfig.Text = "Save";
+            this.saveSoundConfig.UseVisualStyleBackColor = true;
+            this.saveSoundConfig.Click += new System.EventHandler(this.saveSoundConfig_Click);
             // 
-            // soundPan
+            // label1
             // 
-            this.soundPan.LargeChange = 1;
-            this.soundPan.Location = new System.Drawing.Point(6, 149);
-            this.soundPan.Minimum = -10;
-            this.soundPan.Name = "soundPan";
-            this.soundPan.Size = new System.Drawing.Size(214, 45);
-            this.soundPan.TabIndex = 31;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(42, 13);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "Volume";
             // 
-            // label15
+            // soundVolume
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(6, 133);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(26, 13);
-            this.label15.TabIndex = 30;
-            this.label15.Text = "Pan";
+            this.soundVolume.Location = new System.Drawing.Point(6, 47);
+            this.soundVolume.Name = "soundVolume";
+            this.soundVolume.Size = new System.Drawing.Size(214, 45);
+            this.soundVolume.TabIndex = 27;
             // 
             // soundPitch
             // 
@@ -603,31 +600,33 @@ namespace EditorTool
             this.label14.TabIndex = 28;
             this.label14.Text = "Pitch";
             // 
-            // soundVolume
+            // soundPan
             // 
-            this.soundVolume.Location = new System.Drawing.Point(6, 47);
-            this.soundVolume.Name = "soundVolume";
-            this.soundVolume.Size = new System.Drawing.Size(214, 45);
-            this.soundVolume.TabIndex = 27;
+            this.soundPan.LargeChange = 1;
+            this.soundPan.Location = new System.Drawing.Point(6, 149);
+            this.soundPan.Minimum = -10;
+            this.soundPan.Name = "soundPan";
+            this.soundPan.Size = new System.Drawing.Size(214, 45);
+            this.soundPan.TabIndex = 31;
             // 
-            // label1
+            // label15
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 13);
-            this.label1.TabIndex = 26;
-            this.label1.Text = "Volume";
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(6, 133);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(26, 13);
+            this.label15.TabIndex = 30;
+            this.label15.Text = "Pan";
             // 
-            // saveSoundConfig
+            // soundLooping
             // 
-            this.saveSoundConfig.Location = new System.Drawing.Point(145, 221);
-            this.saveSoundConfig.Name = "saveSoundConfig";
-            this.saveSoundConfig.Size = new System.Drawing.Size(75, 23);
-            this.saveSoundConfig.TabIndex = 25;
-            this.saveSoundConfig.Text = "Save";
-            this.saveSoundConfig.UseVisualStyleBackColor = true;
-            this.saveSoundConfig.Click += new System.EventHandler(this.saveSoundConfig_Click);
+            this.soundLooping.AutoSize = true;
+            this.soundLooping.Location = new System.Drawing.Point(6, 194);
+            this.soundLooping.Name = "soundLooping";
+            this.soundLooping.Size = new System.Drawing.Size(64, 17);
+            this.soundLooping.TabIndex = 32;
+            this.soundLooping.Text = "Looping";
+            this.soundLooping.UseVisualStyleBackColor = true;
             // 
             // Asset_Editor
             // 
@@ -657,9 +656,9 @@ namespace EditorTool
             this.assetUseageGroup.ResumeLayout(false);
             this.soundConfigs.ResumeLayout(false);
             this.soundConfigs.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.soundPan)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.soundPitch)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.soundVolume)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.soundPitch)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.soundPan)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

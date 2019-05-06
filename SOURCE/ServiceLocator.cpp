@@ -11,4 +11,3 @@ AudioManager* Locator::ref_audio = nullptr;
 SceneManager* Locator::ref_SM = nullptr;
 GameObjectShared* Locator::ref_GOS = nullptr;
 ThICC_CameraData* Locator::ref_CamD = nullptr;
-ItemPools* Locator::ref_ItemPools = nullptr;

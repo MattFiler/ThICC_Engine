@@ -39,10 +39,10 @@
             this.isOffTrack = new System.Windows.Forms.CheckBox();
             this.shouldFlipUVs = new System.Windows.Forms.CheckBox();
             this.configPreview = new System.Windows.Forms.GroupBox();
-            this.isJumpPad = new System.Windows.Forms.CheckBox();
-            this.isAntiGravPad = new System.Windows.Forms.CheckBox();
             this.isWall = new System.Windows.Forms.CheckBox();
             this.autoDetect = new System.Windows.Forms.Button();
+            this.isAntiGravPad = new System.Windows.Forms.CheckBox();
+            this.isJumpPad = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.materialPreview)).BeginInit();
             this.configPreview.SuspendLayout();
             this.SuspendLayout();
@@ -50,7 +50,6 @@
             // materialList
             // 
             this.materialList.FormattingEnabled = true;
-            this.materialList.HorizontalScrollbar = true;
             this.materialList.Location = new System.Drawing.Point(12, 25);
             this.materialList.Name = "materialList";
             this.materialList.Size = new System.Drawing.Size(254, 342);
@@ -155,28 +154,6 @@
             this.configPreview.TabStop = false;
             this.configPreview.Text = "Config";
             // 
-            // isJumpPad
-            // 
-            this.isJumpPad.AutoCheck = false;
-            this.isJumpPad.AutoSize = true;
-            this.isJumpPad.Location = new System.Drawing.Point(6, 111);
-            this.isJumpPad.Name = "isJumpPad";
-            this.isJumpPad.Size = new System.Drawing.Size(73, 17);
-            this.isJumpPad.TabIndex = 20;
-            this.isJumpPad.Text = "Jump Pad";
-            this.isJumpPad.UseVisualStyleBackColor = true;
-            // 
-            // isAntiGravPad
-            // 
-            this.isAntiGravPad.AutoCheck = false;
-            this.isAntiGravPad.AutoSize = true;
-            this.isAntiGravPad.Location = new System.Drawing.Point(6, 88);
-            this.isAntiGravPad.Name = "isAntiGravPad";
-            this.isAntiGravPad.Size = new System.Drawing.Size(77, 17);
-            this.isAntiGravPad.TabIndex = 19;
-            this.isAntiGravPad.Text = "Hover Pad";
-            this.isAntiGravPad.UseVisualStyleBackColor = true;
-            // 
             // isWall
             // 
             this.isWall.AutoCheck = false;
@@ -197,6 +174,28 @@
             this.autoDetect.Text = "Auto Detect";
             this.autoDetect.UseVisualStyleBackColor = true;
             this.autoDetect.Click += new System.EventHandler(this.autoDetect_Click);
+            // 
+            // isAntiGravPad
+            // 
+            this.isAntiGravPad.AutoCheck = false;
+            this.isAntiGravPad.AutoSize = true;
+            this.isAntiGravPad.Location = new System.Drawing.Point(6, 88);
+            this.isAntiGravPad.Name = "isAntiGravPad";
+            this.isAntiGravPad.Size = new System.Drawing.Size(77, 17);
+            this.isAntiGravPad.TabIndex = 19;
+            this.isAntiGravPad.Text = "Hover Pad";
+            this.isAntiGravPad.UseVisualStyleBackColor = true;
+            // 
+            // isJumpPad
+            // 
+            this.isJumpPad.AutoCheck = false;
+            this.isJumpPad.AutoSize = true;
+            this.isJumpPad.Location = new System.Drawing.Point(6, 111);
+            this.isJumpPad.Name = "isJumpPad";
+            this.isJumpPad.Size = new System.Drawing.Size(73, 17);
+            this.isJumpPad.TabIndex = 20;
+            this.isJumpPad.Text = "Jump Pad";
+            this.isJumpPad.UseVisualStyleBackColor = true;
             // 
             // Model_Importer_MaterialList
             // 

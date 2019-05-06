@@ -77,8 +77,6 @@ public:
 	void Spin(int _revolutions, float _duration) { m_animationMesh->Spin(_revolutions, _duration); };
 	void Flip(int _revolutions, float _duration) { m_animationMesh->Flip(_revolutions, _duration); };
 	void Jump(float _jumpHeight, float _duration) { m_animationMesh->Jump(_jumpHeight, _duration); };
-	void Scale(Vector3 _newScale, float _duration) { m_animationMesh->Scale(_newScale, _duration); };
-
 
 	bool isInvincible() { return m_invincible; };
 	void setInvicible(bool _invincible) { m_invincible = _invincible; };
