@@ -286,6 +286,23 @@ void GameScene::pushBackObjects()
 	}
 }
 
+//Gets all players in 3DObject vector
+std::vector<Player*> GameScene::GetPlayers()
+{
+	std::vector<Player*> players;
+
+	for (auto& obj : m_3DObjects)
+	{
+		Player* player = dynamic_cast<Player*>(obj);
+		if (player)
+		{
+			players.push_back(player);
+		}
+	}
+
+	return players;
+}
+
 /* Update the scene */
 void GameScene::Update(DX::StepTimer const& timer)
 {
@@ -907,7 +924,7 @@ Item* GameScene::CreateItem(ItemType type)
 	}
 	case RED_SHELL:
 	{
-		RedShell* redShell = new RedShell();
+		RedShell* redShell = new RedShell(GetPlayers());
 		m_itemModels.push_back(redShell);
 		loadItemDebugCollider(redShell);
 		return redShell;
