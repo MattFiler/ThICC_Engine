@@ -15,6 +15,8 @@ public:
 	void UseGroundTypes(bool _flag) { m_useGroundTypes = _flag; };
 	CollisionType GetGroundType() { return m_colType; };
 
+	bool HasHitWall() { return m_hasHitWall; };
+
 protected:
 	bool m_onTrack = false;
 	bool m_useGroundTypes = false;
@@ -40,4 +42,6 @@ private:
 
 	float m_timeOffTerrain = 0;
 	float m_rotationDelay = 1; // Seconds spent off terrain before the kart rotates to world up
+
+	bool m_hasHitWall = false;
 };

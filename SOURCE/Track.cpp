@@ -33,8 +33,10 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 		Vector3 bottom_left = blender_vector.ConvertPosition(Vector3(it.value()["bottom_left"][0], it.value()["bottom_left"][1], it.value()["bottom_left"][2]) * m_track_data.scale);
 		Vector3 bottom_right = blender_vector.ConvertPosition(Vector3(it.value()["bottom_right"][0], it.value()["bottom_right"][1], it.value()["bottom_right"][2]) * m_track_data.scale);
 		Vector3 middle_bottom = bottom_left + ((bottom_right - bottom_left)*0.5f);
+		Vector3 middle_top = top_left + ((top_right - top_left)*0.5f);
+		Vector3 middle = middle_bottom + ((middle_top - middle_bottom)*0.5f);
 
-		Waypoint new_waypoint = Waypoint(top_left, top_right, bottom_left, bottom_right, middle_bottom);
+		Waypoint new_waypoint = Waypoint(top_left, top_right, bottom_left, bottom_right, middle);
 		map_waypoints.push_back(new_waypoint);
 
 		//Calculate debug marker position as the mid-point of top left and bottom right!
@@ -225,15 +227,19 @@ void Track::setWaypointBB()
 {
 	for (size_t i = 0; i < map_finishline.size(); ++i)
 	{
-		Vector3 vertices[4] =
+		Vector3 vertices[8] =
 		{
 			Vector3(static_cast<float>(map_finishline[i].top_left.x), static_cast<float>(map_finishline[i].top_left.y), static_cast<float>(map_finishline[i].top_left.z)),
 			Vector3(static_cast<float>(map_finishline[i].top_right.x), static_cast<float>(map_finishline[i].top_right.y), static_cast<float>(map_finishline[i].top_right.z)),
 			Vector3(static_cast<float>(map_finishline[i].bottom_left.x), static_cast<float>(map_finishline[i].bottom_left.y), static_cast<float>(map_finishline[i].bottom_left.z)),
-			Vector3(static_cast<float>(map_finishline[i].bottom_right.x), static_cast<float>(map_finishline[i].bottom_right.y), static_cast<float>(map_finishline[i].bottom_right.z))
+			Vector3(static_cast<float>(map_finishline[i].bottom_right.x), static_cast<float>(map_finishline[i].bottom_right.y), static_cast<float>(map_finishline[i].bottom_right.z)),
+			Vector3(static_cast<float>(map_finishline[i].top_left.x+1), static_cast<float>(map_finishline[i].top_left.y + 1), static_cast<float>(map_finishline[i].top_left.z + 1)),
+			Vector3(static_cast<float>(map_finishline[i].top_right.x + 1), static_cast<float>(map_finishline[i].top_right.y + 1), static_cast<float>(map_finishline[i].top_right.z + 1)),
+			Vector3(static_cast<float>(map_finishline[i].bottom_left.x + 1), static_cast<float>(map_finishline[i].bottom_left.y + 1), static_cast<float>(map_finishline[i].bottom_left.z + 1)),
+			Vector3(static_cast<float>(map_finishline[i].bottom_right.x + 1), static_cast<float>(map_finishline[i].bottom_right.y + 1), static_cast<float>(map_finishline[i].bottom_right.z + 1))
 		};
 		BoundingOrientedBox box;
-		BoundingOrientedBox::CreateFromPoints(box, 4, (const XMFLOAT3*)&vertices[0], 3 * sizeof(float));
+		BoundingOrientedBox::CreateFromPoints(box, 8, (const XMFLOAT3*)&vertices[0], 3 * sizeof(float));
 
 		waypoint_bb.push_back(box);
 	}
@@ -490,7 +496,7 @@ Vector3 Track::getWaypointMiddle(int index)
 	{
 		index -= map_waypoints.size();
 	}
-	return map_waypoints[index].middle_bottom;
+	return map_waypoints[index].middle;
 }
 
 //Allow our decoration model to update and render if we have one

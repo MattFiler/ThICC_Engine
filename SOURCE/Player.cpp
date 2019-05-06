@@ -6,6 +6,7 @@
 #include "ItemData.h"
 #include "AIScheduler.h"
 #include "GameObjectShared.h"
+#include "KartAI.h"
 #include <iostream>
 #include <fstream>
 
@@ -31,11 +32,6 @@ Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, 
 	m_shouldRender = false;
 
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
-
-	for (int i = 0; i < m_posHistoryLength; i++)
-	{
-		m_posHistory.push(m_world);
-	}
 
 	// If AI
 	if (m_playerID == -1)
@@ -100,6 +96,8 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_move = std::make_unique<ControlledMovement>(this, m_animationMesh.get());
 
 	m_normalGrav = m_maxGrav;
+
+	m_lastFramePos = m_pos;
 	//Update TrackMagnet here too?
 }
 void Player::SetActiveItem(ItemType _item) {
@@ -219,6 +217,8 @@ void Player::Tick()
 	TrackMagnet::Tick();
 
 	m_animationMesh->Update(m_world);
+
+	m_lastFramePos = m_pos;
 }
 
 void Player::PositionFloatingItems()
@@ -233,6 +233,10 @@ void Player::PositionFloatingItems()
 
 void Player::CheckUseItem()
 {
+	if (m_ai)
+	{
+		return;
+	}
 	if (m_multiItem)
 	{
 		TrailItems();
@@ -513,7 +517,7 @@ void Player::setGamePad(bool _state)
 	if (!m_ai && (m_playerID == -1 || m_lap == 3))
 	{
 		m_move->SetGamepadActive(false);
-		m_ai = std::make_unique<MoveAI>(this, m_move.get());
+		m_ai = std::make_unique<KartAI>(this, m_move.get());
 		m_ai->UseDrift(true);
 		m_move->SetEnabled(true);
 		return;
@@ -525,6 +529,8 @@ void Player::setGamePad(bool _state)
 
 void Player::movement()
 {
+	// Disable drifting off the track
+	m_move->EnableDrifting(!(m_colType == OFF_TRACK || m_colType == GLIDER_TRACK || m_colType == NO_TERRAIN));
 	m_move->Tick();
 
 	// Debug code to save/load the players game state
@@ -571,6 +577,7 @@ void Player::GlideLogic()
 	else if (m_gliding)
 	{
 		m_glideTimeElapsed += Locator::getGSD()->m_dt;
+		m_drag = 0.3f;
 		if (m_onTrack && m_glideTimeElapsed > m_minGlideDuration)
 		{
 			m_elapsedTimeOff = 0;
@@ -611,6 +618,7 @@ void Player::RespawnLogic()
 	}
 
 	m_timeSinceRespawn += Locator::getGSD()->m_dt;
+
 	if (!m_respawning && m_onTrack && m_colType == CollisionType::ON_TRACK)
 	{
 
@@ -620,8 +628,14 @@ void Player::RespawnLogic()
 		if (m_posHistoryTimer >= m_posHistoryInterval)
 		{
 			m_posHistoryTimer -= m_posHistoryInterval;
-			m_posHistory.push(m_world);
-			m_posHistory.pop();
+			m_matrixHistory.push(m_world);
+			m_posHistory.push(m_pos);
+
+			if (m_matrixHistory.size() > m_posHistoryLength)
+			{
+				m_matrixHistory.pop();
+				m_posHistory.pop();
+			}
 		}
 	}
 	else
@@ -653,6 +667,18 @@ void Player::RespawnLogic()
 	}
 }
 
+Vector3 Player::GetPosHistoryBack()
+{
+	if (m_posHistory.empty())
+	{
+		return m_pos;
+	}
+	else
+	{
+		return m_posHistory.back();
+	}
+}
+
 void Player::Respawn()
 {
 	m_gliding = false;
@@ -660,7 +686,7 @@ void Player::Respawn()
 	m_move->SetEnabled(false);
 	m_animationMesh->SwitchModelSet("respawn");
 	m_respawning = true;
-	m_respawnEnd = m_posHistory.front();
+	m_respawnEnd = m_matrixHistory.front();
 	m_respawnStart = m_world;
 	m_glideTimeElapsed = 0;
 	m_elapsedTimeOff = 0;

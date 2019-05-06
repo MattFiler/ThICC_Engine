@@ -15,6 +15,16 @@ void AIScheduler::UpdateTrack(Track* _track) {
 	m_track = _track;
 }
 
+void AIScheduler::DebugRender()
+{ 
+#ifdef _DEBUG
+	for (MoveAI* ai : m_aiList)
+	{
+		ai->DebugRender();
+	}
+#endif
+}
+
 void AIScheduler::Update()
 {
 	#ifndef _ARCADE
@@ -24,7 +34,7 @@ void AIScheduler::Update()
 	{
 		if (i == m_currentIndex)
 		{
-			if (m_elapsedTime >= (m_totalFrequency*i))
+			if (m_elapsedTime >= (m_totalFrequency*i) && m_aiList[i])
 			{
 				m_aiList[i]->RecalculateLine(m_track);
 				m_currentIndex++;
@@ -46,7 +56,10 @@ void AIScheduler::Update()
 	{
 		if (ai->Update())
 		{
-			ai->RecalculateLine(m_track);
+			if (ai)
+			{
+				ai->RecalculateLine(m_track);
+			}
 		}
 	}
 	#endif

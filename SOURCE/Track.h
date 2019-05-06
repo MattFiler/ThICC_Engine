@@ -18,18 +18,18 @@ struct TrackData {
 };
 
 struct Waypoint {
-	Waypoint(Vector3 _tl, Vector3 _tr, Vector3 _bl, Vector3 _br, Vector3 _mb) {
+	Waypoint(Vector3 _tl, Vector3 _tr, Vector3 _bl, Vector3 _br, Vector3 _mid) {
 		top_left = _tl;
 		top_right = _tr;
 		bottom_left = _bl;
 		bottom_right = _br;
-		middle_bottom = _mb;
+		middle = _mid;
 	}
 	Vector3 top_left = Vector3(0, 0, 0);
 	Vector3 top_right = Vector3(0, 0, 0);
 	Vector3 bottom_left = Vector3(0, 0, 0);
 	Vector3 bottom_right = Vector3(0, 0, 0);
-	Vector3 middle_bottom = Vector3(0, 0, 0);
+	Vector3 middle = Vector3(0, 0, 0);
 };
 
 struct IntroCamGroup {

@@ -139,7 +139,6 @@
     <ClCompile Include="DebugScene.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationModel.cpp" />
     <ClCompile Include="AnimationController.cpp">
       <Filter>Game\Components\Game Objects\3D</Filter>
     </ClCompile>
@@ -157,6 +156,12 @@
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
       <Filter>Engine Backend\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="KartAI.cpp">
+      <Filter>Game\Components\Controllable\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationModel.cpp">
+      <Filter>Game\Components\Game Objects\3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -352,7 +357,6 @@
     <ClInclude Include="CameraData.h">
       <Filter>Engine Backend\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationModel.h" />
     <ClInclude Include="AnimationController.h">
       <Filter>Game\Components\Game Objects\3D</Filter>
     </ClInclude>
@@ -391,6 +395,12 @@
     </ClInclude>
     <ClInclude Include="Skybox.h">
       <Filter>Engine Backend\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="KartAI.h">
+      <Filter>Game\Components\Controllable\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModel.h">
+      <Filter>Game\Components\Game Objects\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

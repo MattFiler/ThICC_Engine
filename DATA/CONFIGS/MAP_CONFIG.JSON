@@ -53,23 +53,7 @@
     "model": "DRAGON_DRIFTWAY",
     "decoration_model": "DEFAULT_ITEM",
     "cubemap": "SUNSUBMIXER",
-    "skybox": "DL_VRDRAGON_ALB",
-    "cup": "DEMO_CUP",
-    "arcade_only": false,
-    "audio": {
-      "background_start": "MKS START MUSIC",
-      "background": "MKS MAIN MUSIC",
-      "final_lap_start": "MKS FINAL LAP START",
-      "final_lap": "MKS FINAL LAP LOOP"
-    }
-  },
-  "YOSHI_CIRCUIT": {
-    "friendly_name": "MAP_YOSHI_CIRCUIT",
-    "menu_sprite": "YOSHI CIRCUIT",
-    "model": "YOSHI_CIRCUIT_SUBMESH2",
-    "decoration_model": "YOSHI_CIRCUIT_SUBMESH1",
-    "cubemap": "SUNSUBMIXER",
-    "skybox": "DL_VRYOSHICIRCUIT_01_ALB",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
     "arcade_only": false,
     "audio": {
@@ -102,6 +86,22 @@
     "decoration_model": "VRFIRST",
     "cubemap": "SUNSUBMIXER",
     "skybox": "SKYBOX_HYRULE_CIRCUIT",
+    "cup": "DEMO_CUP",
+    "arcade_only": false,
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
+  },
+  "YOSHI_CIRCUIT": {
+    "friendly_name": "MAP_YOSHI_CIRCUIT",
+    "menu_sprite": "YOSHI CIRCUIT",
+    "model": "YOSHI_CIRCUIT_SUBMESH2_3",
+    "decoration_model": "YOSHI_CIRCUIT_SUBMESH1",
+    "cubemap": "SUNSUBMIXER",
+    "skybox": "DL_VRYOSHICIRCUIT_01_ALB",
     "cup": "DEMO_CUP",
     "arcade_only": false,
     "audio": {
