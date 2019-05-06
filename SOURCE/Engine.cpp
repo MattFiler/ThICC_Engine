@@ -299,7 +299,7 @@ void ThICC_Engine::Render()
 
 	// Show the new frame.
 	m_device_data.m_deviceResources->Present();
-	m_graphicsMemory->Commit(m_device_data.m_deviceResources->GetCommandQueue());
+	Locator::getRD()->m_graphicsMemory->Commit(m_device_data.m_deviceResources->GetCommandQueue());
 }
 
 // Helper method to clear the back buffers.
@@ -383,7 +383,7 @@ void ThICC_Engine::CreateDeviceDependentResources()
 	auto device = m_device_data.m_deviceResources->GetD3DDevice();
 
 	//Create our core render graphics resources
-	m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
+	Locator::getRD()->m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 	m_renderDescriptors = std::make_unique<DescriptorHeap>(device,
 		D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
 		D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
@@ -434,7 +434,7 @@ void ThICC_Engine::OnDeviceLost()
 
 	m_device_data.m_hdrScene->ReleaseDevice();
 
-	m_graphicsMemory.reset();
+	Locator::getRD()->m_graphicsMemory.reset();
 }
 
 /* If the device comes back, create everything again! */
