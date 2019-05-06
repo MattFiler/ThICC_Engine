@@ -22,8 +22,8 @@ public:
 	void Load();
 	void Reset();
 
-	void AddModel(std::string _name, std::string _filepath, Vector3 _offset = Vector3::Zero);
-	void AddModel(std::string _name, SDKMeshGO3D* _model, Vector3 _offset);
+	void AddModel(std::string _name, std::string _filepath);
+	void AddModel(std::string _name, SDKMeshGO3D* _model);
 
 	void AddModelSet(std::string _setName, std::vector<std::string> models);
 	void SwitchModelSet(std::string _setName);

@@ -83,23 +83,6 @@ void PhysModel::initCollider(json &model_data)
 	m_physData.m_length = m_physData.m_globalFrontTopLeft.z - m_physData.m_globalBackTopLeft.z;
 }
 
-Vector3 PhysModel::MatrixDecomposeYawPitchRoll(Matrix  mat)
-{
-	//Breaks down a matrix into yaw, pitch, and roll. Returns them as a float3
-	Vector3 euler;
-	euler.x = asinf(-mat._32);
-	if (cosf(euler.x) > 0.0001)
-	{
-		euler.y = atan2f(mat._31, mat._33);
-		euler.z = atan2f(mat._12, mat._22);
-	}
-	else
-	{
-		euler.y = 0.0f;
-		euler.z = atan2f(-mat._21, mat._11);
-	}
-	return euler;
-}
 
 void PhysModel::updateCollider()
 {

@@ -41,6 +41,11 @@ public:
 
 	void EnableDrifting(bool _shouldDrift);
 
+	float GetBaseMoveSpeed() { return m_baseMoveSpeed; };
+	float GetBaseTurnSpeed() { return m_baseTurnSpeed; };
+	void ResetMoveSpeed() { m_moveSpeed = m_baseMoveSpeed; };
+	void ResetTurnSpeed() { m_turnSpeed = m_baseTurnSpeed; };
+
 private:
 	KeybindManager m_keybind;
 	GameFilepaths m_filepath;
@@ -66,6 +71,8 @@ private:
 	float m_driftBoostMultiplier = 0.3f;
 	float m_moveSpeed = 50;
 	float m_turnSpeed = 65;
+	float m_baseMoveSpeed = 50;
+	float m_baseTurnSpeed = 65;
 	//--
 
 	bool m_left = false;

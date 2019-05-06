@@ -27,8 +27,8 @@ void BulletBill::Tick()
 		if (m_bulletTimeElapsed >= m_bulletDuration)
 		{
 			ControlledMovement* playerMovement = m_player->GetControlledMovement();
-			playerMovement->SetMoveSpeed(m_playerMoveSpeed);
-			playerMovement->SetTurnSpeed(m_playerTurnSpeed);
+			playerMovement->ResetMoveSpeed();
+			playerMovement->ResetTurnSpeed();
 
 			m_player->GetMoveAi()->UseDrift(true);
 			if (m_player->GetPlayerId() != -1)
@@ -79,8 +79,6 @@ void BulletBill::Use(Player * player, bool _altUse)
 
 	ControlledMovement* playerMovement = player->GetControlledMovement();
 	playerMovement->SetGamepadActive(false);
-	m_playerMoveSpeed = playerMovement->GetMoveSpeed();
-	m_playerTurnSpeed = playerMovement->GetTurnSpeed();
 
 	playerMovement->SetMoveSpeed(m_aiData.m_moveSpeed);
 	playerMovement->SetTurnSpeed(m_aiData.m_turnSpeed);

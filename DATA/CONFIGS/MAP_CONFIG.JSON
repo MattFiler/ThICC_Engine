@@ -63,22 +63,6 @@
       "final_lap": "MKS FINAL LAP LOOP"
     }
   },
-  "MOO_MOO_MEADOWS": {
-    "friendly_name": "MAP_MEADOWS",
-    "menu_sprite": "MAP_MEADOWS",
-    "model": "MOOMOOMEADOWS",
-    "decoration_model": "DEFAULT_ITEM",
-    "cubemap": "SUNSUBMIXER",
-    "skybox": "VRWIIMOO_ALB",
-    "cup": "DEMO_CUP",
-    "arcade_only": false,
-    "audio": {
-      "background_start": "MKS START MUSIC",
-      "background": "MKS MAIN MUSIC",
-      "final_lap_start": "MKS FINAL LAP START",
-      "final_lap": "MKS FINAL LAP LOOP"
-    }
-  },
   "MARIO KART STADIUM": {
     "friendly_name": "MAP_MKS",
     "menu_sprite": "MARIO KART STADIUM PREVIEW",
@@ -102,6 +86,22 @@
     "decoration_model": "YOSHI_CIRCUIT_SUBMESH1",
     "cubemap": "SUNSUBMIXER",
     "skybox": "DL_VRYOSHICIRCUIT_01_ALB",
+    "cup": "DEMO_CUP",
+    "arcade_only": false,
+    "audio": {
+      "background_start": "MKS START MUSIC",
+      "background": "MKS MAIN MUSIC",
+      "final_lap_start": "MKS FINAL LAP START",
+      "final_lap": "MKS FINAL LAP LOOP"
+    }
+  },
+  "MOO_MOO_MEADOWS": {
+    "friendly_name": "MAP_MEADOWS",
+    "menu_sprite": "MAP_MEADOWS",
+    "model": "MOOMOOMEADOWS_SUB_MESH1",
+    "decoration_model": "MOOMOOMEADOWS_SUB_MESH_2",
+    "cubemap": "SUNSUBMIXER",
+    "skybox": "VRWIIMOO_ALB",
     "cup": "DEMO_CUP",
     "arcade_only": false,
     "audio": {

@@ -75,13 +75,13 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_model_config_vehicle << i;
 
 	m_animationMesh = std::make_unique<AnimationController>();
-	m_animationMesh->AddModel("vehicle", _vehicle->model, Vector::Zero);
+	m_animationMesh->AddModel("vehicle", _vehicle->model);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
 	m_animationMesh->AddModel("character", _character->model);
 	m_animationMesh->AddModel("lakitu", Locator::getGOS()->common_model_config["referee"]);
 	m_animationMesh->AddModel("glider", Locator::getGOS()->common_model_config["glider"]);
-	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL), Vector3::Up);
+	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL));
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
 	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
@@ -696,6 +696,7 @@ void Player::Respawn()
 	m_respawnStart = m_world;
 	m_glideTimeElapsed = 0;
 	m_elapsedTimeOff = 0;
+	UseMagnet(false);
 
 	// Decompose the matrix
 	Vector3 pos;
@@ -735,6 +736,7 @@ void Player::MovePlayerToTrack()
 		m_respawning = false;
 		m_move->SetEnabled(true);
 		m_animationMesh->SwitchModelSet("default");
+		UseMagnet(true);
 		return;
 	}
 

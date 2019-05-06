@@ -135,7 +135,8 @@ std::vector<Collision> CollisionManager::CheckPhysModelCollisions(std::vector<Ph
 				continue;
 			}
 
-			if (physModel1 != physModel2 && Vector3::DistanceSquared(physModel1->GetPos(), physModel2->GetPos()) < m_thresholdDistSqrd && physModel1->getCollider().Intersects(physModel2->getCollider()))
+			if (physModel1 != physModel2 && Vector3::DistanceSquared(physModel1->GetPos(), physModel2->GetPos()) < m_thresholdDistSqrd
+				&& physModel1->getCollider().Intersects(physModel2->getCollider()))
 			{
 				Collision collision;
 

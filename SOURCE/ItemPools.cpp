@@ -135,7 +135,7 @@ void ItemPools::CreateItemPool(ItemType _type, int _poolSize)
 AnimationController * ItemPools::CreateExplosion()
 {
 	AnimationController* explosion = new AnimationController();
-	explosion->AddModel("Explosion", "bomb_explosion", Vector3::Zero);
+	explosion->AddModel("Explosion", "bomb_explosion");
 	explosion->AddModelSet("default", std::vector<std::string>{"Explosion"});
 	explosion->SwitchModelSet("default");
 	explosion->Load();
@@ -148,7 +148,7 @@ ItemMesh * ItemPools::CreateItemMesh(ItemType _type)
 	itemMesh->m_mesh = std::make_unique<TrackMagnet>(Locator::getItemData()->GetItemModelName(_type));
 	itemMesh->m_mesh->SetShouldRender(false);
 	itemMesh->m_displayedMesh = std::make_unique<AnimationController>();
-	itemMesh->m_displayedMesh->AddModel("item", Locator::getItemData()->GetItemModelName(_type), Vector3::Zero);
+	itemMesh->m_displayedMesh->AddModel("item", Locator::getItemData()->GetItemModelName(_type));
 	itemMesh->m_displayedMesh->AddModelSet("default", std::vector<std::string>{"item"});
 	itemMesh->m_displayedMesh->SwitchModelSet("default");
 	itemMesh->m_displayedMesh->Load();
