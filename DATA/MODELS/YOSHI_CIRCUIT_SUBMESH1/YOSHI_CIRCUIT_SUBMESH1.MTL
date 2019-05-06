@@ -50,7 +50,7 @@ illum 2
 map_Kd waterfall65.png
 map_Kn norm_placeholder.png
 norm norm_placeholder.png
-Tr 0.000000
+Tr 0.400000
 map_Ks spec_placeholder.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png

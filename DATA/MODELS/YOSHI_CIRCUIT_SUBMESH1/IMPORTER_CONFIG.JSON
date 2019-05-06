@@ -74,7 +74,7 @@
     "map_Kd": "waterfall65.png",
     "map_Kn": "",
     "norm": "",
-    "Tr": "0.000000",
+    "Tr": "0.400000",
     "map_Ks": "",
     "map_Ke": "",
     "map_emissive": "",
@@ -159,7 +159,7 @@
       "waterfall1.png"
     ],
     "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.035
+    "ThICC_ANIMATION_TIME": 0.015
   },
   "yc_Asphalt_t02": {
     "newmtl": "yc_Asphalt_t02",
