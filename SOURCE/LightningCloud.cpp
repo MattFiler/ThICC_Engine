@@ -15,8 +15,8 @@ LightningCloud::LightningCloud() : Item(LIGHTNING_CLOUD)
 void LightningCloud::initCloudData()
 {
 	m_strikeDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["strike_duration"];
-	m_slowAmount = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_velocity_multiplier"];
-	m_maxSpeedMutli = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_max_velocity_multiplier"];
+	m_playerMoveSpeed = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_move_speed"];
+	m_playerTurnSpeed = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_turn_speed"];
 	m_playerSpinRev = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_spin"]["revolutions"];
 	m_playerSpinDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_spin"]["duration"];
 
@@ -40,11 +40,10 @@ void LightningCloud::Tick()
 				if (!m_growthData.m_growing)
 				{
 					m_player->Scale(m_growthData.m_growScale, m_growthData.m_growthDuration);
-					m_player->SetMaxSpeed(m_player->GetMaxSpeed() / m_slowAmount);
+					m_player->GetControlledMovement()->ResetMoveSpeed();
+					m_player->GetControlledMovement()->ResetTurnSpeed();
 					m_growthData.m_growing = true;
 				}
-
-				m_player->SetScale(m_player->GetAnimController()->GetScaleOffset());
 
 				if (m_player->GetAnimController()->FinishedScale())
 				{
@@ -56,12 +55,11 @@ void LightningCloud::Tick()
 			{
 				if (!m_slowed)
 				{
-					m_player->setVelocity(m_player->getVelocity() * m_slowAmount);
-					m_player->SetMaxSpeed(m_player->GetMaxSpeed() * m_maxSpeedMutli);
+					m_player->GetControlledMovement()->SetMoveSpeed(m_playerMoveSpeed);
+					m_player->GetControlledMovement()->SetTurnSpeed(m_playerTurnSpeed);
 					m_slowed = true;
 				}
 
-				m_growthData.m_sizeChangeTimeElapsed += Locator::getGSD()->m_dt;
 				if (m_growthData.m_sizeChangeTimeElapsed >= m_growthData.m_sizeChangeDuration)
 				{
 					m_growthData.m_scaleState = ItemGrowthData::GROW;

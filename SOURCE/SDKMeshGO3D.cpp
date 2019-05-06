@@ -15,17 +15,20 @@ SDKMeshGO3D::SDKMeshGO3D(std::string _filename)
 {
 	filename = _filename;
 
-	if (_filename.length() > 5 && _filename.substr(_filename.length() - 5) != "DEBUG") {
-		//Fetch config
-		std::ifstream x(m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL));
-		nlohmann::json model_config;
-		model_config << x;
-
-		//Apply config
-		SetScale(model_config["modelscale"]);
-		SetPos(Vector3(model_config["start_x"], model_config["start_y"], model_config["start_z"]));
-		SetRotationInDegrees(Vector3(model_config["rot_x"], model_config["rot_y"], model_config["rot_z"]));
+	if (_filename.length() > 5 && _filename.substr(_filename.length() - 5) == "DEBUG") {
+		return;
 	}
+
+	//Fetch config
+	std::ifstream x(m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL));
+	nlohmann::json model_config;
+	model_config << x;
+
+	//Apply config
+	SetScale(model_config["modelscale"]);
+	SetPos(Vector3(model_config["start_x"], model_config["start_y"], model_config["start_z"]));
+	SetRotationInDegrees(Vector3(model_config["rot_x"], model_config["rot_y"], model_config["rot_z"]));
+	UpdateWorld();
 }
 
 /* Destroy everything */

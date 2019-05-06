@@ -20,6 +20,9 @@ void TrackMagnet::Render()
 /* Checks for collision between this object and the track. 'Sticks' the object to the track if at a reasonable angle and distance */
 bool TrackMagnet::ShouldStickToTrack(Track& track)
 {
+	if (!m_useMagnet)
+		return false;
+
 	track.SetValidCollision(true, true, true, false, true, true, true, true);
 
 	Vector3 midIntersect;

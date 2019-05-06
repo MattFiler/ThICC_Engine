@@ -45,14 +45,15 @@ public:
 	void SetYaw(float _yaw) { m_yaw = _yaw; }
 	void SetRoll(float _roll) { m_roll = _roll; }
 
-	void SetRotation(Vector3 _rotation) { m_pitch = _rotation.x; m_yaw = _rotation.y; m_roll = _rotation.z; }
-	void SetRotationInDegrees(Vector3 _rotation) { m_pitch = _rotation.x / 57.2958; m_yaw = _rotation.y / 57.2958; m_roll = _rotation.z / 57.2958; }
+	void SetRotation(Vector3 _rotation);
+	void SetRotationInDegrees(Vector3 _rotation);
 
 	Vector3 GetPos() { return m_pos; }
 	Vector3 GetScale() { return m_scale; }
 	float GetPitch() { return m_pitch; }
 	float GetYaw() { return m_yaw; }
 	float GetRoll() { return m_roll; }
+	Vector3 GetRotation();
 	Matrix GetOri() { return m_rot; }
 	Matrix GetWorld() { return m_world; }
 	GO3D_Render_Type GetType() { return m_type; }
@@ -64,6 +65,7 @@ public:
 	virtual void Reset() {};
 
 protected:
+	Vector3 MatrixDecomposeYawPitchRoll(Matrix  mat);
 	Vector3 m_pos = Vector3::Zero;
 	Vector3 m_scale = Vector3::One;
 	float m_pitch = 0.0f;

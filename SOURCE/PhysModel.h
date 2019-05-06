@@ -108,7 +108,6 @@ protected:
 	float m_maxSpeed = 130;
 
 	SDKMeshGO3D* m_colliderDebug = nullptr;
-	Vector3 MatrixDecomposeYawPitchRoll(Matrix  mat);
 	Vector3 applyOffset(Vector3 pos);
 	float offset = 0;
 

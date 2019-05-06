@@ -4,7 +4,7 @@
 #include "Player.h"
 
 
-RedShell::RedShell() : Item(RED_SHELL)
+RedShell::RedShell(std::vector<Player*> _players) : Item(RED_SHELL), m_players(_players)
 {
 	InitShellData();
 
@@ -45,6 +45,27 @@ void RedShell::Tick()
 		if (!m_altUse)
 		{
 			m_move->Tick();
+
+			float dist = Vector3::DistanceSquared(m_itemMesh->m_mesh->GetPos(), m_targetPlayer->GetPos());
+
+			DebugText::print("distance: " + std::to_string(dist));
+			
+			if (dist < m_aiData.m_moveTowardDistSqrd)
+			{
+				if (m_ai)
+				{
+					m_ai.reset();
+				}
+				Vector3 moveTowards = m_targetPlayer->GetPos() - m_itemMesh->m_mesh->GetPos();
+				moveTowards.Normalize();
+				m_itemMesh->m_mesh->setVelocity(moveTowards * m_move->GetMoveSpeed());
+				m_hasMoveTowards = true;
+			}
+		}
+
+		if (m_itemMesh->m_mesh->HasHitWall())
+		{
+			FlagForDestoy();
 		}
 	}
 }
@@ -57,6 +78,7 @@ void RedShell::HitByPlayer(Player * _player)
 		return;
 	}
 
+	DebugText::print("Red Shell hit player: " + std::to_string(_player->GetPlayerId()));
 	_player->setVelocity(_player->getVelocity() * m_collisionData.m_playerVelMulti);
 	_player->Jump(m_collisionData.m_jumpHeight, m_collisionData.m_jumpDuration);
 	_player->Flip(m_collisionData.m_flipRev, m_collisionData.m_flipDuration);
@@ -83,7 +105,58 @@ void RedShell::Use(Player * _player, bool _altUse)
 		m_move->SetWaypoint(_player->GetWaypoint());
 		m_ai = std::make_unique<MoveAI>(m_itemMesh->m_mesh.get(), m_move.get());
 		m_ai->SetAutoUpdateWaypoints(true);
+
+		FindTargetPlayer();
 	}
 
 	m_altUse = _altUse;
+}
+
+void RedShell::FindTargetPlayer()
+{
+	for (auto& player : m_players)
+	{
+		if (player->GetRanking() >= m_player->GetRanking())
+		{
+			continue;
+		}
+		else if (m_targetPlayer)
+		{
+			if (player->GetRanking() > m_targetPlayer->GetRanking())
+			{
+				m_targetPlayer = player;
+			}
+			else
+			{
+				continue;
+			}
+		}
+		else
+		{
+			m_targetPlayer = player;
+		}
+	}
+
+	if (m_targetPlayer)
+	{
+		m_players.clear();
+	}
+	else
+	{
+		for (auto& player : m_players)
+		{
+			if (m_targetPlayer)
+			{
+				if (player->GetRanking() > m_targetPlayer->GetRanking())
+				{
+					m_targetPlayer = player;
+				}
+			}
+			else
+			{
+				m_targetPlayer = player;
+			}
+		}
+
+	}
 }

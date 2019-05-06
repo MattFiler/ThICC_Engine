@@ -17,7 +17,9 @@ ControlledMovement::ControlledMovement(PhysModel* _physModel, AnimationControlle
 	m_timeForMaxDrift = movement_config["time_for_max_drift"];
 	m_driftBoostMultiplier = movement_config["drift_boost_multiplier"];
 	m_moveSpeed = movement_config["movement_speed"];
+	m_baseMoveSpeed = m_moveSpeed;
 	m_turnSpeed = movement_config["turning_speed"];
+	m_baseTurnSpeed = m_baseTurnSpeed;
 }
 
 void ControlledMovement::Tick()

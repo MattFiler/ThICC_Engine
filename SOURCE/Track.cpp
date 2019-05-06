@@ -74,6 +74,7 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 		ItemBox* new_item_box = new ItemBox(box_pos, box_rot);
 		item_boxes.push_back(new_item_box);
 	}
+
 	for (json::iterator it = m_track_data_j["map_finishline"].begin(); it != m_track_data_j["map_finishline"].end(); ++it) {
 		Vector3 top_left = blender_vector.ConvertPosition(Vector3(it.value()["top_left"][0], it.value()["top_left"][1], it.value()["top_left"][2]) * m_track_data.scale);
 		Vector3 top_right = blender_vector.ConvertPosition(Vector3(it.value()["top_right"][0], it.value()["top_right"][1], it.value()["top_right"][2]) * m_track_data.scale);
@@ -97,10 +98,6 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 	{
 		m_track_data.spawn_pos = m_track_data.origin;
 	}
-
-	//Set our config in action
-	SetScale(m_track_data.scale);
-	SetRotationInDegrees(m_track_data.start_rot);
 
 	//Debug output
 	DebugText::print("Loaded data for track: " + _track->model);
