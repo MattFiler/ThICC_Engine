@@ -5,6 +5,13 @@
 #include "Bomb.h"
 #include "Explosion.h"
 
+float CollisionManager::m_thresholdDistSqrd = 0;
+
+void CollisionManager::SetThresholdDistance(float _dist)
+{
+	m_thresholdDistSqrd = _dist;
+}
+
 void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _physModels, std::vector<Item*> _items)
 {
 	std::vector<Collision> collisions = CheckPhysModelCollisions(_physModels);
@@ -119,33 +126,44 @@ std::vector<Collision> CollisionManager::CheckPhysModelCollisions(std::vector<Ph
 
 	for (PhysModel* physModel1 : _physModels)
 	{
+		int count1 = 0;
+
 		for (PhysModel* physModel2 : _physModels)
 		{
-			if (physModel1 != physModel2 && physModel1->getCollider().Intersects(physModel2->getCollider()))
+			if (dynamic_cast<ItemBox*>(physModel1) && dynamic_cast<ItemBox*>(physModel2))
+			{
+				continue;
+			}
+
+			if (physModel1 != physModel2 && Vector3::DistanceSquared(physModel1->GetPos(), physModel2->GetPos()) < m_thresholdDistSqrd && physModel1->getCollider().Intersects(physModel2->getCollider()))
 			{
 				Collision collision;
 
-				Plane frontPlane = getPlane(physModel2->data.m_globalFrontTopLeft, physModel2->data.m_globalFrontTopRight, physModel2->data.m_height);
-				Plane backPlane = getPlane(physModel2->data.m_globalBackTopLeft, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
-				Plane rightPlane = getPlane(physModel2->data.m_globalFrontTopRight, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
-				Plane leftPlane = getPlane(physModel2->data.m_globalFrontTopLeft, physModel2->data.m_globalBackTopLeft, physModel2->data.m_height);
+				if (dynamic_cast<Player*>(physModel1) && dynamic_cast<Player*>(physModel2))
+				{
+					Plane frontPlane = getPlane(physModel2->data.m_globalFrontTopLeft, physModel2->data.m_globalFrontTopRight, physModel2->data.m_height);
+					Plane backPlane = getPlane(physModel2->data.m_globalBackTopLeft, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
+					Plane rightPlane = getPlane(physModel2->data.m_globalFrontTopRight, physModel2->data.m_globalBackTopRight, physModel2->data.m_height);
+					Plane leftPlane = getPlane(physModel2->data.m_globalFrontTopLeft, physModel2->data.m_globalBackTopLeft, physModel2->data.m_height);
 
-				if (physModel1->getCollider().Intersects(backPlane))
-				{
-					collision.m_collisionNormal = backPlane.Normal();
+					if (physModel1->getCollider().Intersects(backPlane))
+					{
+						collision.m_collisionNormal = backPlane.Normal();
+					}
+					else if (physModel1->getCollider().Intersects(frontPlane))
+					{
+						collision.m_collisionNormal = frontPlane.Normal();
+					}
+					else if (physModel1->getCollider().Intersects(rightPlane))
+					{
+						collision.m_collisionNormal = leftPlane.Normal();
+					}
+					else if (physModel1->getCollider().Intersects(leftPlane))
+					{
+						collision.m_collisionNormal = leftPlane.Normal();
+					}
 				}
-				else if (physModel1->getCollider().Intersects(frontPlane))
-				{
-					collision.m_collisionNormal = frontPlane.Normal();
-				}
-				else if (physModel1->getCollider().Intersects(rightPlane))
-				{
-					collision.m_collisionNormal = leftPlane.Normal();
-				}
-				else if (physModel1->getCollider().Intersects(leftPlane))
-				{
-					collision.m_collisionNormal = leftPlane.Normal();
-				}
+
 				collision.m_model1 = physModel1;
 				collision.m_model2 = physModel2;
 
@@ -162,7 +180,7 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 
 	for (Item* item1 : _items)
 	{
-		if (item1->GetMesh())
+		if (item1->GetItemMesh())
 		{
 			bool hit_player = false;
 
@@ -170,7 +188,8 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 			for (PhysModel* model : _physModels)
 			{
 				Player* player = dynamic_cast<Player*>(model);
-				if (player && player != item1->getPlayer() && item1->GetMesh()->getCollider().Intersects(player->getCollider()))
+				if (player && player != item1->getPlayer() && Vector3::DistanceSquared(item1->GetMesh()->GetPos(), model->GetPos()) < m_thresholdDistSqrd
+					&& item1->GetMesh()->getCollider().Intersects(player->getCollider()))
 				{
 					if (player->isInvincible())
 					{
@@ -191,7 +210,8 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 				//Item x Item Collision
 				for (Item* item2 : _items)
 				{
-					if (item1 != item2 && item2->GetMesh() && !CheckItemImmunity(item1, item2) && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
+					if (item1 != item2 && item2->GetItemMesh() && Vector3::DistanceSquared(item1->GetMesh()->GetPos(), item2->GetMesh()->GetPos()) < m_thresholdDistSqrd
+						&& !CheckItemImmunity(item1, item2) && item1->GetMesh()->getCollider().Intersects(item2->GetMesh()->getCollider()))
 					{
 						//Checking for bombs
 						if (bombResponse(item1, item2))

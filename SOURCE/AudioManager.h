@@ -21,6 +21,8 @@ public:
 
 	// to pass in type of sound you want to play and which sound (cast to an int)
 	void Play(SoundType type, int i);
+	void Stop(SoundType type, int i);
+	void Pause(SoundType type, int i);
 
 	// to pass in type of sound you want to get and which sound (cast to an int)
 	Sound* GetSound(SoundType type, int i);
@@ -42,4 +44,5 @@ private:
 	std::vector<Sound*> m_gameSounds;
 	std::vector<Sound*> m_characterSounds;
 	std::vector<Sound*> m_miscSounds;
+	std::vector<Sound*> m_itemSounds;
 };

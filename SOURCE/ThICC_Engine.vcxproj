@@ -356,6 +356,8 @@
     <ClInclude Include="ItemCollisionData.h" />
     <ClInclude Include="ItemData.h" />
     <ClInclude Include="ItemGrowthData.h" />
+    <ClInclude Include="ItemMesh.h" />
+    <ClInclude Include="ItemPools.h" />
     <ClInclude Include="ItemThrowData.h" />
     <ClInclude Include="KartAI.h" />
     <ClInclude Include="KeybindManager.h" />
@@ -419,6 +421,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="ItemData.cpp" />
+    <ClCompile Include="ItemPools.cpp" />
     <ClCompile Include="KartAI.cpp" />
     <ClCompile Include="KeybindManager.cpp" />
     <ClCompile Include="LightningCloud.cpp" />
