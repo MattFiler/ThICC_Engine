@@ -239,8 +239,9 @@ class ThICC_CourseIntroCam(bpy.types.Operator):
         look_at.location = location
         
         # Ceate camera 1 with calculated name
-        bpy.ops.object.camera_add(location=location,rotation=[3.15/2,0,0])
+        bpy.ops.object.camera_add(location=(location[0],location[1]-3,location[2]),rotation=[3.15/2,0,0])
         bpy.context.active_object.name = camera_name_1
+        bpy.context.object.data.clip_end = 100000
         
         # Make camera 1 look at the look-at point
         look_at.select = True
@@ -248,8 +249,9 @@ class ThICC_CourseIntroCam(bpy.types.Operator):
         bpy.ops.object.track_set(type = "TRACKTO")
         
         # Ceate camera 2 with calculated name
-        bpy.ops.object.camera_add(location=location,rotation=[3.15/2,0,0])
+        bpy.ops.object.camera_add(location=(location[0],location[1]+3,location[2]),rotation=[3.15/2,0,0])
         bpy.context.active_object.name = camera_name_2
+        bpy.context.object.data.clip_end = 100000
         
         # Make camera 2 look at the look-at point
         look_at.select = True
