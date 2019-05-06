@@ -64,7 +64,7 @@ bool MoveAI::Update()
 		m_debugNextWaypoint[i]->SetPos(m_model->GetPos() + step*i);
 		m_debugNextWaypoint[i]->UpdateWorld();
 	}
-	DebugText::print(std::to_string(m_move->GetAcceleration()));
+	//DebugText::print(std::to_string(m_move->GetAcceleration()));
 #endif
 	//return false;
 	if (m_player)

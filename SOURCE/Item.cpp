@@ -63,7 +63,6 @@ void Item::Tick()
 		//Player immunity time
 		if (m_player && !m_trailingPlayerImmunity)
 		{
-			DebugText::print("ITEM ELAPSED IMMUNITY TIME: " + std::to_string(m_elapsedImmunityTime));
 			m_elapsedImmunityTime += Locator::getGSD()->m_dt;
 			if (m_elapsedImmunityTime >= m_maxImmunityTime)
 			{
