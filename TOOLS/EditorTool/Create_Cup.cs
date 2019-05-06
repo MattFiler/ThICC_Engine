@@ -66,12 +66,8 @@ namespace EditorTool
             //Update tags
             function_libary.executeUseageQueueForTag(function_libary.getUseageTagFor(AssetCompType.CUP));
 
-            //Remove old json config or load existing (depends on mode)
-            if (edit_mode)
-            {
-                maps_json_config.Remove(map_json_key);
-            }
-            else
+            //Load existing config if not editing (would already be loaded)
+            if (!edit_mode)
             {
                 maps_json_config = JObject.Parse(File.ReadAllText("DATA/CONFIGS/CUP_CONFIG.JSON"));
             }
@@ -79,7 +75,7 @@ namespace EditorTool
             string map_name = cupCodename.Text;
 
             //Add map to config
-            maps_json_config[map_name] = JObject.Parse("{}");
+            if (!edit_mode) { maps_json_config[map_name] = JObject.Parse("{}"); }
             maps_json_config[map_name]["friendly_name"] = cupName.Text;
             maps_json_config[map_name]["menu_sprite"] = cupPreviewImage.Text;
 

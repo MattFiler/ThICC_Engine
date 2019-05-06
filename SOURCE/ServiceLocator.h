@@ -12,6 +12,7 @@ class AudioManager;
 class SceneManager;
 class GameObjectShared;
 class ThICC_CameraData;
+class ItemPools;
 
 struct Locator {
 	static ThICC_InputData* getID() {
@@ -74,6 +75,12 @@ struct Locator {
 		}
 		return ref_CamD;
 	}
+	static ItemPools* getItemPools() {
+		if (ref_ItemPools == nullptr) {
+			throw std::runtime_error("Call to item pools before initialisation.");
+		}
+		return ref_ItemPools;
+	}
 
 	static void setupID(ThICC_InputData* inst_ID) {
 		ref_ID = inst_ID;
@@ -104,6 +111,9 @@ struct Locator {
 	}
 	static void setupCamData(ThICC_CameraData* inst_camData) {
 		ref_CamD = inst_camData;
+	}	
+	static void setupItemPools(ItemPools* inst_itemPool) {
+		ref_ItemPools = inst_itemPool;
 	}
 
 private:
@@ -117,4 +127,5 @@ private:
 	static SceneManager* ref_SM;
 	static GameObjectShared* ref_GOS;
 	static ThICC_CameraData* ref_CamD;
+	static ItemPools* ref_ItemPools;
 };

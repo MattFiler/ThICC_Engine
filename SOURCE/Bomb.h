@@ -19,9 +19,10 @@ public:
 	void Detonate();
 	void HitByPlayer(Player* player) override;
 
+	Explosion* GetExplosion() { return m_explosion; };
 private:
 	std::function<Explosion*(ItemType)> CreateExplosion;
-	Explosion* explosion;
+	Explosion* m_explosion;
 	float m_current_time = 0;
 	float m_countdownTime = 0;
 	bool m_countdown = false;
