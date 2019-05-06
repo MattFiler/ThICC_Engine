@@ -112,7 +112,7 @@ private:
 	int finished = 0;
 	bool is_paused = false;
 
-	int m_maxPlayers = 3;
+	int m_maxPlayers = 1;
 
 };
 
