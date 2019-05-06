@@ -1,5 +1,7 @@
 {
   "asset_name": "GARAGE",
   "asset_type": "Cubemap",
-  "in_use_in": []
+  "in_use_in": [
+    "Map"
+  ]
 }
