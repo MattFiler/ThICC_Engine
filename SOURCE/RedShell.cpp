@@ -65,7 +65,7 @@ void RedShell::Tick()
 
 		if (m_itemMesh->m_mesh->HasHitWall())
 		{
-			FlagForDestoy();
+			m_shouldDestroy = true;
 		}
 	}
 }

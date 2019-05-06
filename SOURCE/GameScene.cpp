@@ -586,6 +586,13 @@ void GameScene::UpdateItems()
 			{
 				Locator::getItemPools()->AddItemMesh(m_itemModels[i]->GetItemType(), m_itemModels[i]->GetItemMesh());
 			}
+
+			//Removes the AI from the red shell
+			if (dynamic_cast<RedShell*>(m_itemModels[i]))
+			{
+				dynamic_cast<RedShell*>(m_itemModels[i])->GetAi().reset();
+			}
+
 			m_itemModels.erase(m_itemModels.begin() + i);
 		}
 	}
