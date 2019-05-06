@@ -46,7 +46,7 @@ void ThICC_Game::Initialize() {
 	for (auto& element : character_config) {
 		CharacterInfo* new_chr_inf = new CharacterInfo(element);
 		m_go_shared.character_instances.push_back(new_chr_inf);
-		Locator::getAudio()->addToSoundsList(m_go_shared.character_instances[index]->audio, SoundType::CHARACTER);
+		Locator::getAudio()->addToSoundsList(m_go_shared.character_instances[index]->audio, m_go_shared.character_instances[index]->name);
 		index++;
 	}
 

@@ -8,6 +8,7 @@
 #include "AudioManager.h"
 #include "DebugMarker.h"
 #include "CameraData.h"
+#include "RaceManager.h"
 #include "Explosion.h"
 #include "GameObjectShared.h"
 #include "AIScheduler.h"
@@ -83,10 +84,10 @@ void GameScene::ExpensiveLoad() {
 		);
 	}
 
-	Locator::getAudio()->addToSoundsList(map_info->audio_background_start, SoundType::GAME);
-	Locator::getAudio()->addToSoundsList(map_info->audio_background, SoundType::GAME);
-	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap_start, SoundType::GAME);
-	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap, SoundType::GAME);
+	Locator::getAudio()->addToSoundsList(map_info->audio_background_start, "TRACK_START");
+	Locator::getAudio()->addToSoundsList(map_info->audio_background, "TRACK_LOOP");
+	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap_start, "FINAL_LAP_START");
+	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap, "FINAL_LAP_LOOP");
 
 	//Load in
 	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
@@ -154,7 +155,7 @@ void GameScene::ExpensiveUnload() {
 	cine_cam->Reset();
 	cine_cam->SetType(CameraType::CINEMATIC);
 
-	Locator::getAudio()->clearSoundsList(SoundType::GAME);
+	Locator::getAudio()->clearTrackSounds();
 
 	//We'll probably need to reset more stuff here, like race timers, etc
 	timeout = 12.f;
@@ -336,7 +337,23 @@ void GameScene::Update(DX::StepTimer const& timer)
 		DebugText::print(std::to_string(Locator::getID()->TEST));
 	}
 
-	//camera_pos->SetText(std::to_string((int)cine_cam->GetPos().x) + "," + std::to_string((int)cine_cam->GetPos().y) + "," + std::to_string((int)cine_cam->GetPos().z));
+	int players_finsihed = 0;
+	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	{
+		if (dynamic_cast<Player*>((*it)))
+		{
+			if (dynamic_cast<Player*>((*it))->GetLap() == 4)
+			{
+				players_finsihed++;
+				if (players_finsihed == 1)
+				{
+					Locator::getRM()->current_race_number++;
+					m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
+					return;
+				}
+			}
+		}
+	}
 
 	Locator::getAIScheduler()->Update();
 
@@ -351,8 +368,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 	switch (state)
 	{
 	case START:
-		Locator::getAudio()->GetSound(SoundType::MISC, (int)MiscSounds::INTRO_MUSIC)->SetVolume(1.f);
-		Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::INTRO_MUSIC);
+		Locator::getAudio()->GetSound("INTRO_MUSIC")->SetVolume(1.f);
+		Locator::getAudio()->Play("INTRO_MUSIC");
 		state = OPENING;
 		break;
 	case OPENING:
@@ -373,7 +390,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
-			Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::PRE_COUNTDOWN);
+			Locator::getAudio()->Play("PRE_COUNTDOWN");
 		}
 		#ifdef _DEBUG
 		if (m_keybinds.keyReleased("Activate"))
@@ -391,8 +408,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		if (m_cam[game_config["player_count"]-1]->GetType() == CameraType::FOLLOW)
 		{
-			Locator::getAudio()->GetSound(SoundType::MISC, (int)MiscSounds::COUNTDOWN)->SetVolume(0.7f);
-			Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::COUNTDOWN);
+			Locator::getAudio()->GetSound("COUNTDOWN")->SetVolume(0.7f);
+			Locator::getAudio()->Play("COUNTDOWN");
 			state = COUNTDOWN;
 		}
 		break;
@@ -413,8 +430,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			state = PLAY;
 			timeout = 3.5f;
-			Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_START)->SetVolume(0.7f);
-			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_START);
+			Locator::getAudio()->GetSound("TRACK_START")->SetVolume(0.7f);
+			Locator::getAudio()->Play("TRACK_START");
 			for (int i = 0; i < m_maxPlayers; ++i)
 			{
 				player[i]->setGamePad(true);
@@ -431,13 +448,13 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		if (timeout <= 0 && track_music_start)
 		{
-			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_GAME);
+			Locator::getAudio()->Play("TRACK_START");
 			track_music_start = false;
 		}
 
 		if (timeout <= 0 && final_lap_start)
 		{
-			Locator::getAudio()->Play(SoundType::GAME, (int)GameSounds::MKS_FL_GAME);
+			Locator::getAudio()->Play("FINAL_LAP_LOOP");
 			final_lap_start = false;
 		}
 
@@ -451,8 +468,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 	if (m_keybinds.keyReleased("Quit"))
 	{
-		Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_GAME)->Stop();
-		Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_FL_GAME)->Stop();
+		Locator::getAudio()->Stop("TRACK_LOOP");
+		Locator::getAudio()->Stop("FINAL_LAP_LOOP");
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	if (m_keybinds.keyReleased("toggle orbit cam"))
@@ -806,8 +823,8 @@ void GameScene::SetPlayersWaypoint()
 				}
 				else if (i < game_config["player_count"] && player[i]->GetLap() == 2 && !final_lap)
 				{
-					Locator::getAudio()->GetSound(SoundType::GAME, (int)GameSounds::MKS_GAME)->Stop();
-					Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::FINAL_LAP_IND);
+					Locator::getAudio()->Stop("TRACK_LOOP");
+					Locator::getAudio()->Play("FINAL_LAP_SOUND");
 					final_lap = true;
 					final_lap_start = true;
 					timeout = 3.8f;
