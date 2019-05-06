@@ -452,7 +452,7 @@ namespace EditorTool
                     }
                     foreach (JToken data in model_blender_data["look_at_points"])
                     {
-                        lookat_array.Add(data["pos"]);
+                        lookat_array.Add(data);
                     }
                     foreach (JToken data in model_blender_data["waypoints"])
                     {

@@ -42,8 +42,21 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 		//debug_markers.push_back(new_marker);
 	}
 	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
-		map_cams_pos.push_back(blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
-		map_cams_rot.push_back(blender_vector.ConvertAngle(Vector3((float)it.value()["rotation"][0], (float)it.value()["rotation"][1], (float)it.value()["rotation"][2])));
+		if (it.value()["role"] == "Start") {
+			map_intro_cams.at((int)it.value()["index"]).start_pos = (blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
+		}
+		else if (it.value()["role"] == "End") {
+			map_intro_cams.at((int)it.value()["index"]).end_pos = (blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
+		}
+	}
+	if (!m_track_data_j["look_at_points"].is_null()) {
+		for (json::iterator it = m_track_data_j["look_at_points"].begin(); it != m_track_data_j["look_at_points"].end(); ++it) {
+			map_intro_cams.at((int)it.value()["index"]).look_at = (blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
+		}
+	}
+	else
+	{
+		DebugText::print(" >>> This map uses an outdated config! Please re-export for new camera configurations!! <<< ");
 	}
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));
