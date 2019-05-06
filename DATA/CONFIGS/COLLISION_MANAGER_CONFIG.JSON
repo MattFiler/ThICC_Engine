@@ -1,0 +1,19 @@
+{
+  "threshold_collision_distance_squared": 10,
+  "invincibility_collision": {
+	"velocity_multiplier": 0,		
+	"jump": {
+		"height": 1.5,
+		"duration": 1
+	},
+	"flip": {
+		"revolutions": 1,
+		"duration": 0.8
+	},
+	"spin" : {
+		"revolutions": 0,
+		"duration": 0
+	},
+	"vertical_pos_offset": 4   
+  }
+}

@@ -56,7 +56,7 @@ bool GameScene::Load()
 	create3DObjects();
 	create2DObjects();
 	pushBackObjects();
-	CollisionManager::SetThresholdDistance((float)game_config["threshold_collision_distance_squared"]);
+	CollisionManager::InitConfig();
 
 	return true;
 }

@@ -435,11 +435,11 @@
 	"RED_SHELL_3X": {
 		"ui_sprite": "ITEM_RED_SHELL_3X",
 		"probabilities": {
-			"place_4": 7.5,
-			"place_5": 12.5,
-			"place_6": 10,
-			"place_7": 7.5,
-			"place_8": 5
+			"place_4": 0,
+			"place_5": 0,
+			"place_6": 0,
+			"place_7": 0,
+			"place_8": 0
 		},
         "implemented": false 
 	},

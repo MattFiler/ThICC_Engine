@@ -32,3 +32,10 @@ Lightning Cloud
 "place_5": 7.5
 "place_6": 5,
 "place_7": 2.5
+
+Red Shell X3
+"place_4": 7.5,
+"place_5": 12.5,
+"place_6": 10,
+"place_7": 7.5,
+"place_8": 5
