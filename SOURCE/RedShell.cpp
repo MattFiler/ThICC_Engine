@@ -65,7 +65,8 @@ void RedShell::Tick()
 
 		if (m_itemMesh->m_mesh->HasHitWall())
 		{
-			FlagForDestoy();
+			m_ai.reset();
+			m_shouldDestroy = true;
 		}
 	}
 }
@@ -85,6 +86,7 @@ void RedShell::HitByPlayer(Player * _player)
 	_player->Spin(m_collisionData.m_spinRev, m_collisionData.m_spinDuration);
 	_player->AddPos(_player->GetWorld().Up() * m_collisionData.m_vertPosOffset);
 	_player->UpdateWorld();
+	m_ai.reset();
 	m_shouldDestroy = true;
 }
 
