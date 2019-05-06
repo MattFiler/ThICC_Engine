@@ -98,7 +98,7 @@
   "YOSHI_CIRCUIT": {
     "friendly_name": "MAP_YOSHI_CIRCUIT",
     "menu_sprite": "YOSHI CIRCUIT",
-    "model": "YOSHI_CIRCUIT_SUBMESH2",
+    "model": "YOSHI_CIRCUIT_SUBMESH2_3",
     "decoration_model": "YOSHI_CIRCUIT_SUBMESH1",
     "cubemap": "SUNSUBMIXER",
     "skybox": "DL_VRYOSHICIRCUIT_01_ALB",
