@@ -1,0 +1,13 @@
+{
+  "asset_name": "CHARACTER_ROSALINA",
+  "asset_type": "Images",
+  "visible": true,
+  "is_2d": true,
+  "res_x": 1000,
+  "res_y": 969,
+  "x_pos": 0,
+  "y_pos": 0,
+  "in_use_in": [
+    "Character"
+  ]
+}
