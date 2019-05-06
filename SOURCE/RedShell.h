@@ -4,6 +4,7 @@
 #include "ControlledMovement.h"
 #include "ItemCollisionData.h"
 #include "ItemAiData.h"
+
 class RedShell : public Item
 {
 public:

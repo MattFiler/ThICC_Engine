@@ -357,19 +357,10 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 	Locator::getAIScheduler()->Update();
 
-	if (finished == 4)
-	{
-		//m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
-		//Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
-		//Locator::getAudio()->GetSound(SOUND_TYPE::GAME, (int)SOUNDS_GAME::MKS_GAME)->Stop();
-		//finished = 0;
-	}
-
 	switch (state)
 	{
 	case START:
-		Locator::getAudio()->GetSound("INTRO_MUSIC")->SetVolume(1.f);
-		Locator::getAudio()->Play("INTRO_MUSIC");
+		Locator::getAudio()->Play("COURSE_INTRO");
 		state = OPENING;
 		break;
 	case OPENING:

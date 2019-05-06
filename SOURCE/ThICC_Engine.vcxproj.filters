@@ -166,7 +166,9 @@
     <ClCompile Include="AnimationModel.cpp">
       <Filter>Game\Components\Game Objects\3D</Filter>
     </ClCompile>
-    <ClCompile Include="LoadingScene.cpp" />
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
