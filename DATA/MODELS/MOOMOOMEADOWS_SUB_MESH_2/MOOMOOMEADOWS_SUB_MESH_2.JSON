@@ -1,0 +1,60 @@
+{
+  "asset_name": "MOOMOOMEADOWS_SUB_MESH_2",
+  "asset_type": "Models",
+  "model_type": 3,
+  "visible": true,
+  "start_x": 0.0,
+  "start_y": 0.0,
+  "start_z": 0.0,
+  "modelscale": 6.0,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 10.0,
+  "in_use_in": [
+    "Map"
+  ],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      470.9037,
+      71.97584,
+      501.5194
+    ],
+    "front_top_right": [
+      -475.9563,
+      71.97584,
+      501.5194
+    ],
+    "front_bottom_right": [
+      -475.9563,
+      0,
+      501.5194
+    ],
+    "front_bottom_left": [
+      470.9037,
+      0,
+      501.5194
+    ],
+    "back_top_left": [
+      470.9037,
+      71.97584,
+      -467.6309
+    ],
+    "back_top_right": [
+      -475.9563,
+      71.97584,
+      -467.6309
+    ],
+    "back_bottom_right": [
+      -475.9563,
+      0,
+      -467.6309
+    ],
+    "back_bottom_left": [
+      470.9037,
+      0,
+      -467.6309
+    ]
+  }
+}
