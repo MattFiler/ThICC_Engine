@@ -18,7 +18,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 34,
+    "ThICC_INDEX": 35,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -37,7 +37,7 @@
   },
   "yc_ArrowBanner_t01_NoTrm": {
     "newmtl": "yc_ArrowBanner_t01_NoTrm",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -52,28 +52,23 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 10,
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 12,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true,
+      "3": false,
       "5": false,
       "6": false,
       "7": false
-    },
-    "ThICC_ANIMATION": [
-      "gcyc_ArrowBanner_t01_Alb.png"
-    ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    }
   },
   "yc_ArrowBanner_t01_NoTrm_a1": {
     "newmtl": "yc_ArrowBanner_t01_NoTrm_a1",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -88,24 +83,19 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 24,
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 25,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true,
+      "3": false,
       "5": false,
       "6": false,
       "7": false
-    },
-    "ThICC_ANIMATION": [
-      "gcyc_ArrowBanner_t01_Alb.png"
-    ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    }
   },
   "yc_Asphalt_t01": {
     "newmtl": "yc_Asphalt_t01",
@@ -126,16 +116,16 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 7,
+    "ThICC_INDEX": 9,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
       "3": false,
       "5": false,
       "6": false,
-      "7": true
+      "7": false
     },
     "ThICC_ANIMATION": [
       "gcyc_Asphalt_t01_Alb.png"
@@ -145,7 +135,7 @@
   },
   "yc_Asphalt_t01_a1": {
     "newmtl": "yc_Asphalt_t01_a1",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -160,9 +150,9 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 31,
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 32,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -171,13 +161,8 @@
       "3": false,
       "5": false,
       "6": false,
-      "7": true
-    },
-    "ThICC_ANIMATION": [
-      "gcyc_Asphalt_t01_Alb.png"
-    ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+      "7": false
+    }
   },
   "yc_BankNewJump": {
     "newmtl": "yc_BankNewJump",
@@ -198,16 +183,16 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 18,
+    "ThICC_INDEX": 19,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
       "3": false,
       "5": false,
       "6": false,
-      "7": true
+      "7": false
     },
     "ThICC_ANIMATION": [
       "gcyc_BankNewJump_Alb.png"
@@ -217,7 +202,7 @@
   },
   "yc_BrickAndTree_t01": {
     "newmtl": "yc_BrickAndTree_t01",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -232,28 +217,23 @@
     "Tr": "0.000000",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 27,
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 28,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
-      "1": true,
+      "1": false,
       "2": false,
       "3": false,
       "5": false,
       "6": false,
       "7": false
-    },
-    "ThICC_ANIMATION": [
-      "gcyc_BrickAndTree_t01_Alb.png"
-    ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    }
   },
   "yc_BrickAndTree_t01_a1": {
     "newmtl": "yc_BrickAndTree_t01_a1",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -268,24 +248,19 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 32,
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 33,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
-      "1": true,
+      "1": false,
       "2": false,
       "3": false,
       "5": false,
       "6": false,
       "7": false
-    },
-    "ThICC_ANIMATION": [
-      "gcyc_BrickAndTree_t01_Alb.png"
-    ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    }
   },
   "yc_CmnStartGrid1": {
     "newmtl": "yc_CmnStartGrid1",
@@ -306,7 +281,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 15,
+    "ThICC_INDEX": 16,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -337,16 +312,16 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 30,
+    "ThICC_INDEX": 31,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
       "3": false,
       "5": false,
       "6": false,
-      "7": true
+      "7": false
     },
     "ThICC_ANIMATION": [
       "gcyc_Concrete_t01_Alb.png"
@@ -373,7 +348,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 36,
+    "ThICC_INDEX": 37,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -392,7 +367,7 @@
   },
   "yc_CurbStone_t01_a1": {
     "newmtl": "yc_CurbStone_t01_a1",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -407,24 +382,19 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 2,
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 4,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": false,
       "3": false,
       "5": false,
       "6": false,
       "7": false
-    },
-    "ThICC_ANIMATION": [
-      "gcyc_CurbStone_t01_Alb.png"
-    ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    }
   },
   "yc_FlowerLeaf_t01": {
     "newmtl": "yc_FlowerLeaf_t01",
@@ -445,7 +415,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 5,
+    "ThICC_INDEX": 7,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -476,7 +446,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 9,
+    "ThICC_INDEX": 11,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -507,7 +477,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 33,
+    "ThICC_INDEX": 34,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -539,8 +509,8 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 11,
-    "ThICC_METALLIC": true,
+    "ThICC_INDEX": 13,
+    "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
@@ -558,7 +528,7 @@
   },
   "yc_GuardRail_t01_a1": {
     "newmtl": "yc_GuardRail_t01_a1",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -573,24 +543,19 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 19,
-    "ThICC_METALLIC": true,
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 20,
+    "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true,
+      "3": false,
       "5": false,
       "6": false,
       "7": false
-    },
-    "ThICC_ANIMATION": [
-      "gcyc_GuardRail_t01_Alb.png"
-    ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    }
   },
   "yc_HandRails_t01": {
     "newmtl": "yc_HandRails_t01",
@@ -611,8 +576,8 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 23,
-    "ThICC_METALLIC": true,
+    "ThICC_INDEX": 24,
+    "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
@@ -630,7 +595,7 @@
   },
   "yc_HandRails_t02": {
     "newmtl": "yc_HandRails_t02",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -645,24 +610,19 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 21,
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 22,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true,
+      "3": false,
       "5": false,
       "6": false,
       "7": false
-    },
-    "ThICC_ANIMATION": [
-      "gcyc_HandRails_t01_Alb.png"
-    ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    }
   },
   "yc_Light_t01": {
     "newmtl": "yc_Light_t01",
@@ -683,7 +643,7 @@
     "Tr": "0.000000",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 29,
+    "ThICC_INDEX": 30,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -714,7 +674,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 20,
+    "ThICC_INDEX": 21,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -745,7 +705,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 28,
+    "ThICC_INDEX": 29,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -776,7 +736,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 3,
+    "ThICC_INDEX": 5,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -807,7 +767,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 17,
+    "ThICC_INDEX": 18,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -838,7 +798,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 35,
+    "ThICC_INDEX": 36,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -870,7 +830,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 37,
+    "ThICC_INDEX": 38,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -902,7 +862,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 22,
+    "ThICC_INDEX": 23,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -934,7 +894,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 1,
+    "ThICC_INDEX": 3,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -966,7 +926,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 4,
+    "ThICC_INDEX": 6,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -981,7 +941,7 @@
   },
   "yc_Signboard_m01": {
     "newmtl": "yc_Signboard_m01",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -996,24 +956,19 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 25,
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 26,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true,
+      "3": false,
       "5": false,
       "6": false,
       "7": false
-    },
-    "ThICC_ANIMATION": [
-      "gcyc_Signboard_m01_Alb.png"
-    ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    }
   },
   "yc_StartGate": {
     "newmtl": "yc_StartGate",
@@ -1034,8 +989,8 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 26,
-    "ThICC_METALLIC": true,
+    "ThICC_INDEX": 27,
+    "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
@@ -1070,7 +1025,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 8,
+    "ThICC_INDEX": 10,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": true,
@@ -1089,7 +1044,7 @@
   },
   "yc_TireBase_m01": {
     "newmtl": "yc_TireBase_m01",
-    "Ns": "94.000000",
+    "Ns": "94.117647",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1104,24 +1059,19 @@
     "Tr": "0.000000",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "rma_placeholder.png",
-    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 0,
+    "map_RMA": "",
+    "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 2,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": true,
+      "3": false,
       "5": false,
       "6": false,
       "7": false
-    },
-    "ThICC_ANIMATION": [
-      "gcyc_TireBase_m01_Alb.png"
-    ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    }
   },
   "yc_Tire_m01": {
     "newmtl": "yc_Tire_m01",
@@ -1142,7 +1092,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 6,
+    "ThICC_INDEX": 8,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1178,7 +1128,7 @@
     "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 13,
+    "ThICC_INDEX": 14,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1191,9 +1141,9 @@
       "4": false
     }
   },
-  "yc_Wall_t02": {
-    "newmtl": "yc_Wall_t02",
-    "Ns": "94.000000",
+  "yc_Wall_t02.001": {
+    "newmtl": "yc_Wall_t02.001",
+    "Ns": "92.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1210,16 +1160,53 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 12,
+    "ThICC_INDEX": 0,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": false,
+      "0": true,
       "1": false,
       "2": false,
       "3": false,
       "5": false,
       "6": false,
-      "7": true,
+      "7": false,
+      "4": false
+    },
+    "ThICC_ANIMATION": [
+      "gcyc_Wall_t02_Alb.png"
+    ],
+    "ThICC_ANIMATION_ENABLED": false,
+    "ThICC_ANIMATION_TIME": 0.0
+  },
+  "yc_Wall_t02_NONE": {
+    "newmtl": "yc_Wall_t02_NONE",
+    "Ns": "92.000000",
+    "Ka": "1.000000 1.000000 1.000000",
+    "Kd": "1.000000 1.000000 1.000000",
+    "Ks": "0.000000 0.000000 0.000000",
+    "Ke": "0.000000 0.000000 0.000000",
+    "Ni": "1.000000",
+    "d": "0.000000",
+    "illum": "2",
+    "map_Kd": "gcyc_Wall_t02_Alb.png",
+    "Tr": "0.000000",
+    "map_Ks": "",
+    "map_Kn": "",
+    "norm": "",
+    "map_Ke": "",
+    "map_emissive": "",
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "ThICC_INDEX": 1,
+    "ThICC_METALLIC": false,
+    "ThICC_COLLISION": {
+      "0": true,
+      "1": false,
+      "2": false,
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false,
       "4": false
     },
     "ThICC_ANIMATION": [
@@ -1247,7 +1234,7 @@
     "map_emissive": "",
     "map_RMA": "rma_placeholder.png",
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
-    "ThICC_INDEX": 16,
+    "ThICC_INDEX": 17,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1266,7 +1253,7 @@
   },
   "yc_WoodWall_m01": {
     "newmtl": "yc_WoodWall_m01",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1281,9 +1268,9 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
-    "ThICC_INDEX": 14,
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "ThICC_INDEX": 15,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
@@ -1294,6 +1281,11 @@
       "6": false,
       "7": false,
       "4": false
-    }
+    },
+    "ThICC_ANIMATION": [
+      "gcyc_WoodWall_m01_Alb.png"
+    ],
+    "ThICC_ANIMATION_ENABLED": false,
+    "ThICC_ANIMATION_TIME": 0.0
   }
 }

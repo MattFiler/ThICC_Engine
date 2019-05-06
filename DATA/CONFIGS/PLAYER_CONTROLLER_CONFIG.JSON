@@ -3,5 +3,5 @@
   "turning_speed": 55,
   "drift_boost_multiplier": 0.1,
   "time_for_max_turn": 5,
-  "time_for_max_drift": 4
+  "time_for_max_drift": 6
 }

@@ -53,7 +53,7 @@ private:
 	std::vector<SDKMeshGO3D*> m_debugRaceLine;
 	std::vector<SDKMeshGO3D*> m_debugNextWaypoint;
 
-	int m_minFrontSpace = 16; // The minimum number of m_aiPathStep iterations required to be in front of the object, after which the AI turns
+	int m_minFrontSpace = 10; // The minimum number of m_aiPathStep iterations required to be in front of the object, after which the AI turns
 	int m_minSideSpace = 1; // The minimum number of m_aiPathStep buffer space between the object and the side of the track
 
 	float m_deflectionLimit = 2; // The maximum deflection allowed when merging waypoint nodes

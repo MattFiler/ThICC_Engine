@@ -20,7 +20,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_ArrowBanner_t01_NoTrm
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -39,7 +39,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_ArrowBanner_t01_NoTrm_a1
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -77,7 +77,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_Asphalt_t01_a1
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -115,7 +115,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_BrickAndTree_t01
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -134,7 +134,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_BrickAndTree_t01_a1
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -210,7 +210,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_CurbStone_t01_a1
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -305,7 +305,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_GuardRail_t01_a1
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -343,7 +343,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_HandRails_t02
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -552,7 +552,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_Signboard_m01
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -609,7 +609,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_TireBase_m01
-Ns 94.000000
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -665,8 +665,8 @@ map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
-newmtl yc_Wall_t02
-Ns 94.000000
+newmtl yc_Wall_t02.001
+Ns 92.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -679,6 +679,25 @@ map_Ks gcyc_Wall_t02_spm.png
 map_Kn gcyc_Wall_t02_nrm.png
 norm gcyc_Wall_t02_nrm.png
 Tr 0.000000
+map_Ke emm_placeholder.png
+map_emissive emm_placeholder.png
+map_RMA rma_placeholder.png
+map_occlusionRoughnessMetallic rma_placeholder.png
+
+newmtl yc_Wall_t02_NONE
+Ns 92.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd gcyc_Wall_t02_Alb.png
+Tr 0.000000
+map_Ks spec_placeholder.png
+map_Kn norm_placeholder.png
+norm norm_placeholder.png
 map_Ke emm_placeholder.png
 map_emissive emm_placeholder.png
 map_RMA rma_placeholder.png
@@ -704,7 +723,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl yc_WoodWall_m01
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000

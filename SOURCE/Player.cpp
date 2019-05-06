@@ -514,7 +514,7 @@ void Player::ReleaseItem()
 void Player::setGamePad(bool _state)
 {
 	// If AI
-	if (!m_ai && (m_playerID == 0 || m_lap == 3))
+	if (!m_ai && (m_playerID == -1 || m_lap == 3))
 	{
 		m_move->SetGamepadActive(false);
 		m_ai = std::make_unique<KartAI>(this, m_move.get());
@@ -577,6 +577,7 @@ void Player::GlideLogic()
 	else if (m_gliding)
 	{
 		m_glideTimeElapsed += Locator::getGSD()->m_dt;
+		m_drag = 0.3f;
 		if (m_onTrack && m_glideTimeElapsed > m_minGlideDuration)
 		{
 			m_elapsedTimeOff = 0;

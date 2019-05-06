@@ -164,6 +164,14 @@ bool MoveAI::Update()
 			m_move->setAcceleration(0.7f);
 			m_move->Drift(true);
 		}
+		if (dist > m_driftThreshold * 1.35f)
+		{
+			m_move->setAcceleration(0.2f);
+		}
+		else if(dist > m_driftThreshold * 1.7f)
+		{
+			m_move->setAcceleration(-1);
+		}
 	}
 	else
 	{
@@ -281,14 +289,14 @@ bool MoveAI::FindRoute(Track* _track, Matrix& _world, Vector3& _pos, Vector3& _d
 			{
 				Vector right;
 				Vector left;
-				if (count < m_minFrontSpace / 4)
+				if (count < m_minFrontSpace / 2)
 				{
 					right = _world.Right() + _world.Forward();
 					left = _world.Left() + _world.Forward();
 					right.Normalize();
 					left.Normalize();
 				}
-				else if (count < m_minFrontSpace / 2)
+				else if (count < m_minFrontSpace / 1.5f)
 				{
 					right = _world.Right() + (_world.Forward() * 2);
 					left = _world.Left() + (_world.Forward() * 2);
