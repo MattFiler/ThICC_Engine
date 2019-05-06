@@ -725,6 +725,8 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		}
 		break;
 	}
+	m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
+	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
 }
 
 /* Render the 2D scene */
