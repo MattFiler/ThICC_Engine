@@ -455,7 +455,7 @@ void ThICC_Engine::SetDefaultFont(std::string _default_font)
 	RenderTargetState rtState(m_device_data.m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
 
 	//Create sprite batch
-	SpriteBatchPipelineStateDescription pd(rtState);
+	SpriteBatchPipelineStateDescription pd(rtState, &Locator::getRD()->m_states->NonPremultiplied);
 	Locator::getRD()->m_2dSpriteBatch = std::make_unique<SpriteBatch>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, pd);
 	Locator::getRD()->m_2dSpriteBatch->SetViewport(Locator::getRD()->m_screenViewport);
 

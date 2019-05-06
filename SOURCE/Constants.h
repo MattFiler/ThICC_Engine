@@ -17,6 +17,7 @@ struct ThICC_File {
 enum Scenes
 {
 	MENUSCENE,
+	LOADINGSCENE,
 	DEBUG_LIGHTINGTEST,
 	GAMESCENE, // must be second to last as we dynamically extend from this position
 

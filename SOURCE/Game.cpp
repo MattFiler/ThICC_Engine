@@ -6,6 +6,7 @@
 #include "MenuScene.h"
 #include "GameScene.h"
 #include "DebugScene.h"
+#include "LoadingScene.h"
 
 /* Perform initialisation */
 void ThICC_Game::Initialize() {
@@ -23,6 +24,9 @@ void ThICC_Game::Initialize() {
 	//Set up AI scheduler
 	m_aiScheduler = std::make_unique<AIScheduler>();
 	Locator::setupAIScheduler(m_aiScheduler.get());
+
+	m_raceManager = std::make_unique<RaceManager>();
+	Locator::setupRM(m_raceManager.get());
 
 	//Load all common model names
 	std::ifstream x(m_filepath.generateConfigFilepath("COMMON_MODELS_CONFIG", m_filepath.CONFIG));
@@ -88,6 +92,7 @@ void ThICC_Game::Initialize() {
 
 	//Create the scenes
 	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
+	m_scene_manager.addScene(new LoadingScene(), (int)Scenes::LOADINGSCENE);
 	#ifdef _DEBUG 
 	m_scene_manager.addScene(new DebugScene(), (int)Scenes::DEBUG_LIGHTINGTEST);
 	#endif
