@@ -77,6 +77,8 @@ public:
 	void Spin(int _revolutions, float _duration) { m_animationMesh->Spin(_revolutions, _duration); };
 	void Flip(int _revolutions, float _duration) { m_animationMesh->Flip(_revolutions, _duration); };
 	void Jump(float _jumpHeight, float _duration) { m_animationMesh->Jump(_jumpHeight, _duration); };
+	void Scale(Vector3 _newScale, float _duration) { m_animationMesh->Scale(_newScale, _duration); };
+
 
 	bool isInvincible() { return m_invincible; };
 	void setInvicible(bool _invincible) { m_invincible = _invincible; };
@@ -94,7 +96,12 @@ public:
 	bool IsGliding() { return m_gliding; };
 	bool IsRespawning() { return m_respawning; };
 
-	Matrix GetLastOnTrack() { return m_posHistory.front(); };
+	Matrix GetLastOnTrack() { return m_matrixHistory.front(); };
+
+	Vector3 GetLastFramePos() { return m_lastFramePos; };
+	Vector3 GetPosHistoryBack();
+
+	bool IsTrailingItem() { return !m_trailingItems.empty(); };
 
 protected:
 	int m_playerID = 0;
@@ -160,12 +167,13 @@ private:
 
 
 	// Respawn
-	std::queue<Matrix> m_posHistory; // All the recorded player positions
+	std::queue<Matrix> m_matrixHistory; // All the recorded player positions
+	std::queue<Vector3> m_posHistory;
 	float m_posHistoryInterval = 0.2f; // How often the players position will be recorded
 	int m_posHistoryLength = 10; // The length of the position queue
 	float m_noTrackRespawn = 1; // If not on any terrain, respawn after this time
 	float m_offTrackRespawn = 5; // If off the track, but still on terain, respawn after this time
-	float m_stationaryRespawn = 5; // If not moving for this long, repawn
+	float m_stationaryRespawn = 30; // If not moving for this long, repawn
 	float m_respawnSpeed = 30; // The speed at which lakitu moves the player back to the track
 
 	float m_posHistoryTimer = 0;
@@ -195,4 +203,6 @@ private:
 	float m_elapsedTimeOff = 0;
 
 	std::unique_ptr<MoveAI> m_ai = nullptr;
+
+	Vector3 m_lastFramePos = Vector3::Zero;
 };

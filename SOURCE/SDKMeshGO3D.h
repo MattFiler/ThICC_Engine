@@ -29,7 +29,7 @@ public:
 	
 	//These functions are intended for skybox use
 	void DisableDepthDefault() { enable_depth_default = false; }
-	void AlbedoOverride(std::wstring path);
+	void AlbedoEmissiveOverride(std::wstring path);
 	//---
 
 protected:
@@ -44,9 +44,9 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_irradianceIBL;
 
 	//Optional albedo override
-	Microsoft::WRL::ComPtr<ID3D12Resource> m_albedoOverride;
-	int albedo_override_index = -1;
-	bool albedo_override_applied = false;
+	Microsoft::WRL::ComPtr<ID3D12Resource> m_materialOverride;
+	int material_override_index = -1;
+	bool material_override_applied = false;
 
 	//Should use DepthDefault? (available to change mainly b/c of skyboxes)
 	bool enable_depth_default = true;

@@ -82,5 +82,9 @@ private:
 	//States
 	enum menu_states { SPLASH, CUP_SELECT, MAP_SELECT, CHARACTER_SELECT, VEHICLE_SELECT };
 	menu_states m_menu_state = menu_states::SPLASH;
+
+
+	//TEST SPRITE
+	ImageGO2D* GamepadTestSprite = nullptr;
 };
 

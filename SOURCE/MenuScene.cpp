@@ -40,6 +40,10 @@ void MenuScene::ExpensiveLoad() {
 	m_menu_state = menu_states::SPLASH;
 	m_timer = 0.0f;
 	m_keybinds.Reset();
+	highlighted_character = 0;
+	highlighted_cup = 0;
+	highlighted_map = 0;
+	highlighted_vehicle = 0;
 }
 
 /* Create all 2D objects for the scene */
@@ -58,6 +62,9 @@ void MenuScene::create2DObjects()
 	m_state_desc->SetPos(Vector2(498, 620));
 	m_state_desc->SetColour(Colors::Black);
 	m_state_desc->SetScale(0.5f);
+
+	//TEST SPRITE
+	GamepadTestSprite = m_keybinds.getInputIcon("Activate");
 
 	//position cup options
 	int index = 0;
@@ -144,6 +151,19 @@ void MenuScene::Update(DX::StepTimer const& timer)
 					if (a_map->cup->codename != Locator::getGOS()->cup_instances.at(highlighted_cup)->codename) {
 						continue;
 					}
+
+					#ifndef _DEBUG
+					//Show/hide map options based on arcade exclusivity
+					#ifdef _ARCADE
+					if (!a_map->is_arcade_exclusive) {
+						continue;
+					}
+					#else
+					if (a_map->is_arcade_exclusive) {
+						continue;
+					}
+					#endif
+					#endif
 
 					index++;
 
@@ -356,5 +376,11 @@ void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 				(*it)->Render();
 			}
 			break;
+	}
+
+
+	//TEST
+	if (GamepadTestSprite != nullptr) {
+		GamepadTestSprite->Render();
 	}
 }

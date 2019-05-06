@@ -55,7 +55,9 @@ void SDKMeshGO3D::Render()
 		{
 			auto radianceTex = m_resourceDescriptors->GetGpuHandle(radiance_index);
 			auto diffuseDesc = m_radianceIBL->GetDesc();
+			#ifndef _ARCADE
 			auto irradianceTex = m_resourceDescriptors->GetGpuHandle(irradiance_index);
+			#endif
 
 			int i = 0;
 			for (auto& it : m_modelNormal)
@@ -63,6 +65,9 @@ void SDKMeshGO3D::Render()
 				auto pbr = dynamic_cast<PBREffect*>(it.get());
 				if (pbr)
 				{
+					#ifdef _ARCADE
+					pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, radianceTex, Locator::getRD()->m_states->AnisotropicClamp());
+					#else
 					/* METALLIC CONFIG */
 					if (m_material_config.size() != 0 && m_material_config.at(i).is_metallic) {
 						//Metal
@@ -90,15 +95,17 @@ void SDKMeshGO3D::Render()
 						}
 						m_material_config.at(i).animation_timer += (float)Locator::getGSD()->m_timer.GetElapsedSeconds();
 					}
-					/* ALBEDO OVERRIDE */
-					if (albedo_override_index != -1 && !albedo_override_applied) {
-						pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(albedo_override_index));
+					/* MATERIAL OVERRIDE (ALBEDO + EMISSIVE) */
+					if (material_override_index != -1 && !material_override_applied) {
+						pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(material_override_index));
+						pbr->SetEmissiveTexture(m_resourceDescriptors->GetGpuHandle(material_override_index));
 					}
+					#endif
 					i++;
 				}
 			}
-			if (albedo_override_index != -1 && !albedo_override_applied) {
-				albedo_override_applied = true;
+			if (material_override_index != -1 && !material_override_applied) {
+				material_override_applied = true;
 			}
 		}
 
@@ -112,7 +119,7 @@ void SDKMeshGO3D::Render()
 }
 
 /* Override every albedo material for this model (indended for skybox use) */
-void SDKMeshGO3D::AlbedoOverride(std::wstring path) {
+void SDKMeshGO3D::AlbedoEmissiveOverride(std::wstring path) {
 	if (resourceDescriptorOffset < 10) {
 		resourceDescriptorOffset += m_modelNormal.size() * 4;
 	}
@@ -121,9 +128,9 @@ void SDKMeshGO3D::AlbedoOverride(std::wstring path) {
 	resourceUpload.Begin(); 
 	wchar_t override_tex[_MAX_PATH] = {};
 	DX::FindMediaFile(override_tex, _MAX_PATH, path.c_str());
-	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, override_tex, m_albedoOverride.ReleaseAndGetAddressOf()));
-	CreateShaderResourceView(device, m_albedoOverride.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
-	albedo_override_index = resourceDescriptorOffset;
+	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, override_tex, m_materialOverride.ReleaseAndGetAddressOf()));
+	CreateShaderResourceView(device, m_materialOverride.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
+	material_override_index = resourceDescriptorOffset;
 	resourceDescriptorOffset++;
 	auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
 	uploadResourcesFinished.wait();
@@ -156,6 +163,17 @@ void SDKMeshGO3D::Load()
 		1024,
 		0);
 
+	#ifdef _ARCADE
+	//Find env map and load
+	wchar_t radiance[_MAX_PATH] = {};
+	DX::FindMediaFile(radiance, _MAX_PATH, Locator::getRD()->arcade_cubemap.c_str());
+	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, radiance, m_radianceIBL.ReleaseAndGetAddressOf()));
+
+	//Push radiance texture to resource stores
+	radiance_index = resourceDescriptorOffset;
+	CreateShaderResourceView(device, m_radianceIBL.Get(), m_resourceDescriptors->GetCpuHandle(radiance_index), true);
+	resourceDescriptorOffset++;
+	#else
 	//Find our current env maps
 	wchar_t radiance[_MAX_PATH] = {};
 	wchar_t irradiance[_MAX_PATH] = {};
@@ -175,6 +193,7 @@ void SDKMeshGO3D::Load()
 	irradiance_index = resourceDescriptorOffset;
 	CreateShaderResourceView(device, m_irradianceIBL.Get(), m_resourceDescriptors->GetCpuHandle(irradiance_index), true);
 	resourceDescriptorOffset++;
+	#endif
 
 	//End the upload and wait for it to finish
 	auto uploadResourcesFinished = resourceUpload.End(Locator::getDD()->m_deviceResources->GetCommandQueue());
@@ -210,9 +229,28 @@ void SDKMeshGO3D::Load()
 		//Load as SDKMESH
 		m_model = Model::CreateFromSDKMESH(modelBin.data(), modelBin.size());
 	}
+
+	//Catch any issues when loading the model
+	catch (const std::runtime_error& re)
+	{
+		std::string error(re.what());
+		DebugText::print("RUNTIME ERROR WHILE LOADING '" + filename + "': " + error);
+		m_model.reset();
+		return;
+	}
+	catch (const std::exception& ex)
+	{
+		std::string error(ex.what());
+		DebugText::print("EXCEPTION WHILE LOADING '" + filename + "': " + error);
+		if (error == "Out of memory.") {
+			DebugText::print(" >>>> THIS MODEL SHOULD BE REMOVED FROM THE GAME! IT IS TOO LARGE TO HANDLE! <<<< ");
+			throw std::runtime_error("Cannot continue! Remove model '" + filename + "'!");
+		}
+		m_model.reset();
+		return;
+	}
 	catch (...)
 	{
-		//Couldn't load model - not good! Might be trying to load a non-sdkmesh, or have the wrong filepath.
 		DebugText::print("TRIED TO LOAD '" + filename + "' BUT IT FAILED. IS IT A SDKMESH?");
 		m_model.reset();
 		return;
@@ -267,6 +305,7 @@ void SDKMeshGO3D::Load()
 		{
 			//Get effect factory - shouldn't this be per model?! It's currently shared around everything which seems a little odd
 			IEffectFactory *fxFactory = nullptr;
+
 			Locator::getRD()->m_fxFactoryPBR = std::make_unique<PBREffectFactory>(m_modelResources->Heap(), Locator::getRD()->m_states->Heap());
 			fxFactory = Locator::getRD()->m_fxFactoryPBR.get();
 
@@ -312,6 +351,7 @@ void SDKMeshGO3D::Load()
 				m_modelNormal = m_model->CreateEffects(*fxFactory, pd, pdAlpha, resourceDescriptorOffset);
 			}
 
+			#ifndef _ARCADE
 			//Load our engine configs
 			if (!is_debug_mesh) {
 				/* Load metalness config */
@@ -440,6 +480,7 @@ void SDKMeshGO3D::Load()
 					DebugText::print("MODEL '" + filename + "' DOES NOT HAVE AN ANIMATION CONFIGURATION.");
 				}
 			}
+			#endif
 		}
 
 		//Finish upload and wait for it to end

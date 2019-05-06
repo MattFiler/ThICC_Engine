@@ -22,16 +22,12 @@ private:
 	float m_strikeTimeElapsed = 0;
 	float m_strikeDuration = 0;
 	float m_slowAmount = 0;
+	float m_maxSpeedMutli = 0;
+	float m_playerSpinRev = 0;
+	float m_playerSpinDuration = 0;
 
 	bool m_striked = false;
-
-	/*Vector3 m_startScale;
-	Vector3 m_endScale;
-	float m_scaleSpeed = 2;
-	float m_scalePercent = 0;
-	float m_shrinkTimeElapsed = 0;
-	float m_shrinkDuration = 13;
-	enum ScaleState { GROW, MAINTIAIN, SHRINK } m_scaleState = SHRINK;*/
+	bool m_slowed = false;
 
 	ItemGrowthData m_growthData;
 };

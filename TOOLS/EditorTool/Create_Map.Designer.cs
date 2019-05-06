@@ -62,16 +62,23 @@
             this.label2 = new System.Windows.Forms.Label();
             this.mapName = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.isOnPC = new System.Windows.Forms.CheckBox();
+            this.isArcadeOnly = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.mapCup = new System.Windows.Forms.ComboBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.loadDecorationModel = new System.Windows.Forms.Button();
+            this.decorationModel = new System.Windows.Forms.TextBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // saveMap
             // 
-            this.saveMap.Location = new System.Drawing.Point(10, 529);
+            this.saveMap.Location = new System.Drawing.Point(344, 312);
             this.saveMap.Name = "saveMap";
             this.saveMap.Size = new System.Drawing.Size(327, 23);
             this.saveMap.TabIndex = 0;
@@ -111,9 +118,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 134);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 13);
+            this.label3.Size = new System.Drawing.Size(128, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Map Model";
+            this.label3.Text = "Map Model (with collision)";
             // 
             // selectMapModel
             // 
@@ -255,7 +262,7 @@
             this.groupBox1.Controls.Add(this.selectFinalLapIntro);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.finalLapIntro);
-            this.groupBox1.Location = new System.Drawing.Point(10, 274);
+            this.groupBox1.Location = new System.Drawing.Point(344, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(327, 180);
             this.groupBox1.TabIndex = 20;
@@ -264,13 +271,10 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.skyboxChoice);
-            this.groupBox2.Controls.Add(this.loadSkybox);
-            this.groupBox2.Controls.Add(this.label11);
-            this.groupBox2.Controls.Add(this.cubemapChoice);
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Controls.Add(this.loadDecorationModel);
+            this.groupBox2.Controls.Add(this.decorationModel);
             this.groupBox2.Controls.Add(this.label8);
-            this.groupBox2.Controls.Add(this.loadCubemap);
             this.groupBox2.Controls.Add(this.loadString);
             this.groupBox2.Controls.Add(this.mapCodename);
             this.groupBox2.Controls.Add(this.label2);
@@ -283,7 +287,7 @@
             this.groupBox2.Controls.Add(this.mapModelAsset);
             this.groupBox2.Location = new System.Drawing.Point(11, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(327, 256);
+            this.groupBox2.Size = new System.Drawing.Size(327, 220);
             this.groupBox2.TabIndex = 21;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Core Map Elements";
@@ -291,7 +295,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 212);
+            this.label9.Location = new System.Drawing.Point(6, 55);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(42, 13);
             this.label9.TabIndex = 26;
@@ -299,7 +303,7 @@
             // 
             // skyboxChoice
             // 
-            this.skyboxChoice.Location = new System.Drawing.Point(9, 228);
+            this.skyboxChoice.Location = new System.Drawing.Point(9, 71);
             this.skyboxChoice.Name = "skyboxChoice";
             this.skyboxChoice.ReadOnly = true;
             this.skyboxChoice.Size = new System.Drawing.Size(229, 20);
@@ -307,7 +311,7 @@
             // 
             // loadSkybox
             // 
-            this.loadSkybox.Location = new System.Drawing.Point(244, 227);
+            this.loadSkybox.Location = new System.Drawing.Point(244, 70);
             this.loadSkybox.Name = "loadSkybox";
             this.loadSkybox.Size = new System.Drawing.Size(75, 23);
             this.loadSkybox.TabIndex = 25;
@@ -318,7 +322,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 173);
+            this.label11.Location = new System.Drawing.Point(6, 16);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(52, 13);
             this.label11.TabIndex = 3;
@@ -326,7 +330,7 @@
             // 
             // cubemapChoice
             // 
-            this.cubemapChoice.Location = new System.Drawing.Point(9, 189);
+            this.cubemapChoice.Location = new System.Drawing.Point(9, 32);
             this.cubemapChoice.Name = "cubemapChoice";
             this.cubemapChoice.ReadOnly = true;
             this.cubemapChoice.Size = new System.Drawing.Size(229, 20);
@@ -343,7 +347,7 @@
             // 
             // loadCubemap
             // 
-            this.loadCubemap.Location = new System.Drawing.Point(244, 188);
+            this.loadCubemap.Location = new System.Drawing.Point(244, 31);
             this.loadCubemap.Name = "loadCubemap";
             this.loadCubemap.Size = new System.Drawing.Size(75, 23);
             this.loadCubemap.TabIndex = 2;
@@ -388,14 +392,40 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.isOnPC);
+            this.groupBox3.Controls.Add(this.isArcadeOnly);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.mapCup);
-            this.groupBox3.Location = new System.Drawing.Point(10, 460);
+            this.groupBox3.Location = new System.Drawing.Point(344, 198);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(328, 63);
+            this.groupBox3.Size = new System.Drawing.Size(328, 95);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Other Map Configs";
+            // 
+            // isOnPC
+            // 
+            this.isOnPC.AutoSize = true;
+            this.isOnPC.Checked = true;
+            this.isOnPC.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.isOnPC.Location = new System.Drawing.Point(75, 66);
+            this.isOnPC.Name = "isOnPC";
+            this.isOnPC.Size = new System.Drawing.Size(40, 17);
+            this.isOnPC.TabIndex = 3;
+            this.isOnPC.Text = "PC";
+            this.isOnPC.UseVisualStyleBackColor = true;
+            this.isOnPC.CheckedChanged += new System.EventHandler(this.isOnPC_CheckedChanged);
+            // 
+            // isArcadeOnly
+            // 
+            this.isArcadeOnly.AutoSize = true;
+            this.isArcadeOnly.Location = new System.Drawing.Point(9, 66);
+            this.isArcadeOnly.Name = "isArcadeOnly";
+            this.isArcadeOnly.Size = new System.Drawing.Size(60, 17);
+            this.isArcadeOnly.TabIndex = 2;
+            this.isArcadeOnly.Text = "Arcade";
+            this.isArcadeOnly.UseVisualStyleBackColor = true;
+            this.isArcadeOnly.CheckedChanged += new System.EventHandler(this.isArcadeOnly_CheckedChanged);
             // 
             // label10
             // 
@@ -415,11 +445,54 @@
             this.mapCup.Size = new System.Drawing.Size(310, 21);
             this.mapCup.TabIndex = 0;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 173);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(142, 13);
+            this.label12.TabIndex = 26;
+            this.label12.Text = "Decoration (without collision)";
+            // 
+            // loadDecorationModel
+            // 
+            this.loadDecorationModel.Location = new System.Drawing.Point(244, 188);
+            this.loadDecorationModel.Name = "loadDecorationModel";
+            this.loadDecorationModel.Size = new System.Drawing.Size(75, 23);
+            this.loadDecorationModel.TabIndex = 25;
+            this.loadDecorationModel.Text = "Load";
+            this.loadDecorationModel.UseVisualStyleBackColor = true;
+            this.loadDecorationModel.Click += new System.EventHandler(this.loadDecorationModel_Click);
+            // 
+            // decorationModel
+            // 
+            this.decorationModel.Location = new System.Drawing.Point(9, 189);
+            this.decorationModel.Name = "decorationModel";
+            this.decorationModel.ReadOnly = true;
+            this.decorationModel.Size = new System.Drawing.Size(229, 20);
+            this.decorationModel.TabIndex = 24;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label11);
+            this.groupBox4.Controls.Add(this.label9);
+            this.groupBox4.Controls.Add(this.loadCubemap);
+            this.groupBox4.Controls.Add(this.cubemapChoice);
+            this.groupBox4.Controls.Add(this.skyboxChoice);
+            this.groupBox4.Controls.Add(this.loadSkybox);
+            this.groupBox4.Location = new System.Drawing.Point(11, 235);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(327, 100);
+            this.groupBox4.TabIndex = 27;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Map Visual Constants";
+            // 
             // Create_Map
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 560);
+            this.ClientSize = new System.Drawing.Size(681, 347);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -436,6 +509,8 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -477,5 +552,11 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox mapCup;
+        private System.Windows.Forms.CheckBox isArcadeOnly;
+        private System.Windows.Forms.CheckBox isOnPC;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button loadDecorationModel;
+        private System.Windows.Forms.TextBox decorationModel;
+        private System.Windows.Forms.GroupBox groupBox4;
     }
 }

@@ -1,7 +1,7 @@
 {
   "GENERAL": {
     "view_near": 1.0,
-    "view_far": 2000.0
+    "view_far": 20000.0
   },
   "FOLLOW": {
     "fov": 60,

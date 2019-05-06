@@ -28,6 +28,13 @@ void ThICC_Game::Initialize() {
 	std::ifstream x(m_filepath.generateConfigFilepath("COMMON_MODELS_CONFIG", m_filepath.CONFIG));
 	m_go_shared.common_model_config << x;
 
+	#ifdef _ARCADE
+	//Load arcade cubemap
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	std::string cubemap_radiance_str = m_filepath.generateFilepath("WHITE_CUBEMAP", m_filepath.CUBEMAP_RADIANCE);
+	Locator::getRD()->arcade_cubemap = converter.from_bytes(cubemap_radiance_str.c_str());
+	#endif
+
 	//Load all character data
 	std::ifstream p(m_filepath.generateFilepath("CHARACTER_CONFIG", m_filepath.CONFIG));
 	character_config << p;
@@ -62,6 +69,17 @@ void ThICC_Game::Initialize() {
 	for (auto& element : map_config) {
 		//Store map info
 		MapInfo* new_map_inf = new MapInfo(element, index);
+		#ifndef _DEBUG
+		#ifdef _ARCADE
+		if (!new_map_inf->is_arcade_exclusive) {
+			continue;
+		}
+		#else
+		if (new_map_inf->is_arcade_exclusive) {
+			continue;
+		}
+		#endif
+		#endif
 		m_go_shared.map_instances.push_back(new_map_inf);
 		//Create scene
 		m_scene_manager.addScene(new GameScene(m_go_shared.map_instances.at(index)), (int)Scenes::GAMESCENE + index);

@@ -5,6 +5,7 @@
 #include "ItemBox.h"
 #include "DebugMarker.h"
 #include "BlenderToDirectX.h"
+#include "MapInfo.h"
 #include <json.hpp>
 #include <map>
 using json = nlohmann::json;
@@ -17,18 +18,34 @@ struct TrackData {
 };
 
 struct Waypoint {
-	Waypoint(Vector3 _tl, Vector3 _tr, Vector3 _bl, Vector3 _br, Vector3 _mb) {
+	Waypoint(Vector3 _tl, Vector3 _tr, Vector3 _bl, Vector3 _br, Vector3 _mid) {
 		top_left = _tl;
 		top_right = _tr;
 		bottom_left = _bl;
 		bottom_right = _br;
-		middle_bottom = _mb;
+		middle = _mid;
 	}
 	Vector3 top_left = Vector3(0, 0, 0);
 	Vector3 top_right = Vector3(0, 0, 0);
 	Vector3 bottom_left = Vector3(0, 0, 0);
 	Vector3 bottom_right = Vector3(0, 0, 0);
-	Vector3 middle_bottom = Vector3(0, 0, 0);
+	Vector3 middle = Vector3(0, 0, 0);
+};
+
+struct IntroCamGroup {
+	IntroCamGroup() {
+		start_pos = Vector3(0, 0, 0);
+		end_pos = Vector3(0, 0, 0);
+		look_at = Vector3(0, 0, 0);
+	}
+	IntroCamGroup(Vector3 _start, Vector3 _end, Vector3 _lookat) {
+		start_pos = _start;
+		end_pos = _end;
+		look_at = _lookat;
+	}
+	Vector3 start_pos;
+	Vector3 end_pos;
+	Vector3 look_at;
 };
 
 /* A type of PhysModel that stores a reference to their triangles, used so that TrackMagnet objects
@@ -36,7 +53,7 @@ struct Waypoint {
 class Track : public PhysModel
 {
 public:
-	Track(std::string _filename);
+	Track(MapInfo* _track);
 
 	void LoadCollision();
 	void UnloadCollision();
@@ -49,11 +66,8 @@ public:
 	std::vector<Vector3> getSpawnpoints() {
 		return map_spawnpoints;
 	};
-	std::vector<Vector3> getCamerasPos() {
-		return map_cams_pos;
-	};
-	std::vector<Vector3> getCamerasRot() {
-		return map_cams_rot;
+	std::vector<IntroCamGroup> getIntroCams() {
+		return map_intro_cams;
 	};
 	std::vector<BoundingOrientedBox> getWaypointsBB() {
 		return waypoint_bb;
@@ -84,6 +98,9 @@ public:
 	void SetValidCollision(const bool& _boost, const bool& _off, const bool& _on, const bool& _wall, const bool& _glider, const bool& _antigrav, const bool& _jump, const bool& _noai);
 
 	Vector3 getWaypointMiddle(int index);
+
+	void Render() override;
+	void Tick() override;
 
 private:
 	void LoadVertexList(std::string _vertex_list);
@@ -121,8 +138,7 @@ private:
 	// Map config data from Blender
 	std::vector<Waypoint> map_waypoints;
 	std::vector<Vector3> map_spawnpoints;
-	std::vector<Vector3> map_cams_pos;
-	std::vector<Vector3> map_cams_rot; //broken
+	std::vector<IntroCamGroup> map_intro_cams = std::vector<IntroCamGroup>(4);
 	std::vector<Vector3> map_itemboxes_pos;
 	std::vector<Vector3> map_itemboxes_rot; //broken
 	std::vector<Waypoint> map_finishline;
@@ -145,6 +161,8 @@ private:
 	size_t m_triGridY = 0;
 	size_t m_triGridZ = 0;
 	size_t m_triGridYX = 0; // Set to m_triGridY * m_triGridX as this number is used lots
+
+	SDKMeshGO3D* m_decoration_model = nullptr;
 
 	std::map<CollisionType, bool> m_validCollisions;
 };

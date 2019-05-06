@@ -320,6 +320,7 @@ namespace EditorTool
 
             //Hide all configs
             modelConfigs.Visible = false;
+            soundConfigs.Visible = false;
             depreciationWarning.Visible = false;
             assetUseageGroup.Visible = false;
 
@@ -386,7 +387,21 @@ namespace EditorTool
                     function_libary.loadImagePreview(assetList, imagePreview, selected_type);
                     break;
                 case AssetType.SOUND:
-                    function_libary.loadSoundPreview(assetList, sound_player, soundPreview, playSoundPreview);
+                    if (function_libary.loadSoundPreview(assetList, sound_player, soundPreview, playSoundPreview))
+                    {
+                        //If preview loads properly, load config
+                        getConfigPathForSelectedAsset();
+                        JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
+
+                        //Fill up config
+                        soundVolume.Value = asset_json["volume"].Value<int>();
+                        soundPitch.Value = (int)(asset_json["pitch"].Value<decimal>() * 10);
+                        soundPan.Value = (int)(asset_json["pan"].Value<decimal>() * 10);
+                        soundLooping.Checked = asset_json["is_looping"].Value<bool>();
+
+                        //Show
+                        soundConfigs.Visible = true;
+                    }
                     break;
                 case AssetType.FONT:
                     function_libary.loadFontPreview(assetList, imagePreview);
@@ -471,7 +486,7 @@ namespace EditorTool
             function_libary.playSoundPreview(assetList, sound_player);
         }
 
-        /* SAVE CONFIG FOR ASSET */
+        /* Save config for models */
         private void saveAssetConfig_Click(object sender, EventArgs e)
         {
             if (path_to_current_config == "")
@@ -481,27 +496,37 @@ namespace EditorTool
                 return;
             }
 
-            switch (loadAssetType.SelectedItem)
+            JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
+            asset_json["model_type"] = modelType.SelectedIndex; //For this change to actually take effect, the model will need to be "edited" - improvement needed here
+            asset_json["start_x"] = Convert.ToDouble(model_world_x.Text);
+            asset_json["start_y"] = Convert.ToDouble(model_world_y.Text);
+            asset_json["start_z"] = Convert.ToDouble(model_world_z.Text);
+            asset_json["rot_x"] = Convert.ToDouble(model_rot_x.Text);
+            asset_json["rot_y"] = Convert.ToDouble(model_rot_y.Text);
+            asset_json["rot_z"] = Convert.ToDouble(model_rot_z.Text);
+            asset_json["modelscale"] = Convert.ToDouble(model_scale.Text);
+            asset_json["segment_size"] = Convert.ToDouble(model_segmentsize.Value);
+            File.WriteAllText(path_to_current_config, asset_json.ToString(Formatting.Indented));
+            MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /* Save config for sounds */
+        private void saveSoundConfig_Click(object sender, EventArgs e)
+        {
+            if (path_to_current_config == "")
             {
-                case "Models":
-                    JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
-                    asset_json["model_type"] = modelType.SelectedIndex; //For this change to actually take effect, the model will need to be "edited" - improvement needed here
-                    asset_json["start_x"] = Convert.ToDouble(model_world_x.Text);
-                    asset_json["start_y"] = Convert.ToDouble(model_world_y.Text);
-                    asset_json["start_z"] = Convert.ToDouble(model_world_z.Text);
-                    asset_json["rot_x"] = Convert.ToDouble(model_rot_x.Text);
-                    asset_json["rot_y"] = Convert.ToDouble(model_rot_y.Text);
-                    asset_json["rot_z"] = Convert.ToDouble(model_rot_z.Text);
-                    asset_json["modelscale"] = Convert.ToDouble(model_scale.Text);
-                    asset_json["segment_size"] = Convert.ToDouble(model_segmentsize.Value);
-                    File.WriteAllText(path_to_current_config, asset_json.ToString(Formatting.Indented));
-                    MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    break;
-                default:
-                    //Should never get here
-                    MessageBox.Show("There are no properties to edit for the selected asset.", "Nothing to edit.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    break;
+                //Should never get here
+                MessageBox.Show("Asset config could not be read!\nHave you selected another asset?", "No asset selected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+            
+            JToken asset_json = JToken.Parse(File.ReadAllText(path_to_current_config));
+            asset_json["volume"] = soundVolume.Value;
+            asset_json["pitch"] = soundPitch.Value / 10;
+            asset_json["pan"] = soundPan.Value / 10;
+            asset_json["is_looping"] = soundLooping.Checked;
+            File.WriteAllText(path_to_current_config, asset_json.ToString(Formatting.Indented));
+            MessageBox.Show("Configuration saved.", "Saved.", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         //Force numeric in config inputs

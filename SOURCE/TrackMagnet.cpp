@@ -181,12 +181,12 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 	Vector frontSide = (data.m_globalFrontBottomRight + sideOffset) - (data.m_globalFrontBottomLeft + sideOffset);
 	Vector backSide = (data.m_globalBackBottomRight + sideOffset) - (data.m_globalBackBottomLeft + sideOffset);
 
-	Vector cornerOffset = m_world.Up() * data.m_height*2;
+	Vector cornerOffsetStart = m_world.Up() * data.m_height*2;
 
-	Vector frontLeft = data.m_globalFrontBottomLeft - (data.m_globalFrontTopLeft + cornerOffset);
-	Vector frontRight = data.m_globalFrontBottomRight - (data.m_globalFrontTopRight + cornerOffset);
-	Vector backLeft = data.m_globalBackBottomLeft - (data.m_globalBackTopLeft + cornerOffset);
-	Vector backRight = data.m_globalBackBottomRight - (data.m_globalBackTopRight + cornerOffset);
+	Vector frontLeft = data.m_globalFrontBottomLeft - (data.m_globalFrontTopLeft + cornerOffsetStart);
+	Vector frontRight = data.m_globalFrontBottomRight - (data.m_globalFrontTopRight + cornerOffsetStart);
+	Vector backLeft = data.m_globalBackBottomLeft - (data.m_globalBackTopLeft + cornerOffsetStart);
+	Vector backRight = data.m_globalBackBottomRight - (data.m_globalBackTopRight + cornerOffsetStart);
 
 	Vector intersect = Vector::Zero;
 	MeshTri* wallTri = nullptr;
@@ -200,10 +200,10 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 
 	// Then if no collision is found check against only walls with verticle lines and an angle limit
 	walls.SetValidCollision(false, false, false, true, false, false, false, false);
-	if (hit_wall || walls.DoesLineIntersect(frontLeft, data.m_globalFrontTopLeft + cornerOffset, intersect, wallTri, 5,m_minAngle) ||
-		walls.DoesLineIntersect(frontRight, data.m_globalFrontTopRight + cornerOffset, intersect, wallTri, 5, m_minAngle) ||
-		walls.DoesLineIntersect(backLeft, data.m_globalBackTopLeft + cornerOffset, intersect, wallTri, 5, m_minAngle) ||
-		walls.DoesLineIntersect(backRight, data.m_globalBackTopRight + cornerOffset, intersect, wallTri, 5, m_minAngle))
+	if (hit_wall || walls.DoesLineIntersect(frontLeft, data.m_globalFrontTopLeft + cornerOffsetStart, intersect, wallTri, 5,m_minAngle) ||
+		walls.DoesLineIntersect(frontRight, data.m_globalFrontTopRight + cornerOffsetStart, intersect, wallTri, 5, m_minAngle) ||
+		walls.DoesLineIntersect(backLeft, data.m_globalBackTopLeft + cornerOffsetStart, intersect, wallTri, 5, m_minAngle) ||
+		walls.DoesLineIntersect(backRight, data.m_globalBackTopRight + cornerOffsetStart, intersect, wallTri, 5, m_minAngle))
 	{
 		//std::cout << std::to_string(wallTri->m_pointA.x - m_pos.x) << std::endl;
 		/*offset = (wallTri->m_pointA.x - m_pos.x) * 2;
@@ -234,6 +234,7 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 				float dist = Vector::Distance(velNorm, prevVelNorm);
 				m_vel *= 1 - (dist / 2.4f);
 			}
+			m_hasHitWall = true;
 			return true;
 		}
 	}

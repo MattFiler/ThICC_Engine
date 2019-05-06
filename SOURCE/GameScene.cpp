@@ -9,6 +9,7 @@
 #include "DebugMarker.h"
 #include "Explosion.h"
 #include "GameObjectShared.h"
+#include "AIScheduler.h"
 #include <iostream>
 #include <experimental/filesystem>
 #include <memory>
@@ -53,6 +54,7 @@ bool GameScene::Load()
 	create3DObjects();
 	create2DObjects();
 	pushBackObjects();
+	CollisionManager::SetThresholdDistance((float)game_config["threshold_collision_distance_squared"]);
 
 	return true;
 }
@@ -99,7 +101,9 @@ void GameScene::ExpensiveLoad() {
 		}
 	}
 
-
+	//Setup item pools
+	m_itemPools = new ItemPools();
+	Locator::setupItemPools(m_itemPools);
 
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
@@ -154,6 +158,18 @@ void GameScene::ExpensiveUnload() {
 
 	//Unload skybox
 	Locator::getRD()->skybox->Reset();
+
+	//Unload item pools
+	for (auto& item : m_itemModels)
+	{
+		Locator::getItemPools()->AddItemMesh(item->GetItemType(), item->GetItemMesh());
+		if (item->GetItemType() == BOMB)
+		{
+			Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(item)->GetExplosion()->GetDisplayedMesh());
+		}
+		delete item;
+	}
+	Locator::getItemPools()->Reset();
 }
 
 /* Create all 2D objects for the scene */
@@ -198,7 +214,7 @@ void GameScene::create2DObjects()
 void GameScene::create3DObjects()
 {
 	//Load in a track
-	track = new Track(map_info->model);
+	track = new Track(map_info);
 	track->setWaypointBB();
 	m_3DObjects.push_back(track);
 
@@ -452,6 +468,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 		m_3DObjects[i]->Tick();
 		if (m_3DObjects[i]->ShouldDestroy())
 		{
+			if (dynamic_cast<Explosion*>(m_3DObjects[i]))
+			{
+				Locator::getItemPools()->AddExplosion(dynamic_cast<Explosion*>(m_3DObjects[i])->GetDisplayedMesh());
+			}
+
 			delIndex = i;
 		}
 	}
@@ -507,44 +528,22 @@ void GameScene::Update(DX::StepTimer const& timer)
 /* Update the items in the scene specifically */
 void GameScene::UpdateItems()
 {
-	int delIndex = -1;
-	int end = m_itemModels.size();
-	for (int i = 0; i < end; i++)
+	for (int i = 0; i < m_itemModels.size(); i++)
 	{
-		if (m_itemModels[i]->GetMesh())
+		if (m_itemModels[i]->GetItemMesh())
 		{
 			m_itemModels[i]->GetMesh()->ShouldStickToTrack(*track);
 			m_itemModels[i]->GetMesh()->ResolveWallCollisions(*track);
 		}
-		/*for (int j = 0; j < game_config["player_count"]; ++j) {
-			if (m_itemModels[i]->GetMesh() && player[j]->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
-			{
-				m_itemModels[i]->HitByPlayer(player[j]);
-			}
-		}*/
 		m_itemModels[i]->Tick();
 		if (m_itemModels[i]->ShouldDestroy())
 		{
-			delIndex = i;
-		}
-
-		/*if (m_itemModels[i]->GetMesh())
-		{
-			int end2 = m_itemModels.size();
-			for (int j = 0; j < end2; j++)
+			if (m_itemModels[i]->GetItemMesh())
 			{
-				if (m_itemModels[i] != m_itemModels[j] && m_itemModels[j]->GetMesh() && m_itemModels[j]->GetMesh()->getCollider().Intersects(m_itemModels[i]->GetMesh()->getCollider()))
-				{
-					m_itemModels[i]->FlagForDestoy();
-					m_itemModels[j]->FlagForDestoy();
-				}
+				Locator::getItemPools()->AddItemMesh(m_itemModels[i]->GetItemType(), m_itemModels[i]->GetItemMesh());
 			}
-		}*/
-	}
-	if (delIndex != -1)
-	{
-		//Locator::getGarbageCollector()->DeletePointer(m_itemModels[delIndex]);
-		m_itemModels.erase(m_itemModels.begin() + delIndex);
+			m_itemModels.erase(m_itemModels.begin() + i);
+		}
 	}
 }
 
@@ -578,6 +577,10 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 					if (GameDebugToggles::show_debug_meshes) {
 						(*it)->Render();
 					}
+				}
+				else if (dynamic_cast<Explosion*>(*it))
+				{
+					(*it)->Render();
 				}
 				#endif
 				else
@@ -623,6 +626,10 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 						}
 					}
 					#endif
+					else if (dynamic_cast<Explosion*>(*it))
+					{
+						(*it)->Render();
+					}
 					else
 					{
 						(*it)->Render();
@@ -633,7 +640,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			//Render items
 			for (Item* obj : m_itemModels)
 			{
-				if (obj->GetMesh())
+				if (obj->GetItemMesh())
 				{
 					obj->Render();
 				}
@@ -641,6 +648,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		}
 		break;
 	case PLAY:
+		Locator::getAIScheduler()->DebugRender();
 		for (int i = 0; i < game_config["player_count"]; ++i)
 		{
 			//Setup viewport
@@ -668,6 +676,10 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 						}
 					}
 					#endif
+					else if (dynamic_cast<Explosion*>(*it))
+					{
+						(*it)->Render();
+					}
 					else
 					{
 						(*it)->Render();
@@ -678,7 +690,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			//Render items
 			for (Item* obj : m_itemModels)
 			{
-				if (obj->GetMesh())
+				if (obj->GetItemMesh())
 				{
 					obj->Render();
 				}
@@ -732,27 +744,26 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 /* Set the player's current waypoint */
 void GameScene::SetPlayersWaypoint()
 {
-	Vector3 currentWaypoint;
-	Vector3 nextWaypoint;
 	for (int i = 0; i < m_maxPlayers; i++) {
-		currentWaypoint = track->getWaypointMiddle(player[i]->GetWaypoint());
-		int nextWayIndex = player[i]->GetWaypoint() + 1;
-		if (nextWayIndex == track->getWaypoints().size())
+		Vector3 difference = player[i]->GetPosHistoryBack() - player[i]->GetPos();
+		float maxLength = difference.Length();
+		float length = 0;
+		if (maxLength == 0)
+			return;
+
+		difference.Normalize();
+
+		if (player[i]->GetWaypoint() < track->getWaypointsBB().size() - 1)
 		{
-			nextWayIndex = 0;
-		}
-		nextWaypoint = track->getWaypointMiddle(nextWayIndex);
-		bool switchWaypoint = Vector3::Distance(player[i]->GetPos(), nextWaypoint) < Vector3::Distance(currentWaypoint, nextWaypoint);
-		if (switchWaypoint || player[i]->GetWaypoint() < track->getWaypointsBB().size() - 1)
-		{
-			if (player[i]->getCollider().Intersects(track->getWaypointsBB()[player[i]->GetWaypoint() + 1]))
+			if (track->getWaypointsBB()[player[i]->GetWaypoint() + 1].Intersects(player[i]->GetPos(), difference, length))
 			{
-				player[i]->SetWaypoint(player[i]->GetWaypoint() + 1);
+				if(length <= maxLength)
+					player[i]->SetWaypoint(player[i]->GetWaypoint() + 1);
 			}
 		}
 		else
 		{
-			if (switchWaypoint || player[i]->getCollider().Intersects(track->getWaypointsBB()[0]))
+			if (track->getWaypointsBB()[0].Intersects(player[i]->GetPos(), difference, length))
 			{
 				player[i]->SetWaypoint(0);
 				if (player[i]->GetLap() == 3)
@@ -837,18 +848,15 @@ Item* GameScene::CreateItem(ItemType type)
 	case BANANA:
 	{
 		Banana* banana = new Banana();
-		m_itemModels.push_back(banana);		
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(banana->GetMesh())->getDebugCollider());
-		banana->GetMesh()->getDebugCollider()->Load();
+		m_itemModels.push_back(banana);
+		loadItemDebugCollider(banana);
 		return banana;
 	}
 	case GREEN_SHELL:
 	{
 		GreenShell* greenShell = new GreenShell();
 		m_itemModels.push_back(greenShell);
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(greenShell->GetMesh())->getDebugCollider());
-		greenShell->GetMesh()->getDebugCollider()->Load();
-
+		loadItemDebugCollider(greenShell);
 		return greenShell;
 	}
 	case MUSHROOM:
@@ -862,18 +870,14 @@ Item* GameScene::CreateItem(ItemType type)
 		using namespace std::placeholders;
 		Bomb* bomb = new Bomb(std::bind(&GameScene::CreateExplosion, this, _1));
 		m_itemModels.push_back(bomb);
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(bomb->GetMesh())->getDebugCollider());
-		bomb->GetMesh()->getDebugCollider()->Load();
-
+		loadItemDebugCollider(bomb);
 		return bomb;
 	}
 	case FAKE_BOX:
 	{
 		FakeItemBox* box = new FakeItemBox();
 		m_itemModels.push_back(box);
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(box->GetMesh())->getDebugCollider());
-		box->GetMesh()->getDebugCollider()->Load();
-
+		loadItemDebugCollider(box);
 		return box;
 	}
 	case MUSHROOM_UNLIMITED:
@@ -898,28 +902,34 @@ Item* GameScene::CreateItem(ItemType type)
 	{
 		LightningCloud* cloud = new LightningCloud();
 		m_itemModels.push_back(cloud);
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(cloud->GetMesh())->getDebugCollider());
-		cloud->GetMesh()->getDebugCollider()->Load();
+		loadItemDebugCollider(cloud);
 		return cloud;
 	}
 	case RED_SHELL:
 	{
 		RedShell* redShell = new RedShell();
 		m_itemModels.push_back(redShell);
-		m_3DObjects.push_back(dynamic_cast<PhysModel*>(redShell->GetMesh())->getDebugCollider());
-		redShell->GetMesh()->getDebugCollider()->Load();
-
+		loadItemDebugCollider(redShell);
 		return redShell;
 	}
 	case BULLET_BILL:
 	{
 		BulletBill* bullet = new BulletBill();
 		m_itemModels.push_back(bullet);
+		loadItemDebugCollider(bullet);
 		return bullet;
 	}
 	default:
 		return nullptr;
 	}
+}
+
+void GameScene::loadItemDebugCollider(Item* item)
+{
+#ifdef DEBUG
+	m_3DObjects.push_back(dynamic_cast<PhysModel*>(item->GetMesh())->getDebugCollider());
+	item->GetMesh()->getDebugCollider()->Load();
+#endif DEBUG
 }
 
 /* Create an explosion! */
@@ -928,9 +938,10 @@ Explosion * GameScene::CreateExplosion(ItemType _ownerType)
 	Explosion* explosion = new Explosion(_ownerType);
 	m_3DObjects.push_back(explosion);
 	m_physModels.push_back(explosion);
+#ifdef DEBUG
 	m_3DObjects.push_back(dynamic_cast<PhysModel*>(explosion)->getDebugCollider());
 	explosion->getDebugCollider()->Load();
-
+#endif DEBUG
 	return explosion;
 }
 

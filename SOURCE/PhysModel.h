@@ -77,6 +77,7 @@ public:
 	SDKMeshGO3D* getDebugCollider() { return m_colliderDebug; };
 
 	void SetMaxSpeed(float _maxSpeed) { m_maxSpeed = _maxSpeed; };
+	float GetMaxSpeed() { return m_maxSpeed; };
 
 	const PhysModelData& data = m_physData;
 
@@ -93,7 +94,11 @@ protected:
 
 	Vector3 m_gravDirection = Vector3::Down;
 	Vector3 m_gravVel = Vector3::Zero; // The amount of gravity velocity to apply each frame
+	#ifdef _ARCADE
+	float m_maxGrav = 0;
+	#else
 	float m_maxGrav = 120; // The maximum length of m_gravVel. m_gravVel will be clamped to this
+	#endif
 	Vector3 m_acc = Vector3::Zero;
 	PhysModelData m_physData;
 

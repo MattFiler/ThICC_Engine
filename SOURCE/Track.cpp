@@ -10,10 +10,10 @@
 #include <vector>
 #include <sstream>
 
-Track::Track(std::string _filename) : PhysModel(_filename)
+Track::Track(MapInfo* _track) : PhysModel(_track->model)
 {
 	//Read in track config
-	std::ifstream i(m_filepath.generateConfigFilepath(_filename, m_filepath.MODEL));
+	std::ifstream i(m_filepath.generateConfigFilepath(_track->model, m_filepath.MODEL));
 	json m_track_data_j;
 	m_track_data_j << i;
 
@@ -23,16 +23,20 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	m_track_data.start_rot = Vector3(m_track_data_j["rot_x"], m_track_data_j["rot_y"], m_track_data_j["rot_z"]); //Hmm, allow this? Will mess with collision.
 	m_triSegSize = m_track_data_j["segment_size"];
 
-	//Parse loaded arrays from config
+	//Load decoration model
+	m_decoration_model = new SDKMeshGO3D(_track->decoration_model);
 
+	//Parse loaded arrays from config
 	for (json::iterator it = m_track_data_j["map_waypoints"].begin(); it != m_track_data_j["map_waypoints"].end(); ++it) {
 		Vector3 top_left = blender_vector.ConvertPosition(Vector3(it.value()["top_left"][0], it.value()["top_left"][1], it.value()["top_left"][2]) * m_track_data.scale);
 		Vector3 top_right = blender_vector.ConvertPosition(Vector3(it.value()["top_right"][0], it.value()["top_right"][1], it.value()["top_right"][2]) * m_track_data.scale);
 		Vector3 bottom_left = blender_vector.ConvertPosition(Vector3(it.value()["bottom_left"][0], it.value()["bottom_left"][1], it.value()["bottom_left"][2]) * m_track_data.scale);
 		Vector3 bottom_right = blender_vector.ConvertPosition(Vector3(it.value()["bottom_right"][0], it.value()["bottom_right"][1], it.value()["bottom_right"][2]) * m_track_data.scale);
 		Vector3 middle_bottom = bottom_left + ((bottom_right - bottom_left)*0.5f);
+		Vector3 middle_top = top_left + ((top_right - top_left)*0.5f);
+		Vector3 middle = middle_bottom + ((middle_top - middle_bottom)*0.5f);
 
-		Waypoint new_waypoint = Waypoint(top_left, top_right, bottom_left, bottom_right, middle_bottom);
+		Waypoint new_waypoint = Waypoint(top_left, top_right, bottom_left, bottom_right, middle);
 		map_waypoints.push_back(new_waypoint);
 
 		//Calculate debug marker position as the mid-point of top left and bottom right!
@@ -40,12 +44,26 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 		//debug_markers.push_back(new_marker);
 	}
 	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
-		map_cams_pos.push_back(blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
-		map_cams_rot.push_back(blender_vector.ConvertAngle(Vector3((float)it.value()["rotation"][0], (float)it.value()["rotation"][1], (float)it.value()["rotation"][2])));
+		if (it.value()["role"] == "Start") {
+			map_intro_cams.at((int)it.value()["index"]).start_pos = (blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
+		}
+		else if (it.value()["role"] == "End") {
+			map_intro_cams.at((int)it.value()["index"]).end_pos = (blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
+		}
+	}
+	if (!m_track_data_j["look_at_points"].is_null()) {
+		for (json::iterator it = m_track_data_j["look_at_points"].begin(); it != m_track_data_j["look_at_points"].end(); ++it) {
+			map_intro_cams.at((int)it.value()["index"]).look_at = (blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
+		}
+	}
+	else
+	{
+		DebugText::print(" >>> This map uses an outdated config! Please re-export for new camera configurations!! <<< ");
 	}
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));
 	}
+	
 	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
 		Vector3 box_pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
 		Vector3 box_rot = blender_vector.ConvertAngle(Vector3(it.value()["rotation"][0], it.value()["rotation"][1], it.value()["rotation"][2]));
@@ -85,9 +103,9 @@ Track::Track(std::string _filename) : PhysModel(_filename)
 	SetRotationInDegrees(m_track_data.start_rot);
 
 	//Debug output
-	DebugText::print("Loaded data for track: " + _filename);
+	DebugText::print("Loaded data for track: " + _track->model);
 	//DebugText::print("Suitable spawn spot: (" + std::to_string(m_track_data.spawn_pos.x) + ", " + std::to_string(m_track_data.spawn_pos.y) + ", " + std::to_string(m_track_data.spawn_pos.z) + ")");
-	filename = _filename;
+	filename = _track->model;
 }
 
 /* Load the track collision info */
@@ -106,13 +124,21 @@ void Track::LoadCollision() {
 	m_validCollisions.insert(pair(CollisionType::ANTIGRAV_PAD, true));
 	m_validCollisions.insert(pair(CollisionType::JUMP_PAD, true));
 	m_validCollisions.insert(pair(CollisionType::ON_TRACK_NO_AI, true));
+
+	//Load decoration model if we have one
+	if (m_decoration_model != nullptr) {
+		m_decoration_model->Load();
+	}
 }
 
-/* Unload the track collision info */
+/* Unload the track collision info and decoration mesh if we have one */
 void Track::UnloadCollision() {
 	m_validCollisions.clear();
 	m_triangles.clear();
 	m_triGrid.clear();
+	if (m_decoration_model != nullptr) {
+		m_decoration_model->Reset();
+	}
 	DebugText::print("Unloaded track tri map for '" + filename + "'.");
 }
 
@@ -201,15 +227,19 @@ void Track::setWaypointBB()
 {
 	for (size_t i = 0; i < map_finishline.size(); ++i)
 	{
-		Vector3 vertices[4] =
+		Vector3 vertices[8] =
 		{
 			Vector3(static_cast<float>(map_finishline[i].top_left.x), static_cast<float>(map_finishline[i].top_left.y), static_cast<float>(map_finishline[i].top_left.z)),
 			Vector3(static_cast<float>(map_finishline[i].top_right.x), static_cast<float>(map_finishline[i].top_right.y), static_cast<float>(map_finishline[i].top_right.z)),
 			Vector3(static_cast<float>(map_finishline[i].bottom_left.x), static_cast<float>(map_finishline[i].bottom_left.y), static_cast<float>(map_finishline[i].bottom_left.z)),
-			Vector3(static_cast<float>(map_finishline[i].bottom_right.x), static_cast<float>(map_finishline[i].bottom_right.y), static_cast<float>(map_finishline[i].bottom_right.z))
+			Vector3(static_cast<float>(map_finishline[i].bottom_right.x), static_cast<float>(map_finishline[i].bottom_right.y), static_cast<float>(map_finishline[i].bottom_right.z)),
+			Vector3(static_cast<float>(map_finishline[i].top_left.x+1), static_cast<float>(map_finishline[i].top_left.y + 1), static_cast<float>(map_finishline[i].top_left.z + 1)),
+			Vector3(static_cast<float>(map_finishline[i].top_right.x + 1), static_cast<float>(map_finishline[i].top_right.y + 1), static_cast<float>(map_finishline[i].top_right.z + 1)),
+			Vector3(static_cast<float>(map_finishline[i].bottom_left.x + 1), static_cast<float>(map_finishline[i].bottom_left.y + 1), static_cast<float>(map_finishline[i].bottom_left.z + 1)),
+			Vector3(static_cast<float>(map_finishline[i].bottom_right.x + 1), static_cast<float>(map_finishline[i].bottom_right.y + 1), static_cast<float>(map_finishline[i].bottom_right.z + 1))
 		};
 		BoundingOrientedBox box;
-		BoundingOrientedBox::CreateFromPoints(box, 4, (const XMFLOAT3*)&vertices[0], 3 * sizeof(float));
+		BoundingOrientedBox::CreateFromPoints(box, 8, (const XMFLOAT3*)&vertices[0], 3 * sizeof(float));
 
 		waypoint_bb.push_back(box);
 	}
@@ -466,5 +496,19 @@ Vector3 Track::getWaypointMiddle(int index)
 	{
 		index -= map_waypoints.size();
 	}
-	return map_waypoints[index].middle_bottom;
+	return map_waypoints[index].middle;
+}
+
+//Allow our decoration model to update and render if we have one
+void Track::Render() {
+	if (m_decoration_model != nullptr) {
+		m_decoration_model->Render();
+	}
+	PhysModel::Render();
+}
+void Track::Tick() {
+	if (m_decoration_model != nullptr) {
+		m_decoration_model->Tick();
+	}
+	PhysModel::Tick();
 }
