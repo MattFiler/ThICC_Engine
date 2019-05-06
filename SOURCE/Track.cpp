@@ -85,10 +85,6 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 		m_track_data.spawn_pos = m_track_data.origin;
 	}
 
-	//Set our config in action
-	SetScale(m_track_data.scale);
-	SetRotationInDegrees(m_track_data.start_rot);
-
 	//Debug output
 	DebugText::print("Loaded data for track: " + _track->model);
 	//DebugText::print("Suitable spawn spot: (" + std::to_string(m_track_data.spawn_pos.x) + ", " + std::to_string(m_track_data.spawn_pos.y) + ", " + std::to_string(m_track_data.spawn_pos.z) + ")");

@@ -42,26 +42,14 @@ void AnimationController::SwitchModelSet(std::string _setName)
 }
 
 
-void AnimationController::AddModel(std::string _name, SDKMeshGO3D* _model, SimpleMath::Vector3 _offset)
+void AnimationController::AddModel(std::string _name, SDKMeshGO3D* _model)
 {
-	m_additionalModels.push_back(std::make_unique<AnimationModel>(_model, _name, _offset));
+	m_additionalModels.push_back(std::make_unique<AnimationModel>(_model, _name));
 }
 
-void AnimationController::AddModel(std::string _name, std::string _filepath, Vector3 _offset)
+void AnimationController::AddModel(std::string _name, std::string _filepath)
 {
-	std::ifstream x(m_filepath.generateConfigFilepath(_filepath, m_filepath.MODEL));
-	nlohmann::json model_config;
-	model_config << x;
-
-	SDKMeshGO3D* new_model = new SDKMeshGO3D(_filepath);
-	new_model->SetScale(model_config["modelscale"]);
-	new_model->SetRotationInDegrees(Vector3(model_config["rot_x"], model_config["rot_y"], model_config["rot_z"]));
-
-	if (_offset == Vector3::Zero) {
-		_offset = Vector3(model_config["start_x"], model_config["start_y"], model_config["start_z"]);
-	}
-
-	m_additionalModels.push_back(std::make_unique<AnimationModel>(new_model, _name, _offset));
+	m_additionalModels.push_back(std::make_unique<AnimationModel>(new SDKMeshGO3D(_filepath), _name));
 }
 
 void AnimationController::Load() 
@@ -168,9 +156,7 @@ void AnimationController::Update(Matrix _parentWorld)
 	for (AnimationModel* model : m_modelSet[m_currentSet])
 	{
 		Vector3 scale_original = model->GetModel()->GetScale();
-		model->GetModel()->SetWorld(m_world);
-		model->GetModel()->AddPos(Vector3::Transform(model->GetOffset(), m_rot));
-		model->SetScaleOffset(m_scaleOffset);
+		model->SetWorld(m_world);
 	}
 }
 

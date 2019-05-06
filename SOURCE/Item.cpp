@@ -10,7 +10,7 @@ Item::Item(const std::string& item_type)
 	m_mesh = new TrackMagnet(item_type);
 	m_mesh->SetShouldRender(false);
 	m_displayedMesh = std::make_unique<AnimationController>();
-	m_displayedMesh->AddModel("item", item_type, Vector3::Zero);
+	m_displayedMesh->AddModel("item", item_type);
 	m_displayedMesh->AddModelSet("default", std::vector<std::string>{"item"});
 	m_displayedMesh->SwitchModelSet("default");
 	m_displayedMesh->Load();
