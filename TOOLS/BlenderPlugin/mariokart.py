@@ -29,6 +29,7 @@ class ThICC_ToolPanel(Panel):
         layout.operator(ThICC_ItemBox.bl_idname, text='Add Item Box Location', icon='CURSOR')
         layout.operator(ThICC_GliderTrack.bl_idname, text='Add Glider Track', icon='MESH_PLANE')
         layout.operator(ThICC_CourseIntroCam.bl_idname, text='Add Course Intro Cam', icon='OUTLINER_OB_CAMERA')
+        layout.operator(ThICC_IntroCamLookAt.bl_idname, text='Add Intro Cam Look At', icon='PARTICLE_DATA')
         layout.operator(ThICC_ExportConfig.bl_idname, text='Save Config', icon='SAVE_COPY')
         
         
@@ -243,8 +244,50 @@ class ThICC_CourseIntroCam(bpy.types.Operator):
         bpy.context.active_object.name = camera_name
         
         return {'FINISHED'}
+
+
+# Add a look-at for the cinematic cams
+class ThICC_IntroCamLookAt(bpy.types.Operator, ExportHelper):  
+    """Add a New Look-At for Cinematic Cams"""
+    bl_idname = "object.thicc_cinecam_lookat_add"
+    bl_label = "Intro Cam Look-At"
+    bl_options = {'REGISTER', 'UNDO'}
     
+    def execute(self, context):
+        # Work out a valid look-at name
+        camera_name = "Intro Cam Look-At - 1"
+        camera_valid = True
+        camera_update = 0
+        location = (0,0,0)
+        for object in bpy.data.objects:
+            if object.type == "CAMERA":
+                if camera_update < 1 and object.name == "Intro Cam Look-At - 1":
+                    camera_name = "Intro Cam Look-At - 2"
+                    camera_update = 1
+                if camera_update < 2 and object.name == "Intro Cam Look-At - 2":
+                    camera_name = "Intro Cam Look-At - 3"
+                    camera_update = 2
+                if camera_update < 3 and object.name == "Intro Cam Look-At - 3":
+                    camera_name = "Course Intro Cam - End 4"
+                    camera_update = 3
+                if camera_update < 4 and object.name == "Intro Cam Look-At - 4":
+                    camera_valid = False
+                    
+        # If we've reached the max look-at points, don't add more
+        if camera_valid == False:
+            return {'CANCELLED'}
         
+        # Set to selected object's position if we can
+        if bpy.context.active_object != None:
+            location = bpy.context.scene.objects.active.location
+        
+        # Ceate camera with calculated name
+        bpy.ops.object.camera_add(location=location,rotation=[3.15/2,0,0])
+        bpy.context.active_object.name = camera_name
+        
+        return {'FINISHED'}
+    
+
 # Save all config content
 class ThICC_ExportConfig(bpy.types.Operator, ExportHelper):
     """Save ThICC Config"""
@@ -347,6 +390,7 @@ def menu_func(self, context):
     self.layout.operator(ThICC_SpawnMarker.bl_idname)
     self.layout.operator(ThICC_TrackWaypoint.bl_idname)
     self.layout.operator(ThICC_CourseIntroCam.bl_idname)
+    self.layout.operator(ThICC_IntroCamLookAt.bl_idname)
     self.layout.operator(ThICC_ItemBox.bl_idname)
     self.layout.operator(ThICC_FinishLine.bl_idname)
     self.layout.operator(ThICC_GliderTrack.bl_idname)
@@ -361,6 +405,7 @@ def register():
     bpy.utils.register_class(ThICC_SpawnMarker)
     bpy.utils.register_class(ThICC_TrackWaypoint)
     bpy.utils.register_class(ThICC_CourseIntroCam)
+    bpy.utils.register_class(ThICC_IntroCamLookAt)
     bpy.utils.register_class(ThICC_ItemBox)
     bpy.utils.register_class(ThICC_FinishLine)
     bpy.utils.register_class(ThICC_GliderTrack)
@@ -374,6 +419,7 @@ def unregister():
     bpy.utils.unregister_class(ThICC_SpawnMarker)
     bpy.utils.unregister_class(ThICC_TrackWaypoint)
     bpy.utils.unregister_class(ThICC_CourseIntroCam)
+    bpy.utils.unregister_class(ThICC_IntroCamLookAt)
     bpy.utils.unregister_class(ThICC_ItemBox)
     bpy.utils.unregister_class(ThICC_FinishLine)
     bpy.utils.unregister_class(ThICC_GliderTrack)
