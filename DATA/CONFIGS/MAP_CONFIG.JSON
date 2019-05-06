@@ -100,8 +100,8 @@
     "menu_sprite": "MARIO KART STADIUM PREVIEW",
     "model": "MARIOKARTSTADIUM",
     "decoration_model": "VRFIRST",
-    "cubemap": "GARAGE",
-    "skybox": "VRFIRST_ALB",
+    "cubemap": "SUNSUBMIXER",
+    "skybox": "SKYBOX_HYRULE_CIRCUIT",
     "cup": "DEMO_CUP",
     "arcade_only": false,
     "audio": {
