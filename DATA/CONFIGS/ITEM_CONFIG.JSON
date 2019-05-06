@@ -73,11 +73,11 @@
 			"lifetime": 300,
 			"player_immunity_time": 2,
 			"use_pos_offset": 1,
-			"max_speed": 40,
-			"move_toward_distance_squared": 30,
+			"max_speed": 90,
+			"move_toward_distance_squared": 2500,
 			"ai": {
-				"move_speed": 50,
-				"turn_speed": 50
+				"move_speed": 60,
+				"turn_speed": 120
 			},
 			"player_collision": {
 				"velocity_multiplier": 0,		

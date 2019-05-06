@@ -46,14 +46,26 @@ void RedShell::Tick()
 		{
 			m_move->Tick();
 
-			if (!m_hasMoveTowards && Vector3::DistanceSquared(m_itemMesh->m_mesh->GetPos(), m_targetPlayer->GetPos()) < m_aiData.m_moveTowardDistSqrd)
+			float dist = Vector3::DistanceSquared(m_itemMesh->m_mesh->GetPos(), m_targetPlayer->GetPos());
+
+			DebugText::print("distance: " + std::to_string(dist));
+			
+			if (dist < m_aiData.m_moveTowardDistSqrd)
 			{
-				m_ai.release();
+				if (m_ai)
+				{
+					m_ai.reset();
+				}
 				Vector3 moveTowards = m_targetPlayer->GetPos() - m_itemMesh->m_mesh->GetPos();
 				moveTowards.Normalize();
 				m_itemMesh->m_mesh->setVelocity(moveTowards * m_move->GetMoveSpeed());
 				m_hasMoveTowards = true;
 			}
+		}
+
+		if (m_itemMesh->m_mesh->HasHitWall())
+		{
+			FlagForDestoy();
 		}
 	}
 }
@@ -66,6 +78,7 @@ void RedShell::HitByPlayer(Player * _player)
 		return;
 	}
 
+	DebugText::print("Red Shell hit player: " + std::to_string(_player->GetPlayerId()));
 	_player->setVelocity(_player->getVelocity() * m_collisionData.m_playerVelMulti);
 	_player->Jump(m_collisionData.m_jumpHeight, m_collisionData.m_jumpDuration);
 	_player->Flip(m_collisionData.m_flipRev, m_collisionData.m_flipDuration);
