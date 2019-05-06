@@ -14,6 +14,7 @@ public:
 	virtual ~ImageGO2D();
 
 	XMUINT2 GetSize() { return size; }
+	void SetSize(Vector2 _size);
 
 	void Render();
 
@@ -22,6 +23,8 @@ public:
 	void UpdateSprite(string _filename);
 
 	virtual void Reset() override;
+
+	std::string& GetFilepath() { return current_filepath; }
 
 protected:
 	void InternalSpriteUpdate(string _filename);

@@ -84,10 +84,10 @@ void Camera::Tick()
 		look_at_target = m_targetPos;
 		up_transform = Vector3::Up;
 
-		if (cam_point < points.size())
+		if (cam_point < Locator::getCD()->points.size() && Locator::getCD()->look_points[cam_point] != Vector3{0, 0, 0})
 		{
-			target_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / Locator::getCD()->cine_time_out);
-			m_targetPos = look_points[cam_point];
+			target_pos = Vector3::Lerp(Locator::getCD()->points[cam_point][0], Locator::getCD()->points[cam_point][1], timer / Locator::getCD()->cine_time_out);
+			m_targetPos = Locator::getCD()->look_points[cam_point];
 
 			if (timer >= Locator::getCD()->cine_time_out)
 			{
