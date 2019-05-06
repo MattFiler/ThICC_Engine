@@ -13,6 +13,7 @@ class SceneManager;
 class GameObjectShared;
 class ThICC_CameraData;
 class ItemPools;
+class RaceManager;
 
 struct Locator {
 	static ThICC_InputData* getID() {
@@ -81,6 +82,12 @@ struct Locator {
 		}
 		return ref_ItemPools;
 	}
+	static RaceManager* getRM() {
+		if (ref_RaceM == nullptr) {
+			throw std::runtime_error("Call to camera data before initialisation.");
+		}
+		return ref_RaceM;
+	}
 
 	static void setupID(ThICC_InputData* inst_ID) {
 		ref_ID = inst_ID;
@@ -115,6 +122,9 @@ struct Locator {
 	static void setupItemPools(ItemPools* inst_itemPool) {
 		ref_ItemPools = inst_itemPool;
 	}
+	static void setupRM(RaceManager* inst_raceMan) {
+		ref_RaceM = inst_raceMan;
+	}
 
 private:
 	static ThICC_InputData* ref_ID;
@@ -128,4 +138,5 @@ private:
 	static GameObjectShared* ref_GOS;
 	static ThICC_CameraData* ref_CamD;
 	static ItemPools* ref_ItemPools;
+	static RaceManager* ref_RaceM;
 };

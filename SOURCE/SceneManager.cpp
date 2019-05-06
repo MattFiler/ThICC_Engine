@@ -81,6 +81,8 @@ void SceneManager::Update(DX::StepTimer const& timer) {
 			DebugText::print("SceneManager: Unloading previous scene!");
 			Locator::getDD()->m_deviceResources->WaitForGpu();
 			m_prev_scene->ExpensiveUnload();
+			Locator::getDD()->m_deviceResources->WaitForGpu();
+			Locator::getRD()->m_graphicsMemory->GarbageCollect();
 			needs_delete = false;
 			delete_counter = 0;
 			/*

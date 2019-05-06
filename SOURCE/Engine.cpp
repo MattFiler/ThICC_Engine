@@ -160,10 +160,10 @@ void ThICC_Engine::SetupSplitscreenViewports() {
 			}
 			case 1: {
 				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
+					(float)(Locator::getRD()->m_window_width * 0.5f),
 					0.0f,
-					0.0f,
-					0.0f,
-					0.0f,
+					(float)(Locator::getRD()->m_window_width * 0.5f),
+					(float)(Locator::getRD()->m_window_height * 0.5f),
 					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
 				};
 				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
@@ -177,9 +177,9 @@ void ThICC_Engine::SetupSplitscreenViewports() {
 			case 2: {
 				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
 					0.0f,
-					0.0f,
-					0.0f,
-					0.0f,
+					(float)(Locator::getRD()->m_window_width * 0.5f),
+					(float)(Locator::getRD()->m_window_width * 0.5f),
+					(float)(Locator::getRD()->m_window_height * 0.5f),
 					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
 				};
 				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
@@ -192,10 +192,10 @@ void ThICC_Engine::SetupSplitscreenViewports() {
 			}
 			case 3: {
 				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					0.0f,
-					0.0f,
-					(float)(Locator::getRD()->m_window_width),
-					(float)(Locator::getRD()->m_window_height),
+					(float)(Locator::getRD()->m_window_width * 0.5f),
+					(float)(Locator::getRD()->m_window_height * 0.5f),
+					(float)(Locator::getRD()->m_window_width * 0.5f),
+					(float)(Locator::getRD()->m_window_height * 0.5f),
 					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
 				};
 				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
@@ -299,7 +299,7 @@ void ThICC_Engine::Render()
 
 	// Show the new frame.
 	m_device_data.m_deviceResources->Present();
-	m_graphicsMemory->Commit(m_device_data.m_deviceResources->GetCommandQueue());
+	Locator::getRD()->m_graphicsMemory->Commit(m_device_data.m_deviceResources->GetCommandQueue());
 }
 
 // Helper method to clear the back buffers.
@@ -383,7 +383,7 @@ void ThICC_Engine::CreateDeviceDependentResources()
 	auto device = m_device_data.m_deviceResources->GetD3DDevice();
 
 	//Create our core render graphics resources
-	m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
+	Locator::getRD()->m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 	m_renderDescriptors = std::make_unique<DescriptorHeap>(device,
 		D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
 		D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
@@ -434,7 +434,7 @@ void ThICC_Engine::OnDeviceLost()
 
 	m_device_data.m_hdrScene->ReleaseDevice();
 
-	m_graphicsMemory.reset();
+	Locator::getRD()->m_graphicsMemory.reset();
 }
 
 /* If the device comes back, create everything again! */
@@ -455,7 +455,7 @@ void ThICC_Engine::SetDefaultFont(std::string _default_font)
 	RenderTargetState rtState(m_device_data.m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
 
 	//Create sprite batch
-	SpriteBatchPipelineStateDescription pd(rtState);
+	SpriteBatchPipelineStateDescription pd(rtState, &Locator::getRD()->m_states->NonPremultiplied);
 	Locator::getRD()->m_2dSpriteBatch = std::make_unique<SpriteBatch>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, pd);
 	Locator::getRD()->m_2dSpriteBatch->SetViewport(Locator::getRD()->m_screenViewport);
 

@@ -7,6 +7,7 @@
 #include "ServiceLocator.h"
 #include "AudioManager.h"
 #include "DebugMarker.h"
+#include "CameraData.h"
 #include "Explosion.h"
 #include "GameObjectShared.h"
 #include "AIScheduler.h"
@@ -114,7 +115,16 @@ void GameScene::ExpensiveLoad() {
 	//Load skybox
 	Locator::getRD()->skybox->Load();
 
-	//Load the map's audio here using map_info's data
+
+	for (auto& camera : track->getIntroCams())
+	{
+		std::vector<Vector3> camera_pos;
+
+		camera_pos.push_back(camera.start_pos);
+		camera_pos.push_back(camera.end_pos);
+		Locator::getCD()->points.push_back(camera_pos);
+		Locator::getCD()->look_points.push_back(camera.look_at);
+	}
 }
 
 /* Unpopulate the expensive things. */
@@ -715,6 +725,8 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		}
 		break;
 	}
+	m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
+	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
 }
 
 /* Render the 2D scene */
