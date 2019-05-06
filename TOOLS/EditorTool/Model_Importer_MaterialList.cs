@@ -448,10 +448,12 @@ namespace EditorTool
                     JToken model_blender_data = JToken.Parse(File.ReadAllText(importer_common.getModelConfigPath()));
                     foreach (JToken data in model_blender_data["cams"])
                     {
+                        data["index"] = Convert.ToInt32(data["index"].Value<string>());
                         camera_array.Add(data);
                     }
                     foreach (JToken data in model_blender_data["look_at_points"])
                     {
+                        data["index"] = Convert.ToInt32(data["index"].Value<string>());
                         lookat_array.Add(data);
                     }
                     foreach (JToken data in model_blender_data["waypoints"])

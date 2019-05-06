@@ -20,7 +20,10 @@ struct ThICC_RenderData {
 	Microsoft::WRL::ComPtr<ID3D12Device> m_d3dDevice;
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> m_commandQueue;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> m_commandList;
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> m_commandAllocators[MAX_BACK_BUFFER_COUNT];
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> m_commandAllocators[MAX_BACK_BUFFER_COUNT]; 
+	
+	// Our graphics memory
+	std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
 
 	// Swap chain objects.
 	Microsoft::WRL::ComPtr<IDXGIFactory4> m_dxgiFactory;
