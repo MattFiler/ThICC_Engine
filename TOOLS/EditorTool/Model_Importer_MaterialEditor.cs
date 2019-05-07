@@ -271,12 +271,15 @@ namespace EditorTool
         }
         private void removeSelectedDiffuse_Click(object sender, EventArgs e)
         {
-            if (diffuseMapList.SelectedIndex == -1)
+            if (diffuseMapList.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Please select a diffuse map to remove.", "No diffuse map selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please select diffuse map(s) to remove.", "No diffuse map selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            diffuseMapList.Items.RemoveAt(diffuseMapList.SelectedIndex);
+            for (int i = 0; i < diffuseMapList.SelectedItems.Count; i++)
+            {
+                diffuseMapList.Items.Remove(diffuseMapList.SelectedItems[i]);
+            }
             isDiffuseAnimated.Checked = (diffuseMapList.Items.Count > 1);
         }
 

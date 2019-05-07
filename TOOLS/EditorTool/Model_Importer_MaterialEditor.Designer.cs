@@ -655,6 +655,7 @@
             this.diffuseMapList.HorizontalScrollbar = true;
             this.diffuseMapList.Location = new System.Drawing.Point(6, 35);
             this.diffuseMapList.Name = "diffuseMapList";
+            this.diffuseMapList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.diffuseMapList.Size = new System.Drawing.Size(260, 121);
             this.diffuseMapList.TabIndex = 44;
             // 
