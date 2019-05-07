@@ -70,7 +70,7 @@ void GameScene::ExpensiveLoad() {
 
 	if (Locator::getRM()->attract_state)
 	{
-		m_maxPlayers = 3;
+		m_maxPlayers = 1;
 	}
 	else
 	{
