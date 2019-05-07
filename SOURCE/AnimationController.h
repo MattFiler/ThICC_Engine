@@ -38,7 +38,7 @@ public:
 	void SetRotOffset(Vector3 _offset) { m_rotOffsetOverride = _offset; };
 
 	bool FinishedScale() { return m_scaleTimeElapsed >= m_timeForScale; };
-	void ResetScale() { m_scaleOffset = Vector3::One; };
+	void ResetScale();
 	void ResetRotation() { m_rotOffset = Vector3::Zero; };
 	enum direction
 	{
