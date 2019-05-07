@@ -116,6 +116,7 @@ private:
 	void MovePlayerToTrack();
 
 	void GlideLogic();
+	void StopGlide();
 
 	ThICC_RenderData* m_RD = nullptr;
 	KeybindManager m_keybind;
@@ -184,8 +185,13 @@ private:
 	float m_timeStationary = 0;
 	bool m_respawning = false;
 
-	Matrix m_respawnStart = Matrix::Identity;
-	Matrix m_respawnEnd = Matrix::Identity;
+	Vector3 m_respawnStartPos = Vector3::Zero;
+	Vector3 m_respawnEndPos = Vector3::Zero;
+	Quaternion m_respawnStartRot = Quaternion::Identity;
+	Quaternion m_respawnEndRot = Quaternion::Identity;
+	Matrix m_endWorld = Matrix::Identity;
+
+
 	Vector3 m_respawnPos = Vector3::Zero;
 	float m_totalRespawnTime = 0;
 	float m_maxRespawnTime = 2;

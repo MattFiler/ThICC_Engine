@@ -16,6 +16,7 @@ public:
 	CollisionType GetGroundType() { return m_colType; };
 
 	bool HasHitWall() { return m_hasHitWall; };
+	void ResetHasHitWall(){ m_hasHitWall = false; };
 
 	void UseMagnet(bool _shouldUse) { m_useMagnet = _shouldUse; };
 

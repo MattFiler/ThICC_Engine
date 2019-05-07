@@ -7,6 +7,5 @@
   "ui_scale": 1.0,
   "itembox_respawn_time": 4.0,
   "enable_fps": true,
-  "font": "NEUEHAASGROTESKDISP PRO BD",
-  "threshold_collision_distance_squared": 10
+  "font": "NEUEHAASGROTESKDISP PRO BD"
 }

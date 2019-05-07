@@ -79,7 +79,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		{
 			adjustVel *= -1;
 		}
-		m_onTrack = false;
+
 		// If the position of the kart is within the snapping area
 		float dist = Vector::Distance(m_pos, midIntersect);
 		if (dist > m_minSnapDist && dist < m_maxSnapDist)
@@ -98,6 +98,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		}
 		else if (dist > m_maxSnapDist)
 		{
+			m_onTrack = false;
 			modifiedMaxRotation /= 5;
 			m_gravDirection = m_world.Down() * gravityMultiplier;
 		}

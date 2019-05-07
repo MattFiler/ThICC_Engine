@@ -13,47 +13,22 @@ AudioManager::AudioManager()
 	json m_sound_configs;
 	m_sound_configs << i;
 
-	addToSoundsList(m_sound_configs["menu_sounds"]["MENU_LOOP"], SoundType::MENU);
-	addToSoundsList(m_sound_configs["menu_sounds"]["TITLE_START"], SoundType::MENU);
-	addToSoundsList(m_sound_configs["menu_sounds"]["TITLE_LOOP"], SoundType::MENU);
-	addToSoundsList(m_sound_configs["misc_sounds"]["COURSE_INTRO"], SoundType::MISC);
-	addToSoundsList(m_sound_configs["misc_sounds"]["PRE_COUNTDOWN"], SoundType::MISC);
-	addToSoundsList(m_sound_configs["misc_sounds"]["COUNTDOWN"], SoundType::MISC);
-	addToSoundsList(m_sound_configs["misc_sounds"]["ITEMBOX_HIT"], SoundType::MISC);
-	addToSoundsList(m_sound_configs["misc_sounds"]["FINAL_LAP_SOUND"], SoundType::MISC);
-	addToSoundsList(m_sound_configs["item_sounds"]["STAR_SOUND"], SoundType::ITEMS);
-	addToSoundsList(m_sound_configs["item_sounds"]["LIGHTNING_SOUND"], SoundType::ITEMS);
-
-	//for (int i = 0; i <= (int)SOUNDS_MENU::TTLE_LOOP; i++)
-	//{
-	//	Sound* new_sound = new Sound(m_audEngine.get(), menuSounds[i]);
-	//	if (i == 0 || i == 2)
-	//		new_sound->SetLoop(true);
-	//	m_menuSounds.push_back(new_sound);
-	//}
-	//for (int i = 0; i <= (int)SOUNDS_GAME::MKS_FL_GAME; i++)
-	//{
-	//	Sound* new_sound = new Sound(m_audEngine.get(), gameSounds[i]);
-	//	if (i == 1)
-	//		new_sound->SetLoop(true);
-	//	m_gameSounds.push_back(new_sound);
-	//}
-	//for (int i = 0; i <= (int)SOUNDS_CHARACTER::WALUIGI; i++)
-	//{
-	//	Sound* new_sound = new Sound(m_audEngine.get(), characterSounds[i]);
-	//	m_characterSounds.push_back(new_sound);
-	//}
-	//for (int i = 0; i <= (int)SOUNDS_MISC::FINAL_LAP_IND; i++)
-	//{
-	//	Sound* new_sound = new Sound(m_audEngine.get(), miscSounds[i]);
-	//	m_miscSounds.push_back(new_sound);
-	//}
+	addToSoundsList(m_sound_configs["menu_sounds"]["MENU_LOOP"], "MENU_LOOP");
+	addToSoundsList(m_sound_configs["menu_sounds"]["TITLE_START"], "TITLE_START");
+	addToSoundsList(m_sound_configs["menu_sounds"]["TITLE_LOOP"], "TITLE_LOOP");
+	addToSoundsList(m_sound_configs["misc_sounds"]["COURSE_INTRO"], "COURSE_INTRO");
+	addToSoundsList(m_sound_configs["misc_sounds"]["PRE_COUNTDOWN"], "PRE_COUNTDOWN");
+	addToSoundsList(m_sound_configs["misc_sounds"]["COUNTDOWN"], "COUNTDOWN");
+	addToSoundsList(m_sound_configs["misc_sounds"]["ITEMBOX_HIT"], "ITEMBOX_HIT");
+	addToSoundsList(m_sound_configs["misc_sounds"]["FINAL_LAP_SOUND"], "FINAL_LAP_SOUND");
+	addToSoundsList(m_sound_configs["item_sounds"]["STAR_SOUND"], "STAR_SOUND");
+	addToSoundsList(m_sound_configs["item_sounds"]["LIGHTNING_SOUND"], "LIGHTNING_SOUND");
 
 }
 
-void AudioManager::addToSoundsList(std::string asset, SoundType type)
+void AudioManager::addToSoundsList(const std::string& asset, const std::string& _tag)
 {
-	std::ifstream j("DATA/SOUNDS/" + asset + ".JSON");
+	std::ifstream j(m_filepaths.generateConfigFilepath(asset, m_filepaths.SOUND));
 	json m_config;
 	m_config << j;
 
@@ -62,153 +37,98 @@ void AudioManager::addToSoundsList(std::string asset, SoundType type)
 	new_sound->SetVolume(m_config["volume"]);
 	new_sound->SetPitch(m_config["pitch"]);
 	new_sound->SetPan(m_config["pan"]);
+	new_sound->SetTag(_tag);
+	m_Sounds.push_back(new_sound);
+}
 
-	auto soundssss = new_sound;
-	switch (type)
+void AudioManager::clearTrackSounds()
+{
+	for (size_t i = 0; i < m_Sounds.size(); i++)
 	{
-	case SoundType::MENU:
-		m_menuSounds.emplace_back(new_sound);
-		break;
-	case SoundType::GAME:
-		m_gameSounds.emplace_back(new_sound);
-		break;
-	case SoundType::CHARACTER:
-		m_characterSounds.emplace_back(new_sound);
-		break;
-	case SoundType::MISC:
-		m_miscSounds.emplace_back(new_sound);
-		break;
-	case SoundType::ITEMS:
-		m_itemSounds.emplace_back(new_sound);
-		break;
+		if (m_Sounds[i]->GetTag() == "TRACK_START")
+		{
+			m_Sounds.erase(m_Sounds.begin() + i);
+		}
+	}
+	for (size_t i = 0; i < m_Sounds.size(); i++)
+	{
+		if (m_Sounds[i]->GetTag() == "TRACK_LOOP")
+		{
+			m_Sounds.erase(m_Sounds.begin() + i);
+		}
+	}
+	for (size_t i = 0; i < m_Sounds.size(); i++)
+	{
+		if (m_Sounds[i]->GetTag() == "FINAL_LAP_START")
+		{
+			m_Sounds.erase(m_Sounds.begin() + i);
+		}
+	}
+	for (size_t i = 0; i < m_Sounds.size(); i++)
+	{
+		if (m_Sounds[i]->GetTag() == "FINAL_LAP_LOOP")
+		{
+			m_Sounds.erase(m_Sounds.begin() + i);
+		}
 	}
 }
 
-void AudioManager::clearSoundsList(SoundType type)
+void AudioManager::eraseElementInSoundsList(const std::string& _tag)
 {
-	switch (type)
+	for (size_t i = 0; i < m_Sounds.size(); i++)
 	{
-	case SoundType::MENU:
-		m_menuSounds.clear();
-		break;
-	case SoundType::GAME:
-		m_gameSounds.clear();
-		break;
-	case SoundType::CHARACTER:
-		m_characterSounds.clear();
-		break;
-	case SoundType::MISC:
-		m_miscSounds.clear();
-		break;
-	case SoundType::ITEMS:
-		m_itemSounds.clear();
-		break;
-	}
-
-}
-
-void AudioManager::eraseElementInSoundsList(SoundType type, int i)
-{
-	switch (type)
-	{
-	case SoundType::MENU:
-		m_menuSounds.erase(m_menuSounds.begin() + i);
-		break;
-	case SoundType::GAME:
-		m_gameSounds.erase(m_menuSounds.begin() + i);
-		break;
-	case SoundType::CHARACTER:
-		m_characterSounds.erase(m_menuSounds.begin() + i);
-		break;
-	case SoundType::MISC:
-		m_miscSounds.erase(m_menuSounds.begin() + i);
-		break;
-	case SoundType::ITEMS:
-		m_itemSounds.erase(m_menuSounds.begin() + i);
-		break;
+		if (m_Sounds[i]->GetTag() == _tag)
+		{
+			m_Sounds.erase(m_Sounds.begin() + i);
+			return;
+		}
 	}
 }
 
-void AudioManager::Play(SoundType type, int i)
+void AudioManager::Play(const std::string& _tag)
 {
-	switch (type)
+	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
 	{
-	case SoundType::MENU:
-		m_menuSounds[i]->Play();
-		break;
-	case SoundType::GAME:
-		m_gameSounds[i]->Play();
-		break;
-	case SoundType::CHARACTER:
-		m_characterSounds[i]->Play();
-		break;
-	case SoundType::MISC:
-		m_miscSounds[i]->Play();
-		break;
-	case SoundType::ITEMS:
-		m_itemSounds[i]->Play();
-		break;
+		if ((*it)->GetTag() == _tag)
+		{
+			(*it)->Play();
+			return;
+		}
 	}
 }
 
-void AudioManager::Stop(SoundType type, int i)
+void AudioManager::Stop(const std::string& _tag)
 {
-	switch (type)
+	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
 	{
-	case SoundType::MENU:
-		m_menuSounds[i]->Stop();
-		break;
-	case SoundType::GAME:
-		m_gameSounds[i]->Stop();
-		break;
-	case SoundType::CHARACTER:
-		m_characterSounds[i]->Stop();
-		break;
-	case SoundType::MISC:
-		m_miscSounds[i]->Stop();
-		break;
-	case SoundType::ITEMS:
-		m_itemSounds[i]->Stop();
-		break;
+		if ((*it)->GetTag() == _tag)
+		{
+			(*it)->Stop();
+			return;
+		}
 	}
 }
 
-void AudioManager::Pause(SoundType type, int i)
+void AudioManager::Pause(const std::string& _tag)
 {
-	switch (type)
+	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
 	{
-	case SoundType::MENU:
-		m_menuSounds[i]->Pause();
-		break;
-	case SoundType::GAME:
-		m_gameSounds[i]->Pause();
-		break;
-	case SoundType::CHARACTER:
-		m_characterSounds[i]->Pause();
-		break;
-	case SoundType::MISC:
-		m_miscSounds[i]->Pause();
-		break;
-	case SoundType::ITEMS:
-		m_itemSounds[i]->Pause();
-		break;
+		if ((*it)->GetTag() == _tag)
+		{
+			(*it)->Pause();
+			return;
+		}
 	}
 }
 
-Sound* AudioManager::GetSound(SoundType type, int i)
+Sound* AudioManager::GetSound(const std::string& _tag)
 {
-	switch (type)
+	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
 	{
-	case SoundType::MENU:
-		return m_menuSounds[i];
-	case SoundType::GAME:
-		return m_gameSounds[i];
-	case SoundType::CHARACTER:
-		return m_characterSounds[i];
-	case SoundType::MISC:
-		return m_miscSounds[i];
-	case SoundType::ITEMS:
-		return m_itemSounds[i];
+		if ((*it)->GetTag() == _tag)
+		{
+			return (*it);
+		}
 	}
 	return nullptr;
 }

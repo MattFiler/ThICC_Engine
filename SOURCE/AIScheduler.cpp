@@ -52,14 +52,11 @@ void AIScheduler::Update()
 		m_currentIndex = 0;
 	}
 
-	for (MoveAI* ai : m_aiList)
+	for (size_t i = 0; i < m_aiList.size(); i++)
 	{
-		if (ai->Update())
+		if (m_aiList[i]->Update())
 		{
-			if (ai)
-			{
-				ai->RecalculateLine(m_track);
-			}
+			m_aiList[i]->RecalculateLine(m_track);
 		}
 	}
 	#endif

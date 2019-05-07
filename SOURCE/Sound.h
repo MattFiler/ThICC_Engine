@@ -31,6 +31,8 @@ public:
 	bool IsPlaying() { return m_sfx->IsInUse(); }
 
 	void Pause();
+	const std::string& GetTag() { return tag; }
+	void SetTag(const std::string& _tag) { tag = _tag; }
 
 protected:
 	std::unique_ptr<DirectX::SoundEffect> m_sfx;
@@ -43,6 +45,7 @@ protected:
 	bool loop = false;
 	bool m_playing = false;
 	std::string filename = "";
+	std::string tag = "";
 
 	GameFilepaths m_filepath;
 };

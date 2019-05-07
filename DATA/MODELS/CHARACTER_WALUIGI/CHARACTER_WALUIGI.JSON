@@ -1,0 +1,60 @@
+{
+  "asset_name": "CHARACTER_WALUIGI",
+  "asset_type": "Models",
+  "model_type": 2,
+  "visible": true,
+  "start_x": 0,
+  "start_y": 0,
+  "start_z": 0,
+  "modelscale": 1.0,
+  "rot_x": 0,
+  "rot_y": 0,
+  "rot_z": 0,
+  "segment_size": 10,
+  "in_use_in": [
+    "Character"
+  ],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      2.607142,
+      4.680099,
+      0.372732
+    ],
+    "front_top_right": [
+      -2.607142,
+      4.680099,
+      0.372732
+    ],
+    "front_bottom_right": [
+      -2.607142,
+      -0.004884,
+      0.372732
+    ],
+    "front_bottom_left": [
+      2.607142,
+      -0.004884,
+      0.372732
+    ],
+    "back_top_left": [
+      2.607142,
+      4.680099,
+      -0.796329
+    ],
+    "back_top_right": [
+      -2.607142,
+      4.680099,
+      -0.796329
+    ],
+    "back_bottom_right": [
+      -2.607142,
+      -0.004884,
+      -0.796329
+    ],
+    "back_bottom_left": [
+      2.607142,
+      -0.004884,
+      -0.796329
+    ]
+  }
+}
