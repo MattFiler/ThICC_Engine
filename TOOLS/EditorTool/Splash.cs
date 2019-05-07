@@ -271,7 +271,6 @@ namespace EditorTool
                 //Copy all
                 copyAssets(path_mod + output + "/DATA/", path_mod);
                 CopyToOutput(path_mod, output, "MarioKartLauncher.exe", "Mario Kart Launcher.exe");
-                CopyToOutput(path_mod, output, "vc_redist.x64.exe", "vc_redist.x64.exe");
                 return 1;
             }
             return -1;

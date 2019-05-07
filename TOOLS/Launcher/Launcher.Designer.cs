@@ -35,7 +35,6 @@
             this.po_language = new System.Windows.Forms.ComboBox();
             this.playButton = new System.Windows.Forms.Button();
             this.quitButton = new System.Windows.Forms.Button();
-            this.FirstTimeSetup = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.launcherImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,6 +83,7 @@
             // po_language
             // 
             this.po_language.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.po_language.Enabled = false;
             this.po_language.FormattingEnabled = true;
             this.po_language.Items.AddRange(new object[] {
             "English",
@@ -96,7 +96,7 @@
             // 
             // playButton
             // 
-            this.playButton.Location = new System.Drawing.Point(322, 208);
+            this.playButton.Location = new System.Drawing.Point(322, 183);
             this.playButton.Name = "playButton";
             this.playButton.Size = new System.Drawing.Size(122, 23);
             this.playButton.TabIndex = 5;
@@ -106,7 +106,7 @@
             // 
             // quitButton
             // 
-            this.quitButton.Location = new System.Drawing.Point(322, 237);
+            this.quitButton.Location = new System.Drawing.Point(322, 210);
             this.quitButton.Name = "quitButton";
             this.quitButton.Size = new System.Drawing.Size(122, 23);
             this.quitButton.TabIndex = 6;
@@ -114,22 +114,11 @@
             this.quitButton.UseVisualStyleBackColor = true;
             this.quitButton.Click += new System.EventHandler(this.quitButton_Click);
             // 
-            // FirstTimeSetup
-            // 
-            this.FirstTimeSetup.Location = new System.Drawing.Point(12, 237);
-            this.FirstTimeSetup.Name = "FirstTimeSetup";
-            this.FirstTimeSetup.Size = new System.Drawing.Size(154, 23);
-            this.FirstTimeSetup.TabIndex = 7;
-            this.FirstTimeSetup.Text = "First Time Setup";
-            this.FirstTimeSetup.UseVisualStyleBackColor = true;
-            this.FirstTimeSetup.Click += new System.EventHandler(this.FirstTimeSetup_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(453, 271);
-            this.Controls.Add(this.FirstTimeSetup);
+            this.ClientSize = new System.Drawing.Size(453, 239);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.quitButton);
             this.Controls.Add(this.po_language);
@@ -157,7 +146,6 @@
         private System.Windows.Forms.Button quitButton;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox po_language;
-        private System.Windows.Forms.Button FirstTimeSetup;
     }
 }
 
