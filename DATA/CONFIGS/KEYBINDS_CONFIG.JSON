@@ -1,20 +1,4 @@
 {
-  "MENU_UP": {
-    "Keyboard": "Up",
-    "Keyboard_Code": 38,
-    "Arcade": "Left Joystick Up",
-    "Arcade_Code": 38,
-    "Gamepad": "D-Pad Up",
-    "is_debug": false
-  },
-  "MENU_DOWN": {
-    "Keyboard": "Down",
-    "Keyboard_Code": 40,
-    "Arcade": "Left Joystick Down",
-    "Arcade_Code": 40,
-    "Gamepad": "D-Pad Down",
-    "is_debug": false
-  },
   "QUIT": {
     "Keyboard": "Escape",
     "Keyboard_Code": 27,
@@ -310,5 +294,37 @@
     "Arcade_Code": -1,
     "Gamepad": "Right Trigger",
     "is_debug": true
+  },
+  "MENU_LEFT": {
+    "Keyboard": "Left",
+    "Keyboard_Code": 37,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "D-Pad Left",
+    "is_debug": false
+  },
+  "MENU_DOWN": {
+    "Keyboard": "Down",
+    "Keyboard_Code": 40,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "D-Pad Down",
+    "is_debug": false
+  },
+  "MENU_UP": {
+    "Keyboard": "Up",
+    "Keyboard_Code": 38,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "D-Pad Up",
+    "is_debug": false
+  },
+  "MENU_RIGHT": {
+    "Keyboard": "Right",
+    "Keyboard_Code": 39,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "D-Pad Right",
+    "is_debug": false
   }
 }
