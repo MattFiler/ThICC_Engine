@@ -76,7 +76,7 @@ namespace EditorTool
         /* Open Item Asset Editor */
         private void openItemManager_Click(object sender, EventArgs e)
         {
-            ItemAssetEditor openItemEditor = new ItemAssetEditor();
+            Item_Asset_Editor openItemEditor = new Item_Asset_Editor();
             openItemEditor.Show();
             Close();
         }

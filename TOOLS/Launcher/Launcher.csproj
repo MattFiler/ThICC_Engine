@@ -103,7 +103,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\beta_banner.jpg" />
+    <EmbeddedResource Include="Resources\updated launcher banner.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\SOURCE\packages\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\..\SOURCE\packages\Fody.4.2.1\build\Fody.targets')" />

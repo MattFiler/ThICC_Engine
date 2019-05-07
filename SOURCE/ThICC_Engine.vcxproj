@@ -138,6 +138,7 @@
       <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann;</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -195,6 +196,7 @@
       <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann;</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -227,6 +229,7 @@
       <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann;</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
