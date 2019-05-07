@@ -68,9 +68,22 @@ void GameScene::ExpensiveLoad() {
 	Locator::getRD()->current_cubemap_irradiance = map_info->cubemap_irradiance;
 	Locator::getRD()->current_cubemap_skybox = map_info->cubemap_skybox;
 
+	if (Locator::getRM()->attract_state)
+	{
+		m_maxPlayers = 3;
+	}
+	else
+	{
+		m_maxPlayers = 12;
+		player[0]->SetPlayerID(0);
+	}
+
 	//Update characters
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
+		if(!Locator::getRM()->attract_state)
+			player[i]->SetPlayerID(i);
+
 		player[i]->Reload(
 			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i])
@@ -78,6 +91,7 @@ void GameScene::ExpensiveLoad() {
 	}
 	for (int i = Locator::getRM()->player_amount; i < m_maxPlayers; i++)
 	{
+		player[i]->SetPlayerID(-1);
 		player[i]->Reload(
 			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[0])
@@ -91,19 +105,16 @@ void GameScene::ExpensiveLoad() {
 
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
-		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
 		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
 		float text_pos_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
 		float text_pos_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetRankingText()->GetSize().y;
 		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
-		//m_2DObjects.push_back(player[i]->GetRankingText());
 
 		float text_lap_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
 		float text_lap_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetLapText()->GetSize().y;
 		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
-		//m_2DObjects.push_back(player[i]->GetLapText());
 	}
 
 
@@ -126,7 +137,7 @@ void GameScene::ExpensiveLoad() {
 	{
 		//Load meshes
 		(*it)->Load();
-		if (dynamic_cast<Player*>(*it)) {
+		if (dynamic_cast<Player*>(*it) && dynamic_cast<Player*>(*it)->GetAnimController()) {
 			dynamic_cast<Player*>(*it)->ExpensiveLoad();
 		}
 		//Load collision info
@@ -279,25 +290,25 @@ void GameScene::create3DObjects()
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
 	for (int i = 0; i < 4; i++) {
 
-		//Create a player and position on track
-		using std::placeholders::_1;
-		player[i] = new Player(
-			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
-			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i]),
-			i, std::bind(&GameScene::CreateItem, this, _1)
-		);
-		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
-		player[i]->setMass(10);
-		m_3DObjects.push_back(player[i]);
+		////Create a player and position on track
+		//using std::placeholders::_1;
+		//player[i] = new Player(
+		//	Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
+		//	Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i]),
+		//	i, std::bind(&GameScene::CreateItem, this, _1)
+		//);
+		//player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		//player[i]->setMass(10);
+		//m_3DObjects.push_back(player[i]);
 
 		//Create a camera to follow the player
 		//
-		m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::FOLLOW);
-		m_cam[i]->setAngle(180.0f);
+		//m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::FOLLOW);
+		//m_cam[i]->setAngle(180.0f);
 	}
 
 	// Spawn in the AI
-	for (int i = 4; i < m_maxPlayers; i++) {
+	for (int i = 0; i < m_maxPlayers; i++) {
 
 		//Create a player and position on track
 		using std::placeholders::_1;
@@ -309,6 +320,12 @@ void GameScene::create3DObjects()
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		player[i]->setMass(10);
 		m_3DObjects.push_back(player[i]);
+
+		if (i < 4)
+		{
+			m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::FOLLOW);
+			m_cam[i]->setAngle(180.0f);
+		}
 	}
 
 	//Cinematic cam
@@ -389,6 +406,18 @@ void GameScene::Update(DX::StepTimer const& timer)
 	}
 
 	Locator::getAIScheduler()->Update();
+
+	//if (Locator::getRM()->attract_state)
+	//{
+	//	state = PLAY;
+
+	//	//timeout -= Locator::getGSD()->m_dt;
+	//	//if (timeout <= Locator::getGSD()->m_dt + 0.1) {
+	//	//	Locator::getRM()->attract_state = false;
+	//	//	Locator::getRM()->attract_state = 1;
+	//	//	m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
+	//	//}
+	//}
 
 	switch (state)
 	{

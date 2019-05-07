@@ -284,7 +284,6 @@ void MenuScene::Update(DX::StepTimer const& timer)
 		if (m_timer > m_timeout) {
 
 #ifndef _DEBUG
-
 #ifdef _ARCADE
 			Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0]; //We only support P1 choices atm!
 			Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
@@ -300,17 +299,23 @@ void MenuScene::Update(DX::StepTimer const& timer)
 				index++;
 			}
 #else
-			Locator::getRM()->player_amount = 0;
-			
+			Locator::getRM()->attract_state = true;
+			Locator::getRM()->player_amount = 1;
+			int index;
+			for (MapInfo* a_map : Locator::getGOS()->map_instances) {
+				//Only include maps from this cup
+				if (a_map->name == "Low-Poly Circuit") {
+					index = a_map->scene_index;
+				}
+			}
+			m_scene_manager->setCurrentScene(Scenes::GAMESCENE + index);
+			return;
 #endif
 #endif
-
-
-			m_menu_state = menu_states::MAIN_SELECT;
 		}
 
 		//Allow skip
-		if (m_keybinds.keyReleased("Activate"))
+		if (m_keybinds.keyReleased("Activate", 0) || m_keybinds.keyReleased("Activate"))
 		{
 			m_menu_state = menu_states::MAIN_SELECT;
 		}
@@ -572,12 +577,6 @@ void MenuScene::VehicleSelect()
 
 		NavigateMenus(i, m_vehicleHighlightInt[i], m_vehiclePreviews);
 	}
-
-	//for (int i = 0; i < 4; ++i)
-	//{
-	//	if (players_joined[i])
-	//		m_vehicleHighlight[i]->SetPos(m_vehiclePreviews[m_vehicleHighlightInt[i]]->GetPos() - Vector2{ 5, 5 });
-	//}
 
 	//Load selected map with character choices
 	if (m_keybinds.keyReleased("Activate"))
