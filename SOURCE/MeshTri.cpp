@@ -14,17 +14,13 @@ MeshTri::MeshTri(Vector _a, Vector _b, Vector _c, int _type) :
 /* Returns true if the given vector, starting at the given position intersects this triangle*/
 bool MeshTri::DoesLineIntersect(const Vector& _direction, const Vector& _startPos, Vector& _intersect, MeshTri*& _tri, const float& _maxAngle, const float& _minAngle)
 {
-	angle = acos((_direction*-1).Dot(m_plane.Normal()) / ((_direction*-1).Length() * m_plane.Normal().Length()));
+	angle = acos((_direction*-1).Dot(m_plane.Normal()) / 
+		((_direction*-1).Length() * m_plane.Normal().Length()));
 	if (angle > _maxAngle || angle < _minAngle)
 	{
 		return false;
 	}
 
-	if (Vector::Distance(_direction*-1, m_plane.Normal()) > 2)
-	{
-		//DebugText::print(std::to_string(Vector::Distance(_direction*-1, m_plane.Normal())));
-		//return false;
-	}
 	// If the normal is pointing away from the _starPos, ignore this tri
 	if (_maxAngle < 3 && (m_plane.Normal() + _direction).LengthSquared() > _direction.LengthSquared())
 	{
@@ -49,7 +45,8 @@ bool MeshTri::DoesLineIntersect(const Vector& _direction, const Vector& _startPo
 		return false;
 	}
 
-	// D here is the scalar for the vector, which determins where on the line is the intersect
+	// D here is the scalar for the vector, which determins where on 
+	// the line is the intersect
 	d = numerator / denominator;
 
 	_intersect = d * _direction + _startPos;
@@ -63,8 +60,7 @@ bool MeshTri::DoesLineIntersect(const Vector& _direction, const Vector& _startPo
 
 	/* Information for this found at https://gamedev.stackexchange.com/questions/28781/easy-way-to-project-point-onto-triangle-or-plane/152476#152476
 	referencing the work done by:
-	Wolfgang Heidrich, 2005, Computing the Barycentric Coordinates of a Projected Point, Journal of Graphics Tools, pp 9-12, 10(3).
-	I won't pretend that I understand this part at all. */
+	Wolfgang Heidrich, 2005, Computing the Barycentric Coordinates of a Projected Point, Journal of Graphics Tools, pp 9-12, 10(3).*/
 	// u=P2−P1
 	u = m_pointB - m_pointA;
 	// v=P3−P1
@@ -84,9 +80,6 @@ bool MeshTri::DoesLineIntersect(const Vector& _direction, const Vector& _startPo
 	return ((0 <= alpha) && (alpha <= 1) &&
 		(0 <= beta) && (beta <= 1) &&
 		(0 <= gamma) && (gamma <= 1));
-
-
-	return false;
 }
 
 // Returns a vector that represents the upper corner of an axis-alighned bounding box containing this triangles

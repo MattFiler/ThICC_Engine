@@ -183,6 +183,7 @@
       ]
     }
   ],
+  "look_at_points": [],
   "spawns": [
     {
       "name": "Kart Spawn Position",
