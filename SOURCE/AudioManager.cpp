@@ -19,9 +19,7 @@ AudioManager::AudioManager()
 	addToSoundsList(m_sound_configs["misc_sounds"]["COUNTDOWN"], "COUNTDOWN");
 	addToSoundsList(m_sound_configs["misc_sounds"]["ITEMBOX_HIT"], "ITEMBOX_HIT");
 	addToSoundsList(m_sound_configs["misc_sounds"]["FINAL_LAP_SOUND"], "FINAL_LAP_SOUND");
-	addToSoundsList(m_sound_configs["item_sounds"]["STAR_SOUND"], "STAR_SOUND");
-	addToSoundsList(m_sound_configs["item_sounds"]["LIGHTNING_SOUND"], "LIGHTNING_SOUND");
-
+	addToSoundsList(m_sound_configs["item_sounds"]["STAR"], "STAR_SOUND");
 }
 
 void AudioManager::addToSoundsList(const std::string& asset, const std::string& _tag)

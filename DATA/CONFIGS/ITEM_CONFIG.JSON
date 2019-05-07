@@ -44,7 +44,7 @@
         "vertical_pos_offset": 4.0
       }
     },
-    "pool_size": 0,
+    "pool_size": 30,
     "implemented": true
   },
   "RED_SHELL": {
@@ -98,7 +98,7 @@
     "ui_sprite": "ITEM_BANANA",
     "model": "ITEM_BANANA",
     "probabilities": {
-      "place_1": 37.5,
+      "place_1": 38,
       "place_2": 17.5,
       "place_3": 10,
       "place_4": 5,
@@ -112,30 +112,30 @@
       "place_12": 0
     },
     "info": {
-      "lifetime": 300,
+      "lifetime": 300.0,
       "player_immunity_time": 0.5,
       "throw": {
-        "horizontal_pos_offset": 2,
-        "vertical_pos_offset": 3,
-        "forward_force": 100,
-        "upward_force": 1,
-        "max_gravity": 500
+        "horizontal_pos_offset": 2.0,
+        "vertical_pos_offset": 3.0,
+        "forward_force": 100.0,
+        "upward_force": 1.0,
+        "max_gravity": 500.0
       },
       "player_collision": {
         "velocity_multiplier": 0.3,
         "jump": {
-          "height": 0,
-          "duration": 0
+          "height": 0.0,
+          "duration": 0.0
         },
         "flip": {
-          "revolutions": 0,
-          "duration": 0
+          "revolutions": 0.0,
+          "duration": 0.0
         },
         "spin": {
-          "revolutions": 1,
+          "revolutions": 1.0,
           "duration": 0.4
         },
-        "vertical_pos_offset": 0
+        "vertical_pos_offset": 0.0
       }
     },
     "pool_size": 30,
@@ -252,35 +252,35 @@
       "place_12": 0
     },
     "info": {
-      "lifetime": 300,
+      "lifetime": 300.0,
       "player_immunity_time": 0.1,
       "detonation_time": 4,
       "throw": {
-        "horizontal_pos_offset": 2,
-        "vertical_pos_offset": 3,
-        "forward_force": 100,
-        "upward_force": 1,
-        "max_gravity": 500
+        "horizontal_pos_offset": 2.0,
+        "vertical_pos_offset": 3.0,
+        "forward_force": 100.0,
+        "upward_force": 1.0,
+        "max_gravity": 500.0
       },
       "explosion": {
-        "size_multiplier": 10,
+        "size_multiplier": 10.0,
         "growth_duration": 0.5
       },
       "player_collision": {
-        "velocity_multiplier": 0,
+        "velocity_multiplier": 0.0,
         "jump": {
           "height": 1.5,
-          "duration": 1
+          "duration": 1.0
         },
         "flip": {
-          "revolutions": 1,
+          "revolutions": 1.0,
           "duration": 0.8
         },
         "spin": {
-          "revolutions": 0,
-          "duration": 0
+          "revolutions": 0.0,
+          "duration": 0.0
         },
-        "vertical_pos_offset": 4
+        "vertical_pos_offset": 4.0
       }
     },
     "pool_size": 30,
@@ -310,6 +310,14 @@
     "ui_sprite": "ITEM_LIGHTNING",
     "model": "DEFAULT_ITEM",
     "probabilities": {
+      "place_1": 0,
+      "place_2": 0,
+      "place_3": 0,
+      "place_4": 0,
+      "place_5": 0,
+      "place_6": 0,
+      "place_7": 0,
+      "place_8": 0,
       "place_9": 0,
       "place_10": 0,
       "place_11": 0,
@@ -338,8 +346,8 @@
     "info": {
       "duration": 12,
       "boost": {
-        "move_speed": 60,
-        "turn_speed": 70,
+        "move_speed": 42.0,
+        "turn_speed": 67.0,
         "player_drag": 0.7
       }
     },
@@ -365,9 +373,9 @@
     "info": {
       "lifetime": 7.5,
       "boost": {
-        "amount": 35,
-        "min_velocity": 50,
-        "duration": 1,
+        "amount": 45.0,
+        "min_velocity": 50.0,
+        "duration": 1.0,
         "player_drag": 0.7
       }
     },
@@ -546,7 +554,7 @@
     "ui_sprite": "ITEM_BANANAS_X3",
     "model": "DEFAULT_ITEM",
     "probabilities": {
-      "place_1": 12.5,
+      "place_1": 12,
       "place_2": 12.5,
       "place_3": 7.5,
       "place_4": 2.5,
