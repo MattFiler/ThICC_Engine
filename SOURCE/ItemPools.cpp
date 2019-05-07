@@ -54,7 +54,7 @@ ItemMesh* ItemPools::GetItemMesh(ItemType _type)
 	ItemMesh* itemMesh;
 	if (!m_itemPoolMap[_type].m_itemMeshes.empty())
 	{
-		itemMesh = m_itemPoolMap[_type].m_itemMeshes.top();
+		itemMesh = m_itemPoolMap[_type].m_itemMeshes.front();
 		m_itemPoolMap[_type].m_itemMeshes.pop();
 	}
 	else
@@ -82,7 +82,7 @@ AnimationController * ItemPools::GetExplosion()
 
 	if (!m_explosions.empty())
 	{
-		explosion = m_explosions.top();
+		explosion = m_explosions.front();
 		m_explosions.pop();
 	}
 	else
@@ -104,16 +104,16 @@ void ItemPools::Reset()
 {
 	for (auto& kv : m_itemPoolMap)
 	{
-		for (int i = 0; i < kv.second.m_itemMeshes.size(); i++)
+		while(!kv.second.m_itemMeshes.empty())
 		{
-			delete kv.second.m_itemMeshes.top();
+			delete kv.second.m_itemMeshes.front();
 			kv.second.m_itemMeshes.pop();
 		}
 	}
 
-	for (int i = 0; i < m_explosions.size(); i++)
+	while(!m_explosions.empty())
 	{
-		delete m_explosions.top();
+		delete m_explosions.front();
 		m_explosions.pop();
 	}
 }
