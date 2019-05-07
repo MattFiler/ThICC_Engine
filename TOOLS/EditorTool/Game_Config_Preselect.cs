@@ -36,7 +36,7 @@ namespace EditorTool
         /* Open item config */
         private void itemConfigEditor_Click(object sender, EventArgs e)
         {
-            ItemConfigEditor itemConfigs = new ItemConfigEditor();
+            Item_Config_Editor itemConfigs = new Item_Config_Editor();
             itemConfigs.Show();
             Close();
         }
