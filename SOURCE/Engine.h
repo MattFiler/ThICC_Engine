@@ -86,6 +86,11 @@ private:
 	ThICC_GameStateData m_gamestate_data;
 	ThICC_CameraData m_camera_data;
 
+	float SetViewportWidth(int viewport_num);
+	float SetViewportHeight(int viewport_num);
+	float SetViewportX(int viewport_num);
+	float SetViewportY(int viewport_num);
+
 	//Misc data banks
 	json m_game_config;
 	ItemData* m_probabilities = nullptr;

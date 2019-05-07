@@ -26,7 +26,14 @@ MenuScene::~MenuScene()
 	m_mapPreviews.clear();
 	m_characterTitles.clear();
 	m_characterPreviews.clear();
-	delete m_background;
+	m_selectedCharacters.clear();
+	m_selectedVehicles.clear();
+	m_characterHighlightInt.clear();
+	m_selectedVehicles.clear();
+	m_characterHighlight.clear();
+	m_vehicleHighlight.clear();
+	delete m_cupBackground;
+	delete m_characterBackground;
 }
 
 /* Load inexpensive things and create the objects for expensive things we will populate when required */
@@ -44,6 +51,16 @@ void MenuScene::ExpensiveLoad() {
 	highlighted_cup = 0;
 	highlighted_map = 0;
 	highlighted_vehicle = 0;
+	highlighted_menu = 0;
+	m_maxPlayers = 4;
+	for (size_t i = 0; i < 4; i++)
+	{
+		if(i != 0)
+			players_joined[i] = false;
+
+		m_characterHighlightInt[i] = 0;
+		m_vehicleHighlightInt[i] = 0;
+	}
 }
 
 /* Create all 2D objects for the scene */
@@ -57,7 +74,12 @@ void MenuScene::create2DObjects()
 	m_logo->CentreOrigin();
 
 	//Main menu objects
-	m_background = new ImageGO2D("MAIN_MENU_TEMP");
+	m_cupBackground = new ImageGO2D("MAIN_MENU_TEMP");
+	m_state_desc = new Text2D("", Text2D::MIDDLE);
+	m_state_desc->SetPos(Vector2(498, 620));
+	m_state_desc->SetColour(Colors::Black);
+	m_state_desc->SetScale(0.5f);
+	m_characterBackground = new ImageGO2D("CHARACTER_SELECT");
 	m_state_desc = new Text2D("", Text2D::MIDDLE);
 	m_state_desc->SetPos(Vector2(498, 620));
 	m_state_desc->SetColour(Colors::Black);
@@ -68,7 +90,12 @@ void MenuScene::create2DObjects()
 	m_mainMenuTitles.push_back(cup_text);
 	Text2D* race_text = new Text2D(m_localiser.getString("RACE"));
 	race_text->SetPos(Vector2(209, 55 + 47 * 2));
+	race_text->SetColour(inactive_colour);
 	m_mainMenuTitles.push_back(race_text);
+	Text2D* exit_text = new Text2D(m_localiser.getString("EXIT"));
+	exit_text->SetPos(Vector2(209, 55 + 47 * 3));
+	exit_text->SetColour(inactive_colour);
+	m_mainMenuTitles.push_back(exit_text);
 
 	{
 		//position cup options
@@ -95,7 +122,7 @@ void MenuScene::create2DObjects()
 	CreateVehiclesMenu();
 
 	//position character options
-	for (size_t i = 0; i < 4; ++i) {
+	for (size_t i = 0; i < m_maxPlayers; ++i) {
 
 		ImageGO2D* image = m_keybinds.getInputIcon("PAUSE");
 
@@ -255,6 +282,24 @@ void MenuScene::Update(DX::StepTimer const& timer)
 		m_logo->SetScale(Vector2(0.3 + (m_timer / 30), 0.3 + (m_timer / 30)));
 		m_timer += (float)timer.GetElapsedSeconds();
 		if (m_timer > m_timeout) {
+
+#ifdef _ARCADE
+			Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0]; //We only support P1 choices atm!
+			Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
+			Locator::getRM()->player_amount = 1;
+			Locator::getRM()->is_cup = false;
+			int index = 0;
+			for (MapInfo* a_map : Locator::getGOS()->map_instances) {
+				//Only include maps from this cup
+				if (a_map->is_arcade_exclusive) {
+					m_scene_manager->setCurrentScene(Scenes::GAMESCENE + index);
+					return;
+				}
+				index++;
+			}
+#endif // _ARCADE
+
+
 			m_menu_state = menu_states::MAIN_SELECT;
 		}
 
@@ -284,15 +329,20 @@ void MenuScene::Update(DX::StepTimer const& timer)
 		}
 		else if (m_keybinds.keyReleased("Activate"))
 		{
+			for (size_t i = 0; i < m_mainMenuTitles.size(); i++)
+			{
+				m_mainMenuTitles.at(i)->SetColour(i == 0 ? active_colour : inactive_colour);
+			}
 			//Swap scene
 			m_menu_state = menu_states::CUP_SELECT;
 			if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("CUP"))
-			{
 				Locator::getRM()->is_cup = true;
-			}
 			else if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("RACE"))
-			{
 				Locator::getRM()->is_cup = false;
+			else if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("EXIT"))
+			{
+				ExitGame();
+				m_menu_state = menu_states::SPLASH;
 			}
 		}
 		break;
@@ -310,7 +360,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 		break;
 	}
 
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < m_maxPlayers; ++i)
 	{
 		m_vehicleHighlight[i]->SetPos(m_vehiclePreviews[m_vehicleHighlightInt[i]]->GetPos() - Vector2{ highlight_diff, highlight_diff });
 		m_characterHighlight[i]->SetPos(m_characterPreviews[m_characterHighlightInt[i]]->GetPos() - Vector2{ highlight_diff, highlight_diff });
@@ -394,7 +444,6 @@ void MenuScene::CupSelect()
 		}
 		else
 		{
-			m_background->UpdateSprite("CHARACTER_SELECT");
 			//swap scene
 			m_menu_state = menu_states::CHARACTER_SELECT;
 		}
@@ -432,9 +481,71 @@ void MenuScene::MapSelect()
 	//Change to character select
 	if (m_keybinds.keyReleased("Activate"))
 	{
-		m_background->UpdateSprite("CHARACTER_SELECT");
 		//swap scene
 		m_menu_state = menu_states::CHARACTER_SELECT;
+	}
+}
+
+void MenuScene::CharacterSelect()
+{
+	m_state_desc->SetText(m_localiser.getString("character_select"));
+
+	for (size_t i = 0; i < m_maxPlayers; ++i)
+	{
+
+		if (m_keybinds.keyReleased("Right", i) && players_joined[i])
+		{
+			CheckAvailabilty(i, m_characterHighlightInt[i], 1, num_of_charcters, 0, m_characterHighlightInt);
+		}
+		else if (m_keybinds.keyReleased("Left", i) && players_joined[i])
+		{
+			CheckAvailabilty(i, m_characterHighlightInt[i], -1, -1, num_of_charcters - 1, m_characterHighlightInt);
+		}
+		else if (!NavigateMenus(i, m_characterHighlightInt[i], m_characterPreviews) && m_keybinds.keyReleased("Pause", i))
+		{
+			////swap scene
+
+			if (!players_joined[i])
+			{
+				players_joined[i] = true;
+				Locator::getRM()->player_amount += 1;
+				CheckAvailabilty(i, m_characterHighlightInt[i], 1, num_of_charcters, 0, m_characterHighlightInt);
+			}
+		}
+		else if (i != 0 && m_keybinds.keyReleased("Back", i))
+		{
+			if (players_joined[i])
+			{
+				players_joined[i] = false;
+				Locator::getRM()->player_amount = -1;
+			}
+		}
+	}
+
+	if (m_keybinds.keyReleased("Activate", 0))
+	{
+		//swap scene
+		m_menu_state = menu_states::VEHICLE_SELECT;
+	}
+	//Back to main menu select
+	else if (m_keybinds.keyReleased("Back", 0) || m_keybinds.keyReleased("Back"))
+	{
+		//swap scene
+		m_menu_state = menu_states::MAIN_SELECT;
+		Locator::getRM()->is_cup = false;
+		highlighted_cup = 0;
+		highlighted_map = 0;
+		highlighted_menu = 0;
+		Locator::getRM()->player_amount = 1;
+		for (size_t i = 0; i < m_maxPlayers; ++i)
+		{
+			if(i != 0)
+				players_joined[i] = false;
+
+			m_characterHighlightInt[i] = 0;
+			m_vehicleHighlightInt[i] = 0;
+		}
+
 	}
 }
 
@@ -448,24 +559,26 @@ void MenuScene::VehicleSelect()
 		m_menu_state = menu_states::CHARACTER_SELECT;
 	}
 
-	for (size_t i = 0; i < 4; ++i)
+	for (size_t i = 0; i < m_maxPlayers; ++i)
 	{
 
 		NavigateMenus(i, m_vehicleHighlightInt[i], m_vehiclePreviews);
 	}
 
-	for (int i = 0; i < 4; ++i)
-	{
-		if (players_joined[i])
-			m_vehicleHighlight[i]->SetPos(m_vehiclePreviews[m_vehicleHighlightInt[i]]->GetPos() - Vector2{ 5, 5 });
-	}
+	//for (int i = 0; i < 4; ++i)
+	//{
+	//	if (players_joined[i])
+	//		m_vehicleHighlight[i]->SetPos(m_vehiclePreviews[m_vehicleHighlightInt[i]]->GetPos() - Vector2{ 5, 5 });
+	//}
 
 	//Load selected map with character choices
 	if (m_keybinds.keyReleased("Activate"))
 	{
-		Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0]; //We only support P1 choices atm!
-		Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
-		m_background->UpdateSprite("MAIN_MENU_TEMP");
+		for (size_t i = 0; i < Locator::getRM()->player_amount; i++)
+		{
+			Locator::getGSD()->character_selected[i] = m_characterHighlightInt[i]; //We only support P1 choices atm!
+			Locator::getGSD()->vehicle_selected[i] = m_vehicleHighlightInt[i];
+		}
 
 		if (Locator::getRM()->is_cup)
 		{
@@ -533,54 +646,6 @@ bool MenuScene::NavigateMenus(int player, int& number, const std::vector<ImageGO
 	return false;
 }
 
-void MenuScene::CharacterSelect()
-{
-	m_state_desc->SetText(m_localiser.getString("character_select"));
-
-	for (size_t i = 0; i < 4; ++i)
-	{
-
-		if (m_keybinds.keyReleased("Right", i) && players_joined[i])
-		{
-			CheckAvailabilty(i, m_characterHighlightInt[i], 1, num_of_charcters, 0, m_characterHighlightInt);
-		}
-		else if (m_keybinds.keyReleased("Left", i) && players_joined[i])
-		{
-			CheckAvailabilty(i, m_characterHighlightInt[i], -1, -1, num_of_charcters - 1, m_characterHighlightInt);
-		}
-		else if (!NavigateMenus(i, m_characterHighlightInt[i], m_characterPreviews) && m_keybinds.keyReleased("Pause", i))
-		{
-			////swap scene
-
-			if (!players_joined[i])
-			{
-				players_joined[i] = true;
-				CheckAvailabilty(i, m_characterHighlightInt[i], 1, num_of_charcters, 0, m_characterHighlightInt);
-			}
-		}
-	}
-
-	if (m_keybinds.keyReleased("Activate", 0))
-	{
-		//swap scene
-		m_menu_state = menu_states::VEHICLE_SELECT;
-	}
-	//Back to main menu select
-	else if (m_keybinds.keyReleased("Back", 0) || m_keybinds.keyReleased("Back"))
-	{
-		//swap scene
-		m_background->UpdateSprite("MAIN_MENU_TEMP");
-		m_menu_state = menu_states::MAIN_SELECT;
-		Locator::getRM()->is_cup = false;
-		for (size_t i = 1; i < 4; ++i)
-		{
-			players_joined[i] = false;
-			m_characterHighlightInt[i] = 0;
-			m_vehicleHighlightInt[i] = 0;
-		}
-	}
-}
-
 
 void MenuScene::CheckAvailabilty(int player, int& player_sel_number, int added_num, int limit, int reset, const std::vector<int>& vector_compare)
 {
@@ -623,32 +688,35 @@ void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		return;
 	}
 
-	m_background->Render();
 	m_state_desc->Render();
 	switch (m_menu_state) {
 	case menu_states::MAIN_SELECT:
+		m_cupBackground->Render();
 		m_cupPreviews.at(highlighted_cup)->Render();
 		for (std::vector<Text2D*>::iterator it = m_mainMenuTitles.begin(); it != m_mainMenuTitles.end(); it++) {
 			(*it)->Render();
 		}
 		break;
 	case menu_states::CUP_SELECT:
+		m_cupBackground->Render();
 		m_cupPreviews.at(highlighted_cup)->Render();
 		for (std::vector<Text2D*>::iterator it = m_cupTitles.begin(); it != m_cupTitles.end(); it++) {
 			(*it)->Render();
 		}
 		break;
 	case menu_states::MAP_SELECT:
+		m_cupBackground->Render();
 		m_mapPreviews.at(highlighted_map)->Render();
 		for (std::vector<Text2D*>::iterator it = m_mapTitles.begin(); it != m_mapTitles.end(); it++) {
 			(*it)->Render();
 		}
 		break;
 	case menu_states::CHARACTER_SELECT:
+		m_characterBackground->Render();
 		for (std::vector<ImageGO2D*>::iterator it = m_characterPreviews.begin(); it != m_characterPreviews.end(); it++) {
 			(*it)->Render();
 		}
-		for (int i = 0; i < 4; ++i)
+		for (int i = 0; i < m_maxPlayers; ++i)
 		{
 			if (players_joined[i])
 			{
@@ -660,10 +728,11 @@ void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		}
 		break;
 	case menu_states::VEHICLE_SELECT:
+		m_characterBackground->Render();
 		for (std::vector<ImageGO2D*>::iterator it = m_vehiclePreviews.begin(); it != m_vehiclePreviews.end(); it++) {
 			(*it)->Render();
 		}
-		for (int i = 0; i < 4; ++i)
+		for (int i = 0; i < m_maxPlayers; ++i)
 		{
 			if (players_joined[i])
 			{

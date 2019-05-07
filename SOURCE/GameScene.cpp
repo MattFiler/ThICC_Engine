@@ -399,7 +399,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		if (m_cam[game_config["player_count"]-1]->GetType() == CameraType::FOLLOW)
 		{
-			Locator::getAudio()->GetSound("COUNTDOWN")->SetVolume(0.7f);
 			Locator::getAudio()->Play("COUNTDOWN");
 			state = COUNTDOWN;
 		}
@@ -421,7 +420,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			state = PLAY;
 			timeout = 3.5f;
-			Locator::getAudio()->GetSound("TRACK_START")->SetVolume(0.7f);
 			Locator::getAudio()->Play("TRACK_START");
 			for (int i = 0; i < m_maxPlayers; ++i)
 			{
