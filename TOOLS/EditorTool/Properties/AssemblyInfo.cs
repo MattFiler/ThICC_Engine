@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Mario Kart Asset Manager")]
-[assembly: AssemblyDescription("The asset manager for our Mario Kart game.")]
+[assembly: AssemblyTitle("ThICC Engine Toolkit")]
+[assembly: AssemblyDescription("A tool for managing the pipeline of the ThICC Engine.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MKAM")]
+[assembly: AssemblyCompany("Matt Filer")]
+[assembly: AssemblyProduct("ThICC Toolkit")]
 [assembly: AssemblyCopyright("Copyright © Matt Filer 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -39,11 +39,9 @@
             this.isMetallic = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.collisionGroup = new System.Windows.Forms.GroupBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.boostPad = new System.Windows.Forms.RadioButton();
             this.antiGravPad = new System.Windows.Forms.RadioButton();
             this.jumpPad = new System.Windows.Forms.RadioButton();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.onTrack = new System.Windows.Forms.RadioButton();
             this.offTrack = new System.Windows.Forms.RadioButton();
             this.isWall = new System.Windows.Forms.RadioButton();
@@ -97,8 +95,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.transparencySlider)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.collisionGroup.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.specExSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.emissiveColour)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.specularColour)).BeginInit();
@@ -198,7 +194,7 @@
             // isMetallic
             // 
             this.isMetallic.AutoSize = true;
-            this.isMetallic.Location = new System.Drawing.Point(119, 202);
+            this.isMetallic.Location = new System.Drawing.Point(9, 169);
             this.isMetallic.Name = "isMetallic";
             this.isMetallic.Size = new System.Drawing.Size(73, 17);
             this.isMetallic.TabIndex = 35;
@@ -216,33 +212,25 @@
             // 
             // collisionGroup
             // 
-            this.collisionGroup.Controls.Add(this.groupBox8);
-            this.collisionGroup.Controls.Add(this.groupBox3);
+            this.collisionGroup.Controls.Add(this.boostPad);
             this.collisionGroup.Controls.Add(this.onTrackNoAI);
+            this.collisionGroup.Controls.Add(this.antiGravPad);
             this.collisionGroup.Controls.Add(this.inPlayableArea);
+            this.collisionGroup.Controls.Add(this.onTrack);
+            this.collisionGroup.Controls.Add(this.offTrack);
+            this.collisionGroup.Controls.Add(this.isWall);
+            this.collisionGroup.Controls.Add(this.jumpPad);
             this.collisionGroup.Location = new System.Drawing.Point(9, 62);
             this.collisionGroup.Name = "collisionGroup";
-            this.collisionGroup.Size = new System.Drawing.Size(285, 133);
+            this.collisionGroup.Size = new System.Drawing.Size(285, 89);
             this.collisionGroup.TabIndex = 30;
             this.collisionGroup.TabStop = false;
             this.collisionGroup.Text = "Collision Config";
             // 
-            // groupBox8
-            // 
-            this.groupBox8.Controls.Add(this.boostPad);
-            this.groupBox8.Controls.Add(this.antiGravPad);
-            this.groupBox8.Controls.Add(this.jumpPad);
-            this.groupBox8.Location = new System.Drawing.Point(6, 87);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(273, 40);
-            this.groupBox8.TabIndex = 35;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Special";
-            // 
             // boostPad
             // 
             this.boostPad.AutoSize = true;
-            this.boostPad.Location = new System.Drawing.Point(6, 17);
+            this.boostPad.Location = new System.Drawing.Point(6, 65);
             this.boostPad.Name = "boostPad";
             this.boostPad.Size = new System.Drawing.Size(74, 17);
             this.boostPad.TabIndex = 29;
@@ -253,7 +241,7 @@
             // antiGravPad
             // 
             this.antiGravPad.AutoSize = true;
-            this.antiGravPad.Location = new System.Drawing.Point(86, 17);
+            this.antiGravPad.Location = new System.Drawing.Point(86, 65);
             this.antiGravPad.Name = "antiGravPad";
             this.antiGravPad.Size = new System.Drawing.Size(101, 17);
             this.antiGravPad.TabIndex = 31;
@@ -264,7 +252,7 @@
             // jumpPad
             // 
             this.jumpPad.AutoSize = true;
-            this.jumpPad.Location = new System.Drawing.Point(193, 17);
+            this.jumpPad.Location = new System.Drawing.Point(193, 65);
             this.jumpPad.Name = "jumpPad";
             this.jumpPad.Size = new System.Drawing.Size(72, 17);
             this.jumpPad.TabIndex = 32;
@@ -272,22 +260,10 @@
             this.jumpPad.Text = "Jump Pad";
             this.jumpPad.UseVisualStyleBackColor = true;
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.onTrack);
-            this.groupBox3.Controls.Add(this.offTrack);
-            this.groupBox3.Controls.Add(this.isWall);
-            this.groupBox3.Location = new System.Drawing.Point(6, 42);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(273, 40);
-            this.groupBox3.TabIndex = 34;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Regular";
-            // 
             // onTrack
             // 
             this.onTrack.AutoSize = true;
-            this.onTrack.Location = new System.Drawing.Point(6, 17);
+            this.onTrack.Location = new System.Drawing.Point(6, 42);
             this.onTrack.Name = "onTrack";
             this.onTrack.Size = new System.Drawing.Size(70, 17);
             this.onTrack.TabIndex = 27;
@@ -299,7 +275,7 @@
             // offTrack
             // 
             this.offTrack.AutoSize = true;
-            this.offTrack.Location = new System.Drawing.Point(82, 17);
+            this.offTrack.Location = new System.Drawing.Point(82, 42);
             this.offTrack.Name = "offTrack";
             this.offTrack.Size = new System.Drawing.Size(70, 17);
             this.offTrack.TabIndex = 28;
@@ -310,7 +286,7 @@
             // isWall
             // 
             this.isWall.AutoSize = true;
-            this.isWall.Location = new System.Drawing.Point(158, 17);
+            this.isWall.Location = new System.Drawing.Point(158, 42);
             this.isWall.Name = "isWall";
             this.isWall.Size = new System.Drawing.Size(46, 17);
             this.isWall.TabIndex = 30;
@@ -350,7 +326,7 @@
             // hasSpec
             // 
             this.hasSpec.AutoSize = true;
-            this.hasSpec.Location = new System.Drawing.Point(9, 202);
+            this.hasSpec.Location = new System.Drawing.Point(9, 192);
             this.hasSpec.Name = "hasSpec";
             this.hasSpec.Size = new System.Drawing.Size(104, 17);
             this.hasSpec.TabIndex = 34;
@@ -789,7 +765,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(732, 717);
+            this.ClientSize = new System.Drawing.Size(727, 717);
             this.Controls.Add(this.groupBox11);
             this.Controls.Add(this.groupBox10);
             this.Controls.Add(this.groupBox9);
@@ -809,10 +785,6 @@
             this.groupBox1.PerformLayout();
             this.collisionGroup.ResumeLayout(false);
             this.collisionGroup.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.specExSlider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.emissiveColour)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.specularColour)).EndInit();
@@ -889,8 +861,6 @@
         private System.Windows.Forms.RadioButton jumpPad;
         private System.Windows.Forms.RadioButton antiGravPad;
         private System.Windows.Forms.CheckBox onTrackNoAI;
-        private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ListBox diffuseMapList;
         private System.Windows.Forms.Button addNewDiffuse;
         private System.Windows.Forms.Label label5;

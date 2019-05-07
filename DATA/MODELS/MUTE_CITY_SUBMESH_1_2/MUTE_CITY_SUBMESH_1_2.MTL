@@ -818,7 +818,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl Fz_StartGrid
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -913,7 +913,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl bbm_GoalLine01
-Ns 92.156863
+Ns 92.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -932,7 +932,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl ef_dashboard
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -951,7 +951,7 @@ map_RMA rma_placeholder.png
 map_occlusionRoughnessMetallic rma_placeholder.png
 
 newmtl ef_dashboard03
-Ns 94.117647
+Ns 94.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000

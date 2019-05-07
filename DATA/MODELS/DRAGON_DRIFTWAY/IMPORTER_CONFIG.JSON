@@ -1876,7 +1876,7 @@
     "ThICC_INDEX": 22,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": false,
       "3": false,

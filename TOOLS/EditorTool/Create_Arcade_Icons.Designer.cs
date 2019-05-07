@@ -28,7 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Create_Arcade_Icons));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.btnSide = new System.Windows.Forms.TextBox();
+            this.btnSideLoad = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btnGrey2 = new System.Windows.Forms.TextBox();
+            this.btnGrey2Load = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.btnRed = new System.Windows.Forms.TextBox();
+            this.btnRedLoad = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.btnGreen = new System.Windows.Forms.TextBox();
+            this.btnGreenLoad = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnGrey1 = new System.Windows.Forms.TextBox();
+            this.btnGrey1Load = new System.Windows.Forms.Button();
             this.btnBlueLoad = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.btnBlue = new System.Windows.Forms.TextBox();
@@ -49,21 +65,6 @@
             this.joyRightLoad = new System.Windows.Forms.Button();
             this.joyUpLoad = new System.Windows.Forms.Button();
             this.joyUp = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.btnGrey1 = new System.Windows.Forms.TextBox();
-            this.btnGrey1Load = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
-            this.btnGreen = new System.Windows.Forms.TextBox();
-            this.btnGreenLoad = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
-            this.btnRed = new System.Windows.Forms.TextBox();
-            this.btnRedLoad = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.btnGrey2 = new System.Windows.Forms.TextBox();
-            this.btnGrey2Load = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
-            this.btnSide = new System.Windows.Forms.TextBox();
-            this.btnSideLoad = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -97,6 +98,141 @@
             this.groupBox1.TabIndex = 33;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Arcade Buttons";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 252);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(62, 13);
+            this.label11.TabIndex = 26;
+            this.label11.Text = "Side Button";
+            // 
+            // btnSide
+            // 
+            this.btnSide.Location = new System.Drawing.Point(9, 268);
+            this.btnSide.Name = "btnSide";
+            this.btnSide.ReadOnly = true;
+            this.btnSide.Size = new System.Drawing.Size(229, 20);
+            this.btnSide.TabIndex = 24;
+            // 
+            // btnSideLoad
+            // 
+            this.btnSideLoad.Location = new System.Drawing.Point(244, 267);
+            this.btnSideLoad.Name = "btnSideLoad";
+            this.btnSideLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnSideLoad.TabIndex = 25;
+            this.btnSideLoad.Text = "Load";
+            this.btnSideLoad.UseVisualStyleBackColor = true;
+            this.btnSideLoad.Click += new System.EventHandler(this.btnSideLoad_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 213);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(99, 13);
+            this.label10.TabIndex = 23;
+            this.label10.Text = "Grey Bottom Button";
+            // 
+            // btnGrey2
+            // 
+            this.btnGrey2.Location = new System.Drawing.Point(9, 229);
+            this.btnGrey2.Name = "btnGrey2";
+            this.btnGrey2.ReadOnly = true;
+            this.btnGrey2.Size = new System.Drawing.Size(229, 20);
+            this.btnGrey2.TabIndex = 21;
+            // 
+            // btnGrey2Load
+            // 
+            this.btnGrey2Load.Location = new System.Drawing.Point(244, 228);
+            this.btnGrey2Load.Name = "btnGrey2Load";
+            this.btnGrey2Load.Size = new System.Drawing.Size(75, 23);
+            this.btnGrey2Load.TabIndex = 22;
+            this.btnGrey2Load.Text = "Load";
+            this.btnGrey2Load.UseVisualStyleBackColor = true;
+            this.btnGrey2Load.Click += new System.EventHandler(this.btnGrey2Load_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 174);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(61, 13);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "Red Button";
+            // 
+            // btnRed
+            // 
+            this.btnRed.Location = new System.Drawing.Point(9, 190);
+            this.btnRed.Name = "btnRed";
+            this.btnRed.ReadOnly = true;
+            this.btnRed.Size = new System.Drawing.Size(229, 20);
+            this.btnRed.TabIndex = 18;
+            // 
+            // btnRedLoad
+            // 
+            this.btnRedLoad.Location = new System.Drawing.Point(244, 189);
+            this.btnRedLoad.Name = "btnRedLoad";
+            this.btnRedLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnRedLoad.TabIndex = 19;
+            this.btnRedLoad.Text = "Load";
+            this.btnRedLoad.UseVisualStyleBackColor = true;
+            this.btnRedLoad.Click += new System.EventHandler(this.btnRedLoad_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 135);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(70, 13);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "Green Button";
+            // 
+            // btnGreen
+            // 
+            this.btnGreen.Location = new System.Drawing.Point(9, 151);
+            this.btnGreen.Name = "btnGreen";
+            this.btnGreen.ReadOnly = true;
+            this.btnGreen.Size = new System.Drawing.Size(229, 20);
+            this.btnGreen.TabIndex = 15;
+            // 
+            // btnGreenLoad
+            // 
+            this.btnGreenLoad.Location = new System.Drawing.Point(244, 150);
+            this.btnGreenLoad.Name = "btnGreenLoad";
+            this.btnGreenLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnGreenLoad.TabIndex = 16;
+            this.btnGreenLoad.Text = "Load";
+            this.btnGreenLoad.UseVisualStyleBackColor = true;
+            this.btnGreenLoad.Click += new System.EventHandler(this.btnGreenLoad_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 96);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(85, 13);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Grey Top Button";
+            // 
+            // btnGrey1
+            // 
+            this.btnGrey1.Location = new System.Drawing.Point(9, 112);
+            this.btnGrey1.Name = "btnGrey1";
+            this.btnGrey1.ReadOnly = true;
+            this.btnGrey1.Size = new System.Drawing.Size(229, 20);
+            this.btnGrey1.TabIndex = 12;
+            // 
+            // btnGrey1Load
+            // 
+            this.btnGrey1Load.Location = new System.Drawing.Point(244, 111);
+            this.btnGrey1Load.Name = "btnGrey1Load";
+            this.btnGrey1Load.Size = new System.Drawing.Size(75, 23);
+            this.btnGrey1Load.TabIndex = 13;
+            this.btnGrey1Load.Text = "Load";
+            this.btnGrey1Load.UseVisualStyleBackColor = true;
+            this.btnGrey1Load.Click += new System.EventHandler(this.btnGrey1Load_Click);
             // 
             // btnBlueLoad
             // 
@@ -291,141 +427,6 @@
             this.joyUp.Size = new System.Drawing.Size(229, 20);
             this.joyUp.TabIndex = 5;
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 96);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(85, 13);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "Grey Top Button";
-            // 
-            // btnGrey1
-            // 
-            this.btnGrey1.Location = new System.Drawing.Point(9, 112);
-            this.btnGrey1.Name = "btnGrey1";
-            this.btnGrey1.ReadOnly = true;
-            this.btnGrey1.Size = new System.Drawing.Size(229, 20);
-            this.btnGrey1.TabIndex = 12;
-            // 
-            // btnGrey1Load
-            // 
-            this.btnGrey1Load.Location = new System.Drawing.Point(244, 111);
-            this.btnGrey1Load.Name = "btnGrey1Load";
-            this.btnGrey1Load.Size = new System.Drawing.Size(75, 23);
-            this.btnGrey1Load.TabIndex = 13;
-            this.btnGrey1Load.Text = "Load";
-            this.btnGrey1Load.UseVisualStyleBackColor = true;
-            this.btnGrey1Load.Click += new System.EventHandler(this.btnGrey1Load_Click);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 135);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(70, 13);
-            this.label8.TabIndex = 17;
-            this.label8.Text = "Green Button";
-            // 
-            // btnGreen
-            // 
-            this.btnGreen.Location = new System.Drawing.Point(9, 151);
-            this.btnGreen.Name = "btnGreen";
-            this.btnGreen.ReadOnly = true;
-            this.btnGreen.Size = new System.Drawing.Size(229, 20);
-            this.btnGreen.TabIndex = 15;
-            // 
-            // btnGreenLoad
-            // 
-            this.btnGreenLoad.Location = new System.Drawing.Point(244, 150);
-            this.btnGreenLoad.Name = "btnGreenLoad";
-            this.btnGreenLoad.Size = new System.Drawing.Size(75, 23);
-            this.btnGreenLoad.TabIndex = 16;
-            this.btnGreenLoad.Text = "Load";
-            this.btnGreenLoad.UseVisualStyleBackColor = true;
-            this.btnGreenLoad.Click += new System.EventHandler(this.btnGreenLoad_Click);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 174);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(61, 13);
-            this.label9.TabIndex = 20;
-            this.label9.Text = "Red Button";
-            // 
-            // btnRed
-            // 
-            this.btnRed.Location = new System.Drawing.Point(9, 190);
-            this.btnRed.Name = "btnRed";
-            this.btnRed.ReadOnly = true;
-            this.btnRed.Size = new System.Drawing.Size(229, 20);
-            this.btnRed.TabIndex = 18;
-            // 
-            // btnRedLoad
-            // 
-            this.btnRedLoad.Location = new System.Drawing.Point(244, 189);
-            this.btnRedLoad.Name = "btnRedLoad";
-            this.btnRedLoad.Size = new System.Drawing.Size(75, 23);
-            this.btnRedLoad.TabIndex = 19;
-            this.btnRedLoad.Text = "Load";
-            this.btnRedLoad.UseVisualStyleBackColor = true;
-            this.btnRedLoad.Click += new System.EventHandler(this.btnRedLoad_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 213);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(99, 13);
-            this.label10.TabIndex = 23;
-            this.label10.Text = "Grey Bottom Button";
-            // 
-            // btnGrey2
-            // 
-            this.btnGrey2.Location = new System.Drawing.Point(9, 229);
-            this.btnGrey2.Name = "btnGrey2";
-            this.btnGrey2.ReadOnly = true;
-            this.btnGrey2.Size = new System.Drawing.Size(229, 20);
-            this.btnGrey2.TabIndex = 21;
-            // 
-            // btnGrey2Load
-            // 
-            this.btnGrey2Load.Location = new System.Drawing.Point(244, 228);
-            this.btnGrey2Load.Name = "btnGrey2Load";
-            this.btnGrey2Load.Size = new System.Drawing.Size(75, 23);
-            this.btnGrey2Load.TabIndex = 22;
-            this.btnGrey2Load.Text = "Load";
-            this.btnGrey2Load.UseVisualStyleBackColor = true;
-            this.btnGrey2Load.Click += new System.EventHandler(this.btnGrey2Load_Click);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 252);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(62, 13);
-            this.label11.TabIndex = 26;
-            this.label11.Text = "Side Button";
-            // 
-            // btnSide
-            // 
-            this.btnSide.Location = new System.Drawing.Point(9, 268);
-            this.btnSide.Name = "btnSide";
-            this.btnSide.ReadOnly = true;
-            this.btnSide.Size = new System.Drawing.Size(229, 20);
-            this.btnSide.TabIndex = 24;
-            // 
-            // btnSideLoad
-            // 
-            this.btnSideLoad.Location = new System.Drawing.Point(244, 267);
-            this.btnSideLoad.Name = "btnSideLoad";
-            this.btnSideLoad.Size = new System.Drawing.Size(75, 23);
-            this.btnSideLoad.TabIndex = 25;
-            this.btnSideLoad.Text = "Load";
-            this.btnSideLoad.UseVisualStyleBackColor = true;
-            this.btnSideLoad.Click += new System.EventHandler(this.btnSideLoad_Click);
-            // 
             // Create_Arcade_Icons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -435,6 +436,7 @@
             this.Controls.Add(this.saveGamepadIcons);
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Create_Arcade_Icons";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Arcade Input Icons";

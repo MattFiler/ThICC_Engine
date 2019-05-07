@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Game_Config_Misc));
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.playerCount = new System.Windows.Forms.NumericUpDown();
-            this.saveConfig = new System.Windows.Forms.Button();
-            this.label15 = new System.Windows.Forms.Label();
-            this.engineFont = new System.Windows.Forms.ComboBox();
             this.text2 = new System.Windows.Forms.Label();
+            this.engineFont = new System.Windows.Forms.ComboBox();
+            this.playerCount = new System.Windows.Forms.NumericUpDown();
+            this.label15 = new System.Windows.Forms.Label();
+            this.saveConfig = new System.Windows.Forms.Button();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.playerCount)).BeginInit();
             this.SuspendLayout();
@@ -50,6 +51,24 @@
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Core Engine Configs";
+            // 
+            // text2
+            // 
+            this.text2.AutoSize = true;
+            this.text2.Location = new System.Drawing.Point(6, 65);
+            this.text2.Name = "text2";
+            this.text2.Size = new System.Drawing.Size(28, 13);
+            this.text2.TabIndex = 19;
+            this.text2.Text = "Font";
+            // 
+            // engineFont
+            // 
+            this.engineFont.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.engineFont.FormattingEnabled = true;
+            this.engineFont.Location = new System.Drawing.Point(6, 81);
+            this.engineFont.Name = "engineFont";
+            this.engineFont.Size = new System.Drawing.Size(269, 21);
+            this.engineFont.TabIndex = 18;
             // 
             // playerCount
             // 
@@ -73,6 +92,15 @@
             0,
             0});
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(3, 22);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(90, 13);
+            this.label15.TabIndex = 17;
+            this.label15.Text = "Max Player Count";
+            // 
             // saveConfig
             // 
             this.saveConfig.Location = new System.Drawing.Point(12, 136);
@@ -83,33 +111,6 @@
             this.saveConfig.UseVisualStyleBackColor = true;
             this.saveConfig.Click += new System.EventHandler(this.saveConfig_Click);
             // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(3, 22);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(90, 13);
-            this.label15.TabIndex = 17;
-            this.label15.Text = "Max Player Count";
-            // 
-            // engineFont
-            // 
-            this.engineFont.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.engineFont.FormattingEnabled = true;
-            this.engineFont.Location = new System.Drawing.Point(6, 81);
-            this.engineFont.Name = "engineFont";
-            this.engineFont.Size = new System.Drawing.Size(269, 21);
-            this.engineFont.TabIndex = 18;
-            // 
-            // text2
-            // 
-            this.text2.AutoSize = true;
-            this.text2.Location = new System.Drawing.Point(6, 65);
-            this.text2.Name = "text2";
-            this.text2.Size = new System.Drawing.Size(28, 13);
-            this.text2.TabIndex = 19;
-            this.text2.Text = "Font";
-            // 
             // Game_Config_Misc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -118,6 +119,7 @@
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.saveConfig);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Game_Config_Misc";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Core Engine Configs";
