@@ -72,7 +72,7 @@ void LightningCloud::Tick()
 				{
 					m_player->Scale(m_growthData.m_shrinkScale, m_growthData.m_shrinkDuration);
 					m_growthData.m_shrinking = true;
-					Locator::getAudio()->Play(SoundType::ITEMS, static_cast<int>(ItemSounds::LIGHTNING_SOUND));
+					Locator::getAudio()->Play("LIGHTNING_SOUND");
 				}
 				m_player->Spin(m_playerSpinRev, m_playerSpinDuration);
 				m_player->SetScale(m_player->GetAnimController()->GetScaleOffset());
