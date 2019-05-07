@@ -1,0 +1,2 @@
+Item sounds are in SOUNDS_CONFIG.JSON
+Item configs are in ITEM_CONFIG.JSON

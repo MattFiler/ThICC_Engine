@@ -18,6 +18,10 @@ public:
 
 	//Core update/render/load functions
 	void Update(DX::StepTimer const& timer) override;
+	void CupSelect();
+	void MapSelect();
+	void VehicleSelect();
+	void CharacterSelect();
 	void Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override {};
 	void Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
 	bool Load() override;
@@ -31,10 +35,16 @@ private:
 	void create2DObjects() override;
 	void create3DObjects() override {};
 	void pushBackObjects() override {};
+	void CreateCharacterMenu();
+	void CreateVehiclesMenu();
 
 	//Background
 	ImageGO2D* m_background = nullptr;
 	Text2D* m_state_desc = nullptr;
+
+	//Main Menu select objects
+	int highlighted_menu = 0;
+	std::vector<Text2D*> m_mainMenuTitles;
 
 	//Cup select objects
 	int highlighted_cup = 0;
@@ -47,14 +57,20 @@ private:
 	std::vector<ImageGO2D*> m_mapPreviews;
 
 	//Character select objects
-	int highlighted_character = 0;
 	std::vector<Text2D*> m_characterTitles;
 	std::vector<ImageGO2D*> m_characterPreviews;
+	std::vector<int> m_characterHighlightInt{ 0, 0, 0, 0 };
+	std::vector<std::vector<ImageGO2D*>> m_selectedCharacters;
+	std::vector<ImageGO2D*> m_characterHighlight;
+	std::vector<ImageGO2D*> m_AButton;
 
 	//Vehicle select objects
 	int highlighted_vehicle = 0;
 	std::vector<Text2D*> m_vehicleTitles;
 	std::vector<ImageGO2D*> m_vehiclePreviews;
+	std::vector<int> m_vehicleHighlightInt{ 0, 0, 0, 0 };
+	std::vector<std::vector<ImageGO2D*>> m_selectedVehicles;
+	std::vector<ImageGO2D*> m_vehicleHighlight;
 
 	//Common engine components
 	LocalisationManager m_localiser;
@@ -80,11 +96,13 @@ private:
 	json game_config;
 
 	//States
-	enum menu_states { SPLASH, CUP_SELECT, MAP_SELECT, CHARACTER_SELECT, VEHICLE_SELECT };
+	enum menu_states { SPLASH, MAIN_SELECT, CUP_SELECT, MAP_SELECT, CHARACTER_SELECT, VEHICLE_SELECT };
 	menu_states m_menu_state = menu_states::SPLASH;
 
-
-	//TEST SPRITE
-	ImageGO2D* GamepadTestSprite = nullptr;
+	int num_of_charcters = 0;
+	bool players_joined[4]{ true, false, false, false };
+	float highlight_diff;
+	void CheckAvailabilty(int player, int& player_sel_number, int added_num, int limit, int reset, const std::vector<int>& vector_compare);
+	bool NavigateMenus(int player, int& number, const std::vector<ImageGO2D*>& previews);
 };
 

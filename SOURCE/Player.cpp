@@ -586,13 +586,7 @@ void Player::GlideLogic()
 		m_drag = 0.3f;
 		if (m_onTrack && m_glideTimeElapsed > m_minGlideDuration)
 		{
-			m_elapsedTimeOff = 0;
-			m_glideTimeElapsed = 0;
-			m_preventRespawn = false;
-			m_gliding = false;
-			m_maxGrav = m_normalGrav;
-			m_move->SetGliding(false);
-			m_animationMesh->SwitchModelSet("default");
+			StopGlide();
 		}
 		else if (m_colType == CollisionType::NO_TERRAIN)
 		{
@@ -608,6 +602,17 @@ void Player::GlideLogic()
 			m_maxGrav = m_glidingGrav;
 		}
 	}
+}
+
+void Player::StopGlide()
+{
+	m_elapsedTimeOff = 0;
+	m_glideTimeElapsed = 0;
+	m_preventRespawn = false;
+	m_gliding = false;
+	m_maxGrav = m_normalGrav;
+	m_move->SetGliding(false);
+	m_animationMesh->SwitchModelSet("default");
 }
 
 void Player::RespawnLogic()
@@ -687,33 +692,24 @@ Vector3 Player::GetPosHistoryBack()
 
 void Player::Respawn()
 {
-	m_gliding = false;
-	m_maxGrav = m_normalGrav;
+	StopGlide();
 	m_move->SetEnabled(false);
 	m_animationMesh->SwitchModelSet("respawn");
 	m_respawning = true;
-	m_respawnEnd = m_matrixHistory.front();
-	m_respawnStart = m_world;
 	m_glideTimeElapsed = 0;
 	m_elapsedTimeOff = 0;
 	UseMagnet(false);
 
-	// Decompose the matrix
-	Vector3 pos;
-	Vector3 scale;
-	Quaternion rot;
-	m_respawnEnd.Decompose(scale, rot, pos);
-	// Add a bit of height to it to "drop" the player
-	pos += m_respawnEnd.Up() * 3;
+	m_respawnStartPos = m_pos;
+	m_respawnStartRot = m_quatRot;
+	m_endWorld = m_matrixHistory.front();
 
-	// Rebuild the matrix
-	Matrix mat_rot = Matrix::CreateFromQuaternion(rot);
-	Matrix trans = Matrix::CreateTranslation(pos);
-	Matrix mat_scale = Matrix::CreateScale(scale);
-	m_respawnEnd = mat_scale * mat_rot * trans;
+	Vector3 scale;
+	m_matrixHistory.front().Decompose(scale, m_respawnEndRot, m_respawnEndPos);
+	m_respawnEndPos += m_matrixHistory.front().Up() * (data.m_height * 5);
 
 	// Find the distance to the respawn point
-	float dist = Vector3::Distance(pos, m_pos);
+	float dist = Vector3::Distance(m_respawnEndPos, m_pos);
 	m_totalRespawnTime = dist / m_respawnSpeed;
 	if (m_totalRespawnTime > m_maxRespawnTime)
 	{
@@ -732,15 +728,21 @@ void Player::MovePlayerToTrack()
 	if (m_elapsedRespawnTime > m_totalRespawnTime)
 	{
 		m_elapsedRespawnTime = 0;
-		SetWorld(m_respawnEnd);
+		m_pos = m_respawnEndPos;
+		m_rot = Matrix::CreateFromQuaternion(m_respawnEndRot);
+		UpdateWorld();
 		m_respawning = false;
+		StopGlide();
 		m_move->SetEnabled(true);
 		m_animationMesh->SwitchModelSet("default");
 		UseMagnet(true);
 		return;
 	}
 
-	SetWorld(Matrix::Lerp(m_respawnStart, m_respawnEnd, m_elapsedRespawnTime / m_totalRespawnTime));
+	m_pos = Vector3::Lerp(m_respawnStartPos, m_respawnEndPos, m_elapsedRespawnTime / m_totalRespawnTime);
+	Quaternion quatRot = Quaternion::Slerp(m_respawnStartRot, m_respawnEndRot, m_elapsedRespawnTime / m_totalRespawnTime);
+	m_rot = Matrix::CreateFromQuaternion(quatRot);
+	UpdateWorld();
 }
 
 void Player::SetWaypoint(int _waypoint)

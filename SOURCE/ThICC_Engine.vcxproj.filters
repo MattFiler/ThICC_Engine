@@ -166,6 +166,9 @@
     <ClCompile Include="AnimationModel.cpp">
       <Filter>Game\Components\Game Objects\3D</Filter>
     </ClCompile>
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -410,6 +413,12 @@
     </ClInclude>
     <ClInclude Include="AnimationModel.h">
       <Filter>Game\Components\Game Objects\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="RaceManager.h">
+      <Filter>Engine Backend\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -29,7 +29,6 @@ class ThICC_ToolPanel(Panel):
         layout.operator(ThICC_ItemBox.bl_idname, text='Add Item Box Location', icon='CURSOR')
         layout.operator(ThICC_GliderTrack.bl_idname, text='Add Glider Track', icon='MESH_PLANE')
         layout.operator(ThICC_CourseIntroCam.bl_idname, text='Add Course Intro Cam', icon='OUTLINER_OB_CAMERA')
-        layout.operator(ThICC_IntroCamLookAt.bl_idname, text='Add Intro Cam Look At', icon='PARTICLE_DATA')
         layout.operator(ThICC_ExportConfig.bl_idname, text='Save Config', icon='SAVE_COPY')
         
         
@@ -200,96 +199,64 @@ class ThICC_CourseIntroCam(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        # Work out a valid camera name
-        camera_name = "Course Intro Cam - Start 1"
+        # Work out valid names
+        camera_name_1 = "Course Intro Cam - Start 1"
+        camera_name_2 = "Course Intro Cam - End 1"
+        lookat_name = "Intro Cam Look-At - 1"
         camera_valid = True
         camera_update = 0
         location = (0,0,0)
         for object in bpy.data.objects:
-            if object.type == "CAMERA":
-                if camera_update < 1 and object.name == "Course Intro Cam - Start 1":
-                    camera_name = "Course Intro Cam - End 1"
-                    camera_update = 1
-                if camera_update < 2 and object.name == "Course Intro Cam - End 1":
-                    camera_name = "Course Intro Cam - Start 2"
-                    camera_update = 2
-                if camera_update < 3 and object.name == "Course Intro Cam - Start 2":
-                    camera_name = "Course Intro Cam - End 2"
-                    camera_update = 3
-                if camera_update < 4 and object.name == "Course Intro Cam - End 2":
-                    camera_name = "Course Intro Cam - Start 3"
-                    camera_update = 4
-                if camera_update < 5 and object.name == "Course Intro Cam - Start 3":
-                    camera_name = "Course Intro Cam - End 3"
-                    camera_update = 5
-                if camera_update < 6  and object.name == "Course Intro Cam - End 3":
-                    camera_name = "Course Intro Cam - Start 4"
-                    camera_update = 6
-                if camera_update < 7 and object.name == "Course Intro Cam - Start 4":
-                    camera_name = "Course Intro Cam - End 4"
-                    camera_update = 7
-                if camera_update < 8 and object.name == "Course Intro Cam - End 4":
-                    camera_valid = False
+            if camera_update < 1 and object.name == "Course Intro Cam - Start 1":
+                camera_name_1 = "Course Intro Cam - Start 2"
+                camera_name_2 = "Course Intro Cam - End 2"
+                lookat_name = "Intro Cam Look-At - 2"
+                camera_update = 1
+            if camera_update < 2 and object.name == "Course Intro Cam - Start 2":
+                camera_name_1 = "Course Intro Cam - Start 3"
+                camera_name_2 = "Course Intro Cam - End 3"
+                lookat_name = "Intro Cam Look-At - 3"
+                camera_update = 2
+            if camera_update < 3 and object.name == "Course Intro Cam - Start 3":
+                camera_name_1 = "Course Intro Cam - Start 4"
+                camera_name_2 = "Course Intro Cam - End 4"
+                lookat_name = "Intro Cam Look-At - 4"
+                camera_update = 3
+            if camera_update < 4 and object.name == "Course Intro Cam - Start 4":
+                camera_valid = False
                     
         # If we've reached the max cameras, don't add more
         if camera_valid == False:
             return {'CANCELLED'}
         
-        # Set to selected object's position if we can
+        # Get selected object's position if we can
         if bpy.context.active_object != None:
             location = bpy.context.scene.objects.active.location
-        
-        # Ceate camera with calculated name
-        bpy.ops.object.camera_add(location=location,rotation=[3.15/2,0,0])
-        bpy.context.active_object.name = camera_name
-        
-        return {'FINISHED'}
-
-
-# Add a look-at for the cinematic cams
-class ThICC_IntroCamLookAt(bpy.types.Operator):  
-    """Add a New Look-At for Cinematic Cams"""
-    bl_idname = "object.thicc_cinecam_lookat_add"
-    bl_label = "Intro Cam Look-At"
-    bl_options = {'REGISTER', 'UNDO'}
-    
-    def execute(self, context):
-        # Work out a valid look-at name
-        camera_name = "Intro Cam Look-At - 1"
-        camera_valid = True
-        camera_update = 0
-        location = (0,0,0)
-        for object in bpy.data.objects:
-            if camera_update < 1 and object.name == "Intro Cam Look-At - 1":
-                camera_name = "Intro Cam Look-At - 2"
-                camera_update = 1
-            if camera_update < 2 and object.name == "Intro Cam Look-At - 2":
-                camera_name = "Intro Cam Look-At - 3"
-                camera_update = 2
-            if camera_update < 3 and object.name == "Intro Cam Look-At - 3":
-                camera_name = "Intro Cam Look-At - 4"
-                camera_update = 3
-            if camera_update < 4 and object.name == "Intro Cam Look-At - 4":
-                camera_valid = False
-                    
-        # If we've reached the max look-at points, don't add more
-        if camera_valid == False:
-            return {'CANCELLED'}
-			
-        #Set to selected object's position if we can
-        if bpy.context.active_object != None:
-            location = bpy.context.scene.objects.active.location
-			
-        #Create look-at marker
-        look_at = bpy.data.objects.new(name=camera_name, object_data=None)
+            
+        # Create look-at marker
+        look_at = bpy.data.objects.new(name=lookat_name, object_data=None)
         bpy.context.scene.objects.link(look_at)
         look_at.location = location
-		
-        #Select the marker
-        for item in bpy.context.selectable_objects:  
-            item.select = False  
+        
+        # Ceate camera 1 with calculated name
+        bpy.ops.object.camera_add(location=(location[0],location[1]-3,location[2]),rotation=[3.15/2,0,0])
+        bpy.context.active_object.name = camera_name_1
+        bpy.context.object.data.clip_end = 100000
+        
+        # Make camera 1 look at the look-at point
         look_at.select = True
         bpy.context.scene.objects.active = look_at
+        bpy.ops.object.track_set(type = "TRACKTO")
+        
+        # Ceate camera 2 with calculated name
+        bpy.ops.object.camera_add(location=(location[0],location[1]+3,location[2]),rotation=[3.15/2,0,0])
+        bpy.context.active_object.name = camera_name_2
+        bpy.context.object.data.clip_end = 100000
+        
+        # Make camera 2 look at the look-at point
+        look_at.select = True
+        bpy.context.scene.objects.active = look_at
+        bpy.ops.object.track_set(type = "TRACKTO")
         
         return {'FINISHED'}
     
@@ -402,7 +369,6 @@ def menu_func(self, context):
     self.layout.operator(ThICC_SpawnMarker.bl_idname)
     self.layout.operator(ThICC_TrackWaypoint.bl_idname)
     self.layout.operator(ThICC_CourseIntroCam.bl_idname)
-    self.layout.operator(ThICC_IntroCamLookAt.bl_idname)
     self.layout.operator(ThICC_ItemBox.bl_idname)
     self.layout.operator(ThICC_FinishLine.bl_idname)
     self.layout.operator(ThICC_GliderTrack.bl_idname)
@@ -417,7 +383,6 @@ def register():
     bpy.utils.register_class(ThICC_SpawnMarker)
     bpy.utils.register_class(ThICC_TrackWaypoint)
     bpy.utils.register_class(ThICC_CourseIntroCam)
-    bpy.utils.register_class(ThICC_IntroCamLookAt)
     bpy.utils.register_class(ThICC_ItemBox)
     bpy.utils.register_class(ThICC_FinishLine)
     bpy.utils.register_class(ThICC_GliderTrack)
@@ -431,7 +396,6 @@ def unregister():
     bpy.utils.unregister_class(ThICC_SpawnMarker)
     bpy.utils.unregister_class(ThICC_TrackWaypoint)
     bpy.utils.unregister_class(ThICC_CourseIntroCam)
-    bpy.utils.unregister_class(ThICC_IntroCamLookAt)
     bpy.utils.unregister_class(ThICC_ItemBox)
     bpy.utils.unregister_class(ThICC_FinishLine)
     bpy.utils.unregister_class(ThICC_GliderTrack)

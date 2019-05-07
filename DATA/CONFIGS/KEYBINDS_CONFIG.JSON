@@ -270,5 +270,45 @@
     "Arcade_Code": -1,
     "Gamepad": "Y",
     "is_debug": true
+  },
+  "CAM_UP": {
+    "Keyboard": "Up",
+    "Keyboard_Code": 38,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Right Stick Up",
+    "is_debug": false
+  },
+  "CAM_DOWN": {
+    "Keyboard": "Down",
+    "Keyboard_Code": 40,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Right Stick Down",
+    "is_debug": false
+  },
+  "CAM_RIGHT": {
+    "Keyboard": "Right",
+    "Keyboard_Code": 39,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Right Stick Right",
+    "is_debug": false
+  },
+  "CAM_LEFT": {
+    "Keyboard": "Left",
+    "Keyboard_Code": 37,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Right Stick Left",
+    "is_debug": false
+  },
+  "DEBUG_CAM_ACCELERATE": {
+    "Keyboard": "NumPad0",
+    "Keyboard_Code": 96,
+    "Arcade": "DISABLED",
+    "Arcade_Code": -1,
+    "Gamepad": "Right Trigger",
+    "is_debug": true
   }
 }

@@ -15,32 +15,6 @@ Camera::Camera(float _width, float _height, Vector3 _dpos, GameObject3D * _targe
 	m_targetObject = _target;
 }
 
-/*
-void Camera::SetCinematicPos(std::vector<Vector3> positions)
-{
-	int x = 0;
-	for (int i = 0; i < positions.size(); i+=2)
-	{
-		std::array<Vector3, 2> array_points;
-		array_points[x] = positions[i];
-		array_points[x+1] = positions[i+1];
-		points.push_back(array_points);
-	}
-}
-
-void Camera::SetCinematicRot(std::vector<Vector3> _rotations)
-{
-	int x = 0;
-	for (int i = 0; i < _rotations.size(); i += 2)
-	{
-		std::array<Vector3, 2> array_points;
-		array_points[x] = _rotations[i];
-		array_points[x + 1] = _rotations[i + 1];
-		rotations.push_back(array_points);
-	}
-}
-*/
-
 void Camera::Tick()
 {
 	Vector3 look_at_target;
@@ -84,10 +58,10 @@ void Camera::Tick()
 		look_at_target = m_targetPos;
 		up_transform = Vector3::Up;
 
-		if (cam_point < points.size())
+		if (cam_point < Locator::getCD()->points.size() && Locator::getCD()->look_points[cam_point] != Vector3{0, 0, 0})
 		{
-			target_pos = Vector3::Lerp(points[cam_point][0], points[cam_point][1], timer / Locator::getCD()->cine_time_out);
-			m_targetPos = look_points[cam_point];
+			target_pos = Vector3::Lerp(Locator::getCD()->points[cam_point][0], Locator::getCD()->points[cam_point][1], timer / Locator::getCD()->cine_time_out);
+			m_targetPos = Locator::getCD()->look_points[cam_point];
 
 			if (timer >= Locator::getCD()->cine_time_out)
 			{
@@ -99,15 +73,15 @@ void Camera::Tick()
 	}
 	case CameraType::INDEPENDENT:
 	{
-		//if (Locator::getID()->m_gamepadButtonTracker[m_cameraID].IsRightThumbStickLeft())
-		//	indep_angle_x += indep_spin_amount;
-		//else if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickRight())
-		//	indep_angle_x -= indep_spin_amount;
+		if (m_keybinds.keyHeld("CAM_LEFT", m_cameraID))
+			indep_angle_x += Locator::getCD()->indep_spin_amount;
+		else if (m_keybinds.keyHeld("CAM_RIGHT"), m_cameraID)
+			indep_angle_x -= Locator::getCD()->indep_spin_amount;
 
-		//if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickUp() && indep_angle_y > -88)
-		//	indep_angle_y -= indep_spin_amount;
-		//else if (Locator::getID()->m_gamePadState[m_cameraID].IsRightThumbStickDown() && indep_angle_y < 88)
-		//	indep_angle_y += indep_spin_amount;
+		if (m_keybinds.keyHeld("CAM_UP", m_cameraID) && indep_angle_y > -88)
+			indep_angle_y -= Locator::getCD()->indep_spin_amount;
+		else if (m_keybinds.keyHeld("CAM_DOWN", m_cameraID) && indep_angle_y < 88)
+			indep_angle_y += Locator::getCD()->indep_spin_amount;
 
 		target_pos = (m_targetObject ? m_targetObject->GetPos() : Locator::getCD()->target_positions[static_cast<int>(cam_type)]) + 
 			Vector3::Transform({ sin(indep_angle_x / 57.2958f) * m_dpos.x, 
@@ -119,10 +93,10 @@ void Camera::Tick()
 	case CameraType::DEBUG_CAM:
 	{
 		float cam_speed = Locator::getCD()->cam_speed;
-		//if (m_keybinds.keyHeld("DebugCamSpeedup"))
-		//{
-		//	cam_speed *= 1.1f;
-		//}
+		if (m_keybinds.keyHeld("DEBUG_CAM_ACCELERATE"))
+		{
+			cam_speed *= 1.1f;
+		}
 
 		Vector3 forwardMove = cam_speed * m_world.Forward();
 		Vector3 rightMove = cam_speed * m_world.Right();
