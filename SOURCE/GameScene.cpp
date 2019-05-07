@@ -40,6 +40,8 @@ GameScene::~GameScene()
 		delete m_cam[i];
 		m_cam[i] = nullptr;
 	}
+	delete m_itemPools;
+	m_itemPools = nullptr;
 }
 
 /* Load inexpensive things and create the objects for expensive things we will populate when required */

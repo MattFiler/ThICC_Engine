@@ -69,8 +69,10 @@ void ItemPools::AddItemMesh(ItemType _type, ItemMesh* _mesh)
 {
 	_mesh->m_mesh->Reset();
 	_mesh->m_mesh->SetOri(Matrix::Identity);
+	_mesh->m_mesh->UpdateWorld();
 	_mesh->m_displayedMesh->ResetRotation();
 	_mesh->m_displayedMesh->ResetScale();
+	_mesh->m_displayedMesh->Update(_mesh->m_mesh->GetWorld());
 	m_itemPoolMap[_type].m_itemMeshes.push(_mesh);
 }
 
