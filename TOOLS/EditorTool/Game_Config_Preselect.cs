@@ -34,9 +34,11 @@ namespace EditorTool
         }
 
         /* Open item config */
-        private void openItemConfig_Click(object sender, EventArgs e)
+        private void itemConfigEditor_Click(object sender, EventArgs e)
         {
-
+            ItemConfigEditor itemConfigs = new ItemConfigEditor();
+            itemConfigs.Show();
+            Close();
         }
 
         /* Open misc config */
@@ -46,5 +48,12 @@ namespace EditorTool
             miscConfig.Show();
             Close();
         }
+
+
+
+        private void openItemConfig_Click(object sender, EventArgs e)
+        {
+        }
+
     }
 }
