@@ -106,8 +106,12 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 		// Calculate a new rotation using 2 points on the plane that is found
 		Vector secondIntersect;
 		MeshTri* tri2 = nullptr;
-		closestTri->DoesLineIntersect(m_world.Down() * (data.m_height * 30), m_pos + adjustVel + m_world.Forward() + (m_world.Up() * (data.m_height / 2)), secondIntersect, tri2, m_maxAngle,0);
-		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - midIntersect, closestTri->m_plane.Normal());
+		closestTri->DoesLineIntersect(m_world.Down() * 
+			(data.m_height * 30), m_pos + adjustVel + m_world.Forward() + 
+			(m_world.Up() * (data.m_height / 2)), secondIntersect, tri2, m_maxAngle,0);
+
+		targetWorld = m_world.CreateWorld(m_pos, secondIntersect - 
+			midIntersect, closestTri->m_plane.Normal());
 		targetWorld = Matrix::CreateScale(m_scale) * targetWorld;
 
 		if (dist > m_minSnapDist && dist < m_maxSnapDist)
@@ -154,14 +158,14 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	// Calculate the distance between the current and target rotation
 	Quaternion inverseRot = Quaternion::Identity;
 	m_quatRot.Inverse(inverseRot);
-	float lerpDelta = (modifiedMaxRotation * Locator::getGSD()->m_dt) / (inverseRot*rot).Length();
+	float lerpDelta = (modifiedMaxRotation * Locator::getGSD()->m_dt) / 
+											 (inverseRot*rot).Length();
 	if (lerpDelta > 1)
 	{
 		lerpDelta = 1;
 	}
 	
 	// Lerp the rotation by the calculated amount
-	
 	m_quatRot = Quaternion::Slerp(m_quatRot, rot, lerpDelta);
 
 	// Rebuild m_world
@@ -209,10 +213,6 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 		walls.DoesLineIntersect(backLeft, data.m_globalBackTopLeft + cornerOffsetStart, intersect, wallTri, 5, m_minAngle) ||
 		walls.DoesLineIntersect(backRight, data.m_globalBackTopRight + cornerOffsetStart, intersect, wallTri, 5, m_minAngle))
 	{
-		//std::cout << std::to_string(wallTri->m_pointA.x - m_pos.x) << std::endl;
-		/*offset = (wallTri->m_pointA.x - m_pos.x) * 2;
-		std::cout << std::to_string(offset) << std::endl;*/
-
 		// Check if the velocity and this wall are not already diverging
 		if ((wallTri->m_plane.Normal() + m_vel).Length() < m_vel.Length())
 		{
@@ -246,11 +246,13 @@ bool TrackMagnet::ResolveWallCollisions(Track& walls)
 }
 
 // Checks a collsion with the passed location and updates the closest values if this collision is closer
-bool TrackMagnet::TryCollision(Track& _track, const Vector3& _location, MeshTri*& _closestTri, Vector3& _closestPos )
+bool TrackMagnet::TryCollision(Track& _track, const Vector3& _location, 
+							   MeshTri*& _closestTri, Vector3& _closestPos )
 {
 	MeshTri* triangle = nullptr;
 	Vector3 intersect = Vector3::Zero;
-	if (_track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), _location, intersect, triangle, m_maxAngle, 0))
+	if (_track.DoesLineIntersect(m_world.Down()*(data.m_height * 30), 
+		_location, intersect, triangle, m_maxAngle, 0))
 	{
 		if ((m_pos - intersect).LengthSquared() < (m_pos-_closestPos).LengthSquared())
 		{

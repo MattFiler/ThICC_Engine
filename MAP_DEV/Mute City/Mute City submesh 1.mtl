@@ -49,18 +49,6 @@ illum 2
 map_Kd DL_MCPipeRing_Alb.png
 map_d DL_MCPipeRing_Alb.png
 
-newmtl CubeRoadEnergy
-Ns 94.117647
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 2
-map_Kd Fz_RoadEnergyZone_Alb02.png
-map_d Fz_RoadEnergyZone_Alb02.png
-
 newmtl CubeRoadLight
 Ns 94.117647
 Ka 1.000000 1.000000 1.000000
@@ -588,6 +576,18 @@ d 0.000000
 illum 2
 map_Kd MCTV.000.png
 map_d MCTV.000.png
+
+newmtl bbm_GoalLine01
+Ns 92.156863
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd D:\Wii U - Mario Kart 8 - Big Blue\dbb_goalline01_alb.png
+map_d D:\\Wii U - Mario Kart 8 - Big Blue\\dbb_goalline01_alb.png
 
 newmtl ef_dashboard
 Ns 94.117647

@@ -18,10 +18,6 @@ public:
 
 	//Core update/render/load functions
 	void Update(DX::StepTimer const& timer) override;
-	void CupSelect();
-	void MapSelect();
-	void VehicleSelect();
-	void CharacterSelect();
 	void Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override {};
 	void Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
 	bool Load() override;
@@ -37,9 +33,16 @@ private:
 	void pushBackObjects() override {};
 	void CreateCharacterMenu();
 	void CreateVehiclesMenu();
+	void CupSelect();
+	void MapSelect();
+	void VehicleSelect();
+	void CharacterSelect();
+	void CheckAvailabilty(int player, int& player_sel_number, int added_num, int limit, int reset, const std::vector<int>& vector_compare);
+	bool NavigateMenus(int player, int& number, const std::vector<ImageGO2D*>& previews);
 
 	//Background
-	ImageGO2D* m_background = nullptr;
+	ImageGO2D* m_cupBackground = nullptr;
+	ImageGO2D* m_characterBackground = nullptr;
 	Text2D* m_state_desc = nullptr;
 
 	//Main Menu select objects
@@ -102,7 +105,6 @@ private:
 	int num_of_charcters = 0;
 	bool players_joined[4]{ true, false, false, false };
 	float highlight_diff;
-	void CheckAvailabilty(int player, int& player_sel_number, int added_num, int limit, int reset, const std::vector<int>& vector_compare);
-	bool NavigateMenus(int player, int& number, const std::vector<ImageGO2D*>& previews);
+	int m_maxPlayers = 4;
 };
 

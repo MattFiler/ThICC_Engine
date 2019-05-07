@@ -25,7 +25,8 @@ public:
 
 	int current_race_number = 0;
 	bool is_cup = false; // whether it is a cup or a race
-
+	int player_amount = 1;
+	bool player_amount_changed = false;
 private:
 	int number_of_races = 0;
 	std::vector<int> scores{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
