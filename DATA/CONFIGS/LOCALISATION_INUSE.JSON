@@ -115,5 +115,8 @@
     "in_use_in": [
       "Character"
     ]
+  },
+  "EXIT": {
+    "in_use_in": []
   }
 }
