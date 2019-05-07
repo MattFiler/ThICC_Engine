@@ -283,6 +283,8 @@ void MenuScene::Update(DX::StepTimer const& timer)
 		m_timer += (float)timer.GetElapsedSeconds();
 		if (m_timer > m_timeout) {
 
+#ifndef _DEBUG
+
 #ifdef _ARCADE
 			Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0]; //We only support P1 choices atm!
 			Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
@@ -297,7 +299,11 @@ void MenuScene::Update(DX::StepTimer const& timer)
 				}
 				index++;
 			}
-#endif // _ARCADE
+#else
+			Locator::getRM()->player_amount = 0;
+			
+#endif
+#endif
 
 
 			m_menu_state = menu_states::MAIN_SELECT;

@@ -164,18 +164,7 @@ void ThICC_Engine::SetupSplitscreenViewports() {
 float ThICC_Engine::SetViewportWidth(int viewport_num) {
 	if (Locator::getRM() && Locator::getRM()->player_amount > 1)
 	{
-		if (Locator::getRM()->player_amount == 2)
-		{
-			return 0.5f;
-		}
-		else if (Locator::getRM()->player_amount == 3)
-		{
-			return 0.5f;
-		}
-		else if (Locator::getRM()->player_amount == 4)
-		{
-			return 0.5f;
-		}
+		return 0.5f;
 	}
 
 	return 1.0f;

@@ -27,8 +27,10 @@ public:
 	bool is_cup = false; // whether it is a cup or a race
 	int player_amount = 1;
 	bool player_amount_changed = false;
+	bool attract_state = false;
 private:
 	int number_of_races = 0;
 	std::vector<int> scores{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	std::vector<int> maps;
+
 };
