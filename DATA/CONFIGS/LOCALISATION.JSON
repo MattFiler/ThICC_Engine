@@ -21,7 +21,15 @@
     "MAP_MEADOWS": "Moo Moo Meadows",
     "MAP_SUBWAY": "Super Bell Subway",
     "TEST MAP": "Low-Poly Circuit",
-    "MUTE CITY": "Mute City"
+    "MUTE CITY": "Mute City",
+    "CHARACTER_BOWSER": "Bowser",
+    "CHARACTER_WALUIGI": "Waluigi",
+    "CHARACTER_ROSALINA": "Rosalina",
+    "CHARACTER_BABY_MARIO": "Baby Mario",
+    "CUP": "Cup",
+    "RACE": "Race",
+    "CHARACTER_YOSHI": "Yoshi",
+    "EXIT": "Exit"
   },
   "SPANISH": {},
   "FRENCH": {}

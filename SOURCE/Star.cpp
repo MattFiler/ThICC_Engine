@@ -31,9 +31,10 @@ void Star::Tick()
 		{
 			m_player->setInvicible(false);
 			m_player->UseGroundTypes(true);
-			m_player->GetControlledMovement()->SetMoveSpeed(m_playerMoveSpeed);
-			Locator::getAudio()->Stop(SoundType::ITEMS, static_cast<int>(ItemSounds::STAR_SOUND));
-			Locator::getAudio()->Play(SoundType::GAME, static_cast<int>(GameSounds::MKS_GAME));
+			m_player->GetControlledMovement()->ResetMoveSpeed();
+			m_player->GetControlledMovement()->ResetTurnSpeed();
+			Locator::getAudio()->Stop("STAR_SOUND");
+			Locator::getAudio()->Play("TRACK_LOOP");
 			FlagForDestoy();
 		}
 	}
@@ -43,15 +44,13 @@ void Star::Use(Player * player, bool _altUse)
 {
 	setItemInUse(player);
 	m_trailingPlayerImmunity = true;
-	m_playerMoveSpeed = player->GetControlledMovement()->GetMoveSpeed();
-	m_playerTurnSpeed = player->GetControlledMovement()->GetMoveSpeed();
 	m_player->GetControlledMovement()->SetMoveSpeed(m_moveSpeed);
 	m_player->GetControlledMovement()->SetMoveSpeed(m_turnSpeed);
 
 	m_player->SetDrag(m_playerDrag);
 	m_player->setInvicible(true);
 	m_player->UseGroundTypes(false);
-	Locator::getAudio()->Pause(SoundType::GAME, static_cast<int>(GameSounds::MKS_GAME));
-	Locator::getAudio()->Play(SoundType::ITEMS, static_cast<int>(ItemSounds::STAR_SOUND));
+	Locator::getAudio()->Pause("TRACK_LOOP");
+	Locator::getAudio()->Play("STAR_SOUND");
 
 }

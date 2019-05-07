@@ -138,6 +138,7 @@
       <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann;</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -195,6 +196,7 @@
       <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann;</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -227,6 +229,7 @@
       <AdditionalIncludeDirectories>DirectXTK12\Inc;DirectXTK12\Src;$(SolutionDir)../LIBRARIES/nlohmann;</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -362,6 +365,7 @@
     <ClInclude Include="KartAI.h" />
     <ClInclude Include="KeybindManager.h" />
     <ClInclude Include="LightningCloud.h" />
+    <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="LocalisationManager.h" />
     <ClInclude Include="MapInfo.h" />
     <ClInclude Include="MenuScene.h" />
@@ -372,6 +376,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RaceManager.h" />
     <ClInclude Include="ReadData.h" />
     <ClInclude Include="RedShell.h" />
     <ClInclude Include="RenderData.h" />
@@ -425,6 +430,7 @@
     <ClCompile Include="KartAI.cpp" />
     <ClCompile Include="KeybindManager.cpp" />
     <ClCompile Include="LightningCloud.cpp" />
+    <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="LocalisationManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuScene.cpp" />

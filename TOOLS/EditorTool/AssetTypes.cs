@@ -45,6 +45,7 @@
         CUP,
         GLOBAL_MODELS,
         GAMEPAD_GLPYHS,
-        ARCADE_GLPYHS
+        ARCADE_GLPYHS,
+        ITEMS
     }
 }

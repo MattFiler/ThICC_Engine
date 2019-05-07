@@ -63,9 +63,9 @@ namespace Launcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap beta_banner {
+        internal static System.Drawing.Bitmap updated_launcher_banner {
             get {
-                object obj = ResourceManager.GetObject("beta_banner", resourceCulture);
+                object obj = ResourceManager.GetObject("updated_launcher_banner", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

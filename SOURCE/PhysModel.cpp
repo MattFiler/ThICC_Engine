@@ -155,6 +155,14 @@ void PhysModel::Tick()
 	updateCollider();
 }
 
+void PhysModel::Reset()
+{
+	SDKMeshGO3D::Reset();
+	Vector3 m_velTotal = Vector3::Zero;
+	Vector3 m_vel = Vector3::Zero;
+	Vector3 m_gravDirection = Vector3::Down;
+	Vector3 m_gravVel = Vector3::Zero;
+}
 
 Vector3 PhysModel::applyOffset(Vector3 pos)
 {

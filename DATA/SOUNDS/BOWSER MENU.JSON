@@ -6,6 +6,7 @@
   "pitch": 0.0,
   "pan": 0.0,
   "in_use_in": [
+    "Character",
     "Character"
   ]
 }

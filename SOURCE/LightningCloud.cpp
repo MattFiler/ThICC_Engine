@@ -18,7 +18,7 @@ void LightningCloud::initCloudData()
 	m_playerMoveSpeed = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_move_speed"];
 	m_playerTurnSpeed = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_turn_speed"];
 	m_playerSpinRev = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_spin"]["revolutions"];
-	m_playerSpinDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_spin"]["duration"];
+	m_playerSpinDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["spin"]["duration"];
 
 	m_growthData.m_scaleMulti = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["size_multiplier"];
 	m_growthData.m_growthDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["growth_duration"];
@@ -72,7 +72,7 @@ void LightningCloud::Tick()
 				{
 					m_player->Scale(m_growthData.m_shrinkScale, m_growthData.m_shrinkDuration);
 					m_growthData.m_shrinking = true;
-					Locator::getAudio()->Play(SoundType::ITEMS, static_cast<int>(ItemSounds::LIGHTNING_SOUND));
+					Locator::getAudio()->Play("LIGHTNING_SOUND");
 				}
 				m_player->Spin(m_playerSpinRev, m_playerSpinDuration);
 				m_player->SetScale(m_player->GetAnimController()->GetScaleOffset());

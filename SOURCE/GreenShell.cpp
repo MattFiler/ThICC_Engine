@@ -16,6 +16,8 @@ void GreenShell::InitShellData()
 {
 	m_speed = (float)m_itemData["GREEN_SHELL"]["info"]["speed"];
 	m_usePosOffset = (float)m_itemData["GREEN_SHELL"]["info"]["use_pos_offset"];
+	m_maxBounceCount = m_itemData["GREEN_SHELL"]["info"]["max_bounce_count"];
+	m_frameDelay = m_itemData["GREEN_SHELL"]["info"]["collision_frame_delay"];
 
 	m_spinRev = (float)m_itemData["GREEN_SHELL"]["info"]["spin"]["revolutions"];
 	m_spinDuration = m_itemData["GREEN_SHELL"]["info"]["spin"]["duration"];
@@ -62,6 +64,16 @@ void GreenShell::Tick()
 	if (m_itemUsed)
 	{
 		m_itemMesh->m_displayedMesh->Spin(m_spinRev, m_spinDuration);
+		
+		++m_frameCount;
+
+		if (m_itemMesh->m_mesh->HasHitWall() && m_frameCount >= m_frameDelay)
+		{
+			++m_bounceCount;
+			m_itemMesh->m_mesh->ResetHasHitWall();
+			m_frameCount = 0;
+		}
+		m_shouldDestroy = m_bounceCount >= m_maxBounceCount;
 	}
 	Item::Tick();
 }

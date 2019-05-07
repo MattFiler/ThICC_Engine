@@ -74,6 +74,9 @@ struct ThICC_CameraData
 	std::vector<DirectX::SimpleMath::Vector3> look_at_positions;
 	std::vector<DirectX::SimpleMath::Vector3> target_positions;
 	std::vector<DirectX::SimpleMath::Vector3> look_at_offsets;
+	std::vector<std::vector<Vector3>> points;
+	std::vector<Vector3> look_points;
+	std::vector<Vector3> rotations;
 	std::vector<float> fovs;
 	std::vector<float> rotation_lerps;
 	std::vector<float> position_lerps;

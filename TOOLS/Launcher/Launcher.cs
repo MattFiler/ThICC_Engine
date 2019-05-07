@@ -17,7 +17,6 @@ namespace Launcher
     public partial class Form1 : Form
     {
         JObject game_config_json;
-        JObject keybind_config_json;
 
         List<Label> labels = new List<Label>();
         List<ComboBox> dropdowns = new List<ComboBox>();
@@ -34,21 +33,12 @@ namespace Launcher
         private void Launcher_Load(object sender, EventArgs e)
         {
             //Load image and select default res
-            launcherImage.Image = new Bitmap(Properties.Resources.beta_banner);
+            launcherImage.Image = new Bitmap(Properties.Resources.updated_launcher_banner);
             resolutionSelector.SelectedIndex = 0;
             po_language.SelectedIndex = 0;
-            tabPage2.AutoScroll = true;
 
             //Get current game config 
             game_config_json = JObject.Parse(File.ReadAllText("DATA/CONFIGS/GAME_CORE.JSON"));
-            keybind_config_json = JObject.Parse(File.ReadAllText("DATA/CONFIGS/KEYBINDS.JSON"));
-
-            //Add keybinds to list from config
-            foreach (var keybind in keybind_config_json)
-            {
-                tabPage2.Controls.Add(makeNewLabel(keybind.Key));
-                tabPage2.Controls.Add(makeNewDropdown(keybind.Value.ToString()));
-            }
 
             //Load previous res from config
             resolutionSelector.SelectedItem = game_config_json["window_width"] + "x" + game_config_json["window_height"];
@@ -61,11 +51,6 @@ namespace Launcher
         /* Launcher Close */
         private void PO_Launcher_FormClosing1(object sender, FormClosingEventArgs e)
         {
-            //Update internal config with new keybinds
-            for (int i = 0; i < labels.Count; i++) {
-                keybind_config_json[labels[i].Text] = dropdowns[i].Items[dropdowns[i].SelectedIndex].ToString();
-            }
-
             //Update internal config with new resolution
             string[] new_resolution = resolutionSelector.Items[resolutionSelector.SelectedIndex].ToString().Split('x');
             game_config_json["window_width"] = Convert.ToInt32(new_resolution[0]);
@@ -77,7 +62,6 @@ namespace Launcher
 
             //Save back out
             File.WriteAllText("DATA/CONFIGS/GAME_CORE.JSON", game_config_json.ToString(Formatting.Indented));
-            File.WriteAllText("DATA/CONFIGS/KEYBINDS.JSON", keybind_config_json.ToString(Formatting.Indented));
 
             //Launch game if requested (must do this AFTER saving config!)
             if (launch_game)
@@ -147,6 +131,12 @@ namespace Launcher
             input_dropdown.Location = new Point(18, new_y);
             dropdowns.Add(input_dropdown);
             return input_dropdown;
+        }
+        
+        /* Perform first time setup */
+        private void FirstTimeSetup_Click(object sender, EventArgs e)
+        {
+            Process.Start("vc_redist.x64.exe");
         }
     }
 }

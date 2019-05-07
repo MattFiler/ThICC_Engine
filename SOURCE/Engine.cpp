@@ -86,6 +86,10 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	Locator::setupAudio(&m_AM);
 	Locator::setupCamData(&m_camera_data);
 
+	// Setup Race Manager
+	m_raceManager = std::make_unique<RaceManager>();
+	Locator::setupRM(m_raceManager.get());
+
 	//Setup itembox respawn time
 	ItemBoxConfig::respawn_time = m_game_config["itembox_respawn_time"];
 
@@ -140,75 +144,174 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 
 /* Setup our splitscreen viewport sizes */
 void ThICC_Engine::SetupSplitscreenViewports() {
-	for (int i = 0; i < m_game_config["player_count"]; i++) {
-		switch (i) {
-			case 0: {
-				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					0.0f,
-					0.0f,
-					(float)(Locator::getRD()->m_window_width),
-					(float)(Locator::getRD()->m_window_height),
-					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-				};
-				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
-					0,
-					0,
-					(int)(Locator::getRD()->m_window_width),
-					(int)(Locator::getRD()->m_window_height)
-				};
-				break;
-			}
-			case 1: {
-				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					0.0f,
-					0.0f,
-					0.0f,
-					0.0f,
-					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-				};
-				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
-					0,
-					0,
-					(int)(Locator::getRD()->m_window_width),
-					(int)(Locator::getRD()->m_window_height)
-				};
-				break;
-			}
-			case 2: {
-				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					0.0f,
-					0.0f,
-					0.0f,
-					0.0f,
-					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-				};
-				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
-					0,
-					0,
-					(int)(Locator::getRD()->m_window_width),
-					(int)(Locator::getRD()->m_window_height)
-				};
-				break;
-			}
-			case 3: {
-				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					0.0f,
-					0.0f,
-					(float)(Locator::getRD()->m_window_width),
-					(float)(Locator::getRD()->m_window_height),
-					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-				};
-				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
-					0,
-					0,
-					(int)(Locator::getRD()->m_window_width),
-					(int)(Locator::getRD()->m_window_height)
-				};
-				break;
-			}
-		}
+	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
+		*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
+			(float)(Locator::getRD()->m_window_width * SetViewportX(i)),
+			(float)(Locator::getRD()->m_window_height * SetViewportY(i)),
+			(float)(Locator::getRD()->m_window_width * SetViewportWidth(i)),
+			(float)(Locator::getRD()->m_window_height * SetViewportHeight(i)),
+			D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
+		};
+		*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
+			(int)(Locator::getRD()->m_window_width * SetRectX(i)),
+			(int)(Locator::getRD()->m_window_height * SetRectY(i)),
+			(int)(Locator::getRD()->m_window_width * SetRectWidth(i)),
+			(int)(Locator::getRD()->m_window_height * SetRectHeight(i))
+		};
 	}
 }
+
+float ThICC_Engine::SetViewportWidth(int viewport_num) {
+	if (Locator::getRM() && Locator::getRM()->player_amount > 1)
+	{
+		if (Locator::getRM()->player_amount == 2)
+		{
+			return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 3)
+		{
+			return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 4)
+		{
+			return 0.5f;
+		}
+	}
+
+	return 1.0f;
+}
+
+float ThICC_Engine::SetViewportHeight(int viewport_num) {
+	if (Locator::getRM() && Locator::getRM()->player_amount > 1)
+	{
+		if (Locator::getRM()->player_amount == 3 || Locator::getRM()->player_amount == 4)
+			return 0.5f;
+	}
+
+	return 1.0f;
+}
+
+float ThICC_Engine::SetViewportX(int viewport_num) {
+	if (Locator::getRM() && Locator::getRM()->player_amount > 1)
+	{
+		if (Locator::getRM()->player_amount == 2)
+		{
+			if (viewport_num == 1)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 3)
+		{
+			if (viewport_num == 1)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 4)
+		{
+			if (viewport_num == 1 || viewport_num == 3)
+				return 0.5f;
+		}
+	}
+
+	return 0.0f;
+}
+
+float ThICC_Engine::SetViewportY(int viewport_num) {
+	if (Locator::getRM() && Locator::getRM()->player_amount > 1)
+	{
+		if (Locator::getRM()->player_amount == 3)
+		{
+			if (viewport_num == 2)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 4)
+		{
+			if (viewport_num == 1 || viewport_num == 3)
+				return 0.5f;
+		}
+	}
+
+	return 0.0f;
+}
+
+float ThICC_Engine::SetRectWidth(int rect_num) {
+	if (Locator::getRM() && Locator::getRM()->player_amount > 1)
+	{
+		if (Locator::getRM()->player_amount == 2)
+		{
+			if (rect_num == 0)
+				return 0.5f;
+		}
+		if (Locator::getRM()->player_amount == 3)
+		{
+			if (rect_num == 0)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 4)
+		{
+			if (rect_num == 0 || rect_num == 2)
+				return 0.5f;
+		}
+	}
+
+	return 1.0f;
+}
+
+float ThICC_Engine::SetRectHeight(int rect_num) {
+	if (Locator::getRM() || Locator::getRM()->player_amount > 1)
+	{
+		if (Locator::getRM()->player_amount == 3)
+		{
+			if (rect_num == 0 || rect_num == 1)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 4)
+		{
+			if (rect_num == 0 || rect_num == 2)
+				return 0.5f;
+		}
+	}
+
+	return 1.0f;
+}
+
+float ThICC_Engine::SetRectX(int rect_num) {
+	if (Locator::getRM() || Locator::getRM()->player_amount > 1)
+	{
+		if (Locator::getRM()->player_amount == 2)
+		{
+			if (rect_num == 1)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 3)
+		{
+			if (rect_num == 0 || rect_num == 1)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 4)
+		{
+			if (rect_num == 0 || rect_num == 2)
+				return 0.5f;
+		}
+	}
+	return 0.0f;
+}
+
+float ThICC_Engine::SetRectY(int rect_num) {
+	if (Locator::getRM() || Locator::getRM()->player_amount > 1)
+	{
+		if (Locator::getRM()->player_amount == 3)
+		{
+			if (rect_num == 0 || rect_num == 1)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 4)
+		{
+			if (rect_num == 0 || rect_num == 2)
+				return 0.5f;
+		}
+	}
+	return 0.0f;
+}
+
 
 /* The game update, split it out to update and render :) */
 void ThICC_Engine::Tick()
@@ -224,6 +327,12 @@ void ThICC_Engine::Tick()
 /* Update the scene */
 void ThICC_Engine::Update(DX::StepTimer const& timer)
 {
+	if (Locator::getRM()->player_amount_changed)
+	{
+		SetupSplitscreenViewports();
+		Locator::getRM()->player_amount_changed = false;
+	}
+
 	//Update input trackers
 	m_input_data.m_keyboardTracker.Update(m_input_data.m_keyboard->GetState());
 	m_input_data.m_mouseState = m_input_data.m_mouse->GetState();
@@ -299,7 +408,7 @@ void ThICC_Engine::Render()
 
 	// Show the new frame.
 	m_device_data.m_deviceResources->Present();
-	m_graphicsMemory->Commit(m_device_data.m_deviceResources->GetCommandQueue());
+	Locator::getRD()->m_graphicsMemory->Commit(m_device_data.m_deviceResources->GetCommandQueue());
 }
 
 // Helper method to clear the back buffers.
@@ -383,7 +492,7 @@ void ThICC_Engine::CreateDeviceDependentResources()
 	auto device = m_device_data.m_deviceResources->GetD3DDevice();
 
 	//Create our core render graphics resources
-	m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
+	Locator::getRD()->m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 	m_renderDescriptors = std::make_unique<DescriptorHeap>(device,
 		D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
 		D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
@@ -434,7 +543,7 @@ void ThICC_Engine::OnDeviceLost()
 
 	m_device_data.m_hdrScene->ReleaseDevice();
 
-	m_graphicsMemory.reset();
+	Locator::getRD()->m_graphicsMemory.reset();
 }
 
 /* If the device comes back, create everything again! */
@@ -455,7 +564,7 @@ void ThICC_Engine::SetDefaultFont(std::string _default_font)
 	RenderTargetState rtState(m_device_data.m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
 
 	//Create sprite batch
-	SpriteBatchPipelineStateDescription pd(rtState);
+	SpriteBatchPipelineStateDescription pd(rtState, &Locator::getRD()->m_states->NonPremultiplied);
 	Locator::getRD()->m_2dSpriteBatch = std::make_unique<SpriteBatch>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, pd);
 	Locator::getRD()->m_2dSpriteBatch->SetViewport(Locator::getRD()->m_screenViewport);
 

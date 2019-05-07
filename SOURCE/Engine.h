@@ -11,6 +11,7 @@
 #include "CameraData.h"
 #include "GameStateData.h"
 #include "LocalisationManager.h"
+#include "RaceManager.h"
 #include "DebugConsole.h"
 
 #include "Game.h"
@@ -34,6 +35,12 @@ public:
 
 	// Initialization and management
 	void Initialize(HWND window, int width, int height);
+
+	float SetRectHeight(int rect_num);
+
+	float SetRectX(int rect_num);
+
+	float SetRectY(int rect_num);
 
 	// Basic game loop
 	void Tick();
@@ -86,19 +93,25 @@ private:
 	ThICC_GameStateData m_gamestate_data;
 	ThICC_CameraData m_camera_data;
 
+	float SetViewportWidth(int viewport_num);
+	float SetViewportHeight(int viewport_num);
+	float SetViewportX(int viewport_num);
+	float SetViewportY(int viewport_num);
+
+	float SetRectWidth(int rect_num);
+
 	//Misc data banks
 	json m_game_config;
 	ItemData* m_probabilities = nullptr;
 
 	//Audio engine
 	std::unique_ptr<DirectX::AudioEngine> m_audEngine;
+	std::unique_ptr<RaceManager> m_raceManager;
 
 	//Game timer
 	DX::StepTimer m_timer;
 
-	//Core resources (these can probably be cut back a bit, since we only really use them for the tonemap now)
-	std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
-	std::unique_ptr<DirectX::DescriptorHeap> m_renderDescriptors;
+	std::unique_ptr<DirectX::DescriptorHeap> m_renderDescriptors; //This needs looking into - does this ever get used anymore ?!?!?
 
 	int tonemapIndex = -1;
 

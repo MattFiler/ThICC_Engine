@@ -1,0 +1,60 @@
+{
+  "asset_name": "CHARACTER_ROSALINA",
+  "asset_type": "Models",
+  "model_type": 2,
+  "visible": true,
+  "start_x": 0.0,
+  "start_y": 0.0,
+  "start_z": 0.0,
+  "modelscale": 0.7,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 10.0,
+  "in_use_in": [
+    "Character"
+  ],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      1.267627,
+      2.801692,
+      0.707331
+    ],
+    "front_top_right": [
+      -1.267627,
+      2.801692,
+      0.707331
+    ],
+    "front_bottom_right": [
+      -1.267627,
+      0,
+      0.707331
+    ],
+    "front_bottom_left": [
+      1.267627,
+      0,
+      0.707331
+    ],
+    "back_top_left": [
+      1.267627,
+      2.801692,
+      -0.609602
+    ],
+    "back_top_right": [
+      -1.267627,
+      2.801692,
+      -0.609602
+    ],
+    "back_bottom_right": [
+      -1.267627,
+      0,
+      -0.609602
+    ],
+    "back_bottom_left": [
+      1.267627,
+      0,
+      -0.609602
+    ]
+  }
+}

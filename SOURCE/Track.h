@@ -66,6 +66,9 @@ public:
 	std::vector<Vector3> getSpawnpoints() {
 		return map_spawnpoints;
 	};
+	std::vector<Vector3> getSpawnRotations() {
+		return map_spawn_rotations;
+	}
 	std::vector<IntroCamGroup> getIntroCams() {
 		return map_intro_cams;
 	};
@@ -138,6 +141,7 @@ private:
 	// Map config data from Blender
 	std::vector<Waypoint> map_waypoints;
 	std::vector<Vector3> map_spawnpoints;
+	std::vector<Vector3> map_spawn_rotations;
 	std::vector<IntroCamGroup> map_intro_cams = std::vector<IntroCamGroup>(4);
 	std::vector<Vector3> map_itemboxes_pos;
 	std::vector<Vector3> map_itemboxes_rot; //broken

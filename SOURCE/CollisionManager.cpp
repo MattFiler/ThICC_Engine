@@ -4,12 +4,28 @@
 #include "ItemBox.h"
 #include "Bomb.h"
 #include "Explosion.h"
+#include <iostream>
+#include <fstream>
+
 
 float CollisionManager::m_thresholdDistSqrd = 0;
+ItemCollisionData CollisionManager::m_collisionData = ItemCollisionData();
 
-void CollisionManager::SetThresholdDistance(float _dist)
+void CollisionManager::InitConfig()
 {
-	m_thresholdDistSqrd = _dist;
+	std::ifstream i("DATA/CONFIGS/COLLISION_MANAGER_CONFIG.JSON");
+	json data;
+	data << i;
+
+	m_thresholdDistSqrd = (float)data["threshold_collision_distance_squared"];
+	m_collisionData.m_playerVelMulti = (float)data["invincibility_collision"]["velocity_multiplier"];
+	m_collisionData.m_jumpHeight = (float)data["invincibility_collision"]["jump"]["height"];
+	m_collisionData.m_jumpDuration = (float)data["invincibility_collision"]["jump"]["duration"];
+	m_collisionData.m_flipRev = (float)data["invincibility_collision"]["flip"]["revolutions"];
+	m_collisionData.m_flipDuration = (float)data["invincibility_collision"]["flip"]["duration"];
+	m_collisionData.m_spinRev = (float)data["invincibility_collision"]["spin"]["revolutions"];
+	m_collisionData.m_spinDuration = (float)data["invincibility_collision"]["spin"]["duration"];
+	m_collisionData.m_vertPosOffset = (float)data["invincibility_collision"]["vertical_pos_offset"];
 }
 
 void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _physModels, std::vector<Item*> _items)
@@ -56,7 +72,7 @@ void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _ph
 void CollisionManager::ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox)
 {
 	dynamic_cast<ItemBox*>(_itemBox)->hasCollided(dynamic_cast<Player*>(_player));
-	Locator::getAudio()->Play(SoundType::MISC, (int)MiscSounds::ITEM_BOX_HIT);
+	Locator::getAudio()->Play("ITEMBOX_HIT");
 }
 
 void CollisionManager::ExplosionCollision(PhysModel *& _player, PhysModel *& _explosion)
@@ -74,15 +90,11 @@ void CollisionManager::PlayerCollisions(PhysModel*& _player1, PhysModel*& _playe
 
 	if (player1->isInvincible() && !player2->isInvincible())
 	{
-		player2->Jump(1.5f, 1);
-		player2->Flip(1, 0.8f);
-		player2->AddPos(player2->GetWorld().Up() * 4);
+		ApplyInvincibleResponse(player2);
 	}
 	else if (player2->isInvincible() && !player1->isInvincible())
 	{
-		player1->Jump(1.5f, 1);
-		player1->Flip(1, 0.8f);
-		player1->AddPos(player1->GetWorld().Up() * 4);
+		ApplyInvincibleResponse(player1);
 	}
 	else
 	{
@@ -105,6 +117,16 @@ void CollisionManager::PlayerCollisions(PhysModel*& _player1, PhysModel*& _playe
 
 		LightningCloudCollision(player2, player1);
 	}
+}
+
+void CollisionManager::ApplyInvincibleResponse(Player * player)
+{
+	player->setVelocity(player->getVelocity() * m_collisionData.m_playerVelMulti);
+	player->Jump(m_collisionData.m_jumpHeight, m_collisionData.m_jumpDuration);
+	player->Flip(m_collisionData.m_flipRev, m_collisionData.m_flipDuration);
+	player->Spin(m_collisionData.m_spinRev, m_collisionData.m_spinDuration);
+	player->AddPos(player->GetWorld().Up() * m_collisionData.m_vertPosOffset);
+	player->UpdateWorld();
 }
 
 void CollisionManager::LightningCloudCollision(Player * player2, Player * player1)

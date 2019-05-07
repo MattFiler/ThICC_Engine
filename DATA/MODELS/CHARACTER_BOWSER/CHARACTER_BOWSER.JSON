@@ -1,0 +1,60 @@
+{
+  "asset_name": "CHARACTER_BOWSER",
+  "asset_type": "Models",
+  "model_type": 2,
+  "visible": true,
+  "start_x": 0.0,
+  "start_y": 0.0,
+  "start_z": 0.0,
+  "modelscale": 0.5,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 10.0,
+  "in_use_in": [
+    "Character"
+  ],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      2.955699,
+      4.464455,
+      2.040756
+    ],
+    "front_top_right": [
+      -2.955699,
+      4.464455,
+      2.040756
+    ],
+    "front_bottom_right": [
+      -2.955699,
+      -0.217981,
+      2.040756
+    ],
+    "front_bottom_left": [
+      2.955699,
+      -0.217981,
+      2.040756
+    ],
+    "back_top_left": [
+      2.955699,
+      4.464455,
+      -2.547447
+    ],
+    "back_top_right": [
+      -2.955699,
+      4.464455,
+      -2.547447
+    ],
+    "back_bottom_right": [
+      -2.955699,
+      -0.217981,
+      -2.547447
+    ],
+    "back_bottom_left": [
+      2.955699,
+      -0.217981,
+      -2.547447
+    ]
+  }
+}

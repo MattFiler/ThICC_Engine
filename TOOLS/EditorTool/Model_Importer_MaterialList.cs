@@ -171,7 +171,7 @@ namespace EditorTool
             {
                 if (File.Exists(importer_common.fileName(importer_file.ENGINE_MESH)))
                 {
-                    File.Delete(importer_common.fileName(importer_file.ENGINE_MESH));
+                    try { File.Delete(importer_common.fileName(importer_file.ENGINE_MESH)); } catch { }
                 }
             }
 
@@ -441,6 +441,7 @@ namespace EditorTool
                 JArray lookat_array = new JArray();
                 JArray waypoint_array = new JArray();
                 JArray spawnpoint_array = new JArray();
+                JArray spawnpoint_rot_array = new JArray();
                 JArray finishline_array = new JArray();
                 JArray itembox_array = new JArray();
                 if (File.Exists(importer_common.getModelConfigPath()))
@@ -448,10 +449,12 @@ namespace EditorTool
                     JToken model_blender_data = JToken.Parse(File.ReadAllText(importer_common.getModelConfigPath()));
                     foreach (JToken data in model_blender_data["cams"])
                     {
+                        data["index"] = Convert.ToInt32(data["index"].Value<string>());
                         camera_array.Add(data);
                     }
                     foreach (JToken data in model_blender_data["look_at_points"])
                     {
+                        data["index"] = Convert.ToInt32(data["index"].Value<string>());
                         lookat_array.Add(data);
                     }
                     foreach (JToken data in model_blender_data["waypoints"])
@@ -461,6 +464,7 @@ namespace EditorTool
                     foreach (JToken data in model_blender_data["spawns"])
                     {
                         spawnpoint_array.Add(data["pos"]);
+                        spawnpoint_rot_array.Add(data["rotation"]);
                     }
                     foreach (JToken data in model_blender_data["finish_line"])
                     {
@@ -486,9 +490,10 @@ namespace EditorTool
                     }
                 }
                 asset_json["map_cameras"] = camera_array;
-                asset_json["map_cam_lookat"] = lookat_array;
+                asset_json["look_at_points"] = lookat_array;
                 asset_json["map_waypoints"] = waypoint_array;
                 asset_json["map_spawnpoints"] = spawnpoint_array;
+                asset_json["map_spawn_rotations"] = spawnpoint_rot_array;
                 asset_json["map_finishline"] = finishline_array;
                 asset_json["map_itemboxes"] = itembox_array;
             }

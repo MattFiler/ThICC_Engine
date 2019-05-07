@@ -323,6 +323,8 @@ namespace EditorTool
                     return "Gamepad Icons";
                 case AssetCompType.ARCADE_GLPYHS:
                     return "Arcade Icons";
+                case AssetCompType.ITEMS:
+                    return "Items";
             }
             return "";
         }

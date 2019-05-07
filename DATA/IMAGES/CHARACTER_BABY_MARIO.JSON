@@ -1,0 +1,13 @@
+{
+  "asset_name": "CHARACTER_BABY_MARIO",
+  "asset_type": "Images",
+  "visible": true,
+  "is_2d": true,
+  "res_x": 800,
+  "res_y": 779,
+  "x_pos": 0,
+  "y_pos": 0,
+  "in_use_in": [
+    "Character"
+  ]
+}

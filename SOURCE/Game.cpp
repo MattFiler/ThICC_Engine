@@ -6,6 +6,7 @@
 #include "MenuScene.h"
 #include "GameScene.h"
 #include "DebugScene.h"
+#include "LoadingScene.h"
 
 /* Perform initialisation */
 void ThICC_Game::Initialize() {
@@ -42,7 +43,7 @@ void ThICC_Game::Initialize() {
 	for (auto& element : character_config) {
 		CharacterInfo* new_chr_inf = new CharacterInfo(element);
 		m_go_shared.character_instances.push_back(new_chr_inf);
-		Locator::getAudio()->addToSoundsList(m_go_shared.character_instances[index]->audio, SoundType::CHARACTER);
+		Locator::getAudio()->addToSoundsList(m_go_shared.character_instances[index]->audio, m_go_shared.character_instances[index]->name);
 		index++;
 	}
 
@@ -88,6 +89,7 @@ void ThICC_Game::Initialize() {
 
 	//Create the scenes
 	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
+	m_scene_manager.addScene(new LoadingScene(), (int)Scenes::LOADINGSCENE);
 	#ifdef _DEBUG 
 	m_scene_manager.addScene(new DebugScene(), (int)Scenes::DEBUG_LIGHTINGTEST);
 	#endif

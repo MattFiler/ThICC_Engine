@@ -30,8 +30,8 @@
         {
             this.openCharacterConfig = new System.Windows.Forms.Button();
             this.openCameraConfig = new System.Windows.Forms.Button();
-            this.openItemConfig = new System.Windows.Forms.Button();
             this.miscConfigs = new System.Windows.Forms.Button();
+            this.itemConfigEditor = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openCharacterConfig
@@ -56,18 +56,6 @@
             this.openCameraConfig.UseVisualStyleBackColor = true;
             this.openCameraConfig.Click += new System.EventHandler(this.openCameraConfig_Click);
             // 
-            // openItemConfig
-            // 
-            this.openItemConfig.Enabled = false;
-            this.openItemConfig.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.openItemConfig.Location = new System.Drawing.Point(12, 86);
-            this.openItemConfig.Name = "openItemConfig";
-            this.openItemConfig.Size = new System.Drawing.Size(270, 31);
-            this.openItemConfig.TabIndex = 4;
-            this.openItemConfig.Text = "Item Configurations";
-            this.openItemConfig.UseVisualStyleBackColor = true;
-            this.openItemConfig.Click += new System.EventHandler(this.openItemConfig_Click);
-            // 
             // miscConfigs
             // 
             this.miscConfigs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -79,13 +67,24 @@
             this.miscConfigs.UseVisualStyleBackColor = true;
             this.miscConfigs.Click += new System.EventHandler(this.miscConfigs_Click);
             // 
+            // itemConfigEditor
+            // 
+            this.itemConfigEditor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.itemConfigEditor.Location = new System.Drawing.Point(12, 86);
+            this.itemConfigEditor.Name = "itemConfigEditor";
+            this.itemConfigEditor.Size = new System.Drawing.Size(270, 31);
+            this.itemConfigEditor.TabIndex = 6;
+            this.itemConfigEditor.Text = "Item Config Editor";
+            this.itemConfigEditor.UseVisualStyleBackColor = true;
+            this.itemConfigEditor.Click += new System.EventHandler(this.itemConfigEditor_Click);
+            // 
             // Game_Config_Preselect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 162);
+            this.ClientSize = new System.Drawing.Size(294, 161);
+            this.Controls.Add(this.itemConfigEditor);
             this.Controls.Add(this.miscConfigs);
-            this.Controls.Add(this.openItemConfig);
             this.Controls.Add(this.openCameraConfig);
             this.Controls.Add(this.openCharacterConfig);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -100,7 +99,7 @@
 
         private System.Windows.Forms.Button openCharacterConfig;
         private System.Windows.Forms.Button openCameraConfig;
-        private System.Windows.Forms.Button openItemConfig;
         private System.Windows.Forms.Button miscConfigs;
+        private System.Windows.Forms.Button itemConfigEditor;
     }
 }

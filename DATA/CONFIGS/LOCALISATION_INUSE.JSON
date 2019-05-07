@@ -84,5 +84,39 @@
     "in_use_in": [
       "Map"
     ]
+  },
+  "CHARACTER_BOWSER": {
+    "in_use_in": [
+      "Character"
+    ]
+  },
+  "CHARACTER_WALUIGI": {
+    "in_use_in": [
+      "Character"
+    ]
+  },
+  "CHARACTER_ROSALINA": {
+    "in_use_in": [
+      "Character"
+    ]
+  },
+  "CHARACTER_BABY_MARIO": {
+    "in_use_in": [
+      "Character"
+    ]
+  },
+  "CUP": {
+    "in_use_in": []
+  },
+  "RACE": {
+    "in_use_in": []
+  },
+  "CHARACTER_YOSHI": {
+    "in_use_in": [
+      "Character"
+    ]
+  },
+  "EXIT": {
+    "in_use_in": []
   }
 }

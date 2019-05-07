@@ -644,7 +644,7 @@ namespace EditorTool
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Asset_Editor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Mario Kart Asset Manager";
+            this.Text = "Asset Manager";
             this.Load += new System.EventHandler(this.Landing_Load);
             this.groupBox2.ResumeLayout(false);
             this.modelConfigs.ResumeLayout(false);

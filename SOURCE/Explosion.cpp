@@ -37,14 +37,14 @@ void Explosion::InitExplosionData(ItemType _ownerType)
 	m_growthData.m_scaleMulti = (float)data[ownerName]["info"]["explosion"]["size_multiplier"];
 	m_growthData.m_growthDuration = (float)data[ownerName]["info"]["explosion"]["growth_duration"];
 
-	m_collisionData.m_playerVelMulti = (float)data[ownerName]["info"]["explosion"]["player_collision"]["velocity_multiplier"];
-	m_collisionData.m_jumpHeight = (float)data[ownerName]["info"]["explosion"]["player_collision"]["jump"]["height"];
-	m_collisionData.m_jumpDuration = (float)data[ownerName]["info"]["explosion"]["player_collision"]["jump"]["duration"];
-	m_collisionData.m_flipRev = (float)data[ownerName]["info"]["explosion"]["player_collision"]["flip"]["revolutions"];
-	m_collisionData.m_flipDuration = (float)data[ownerName]["info"]["explosion"]["player_collision"]["flip"]["duration"];
-	m_collisionData.m_spinRev = (float)data[ownerName]["info"]["explosion"]["player_collision"]["spin"]["revolutions"];
-	m_collisionData.m_spinDuration = (float)data[ownerName]["info"]["explosion"]["player_collision"]["spin"]["duration"];
-	m_collisionData.m_vertPosOffset = (float)data[ownerName]["info"]["explosion"]["player_collision"]["vertical_pos_offset"];
+	m_collisionData.m_playerVelMulti = (float)data[ownerName]["info"]["player_collision"]["velocity_multiplier"];
+	m_collisionData.m_jumpHeight = (float)data[ownerName]["info"]["player_collision"]["jump"]["height"];
+	m_collisionData.m_jumpDuration = (float)data[ownerName]["info"]["player_collision"]["jump"]["duration"];
+	m_collisionData.m_flipRev = (float)data[ownerName]["info"]["player_collision"]["flip"]["revolutions"];
+	m_collisionData.m_flipDuration = (float)data[ownerName]["info"]["player_collision"]["flip"]["duration"];
+	m_collisionData.m_spinRev = (float)data[ownerName]["info"]["player_collision"]["spin"]["revolutions"];
+	m_collisionData.m_spinDuration = (float)data[ownerName]["info"]["player_collision"]["spin"]["duration"];
+	m_collisionData.m_vertPosOffset = (float)data[ownerName]["info"]["player_collision"]["vertical_pos_offset"];
 }
 
 void Explosion::HitByPlayer(Player * _player)

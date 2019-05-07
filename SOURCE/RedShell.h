@@ -4,6 +4,7 @@
 #include "ControlledMovement.h"
 #include "ItemCollisionData.h"
 #include "ItemAiData.h"
+
 class RedShell : public Item
 {
 public:
@@ -14,6 +15,8 @@ public:
 	virtual void Tick() override;
 	void HitByPlayer(Player* _player) override;
 	void Use(Player* _player, bool _altUse) override;
+
+	std::unique_ptr<MoveAI>& GetAi() { return m_ai; };
 private:
 	void FindTargetPlayer();
 
