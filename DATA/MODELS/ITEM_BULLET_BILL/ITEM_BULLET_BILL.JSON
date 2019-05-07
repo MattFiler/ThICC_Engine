@@ -1,47 +1,4 @@
 {
-  "has_box_collider": true,
-  "collision_box": {
-    "front_top_left": [
-      1.73313,
-      1.05544,
-      1.30908
-    ],
-    "front_top_right": [
-      -1.73304,
-      1.05544,
-      1.30908
-    ],
-    "front_bottom_right": [
-      -1.73304,
-      -1.05544,
-      1.30908
-    ],
-    "front_bottom_left": [
-      1.73313,
-      -1.05544,
-      1.30908
-    ],
-    "back_top_left": [
-      1.73313,
-      1.05544,
-      -1.97238
-    ],
-    "back_top_right": [
-      -1.73304,
-      1.05544,
-      -1.97238
-    ],
-    "back_bottom_right": [
-      -1.73304,
-      -1.05544,
-      -1.97238
-    ],
-    "back_bottom_left": [
-      1.73313,
-      -1.05544,
-      -1.97238
-    ]
-  },
   "asset_name": "ITEM_BULLET_BILL",
   "asset_type": "Models",
   "model_type": 1,
@@ -55,6 +12,48 @@
   "rot_z": 0,
   "segment_size": 10,
   "in_use_in": [
-    "Items"
-  ]
+    "Items"],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      1.73313,
+      2.229091,
+      1.30908
+    ],
+    "front_top_right": [
+      -1.73304,
+      2.229091,
+      1.30908
+    ],
+    "front_bottom_right": [
+      -1.73304,
+      0,
+      1.30908
+    ],
+    "front_bottom_left": [
+      1.73313,
+      0,
+      1.30908
+    ],
+    "back_top_left": [
+      1.73313,
+      2.229091,
+      -1.97238
+    ],
+    "back_top_right": [
+      -1.73304,
+      2.229091,
+      -1.97238
+    ],
+    "back_bottom_right": [
+      -1.73304,
+      0,
+      -1.97238
+    ],
+    "back_bottom_left": [
+      1.73313,
+      0,
+      -1.97238
+    ]
+  }
 }
