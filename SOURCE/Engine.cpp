@@ -145,72 +145,19 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 /* Setup our splitscreen viewport sizes */
 void ThICC_Engine::SetupSplitscreenViewports() {
 	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
-		switch (i) {
-			case 0: {
-				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					(float)(Locator::getRD()->m_window_width * SetViewportX(i)),
-					(float)(Locator::getRD()->m_window_height * SetViewportY(i)),
-					(float)(Locator::getRD()->m_window_width * SetViewportWidth(i)),
-					(float)(Locator::getRD()->m_window_height * SetViewportHeight(i)),
-					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-				};
-				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
-					0,
-					0,
-					(int)(Locator::getRD()->m_window_width * SetRectWidth(i)),
-					(int)(Locator::getRD()->m_window_height * SetRectHeight(i))
-				};
-				break;
-			}
-			case 1: {
-				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					(float)(Locator::getRD()->m_window_width * SetViewportX(i)),
-					(float)(Locator::getRD()->m_window_height * SetViewportY(i)),
-					(float)(Locator::getRD()->m_window_width * SetViewportWidth(i)),
-					(float)(Locator::getRD()->m_window_height * SetViewportHeight(i)),
-					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-				};
-				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
-					0,
-					0,
-					(int)(Locator::getRD()->m_window_width * SetRectWidth(i)),
-					(int)(Locator::getRD()->m_window_height * SetRectHeight(i))
-				};
-				break;
-			}
-			case 2: {
-				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					(float)(Locator::getRD()->m_window_width * SetViewportX(i)),
-					(float)(Locator::getRD()->m_window_height * SetViewportY(i)),
-					(float)(Locator::getRD()->m_window_width * SetViewportWidth(i)),
-					(float)(Locator::getRD()->m_window_height * SetViewportHeight(i)),
-					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-				};
-				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
-					0,
-					0,
-					(int)(Locator::getRD()->m_window_width * SetRectWidth(i)),
-					(int)(Locator::getRD()->m_window_height * SetRectHeight(i))
-				};
-				break;
-			}
-			case 3: {
-				*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
-					(float)(Locator::getRD()->m_window_width * SetViewportX(i)),
-					(float)(Locator::getRD()->m_window_height * SetViewportY(i)),
-					(float)(Locator::getRD()->m_window_width * SetViewportWidth(i)),
-					(float)(Locator::getRD()->m_window_height * SetViewportHeight(i)),
-					D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-				};
-				*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
-					0,
-					0,
-					(int)(Locator::getRD()->m_window_width * SetRectWidth(i)),
-					(int)(Locator::getRD()->m_window_height * SetRectHeight(i))
-				};
-				break;
-			}
-		}
+		*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
+			(float)(Locator::getRD()->m_window_width * SetViewportX(i)),
+			(float)(Locator::getRD()->m_window_height * SetViewportY(i)),
+			(float)(Locator::getRD()->m_window_width * SetViewportWidth(i)),
+			(float)(Locator::getRD()->m_window_height * SetViewportHeight(i)),
+			D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
+		};
+		*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
+			(int)(Locator::getRD()->m_window_width * SetRectX(i)),
+			(int)(Locator::getRD()->m_window_height * SetRectY(i)),
+			(int)(Locator::getRD()->m_window_width * SetRectWidth(i)),
+			(int)(Locator::getRD()->m_window_height * SetRectHeight(i))
+		};
 	}
 }
 
@@ -223,10 +170,7 @@ float ThICC_Engine::SetViewportWidth(int viewport_num) {
 		}
 		else if (Locator::getRM()->player_amount == 3)
 		{
-			if (viewport_num == 0 || viewport_num == 1)
-				return 0.5f;
-			else
-				return 1.0f;
+			return 0.5f;
 		}
 		else if (Locator::getRM()->player_amount == 4)
 		{
@@ -268,27 +212,6 @@ float ThICC_Engine::SetViewportX(int viewport_num) {
 	}
 
 	return 0.0f;
-
-			//case 0: {
-			//	*&Locator::getWD()->m_viewport[i] = { 0.0f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			//	*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth * 0.5f),(int)(Locator::getWD()->m_outputHeight * 0.5f) };
-			//	break;
-			//}
-			//case 1: {
-			//	*&Locator::getWD()->m_viewport[i] = { static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, 0.0f, static_cast<float>(Locator::getWD()->m_outputWidth)* 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			//	*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight * 0.5f) };
-			//	break;
-			//}
-			//case 2: {
-			//	*&Locator::getWD()->m_viewport[i] = { 0.0f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			//	*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth * 0.5f),(int)(Locator::getWD()->m_outputHeight) };
-			//	break;
-			//}
-			//case 3: {
-			//	*&Locator::getWD()->m_viewport[i] = { static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(Locator::getWD()->m_outputHeight) * 0.5f, static_cast<float>(Locator::getWD()->m_outputWidth) * 0.5f, static_cast<float>(*&Locator::getWD()->m_outputHeight) * 0.5f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-			//	*&Locator::getWD()->m_scissorRect[i] = { 0,0,(int)(Locator::getWD()->m_outputWidth),(int)(Locator::getWD()->m_outputHeight) };
-			//	break;
-			//}
 }
 
 float ThICC_Engine::SetViewportY(int viewport_num) {
@@ -312,6 +235,11 @@ float ThICC_Engine::SetViewportY(int viewport_num) {
 float ThICC_Engine::SetRectWidth(int rect_num) {
 	if (Locator::getRM() && Locator::getRM()->player_amount > 1)
 	{
+		if (Locator::getRM()->player_amount == 2)
+		{
+			if (rect_num == 0)
+				return 0.5f;
+		}
 		if (Locator::getRM()->player_amount == 3)
 		{
 			if (rect_num == 0)
@@ -343,6 +271,45 @@ float ThICC_Engine::SetRectHeight(int rect_num) {
 	}
 
 	return 1.0f;
+}
+
+float ThICC_Engine::SetRectX(int rect_num) {
+	if (Locator::getRM() || Locator::getRM()->player_amount > 1)
+	{
+		if (Locator::getRM()->player_amount == 2)
+		{
+			if (rect_num == 1)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 3)
+		{
+			if (rect_num == 0 || rect_num == 1)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 4)
+		{
+			if (rect_num == 0 || rect_num == 2)
+				return 0.5f;
+		}
+	}
+	return 0.0f;
+}
+
+float ThICC_Engine::SetRectY(int rect_num) {
+	if (Locator::getRM() || Locator::getRM()->player_amount > 1)
+	{
+		if (Locator::getRM()->player_amount == 3)
+		{
+			if (rect_num == 0 || rect_num == 1)
+				return 0.5f;
+		}
+		else if (Locator::getRM()->player_amount == 4)
+		{
+			if (rect_num == 0 || rect_num == 2)
+				return 0.5f;
+		}
+	}
+	return 0.0f;
 }
 
 

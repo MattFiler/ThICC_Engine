@@ -38,6 +38,10 @@ public:
 
 	float SetRectHeight(int rect_num);
 
+	float SetRectX(int rect_num);
+
+	float SetRectY(int rect_num);
+
 	// Basic game loop
 	void Tick();
 
