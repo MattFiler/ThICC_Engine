@@ -586,13 +586,7 @@ void Player::GlideLogic()
 		m_drag = 0.3f;
 		if (m_onTrack && m_glideTimeElapsed > m_minGlideDuration)
 		{
-			m_elapsedTimeOff = 0;
-			m_glideTimeElapsed = 0;
-			m_preventRespawn = false;
-			m_gliding = false;
-			m_maxGrav = m_normalGrav;
-			m_move->SetGliding(false);
-			m_animationMesh->SwitchModelSet("default");
+			StopGlide();
 		}
 		else if (m_colType == CollisionType::NO_TERRAIN)
 		{
@@ -608,6 +602,17 @@ void Player::GlideLogic()
 			m_maxGrav = m_glidingGrav;
 		}
 	}
+}
+
+void Player::StopGlide()
+{
+	m_elapsedTimeOff = 0;
+	m_glideTimeElapsed = 0;
+	m_preventRespawn = false;
+	m_gliding = false;
+	m_maxGrav = m_normalGrav;
+	m_move->SetGliding(false);
+	m_animationMesh->SwitchModelSet("default");
 }
 
 void Player::RespawnLogic()
@@ -687,8 +692,7 @@ Vector3 Player::GetPosHistoryBack()
 
 void Player::Respawn()
 {
-	m_gliding = false;
-	m_maxGrav = m_normalGrav;
+	StopGlide();
 	m_move->SetEnabled(false);
 	m_animationMesh->SwitchModelSet("respawn");
 	m_respawning = true;
@@ -698,10 +702,11 @@ void Player::Respawn()
 
 	m_respawnStartPos = m_pos;
 	m_respawnStartRot = m_quatRot;
+	m_endWorld = m_matrixHistory.front();
 
 	Vector3 scale;
 	m_matrixHistory.front().Decompose(scale, m_respawnEndRot, m_respawnEndPos);
-	m_respawnEndPos += m_matrixHistory.front().Up() * (data.m_height * 3);
+	m_respawnEndPos += m_matrixHistory.front().Up() * (data.m_height * 5);
 
 	// Find the distance to the respawn point
 	float dist = Vector3::Distance(m_respawnEndPos, m_pos);
@@ -727,6 +732,7 @@ void Player::MovePlayerToTrack()
 		m_rot = Matrix::CreateFromQuaternion(m_respawnEndRot);
 		UpdateWorld();
 		m_respawning = false;
+		StopGlide();
 		m_move->SetEnabled(true);
 		m_animationMesh->SwitchModelSet("default");
 		UseMagnet(true);
@@ -734,7 +740,7 @@ void Player::MovePlayerToTrack()
 	}
 
 	m_pos = Vector3::Lerp(m_respawnStartPos, m_respawnEndPos, m_elapsedRespawnTime / m_totalRespawnTime);
-	Quaternion quatRot = Quaternion::Lerp(m_respawnStartRot, m_respawnEndRot, m_elapsedRespawnTime / m_totalRespawnTime);
+	Quaternion quatRot = Quaternion::Slerp(m_respawnStartRot, m_respawnEndRot, m_elapsedRespawnTime / m_totalRespawnTime);
 	m_rot = Matrix::CreateFromQuaternion(quatRot);
 	UpdateWorld();
 }

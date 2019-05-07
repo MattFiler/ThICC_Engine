@@ -113,6 +113,7 @@ void ControlledMovement::ProcessInputFlags()
 {
 	if (!m_enabled)
 	{
+		m_animMesh->SetRotOffset(m_physModel->GetWorld().Forward());
 		return;
 	}
 
