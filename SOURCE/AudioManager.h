@@ -22,6 +22,7 @@ public:
 
 	void Play(const std::string& _tag);
 	void Stop(const std::string& _tag);
+	void StopAll();
 	void Pause(const std::string& _tag);
 	Sound* GetSound(const std::string& _tag);
 

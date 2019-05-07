@@ -409,17 +409,15 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 	Locator::getAIScheduler()->Update();
 
-	//if (Locator::getRM()->attract_state)
-	//{
-	//	state = PLAY;
-
-	//	//timeout -= Locator::getGSD()->m_dt;
-	//	//if (timeout <= Locator::getGSD()->m_dt + 0.1) {
-	//	//	Locator::getRM()->attract_state = false;
-	//	//	Locator::getRM()->attract_state = 1;
-	//	//	m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
-	//	//}
-	//}
+	if (Locator::getRM()->attract_state)
+	{
+		if (m_keybinds.keyReleased("Activate")) {
+			Locator::getRM()->attract_state = false;
+			Locator::getAudio()->StopAll();
+			m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
+			return;
+		}
+	}
 
 	switch (state)
 	{
