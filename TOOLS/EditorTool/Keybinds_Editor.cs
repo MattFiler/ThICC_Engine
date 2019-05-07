@@ -182,14 +182,8 @@ namespace EditorTool
                 return;
             }
 
-            //Remove old json config if editing
-            if (edit_mode)
-            {
-                maps_json_config.Remove(map_json_key);
-            }
-
             //Add to config
-            maps_json_config[keybind_name] = JObject.Parse("{}");
+            if (!edit_mode) { maps_json_config[keybind_name] = JObject.Parse("{}"); } 
             maps_json_config[keybind_name]["Keyboard"] = keyboardInput.SelectedItem.ToString();
             maps_json_config[keybind_name]["Keyboard_Code"] = keyboardToKeyCode(keyboardInput.SelectedItem.ToString());
             maps_json_config[keybind_name]["Arcade"] = arcadeInput.SelectedItem.ToString();

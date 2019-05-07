@@ -40,6 +40,8 @@ GameScene::~GameScene()
 		delete m_cam[i];
 		m_cam[i] = nullptr;
 	}
+	delete m_itemPools;
+	m_itemPools = nullptr;
 }
 
 /* Load inexpensive things and create the objects for expensive things we will populate when required */
@@ -288,7 +290,7 @@ void GameScene::create3DObjects()
 	//DebugText::print("Height: " + std::to_string(Locator::getRD()->m_window_height));
 
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 1; i++) {
 
 		////Create a player and position on track
 		//using std::placeholders::_1;

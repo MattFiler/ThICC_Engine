@@ -504,11 +504,11 @@ void MenuScene::CharacterSelect()
 	for (size_t i = 0; i < m_maxPlayers; ++i)
 	{
 
-		if (m_keybinds.keyReleased("Right", i) && players_joined[i])
+		if (m_keybinds.keyReleased("Menu Right", i) || m_keybinds.keyReleased("Right", i) && players_joined[i])
 		{
 			CheckAvailabilty(i, m_characterHighlightInt[i], 1, num_of_charcters, 0, m_characterHighlightInt);
 		}
-		else if (m_keybinds.keyReleased("Left", i) && players_joined[i])
+		else if (m_keybinds.keyReleased("Menu Left", i) || m_keybinds.keyReleased("Left", i) && players_joined[i])
 		{
 			CheckAvailabilty(i, m_characterHighlightInt[i], -1, -1, num_of_charcters - 1, m_characterHighlightInt);
 		}

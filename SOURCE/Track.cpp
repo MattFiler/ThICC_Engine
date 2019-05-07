@@ -63,6 +63,15 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));
 	}
+	if (!m_track_data_j["map_spawn_rotations"].is_null()) {
+		for (json::iterator it = m_track_data_j["map_spawn_rotations"].begin(); it != m_track_data_j["map_spawn_rotations"].end(); ++it) {
+			map_spawn_rotations.push_back(blender_vector.ConvertAngle(Vector3((float)it.value()[0], (float)it.value()[1], (float)it.value()[2])));
+		}
+	}
+	else
+	{
+		DebugText::print(" >>> This map uses an outdated config! Please re-export for new camera configurations!! <<< ");
+	}
 	
 	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
 		Vector3 box_pos = blender_vector.ConvertPosition(Vector3(it.value()["pos"][0], it.value()["pos"][1], it.value()["pos"][2]) * m_track_data.scale);
