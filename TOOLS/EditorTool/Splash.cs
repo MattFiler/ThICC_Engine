@@ -270,11 +270,8 @@ namespace EditorTool
 
                 //Copy all
                 copyAssets(path_mod + output + "/DATA/", path_mod);
-                if (File.Exists(path_mod + output + "/Mario Kart Launcher.exe"))
-                {
-                    File.Delete(path_mod + output + "/Mario Kart Launcher.exe");
-                }
-                File.Copy(path_mod + "DATA/MarioKartLauncher.exe", path_mod + output + "/Mario Kart Launcher.exe");
+                CopyToOutput(path_mod, output, "MarioKartLauncher.exe", "Mario Kart Launcher.exe");
+                CopyToOutput(path_mod, output, "vc_redist.x64.exe", "vc_redist.x64.exe");
                 return 1;
             }
             return -1;
@@ -286,17 +283,24 @@ namespace EditorTool
             File.WriteAllText(Directory.GetCurrentDirectory() + "/SOURCE/ThICC_Engine.vcxproj.user", "<?xml version=\"1.0\" encoding=\"utf-8\"?><Project ToolsVersion=\"15.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\"><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments><LocalDebuggerWorkingDirectory>$(SolutionDir)..\\\\BUILDS\\$(Configuration)\\\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\"><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments><LocalDebuggerWorkingDirectory>$(SolutionDir)..\\\\BUILDS\\$(Configuration)\\\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup><PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Arcade|Win32'\"><LocalDebuggerCommandArguments>Launcher_Auth</LocalDebuggerCommandArguments><LocalDebuggerWorkingDirectory>$(SolutionDir)..\\\\BUILDS\\$(Configuration)\\\\</LocalDebuggerWorkingDirectory><DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor></PropertyGroup></Project>");
         }
 
+        /* Copy to output */
+        private void CopyToOutput(string path_mod, string output, string input, string copyto)
+        {
+            if (File.Exists(path_mod + output + "/" + copyto))
+            {
+                File.Delete(path_mod + output + "/" + copyto);
+            }
+            File.Copy(path_mod + "DATA/" + input, path_mod + output + "/" + copyto);
+        }
+
+
+
 
         private void debug_btn_Click(object sender, EventArgs e)
         {
             Model_Importer importer = new Model_Importer(ModelType.PROP);
             importer.Show();
         }
-
-
-
-
-
 
         private void Splash_Load(object sender, EventArgs e)
         {
