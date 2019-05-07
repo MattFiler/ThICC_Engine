@@ -79,6 +79,8 @@ public:
 	void SetMaxSpeed(float _maxSpeed) { m_maxSpeed = _maxSpeed; };
 	float GetMaxSpeed() { return m_maxSpeed; };
 
+	virtual void Reset() override;
+
 	const PhysModelData& data = m_physData;
 
 	bool debug_print = false;

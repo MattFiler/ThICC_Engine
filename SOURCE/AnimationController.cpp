@@ -41,6 +41,22 @@ void AnimationController::SwitchModelSet(std::string _setName)
 	}
 }
 
+void AnimationController::ResetScale()
+{
+	m_startScale = Vector3::One;
+	m_targetScale = Vector3::One;
+	m_scaleOffset = Vector3::One;
+	m_scaleTimeElapsed = 0;
+}
+
+void AnimationController::ResetRotation()
+{
+	while(!m_rotAnimPoints.empty())
+	{
+		m_rotAnimPoints.pop();
+	}
+}
+
 
 void AnimationController::AddModel(std::string _name, SDKMeshGO3D* _model)
 {
@@ -171,7 +187,7 @@ void AnimationController::UpdateWorld(Matrix& _newWorld)
 	{
 		rotOffset = _newWorld.Forward();
 	}
-	m_world = Matrix::CreateScale(m_scale) * Matrix::CreateWorld(m_pos, rotOffset, m_world.Up());
+	m_world = Matrix::CreateScale(m_scale * m_scaleOffset) * Matrix::CreateWorld(m_pos, rotOffset, m_world.Up());
 	m_world.Decompose(m_scale, m_quatRot, m_pos);
 	m_rot = Matrix::CreateFromQuaternion(m_quatRot);
 	m_pos += m_posOffset;

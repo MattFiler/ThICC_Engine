@@ -30,28 +30,28 @@
       "player_collision": {
         "velocity_multiplier": 0.0,
         "jump": {
-          "height": 1.5,
-          "duration": 1.0
+          "height": 3.0,
+          "duration": 0.7
         },
         "flip": {
           "revolutions": 1.0,
-          "duration": 0.8
+          "duration": 0.5
         },
         "spin": {
           "revolutions": 0.0,
           "duration": 0.0
         },
-        "vertical_pos_offset": 4.0
+        "vertical_pos_offset": 0.0
       }
     },
-    "pool_size": 30,
+    "pool_size": 0,
     "implemented": true
   },
   "RED_SHELL": {
     "ui_sprite": "ITEM_RED_SHELL",
     "model": "ITEM_RED_SHELL",
     "probabilities": {
-      "place_1": 7.5,
+      "place_1": 8,
       "place_2": 25,
       "place_3": 20,
       "place_4": 15,
@@ -65,30 +65,30 @@
       "place_12": 0
     },
     "info": {
-      "lifetime": 300,
-      "player_immunity_time": 2,
-      "use_pos_offset": 1,
-      "max_speed": 90,
-      "move_toward_distance_squared": 2500,
+      "lifetime": 300.0,
+      "player_immunity_time": 2.0,
+      "use_pos_offset": 1.0,
+      "max_speed": 90.0,
+      "move_toward_distance_squared": 2500.0,
       "ai": {
-        "move_speed": 60,
-        "turn_speed": 120
+        "move_speed": 60.0,
+        "turn_speed": 120.0
       },
       "player_collision": {
-        "velocity_multiplier": 0,
+        "velocity_multiplier": 0.0,
         "jump": {
-          "height": 1.5,
-          "duration": 1
+          "height": 3.0,
+          "duration": 0.7
         },
         "flip": {
-          "revolutions": 1,
-          "duration": 0.8
+          "revolutions": 1.0,
+          "duration": 0.5
         },
         "spin": {
-          "revolutions": 0,
-          "duration": 0
+          "revolutions": 0.0,
+          "duration": 0.0
         },
-        "vertical_pos_offset": 4
+        "vertical_pos_offset": 0.0
       }
     },
     "pool_size": 30,
@@ -145,7 +145,7 @@
     "ui_sprite": "ITEM_FAKEBOX",
     "model": "ITEM_FAKEBOX",
     "probabilities": {
-      "place_1": 17.5,
+      "place_1": 18,
       "place_2": 10,
       "place_3": 5,
       "place_4": 2.5,
@@ -159,30 +159,30 @@
       "place_12": 0
     },
     "info": {
-      "lifetime": 300,
+      "lifetime": 300.0,
       "player_immunity_time": 0.5,
       "throw": {
-        "horizontal_pos_offset": 2,
-        "vertical_pos_offset": 3,
-        "forward_force": 100,
-        "upward_force": 1,
-        "max_gravity": 500
+        "horizontal_pos_offset": 2.0,
+        "vertical_pos_offset": 3.0,
+        "forward_force": 100.0,
+        "upward_force": 1.0,
+        "max_gravity": 500.0
       },
       "player_collision": {
-        "velocity_multiplier": 0,
+        "velocity_multiplier": 0.0,
         "jump": {
-          "height": 1.5,
-          "duration": 1
+          "height": 3.0,
+          "duration": 0.7
         },
         "flip": {
-          "revolutions": 1,
-          "duration": 0.8
+          "revolutions": 1.0,
+          "duration": 0.5
         },
         "spin": {
-          "revolutions": 0,
-          "duration": 0
+          "revolutions": 0.0,
+          "duration": 0.0
         },
-        "vertical_pos_offset": 4
+        "vertical_pos_offset": 0.0
       }
     },
     "pool_size": 30,
@@ -269,18 +269,18 @@
       "player_collision": {
         "velocity_multiplier": 0.0,
         "jump": {
-          "height": 1.5,
-          "duration": 1.0
+          "height": 1.0,
+          "duration": 0.7
         },
         "flip": {
           "revolutions": 1.0,
           "duration": 0.8
         },
         "spin": {
-          "revolutions": 0.0,
-          "duration": 0.0
+          "revolutions": 1.0,
+          "duration": 0.5
         },
-        "vertical_pos_offset": 4.0
+        "vertical_pos_offset": 0.0
       }
     },
     "pool_size": 30,

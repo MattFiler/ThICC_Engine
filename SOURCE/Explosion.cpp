@@ -74,7 +74,6 @@ void Explosion::Tick()
 
 		if (m_displayedMesh->FinishedScale())
 		{
-			m_displayedMesh->ResetScale();
 			m_shouldDestroy = true;
 		}
 	}

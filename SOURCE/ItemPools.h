@@ -1,6 +1,6 @@
 #pragma once
 #include "ItemMesh.h"
-#include <stack>
+#include <queue>
 #include <map>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -26,10 +26,10 @@ private:
 	struct ItemPool
 	{
 		int m_size = 0;
-		std::stack<ItemMesh*> m_itemMeshes;
+		std::queue<ItemMesh*> m_itemMeshes;
 	};
 
 	std::map<ItemType, ItemPool> m_itemPoolMap;
-	std::stack<AnimationController*> m_explosions;
+	std::queue<AnimationController*> m_explosions;
 };
 
