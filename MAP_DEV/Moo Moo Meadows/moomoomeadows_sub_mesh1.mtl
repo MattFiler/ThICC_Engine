@@ -1,8 +1,20 @@
 # Blender MTL File: 'moomoomeadows_sub_mesh1.blend'
-# Material Count: 18
+# Material Count: 38
+
+newmtl AgbForest_FakeLeaf
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd FakeLeaf_Alb.png
+map_d  FakeLeaf_Alb.png
 
 newmtl PanelFlame
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -10,119 +22,11 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\PanelFlame_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\PanelFlame_Alb.png
+map_Kd PanelFlame_Alb.png
+map_d  PanelFlame_Alb.png
 
 newmtl di_TreeA_Leaf
-Ns 92.156863
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\di_Tree_Leaf_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\di_Tree_Leaf_Alb.png
-
-newmtl ef_dashboard
-Ns 92.156863
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MARIOKARTSTADIUM\ef_dashboard02_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MARIOKARTSTADIUM\\ef_dashboard02_Alb.png
-
-newmtl ef_glideboard
-Ns 92.156863
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MARIOKARTSTADIUM\ef_glideboard02_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MARIOKARTSTADIUM\\ef_glideboard02_Alb.png
-
-newmtl mm_Fence
-Ns 92.156863
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\mm_saku_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\mm_saku_Alb.png
-
-newmtl mm_Lawn01
-Ns 92.156863
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\mm_grass_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\mm_grass_Alb.png
-
-newmtl mm_Lawn02
-Ns 92.156863
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\mm_grass_Alp.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\mm_grass_Alp.png
-
-newmtl mm_Tree_Leaf
-Ns 92.156863
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\di_Tree_Leaf_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\di_Tree_Leaf_Alb.png
-
-newmtl mm_Tree_Leaf2
-Ns 92.156863
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\di_Tree_Leaf_2_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\di_Tree_Leaf_2_Alb.png
-
-newmtl mm_Tree_Leaf3
-Ns 92.156863
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\di_Tree_Leaf_2_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\di_Tree_Leaf_2_Alb.png
-
-newmtl mm_Tree_Leaf4
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -131,10 +35,286 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd di_Tree_Leaf_Alb.png
-map_d di_Tree_Leaf_Alb.png
+map_d  di_Tree_Leaf_Alb.png
+
+newmtl di_TreeA_Shaft
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd di_TreeShaft_Alb.png
+map_d  di_TreeShaft_Alb.png
+
+newmtl ef_dashboard
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_dashboard02_Alb.png
+map_d  ef_dashboard02_Alb.png
+
+newmtl ef_glideboard
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ef_glideboard02_Alb.png
+map_d  ef_glideboard02_Alb.png
+
+newmtl mm_Fence
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_saku_Alb.png
+map_d  mm_saku_Alb.png
+
+newmtl mm_Lawn01
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_grass_Alb.png
+map_d  mm_grass_Alb.png
+
+newmtl mm_Lawn02
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_grass_Alp.png
+map_d  mm_grass_Alp.png
+
+newmtl mm_PlantA
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd PlantA_01_Alb.png
+map_d  PlantA_01_Alb.png
+
+newmtl mm_PlantB
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd kusa_01_Alb.png
+map_d  kusa_01_Alb.png
+
+newmtl mm_StartCloth
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_StartCloth_Alb.png
+map_d  mm_StartCloth_Alb.png
+
+newmtl mm_StartGrad
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_StartGrid_Alb.png
+map_d  mm_StartGrid_Alb.png
+
+newmtl mm_Tractor
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd MooMoo_Tractor_Alb.png
+map_d  MooMoo_Tractor_Alb.png
+
+newmtl mm_Tree_Leaf
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd di_Tree_Leaf_Alb.png
+map_d  di_Tree_Leaf_Alb.png
+
+newmtl mm_Tree_Leaf2
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd di_Tree_Leaf_2_Alb.png
+map_d  di_Tree_Leaf_2_Alb.png
+
+newmtl mm_Tree_Leaf3
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd di_Tree_Leaf_2_Alb.png
+map_d  di_Tree_Leaf_2_Alb.png
+
+newmtl mm_Tree_Leaf4
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd di_Tree_Leaf_Alb.png
+map_d  di_Tree_Leaf_Alb.png
+
+newmtl mm_WoodEnd
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_WoodEnd00_alb.png
+map_d  mm_WoodEnd00_alb.png
+
+newmtl mm_Woodbark
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_WoodBark01_alb.png
+map_d  mm_WoodBark01_alb.png
+
+newmtl mm_arrow01
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_arrow01_Alb.png
+map_d  mm_arrow01_Alb.png
+
+newmtl mm_arrow02
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_arrow02_Alb.png
+map_d  mm_arrow02_Alb.png
+
+newmtl mm_farm
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_farm_Alb.png
+map_d  mm_farm_Alb.png
+
+newmtl mm_flowers
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd ct_ry_flowers01_Alb.png
+map_d  ct_ry_flowers01_Alb.png
+
+newmtl mm_grass_A
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_grass_A_Alb.png
+map_d  mm_grass_A_Alb.png
+
+newmtl mm_grass_B
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_grass_B_Alb.png
+map_d  mm_grass_B_Alb.png
 
 newmtl mm_jumpboard2
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -142,11 +322,11 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\bd_jumpboard2_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\bd_jumpboard2_Alb.png
+map_Kd bd_jumpboard2_Alb.png
+map_d  bd_jumpboard2_Alb.png
 
 newmtl mm_kanban
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -154,11 +334,23 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\mm_kanban_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\mm_kanban_Alb.png
+map_Kd mm_kanban_Alb.png
+map_d  mm_kanban_Alb.png
+
+newmtl mm_kanban1
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_kanban01_Alb.png
+map_d  mm_kanban01_Alb.png
 
 newmtl mm_kanbantree
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -166,11 +358,23 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\mm_kanbantree_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\mm_kanbantree_Alb.png
+map_Kd mm_kanbantree_Alb.png
+map_d  mm_kanbantree_Alb.png
+
+newmtl mm_redbrick
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_redbrick_Alb.png
+map_d  mm_redbrick_Alb.png
 
 newmtl mm_road
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -178,11 +382,11 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\wiimm_hm_dirt02_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\wiimm_hm_dirt02_Alb.png
+map_Kd wiimm_hm_dirt02_Alb.png
+map_d  wiimm_hm_dirt02_Alb.png
 
 newmtl mm_rock
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -190,11 +394,11 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\mm_rock_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\mm_rock_Alb.png
+map_Kd mm_rock_Alb.png
+map_d  mm_rock_Alb.png
 
 newmtl mm_startLine
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -202,11 +406,35 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\mm_StartLine_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\mm_StartLine_Alb.png
+map_Kd mm_StartLine_Alb.png
+map_d  mm_StartLine_Alb.png
+
+newmtl mm_startLine2
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_StartLine2_Alb.png
+map_d  mm_StartLine2_Alb.png
+
+newmtl mm_wall_pole.002
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_wall_pole_Alb.png
+map_d  mm_wall_pole_Alb.png
 
 newmtl mm_wood03
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -214,5 +442,17 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd D:\GEP-2019-WorkingAI\DATA\MODELS\MOOMOOMEADOWS\mm_wood3_Alb.png
-map_d D:\\GEP-2019-WorkingAI\\DATA\\MODELS\\MOOMOOMEADOWS\\mm_wood3_Alb.png
+map_Kd mm_wood3_Alb.png
+map_d  mm_wood3_Alb.png
+
+newmtl mm_wood05
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd mm_wood05_Alb.png
+map_d  mm_wood05_Alb.png

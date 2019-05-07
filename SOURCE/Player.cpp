@@ -84,9 +84,9 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_model_config_vehicle << i;
 
 	m_animationMesh = std::make_unique<AnimationController>();
-	m_animationMesh->AddModel("vehicle", _vehicle->model);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
+	m_animationMesh->AddModel("vehicle", _vehicle->model);
 	m_animationMesh->AddModel("character", _character->model);
 	m_animationMesh->AddModel("lakitu", Locator::getGOS()->common_model_config["referee"]);
 	m_animationMesh->AddModel("glider", Locator::getGOS()->common_model_config["glider"]);
