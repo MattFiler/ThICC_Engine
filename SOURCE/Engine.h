@@ -96,9 +96,7 @@ private:
 	//Game timer
 	DX::StepTimer m_timer;
 
-	//Core resources (these can probably be cut back a bit, since we only really use them for the tonemap now)
-	std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
-	std::unique_ptr<DirectX::DescriptorHeap> m_renderDescriptors;
+	std::unique_ptr<DirectX::DescriptorHeap> m_renderDescriptors; //This needs looking into - does this ever get used anymore ?!?!?
 
 	int tonemapIndex = -1;
 

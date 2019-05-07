@@ -1,0 +1,60 @@
+{
+  "asset_name": "CHARACTER_BABY_MARIO",
+  "asset_type": "Models",
+  "model_type": 2,
+  "visible": true,
+  "start_x": 0,
+  "start_y": 0,
+  "start_z": 0,
+  "modelscale": 1.0,
+  "rot_x": 0,
+  "rot_y": 0,
+  "rot_z": 0,
+  "segment_size": 10,
+  "in_use_in": [
+    "Character"
+  ],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      0.653687,
+      1.428426,
+      0.480716
+    ],
+    "front_top_right": [
+      -0.653687,
+      1.428426,
+      0.480716
+    ],
+    "front_bottom_right": [
+      -0.653687,
+      0,
+      0.480716
+    ],
+    "front_bottom_left": [
+      0.653687,
+      0,
+      0.480716
+    ],
+    "back_top_left": [
+      0.653687,
+      1.428426,
+      -0.494115
+    ],
+    "back_top_right": [
+      -0.653687,
+      1.428426,
+      -0.494115
+    ],
+    "back_bottom_right": [
+      -0.653687,
+      0,
+      -0.494115
+    ],
+    "back_bottom_left": [
+      0.653687,
+      0,
+      -0.494115
+    ]
+  }
+}

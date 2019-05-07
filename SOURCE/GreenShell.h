@@ -25,5 +25,10 @@ private:
 	float m_spinRev = 0;
 	float m_spinDuration = 0;
 
+	int m_bounceCount = 0;
+	int m_maxBounceCount = 0;
+	int m_frameCount = 0;
+	int m_frameDelay = 0;
+
 	ItemCollisionData m_collisionData;
 };

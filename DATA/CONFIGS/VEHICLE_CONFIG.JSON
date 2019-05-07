@@ -1,7 +1,7 @@
 {
   "MARIO WII KART": {
     "friendly_name": "KART_MK_WII",
-    "menu_sprite": "KART_STANDARD",
+    "menu_sprite": "WII_KART",
     "model": "KART_KNUCKLES",
     "audio": {}
   },

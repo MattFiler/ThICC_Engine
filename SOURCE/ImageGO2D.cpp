@@ -27,7 +27,7 @@ void ImageGO2D::Render()
 
 	//Render
 	Locator::getRD()->m_2dSpriteBatch->Draw(Locator::getRD()->m_2dResourceDescriptors->GetGpuHandle(m_resourceNum),
-		GetTextureSize(m_texture.Get()),
+		size,
 		m_pos, nullptr, m_colour, m_orientation, m_origin, m_scale);
 }
 
@@ -85,4 +85,9 @@ void ImageGO2D::InternalSpriteUpdate(string _filename) {
 void ImageGO2D::Reset()
 {
 	m_texture.Reset();
+}
+
+void ImageGO2D::SetSize(Vector2 _size) {
+	size.x = _size.x;
+	size.y = _size.y;
 }
