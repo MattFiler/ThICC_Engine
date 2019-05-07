@@ -11,6 +11,7 @@
 #include "CameraData.h"
 #include "GameStateData.h"
 #include "LocalisationManager.h"
+#include "RaceManager.h"
 #include "DebugConsole.h"
 
 #include "Game.h"
@@ -34,6 +35,8 @@ public:
 
 	// Initialization and management
 	void Initialize(HWND window, int width, int height);
+
+	float SetRectHeight(int rect_num);
 
 	// Basic game loop
 	void Tick();
@@ -91,12 +94,15 @@ private:
 	float SetViewportX(int viewport_num);
 	float SetViewportY(int viewport_num);
 
+	float SetRectWidth(int rect_num);
+
 	//Misc data banks
 	json m_game_config;
 	ItemData* m_probabilities = nullptr;
 
 	//Audio engine
 	std::unique_ptr<DirectX::AudioEngine> m_audEngine;
+	std::unique_ptr<RaceManager> m_raceManager;
 
 	//Game timer
 	DX::StepTimer m_timer;

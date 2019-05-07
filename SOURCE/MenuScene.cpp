@@ -509,6 +509,7 @@ void MenuScene::CharacterSelect()
 			{
 				players_joined[i] = true;
 				Locator::getRM()->player_amount += 1;
+				Locator::getRM()->player_amount_changed = true;
 				CheckAvailabilty(i, m_characterHighlightInt[i], 1, num_of_charcters, 0, m_characterHighlightInt);
 			}
 		}
@@ -518,6 +519,7 @@ void MenuScene::CharacterSelect()
 			{
 				players_joined[i] = false;
 				Locator::getRM()->player_amount = -1;
+				Locator::getRM()->player_amount_changed = true;
 			}
 		}
 	}

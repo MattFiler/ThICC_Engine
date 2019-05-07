@@ -35,7 +35,7 @@ GameScene::~GameScene()
 	m_3DObjects.clear();
 	delete cine_cam;
 	cine_cam = nullptr;
-	for (int i = 0; i < game_config["player_count"]; i++)
+	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
 		delete m_cam[i];
 		m_cam[i] = nullptr;
@@ -69,14 +69,14 @@ void GameScene::ExpensiveLoad() {
 	Locator::getRD()->current_cubemap_skybox = map_info->cubemap_skybox;
 
 	//Update characters
-	for (int i = 0; i < game_config["player_count"]; i++)
+	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
 		player[i]->Reload(
 			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i])
 		);
 	}
-	for (int i = game_config["player_count"]; i < m_maxPlayers; i++)
+	for (int i = Locator::getRM()->player_amount; i < m_maxPlayers; i++)
 	{
 		player[i]->Reload(
 			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
@@ -143,12 +143,12 @@ void GameScene::ExpensiveUnload() {
 	}
 
 	//Reset player positions & camera mode
-	for (int i = 0; i < game_config["player_count"]; i++) {
+	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		m_cam[i]->Reset();
 		m_cam[i]->SetType(CameraType::ORBIT);
 	}
-	for (int i = game_config["player_count"]; i < m_maxPlayers; i++) {
+	for (int i = Locator::getRM()->player_amount; i < m_maxPlayers; i++) {
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 	}
 
@@ -188,7 +188,7 @@ void GameScene::create2DObjects()
 {
 	m_pause_screen = new ImageGO2D("paused");
 
-	for (int i = 0; i < game_config["player_count"]; i++)
+	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
 		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
 		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
@@ -208,7 +208,7 @@ void GameScene::create2DObjects()
 
 
 	// player countdown text
-	for (int i = 0; i < game_config["player_count"]; i++)
+	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
 		player[i]->GetCountdown()->SetPos({
 			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 ,
@@ -245,7 +245,7 @@ void GameScene::create3DObjects()
 	DebugText::print("Height: " + std::to_string(Locator::getRD()->m_window_height));
 
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
-	for (int i = 0; i < game_config["player_count"]; i++) {
+	for (int i = 0; i < 4; i++) {
 
 		//Create a player and position on track
 		using std::placeholders::_1;
@@ -264,7 +264,7 @@ void GameScene::create3DObjects()
 	}
 
 	// Spawn in the AI
-	for (int i = game_config["player_count"]; i < m_maxPlayers; i++) {
+	for (int i = 4; i < m_maxPlayers; i++) {
 
 		//Create a player and position on track
 		using std::placeholders::_1;
@@ -369,14 +369,14 @@ void GameScene::Update(DX::StepTimer const& timer)
 			timeout -= Locator::getGSD()->m_dt;
 			cine_cam->Tick();
 			if (timeout <= Locator::getGSD()->m_dt + 0.1) {
-				for (int i = 0; i < game_config["player_count"]; ++i) {
+				for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 					m_cam[i]->Tick(); 
 				}
 			}
 		}
 		else
 		{
-			for (int i = 0; i < game_config["player_count"]; ++i) {
+			for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 				m_cam[i]->Tick();
 			}
 			state = CAM_OPEN;
@@ -392,7 +392,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		#endif
 		break;
 	case CAM_OPEN:
-		for (int i = 0; i < game_config["player_count"]; ++i) {
+		for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 			m_cam[i]->Tick();
 		}
 		cine_cam->Tick();
@@ -407,7 +407,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		if (timeout > 0)
 		{
 			timeout -= Locator::getGSD()->m_dt;
-			for (int i = 0; i < game_config["player_count"]; ++i) {
+			for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 				std::string countdown_time = std::to_string((int)std::ceil(timeout));
 				if (countdown_time == "0") {
 					countdown_time = "GO!";
@@ -429,7 +429,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		}
 		break;
 	case PLAY:
-		for (int i = 0; i < game_config["player_count"]; ++i) {
+		for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 			m_cam[i]->Tick();
 		}
 
@@ -639,7 +639,8 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		break;
 	case CAM_OPEN:
 	case COUNTDOWN:
-		for (int i = 0; i < game_config["player_count"]; ++i)
+	case PLAY:
+		for (int i = 0; i < Locator::getRM()->player_amount; ++i)
 		{
 			//Configure viewports
 			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[i]);
@@ -687,56 +688,56 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			}
 		}
 		break;
-	case PLAY:
-		Locator::getAIScheduler()->DebugRender();
-		for (int i = 0; i < game_config["player_count"]; ++i)
-		{
-			//Setup viewport
-			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[i]);
-			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[i]);
-			Locator::getRD()->m_cam = m_cam[i];
+	//case PLAY:
+	//	//Locator::getAIScheduler()->DebugRender();
+	//	for (int i = 0; i < Locator::getRM()->player_amount; ++i)
+	//	{
+	//		//Setup viewport
+	//		m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[i]);
+	//		m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[i]);
+	//		Locator::getRD()->m_cam = m_cam[i];
 
-			// Render skybox
-			Locator::getRD()->skybox->Render();
+	//		// Render skybox
+	//		Locator::getRD()->skybox->Render();
 
-			//Render 3D objects
-			for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-			{
-				if ((*it)->isVisible()) {
-					if (dynamic_cast<Track*>(*it))
-					{
-						if (GameDebugToggles::render_level) {
-							(*it)->Render();
-						}
-					}
-					#ifdef _DEBUG
-					else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
-						if (GameDebugToggles::show_debug_meshes) {
-							(*it)->Render();
-						}
-					}
-					#endif
-					else if (dynamic_cast<Explosion*>(*it))
-					{
-						(*it)->Render();
-					}
-					else
-					{
-						(*it)->Render();
-					}
-				}
-			}
+	//		//Render 3D objects
+	//		for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	//		{
+	//			if ((*it)->isVisible()) {
+	//				if (dynamic_cast<Track*>(*it))
+	//				{
+	//					if (GameDebugToggles::render_level) {
+	//						(*it)->Render();
+	//					}
+	//				}
+	//				#ifdef _DEBUG
+	//				else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+	//					if (GameDebugToggles::show_debug_meshes) {
+	//						(*it)->Render();
+	//					}
+	//				}
+	//				#endif
+	//				else if (dynamic_cast<Explosion*>(*it))
+	//				{
+	//					(*it)->Render();
+	//				}
+	//				else
+	//				{
+	//					(*it)->Render();
+	//				}
+	//			}
+	//		}
 
-			//Render items
-			for (Item* obj : m_itemModels)
-			{
-				if (obj->GetItemMesh())
-				{
-					obj->Render();
-				}
-			}
-		}
-		break;
+	//		//Render items
+	//		for (Item* obj : m_itemModels)
+	//		{
+	//			if (obj->GetItemMesh())
+	//			{
+	//				obj->Render();
+	//			}
+	//		}
+	//	}
+	//	break;
 	}
 	m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
 	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
@@ -754,7 +755,7 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 	{
 	case COUNTDOWN:
 		//Render countdown in screen centre
-		for (int i = 0; i < game_config["player_count"]; i++)
+		for (int i = 0; i < Locator::getRM()->player_amount; i++)
 		{
 			player[i]->GetCountdown()->Render();
 		}
@@ -766,7 +767,7 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			(*it)->Render();
 		}*/
 
-		for (int i = 0; i < game_config["player_count"]; i++)
+		for (int i = 0; i < Locator::getRM()->player_amount; i++)
 		{
 			if (player[i]->GetFinished())
 			{
@@ -812,12 +813,12 @@ void GameScene::SetPlayersWaypoint()
 				{
 					player[i]->SetFinished(true);
 					player[i]->GetFinishOrder()->SetText(std::to_string(player[i]->GetRanking()) + player[i]->GetOrderIndicator()[player[i]->GetRanking() - 1]);
-					if(i < game_config["player_count"])
+					if(i < Locator::getRM()->player_amount)
 						m_cam[i]->SetType(CameraType::ORBIT);
 					player[i]->setGamePad(false);
 					finished++;
 				}
-				else if (i < game_config["player_count"] && player[i]->GetLap() == 2 && !final_lap)
+				else if (i < Locator::getRM()->player_amount && player[i]->GetLap() == 2 && !final_lap)
 				{
 					Locator::getAudio()->Stop("TRACK_LOOP");
 					Locator::getAudio()->Play("FINAL_LAP_SOUND");
