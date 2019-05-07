@@ -293,10 +293,6 @@ bool Track::DoesLineIntersect(const Vector& _direction, const Vector& _startPos,
 				{
 					if (m_validCollisions[tri->GetType()] && tri->DoesLineIntersect(_direction, _startPos, _intersect, _tri, _maxAngle, _minAngle))
 					{
-						if (tri->m_type == GLIDER_TRACK)
-						{
-							bool breakme = false;
-						}
 						float dist = Vector::Distance(_startPos, _intersect);
 						if (dist < bestDist)
 						{
@@ -446,7 +442,8 @@ int Track::GetIndexAtPoint(Vector point)
 	point.y = floor(point.y / m_triSegSize);
 	point.z = floor(point.z / m_triSegSize);
 
-	return static_cast<int>((point.z * m_triGridYX) + (point.y * m_triGridX) + point.x);
+	return static_cast<int>((point.z * m_triGridYX) + 
+		(point.y * m_triGridX) + point.x);
 }
 
 /* Similar to GetIndexAtPoint but instead returns the x,y and z indicies as if it were a 3D vector 
