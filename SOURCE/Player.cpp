@@ -637,7 +637,7 @@ void Player::RespawnLogic()
 		m_posHistoryTimer += Locator::getGSD()->m_dt;
 		m_offTrackTimer = 0;
 		m_offTerrainTimer = 0;
-		if (m_posHistoryTimer >= m_posHistoryInterval)
+		if (m_posHistoryTimer >= m_posHistoryInterval && !m_respawning)
 		{
 			m_posHistoryTimer -= m_posHistoryInterval;
 			m_matrixHistory.push(m_world);
@@ -736,7 +736,11 @@ void Player::MovePlayerToTrack()
 		StopGlide();
 		m_move->SetEnabled(true);
 		m_animationMesh->SwitchModelSet("default");
+		m_gravDirection = m_world.Down();
 		UseMagnet(true);
+		m_vel = Vector::Zero;
+		m_gravVel = Vector::Zero;
+		m_velTotal = Vector::Zero;
 		return;
 	}
 
