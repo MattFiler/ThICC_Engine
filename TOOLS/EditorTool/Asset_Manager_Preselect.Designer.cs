@@ -71,13 +71,13 @@
             // 
             // openItemManager
             // 
-            this.openItemManager.Enabled = false;
             this.openItemManager.Location = new System.Drawing.Point(12, 160);
             this.openItemManager.Name = "openItemManager";
             this.openItemManager.Size = new System.Drawing.Size(270, 31);
             this.openItemManager.TabIndex = 11;
             this.openItemManager.Text = "In-Game Items";
             this.openItemManager.UseVisualStyleBackColor = true;
+            this.openItemManager.Click += new System.EventHandler(this.openItemManager_Click);
             // 
             // openSoundManager
             // 

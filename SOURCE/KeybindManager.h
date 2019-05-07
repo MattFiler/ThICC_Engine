@@ -238,6 +238,7 @@ private:
 		if (config[this_keybind]["Gamepad"] == "Right Stick Right") { if (m_ID->m_gamepadButtonTracker[i].rightStickRight == button_state) { return true; } }
 		if (config[this_keybind]["Gamepad"] == "Left Trigger") { if (m_ID->m_gamepadButtonTracker[i].leftTrigger == button_state) { return true; } }
 		if (config[this_keybind]["Gamepad"] == "Right Trigger") { if (m_ID->m_gamepadButtonTracker[i].rightTrigger == button_state) { return true; } }
+		return false;
 	}
 
 	static ThICC_InputData* m_ID;

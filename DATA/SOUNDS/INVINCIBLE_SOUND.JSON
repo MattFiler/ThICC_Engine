@@ -5,5 +5,7 @@
   "volume": 1,
   "pitch": 0,
   "pan": 0,
-  "in_use_in": []
+  "in_use_in": [
+    "Items"
+  ]
 }
