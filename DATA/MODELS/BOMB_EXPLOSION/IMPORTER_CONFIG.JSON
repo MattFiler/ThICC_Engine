@@ -2,7 +2,7 @@
   "Material.001": {
     "newmtl": "Material.001",
     "Ns": "0.000000",
-    "Ka": "1.000000 1.000000 1.000000",
+    "Ka": "0.000000 0.000000 0.000000",
     "Kd": "0.000000 0.000000 0.000000",
     "Ks": "0.000000 0.000000 0.000000",
     "Ke": "0.000000 0.000000 0.000000",
@@ -10,21 +10,29 @@
     "d": "1.000000",
     "illum": "2",
     "map_Kd": "Explosion.png",
-    "Tr": "0.000000",
+    "Tr": "0.300000",
     "map_Ks": "ItemTogezoBomb_Spm.png",
     "map_Kn": "",
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
+    "map_RMA": "Material.001_occlusionRoughnessMetallic.png",
+    "map_occlusionRoughnessMetallic": "Material.001_occlusionRoughnessMetallic.png",
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "7": false,
+      "5": false,
+      "6": false
     },
     "ThICC_INDEX": 0,
-    "ThICC_METALLIC": false
+    "ThICC_METALLIC": false,
+    "ThICC_ANIMATION": [
+      "Explosion.png"
+    ],
+    "ThICC_ANIMATION_ENABLED": false,
+    "ThICC_ANIMATION_TIME": 0.0
   }
 }
