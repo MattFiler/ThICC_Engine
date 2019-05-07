@@ -19,7 +19,7 @@ ItemPools::ItemPools()
 		}
 
 		std::string itemName = Locator::getItemData()->GetItemModelName(type);
-		if (itemName == "DEFAULT ITEM")
+		if (itemName == "DEFAULT_ITEM")
 		{
 			continue;
 		}
@@ -59,6 +59,7 @@ ItemMesh* ItemPools::GetItemMesh(ItemType _type)
 	}
 	else
 	{
+		DebugText::print("Not enough " + Locator::getItemData()->GetItemModelName(_type) + " meshes in pool. Loading new mesh:");
 		itemMesh = CreateItemMesh(_type);
 	}
 	return itemMesh;

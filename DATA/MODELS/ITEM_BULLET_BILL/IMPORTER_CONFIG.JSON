@@ -1,41 +1,44 @@
 {
-  "Material.003": {
-    "newmtl": "Material.003",
-    "Ns": "96.078431",
+  "Material.001": {
+    "newmtl": "Material.001",
+    "Ns": "92.156863",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "0.640000 0.640000 0.640000",
     "Ks": "0.500000 0.500000 0.500000",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "1.000000",
+    "d": "0.000000",
     "illum": "2",
     "map_Kd": "ItemKiller_Alb.png",
+    "map_Ke": "ItemKiller_emm.png",
     "map_Ks": "ItemKiller_spm.png",
     "map_Kn": "ItemKiller_nrm.png",
     "norm": "ItemKiller_nrm.png",
-    "map_Ke": "ItemKiller_emm.png",
-    "map_emissive": "ItemKiller_emm.png",
     "Tr": "0.000000",
+    "map_emissive": "",
     "map_RMA": "",
     "map_occlusionRoughnessMetallic": "",
+    "ThICC_INDEX": 0,
+    "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": false
-    },
-    "ThICC_INDEX": 0,
-    "ThICC_METALLIC": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
+    }
   },
-  "Material.004": {
-    "newmtl": "Material.004",
-    "Ns": "96.078431",
-    "Ka": "1.000000 1.000000 1.000000",
-    "Kd": "0.640000 0.640000 0.640000",
-    "Ks": "0.500000 0.500000 0.500000",
+  "Material.002": {
+    "newmtl": "Material.002",
+    "Ns": "92.000000",
+    "Ka": "0.992157 0.623529 0.258824",
+    "Kd": "0.639216 0.639216 0.639216",
+    "Ks": "0.501961 0.501961 0.501961",
     "Ke": "0.000000 0.000000 0.000000",
     "Ni": "1.000000",
-    "d": "1.000000",
+    "d": "0.000000",
     "illum": "2",
     "map_Kd": "itemkillerjet_alb.png",
     "Tr": "0.000000",
@@ -44,15 +47,23 @@
     "norm": "",
     "map_Ke": "",
     "map_emissive": "",
-    "map_RMA": "",
-    "map_occlusionRoughnessMetallic": "",
+    "map_RMA": "Material.002_occlusionRoughnessMetallic.png",
+    "map_occlusionRoughnessMetallic": "Material.002_occlusionRoughnessMetallic.png",
+    "ThICC_INDEX": 1,
+    "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
       "0": false,
       "1": false,
       "2": false,
-      "3": false
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
     },
-    "ThICC_INDEX": 1,
-    "ThICC_METALLIC": false
+    "ThICC_ANIMATION": [
+      "itemkillerjet_alb.png"
+    ],
+    "ThICC_ANIMATION_ENABLED": false,
+    "ThICC_ANIMATION_TIME": 0.0
   }
 }

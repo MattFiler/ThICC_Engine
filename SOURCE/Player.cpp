@@ -115,8 +115,9 @@ void Player::SetActiveItem(ItemType _item) {
 	}
 	else
 	{
-		//We should never get here
+		//We should never often get here
 		DebugText::print("PLAYER TRIED TO USE AN ITEM THEY DON'T HAVE - THIS SHOULD NEVER BE REQUESTED!");
+		DebugText::print("UNLESS THEY'RE MAKING A TRIPLE ITEM");
 	}
 };
 
