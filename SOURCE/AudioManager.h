@@ -5,6 +5,8 @@
 #include "GameFilepaths.h"
 
 #include <Audio.h>
+#include <json.hpp>
+using json = nlohmann::json;
 
 class AudioManager
 {
@@ -28,6 +30,8 @@ private:
 	std::unique_ptr<DirectX::AudioEngine> m_audEngine;
 
 	GameFilepaths m_filepaths;
+	json m_sound_configs;
+	json m_sound_info;
 
 	// all the sounds
 	std::vector<Sound*> m_Sounds;
