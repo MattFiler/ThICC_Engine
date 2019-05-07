@@ -67,6 +67,8 @@ ItemMesh* ItemPools::GetItemMesh(ItemType _type)
 
 void ItemPools::AddItemMesh(ItemType _type, ItemMesh* _mesh)
 {
+	_mesh->m_displayedMesh->ResetRotation();
+	_mesh->m_displayedMesh->ResetScale();
 	m_itemPoolMap[_type].m_itemMeshes.push(_mesh);
 }
 
@@ -89,6 +91,8 @@ AnimationController * ItemPools::GetExplosion()
 
 void ItemPools::AddExplosion(AnimationController * _explosion)
 {
+	_explosion->ResetRotation();
+	_explosion->ResetScale();
 	m_explosions.push(_explosion);
 }
 

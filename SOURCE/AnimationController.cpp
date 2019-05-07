@@ -49,6 +49,14 @@ void AnimationController::ResetScale()
 	m_scaleTimeElapsed = 0;
 }
 
+void AnimationController::ResetRotation()
+{
+	while(!m_rotAnimPoints.empty())
+	{
+		m_rotAnimPoints.pop();
+	}
+}
+
 
 void AnimationController::AddModel(std::string _name, SDKMeshGO3D* _model)
 {

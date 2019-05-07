@@ -39,7 +39,7 @@ public:
 
 	bool FinishedScale() { return m_scaleTimeElapsed >= m_timeForScale; };
 	void ResetScale();
-	void ResetRotation() { m_rotOffset = Vector3::Zero; };
+	void ResetRotation();
 	enum direction
 	{
 		FORWARD,

@@ -74,9 +74,6 @@ void Explosion::Tick()
 
 		if (m_displayedMesh->FinishedScale())
 		{
-			m_displayedMesh->ResetScale();
-			m_scale = m_growthData.m_shrinkScale;
-			UpdateWorld();
 			m_shouldDestroy = true;
 		}
 	}
