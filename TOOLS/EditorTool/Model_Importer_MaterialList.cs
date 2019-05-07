@@ -171,7 +171,7 @@ namespace EditorTool
             {
                 if (File.Exists(importer_common.fileName(importer_file.ENGINE_MESH)))
                 {
-                    File.Delete(importer_common.fileName(importer_file.ENGINE_MESH));
+                    try { File.Delete(importer_common.fileName(importer_file.ENGINE_MESH)); } catch { }
                 }
             }
 
