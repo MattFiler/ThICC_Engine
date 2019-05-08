@@ -88,8 +88,10 @@ private:
 	XMVECTORF32 inactive_colour = Colors::LightGray;
 
 	//Timing
-	float m_timeout = 5.0f;
+	float m_timeout = 3.0f;
 	float m_timer = 0.0f;
+	float m_idle_timer = 0.0f;
+	float m_idle_timeout = 30.0f;
 
 	//Logo
 	ImageGO2D* m_logo = nullptr;

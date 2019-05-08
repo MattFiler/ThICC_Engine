@@ -47,6 +47,7 @@ bool MenuScene::Load()
 void MenuScene::ExpensiveLoad() {
 	m_menu_state = menu_states::SPLASH;
 	m_timer = 0.0f;
+	m_idle_timer = 0.0f;
 	m_keybinds.Reset();
 	highlighted_cup = 0;
 	highlighted_map = 0;
@@ -276,99 +277,100 @@ void MenuScene::Update(DX::StepTimer const& timer)
 	}
 #endif
 
-	switch (m_menu_state) {
-	case menu_states::SPLASH:
-		//Animate logo over time
-		m_logo->SetScale(Vector2(0.3 + (m_timer / 30), 0.3 + (m_timer / 30)));
-		m_timer += (float)timer.GetElapsedSeconds();
-		if (m_timer > m_timeout) {
-
-#ifndef _DEBUG
 #ifdef _ARCADE
-			Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0]; //We only support P1 choices atm!
-			Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
-			Locator::getRM()->player_amount = 1;
-			Locator::getRM()->is_cup = false;
-			int index = 0;
-			for (MapInfo* a_map : Locator::getGOS()->map_instances) {
-				//Only include maps from this cup
-				if (a_map->is_arcade_exclusive) {
-					m_scene_manager->setCurrentScene(Scenes::GAMESCENE + index);
-					return;
-				}
-				index++;
-			}
-#else
-			Locator::getRM()->attract_state = true;
-			Locator::getRM()->player_amount = 1;
-			int index;
-			for (MapInfo* a_map : Locator::getGOS()->map_instances) {
-				//Only include maps from this cup
-				if (a_map->name == "Low-Poly Circuit") {
-					index = a_map->scene_index;
-				}
-			}
+	//Arcade loads straight to an arcade map
+	Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0];=
+	Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
+	Locator::getRM()->player_amount = 1;
+	Locator::getRM()->is_cup = false;
+	int index = 0;
+	for (MapInfo* a_map : Locator::getGOS()->map_instances) {
+		if (a_map->is_arcade_exclusive) {
 			m_scene_manager->setCurrentScene(Scenes::GAMESCENE + index);
 			return;
-#endif
-#endif
 		}
+		index++;
+	}
+#endif	 
 
-		//Allow skip
-		if (m_keybinds.keyReleased("Activate", 0) || m_keybinds.keyReleased("Activate"))
-		{
-			m_menu_state = menu_states::MAIN_SELECT;
+#ifndef _DEBUG
+	//If idle for too long, send to attraction state
+	m_idle_timer += (float)timer.GetElapsedSeconds();
+	if (m_idle_timer > m_idle_timeout) {
+		Locator::getRM()->attract_state = true;
+		Locator::getRM()->player_amount = 1;
+		for (MapInfo* a_map : Locator::getGOS()->map_instances) {
+			if (a_map->name == "Low-Poly Circuit") {
+				m_scene_manager->setCurrentScene(Scenes::GAMESCENE + a_map->scene_index);
+				return;
+			}
 		}
+	}
+#endif
 
-		break;
-	case menu_states::MAIN_SELECT:
-		if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
-		{
-			if (highlighted_menu < m_mainMenuTitles.size() - 1) {
-				m_mainMenuTitles.at(highlighted_menu)->SetColour(inactive_colour);
-				highlighted_menu++;
-				m_mainMenuTitles.at(highlighted_menu)->SetColour(active_colour);
-			}
-		}
-		else if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
-		{
-			if (highlighted_menu > 0) {
-				m_mainMenuTitles.at(highlighted_menu)->SetColour(inactive_colour);
-				highlighted_menu--;
-				m_mainMenuTitles.at(highlighted_menu)->SetColour(active_colour);
-			}
-		}
-		else if (m_keybinds.keyReleased("Activate"))
-		{
-			for (size_t i = 0; i < m_mainMenuTitles.size(); i++)
+	switch (m_menu_state) {
+		case menu_states::SPLASH:
+			//Animate logo over time
+			m_logo->SetScale(Vector2(0.3 + (m_timer / 30), 0.3 + (m_timer / 30)));
+			m_timer += (float)timer.GetElapsedSeconds();
+
+			//Allow skip or progress if time elapsed
+			if (m_keybinds.keyReleased("Activate") || m_timer > m_timeout)
 			{
-				m_mainMenuTitles.at(i)->SetColour(i == 0 ? active_colour : inactive_colour);
+				m_menu_state = menu_states::MAIN_SELECT;
+				m_idle_timer = 0.0f;
 			}
-			//Swap scene
-			m_menu_state = menu_states::CUP_SELECT;
-			if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("CUP"))
-				Locator::getRM()->is_cup = true;
-			else if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("RACE"))
-				Locator::getRM()->is_cup = false;
-			else if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("EXIT"))
+
+			break;
+		case menu_states::MAIN_SELECT:
+			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
-				ExitGame();
-				m_menu_state = menu_states::SPLASH;
+				if (highlighted_menu < m_mainMenuTitles.size() - 1) {
+					m_mainMenuTitles.at(highlighted_menu)->SetColour(inactive_colour);
+					highlighted_menu++;
+					m_mainMenuTitles.at(highlighted_menu)->SetColour(active_colour);
+				}
 			}
-		}
-		break;
-	case menu_states::CUP_SELECT:
-		CupSelect();
-		break;
-	case menu_states::MAP_SELECT:
-		MapSelect();
-		break;
-	case menu_states::CHARACTER_SELECT:
-		CharacterSelect();
-		break;
-	case menu_states::VEHICLE_SELECT:
-		VehicleSelect();
-		break;
+			else if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
+			{
+				if (highlighted_menu > 0) {
+					m_mainMenuTitles.at(highlighted_menu)->SetColour(inactive_colour);
+					highlighted_menu--;
+					m_mainMenuTitles.at(highlighted_menu)->SetColour(active_colour);
+				}
+			}
+			else if (m_keybinds.keyReleased("Activate"))
+			{
+				m_idle_timer = 0.0f;
+				for (size_t i = 0; i < m_mainMenuTitles.size(); i++)
+				{
+					m_mainMenuTitles.at(i)->SetColour(i == 0 ? active_colour : inactive_colour);
+				}
+				//Swap scene
+				m_menu_state = menu_states::CUP_SELECT;
+				if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("CUP"))
+					Locator::getRM()->is_cup = true;
+				else if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("RACE"))
+					Locator::getRM()->is_cup = false;
+				else if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("EXIT"))
+				{
+					ExitGame();
+					m_menu_state = menu_states::SPLASH;
+				}
+			}
+			break;
+		case menu_states::CUP_SELECT:
+			CupSelect();
+			break;
+		case menu_states::MAP_SELECT:
+			MapSelect();
+			break;
+		case menu_states::CHARACTER_SELECT:
+			CharacterSelect();
+			break;
+		case menu_states::VEHICLE_SELECT:
+			VehicleSelect();
+			break;
 	}
 
 	for (int i = 0; i < m_maxPlayers; ++i)
@@ -384,8 +386,8 @@ void MenuScene::CupSelect()
 
 	//Exit
 	if (m_keybinds.keyReleased("Back")) {
-		//ExitGame();
 		m_menu_state = menu_states::MAIN_SELECT;
+		m_idle_timer = 0.0f;
 	}
 
 	//Change cup selection
@@ -408,6 +410,7 @@ void MenuScene::CupSelect()
 
 	//	Change to map select
 	if (m_keybinds.keyReleased("Activate")) {
+		m_idle_timer = 0.0f;
 		if (!Locator::getRM()->is_cup)
 		{
 			m_mapTitles.clear();
@@ -450,12 +453,10 @@ void MenuScene::CupSelect()
 				m_mapPreviews.push_back(a_map->preview_sprite);
 			}
 
-			//Swap scene
 			m_menu_state = menu_states::MAP_SELECT;
 		}
 		else
 		{
-			//swap scene
 			m_menu_state = menu_states::CHARACTER_SELECT;
 		}
 	}
@@ -468,6 +469,7 @@ void MenuScene::MapSelect()
 	//Back to cup select
 	if (m_keybinds.keyReleased("Back"))
 	{
+		m_idle_timer = 0.0f;
 		m_menu_state = menu_states::MAIN_SELECT;
 	}
 
@@ -492,7 +494,7 @@ void MenuScene::MapSelect()
 	//Change to character select
 	if (m_keybinds.keyReleased("Activate"))
 	{
-		//swap scene
+		m_idle_timer = 0.0f;
 		m_menu_state = menu_states::CHARACTER_SELECT;
 	}
 }
@@ -514,8 +516,6 @@ void MenuScene::CharacterSelect()
 		}
 		else if (!NavigateMenus(i, m_characterHighlightInt[i], m_characterPreviews) && m_keybinds.keyReleased("Pause", i))
 		{
-			////swap scene
-
 			if (!players_joined[i])
 			{
 				players_joined[i] = true;
@@ -537,13 +537,13 @@ void MenuScene::CharacterSelect()
 
 	if (m_keybinds.keyReleased("Activate", 0))
 	{
-		//swap scene
+		m_idle_timer = 0.0f;
 		m_menu_state = menu_states::VEHICLE_SELECT;
 	}
 	//Back to main menu select
 	else if (m_keybinds.keyReleased("Back", 0) || m_keybinds.keyReleased("Back"))
 	{
-		//swap scene
+		m_idle_timer = 0.0f;
 		m_menu_state = menu_states::MAIN_SELECT;
 		Locator::getRM()->is_cup = false;
 		highlighted_cup = 0;
@@ -569,6 +569,7 @@ void MenuScene::VehicleSelect()
 	//Back to character select
 	if (m_keybinds.keyReleased("Back"))
 	{
+		m_idle_timer = 0.0f;
 		m_menu_state = menu_states::CHARACTER_SELECT;
 	}
 
@@ -583,6 +584,7 @@ void MenuScene::VehicleSelect()
 	{
 		//Locator::getRM()->player_amount = 3;
 		//Locator::getRM()->player_amount_changed = true;
+		m_idle_timer = 0.0f;
 		for (size_t i = 0; i < Locator::getRM()->player_amount; i++)
 		{
 			Locator::getGSD()->character_selected[i] = m_characterHighlightInt[i]; //We only support P1 choices atm!
