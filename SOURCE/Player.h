@@ -56,6 +56,7 @@ public:
 		m_animationMesh->Load();
 	};
 
+	void SetPlayerID(int val);
 	void SetWaypoint(int _waypoint);
 	void SetLap(int _lap) { m_lap = _lap; }
 	void SetRanking(int _position) { m_ranking = _position; }
@@ -107,6 +108,7 @@ protected:
 	int m_playerID = 0;
 
 private:
+
 	std::function<Item*(ItemType)> CreateItem;
 
 	void movement();

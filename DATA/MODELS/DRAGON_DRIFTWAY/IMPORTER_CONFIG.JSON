@@ -305,8 +305,8 @@
     "ThICC_INDEX": 6,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": false,
-      "1": true,
+      "0": true,
+      "1": false,
       "2": false,
       "3": false,
       "5": false,
