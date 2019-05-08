@@ -70,7 +70,7 @@ void MenuScene::create2DObjects()
 	m_splash_bg = new ImageGO2D("WHITE_720");
 	m_logo = new ImageGO2D("engine_logo_white_720");
 	m_logo->SetScale(Vector2(0.3, 0.3));
-	m_logo->SetPos(Vector2(Locator::getRD()->m_window_width / 2.f, Locator::getRD()->m_window_height / 2.f));
+	m_logo->SetPos(Vector2(Locator::getRD()->m_window_width / 2.f, Locator::getRD()->m_window_height / 2.f), false);
 	m_logo->CentreOrigin();
 
 	//Main menu objects

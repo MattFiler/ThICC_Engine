@@ -114,6 +114,7 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 	//Save our window size config
 	Locator::getRD()->m_window_height = height;
 	Locator::getRD()->m_window_width = width;
+	Locator::getRD()->m_base_res_scale = m_game_config["ui_scale"];
 
 	//Set our default font
 	SetDefaultFont(m_game_config["font"]);
@@ -570,7 +571,7 @@ void ThICC_Engine::SetDefaultFont(std::string _default_font)
 
 	//Get font name
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	string font_path = m_filepath.generateFilepath(_default_font, m_filepath.FONT);
+	std::string font_path = m_filepath.generateFilepath(_default_font, m_filepath.FONT);
 	std::wstring w_font_path = converter.from_bytes(font_path.c_str());
 
 	//Load font resource

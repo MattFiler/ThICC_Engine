@@ -92,17 +92,17 @@ void GameScene::ExpensiveLoad() {
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
 		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
-		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
+		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY) / Locator::getRD()->m_base_res_scale);
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
 		float text_pos_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
 		float text_pos_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetRankingText()->GetSize().y;
-		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
+		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y), false);
 		//m_2DObjects.push_back(player[i]->GetRankingText());
 
 		float text_lap_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
 		float text_lap_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetLapText()->GetSize().y;
-		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
+		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y), false);
 		//m_2DObjects.push_back(player[i]->GetLapText());
 	}
 
@@ -113,11 +113,11 @@ void GameScene::ExpensiveLoad() {
 		player[i]->GetCountdown()->SetPos({
 			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 ,
 			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2
-			});
+			}, false);
 		player[i]->GetFinishOrder()->SetPos({
 			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetFinishOrder()->GetSize().x / 2 ,
 			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height / 2 - player[i]->GetFinishOrder()->GetSize().y / 2
-			});
+			}, false);
 		m_cam[i]->ResetFOV();
 	}
 
