@@ -175,10 +175,13 @@ void GameScene::ExpensiveUnload() {
 	//Unload item pools
 	for (auto& item : m_itemModels)
 	{
-		Locator::getItemPools()->AddItemMesh(item->GetItemType(), item->GetItemMesh());
-		if (item->GetItemType() == BOMB)
+		if (item->GetItemMesh())
 		{
-			Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(item)->GetExplosion()->GetDisplayedMesh());
+			Locator::getItemPools()->AddItemMesh(item->GetItemType(), item->GetItemMesh());
+			if (item->GetItemType() == BOMB)
+			{
+				Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(item)->GetExplosion()->GetDisplayedMesh());
+			}
 		}
 		delete item;
 	}
