@@ -581,8 +581,8 @@ void MenuScene::VehicleSelect()
 	//Load selected map with character choices
 	if (m_keybinds.keyReleased("Activate"))
 	{
-		Locator::getRM()->player_amount = 3;
-		Locator::getRM()->player_amount_changed = true;
+		//Locator::getRM()->player_amount = 3;
+		//Locator::getRM()->player_amount_changed = true;
 		for (size_t i = 0; i < Locator::getRM()->player_amount; i++)
 		{
 			Locator::getGSD()->character_selected[i] = m_characterHighlightInt[i]; //We only support P1 choices atm!
