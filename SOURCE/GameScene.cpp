@@ -77,7 +77,6 @@ void GameScene::ExpensiveLoad() {
 	else
 	{
 		m_maxPlayers = 12;
-		player[0]->SetPlayerID(0);
 	}
 
 	//Update characters
@@ -201,6 +200,8 @@ void GameScene::ExpensiveUnload() {
 	cine_cam->SetType(CameraType::CINEMATIC);
 
 	Locator::getAudio()->clearTrackSounds();
+	Locator::getCD()->look_points.clear();
+	Locator::getCD()->points.clear();
 
 	//We'll probably need to reset more stuff here, like race timers, etc
 	timeout = 12.f;
@@ -290,24 +291,6 @@ void GameScene::create3DObjects()
 	//DebugText::print("Height: " + std::to_string(Locator::getRD()->m_window_height));
 
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
-	for (int i = 0; i < 1; i++) {
-
-		////Create a player and position on track
-		//using std::placeholders::_1;
-		//player[i] = new Player(
-		//	Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
-		//	Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i]),
-		//	i, std::bind(&GameScene::CreateItem, this, _1)
-		//);
-		//player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
-		//player[i]->setMass(10);
-		//m_3DObjects.push_back(player[i]);
-
-		//Create a camera to follow the player
-		//
-		//m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::FOLLOW);
-		//m_cam[i]->setAngle(180.0f);
-	}
 
 	// Spawn in the AI
 	for (int i = 0; i < m_maxPlayers; i++) {
@@ -444,6 +427,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 			state = CAM_OPEN;
 			timeout = 2.99999f;
 			Locator::getAudio()->Play("PRE_COUNTDOWN");
+			if (Locator::getRM()->player_amount = 3)
+			{
+				cine_cam->SetType(CameraType::ORBIT);
+				cine_cam->SetTarget(player[3]);
+			}
 		}
 		#ifdef _DEBUG
 		if (m_keybinds.keyReleased("Activate"))
@@ -457,7 +445,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 		for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 			m_cam[i]->Tick();
 		}
-		cine_cam->Tick();
+
+		if (Locator::getRM()->player_amount == 3)
+		{
+			cine_cam->Tick();
+		}
 
 		if (m_cam[game_config["player_count"]-1]->GetType() == CameraType::FOLLOW)
 		{
@@ -477,6 +469,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 				player[i]->GetCountdown()->SetText(countdown_time);
 				m_cam[i]->Tick();
 			}
+
+			if (Locator::getRM()->player_amount == 3)
+			{
+				cine_cam->Tick();
+			}
 		}
 		else
 		{
@@ -493,6 +490,12 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case PLAY:
 		for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 			m_cam[i]->Tick();
+		}
+
+
+		if (Locator::getRM()->player_amount == 3)
+		{
+			cine_cam->Tick();
 		}
 
 		timeout -= Locator::getGSD()->m_dt;
@@ -661,42 +664,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
 		Locator::getRD()->m_cam = cine_cam;
 
-		// Render skybox
-		Locator::getRD()->skybox->Render();
-
-		//Render 3D objects
-		for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-		{
-			if ((*it)->isVisible()) {
-				if (dynamic_cast<Track*>(*it)) 
-				{
-					if (GameDebugToggles::render_level) {
-						(*it)->Render();
-					}
-				}
-				#ifdef _DEBUG
-				else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
-					if (GameDebugToggles::show_debug_meshes) {
-						(*it)->Render();
-					}
-				}
-				else if (dynamic_cast<Explosion*>(*it))
-				{
-					(*it)->Render();
-				}
-				#endif
-				else
-				{
-					(*it)->Render();
-				}
-			}
-		}
-
-		//Render items
-		for (Item* obj : m_itemModels)
-		{
-			obj->Render();
-		}
+		render3DObjects();
 
 		break;
 	case CAM_OPEN:
@@ -709,100 +677,64 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[i]);
 			Locator::getRD()->m_cam = m_cam[i];
 
-			// Render skybox
-			Locator::getRD()->skybox->Render();
-
-			//Render 3D objects
-			for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-			{
-				if ((*it)->isVisible()) {
-					if (dynamic_cast<Track*>(*it)) 
-					{
-						if (GameDebugToggles::render_level) {
-							(*it)->Render();
-						}
-					}
-					#ifdef _DEBUG
-					else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
-						if (GameDebugToggles::show_debug_meshes) {
-							(*it)->Render();
-						}
-					}
-					#endif
-					else if (dynamic_cast<Explosion*>(*it))
-					{
-						(*it)->Render();
-					}
-					else
-					{
-						(*it)->Render();
-					}
-				}
-			}
-
-			//Render items
-			for (Item* obj : m_itemModels)
-			{
-				if (obj->GetItemMesh())
-				{
-					obj->Render();
-				}
-			}
+			render3DObjects();
 		}
+
+		if (Locator::getRM()->player_amount = 3)
+		{
+			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[3]);
+			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[3]);
+			Locator::getRD()->m_cam = cine_cam;
+			render3DObjects();
+		}
+
 		break;
-	//case PLAY:
-	//	//Locator::getAIScheduler()->DebugRender();
-	//	for (int i = 0; i < Locator::getRM()->player_amount; ++i)
-	//	{
-	//		//Setup viewport
-	//		m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[i]);
-	//		m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[i]);
-	//		Locator::getRD()->m_cam = m_cam[i];
-
-	//		// Render skybox
-	//		Locator::getRD()->skybox->Render();
-
-	//		//Render 3D objects
-	//		for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
-	//		{
-	//			if ((*it)->isVisible()) {
-	//				if (dynamic_cast<Track*>(*it))
-	//				{
-	//					if (GameDebugToggles::render_level) {
-	//						(*it)->Render();
-	//					}
-	//				}
-	//				#ifdef _DEBUG
-	//				else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
-	//					if (GameDebugToggles::show_debug_meshes) {
-	//						(*it)->Render();
-	//					}
-	//				}
-	//				#endif
-	//				else if (dynamic_cast<Explosion*>(*it))
-	//				{
-	//					(*it)->Render();
-	//				}
-	//				else
-	//				{
-	//					(*it)->Render();
-	//				}
-	//			}
-	//		}
-
-	//		//Render items
-	//		for (Item* obj : m_itemModels)
-	//		{
-	//			if (obj->GetItemMesh())
-	//			{
-	//				obj->Render();
-	//			}
-	//		}
-	//	}
-	//	break;
 	}
 	m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
 	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
+}
+
+void GameScene::render3DObjects()
+{
+	// Render skybox
+	Locator::getRD()->skybox->Render();
+
+	//Render 3D objects
+	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	{
+		if ((*it)->isVisible()) {
+			if (dynamic_cast<Track*>(*it))
+			{
+				if (GameDebugToggles::render_level) {
+					(*it)->Render();
+				}
+			}
+#ifdef _DEBUG
+			else if (dynamic_cast<DebugMarker*>(*it)) { //debugging only
+				if (GameDebugToggles::show_debug_meshes) {
+					(*it)->Render();
+				}
+			}
+#endif
+			else if (dynamic_cast<Explosion*>(*it))
+			{
+				(*it)->Render();
+			}
+			else
+			{
+				(*it)->Render();
+			}
+		}
+	}
+
+	//Render items
+	for (Item* obj : m_itemModels)
+	{
+		if (obj->GetItemMesh())
+		{
+			obj->Render();
+		}
+	}
 }
 
 /* Render the 2D scene */

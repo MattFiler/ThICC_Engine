@@ -6,7 +6,7 @@
   "FOLLOW": {
     "fov": 60,
     "rotation_lerp": 0.1,
-    "position_lerp": 0.3,
+    "position_lerp": 0.50,
     "look_at_position": [
       0.0,
       0.0,
@@ -31,7 +31,7 @@
   "ORBIT": {
     "fov": 60,
     "rotation_lerp": 0.1,
-    "position_lerp": 0.25,
+    "position_lerp": 0.50,
     "look_at_position": [
       0.0,
       0.0,
@@ -52,7 +52,7 @@
       1.0,
       0.0
     ],
-    "spin_amount": 30.0
+    "spin_amount": 25.0
   },
   "CINEMATIC": {
     "fov": 40,

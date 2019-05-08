@@ -494,9 +494,14 @@ void SoundEffect::UnregisterInstance(_In_ SoundEffectInstance* instance)
 // Public accessors.
 bool SoundEffect::IsInUse() const
 {
+	pImpl->mOneShots = 0;
     return (pImpl->mOneShots > 0) || !pImpl->mInstances.empty();
 }
 
+void SoundEffect::StopSound()
+{
+	pImpl->mOneShots = 0;
+}
 
 size_t SoundEffect::GetSampleSizeInBytes() const
 {
