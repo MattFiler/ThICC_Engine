@@ -323,6 +323,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 
 			break;
 		case menu_states::MAIN_SELECT:
+			m_state_desc->SetText(m_localiser.getString("main_select"));
 			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
 			{
 				if (highlighted_menu < m_mainMenuTitles.size() - 1) {

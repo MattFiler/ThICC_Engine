@@ -29,7 +29,8 @@
     "CUP": "Cup",
     "RACE": "Race",
     "CHARACTER_YOSHI": "Yoshi",
-    "EXIT": "Exit"
+    "EXIT": "Exit",
+    "MAIN_SELECT": "Select a Game Type"
   },
   "SPANISH": {},
   "FRENCH": {}
