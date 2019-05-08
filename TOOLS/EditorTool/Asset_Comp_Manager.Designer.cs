@@ -99,7 +99,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Asset_Comp_Manager";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Mario Kart Map Manager";
+            this.Text = "Map Manager";
             this.Load += new System.EventHandler(this.Asset_Comp_Manager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.previewImage)).EndInit();
             this.ResumeLayout(false);

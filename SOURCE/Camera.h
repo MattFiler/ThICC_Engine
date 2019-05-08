@@ -20,6 +20,7 @@ public:
 	void SetTarget(Vector3 _target) { m_targetObject = NULL; m_targetPos = _target; }
 	void SetDPos(Vector3 _m_dpos) { m_dpos = _m_dpos; }
 	void SetType(CameraType _behav) { cam_type = _behav; }
+	void ResetFOV();
 
 	/*
 	void SetCinematicPos(std::vector<Vector3> positions);
@@ -71,4 +72,7 @@ protected:
 	// Debug Cam variables
 	float last_mouse_xpos = 0.0f;
 	float last_mouse_ypos = 0.0f;
+
+	float width = 0.0f;
+	float height = 0.0f;
 };

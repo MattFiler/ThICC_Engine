@@ -185,6 +185,14 @@
     <Compile Include="Generic_Importer.Designer.cs">
       <DependentUpon>Generic_Importer.cs</DependentUpon>
     </Compile>
+    <Compile Include="ItemAssetEditor.cs" />
+    <Compile Include="ItemAssetEditor.Designer.cs">
+      <DependentUpon>ItemAssetEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ItemConfigEditor.cs" />
+    <Compile Include="ItemConfigEditor.Designer.cs">
+      <DependentUpon>ItemConfigEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Keybinds_Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -246,9 +254,7 @@
     <Compile Include="Model_Importer_MaterialList.Designer.cs">
       <DependentUpon>Model_Importer_MaterialList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model_Importer_Wrapper.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Model_Importer_Wrapper.cs" />
     <Compile Include="Model_Importer_Wrapper.Designer.cs">
       <DependentUpon>Model_Importer_Wrapper.cs</DependentUpon>
     </Compile>
@@ -269,9 +275,7 @@
     <Compile Include="Splash.Designer.cs">
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI_Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="UI_Editor.cs" />
     <Compile Include="UI_Editor.Designer.cs">
       <DependentUpon>UI_Editor.cs</DependentUpon>
     </Compile>
@@ -326,6 +330,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Asset_Editor.resx">
       <DependentUpon>Asset_Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemAssetEditor.resx">
+      <DependentUpon>ItemAssetEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemConfigEditor.resx">
+      <DependentUpon>ItemConfigEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Keybinds_Editor.resx">
       <DependentUpon>Keybinds_Editor.cs</DependentUpon>

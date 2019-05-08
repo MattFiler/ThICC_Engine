@@ -1,16 +1,14 @@
 #include "pch.h"
 #include "AudioManager.h"
+
 #include <fstream>
-#include <json.hpp>
-using json = nlohmann::json;
 
 AudioManager::AudioManager()
 {
 	m_audEngine = std::unique_ptr<DirectX::AudioEngine>(new DirectX::AudioEngine);
 
 	//Read in track config
-	std::ifstream i(m_filepaths.generateConfigFilepath("SOUNDS_CONFIG", m_filepaths.CONFIG));
-	json m_sound_configs;
+	std::fstream i(m_filepaths.generateConfigFilepath("SOUNDS_CONFIG", m_filepaths.CONFIG));
 	m_sound_configs << i;
 
 	addToSoundsList(m_sound_configs["menu_sounds"]["MENU_LOOP"], "MENU_LOOP");
@@ -21,24 +19,29 @@ AudioManager::AudioManager()
 	addToSoundsList(m_sound_configs["misc_sounds"]["COUNTDOWN"], "COUNTDOWN");
 	addToSoundsList(m_sound_configs["misc_sounds"]["ITEMBOX_HIT"], "ITEMBOX_HIT");
 	addToSoundsList(m_sound_configs["misc_sounds"]["FINAL_LAP_SOUND"], "FINAL_LAP_SOUND");
-	addToSoundsList(m_sound_configs["item_sounds"]["STAR_SOUND"], "STAR_SOUND");
-	addToSoundsList(m_sound_configs["item_sounds"]["LIGHTNING_SOUND"], "LIGHTNING_SOUND");
-
+	addToSoundsList(m_sound_configs["item_sounds"]["STAR"], "STAR_SOUND");
 }
 
 void AudioManager::addToSoundsList(const std::string& asset, const std::string& _tag)
 {
-	std::ifstream j(m_filepaths.generateConfigFilepath(asset, m_filepaths.SOUND));
-	json m_config;
-	m_config << j;
+	//std::string filepath = "DATA/SOUNDS/" + asset + ".JSON";
+	std::string filepath = m_filepaths.generateConfigFilepath(asset, m_filepaths.SOUND);
+	std::fstream j;
+	j.open(filepath);
+	if (!j.is_open())
+	{
+		return;
+	}
+	m_sound_info << j;
 
-	Sound* new_sound = new Sound(m_audEngine.get(), m_config["asset_name"]);
-	new_sound->SetLoop(m_config["is_looping"]);
-	new_sound->SetVolume(m_config["volume"]);
-	new_sound->SetPitch(m_config["pitch"]);
-	new_sound->SetPan(m_config["pan"]);
+	Sound* new_sound = new Sound(m_audEngine.get(), m_sound_info["asset_name"]);
+	new_sound->SetLoop(m_sound_info["is_looping"]);
+	new_sound->SetVolume(m_sound_info["volume"]);
+	new_sound->SetPitch(m_sound_info["pitch"]);
+	new_sound->SetPan(m_sound_info["pan"]);
 	new_sound->SetTag(_tag);
 	m_Sounds.push_back(new_sound);
+	m_sound_info.clear();
 }
 
 void AudioManager::clearTrackSounds()
@@ -106,6 +109,14 @@ void AudioManager::Stop(const std::string& _tag)
 			(*it)->Stop();
 			return;
 		}
+	}
+}
+
+void AudioManager::StopAll()
+{
+	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
+	{
+		(*it)->Stop();
 	}
 }
 

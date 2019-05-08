@@ -10,8 +10,6 @@ GreenShell::GreenShell() : Item(GREEN_SHELL)
 	m_itemMesh->m_mesh->setDampenWallReflect(false);
 
 	InitShellData();
-	m_itemMesh->m_displayedMesh->ResetRotation();
-
 }
 
 void GreenShell::InitShellData()
@@ -48,7 +46,6 @@ void GreenShell::HitByPlayer(Player* player)
 	player->Spin(m_collisionData.m_spinRev, m_collisionData.m_spinDuration);
 	player->AddPos(player->GetWorld().Up() * m_collisionData.m_vertPosOffset);
 	player->UpdateWorld();
-	m_itemMesh->m_displayedMesh->ResetRotation();
 	m_shouldDestroy = true;
 }
 

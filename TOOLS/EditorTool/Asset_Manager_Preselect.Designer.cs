@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Asset_Manager_Preselect));
             this.openCharacterManager = new System.Windows.Forms.Button();
             this.openVehicleManager = new System.Windows.Forms.Button();
             this.openMapManager = new System.Windows.Forms.Button();
@@ -71,13 +72,13 @@
             // 
             // openItemManager
             // 
-            this.openItemManager.Enabled = false;
             this.openItemManager.Location = new System.Drawing.Point(12, 160);
             this.openItemManager.Name = "openItemManager";
             this.openItemManager.Size = new System.Drawing.Size(270, 31);
             this.openItemManager.TabIndex = 11;
             this.openItemManager.Text = "In-Game Items";
             this.openItemManager.UseVisualStyleBackColor = true;
+            this.openItemManager.Click += new System.EventHandler(this.openItemManager_Click);
             // 
             // openSoundManager
             // 
@@ -144,6 +145,7 @@
             this.Controls.Add(this.openVehicleManager);
             this.Controls.Add(this.openMapManager);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Asset_Manager_Preselect";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Asset Groups";

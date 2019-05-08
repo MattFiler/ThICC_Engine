@@ -376,6 +376,7 @@ namespace DirectX
 
         void __cdecl Play();
         void __cdecl Play(float volume, float pitch, float pan);
+		void __cdecl StopSound();
 
         std::unique_ptr<SoundEffectInstance> __cdecl CreateInstance(SOUND_EFFECT_INSTANCE_FLAGS flags = SoundEffectInstance_Default);
 

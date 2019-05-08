@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Splash));
             this.openGroupManager = new System.Windows.Forms.Button();
             this.openAssetManager = new System.Windows.Forms.Button();
-            this.openUiEditor = new System.Windows.Forms.Button();
             this.openKeybindEditor = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.compileAssets = new System.Windows.Forms.Button();
@@ -64,19 +63,9 @@
             this.openAssetManager.UseVisualStyleBackColor = true;
             this.openAssetManager.Click += new System.EventHandler(this.openAssetManager_Click);
             // 
-            // openUiEditor
-            // 
-            this.openUiEditor.Location = new System.Drawing.Point(6, 19);
-            this.openUiEditor.Name = "openUiEditor";
-            this.openUiEditor.Size = new System.Drawing.Size(270, 31);
-            this.openUiEditor.TabIndex = 4;
-            this.openUiEditor.Text = "UI Editor";
-            this.openUiEditor.UseVisualStyleBackColor = true;
-            this.openUiEditor.Click += new System.EventHandler(this.openUiEditor_Click);
-            // 
             // openKeybindEditor
             // 
-            this.openKeybindEditor.Location = new System.Drawing.Point(6, 56);
+            this.openKeybindEditor.Location = new System.Drawing.Point(5, 19);
             this.openKeybindEditor.Name = "openKeybindEditor";
             this.openKeybindEditor.Size = new System.Drawing.Size(270, 31);
             this.openKeybindEditor.TabIndex = 5;
@@ -109,18 +98,17 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.openEngineConfigs);
-            this.groupBox3.Controls.Add(this.openUiEditor);
             this.groupBox3.Controls.Add(this.openKeybindEditor);
             this.groupBox3.Location = new System.Drawing.Point(11, 148);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(281, 130);
+            this.groupBox3.Size = new System.Drawing.Size(281, 94);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Additional Editors";
             // 
             // openEngineConfigs
             // 
-            this.openEngineConfigs.Location = new System.Drawing.Point(6, 93);
+            this.openEngineConfigs.Location = new System.Drawing.Point(5, 56);
             this.openEngineConfigs.Name = "openEngineConfigs";
             this.openEngineConfigs.Size = new System.Drawing.Size(270, 31);
             this.openEngineConfigs.TabIndex = 6;
@@ -131,7 +119,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.openProject);
-            this.groupBox5.Location = new System.Drawing.Point(11, 284);
+            this.groupBox5.Location = new System.Drawing.Point(11, 248);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(281, 56);
             this.groupBox5.TabIndex = 0;
@@ -152,7 +140,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(301, 350);
+            this.ClientSize = new System.Drawing.Size(301, 314);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -173,7 +161,6 @@
 
         private System.Windows.Forms.Button openGroupManager;
         private System.Windows.Forms.Button openAssetManager;
-        private System.Windows.Forms.Button openUiEditor;
         private System.Windows.Forms.Button openKeybindEditor;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button compileAssets;

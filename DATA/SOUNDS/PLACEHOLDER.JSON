@@ -1,0 +1,22 @@
+{
+  "asset_name": "PLACEHOLDER",
+  "asset_type": "Sounds",
+  "is_looping": false,
+  "volume": 1.0,
+  "pitch": 0.0,
+  "pan": 0.0,
+  "in_use_in": [
+    "Items",
+    "Items",
+    "Items",
+    "Items",
+    "Items",
+    "Items",
+    "Items",
+    "Items",
+    "Items",
+    "Items",
+    "Items",
+    "Items"
+  ]
+}
