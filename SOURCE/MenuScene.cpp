@@ -473,7 +473,7 @@ void MenuScene::MapSelect()
 	if (m_keybinds.keyReleased("Back"))
 	{
 		m_idle_timer = 0.0f;
-		m_menu_state = menu_states::MAIN_SELECT;
+		m_menu_state = menu_states::CUP_SELECT;
 	}
 
 	//Change map selection
