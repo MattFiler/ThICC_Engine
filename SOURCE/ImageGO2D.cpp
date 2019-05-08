@@ -5,7 +5,7 @@
 #include "DeviceData.h"
 
 /* Create */
-ImageGO2D::ImageGO2D(string _filename)
+ImageGO2D::ImageGO2D(std::string _filename)
 {
 	new_filepath = _filename;
 	InternalSpriteUpdate(_filename);
@@ -39,12 +39,12 @@ void ImageGO2D::CentreOrigin()
 }
 
 /* Queue a sprite switch */
-void ImageGO2D::UpdateSprite(string _filename) {
+void ImageGO2D::UpdateSprite(std::string _filename) {
 	new_filepath = _filename;
 }
 
 /* Change sprite */
-void ImageGO2D::InternalSpriteUpdate(string _filename) {
+void ImageGO2D::InternalSpriteUpdate(std::string _filename) {
 	current_filepath = _filename;
 
 	//Start upload
@@ -53,7 +53,7 @@ void ImageGO2D::InternalSpriteUpdate(string _filename) {
 
 	//Get filepath
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	string fullpath = m_filepath.generateFilepath(_filename, m_filepath.IMAGE);
+	std::string fullpath = m_filepath.generateFilepath(_filename, m_filepath.IMAGE);
 	std::wstring wFilename = converter.from_bytes(fullpath.c_str());
 
 	try {
@@ -85,6 +85,11 @@ void ImageGO2D::InternalSpriteUpdate(string _filename) {
 void ImageGO2D::Reset()
 {
 	m_texture.Reset();
+}
+
+XMUINT2 ImageGO2D::GetSize()
+{
+	return size;
 }
 
 void ImageGO2D::SetSize(Vector2 _size) {

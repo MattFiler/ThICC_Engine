@@ -1978,7 +1978,7 @@
   },
   "ef_dashboard": {
     "newmtl": "ef_dashboard",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -1998,7 +1998,7 @@
     "ThICC_INDEX": 12,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": true,
       "3": false,
@@ -2078,7 +2078,7 @@
   },
   "ef_dashboard03": {
     "newmtl": "ef_dashboard03",
-    "Ns": "94.117647",
+    "Ns": "94.000000",
     "Ka": "1.000000 1.000000 1.000000",
     "Kd": "1.000000 1.000000 1.000000",
     "Ks": "0.000000 0.000000 0.000000",
@@ -2098,7 +2098,7 @@
     "ThICC_INDEX": 27,
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": true,
       "3": false,

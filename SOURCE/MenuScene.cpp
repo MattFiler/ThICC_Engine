@@ -70,7 +70,7 @@ void MenuScene::create2DObjects()
 	m_splash_bg = new ImageGO2D("WHITE_720");
 	m_logo = new ImageGO2D("engine_logo_white_720");
 	m_logo->SetScale(Vector2(0.3, 0.3));
-	m_logo->SetPos(Vector2(Locator::getRD()->m_window_width / 2.f, Locator::getRD()->m_window_height / 2.f));
+	m_logo->SetPos(Vector2(Locator::getRD()->m_window_width / 2.f, Locator::getRD()->m_window_height / 2.f), false);
 	m_logo->CentreOrigin();
 
 	//Main menu objects
@@ -283,6 +283,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 		m_timer += (float)timer.GetElapsedSeconds();
 		if (m_timer > m_timeout) {
 
+#ifndef _DEBUG
 #ifdef _ARCADE
 			Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0]; //We only support P1 choices atm!
 			Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
@@ -297,14 +298,24 @@ void MenuScene::Update(DX::StepTimer const& timer)
 				}
 				index++;
 			}
-#endif // _ARCADE
-
-
-			m_menu_state = menu_states::MAIN_SELECT;
+#else
+			Locator::getRM()->attract_state = true;
+			Locator::getRM()->player_amount = 1;
+			int index;
+			for (MapInfo* a_map : Locator::getGOS()->map_instances) {
+				//Only include maps from this cup
+				if (a_map->name == "Low-Poly Circuit") {
+					index = a_map->scene_index;
+				}
+			}
+			m_scene_manager->setCurrentScene(Scenes::GAMESCENE + index);
+			return;
+#endif
+#endif
 		}
 
 		//Allow skip
-		if (m_keybinds.keyReleased("Activate"))
+		if (m_keybinds.keyReleased("Activate", 0) || m_keybinds.keyReleased("Activate"))
 		{
 			m_menu_state = menu_states::MAIN_SELECT;
 		}
@@ -567,15 +578,11 @@ void MenuScene::VehicleSelect()
 		NavigateMenus(i, m_vehicleHighlightInt[i], m_vehiclePreviews);
 	}
 
-	//for (int i = 0; i < 4; ++i)
-	//{
-	//	if (players_joined[i])
-	//		m_vehicleHighlight[i]->SetPos(m_vehiclePreviews[m_vehicleHighlightInt[i]]->GetPos() - Vector2{ 5, 5 });
-	//}
-
 	//Load selected map with character choices
 	if (m_keybinds.keyReleased("Activate"))
 	{
+		//Locator::getRM()->player_amount = 3;
+		//Locator::getRM()->player_amount_changed = true;
 		for (size_t i = 0; i < Locator::getRM()->player_amount; i++)
 		{
 			Locator::getGSD()->character_selected[i] = m_characterHighlightInt[i]; //We only support P1 choices atm!

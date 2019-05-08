@@ -28,7 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Create_InGame_Models_Common));
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.skybox = new System.Windows.Forms.TextBox();
+            this.loadSkybox = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.debugMarker = new System.Windows.Forms.TextBox();
+            this.loadDebugMarker = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.itemBox = new System.Windows.Forms.TextBox();
+            this.selectItemBox = new System.Windows.Forms.Button();
             this.loadReferee = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.courseReferee = new System.Windows.Forms.TextBox();
@@ -36,15 +46,6 @@
             this.glider = new System.Windows.Forms.TextBox();
             this.loadGlider = new System.Windows.Forms.Button();
             this.saveModels = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.itemBox = new System.Windows.Forms.TextBox();
-            this.selectItemBox = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.debugMarker = new System.Windows.Forms.TextBox();
-            this.loadDebugMarker = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.skybox = new System.Windows.Forms.TextBox();
-            this.loadSkybox = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,6 +73,87 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Common Models";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 177);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(74, 13);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "Skybox Model";
+            // 
+            // skybox
+            // 
+            this.skybox.Location = new System.Drawing.Point(9, 193);
+            this.skybox.Name = "skybox";
+            this.skybox.ReadOnly = true;
+            this.skybox.Size = new System.Drawing.Size(229, 20);
+            this.skybox.TabIndex = 18;
+            // 
+            // loadSkybox
+            // 
+            this.loadSkybox.Location = new System.Drawing.Point(244, 192);
+            this.loadSkybox.Name = "loadSkybox";
+            this.loadSkybox.Size = new System.Drawing.Size(75, 23);
+            this.loadSkybox.TabIndex = 19;
+            this.loadSkybox.Text = "Load";
+            this.loadSkybox.UseVisualStyleBackColor = true;
+            this.loadSkybox.Click += new System.EventHandler(this.loadSkybox_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 138);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(75, 13);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "Debug Marker";
+            // 
+            // debugMarker
+            // 
+            this.debugMarker.Location = new System.Drawing.Point(9, 154);
+            this.debugMarker.Name = "debugMarker";
+            this.debugMarker.ReadOnly = true;
+            this.debugMarker.Size = new System.Drawing.Size(229, 20);
+            this.debugMarker.TabIndex = 15;
+            // 
+            // loadDebugMarker
+            // 
+            this.loadDebugMarker.Location = new System.Drawing.Point(244, 153);
+            this.loadDebugMarker.Name = "loadDebugMarker";
+            this.loadDebugMarker.Size = new System.Drawing.Size(75, 23);
+            this.loadDebugMarker.TabIndex = 16;
+            this.loadDebugMarker.Text = "Load";
+            this.loadDebugMarker.UseVisualStyleBackColor = true;
+            this.loadDebugMarker.Click += new System.EventHandler(this.loadDebugMarker_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 99);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(48, 13);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Item Box";
+            // 
+            // itemBox
+            // 
+            this.itemBox.Location = new System.Drawing.Point(9, 115);
+            this.itemBox.Name = "itemBox";
+            this.itemBox.ReadOnly = true;
+            this.itemBox.Size = new System.Drawing.Size(229, 20);
+            this.itemBox.TabIndex = 12;
+            // 
+            // selectItemBox
+            // 
+            this.selectItemBox.Location = new System.Drawing.Point(244, 114);
+            this.selectItemBox.Name = "selectItemBox";
+            this.selectItemBox.Size = new System.Drawing.Size(75, 23);
+            this.selectItemBox.TabIndex = 13;
+            this.selectItemBox.Text = "Load";
+            this.selectItemBox.UseVisualStyleBackColor = true;
+            this.selectItemBox.Click += new System.EventHandler(this.selectItemBox_Click);
             // 
             // loadReferee
             // 
@@ -137,87 +219,6 @@
             this.saveModels.UseVisualStyleBackColor = true;
             this.saveModels.Click += new System.EventHandler(this.saveModels_Click);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 99);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(48, 13);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "Item Box";
-            // 
-            // itemBox
-            // 
-            this.itemBox.Location = new System.Drawing.Point(9, 115);
-            this.itemBox.Name = "itemBox";
-            this.itemBox.ReadOnly = true;
-            this.itemBox.Size = new System.Drawing.Size(229, 20);
-            this.itemBox.TabIndex = 12;
-            // 
-            // selectItemBox
-            // 
-            this.selectItemBox.Location = new System.Drawing.Point(244, 114);
-            this.selectItemBox.Name = "selectItemBox";
-            this.selectItemBox.Size = new System.Drawing.Size(75, 23);
-            this.selectItemBox.TabIndex = 13;
-            this.selectItemBox.Text = "Load";
-            this.selectItemBox.UseVisualStyleBackColor = true;
-            this.selectItemBox.Click += new System.EventHandler(this.selectItemBox_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 138);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(75, 13);
-            this.label4.TabIndex = 17;
-            this.label4.Text = "Debug Marker";
-            // 
-            // debugMarker
-            // 
-            this.debugMarker.Location = new System.Drawing.Point(9, 154);
-            this.debugMarker.Name = "debugMarker";
-            this.debugMarker.ReadOnly = true;
-            this.debugMarker.Size = new System.Drawing.Size(229, 20);
-            this.debugMarker.TabIndex = 15;
-            // 
-            // loadDebugMarker
-            // 
-            this.loadDebugMarker.Location = new System.Drawing.Point(244, 153);
-            this.loadDebugMarker.Name = "loadDebugMarker";
-            this.loadDebugMarker.Size = new System.Drawing.Size(75, 23);
-            this.loadDebugMarker.TabIndex = 16;
-            this.loadDebugMarker.Text = "Load";
-            this.loadDebugMarker.UseVisualStyleBackColor = true;
-            this.loadDebugMarker.Click += new System.EventHandler(this.loadDebugMarker_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 177);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(74, 13);
-            this.label5.TabIndex = 20;
-            this.label5.Text = "Skybox Model";
-            // 
-            // skybox
-            // 
-            this.skybox.Location = new System.Drawing.Point(9, 193);
-            this.skybox.Name = "skybox";
-            this.skybox.ReadOnly = true;
-            this.skybox.Size = new System.Drawing.Size(229, 20);
-            this.skybox.TabIndex = 18;
-            // 
-            // loadSkybox
-            // 
-            this.loadSkybox.Location = new System.Drawing.Point(244, 192);
-            this.loadSkybox.Name = "loadSkybox";
-            this.loadSkybox.Size = new System.Drawing.Size(75, 23);
-            this.loadSkybox.TabIndex = 19;
-            this.loadSkybox.Text = "Load";
-            this.loadSkybox.UseVisualStyleBackColor = true;
-            this.loadSkybox.Click += new System.EventHandler(this.loadSkybox_Click);
-            // 
             // Create_InGame_Models_Common
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -226,6 +227,7 @@
             this.Controls.Add(this.saveModels);
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Create_InGame_Models_Common";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Common In-Game Models";

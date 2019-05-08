@@ -16,19 +16,18 @@ public:
 	GameObject2D();
 	virtual ~GameObject2D();
 
-	Vector2 GetPos() { return m_pos; }
-	Vector2 GetOrigin() { return m_origin; }
+	Vector2 GetPos();
 	float GetOri() { return m_orientation; }
 	XMVECTORF32 GetColour() { return m_colour; }
-	Vector2 GetScale() { return m_scale; }
+	Vector2 GetScale();
 
-	void SetPos(Vector2 _pos) { m_pos = _pos; }
-	void SetOrigin(Vector2 _origin) { m_origin = _origin; }
+	//Set position - if the position should not be scaled adjusted (e.g. working off of current window size), declare "false" in parameter 2.
+	void SetPos(Vector2 _pos, bool adjust_for_scale=true);
+
 	void SetOri(float _ori) { m_orientation = _ori; }
 	void SetColour(XMVECTORF32 _col) { m_colour = _col; }
-	void SetScale(float _scale) { m_scale = _scale * Vector2::One; }
-	void SetScale(Vector2 _scale) { m_scale = _scale; }
-
+	void SetScale(float _scale);
+	void SetScale(Vector2 _scale);
 
 	virtual void CentreOrigin() = 0;
 

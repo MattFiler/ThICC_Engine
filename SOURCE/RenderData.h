@@ -69,6 +69,9 @@ struct ThICC_RenderData {
 	int m_window_width;
 	int m_window_height;
 
+	//Base resolution scale (we use 720p as our base_
+	float m_base_res_scale = 1.0f;
+
 	//The active camera
 	Camera* m_cam = NULL;
 

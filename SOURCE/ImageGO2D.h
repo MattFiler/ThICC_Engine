@@ -3,31 +3,30 @@
 #include "GameFilepaths.h"
 #include <string>
 
-using std::string;
-struct RenderData;
+struct ThICC_RenderData;
 
 class ImageGO2D :
 	public GameObject2D
 {
 public:
-	ImageGO2D(string _filename);
+	ImageGO2D(std::string _filename);
 	virtual ~ImageGO2D();
 
-	XMUINT2 GetSize() { return size; }
+	XMUINT2 GetSize();
 	void SetSize(Vector2 _size);
 
 	void Render();
 
 	void CentreOrigin();
 
-	void UpdateSprite(string _filename);
+	void UpdateSprite(std::string _filename);
 
 	virtual void Reset() override;
 
 	std::string& GetFilepath() { return current_filepath; }
 
 protected:
-	void InternalSpriteUpdate(string _filename);
+	void InternalSpriteUpdate(std::string _filename);
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
 	int m_resourceNum = -1;

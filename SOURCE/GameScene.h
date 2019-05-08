@@ -25,6 +25,7 @@ public:
 	//Core update/render/load functions
 	void Update(DX::StepTimer const& timer) override;
 	void Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
+	void render3DObjects();
 	void Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList) override;
 	bool Load() override;
 
@@ -112,7 +113,7 @@ private:
 	int finished = 0;
 	bool is_paused = false;
 
-	int m_maxPlayers = 4;
+	int m_maxPlayers = 12;
 
 };
 
