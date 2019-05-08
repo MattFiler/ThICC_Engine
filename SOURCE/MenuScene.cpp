@@ -380,6 +380,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 	}
 }
 
+/* Cup selection */
 void MenuScene::CupSelect()
 {
 	m_state_desc->SetText(m_localiser.getString("cup_select"));
@@ -462,6 +463,7 @@ void MenuScene::CupSelect()
 	}
 }
 
+/* Map selection */
 void MenuScene::MapSelect()
 {
 	m_state_desc->SetText(m_localiser.getString("map_select"));
@@ -499,6 +501,7 @@ void MenuScene::MapSelect()
 	}
 }
 
+/* Character selection */
 void MenuScene::CharacterSelect()
 {
 	m_state_desc->SetText(m_localiser.getString("character_select"));
@@ -562,6 +565,7 @@ void MenuScene::CharacterSelect()
 	}
 }
 
+/* Vehicle selection */
 void MenuScene::VehicleSelect()
 {
 	m_state_desc->SetText(m_localiser.getString("vehicle_select"));
@@ -582,8 +586,6 @@ void MenuScene::VehicleSelect()
 	//Load selected map with character choices
 	if (m_keybinds.keyReleased("Activate"))
 	{
-		//Locator::getRM()->player_amount = 3;
-		//Locator::getRM()->player_amount_changed = true;
 		m_idle_timer = 0.0f;
 		for (size_t i = 0; i < Locator::getRM()->player_amount; i++)
 		{
@@ -610,6 +612,7 @@ void MenuScene::VehicleSelect()
 	}
 }
 
+/* Navigate character/vehicle selection */
 bool MenuScene::NavigateMenus(int player, int& number, const std::vector<ImageGO2D*>& previews)
 {
 	if (m_keybinds.keyReleased("Right", player) && players_joined[player])
@@ -657,7 +660,7 @@ bool MenuScene::NavigateMenus(int player, int& number, const std::vector<ImageGO
 	return false;
 }
 
-
+/* Check character/vehicle availability */
 void MenuScene::CheckAvailabilty(int player, int& player_sel_number, int added_num, int limit, int reset, const std::vector<int>& vector_compare)
 {
 	bool checked;
@@ -689,7 +692,6 @@ void MenuScene::CheckAvailabilty(int player, int& player_sel_number, int added_n
 
 }
 
-
 /* Render the 2D scene */
 void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
@@ -699,58 +701,58 @@ void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		return;
 	}
 
-	m_state_desc->Render();
 	switch (m_menu_state) {
-	case menu_states::MAIN_SELECT:
-		m_cupBackground->Render();
-		m_cupPreviews.at(highlighted_cup)->Render();
-		for (std::vector<Text2D*>::iterator it = m_mainMenuTitles.begin(); it != m_mainMenuTitles.end(); it++) {
-			(*it)->Render();
-		}
-		break;
-	case menu_states::CUP_SELECT:
-		m_cupBackground->Render();
-		m_cupPreviews.at(highlighted_cup)->Render();
-		for (std::vector<Text2D*>::iterator it = m_cupTitles.begin(); it != m_cupTitles.end(); it++) {
-			(*it)->Render();
-		}
-		break;
-	case menu_states::MAP_SELECT:
-		m_cupBackground->Render();
-		m_mapPreviews.at(highlighted_map)->Render();
-		for (std::vector<Text2D*>::iterator it = m_mapTitles.begin(); it != m_mapTitles.end(); it++) {
-			(*it)->Render();
-		}
-		break;
-	case menu_states::CHARACTER_SELECT:
-		m_characterBackground->Render();
-		for (std::vector<ImageGO2D*>::iterator it = m_characterPreviews.begin(); it != m_characterPreviews.end(); it++) {
-			(*it)->Render();
-		}
-		for (int i = 0; i < m_maxPlayers; ++i)
-		{
-			if (players_joined[i])
-			{
-				m_characterHighlight[i]->Render();
-				m_selectedCharacters[i][m_characterHighlightInt[i]]->Render();
+		case menu_states::MAIN_SELECT:
+			m_cupBackground->Render();
+			m_cupPreviews.at(highlighted_cup)->Render();
+			for (std::vector<Text2D*>::iterator it = m_mainMenuTitles.begin(); it != m_mainMenuTitles.end(); it++) {
+				(*it)->Render();
 			}
-			else if (!players_joined[i])
-				m_AButton[i]->Render();
-		}
-		break;
-	case menu_states::VEHICLE_SELECT:
-		m_characterBackground->Render();
-		for (std::vector<ImageGO2D*>::iterator it = m_vehiclePreviews.begin(); it != m_vehiclePreviews.end(); it++) {
-			(*it)->Render();
-		}
-		for (int i = 0; i < m_maxPlayers; ++i)
-		{
-			if (players_joined[i])
-			{
-				m_vehicleHighlight[i]->Render();
-				m_selectedVehicles[i][m_vehicleHighlightInt[i]]->Render();
+			break;
+		case menu_states::CUP_SELECT:
+			m_cupBackground->Render();
+			m_cupPreviews.at(highlighted_cup)->Render();
+			for (std::vector<Text2D*>::iterator it = m_cupTitles.begin(); it != m_cupTitles.end(); it++) {
+				(*it)->Render();
 			}
-		}
-		break;
+			break;
+		case menu_states::MAP_SELECT:
+			m_cupBackground->Render();
+			m_mapPreviews.at(highlighted_map)->Render();
+			for (std::vector<Text2D*>::iterator it = m_mapTitles.begin(); it != m_mapTitles.end(); it++) {
+				(*it)->Render();
+			}
+			break;
+		case menu_states::CHARACTER_SELECT:
+			m_characterBackground->Render();
+			for (std::vector<ImageGO2D*>::iterator it = m_characterPreviews.begin(); it != m_characterPreviews.end(); it++) {
+				(*it)->Render();
+			}
+			for (int i = 0; i < m_maxPlayers; ++i)
+			{
+				if (players_joined[i])
+				{
+					m_characterHighlight[i]->Render();
+					m_selectedCharacters[i][m_characterHighlightInt[i]]->Render();
+				}
+				else if (!players_joined[i])
+					m_AButton[i]->Render();
+			}
+			break;
+		case menu_states::VEHICLE_SELECT:
+			m_characterBackground->Render();
+			for (std::vector<ImageGO2D*>::iterator it = m_vehiclePreviews.begin(); it != m_vehiclePreviews.end(); it++) {
+				(*it)->Render();
+			}
+			for (int i = 0; i < m_maxPlayers; ++i)
+			{
+				if (players_joined[i])
+				{
+					m_vehicleHighlight[i]->Render();
+					m_selectedVehicles[i][m_vehicleHighlightInt[i]]->Render();
+				}
+			}
+			break;
 	}
+	m_state_desc->Render();
 }
