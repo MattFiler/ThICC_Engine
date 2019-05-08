@@ -41,6 +41,7 @@
             // resolutionSelector
             // 
             this.resolutionSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.resolutionSelector.Enabled = false;
             this.resolutionSelector.FormattingEnabled = true;
             this.resolutionSelector.Items.AddRange(new object[] {
             "2560x1440",

@@ -70,7 +70,7 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 	}
 	else
 	{
-		DebugText::print(" >>> This map uses an outdated config! Please re-export for new camera configurations!! <<< ");
+		DebugText::print(" >>> This map uses an outdated config! Please re-export for new spawn rotation configurations!! <<< ");
 	}
 	
 	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Game_Config_Preselect));
             this.openCharacterConfig = new System.Windows.Forms.Button();
             this.openCameraConfig = new System.Windows.Forms.Button();
             this.miscConfigs = new System.Windows.Forms.Button();
@@ -88,6 +89,7 @@
             this.Controls.Add(this.openCameraConfig);
             this.Controls.Add(this.openCharacterConfig);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Game_Config_Preselect";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Engine Configurations";

@@ -20,7 +20,7 @@
     "map_occlusionRoughnessMetallic": "rma_placeholder.png",
     "ThICC_METALLIC": false,
     "ThICC_COLLISION": {
-      "0": true,
+      "0": false,
       "1": false,
       "2": true,
       "3": false,
