@@ -67,7 +67,7 @@ Vector3 GameObject3D::GetRotation()
 Vector3 GameObject3D::MatrixDecomposeYawPitchRoll(Matrix  mat)
 {
 	//Breaks down a matrix into yaw, pitch, and roll. Returns them as a float3
-	// Retrieved From: https://gamedev.stackexchange.com/questions/50963/how-to-extract-euler-angles-from-transformation-matrix
+	// Based of: https://gamedev.stackexchange.com/questions/50963/how-to-extract-euler-angles-from-transformation-matrix
 	Vector3 euler;
 	euler.x = asinf(-mat._32);
 	if (cosf(euler.x) > 0.0001)
