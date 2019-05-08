@@ -45,12 +45,8 @@ void RedShell::Tick()
 		if (!m_altUse)
 		{
 			m_move->Tick();
-
-			float dist = Vector3::DistanceSquared(m_itemMesh->m_mesh->GetPos(), m_targetPlayer->GetPos());
-
-			DebugText::print("distance: " + std::to_string(dist));
 			
-			if (dist < m_aiData.m_moveTowardDistSqrd)
+			if (Vector3::DistanceSquared(m_itemMesh->m_mesh->GetPos(), m_targetPlayer->GetPos()) < m_aiData.m_moveTowardDistSqrd)
 			{
 				if (m_ai)
 				{
@@ -126,10 +122,6 @@ void RedShell::FindTargetPlayer()
 			{
 				m_targetPlayer = player;
 			}
-			else
-			{
-				continue;
-			}
 		}
 		else
 		{
@@ -147,7 +139,7 @@ void RedShell::FindTargetPlayer()
 		{
 			if (m_targetPlayer)
 			{
-				if (player->GetRanking() > m_targetPlayer->GetRanking())
+				if (m_player != player && player->GetRanking() > m_targetPlayer->GetRanking())
 				{
 					m_targetPlayer = player;
 				}
@@ -158,5 +150,6 @@ void RedShell::FindTargetPlayer()
 			}
 		}
 
+		m_players.clear();
 	}
 }

@@ -185,17 +185,13 @@
     <Compile Include="Generic_Importer.Designer.cs">
       <DependentUpon>Generic_Importer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Item_Asset_Editor.cs">
-      <SubType>Form</SubType>
+    <Compile Include="ItemAssetEditor.cs" />
+    <Compile Include="ItemAssetEditor.Designer.cs">
+      <DependentUpon>ItemAssetEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Item_Asset_Editor.Designer.cs">
-      <DependentUpon>Item_Asset_Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Item_Config_Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Item_Config_Editor.Designer.cs">
-      <DependentUpon>Item_Config_Editor.cs</DependentUpon>
+    <Compile Include="ItemConfigEditor.cs" />
+    <Compile Include="ItemConfigEditor.Designer.cs">
+      <DependentUpon>ItemConfigEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Keybinds_Editor.cs">
       <SubType>Form</SubType>
@@ -339,11 +335,11 @@
     <EmbeddedResource Include="Asset_Editor.resx">
       <DependentUpon>Asset_Editor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Item_Asset_Editor.resx">
-      <DependentUpon>Item_Asset_Editor.cs</DependentUpon>
+    <EmbeddedResource Include="ItemAssetEditor.resx">
+      <DependentUpon>ItemAssetEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Item_Config_Editor.resx">
-      <DependentUpon>Item_Config_Editor.cs</DependentUpon>
+    <EmbeddedResource Include="ItemConfigEditor.resx">
+      <DependentUpon>ItemConfigEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Keybinds_Editor.resx">
       <DependentUpon>Keybinds_Editor.cs</DependentUpon>
