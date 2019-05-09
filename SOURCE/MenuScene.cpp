@@ -28,7 +28,7 @@ MenuScene::~MenuScene()
 	m_characterPreviews.clear();
 	m_selectedCharacters.clear();
 	m_selectedVehicles.clear();
-	m_characterHighlightInt.clear();
+	highlighted_character.clear();
 	m_selectedVehicles.clear();
 	m_characterHighlight.clear();
 	m_vehicleHighlight.clear();
@@ -45,22 +45,22 @@ bool MenuScene::Load()
 
 /* Reset on load */
 void MenuScene::ExpensiveLoad() {
+	Locator::getRM()->attract_state = false;
 	m_menu_state = menu_states::SPLASH;
 	m_timer = 0.0f;
 	m_idle_timer = 0.0f;
 	m_keybinds.Reset();
 	highlighted_cup = 0;
 	highlighted_map = 0;
-	highlighted_vehicle = 0;
-	highlighted_menu = 0;
+	highlighted_type = 0;
 	m_maxPlayers = 4;
 	for (size_t i = 0; i < 4; i++)
 	{
-		if(i != 0)
+		if (i != 0)
 			players_joined[i] = false;
 
-		m_characterHighlightInt[i] = 0;
-		m_vehicleHighlightInt[i] = 0;
+		highlighted_character[i] = 0;
+		highlighted_vehicle[i] = 0;
 	}
 }
 
@@ -98,25 +98,23 @@ void MenuScene::create2DObjects()
 	exit_text->SetColour(inactive_colour);
 	m_mainMenuTitles.push_back(exit_text);
 
-	{
-		//position cup options
-		int index = 0;
-		for (CupInfo* a_cup : Locator::getGOS()->cup_instances) {
-			index++;
+	//position cup options
+	int index = 0;
+	for (CupInfo* a_cup : Locator::getGOS()->cup_instances) {
+		index++;
 
-			//Text
-			Text2D* cup_name = new Text2D(a_cup->name);
-			cup_name->SetColour(inactive_colour);
-			if (index == 1) {
-				cup_name->SetColour(active_colour);
-			}
-			cup_name->SetPos(Vector2(209, 55 + (index * 47)));
-			m_cupTitles.push_back(cup_name);
-
-			//Image
-			a_cup->preview_sprite->SetPos(Vector2(812, 279));
-			m_cupPreviews.push_back(a_cup->preview_sprite);
+		//Text
+		Text2D* cup_name = new Text2D(a_cup->name);
+		cup_name->SetColour(inactive_colour);
+		if (index == 1) {
+			cup_name->SetColour(active_colour);
 		}
+		cup_name->SetPos(Vector2(209, 55 + (index * 47)));
+		m_cupTitles.push_back(cup_name);
+
+		//Image
+		a_cup->preview_sprite->SetPos(Vector2(812, 279));
+		m_cupPreviews.push_back(a_cup->preview_sprite);
 	}
 
 	CreateCharacterMenu();
@@ -180,7 +178,7 @@ void MenuScene::CreateCharacterMenu()
 		for (int i = 0; i < 4; i++)
 		{
 			ImageGO2D* image = new ImageGO2D(a_character->preview_sprite->GetFilepath());
-			image->SetSize(Vector2( 150, 150 ));
+			image->SetSize(Vector2(150, 150));
 			if (i == 0)
 			{
 				image->SetPos(Vector2(160, 100));
@@ -279,8 +277,8 @@ void MenuScene::Update(DX::StepTimer const& timer)
 
 #ifdef _ARCADE
 	//Arcade loads straight to an arcade map
-	Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0];=
-	Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
+	Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0]; =
+		Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
 	Locator::getRM()->player_amount = 1;
 	Locator::getRM()->is_cup = false;
 	int index = 0;
@@ -293,7 +291,6 @@ void MenuScene::Update(DX::StepTimer const& timer)
 	}
 #endif	 
 
-#ifndef _DEBUG
 	//If idle for too long, send to attraction state
 	m_idle_timer += (float)timer.GetElapsedSeconds();
 	if (m_idle_timer > m_idle_timeout) {
@@ -306,78 +303,77 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 		}
 	}
-#endif
 
 	switch (m_menu_state) {
-		case menu_states::SPLASH:
-			//Animate logo over time
-			m_logo->SetScale(Vector2(0.3 + (m_timer / 30), 0.3 + (m_timer / 30)));
-			m_timer += (float)timer.GetElapsedSeconds();
+	case menu_states::SPLASH:
+		//Animate logo over time
+		m_logo->SetScale(Vector2(0.3 + (m_timer / 30), 0.3 + (m_timer / 30)));
+		m_timer += (float)timer.GetElapsedSeconds();
 
-			//Allow skip or progress if time elapsed
-			if (m_keybinds.keyReleased("Activate") || m_timer > m_timeout)
-			{
-				m_menu_state = menu_states::MAIN_SELECT;
-				m_idle_timer = 0.0f;
-			}
+		//Allow skip or progress if time elapsed
+		if (m_keybinds.keyReleased("Activate") || m_timer > m_timeout)
+		{
+			m_menu_state = menu_states::MAIN_SELECT;
+			m_idle_timer = 0.0f;
+		}
 
-			break;
-		case menu_states::MAIN_SELECT:
-			m_state_desc->SetText(m_localiser.getString("main_select"));
-			if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
-			{
-				if (highlighted_menu < m_mainMenuTitles.size() - 1) {
-					m_mainMenuTitles.at(highlighted_menu)->SetColour(inactive_colour);
-					highlighted_menu++;
-					m_mainMenuTitles.at(highlighted_menu)->SetColour(active_colour);
-				}
+		break;
+	case menu_states::MAIN_SELECT:
+		m_state_desc->SetText(m_localiser.getString("main_select"));
+		if (m_keybinds.keyReleased("Menu Down") || m_keybinds.keyReleased("backwards"))
+		{
+			if (highlighted_type < m_mainMenuTitles.size() - 1) {
+				m_mainMenuTitles.at(highlighted_type)->SetColour(inactive_colour);
+				highlighted_type++;
+				m_mainMenuTitles.at(highlighted_type)->SetColour(active_colour);
 			}
-			else if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
-			{
-				if (highlighted_menu > 0) {
-					m_mainMenuTitles.at(highlighted_menu)->SetColour(inactive_colour);
-					highlighted_menu--;
-					m_mainMenuTitles.at(highlighted_menu)->SetColour(active_colour);
-				}
+		}
+		else if (m_keybinds.keyReleased("Menu Up") || m_keybinds.keyReleased("forward"))
+		{
+			if (highlighted_type > 0) {
+				m_mainMenuTitles.at(highlighted_type)->SetColour(inactive_colour);
+				highlighted_type--;
+				m_mainMenuTitles.at(highlighted_type)->SetColour(active_colour);
 			}
-			else if (m_keybinds.keyReleased("Activate"))
+		}
+		else if (m_keybinds.keyReleased("Activate"))
+		{
+			m_idle_timer = 0.0f;
+			for (size_t i = 0; i < m_mainMenuTitles.size(); i++)
 			{
-				m_idle_timer = 0.0f;
-				for (size_t i = 0; i < m_mainMenuTitles.size(); i++)
-				{
-					m_mainMenuTitles.at(i)->SetColour(i == 0 ? active_colour : inactive_colour);
-				}
-				//Swap scene
-				m_menu_state = menu_states::CUP_SELECT;
-				if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("CUP"))
-					Locator::getRM()->is_cup = true;
-				else if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("RACE"))
-					Locator::getRM()->is_cup = false;
-				else if (m_mainMenuTitles[highlighted_menu]->GetText() == m_localiser.getString("EXIT"))
-				{
-					ExitGame();
-					m_menu_state = menu_states::SPLASH;
-				}
+				m_mainMenuTitles.at(i)->SetColour(i == 0 ? active_colour : inactive_colour);
 			}
-			break;
-		case menu_states::CUP_SELECT:
-			CupSelect();
-			break;
-		case menu_states::MAP_SELECT:
-			MapSelect();
-			break;
-		case menu_states::CHARACTER_SELECT:
-			CharacterSelect();
-			break;
-		case menu_states::VEHICLE_SELECT:
-			VehicleSelect();
-			break;
+			//Swap scene
+			m_menu_state = menu_states::CUP_SELECT;
+			if (m_mainMenuTitles[highlighted_type]->GetText() == m_localiser.getString("CUP"))
+				Locator::getRM()->is_cup = true;
+			else if (m_mainMenuTitles[highlighted_type]->GetText() == m_localiser.getString("RACE"))
+				Locator::getRM()->is_cup = false;
+			else if (m_mainMenuTitles[highlighted_type]->GetText() == m_localiser.getString("EXIT"))
+			{
+				ExitGame();
+				m_menu_state = menu_states::SPLASH;
+			}
+		}
+		break;
+	case menu_states::CUP_SELECT:
+		CupSelect();
+		break;
+	case menu_states::MAP_SELECT:
+		MapSelect();
+		break;
+	case menu_states::CHARACTER_SELECT:
+		CharacterSelect();
+		break;
+	case menu_states::VEHICLE_SELECT:
+		VehicleSelect();
+		break;
 	}
 
 	for (int i = 0; i < m_maxPlayers; ++i)
 	{
-		m_vehicleHighlight[i]->SetPos(m_vehiclePreviews[m_vehicleHighlightInt[i]]->GetPos() - Vector2{ highlight_diff, highlight_diff });
-		m_characterHighlight[i]->SetPos(m_characterPreviews[m_characterHighlightInt[i]]->GetPos() - Vector2{ highlight_diff, highlight_diff });
+		m_vehicleHighlight[i]->SetPos(m_vehiclePreviews[highlighted_vehicle[i]]->GetPos() - Vector2{ highlight_diff, highlight_diff });
+		m_characterHighlight[i]->SetPos(m_characterPreviews[highlighted_character[i]]->GetPos() - Vector2{ highlight_diff, highlight_diff });
 	}
 }
 
@@ -389,6 +385,7 @@ void MenuScene::CupSelect()
 	//Exit
 	if (m_keybinds.keyReleased("Back")) {
 		m_menu_state = menu_states::MAIN_SELECT;
+		highlighted_type = 0;
 		m_idle_timer = 0.0f;
 	}
 
@@ -455,6 +452,7 @@ void MenuScene::CupSelect()
 				m_mapPreviews.push_back(a_map->preview_sprite);
 			}
 
+			highlighted_map = 0;
 			m_menu_state = menu_states::MAP_SELECT;
 		}
 		else
@@ -474,6 +472,7 @@ void MenuScene::MapSelect()
 	{
 		m_idle_timer = 0.0f;
 		m_menu_state = menu_states::CUP_SELECT;
+		highlighted_cup = 0;
 	}
 
 	//Change map selection
@@ -509,23 +508,22 @@ void MenuScene::CharacterSelect()
 
 	for (size_t i = 0; i < m_maxPlayers; ++i)
 	{
-
 		if (m_keybinds.keyReleased("Menu Right", i) || m_keybinds.keyReleased("Right", i) && players_joined[i])
 		{
-			CheckAvailabilty(i, m_characterHighlightInt[i], 1, num_of_charcters, 0, m_characterHighlightInt);
+			CheckAvailabilty(i, highlighted_character[i], 1, num_of_charcters, 0, highlighted_character);
 		}
 		else if (m_keybinds.keyReleased("Menu Left", i) || m_keybinds.keyReleased("Left", i) && players_joined[i])
 		{
-			CheckAvailabilty(i, m_characterHighlightInt[i], -1, -1, num_of_charcters - 1, m_characterHighlightInt);
+			CheckAvailabilty(i, highlighted_character[i], -1, -1, num_of_charcters - 1, highlighted_character);
 		}
-		else if (!NavigateMenus(i, m_characterHighlightInt[i], m_characterPreviews) && m_keybinds.keyReleased("Pause", i))
+		else if (!NavigateMenus(i, highlighted_character[i], m_characterPreviews) && m_keybinds.keyReleased("Pause", i))
 		{
 			if (!players_joined[i])
 			{
 				players_joined[i] = true;
 				Locator::getRM()->player_amount += 1;
 				Locator::getRM()->player_amount_changed = true;
-				CheckAvailabilty(i, m_characterHighlightInt[i], 1, num_of_charcters, 0, m_characterHighlightInt);
+				CheckAvailabilty(i, highlighted_character[i], 1, num_of_charcters, 0, highlighted_character);
 			}
 		}
 		else if (i != 0 && m_keybinds.keyReleased("Back", i))
@@ -545,22 +543,24 @@ void MenuScene::CharacterSelect()
 		m_menu_state = menu_states::VEHICLE_SELECT;
 	}
 	//Back to main menu select
-	else if (m_keybinds.keyReleased("Back", 0) || m_keybinds.keyReleased("Back"))
+	else if (m_keybinds.keyReleased("Back"))
 	{
 		m_idle_timer = 0.0f;
 		m_menu_state = menu_states::MAIN_SELECT;
 		Locator::getRM()->is_cup = false;
 		highlighted_cup = 0;
 		highlighted_map = 0;
-		highlighted_menu = 0;
+		highlighted_type = 0;
 		Locator::getRM()->player_amount = 1;
 		for (size_t i = 0; i < m_maxPlayers; ++i)
 		{
-			if(i != 0)
+			if (i != 0)
+			{
 				players_joined[i] = false;
+			}
 
-			m_characterHighlightInt[i] = 0;
-			m_vehicleHighlightInt[i] = 0;
+			highlighted_character[i] = 0;
+			highlighted_vehicle[i] = 0;
 		}
 
 	}
@@ -580,8 +580,7 @@ void MenuScene::VehicleSelect()
 
 	for (size_t i = 0; i < m_maxPlayers; ++i)
 	{
-
-		NavigateMenus(i, m_vehicleHighlightInt[i], m_vehiclePreviews);
+		NavigateMenus(i, highlighted_vehicle[i], m_vehiclePreviews);
 	}
 
 	//Load selected map with character choices
@@ -590,8 +589,8 @@ void MenuScene::VehicleSelect()
 		m_idle_timer = 0.0f;
 		for (size_t i = 0; i < Locator::getRM()->player_amount; i++)
 		{
-			Locator::getGSD()->character_selected[i] = m_characterHighlightInt[i]; //We only support P1 choices atm!
-			Locator::getGSD()->vehicle_selected[i] = m_vehicleHighlightInt[i];
+			Locator::getGSD()->character_selected[i] = highlighted_character[i];
+			Locator::getGSD()->vehicle_selected[i] = highlighted_vehicle[i];
 		}
 
 		if (Locator::getRM()->is_cup)
@@ -609,14 +608,16 @@ void MenuScene::VehicleSelect()
 			m_scene_manager->setCurrentScene(Scenes::GAMESCENE + Locator::getRM()->GetMaps()[Locator::getRM()->current_race_number]);
 		}
 		else
+		{
 			m_scene_manager->setCurrentScene(Scenes::GAMESCENE + highlighted_map);
+		}
 	}
 }
 
 /* Navigate character/vehicle selection */
 bool MenuScene::NavigateMenus(int player, int& number, const std::vector<ImageGO2D*>& previews)
 {
-	if (m_keybinds.keyReleased("Right", player) && players_joined[player])
+	if ((m_keybinds.keyReleased("Right", player) || m_keybinds.keyReleased("Menu_Right", player)) && players_joined[player])
 	{
 		number++;
 		if (number >= previews.size())
@@ -625,7 +626,7 @@ bool MenuScene::NavigateMenus(int player, int& number, const std::vector<ImageGO
 		}
 		return true;
 	}
-	else if (m_keybinds.keyReleased("Left", player) && players_joined[player])
+	else if ((m_keybinds.keyReleased("Left", player) || m_keybinds.keyReleased("Menu_Left", player)) && players_joined[player])
 	{
 		number--;
 		if (number < 0)
@@ -634,7 +635,7 @@ bool MenuScene::NavigateMenus(int player, int& number, const std::vector<ImageGO
 		}
 		return true;
 	}
-	else if (m_keybinds.keyReleased("Backwards", player) && players_joined[player])
+	else if ((m_keybinds.keyReleased("Backwards", player) || m_keybinds.keyReleased("Menu_Down", player)) && players_joined[player])
 	{
 		number += 4;
 		if (number >= previews.size())
@@ -642,11 +643,13 @@ bool MenuScene::NavigateMenus(int player, int& number, const std::vector<ImageGO
 			int diff = number - previews.size();
 			number = 0 + diff;
 			if (number >= previews.size())
+			{
 				number = previews.size() - 1;
+			}
 		}
 		return true;
 	}
-	else if (m_keybinds.keyReleased("Forward", player) && players_joined[player])
+	else if ((m_keybinds.keyReleased("Forward", player) || m_keybinds.keyReleased("Menu_Up", player)) && players_joined[player])
 	{
 		number -= 4;
 		if (number < 0)
@@ -654,7 +657,9 @@ bool MenuScene::NavigateMenus(int player, int& number, const std::vector<ImageGO
 			int diff = 0 - number;
 			number = previews.size() - diff;
 			if (number < 0)
+			{
 				number = 0;
+			}
 		}
 		return true;
 	}
@@ -677,7 +682,9 @@ void MenuScene::CheckAvailabilty(int player, int& player_sel_number, int added_n
 		for (int j = 0; j < 4; ++j)
 		{
 			if (player != j && player_sel_number == vector_compare[j] && players_joined[j])
+			{
 				checked = false;
+			}
 		}
 
 	} while (!checked);
@@ -703,57 +710,59 @@ void MenuScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 	}
 
 	switch (m_menu_state) {
-		case menu_states::MAIN_SELECT:
-			m_cupBackground->Render();
-			m_cupPreviews.at(highlighted_cup)->Render();
-			for (std::vector<Text2D*>::iterator it = m_mainMenuTitles.begin(); it != m_mainMenuTitles.end(); it++) {
-				(*it)->Render();
-			}
-			break;
-		case menu_states::CUP_SELECT:
-			m_cupBackground->Render();
-			m_cupPreviews.at(highlighted_cup)->Render();
-			for (std::vector<Text2D*>::iterator it = m_cupTitles.begin(); it != m_cupTitles.end(); it++) {
-				(*it)->Render();
-			}
-			break;
-		case menu_states::MAP_SELECT:
-			m_cupBackground->Render();
-			m_mapPreviews.at(highlighted_map)->Render();
-			for (std::vector<Text2D*>::iterator it = m_mapTitles.begin(); it != m_mapTitles.end(); it++) {
-				(*it)->Render();
-			}
-			break;
-		case menu_states::CHARACTER_SELECT:
-			m_characterBackground->Render();
-			for (std::vector<ImageGO2D*>::iterator it = m_characterPreviews.begin(); it != m_characterPreviews.end(); it++) {
-				(*it)->Render();
-			}
-			for (int i = 0; i < m_maxPlayers; ++i)
+	case menu_states::MAIN_SELECT:
+		m_cupBackground->Render();
+		m_cupPreviews.at(highlighted_cup)->Render();
+		for (std::vector<Text2D*>::iterator it = m_mainMenuTitles.begin(); it != m_mainMenuTitles.end(); it++) {
+			(*it)->Render();
+		}
+		break;
+	case menu_states::CUP_SELECT:
+		m_cupBackground->Render();
+		m_cupPreviews.at(highlighted_cup)->Render();
+		for (std::vector<Text2D*>::iterator it = m_cupTitles.begin(); it != m_cupTitles.end(); it++) {
+			(*it)->Render();
+		}
+		break;
+	case menu_states::MAP_SELECT:
+		m_cupBackground->Render();
+		m_mapPreviews.at(highlighted_map)->Render();
+		for (std::vector<Text2D*>::iterator it = m_mapTitles.begin(); it != m_mapTitles.end(); it++) {
+			(*it)->Render();
+		}
+		break;
+	case menu_states::CHARACTER_SELECT:
+		m_characterBackground->Render();
+		for (std::vector<ImageGO2D*>::iterator it = m_characterPreviews.begin(); it != m_characterPreviews.end(); it++) {
+			(*it)->Render();
+		}
+		for (int i = 0; i < m_maxPlayers; ++i)
+		{
+			if (players_joined[i])
 			{
-				if (players_joined[i])
-				{
-					m_characterHighlight[i]->Render();
-					m_selectedCharacters[i][m_characterHighlightInt[i]]->Render();
-				}
-				else if (!players_joined[i])
-					m_AButton[i]->Render();
+				m_characterHighlight[i]->Render();
+				m_selectedCharacters[i][highlighted_character[i]]->Render();
 			}
-			break;
-		case menu_states::VEHICLE_SELECT:
-			m_characterBackground->Render();
-			for (std::vector<ImageGO2D*>::iterator it = m_vehiclePreviews.begin(); it != m_vehiclePreviews.end(); it++) {
-				(*it)->Render();
-			}
-			for (int i = 0; i < m_maxPlayers; ++i)
+			else if (!players_joined[i])
 			{
-				if (players_joined[i])
-				{
-					m_vehicleHighlight[i]->Render();
-					m_selectedVehicles[i][m_vehicleHighlightInt[i]]->Render();
-				}
+				m_AButton[i]->Render();
 			}
-			break;
+		}
+		break;
+	case menu_states::VEHICLE_SELECT:
+		m_characterBackground->Render();
+		for (std::vector<ImageGO2D*>::iterator it = m_vehiclePreviews.begin(); it != m_vehiclePreviews.end(); it++) {
+			(*it)->Render();
+		}
+		for (int i = 0; i < m_maxPlayers; ++i)
+		{
+			if (players_joined[i])
+			{
+				m_vehicleHighlight[i]->Render();
+				m_selectedVehicles[i][highlighted_vehicle[i]]->Render();
+			}
+		}
+		break;
 	}
 	m_state_desc->Render();
 }
