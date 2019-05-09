@@ -580,7 +580,6 @@ void MenuScene::VehicleSelect()
 
 	for (size_t i = 0; i < m_maxPlayers; ++i)
 	{
-
 		NavigateMenus(i, m_vehicleHighlightInt[i], m_vehiclePreviews);
 	}
 

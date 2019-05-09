@@ -431,7 +431,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 			state = CAM_OPEN;
 			timeout = 2.99999f;
 			Locator::getAudio()->Play("PRE_COUNTDOWN");
-			if (Locator::getRM()->player_amount = 3)
+			if (Locator::getRM()->player_amount == 3)
 			{
 				cine_cam->SetType(CameraType::ORBIT);
 				cine_cam->SetTarget(player[3]);
@@ -684,7 +684,7 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			render3DObjects();
 		}
 
-		if (Locator::getRM()->player_amount = 3)
+		if (Locator::getRM()->player_amount == 3)
 		{
 			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[3]);
 			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[3]);
@@ -764,12 +764,6 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		}
 		break;
 	case PLAY:
-		/*
-		for (std::vector<GameObject2D *>::iterator it = m_2DObjects.begin(); it != m_2DObjects.end(); it++)
-		{
-			(*it)->Render();
-		}*/
-
 		for (int i = 0; i < Locator::getRM()->player_amount; i++)
 		{
 			if (player[i]->GetFinished())
