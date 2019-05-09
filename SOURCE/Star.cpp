@@ -33,8 +33,15 @@ void Star::Tick()
 			m_player->UseGroundTypes(true);
 			m_player->GetControlledMovement()->ResetMoveSpeed();
 			m_player->GetControlledMovement()->ResetTurnSpeed();
-			Locator::getAudio()->Stop("STAR_SOUND");
-			Locator::getAudio()->Play("TRACK_LOOP");
+
+			//for (size_t i = 0; i < Locator::getAudio()->SoundListSize(); i++)
+			//{
+			//	if (Locator::getAudio()->Paused(i) && (Locator::getAudio()->GetSound(i)->GetTag() == "TRACK_LOOP" || Locator::getAudio()->GetSound(i)->GetTag() == "FINAL_LAP_LOOP"))
+			//	{
+			//		Locator::getAudio()->Resume(i);
+			//	}
+			//}
+			//Locator::getAudio()->Stop("STAR_SOUND");
 			FlagForDestoy();
 		}
 	}
@@ -50,7 +57,12 @@ void Star::Use(Player * player, bool _altUse)
 	m_player->SetDrag(m_playerDrag);
 	m_player->setInvicible(true);
 	m_player->UseGroundTypes(false);
-	Locator::getAudio()->Pause("TRACK_LOOP");
-	Locator::getAudio()->Play("STAR_SOUND");
-
+	//for (size_t i = 0; i < Locator::getAudio()->SoundListSize(); i++)
+	//{
+	//	if (Locator::getAudio()->IsPlaying(i) && (Locator::getAudio()->GetSound(i)->GetTag() == "TRACK_LOOP" || Locator::getAudio()->GetSound(i)->GetTag() == "FINAL_LAP_LOOP"))
+	//	{
+	//		Locator::getAudio()->Pause(i);
+	//	}
+	//}
+	//Locator::getAudio()->Play("STAR_SOUND");
 }

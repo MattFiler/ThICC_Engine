@@ -32,6 +32,7 @@ public:
 private:
 	int number_of_races = 0;
 	std::vector<int> scores{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	std::vector<int> laps{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	std::vector<int> maps;
 
 };

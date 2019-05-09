@@ -31,6 +31,10 @@ public:
 	bool IsPlaying() { return m_sfx->IsInUse(); }
 
 	void Pause();
+
+	void SetPause(bool _paused) { paused = _paused; }
+	bool IsPaused() { return paused; }
+
 	const std::string& GetTag() { return tag; }
 	void SetTag(const std::string& _tag) { tag = _tag; }
 
@@ -44,6 +48,7 @@ protected:
 
 	bool loop = false;
 	bool m_playing = false;
+	bool paused = false;
 	std::string filename = "";
 	std::string tag = "";
 

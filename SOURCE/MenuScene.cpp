@@ -267,6 +267,11 @@ void MenuScene::CreateVehiclesMenu()
 /* Update the scene */
 void MenuScene::Update(DX::StepTimer const& timer)
 {
+	if (menu_start)
+	{
+		Locator::getAudio()->Play("MENU_LOOP");
+		menu_start = false;
+	}
 #ifdef _DEBUG
 	//Hacky implementation to get to the debug scene (temp)
 	if (Locator::getID()->m_keyboardTracker.IsKeyReleased(DirectX::Keyboard::Keys::D))
@@ -536,6 +541,7 @@ void MenuScene::CharacterSelect()
 	{
 		m_idle_timer = 0.0f;
 		m_menu_state = menu_states::VEHICLE_SELECT;
+
 	}
 	//Back to main menu select
 	else if (m_keybinds.keyReleased("Back"))
@@ -579,8 +585,10 @@ void MenuScene::VehicleSelect()
 	}
 
 	//Load selected map with character choices
-	if (m_keybinds.keyReleased("Activate"))
+	if (m_keybinds.keyReleased("Activate") || m_keybinds.keyReleased("Activate", 0))
 	{
+		menu_start = true;
+		Locator::getAudio()->Stop("MENU_LOOP");
 		m_idle_timer = 0.0f;
 		for (size_t i = 0; i < Locator::getRM()->player_amount; i++)
 		{
@@ -693,6 +701,8 @@ void MenuScene::CheckAvailabilty(int player, int& player_sel_number, int added_n
 		player_sel_number = 0;
 	}
 
+	Locator::getGSD()->character_selected[player] = highlighted_character[player];
+	Locator::getGSD()->vehicle_selected[player] = highlighted_vehicle[player];
 }
 
 /* Render the 2D scene */
