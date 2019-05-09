@@ -45,7 +45,6 @@ bool MenuScene::Load()
 
 /* Reset on load */
 void MenuScene::ExpensiveLoad() {
-	menu_start = true;
 	Locator::getRM()->attract_state = false;
 	m_menu_state = menu_states::SPLASH;
 	m_timer = 0.0f;
@@ -591,8 +590,9 @@ void MenuScene::VehicleSelect()
 	}
 
 	//Load selected map with character choices
-	if (m_keybinds.keyReleased("Activate"))
+	if (m_keybinds.keyReleased("Activate") || m_keybinds.keyReleased("Activate", 0))
 	{
+		menu_start = true;
 		Locator::getAudio()->Stop("MENU_LOOP");
 		m_idle_timer = 0.0f;
 		for (size_t i = 0; i < Locator::getRM()->player_amount; i++)

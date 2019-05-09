@@ -85,6 +85,7 @@ void GameScene::ExpensiveLoad() {
 		if(!Locator::getRM()->attract_state)
 			player[i]->SetPlayerID(i);
 
+		player[i]->SetLap(1);
 		player[i]->Reload(
 			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i])
@@ -93,6 +94,7 @@ void GameScene::ExpensiveLoad() {
 	for (int i = Locator::getRM()->player_amount; i < m_maxPlayers; i++)
 	{
 		player[i]->SetPlayerID(-1);
+		player[i]->SetLap(1);
 		player[i]->Reload(
 			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[0])
@@ -370,32 +372,34 @@ void GameScene::Update(DX::StepTimer const& timer)
 		DebugText::print(std::to_string(Locator::getID()->TEST));
 	}
 
-	int players_finished = 0;
-	for (size_t i = 0; i < Locator::getRM()->player_amount; ++i)
+	if (!Locator::getRM()->attract_state)
 	{
-		if (player[i]->GetLap() == 4)
+		int players_finished = 0;
+		for (size_t i = 0; i < Locator::getRM()->player_amount; ++i)
 		{
-			players_finished++;
+			if (player[i]->GetLap() == 4)
+			{
+				players_finished++;
+			}
+		}
+
+		if (!race_finished)
+			race_finished = players_finished == Locator::getRM()->player_amount;
+
+
+		if (race_finished)
+		{
+			finish_timer += (float)timer.GetElapsedSeconds();
+
+			if (finish_timer > 10)
+			{
+				Locator::getAudio()->StopAll();
+				Locator::getRM()->attract_state = false;
+				m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
+				return;
+			}
 		}
 	}
-
-	if(!race_finished)
-		race_finished = players_finished == Locator::getRM()->player_amount;
-
-
-	if (race_finished)
-	{
-		finish_timer += (float)timer.GetElapsedSeconds();
-
-		if (finish_timer > 10)
-		{
-			Locator::getAudio()->StopAll();
-			Locator::getRM()->attract_state = false;
-			m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
-			return;
-		}
-	}
-
 
 	Locator::getAIScheduler()->Update();
 
