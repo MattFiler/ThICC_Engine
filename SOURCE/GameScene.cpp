@@ -246,16 +246,16 @@ void GameScene::create2DObjects()
 
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
-		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
+		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
 		m_2DObjects.push_back(player[i]->GetItemImg());
 
 		float text_pos_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
 		float text_pos_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetRankingText()->GetSize().y;
-		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
+		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y), false);
 
 		float text_lap_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
 		float text_lap_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetLapText()->GetSize().y;
-		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
+		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y), false);
 	}
 
 
