@@ -196,9 +196,11 @@ void GameScene::ExpensiveUnload() {
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		player[i]->SetWaypoint(0);
 
-		if(i < 4)
+		if (i < 4)
+		{
 			m_cam[i]->Reset();
 			m_cam[i]->SetType(CameraType::FOLLOW);
+		}
 	}
 
 	cine_cam->Reset();
