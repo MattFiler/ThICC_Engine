@@ -19,6 +19,7 @@ enum Scenes
 	MENUSCENE,
 	LOADINGSCENE,
 	DEBUG_LIGHTINGTEST,
+	ATTRACT_STATE,
 	GAMESCENE, // must be second to last as we dynamically extend from this position
 
 	SCENE_COUNT // must always be last!

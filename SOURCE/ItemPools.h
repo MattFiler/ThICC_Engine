@@ -11,6 +11,8 @@ public:
 	ItemPools();
 	~ItemPools();
 
+	void Load();
+
 	ItemMesh* GetItemMesh(ItemType _type);
 	void AddItemMesh(ItemType _type, ItemMesh* _mesh);
 

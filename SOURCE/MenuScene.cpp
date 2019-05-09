@@ -301,12 +301,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 	if (m_idle_timer > m_idle_timeout) {
 		Locator::getRM()->attract_state = true;
 		Locator::getRM()->player_amount = 1;
-		for (MapInfo* a_map : Locator::getGOS()->map_instances) {
-			if (a_map->name == "Low-Poly Circuit") {
-				m_scene_manager->setCurrentScene(Scenes::GAMESCENE + a_map->scene_index);
-				return;
-			}
-		}
+		m_scene_manager->setCurrentScene(Scenes::ATTRACT_STATE);
 	}
 
 	switch (m_menu_state) {
