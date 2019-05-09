@@ -15,7 +15,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 
 	
 
-	for (int i = 0; i < m_maxPathIterations; i++)
+	/*for (int i = 0; i < m_maxPathIterations; i++)
 	{
 		m_debugRaceLine.push_back(new SDKMeshGO3D(Locator::getGOS()->common_model_config["debug_marker"]));
 		m_debugRaceLine.back()->Load();
@@ -31,7 +31,7 @@ MoveAI::MoveAI(PhysModel* _model, ControlledMovement* _move) : m_model(_model), 
 		m_debugNextWaypoint.back()->SetScale(0.2f);
 		m_debugNextWaypoint.back()->UpdateWorld();
 	}
-	#endif
+	#endif*/
 }
 
 MoveAI::~MoveAI()
@@ -42,7 +42,7 @@ MoveAI::~MoveAI()
 void MoveAI::DebugRender()
 {
 	
-	for (SDKMeshGO3D* mesh : m_debugRaceLine)
+	/*for (SDKMeshGO3D* mesh : m_debugRaceLine)
 	{
 		mesh->Render();
 	}
@@ -51,11 +51,12 @@ void MoveAI::DebugRender()
 	{
 		mesh->Render();
 	}
-	#endif
+	#endif*/
 }
 
 bool MoveAI::Update()
 {
+	/*
 #ifdef _DEBUG
 	Vector3 step = m_wayMiddle - m_model->GetPos();
 	step *= 0.05;
@@ -65,8 +66,8 @@ bool MoveAI::Update()
 		m_debugNextWaypoint[i]->UpdateWorld();
 	}
 	//DebugText::print(std::to_string(m_move->GetAcceleration()));
-#endif
-	//return false;
+#endif*/
+
 	if (m_player)
 	{
 		if (m_player->GetGroundType() == OFF_TRACK || m_player->GetGroundType() == ON_TRACK_NO_AI)

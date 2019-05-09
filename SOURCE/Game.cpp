@@ -25,9 +25,6 @@ void ThICC_Game::Initialize() {
 	m_aiScheduler = std::make_unique<AIScheduler>();
 	Locator::setupAIScheduler(m_aiScheduler.get());
 
-	m_raceManager = std::make_unique<RaceManager>();
-	Locator::setupRM(m_raceManager.get());
-
 	//Load all common model names
 	std::ifstream x(m_filepath.generateConfigFilepath("COMMON_MODELS_CONFIG", m_filepath.CONFIG));
 	m_go_shared.common_model_config << x;
@@ -73,16 +70,10 @@ void ThICC_Game::Initialize() {
 	for (auto& element : map_config) {
 		//Store map info
 		MapInfo* new_map_inf = new MapInfo(element, index);
-		#ifndef _DEBUG
 		#ifdef _ARCADE
 		if (!new_map_inf->is_arcade_exclusive) {
 			continue;
 		}
-		#else
-		if (new_map_inf->is_arcade_exclusive) {
-			continue;
-		}
-		#endif
 		#endif
 		m_go_shared.map_instances.push_back(new_map_inf);
 		//Create scene

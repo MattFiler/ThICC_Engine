@@ -254,9 +254,7 @@
     <Compile Include="Model_Importer_MaterialList.Designer.cs">
       <DependentUpon>Model_Importer_MaterialList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model_Importer_Wrapper.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Model_Importer_Wrapper.cs" />
     <Compile Include="Model_Importer_Wrapper.Designer.cs">
       <DependentUpon>Model_Importer_Wrapper.cs</DependentUpon>
     </Compile>
@@ -277,9 +275,7 @@
     <Compile Include="Splash.Designer.cs">
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI_Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="UI_Editor.cs" />
     <Compile Include="UI_Editor.Designer.cs">
       <DependentUpon>UI_Editor.cs</DependentUpon>
     </Compile>

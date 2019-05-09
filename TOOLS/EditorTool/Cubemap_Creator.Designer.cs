@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cubemap_Creator));
             this.loadPX = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.pathPX = new System.Windows.Forms.TextBox();
@@ -56,8 +57,8 @@
             this.previewPY = new System.Windows.Forms.PictureBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.asset_name = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.asset_name = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewNX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.previewPZ)).BeginInit();
@@ -348,14 +349,6 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Misc";
             // 
-            // asset_name
-            // 
-            this.asset_name.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.asset_name.Location = new System.Drawing.Point(6, 34);
-            this.asset_name.Name = "asset_name";
-            this.asset_name.Size = new System.Drawing.Size(197, 20);
-            this.asset_name.TabIndex = 0;
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -364,6 +357,14 @@
             this.label7.Size = new System.Drawing.Size(35, 13);
             this.label7.TabIndex = 30;
             this.label7.Text = "Name";
+            // 
+            // asset_name
+            // 
+            this.asset_name.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.asset_name.Location = new System.Drawing.Point(6, 34);
+            this.asset_name.Name = "asset_name";
+            this.asset_name.Size = new System.Drawing.Size(197, 20);
+            this.asset_name.TabIndex = 0;
             // 
             // Cubemap_Creator
             // 
@@ -375,6 +376,7 @@
             this.Controls.Add(this.createCubemap);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Cubemap_Creator";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cubemap Creator";

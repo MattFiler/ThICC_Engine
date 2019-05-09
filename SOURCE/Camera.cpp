@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "GameStateData.h"
 #include "CameraData.h"
+#include "RaceManager.h"
 #include "Player.h"
 #include "Keyboard.h"
 #include "KeybindManager.h"
@@ -11,8 +12,20 @@ Camera::Camera(float _width, float _height, Vector3 _dpos, GameObject3D * _targe
 {
 	m_pos = Vector3::Backward;
 	m_proj = Matrix::CreatePerspectiveFieldOfView(Locator::getCD()->fovs[static_cast<int>(cam_type)], _width / _height, Locator::getCD()->m_near, Locator::getCD()->m_far);
-
 	m_targetObject = _target;
+	width = _width;
+	height = _height;
+}
+
+void Camera::ResetFOV()
+{
+	if (cam_type != CameraType::CINEMATIC)
+	{
+		if(Locator::getRM()->player_amount != 2)
+			m_proj = Matrix::CreatePerspectiveFieldOfView(Locator::getCD()->fovs[static_cast<int>(cam_type)], width / height, Locator::getCD()->m_near, Locator::getCD()->m_far);
+		else
+			m_proj = Matrix::CreatePerspectiveFieldOfView(Locator::getCD()->fovs[static_cast<int>(cam_type)], width * 0.5f / height, Locator::getCD()->m_near, Locator::getCD()->m_far);
+	}
 }
 
 void Camera::Tick()

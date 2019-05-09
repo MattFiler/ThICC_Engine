@@ -42,7 +42,7 @@ Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, 
 
 void Player::InitPlayerData()
 {
-	std::ifstream i("DATA/CONFIGS/PLAYER_CONFIG.JSON");
+	std::ifstream i(m_filepath.generateConfigFilepath("PLAYER_CONFIG", m_filepath.CONFIG));
 	json playerData;
 	playerData << i;
 
@@ -67,6 +67,15 @@ Player::~Player()
 	m_imgItem = nullptr;
 }
 
+void Player::SetPlayerID(int val) 
+{ 
+	m_playerID = val;
+	// If AI
+	if (m_playerID == -1)
+	{
+		m_move->SetEnabled(false);
+	}
+}
 
 void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 
@@ -75,9 +84,9 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_model_config_vehicle << i;
 
 	m_animationMesh = std::make_unique<AnimationController>();
-	m_animationMesh->AddModel("vehicle", _vehicle->model);
 	SetScale(m_model_config_vehicle["modelscale"]);
 
+	m_animationMesh->AddModel("vehicle", _vehicle->model);
 	m_animationMesh->AddModel("character", _character->model);
 	m_animationMesh->AddModel("lakitu", Locator::getGOS()->common_model_config["referee"]);
 	m_animationMesh->AddModel("glider", Locator::getGOS()->common_model_config["glider"]);
@@ -100,6 +109,7 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_lastFramePos = m_pos;
 	//Update TrackMagnet here too?
 }
+
 void Player::SetActiveItem(ItemType _item) {
 	if (m_InventoryItem == _item) {
 		active_item = _item;
@@ -119,7 +129,7 @@ void Player::SetActiveItem(ItemType _item) {
 		DebugText::print("PLAYER TRIED TO USE AN ITEM THEY DON'T HAVE - THIS SHOULD NEVER BE REQUESTED!");
 		DebugText::print("UNLESS THEY'RE MAKING A TRIPLE ITEM");
 	}
-};
+}
 
 void Player::SetItemInInventory(ItemType _item) {
 	if (m_InventoryItem == ItemType::NONE) {
@@ -161,6 +171,9 @@ LightningCloud* Player::GetLightningCloud()
 
 void Player::Render()
 {
+	if (!m_animationMesh)
+		return;
+
 	m_animationMesh->Render();
 	TrackMagnet::Render();
 
@@ -173,6 +186,9 @@ void Player::Render()
 
 void Player::Tick()
 {
+	if (!m_animationMesh)
+		return;
+
 	movement();
 
 	RespawnLogic();
@@ -637,7 +653,7 @@ void Player::RespawnLogic()
 		m_posHistoryTimer += Locator::getGSD()->m_dt;
 		m_offTrackTimer = 0;
 		m_offTerrainTimer = 0;
-		if (m_posHistoryTimer >= m_posHistoryInterval)
+		if (m_posHistoryTimer >= m_posHistoryInterval && !m_respawning)
 		{
 			m_posHistoryTimer -= m_posHistoryInterval;
 			m_matrixHistory.push(m_world);
@@ -736,7 +752,11 @@ void Player::MovePlayerToTrack()
 		StopGlide();
 		m_move->SetEnabled(true);
 		m_animationMesh->SwitchModelSet("default");
+		m_gravDirection = m_world.Down();
 		UseMagnet(true);
+		m_vel = Vector::Zero;
+		m_gravVel = Vector::Zero;
+		m_velTotal = Vector::Zero;
 		return;
 	}
 

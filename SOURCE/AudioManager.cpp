@@ -112,6 +112,14 @@ void AudioManager::Stop(const std::string& _tag)
 	}
 }
 
+void AudioManager::StopAll()
+{
+	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
+	{
+		(*it)->Stop();
+	}
+}
+
 void AudioManager::Pause(const std::string& _tag)
 {
 	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
