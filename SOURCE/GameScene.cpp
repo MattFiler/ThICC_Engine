@@ -147,9 +147,12 @@ void GameScene::ExpensiveLoad() {
 		}
 	}
 
-	//Setup item pools
-	m_itemPools = new ItemPools();
-	Locator::setupItemPools(m_itemPools);
+	if (!Locator::getRM()->attract_state)
+	{
+		//Setup item pools
+		m_itemPools = new ItemPools();
+		Locator::setupItemPools(m_itemPools);
+	}
 
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
@@ -216,20 +219,24 @@ void GameScene::ExpensiveUnload() {
 	//Unload skybox
 	Locator::getRD()->skybox->Reset();
 
-	//Unload item pools
-	for (auto& item : m_itemModels)
+	if (!Locator::getRM()->attract_state)
 	{
-		if (item->GetItemMesh())
+		//Unload item pools
+		for (int i = 0; i < m_itemModels.size(); ++i)
 		{
-			Locator::getItemPools()->AddItemMesh(item->GetItemType(), item->GetItemMesh());
-			if (item->GetItemType() == BOMB)
+			if (m_itemModels[i]->GetItemMesh())
 			{
-				Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(item)->GetExplosion()->GetDisplayedMesh());
+				Locator::getItemPools()->AddItemMesh(m_itemModels[i]->GetItemType(), m_itemModels[i]->GetItemMesh());
+				if (m_itemModels[i]->GetItemType() == BOMB)
+				{
+					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh());
+				}
 			}
+			delete m_itemModels[i];
+			m_itemModels.erase(m_itemModels.begin() + i);
 		}
-		delete item;
+		Locator::getItemPools()->Reset();
 	}
-	Locator::getItemPools()->Reset();
 }
 
 /* Create all 2D objects for the scene */
