@@ -1,20 +1,4 @@
 {
-  "SUBWAY": {
-    "friendly_name": "MAP_SUBWAY",
-    "menu_sprite": "MAP_SUBWAY",
-    "model": "SUPERBELLSUBWAY",
-    "decoration_model": "DEFAULT_ITEM",
-    "cubemap": "CUBEMAP_SUBWAY",
-    "skybox": "SKYBOX_HYRULE_CIRCUIT",
-    "cup": "DEMO_CUP",
-    "arcade_only": false,
-    "audio": {
-      "background_start": "MKS START MUSIC",
-      "background": "MKS MAIN MUSIC",
-      "final_lap_start": "MKS FINAL LAP START",
-      "final_lap": "MKS FINAL LAP LOOP"
-    }
-  },
   "TEST MAP": {
     "friendly_name": "TEST MAP",
     "menu_sprite": "TEST TRACK",
@@ -98,8 +82,8 @@
   "MOO_MOO_MEADOWS": {
     "friendly_name": "MAP_MEADOWS",
     "menu_sprite": "MAP_MEADOWS",
-    "model": "MOOMOOMEADOWS_SUB_MESH1",
-    "decoration_model": "MOOMOOMEADOWS_SUB_MESH_2",
+    "model": "MOOMOOMEADOWS_SUBMESH1",
+    "decoration_model": "MOOMOOMEADOWS_SUB_MESH2",
     "cubemap": "SUNSUBMIXER",
     "skybox": "VRWIIMOO_ALB",
     "cup": "DEMO_CUP",

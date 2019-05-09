@@ -24,7 +24,14 @@ public:
 	void Stop(const std::string& _tag);
 	void StopAll();
 	void Pause(const std::string& _tag);
+	void Pause(size_t i);
+	bool IsPlaying(size_t i);
+	bool Paused(size_t i);
+	void Resume(const std::string& _tag);
+	void Resume(size_t i);
+	size_t SoundListSize() { return m_Sounds.size(); }
 	Sound* GetSound(const std::string& _tag);
+	Sound* GetSound(size_t i) { return m_Sounds[i]; }
 
 private:
 

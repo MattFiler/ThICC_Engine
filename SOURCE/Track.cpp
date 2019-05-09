@@ -138,7 +138,7 @@ void Track::LoadCollision() {
 }
 
 /* Unload the track collision info and decoration mesh if we have one */
-void Track::UnloadCollision() {
+void Track::Reset() {
 	m_validCollisions.clear();
 	m_triangles.clear();
 	m_triGrid.clear();
@@ -146,6 +146,7 @@ void Track::UnloadCollision() {
 		m_decoration_model->Reset();
 	}
 	DebugText::print("Unloaded track tri map for '" + filename + "'.");
+	PhysModel::Reset();
 }
 
 /* Returns a suitable spawn location for a player in this map */
