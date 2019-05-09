@@ -776,7 +776,8 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			{
 				player[i]->GetRankingText()->Render();
 				player[i]->GetLapText()->Render();
-				player[i]->GetItemImg()->Render();
+				if(player[i]->GetItemInInventory() != ItemType::NONE)
+					player[i]->GetItemImg()->Render();
 			}
 		}
 		break;

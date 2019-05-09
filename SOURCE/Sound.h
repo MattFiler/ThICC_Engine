@@ -29,16 +29,14 @@ public:
 	void SetLoop(bool _loop);
 
 	bool IsPlaying() { return m_sfx->IsInUse(); }
-	void CreateInst();
 
 	void Pause();
-	void Resume();
 	const std::string& GetTag() { return tag; }
 	void SetTag(const std::string& _tag) { tag = _tag; }
 
 protected:
 	std::unique_ptr<DirectX::SoundEffect> m_sfx;
-	std::unique_ptr<DirectX::SoundEffectInstance> m_soundInst;
+	std::unique_ptr<DirectX::SoundEffectInstance> m_loop;
 
 	float m_volume = 1.0f;
 	float m_pitch = 0.0f;
@@ -51,4 +49,3 @@ protected:
 
 	GameFilepaths m_filepath;
 };
-
