@@ -45,6 +45,7 @@ bool MenuScene::Load()
 
 /* Reset on load */
 void MenuScene::ExpensiveLoad() {
+	Locator::getRM()->attract_state = false;
 	m_menu_state = menu_states::SPLASH;
 	m_timer = 0.0f;
 	m_idle_timer = 0.0f;
