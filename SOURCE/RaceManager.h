@@ -21,6 +21,7 @@ public:
 			(*it) = 0;
 		}
 		maps.clear();
+		attract_state = false;
 	}
 
 	int current_race_number = 0;

@@ -147,12 +147,17 @@ void GameScene::ExpensiveLoad() {
 		}
 	}
 
-	if (!Locator::getRM()->attract_state)
+	if (!m_itemPools)
 	{
 		//Setup item pools
 		m_itemPools = new ItemPools();
 		Locator::setupItemPools(m_itemPools);
 	}
+	else
+	{
+		Locator::getItemPools()->Load();
+	}
+	
 
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
@@ -198,7 +203,7 @@ void GameScene::ExpensiveUnload() {
 	for (int i = 0; i < m_maxPlayers; i++) {
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		player[i]->SetWaypoint(0);
-
+		player[i]->SetLap(1);
 		if (i < 4)
 		{
 			m_cam[i]->Reset();
@@ -226,7 +231,7 @@ void GameScene::ExpensiveUnload() {
 	//Unload skybox
 	Locator::getRD()->skybox->Reset();
 
-	if (!Locator::getRM()->attract_state)
+	//if (!Locator::getRM()->attract_state)
 	{
 		//Unload item pools
 		for (int i = 0; i < m_itemModels.size(); ++i)
@@ -239,9 +244,9 @@ void GameScene::ExpensiveUnload() {
 					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh());
 				}
 			}
-			delete m_itemModels[i];
-			m_itemModels.erase(m_itemModels.begin() + i);
+
 		}
+		m_itemModels.clear();
 		Locator::getItemPools()->Reset();
 	}
 }
@@ -408,7 +413,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 	if (Locator::getRM()->attract_state)
 	{
 		if (m_keybinds.keyReleased("Activate")) {
-			Locator::getRM()->attract_state = false;
 			Locator::getAudio()->StopAll();
 			m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
 			return;

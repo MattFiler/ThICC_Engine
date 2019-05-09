@@ -20,7 +20,7 @@ bool KartAI::Update()
 {
 	MoveAI::Update();
 
-	if (!Locator::getRM()->attract_state)
+	//if (!Locator::getRM()->attract_state)
 	{
 		ItemType type = m_player->GetItemInInventory();
 
