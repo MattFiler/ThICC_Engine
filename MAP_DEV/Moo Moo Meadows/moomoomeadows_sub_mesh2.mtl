@@ -11,7 +11,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd barrel_alb.png
-map_d  barrel_alb.png
+map_d barrel_alb.png
 
 newmtl CrashBox.001
 Ns 92.156863
@@ -23,7 +23,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd crashbox_alb.png
-map_d  crashbox_alb.png
+map_d crashbox_alb.png
 
 newmtl ForestEnkei.001
 Ns 92.156863
@@ -35,7 +35,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd forestenkei_alb.png
-map_d  forestenkei_alb.png
+map_d forestenkei_alb.png
 
 newmtl HandCart.001
 Ns 92.156863
@@ -47,7 +47,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd handcart_alb.png
-map_d  handcart_alb.png
+map_d handcart_alb.png
 
 newmtl ef_sea.001
 Ns 92.156863
@@ -59,7 +59,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd ef_seawater_alb.png
-map_d  ef_seawater_alb.png
+map_d ef_seawater_alb.png
 
 newmtl mm_Fence_white.001
 Ns 92.156863
@@ -71,7 +71,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_saku_white_alb.png
-map_d  mm_saku_white_alb.png
+map_d mm_saku_white_alb.png
 
 newmtl mm_Lawn00.001
 Ns 92.156863
@@ -83,7 +83,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_grass2_alb.png
-map_d  mm_grass2_alb.png
+map_d mm_grass2_alb.png
 
 newmtl mm_Pole.001
 Ns 92.156863
@@ -95,7 +95,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_pole_alb.png
-map_d  mm_pole_alb.png
+map_d mm_pole_alb.png
 
 newmtl mm_Truck.001
 Ns 92.156863
@@ -107,7 +107,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd truck_alb.png
-map_d  truck_alb.png
+map_d truck_alb.png
 
 newmtl mm_distantview.001
 Ns 92.156863
@@ -119,7 +119,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_distantview_alb.png
-map_d  mm_distantview_alb.png
+map_d mm_distantview_alb.png
 
 newmtl mm_house_Wall01.001
 Ns 92.156863
@@ -131,7 +131,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_block02_alb.png
-map_d  mm_block02_alb.png
+map_d mm_block02_alb.png
 
 newmtl mm_house_builWood02.001
 Ns 92.156863
@@ -143,7 +143,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd ct_builwood02_alb.png
-map_d  ct_builwood02_alb.png
+map_d ct_builwood02_alb.png
 
 newmtl mm_house_concrete.001
 Ns 92.156863
@@ -155,7 +155,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd ct_toyside_concrete_alb.png
-map_d  ct_toyside_concrete_alb.png
+map_d ct_toyside_concrete_alb.png
 
 newmtl mm_house_door.001
 Ns 92.156863
@@ -167,7 +167,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_house_door_alb.png
-map_d  mm_house_door_alb.png
+map_d mm_house_door_alb.png
 
 newmtl mm_house_hwood01.001
 Ns 92.156863
@@ -179,7 +179,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd ct_hwood03_alb.png
-map_d  ct_hwood03_alb.png
+map_d ct_hwood03_alb.png
 
 newmtl mm_house_metal.001
 Ns 92.156863
@@ -191,7 +191,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd ct_hmetalwall01_alb.png
-map_d  ct_hmetalwall01_alb.png
+map_d ct_hmetalwall01_alb.png
 
 newmtl mm_house_window01.001
 Ns 92.156863
@@ -203,7 +203,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd ct_house_window_alb.png
-map_d  ct_house_window_alb.png
+map_d ct_house_window_alb.png
 
 newmtl mm_house_window02.001
 Ns 92.156863
@@ -215,7 +215,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd ct_hwindow01_alb.png
-map_d  ct_hwindow01_alb.png
+map_d ct_hwindow01_alb.png
 
 newmtl mm_moutain01.001
 Ns 92.156863
@@ -227,7 +227,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd sn_moutain01_alb.png
-map_d  sn_moutain01_alb.png
+map_d sn_moutain01_alb.png
 
 newmtl mm_roaddirt01.001
 Ns 92.156863
@@ -239,7 +239,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd wiimm_hm_dirt01_alb.png
-map_d  wiimm_hm_dirt01_alb.png
+map_d wiimm_hm_dirt01_alb.png
 
 newmtl mm_roof.001
 Ns 92.156863
@@ -251,7 +251,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_roof01_alb.png
-map_d  mm_roof01_alb.png
+map_d mm_roof01_alb.png
 
 newmtl mm_roof02.001
 Ns 92.156863
@@ -263,7 +263,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_roof02_alb.png
-map_d  mm_roof02_alb.png
+map_d mm_roof02_alb.png
 
 newmtl mm_roof03.001
 Ns 92.156863
@@ -275,7 +275,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_roof03_alb.png
-map_d  mm_roof03_alb.png
+map_d mm_roof03_alb.png
 
 newmtl mm_roof04.001
 Ns 92.156863
@@ -287,7 +287,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_roof04_alb.png
-map_d  mm_roof04_alb.png
+map_d mm_roof04_alb.png
 
 newmtl mm_roof5.001
 Ns 92.156863
@@ -299,7 +299,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_roof05_alb.png
-map_d  mm_roof05_alb.png
+map_d mm_roof05_alb.png
 
 newmtl mm_smetalwall01.001
 Ns 92.156863
@@ -311,7 +311,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_smetalwall01_alb.png
-map_d  mm_smetalwall01_alb.png
+map_d mm_smetalwall01_alb.png
 
 newmtl mm_wall_pole.001
 Ns 92.156863
@@ -323,7 +323,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_wall_pole_alb.png
-map_d  mm_wall_pole_alb.png
+map_d mm_wall_pole_alb.png
 
 newmtl mm_whitewall.001
 Ns 92.156863
@@ -335,7 +335,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_white_wall_alb.png
-map_d  mm_white_wall_alb.png
+map_d mm_white_wall_alb.png
 
 newmtl mm_wood02.001
 Ns 92.156863
@@ -347,7 +347,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd ct_hwood02_alb.png
-map_d  ct_hwood02_alb.png
+map_d ct_hwood02_alb.png
 
 newmtl mm_wood04.001
 Ns 92.156863
@@ -359,7 +359,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_wood04_alb.png
-map_d  mm_wood04_alb.png
+map_d mm_wood04_alb.png
 
 newmtl mm_woodroad01.001
 Ns 92.156863
@@ -371,7 +371,7 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_woodroad01_alb.png
-map_d  mm_woodroad01_alb.png
+map_d mm_woodroad01_alb.png
 
 newmtl ttc_wall_metal0.001
 Ns 92.156863
@@ -383,4 +383,4 @@ Ni 1.000000
 d 0.000000
 illum 2
 map_Kd mm_wall_metal0_alb.png
-map_d  mm_wall_metal0_alb.png
+map_d mm_wall_metal0_alb.png
