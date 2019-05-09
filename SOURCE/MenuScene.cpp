@@ -291,7 +291,6 @@ void MenuScene::Update(DX::StepTimer const& timer)
 	}
 #endif	 
 
-#ifndef _DEBUG
 	//If idle for too long, send to attraction state
 	m_idle_timer += (float)timer.GetElapsedSeconds();
 	if (m_idle_timer > m_idle_timeout) {
@@ -304,7 +303,6 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			}
 		}
 	}
-#endif
 
 	switch (m_menu_state) {
 	case menu_states::SPLASH:
