@@ -98,6 +98,7 @@ void CollisionManager::PlayerCollisions(PhysModel*& _player1, PhysModel*& _playe
 	}
 	else
 	{
+		//Based of https://www.randygaul.net/2013/03/27/game-physics-engine-part-1-impulse-resolution/
 		Vector3 rv = _player2->getVelocity() - _player1->getVelocity();
 		float contactVel = rv.Dot(_collisionNormal);
 

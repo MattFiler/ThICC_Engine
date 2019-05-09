@@ -106,16 +106,16 @@ void GameScene::ExpensiveLoad() {
 
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
-		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
+		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY) / Locator::getRD()->m_base_res_scale);
 
 		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
 		float text_pos_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
 		float text_pos_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetRankingText()->GetSize().y;
-		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
+		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y), false);
 
 		float text_lap_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
 		float text_lap_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetLapText()->GetSize().y;
-		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
+		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y), false);
 	}
 
 
@@ -125,11 +125,11 @@ void GameScene::ExpensiveLoad() {
 		player[i]->GetCountdown()->SetPos({
 			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 ,
 			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2
-			});
+			}, false);
 		player[i]->GetFinishOrder()->SetPos({
 			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetFinishOrder()->GetSize().x / 2 ,
 			Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height / 2 - player[i]->GetFinishOrder()->GetSize().y / 2
-			});
+			}, false);
 		m_cam[i]->ResetFOV();
 	}
 
@@ -219,10 +219,13 @@ void GameScene::ExpensiveUnload() {
 	//Unload item pools
 	for (auto& item : m_itemModels)
 	{
-		Locator::getItemPools()->AddItemMesh(item->GetItemType(), item->GetItemMesh());
-		if (item->GetItemType() == BOMB)
+		if (item->GetItemMesh())
 		{
-			Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(item)->GetExplosion()->GetDisplayedMesh());
+			Locator::getItemPools()->AddItemMesh(item->GetItemType(), item->GetItemMesh());
+			if (item->GetItemType() == BOMB)
+			{
+				Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(item)->GetExplosion()->GetDisplayedMesh());
+			}
 		}
 		delete item;
 	}

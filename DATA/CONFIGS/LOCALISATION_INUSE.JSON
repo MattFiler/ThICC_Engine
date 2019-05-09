@@ -118,5 +118,8 @@
   },
   "EXIT": {
     "in_use_in": []
+  },
+  "MAIN_SELECT": {
+    "in_use_in": []
   }
 }
