@@ -157,9 +157,17 @@ void GameScene::ExpensiveLoad() {
 		}
 	}
 
-	//Setup item pools
-	m_itemPools = new ItemPools();
-	Locator::setupItemPools(m_itemPools);
+	if (!m_itemPools)
+	{
+		//Setup item pools
+		m_itemPools = new ItemPools();
+		Locator::setupItemPools(m_itemPools);
+	}
+	else
+	{
+		Locator::getItemPools()->Load();
+	}
+	
 
 	//Set AI to current track
 	Locator::getAIScheduler()->UpdateTrack(track);
@@ -199,7 +207,7 @@ void GameScene::ExpensiveUnload() {
 	//Reset player positions & camera mode
 	for (int i = 0; i < m_maxPlayers; i++) {
 		player[i]->SetWaypoint(0);
-
+		player[i]->SetLap(1);
 		if (i < 4)
 		{
 			m_cam[i]->Reset();
@@ -227,20 +235,24 @@ void GameScene::ExpensiveUnload() {
 	//Unload skybox
 	Locator::getRD()->skybox->Reset();
 
-	//Unload item pools
-	for (auto& item : m_itemModels)
+	//if (!Locator::getRM()->attract_state)
 	{
-		if (item->GetItemMesh())
+		//Unload item pools
+		for (int i = 0; i < m_itemModels.size(); ++i)
 		{
-			Locator::getItemPools()->AddItemMesh(item->GetItemType(), item->GetItemMesh());
-			if (item->GetItemType() == BOMB)
+			if (m_itemModels[i]->GetItemMesh())
 			{
-				Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(item)->GetExplosion()->GetDisplayedMesh());
+				Locator::getItemPools()->AddItemMesh(m_itemModels[i]->GetItemType(), m_itemModels[i]->GetItemMesh());
+				if (m_itemModels[i]->GetItemType() == BOMB)
+				{
+					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh());
+				}
 			}
+
 		}
-		delete item;
+		m_itemModels.clear();
+		Locator::getItemPools()->Reset();
 	}
-	Locator::getItemPools()->Reset();
 }
 
 /* Create all 2D objects for the scene */
@@ -400,7 +412,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 	if (Locator::getRM()->attract_state)
 	{
 		if (m_keybinds.keyReleased("Activate")) {
-			Locator::getRM()->attract_state = false;
 			Locator::getAudio()->StopAll();
 			m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
 			return;

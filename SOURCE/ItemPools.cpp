@@ -6,6 +6,11 @@
 
 ItemPools::ItemPools()
 {
+	Load();
+}
+
+void ItemPools::Load()
+{
 	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
 	json itemData;
 	itemData << i;
