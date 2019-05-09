@@ -46,7 +46,7 @@ private:
 	Text2D* m_state_desc = nullptr;
 
 	//Main Menu select objects
-	int highlighted_menu = 0;
+	int highlighted_type = 0;
 	std::vector<Text2D*> m_mainMenuTitles;
 
 	//Cup select objects
@@ -62,16 +62,15 @@ private:
 	//Character select objects
 	std::vector<Text2D*> m_characterTitles;
 	std::vector<ImageGO2D*> m_characterPreviews;
-	std::vector<int> m_characterHighlightInt{ 0, 0, 0, 0 };
+	std::vector<int> highlighted_character{ 0, 0, 0, 0 };
 	std::vector<std::vector<ImageGO2D*>> m_selectedCharacters;
 	std::vector<ImageGO2D*> m_characterHighlight;
 	std::vector<ImageGO2D*> m_AButton;
 
 	//Vehicle select objects
-	int highlighted_vehicle = 0;
 	std::vector<Text2D*> m_vehicleTitles;
 	std::vector<ImageGO2D*> m_vehiclePreviews;
-	std::vector<int> m_vehicleHighlightInt{ 0, 0, 0, 0 };
+	std::vector<int> highlighted_vehicle{ 0,0,0,0 };
 	std::vector<std::vector<ImageGO2D*>> m_selectedVehicles;
 	std::vector<ImageGO2D*> m_vehicleHighlight;
 
