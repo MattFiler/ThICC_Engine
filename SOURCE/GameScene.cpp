@@ -199,7 +199,7 @@ void GameScene::ExpensiveUnload() {
 	{
 		(*it)->Reset();
 		if (dynamic_cast<Track*>(*it)) {
-			dynamic_cast<Track*>(*it)->UnloadCollision();
+			dynamic_cast<Track*>(*it)->Reset();
 			suitable_spawn = dynamic_cast<Track*>(*it)->getSuitableSpawnSpot();
 		}
 	}
