@@ -315,7 +315,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 			m_timer += (float)timer.GetElapsedSeconds();
 
 			//Allow skip or progress if time elapsed
-			if (m_keybinds.keyReleased("Activate") || m_timer > m_timeout)
+			if (m_keybinds.keyReleased("Activate"))
 			{
 				m_menu_state = menu_states::MAIN_SELECT;
 				m_idle_timer = 0.0f;

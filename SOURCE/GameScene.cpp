@@ -743,6 +743,11 @@ void GameScene::render3DObjects()
 /* Render the 2D scene */
 void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
+	if (Locator::getRM()->attract_state)
+	{
+		return;
+	}
+
 	if (is_paused) {
 		m_pause_screen->Render();
 		return;
