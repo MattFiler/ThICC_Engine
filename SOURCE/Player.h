@@ -128,7 +128,7 @@ private:
 	Vector m_savedGravVel;
 	int m_ranking = 0;
 	int m_waypoint = 0;
-	int m_lap = 1;
+	int m_lap = 3;
 	Text2D *m_textRanking = nullptr;
 	Text2D *m_textLap = nullptr;
 	Text2D *m_textCountdown = nullptr;
@@ -206,7 +206,7 @@ private:
 	float m_glideTimeElapsed = 0;
 	bool m_gliding = false;
 	float m_normalGrav = 0; // Set from physmodel on load
-	float m_glidingGrav = 10;
+	float m_glidingGrav = 16;
 	float m_maxTimeGlidingOff = 3; // Max time gliding off the glide area before it respawns
 	float m_elapsedTimeOff = 0;
 

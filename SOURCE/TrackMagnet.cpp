@@ -42,9 +42,7 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 	{
 		// Find a the point on the found trinagle beneath this object (stored in midIntersect)
 		closestTri->DoesLineIntersect(m_world.Down(), m_pos + (m_world.Up() * (data.m_height / 2)), midIntersect, closestTri, m_maxAngle, 0);
-		m_colType = closestTri->GetType();
 		m_timeOffTerrain = 0;
-		m_colType = tri->GetType();
 		if (m_useGroundTypes && m_onTrack)
 		{
 
@@ -62,16 +60,21 @@ bool TrackMagnet::ShouldStickToTrack(Track& track)
 			}
 			case BOOST_PAD:
 			{
-				Vector vel = m_vel;
-				vel.Normalize();
-				vel *= 200 * Locator::getGSD()->m_dt;
-				m_vel += vel;
+				if (m_colType != BOOST_PAD)
+				{
+					Vector vel = m_vel;
+					vel.Normalize();
+					vel *= 100;
+					m_vel += vel;
+				}
 				break;
 			}
 			default:
 				break;
 			}
 		}
+
+		m_colType = closestTri->GetType();
 
 		Vector adjustVel = m_vel;
 		// If velocity is opposite to direction, then the kart is reversing
