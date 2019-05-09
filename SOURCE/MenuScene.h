@@ -91,7 +91,7 @@ private:
 	float m_timeout = 3.0f;
 	float m_timer = 0.0f;
 	float m_idle_timer = 0.0f;
-	float m_idle_timeout = 10.0f;
+	float m_idle_timeout = 30.0f;
 
 	//Logo
 	ImageGO2D* m_logo = nullptr;
