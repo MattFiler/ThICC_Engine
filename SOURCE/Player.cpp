@@ -70,11 +70,6 @@ Player::~Player()
 void Player::SetPlayerID(int val) 
 { 
 	m_playerID = val;
-	// If AI
-	if (m_playerID == -1)
-	{
-		m_move->SetEnabled(false);
-	}
 }
 
 void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
