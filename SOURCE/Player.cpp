@@ -532,7 +532,7 @@ void Player::ReleaseItem()
 void Player::setGamePad(bool _state)
 {
 	// If AI
-	if (!m_ai && (m_playerID == -1 || m_lap == 3))
+	if (m_playerID == -1 || (m_lap == 3 && !m_ai))
 	{
 		m_move->SetGamepadActive(false);
 		m_ai = std::make_unique<KartAI>(this, m_move.get());

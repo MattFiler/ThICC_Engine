@@ -98,8 +98,8 @@
   "MOO_MOO_MEADOWS": {
     "friendly_name": "MAP_MEADOWS",
     "menu_sprite": "MAP_MEADOWS",
-    "model": "MOOMOOMEADOWS_SUB_MESH1",
-    "decoration_model": "MOOMOOMEADOWS_SUB_MESH_2",
+    "model": "MOOMOOMEADOWS_SUBMESH1",
+    "decoration_model": "MOOMOOMEADOWS_SUB_MESH2",
     "cubemap": "SUNSUBMIXER",
     "skybox": "VRWIIMOO_ALB",
     "cup": "DEMO_CUP",
