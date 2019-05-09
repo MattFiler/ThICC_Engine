@@ -1,6 +1,6 @@
 ## ThICC Engine - Mario Kart
 
-A working build of the game can be found within the BUILDS folder.
+Two working builds of the game can be found within the BUILDS folder.
 
 To open the pipeline tool, select "ThICC Toolkit.exe".
 

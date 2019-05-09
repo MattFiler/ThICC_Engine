@@ -282,8 +282,8 @@ void MenuScene::Update(DX::StepTimer const& timer)
 
 #ifdef _ARCADE
 	//Arcade loads straight to an arcade map
-	Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0]; =
-		Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
+	Locator::getGSD()->character_selected[0] = highlighted_character[0];
+	Locator::getGSD()->vehicle_selected[0] = highlighted_vehicle[0];
 	Locator::getRM()->player_amount = 1;
 	Locator::getRM()->is_cup = false;
 	int index = 0;
