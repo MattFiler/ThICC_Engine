@@ -96,7 +96,7 @@ void SDKMeshGO3D::Render()
 							}
 							this_mat.animation_timer = 0;
 						}
-						m_material_config.at(i).animation_timer += (float)Locator::getGSD()->m_timer.GetElapsedSeconds();
+						m_material_config.at(i).animation_timer += (float)Locator::getGSD()->m_dt;
 					}
 					/* MATERIAL OVERRIDE (ALBEDO + EMISSIVE) */
 					if (material_override_index != -1 && !material_override_applied) {
