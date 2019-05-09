@@ -71,9 +71,7 @@
     ]
   },
   "MAP_SUBWAY": {
-    "in_use_in": [
-      "Map"
-    ]
+    "in_use_in": []
   },
   "TEST MAP": {
     "in_use_in": [
