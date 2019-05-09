@@ -107,5 +107,6 @@ private:
 	bool players_joined[4]{ true, false, false, false };
 	float highlight_diff;
 	int m_maxPlayers = 4;
+	bool menu_start = true;
 };
 

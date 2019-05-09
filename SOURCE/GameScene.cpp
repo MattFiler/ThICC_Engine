@@ -187,14 +187,9 @@ void GameScene::ExpensiveUnload() {
 	}
 
 	//Reset player positions & camera mode
-	//for (int i = 0; i < Locator::getRM()->player_amount; i++) {
-	//	player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
-	//	m_cam[i]->Reset();
-	//	m_cam[i]->SetType(CameraType::FOLLOW);
-	//}
 	for (int i = 0; i < m_maxPlayers; i++) {
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
-		player[i]->SetWaypoint(0);
+		player[i]->SetWaypoint(1);
 
 		if (i < 4)
 		{
@@ -293,9 +288,6 @@ void GameScene::create3DObjects()
 	}
 	#endif
 
-	//DebugText::print("Width: " + std::to_string(Locator::getRD()->m_window_width));
-	//DebugText::print("Height: " + std::to_string(Locator::getRD()->m_window_height));
-
 	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
 
 	// Spawn in the AI
@@ -378,23 +370,32 @@ void GameScene::Update(DX::StepTimer const& timer)
 		DebugText::print(std::to_string(Locator::getID()->TEST));
 	}
 
-	int players_finsihed = 0;
-	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	int players_finished = 0;
+	for (size_t i = 0; i < Locator::getRM()->player_amount; ++i)
 	{
-		if (dynamic_cast<Player*>((*it)))
+		if (player[i]->GetLap() == 4)
 		{
-			if (dynamic_cast<Player*>((*it))->GetLap() == 4)
-			{
-				players_finsihed++;
-				if (players_finsihed == 1)
-				{
-					Locator::getRM()->current_race_number++;
-					m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
-					return;
-				}
-			}
+			players_finished++;
 		}
 	}
+
+	if(!race_finished)
+		race_finished = players_finished == Locator::getRM()->player_amount;
+
+
+	if (race_finished)
+	{
+		finish_timer += (float)timer.GetElapsedSeconds();
+
+		if (finish_timer > 10)
+		{
+			Locator::getAudio()->StopAll();
+			Locator::getRM()->attract_state = false;
+			m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
+			return;
+		}
+	}
+
 
 	Locator::getAIScheduler()->Update();
 
@@ -402,7 +403,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 	{
 		if (m_keybinds.keyReleased("Activate")) {
 			Locator::getRM()->attract_state = false;
-			Locator::getAudio()->StopAll();
 			m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
 			return;
 		}
@@ -411,7 +411,10 @@ void GameScene::Update(DX::StepTimer const& timer)
 	switch (state)
 	{
 	case START:
-		Locator::getAudio()->Play("COURSE_INTRO");
+
+		if (!Locator::getRM()->attract_state)
+			Locator::getAudio()->Play("COURSE_INTRO");
+
 		state = OPENING;
 		break;
 	case OPENING:
@@ -432,7 +435,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
-			Locator::getAudio()->Play("PRE_COUNTDOWN");
+			if (!Locator::getRM()->attract_state)
+				Locator::getAudio()->Play("PRE_COUNTDOWN");
+
 			if (Locator::getRM()->player_amount == 3)
 			{
 				cine_cam->SetType(CameraType::ORBIT);
@@ -459,7 +464,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		if (m_cam[game_config["player_count"]-1]->GetType() == CameraType::FOLLOW)
 		{
-			Locator::getAudio()->Play("COUNTDOWN");
+			if (!Locator::getRM()->attract_state)
+				Locator::getAudio()->Play("COUNTDOWN");
 			state = COUNTDOWN;
 		}
 		break;
@@ -485,7 +491,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			state = PLAY;
 			timeout = 3.5f;
-			Locator::getAudio()->Play("TRACK_START");
+			if(!Locator::getRM()->attract_state)
+				Locator::getAudio()->Play("TRACK_START");
+
 			for (int i = 0; i < m_maxPlayers; ++i)
 			{
 				player[i]->setGamePad(true);
@@ -506,18 +514,20 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		timeout -= Locator::getGSD()->m_dt;
 
-		if (timeout <= 0 && track_music_start)
+		if (!Locator::getRM()->attract_state)
 		{
-			Locator::getAudio()->Play("TRACK_LOOP");
-			track_music_start = false;
-		}
+			if (timeout <= 0 && track_music_start)
+			{
+				Locator::getAudio()->Play("TRACK_LOOP");
+				track_music_start = false;
+			}
 
-		if (timeout <= 0 && final_lap_start)
-		{
-			Locator::getAudio()->Play("FINAL_LAP_LOOP");
-			final_lap_start = false;
+			if (timeout <= 0 && final_lap_start)
+			{
+				Locator::getAudio()->Play("FINAL_LAP_LOOP");
+				final_lap_start = false;
+			}
 		}
-
 		break;
 	}
 
@@ -528,8 +538,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 	if (m_keybinds.keyReleased("Quit"))
 	{
-		Locator::getAudio()->Stop("TRACK_LOOP");
-		Locator::getAudio()->Stop("FINAL_LAP_LOOP");
+		Locator::getAudio()->StopAll();
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	if (m_keybinds.keyReleased("toggle orbit cam"))
@@ -595,24 +604,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 			}
 		}
 
-		//Locator::getGarbageCollector()->DeletePointer(m_3DObjects[delIndex]);
 		m_3DObjects.erase(m_3DObjects.begin() + delIndex);
 	}
-
-	/*end = m_physModels.size();
-	delIndex = -1;
-	for (int i = 0; i < end; i++)
-	{
-		if (m_physModels[i]->ShouldDestroy())
-		{
-			delIndex = i;
-		}
-	}
-	if (delIndex != -1)
-	{
-		Locator::getGarbageCollector()->DeletePointer(m_physModels[delIndex]);
-		m_physModels.erase(m_physModels.begin() + delIndex);
-	}*/
 
 	//Toggle debug mesh renders
 	if (m_keybinds.keyReleased("toggle collision debug"))
@@ -820,8 +813,11 @@ void GameScene::SetPlayersWaypoint()
 				}
 				else if (i < Locator::getRM()->player_amount && player[i]->GetLap() == 2 && !final_lap)
 				{
-					Locator::getAudio()->Stop("TRACK_LOOP");
-					Locator::getAudio()->Play("FINAL_LAP_SOUND");
+					if (!Locator::getRM()->attract_state)
+					{
+						Locator::getAudio()->Stop("TRACK_LOOP");
+						Locator::getAudio()->Play("FINAL_LAP_SOUND");
+					}
 					final_lap = true;
 					final_lap_start = true;
 					timeout = 3.8f;

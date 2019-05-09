@@ -21,6 +21,7 @@ public:
 			(*it) = 0;
 		}
 		maps.clear();
+		attract_state = false;
 	}
 
 	int current_race_number = 0;
@@ -31,6 +32,7 @@ public:
 private:
 	int number_of_races = 0;
 	std::vector<int> scores{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	std::vector<int> laps{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	std::vector<int> maps;
 
 };

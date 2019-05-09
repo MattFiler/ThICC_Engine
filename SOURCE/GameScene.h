@@ -112,7 +112,8 @@ private:
 	bool final_lap = false;
 	int finished = 0;
 	bool is_paused = false;
-
+	bool race_finished = false;
+	float finish_timer = 0.0f;
 	int m_maxPlayers = 12;
 
 };

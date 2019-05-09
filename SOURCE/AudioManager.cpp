@@ -132,6 +132,40 @@ void AudioManager::Pause(const std::string& _tag)
 	}
 }
 
+void AudioManager::Resume(const std::string& _tag)
+{
+	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
+	{
+		if ((*it)->GetTag() == _tag)
+		{
+			(*it)->Play();
+			(*it)->SetPause(false);
+		}
+	}
+}
+
+void AudioManager::Resume(size_t i)
+{
+	m_Sounds[i]->Play();
+	m_Sounds[i]->SetPause(false);
+}
+
+void AudioManager::Pause(size_t i)
+{
+	m_Sounds[i]->Pause();
+	m_Sounds[i]->SetPause(true);
+}
+
+bool AudioManager::IsPlaying(size_t i)
+{
+	return m_Sounds[i]->IsPlaying();
+}
+
+bool AudioManager::Paused(size_t i)
+{
+	return m_Sounds[i]->IsPaused();
+}
+
 Sound* AudioManager::GetSound(const std::string& _tag)
 {
 	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
