@@ -187,13 +187,18 @@ void GameScene::ExpensiveUnload() {
 	}
 
 	//Reset player positions & camera mode
-	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
+	//for (int i = 0; i < Locator::getRM()->player_amount; i++) {
+	//	player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+	//	m_cam[i]->Reset();
+	//	m_cam[i]->SetType(CameraType::FOLLOW);
+	//}
+	for (int i = 0; i < m_maxPlayers; i++) {
 		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
-		m_cam[i]->Reset();
-		m_cam[i]->SetType(CameraType::ORBIT);
-	}
-	for (int i = Locator::getRM()->player_amount; i < m_maxPlayers; i++) {
-		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		player[i]->SetWaypoint(0);
+
+		if(i < 4)
+			m_cam[i]->Reset();
+			m_cam[i]->SetType(CameraType::FOLLOW);
 	}
 
 	cine_cam->Reset();
@@ -239,20 +244,16 @@ void GameScene::create2DObjects()
 
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
-		//player[i]->GetItemImg()->SetPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
 		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
 		m_2DObjects.push_back(player[i]->GetItemImg());
 
-		//player[i] = new Text2D(m_localiser.getString(std::to_string(player[i]->getCurrentWaypoint())), _RD);
 		float text_pos_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
 		float text_pos_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetRankingText()->GetSize().y;
 		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
-		//m_2DObjects.push_back(player[i]->GetRankingText());
 
 		float text_lap_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
 		float text_lap_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetLapText()->GetSize().y;
 		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
-		//m_2DObjects.push_back(player[i]->GetLapText());
 	}
 
 
