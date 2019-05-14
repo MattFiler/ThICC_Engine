@@ -227,6 +227,7 @@ void GameScene::ExpensiveUnload() {
 
 	//We'll probably need to reset more stuff here, like race timers, etc
 	timeout = 12.f;
+	finish_timer = 0;
 	state = START;
 	m_playerControls = false;
 	track_music_start = true;
