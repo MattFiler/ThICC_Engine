@@ -235,6 +235,7 @@ void GameScene::ExpensiveUnload() {
 	final_lap = false;
 	finished = 0;
 	is_paused = false;
+	race_finished = false;
 
 	//Unload skybox
 	Locator::getRD()->skybox->Reset();
