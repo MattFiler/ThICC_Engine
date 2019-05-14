@@ -18,13 +18,14 @@ namespace EditorTool
             {
                 //A launch to soley build assets
                 Splash splash_content = new Splash(false);
-                if (splash_content.autoCompileAssets(false, "../")) //Working directory fix
+                int compile_count = splash_content.autoCompileAssets(false, "../"); //Working directory fix
+                if (compile_count == -1)
                 {
-                    Console.WriteLine("Asset compile finished successfully.");
+                    Console.WriteLine("Asset compile FAILED. Files may be open in another process.");
                 }
                 else
                 {
-                    Console.WriteLine("Asset compile FAILED. Files may be open in another process.");
+                    Console.WriteLine("Finished compiling " + compile_count + " asset(s).");
                 }
                 Application.Exit();
             }
