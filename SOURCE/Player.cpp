@@ -704,6 +704,11 @@ Vector3 Player::GetPosHistoryBack()
 
 void Player::Respawn()
 {
+	if (m_matrixHistory.size() == 0) {
+		DebugText::print("Player called a respawn but had zero values to assign to m_endWorld. Fatal!");
+		return;
+	}
+
 	StopGlide();
 	m_move->SetEnabled(false);
 	m_animationMesh->SwitchModelSet("respawn");

@@ -42,7 +42,7 @@ SDKMeshGO3D::~SDKMeshGO3D()
 void SDKMeshGO3D::Render()
 {
 	if (!m_model) {
-		//DebugText::print("Call to render non-loaded model: " + filename);
+		DebugText::print("Call to render non-loaded model: " + filename);
 		return;
 	}
 	if ((m_shouldRender && !isDebugMesh()) || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
@@ -114,7 +114,12 @@ void SDKMeshGO3D::Render()
 
 		//Update effects and draw
 		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
-		m_model->Draw(Locator::getDD()->m_deviceResources->GetCommandList(), m_modelNormal.cbegin());
+		try {
+			m_model->Draw(Locator::getDD()->m_deviceResources->GetCommandList(), m_modelNormal.cbegin());
+		}
+		catch (...) {
+			DebugText::print("Failed to draw model: '" + filename + "'");
+		}
 
 		//End scene
 		Locator::getDD()->m_hdrScene->EndScene(commandList);
@@ -128,7 +133,13 @@ void SDKMeshGO3D::AlbedoEmissiveOverride(std::wstring path) {
 	}
 	auto device = Locator::getDD()->m_deviceResources->GetD3DDevice();
 	ResourceUploadBatch resourceUpload(device);
-	resourceUpload.Begin(); 
+	try {
+		resourceUpload.Begin();
+	}
+	catch (...) {
+		DebugText::print("SDKMeshGO3D::AlbedoEmissiveOverride - Failed to begin resource upload, we are probably out of memory. Fatal!");
+		return;
+	}
 	wchar_t override_tex[_MAX_PATH] = {};
 	DX::FindMediaFile(override_tex, _MAX_PATH, path.c_str());
 	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, override_tex, m_materialOverride.ReleaseAndGetAddressOf()));
@@ -142,8 +153,6 @@ void SDKMeshGO3D::AlbedoEmissiveOverride(std::wstring path) {
 /* Load the model */
 void SDKMeshGO3D::Load()
 {
-	DebugText::print("LOADING MODEL '" + filename + "'!");
-
 	//Our D3D device
 	auto device = Locator::getDD()->m_deviceResources->GetD3DDevice();
 
@@ -152,7 +161,13 @@ void SDKMeshGO3D::Load()
 
 	//Begin the resource upload
 	ResourceUploadBatch resourceUpload(device);
-	resourceUpload.Begin();
+	try {
+		resourceUpload.Begin();
+	}
+	catch (...) {
+		DebugText::print("SDKMeshGO3D::Load - Failed to begin resource upload, we are probably out of memory. Fatal!");
+		return;
+	}
 
 	//Set the sprite batch description (do we really need this?!)
 	{
@@ -160,11 +175,17 @@ void SDKMeshGO3D::Load()
 	}
 
 	//Create our resource descriptor - I'm allocating 1024 spaces for now
-	m_resourceDescriptors = std::make_unique<DescriptorPile>(device,
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
-		1024,
-		0);
+	try {
+		m_resourceDescriptors = std::make_unique<DescriptorPile>(device,
+			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+			D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
+			1024,
+			0);
+	}
+	catch (...) {
+		DebugText::print("SDKMeshGO3D::Load - Failed to allocate 1024 spaces to descriptor pile. Probably out of memory. Fatal!");
+		return;
+	}
 
 	#ifdef _ARCADE
 	//Find env map and load
@@ -247,7 +268,6 @@ void SDKMeshGO3D::Load()
 		DebugText::print("EXCEPTION WHILE LOADING '" + filename + "': " + error);
 		if (error == "Out of memory.") {
 			DebugText::print(" >>>> THIS MODEL SHOULD BE REMOVED FROM THE GAME! IT IS TOO LARGE TO HANDLE! <<<< ");
-			throw std::runtime_error("Cannot continue! Remove model '" + filename + "'!");
 		}
 		m_model.reset();
 		return;
@@ -394,12 +414,12 @@ void SDKMeshGO3D::Load()
 					}
 					else
 					{
-						DebugText::print("MODEL '" + filename + "' USES A DEPRECIATED METAL CONFIGURATION.");
+						DebugText::print("WARNING: MODEL '" + filename + "' USES A DEPRECIATED METAL CONFIGURATION.");
 					}
 				}
 				else
 				{
-					DebugText::print("MODEL '" + filename + "' DOES NOT HAVE A METAL CONFIGURATION.");
+					DebugText::print("WARNING: MODEL '" + filename + "' DOES NOT HAVE A METAL CONFIGURATION.");
 				}
 
 				/* Load animation config */
@@ -475,12 +495,12 @@ void SDKMeshGO3D::Load()
 					}
 					else
 					{
-						DebugText::print("MODEL '" + filename + "' USES A DEPRECIATED ANIMATION CONFIGURATION.");
+						DebugText::print("WARNING: MODEL '" + filename + "' USES A DEPRECIATED ANIMATION CONFIGURATION.");
 					}
 				}
 				else
 				{
-					DebugText::print("MODEL '" + filename + "' DOES NOT HAVE AN ANIMATION CONFIGURATION.");
+					DebugText::print("WARNING: MODEL '" + filename + "' DOES NOT HAVE AN ANIMATION CONFIGURATION.");
 				}
 			}
 			#endif
