@@ -306,17 +306,17 @@ namespace EditorTool
                 {
                     if (model_material_config[this_material_config.Key]["ThICC_INDEX"].Value<int>() == i)
                     {
-                        if (model_material_config[this_material_config.Key]["ThICC_ANIMATION_ENABLED"] != null &&
-                            model_material_config[this_material_config.Key]["ThICC_ANIMATION_ENABLED"].Value<bool>() == true)
+                        if (model_material_config[this_material_config.Key]["ThICC_DIFFUSE_ANIMATED"] != null &&
+                            model_material_config[this_material_config.Key]["ThICC_DIFFUSE_ANIMATED"].Value<bool>() == true)
                         {
                             anim_mat_index.Add(i);
                             List<string> these_textures = new List<string>();
-                            foreach (string texture in model_material_config[this_material_config.Key]["ThICC_ANIMATION"].Value<JArray>())
+                            foreach (string texture in model_material_config[this_material_config.Key]["ThICC_DIFFUSE_FRAMES"].Value<JArray>())
                             {
                                 these_textures.Add(texture);
                             }
                             anim_mat_textures.Add(these_textures);
-                            anim_mat_anim_time.Add(model_material_config[this_material_config.Key]["ThICC_ANIMATION_TIME"].Value<float>());
+                            anim_mat_anim_time.Add(model_material_config[this_material_config.Key]["ThICC_DIFFUSE_FRAME_TIME"].Value<float>());
                         }
                         break;
                     }

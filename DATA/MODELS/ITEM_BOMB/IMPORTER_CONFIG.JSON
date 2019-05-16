@@ -29,12 +29,12 @@
     },
     "ThICC_INDEX": 0,
     "ThICC_METALLIC": false,
-    "ThICC_ANIMATION": [
-      "red bomb.png",
+    "ThICC_DIFFUSE_FRAMES": [
+      "red_bomb.png",
       "bombhei_body.0.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 1.0
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 1.0
   },
   "bobomb:mat_bombhei_others": {
     "newmtl": "bobomb:mat_bombhei_others",
