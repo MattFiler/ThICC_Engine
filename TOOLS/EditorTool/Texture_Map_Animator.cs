@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -42,6 +43,7 @@ namespace EditorTool
                 return;
             }
 
+            //Create a basic animation of pixel-based movement over the Y of the image
             using (var texture_to_animate = new Bitmap(texture.Text))
             {
                 for (int i = 0; i < texture_to_animate.Height; i += stepModifier.Value)
@@ -54,6 +56,10 @@ namespace EditorTool
                     texture_map.Dispose();
                 }
             }
+
+            //Done
+            MessageBox.Show("Saved all animation frames!", "Completed.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Process.Start(outputFolder.Text);
         }
     }
 }
