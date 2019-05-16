@@ -65,13 +65,6 @@ namespace EditorTool
             //Specular on/off
             hasSpec.Checked = (material_config["illum"].Value<string>() == "2");
 
-            /* CONFIG CHANGES:
-             * 
-             * ThICC_ANIMATION_ENABLED is now ThICC_DIFFUSE_ANIMATED
-             * ThICC_ANIMATION is now ThICC_DIFFUSE_FRAMES
-             * ThICC_ANIMATION_TIME is now ThICC_DIFFUSE_FRAME_TIME
-            */
-
             //Diffuse texture(s)
             if (material_config["ThICC_DIFFUSE_ANIMATED"] != null) 
             {
@@ -87,14 +80,17 @@ namespace EditorTool
             {
                 diffuseMapList.Items.Add(material_config["map_Kd"].Value<string>());
             }
-            int index = 0;
-            foreach (string entry in diffuseMapList.Items)
+            List<object> to_remove = new List<object>();
+            foreach (var entry in diffuseMapList.Items)
             {
-                if (entry == "")
+                if (entry.ToString() == "")
                 {
-                    diffuseMapList.Items.RemoveAt(index);
+                    to_remove.Add(entry);
                 }
-                index++;
+            }
+            foreach (var entry in to_remove)
+            {
+                diffuseMapList.Items.Remove(entry);
             }
 
             //Specular texture(s)
@@ -112,14 +108,17 @@ namespace EditorTool
             {
                 specularMapList.Items.Add(material_config["map_Ks"].Value<string>());
             }
-            index = 0;
-            foreach (string entry in specularMapList.Items)
+            to_remove = new List<object>();
+            foreach (var entry in specularMapList.Items)
             {
-                if (entry == "" || entry == "spec_placeholder.png")
+                if (entry.ToString() == "" || entry.ToString() == "spec_placeholder.png")
                 {
-                    specularMapList.Items.RemoveAt(index);
+                    to_remove.Add(entry);
                 }
-                index++;
+            }
+            foreach (var entry in to_remove)
+            {
+                specularMapList.Items.Remove(entry);
             }
 
             //Normal texture(s)
@@ -128,30 +127,33 @@ namespace EditorTool
                 JArray animated_textures = material_config["ThICC_NORMAL_FRAMES"].Value<JArray>();
                 foreach (string item in animated_textures)
                 {
-                    specularMapList.Items.Add(item);
+                    normalMapList.Items.Add(item);
                 }
-                specularAnimTime.Value = material_config["ThICC_NORMAL_FRAME_TIME"].Value<decimal>();
-                isSpecularAnimated.Checked = material_config["ThICC_NORMAL_ANIMATED"].Value<bool>();
+                normalAnimTime.Value = material_config["ThICC_NORMAL_FRAME_TIME"].Value<decimal>();
+                isNormalAnimated.Checked = material_config["ThICC_NORMAL_ANIMATED"].Value<bool>();
             }
             else
             {
                 if (material_config["map_Kn"].Value<string>() != "")
                 {
-                    specularMapList.Items.Add(material_config["map_Kn"].Value<string>());
+                    normalMapList.Items.Add(material_config["map_Kn"].Value<string>());
                 }
                 else
                 {
-                    specularMapList.Items.Add(material_config["norm"].Value<string>());
+                    normalMapList.Items.Add(material_config["norm"].Value<string>());
                 }
             }
-            index = 0;
-            foreach (string entry in specularMapList.Items)
+            to_remove = new List<object>();
+            foreach (var entry in normalMapList.Items)
             {
-                if (entry == "" || entry == "norm_placeholder.png")
+                if (entry.ToString() == "" || entry.ToString() == "norm_placeholder.png")
                 {
-                    specularMapList.Items.RemoveAt(index);
+                    to_remove.Add(entry);
                 }
-                index++;
+            }
+            foreach (var entry in to_remove)
+            {
+                normalMapList.Items.Remove(entry);
             }
 
             //Emissive texture(s)
@@ -176,14 +178,17 @@ namespace EditorTool
                     emissiveMapList.Items.Add(material_config["norm"].Value<string>());
                 }
             }
-            index = 0;
-            foreach (string entry in emissiveMapList.Items)
+            to_remove = new List<object>();
+            foreach (var entry in emissiveMapList.Items)
             {
-                if (entry == "" || entry == "emm_placeholder.png")
+                if (entry.ToString() == "" || entry.ToString() == "emm_placeholder.png")
                 {
-                    emissiveMapList.Items.RemoveAt(index);
+                    to_remove.Add(entry);
                 }
-                index++;
+            }
+            foreach (var entry in to_remove)
+            {
+                emissiveMapList.Items.Remove(entry);
             }
 
             //RMA values
@@ -454,7 +459,7 @@ namespace EditorTool
             material_config["illum"] = (hasSpec.Checked ? "2" : "0");
 
             //Default Diffuse Texture
-            material_config["map_Kd"] = Path.GetFileName(diffuseMapList.Items[0].ToString());
+            material_config["map_Kd"] = Path.GetFileName(diffuseMapList.Items[0].ToString()).Replace(' ', '_');
             copyNewMat(diffuseMapList.Items[0].ToString());
 
             //Diffuse texture(s) and animation properties (if enabled)
@@ -469,7 +474,7 @@ namespace EditorTool
             material_config["ThICC_DIFFUSE_FRAME_TIME"] = diffuseAnimTime.Value;
 
             //Default Specular Texture
-            string default_map = (specularMapList.Items.Count != 0 ? specularMapList.Items[0].ToString() : "spec_placeholder.png");
+            string default_map = (specularMapList.Items.Count != 0 ? specularMapList.Items[0].ToString() : "spec_placeholder.png").Replace(' ', '_');
             material_config["map_Ks"] = Path.GetFileName(default_map);
             copyNewMat(default_map);
 
@@ -485,7 +490,7 @@ namespace EditorTool
             material_config["ThICC_SPECULAR_FRAME_TIME"] = specularAnimTime.Value;
 
             //Default Normal Texture
-            default_map = (normalMapList.Items.Count != 0 ? normalMapList.Items[0].ToString() : "norm_placeholder.png");
+            default_map = (normalMapList.Items.Count != 0 ? normalMapList.Items[0].ToString() : "norm_placeholder.png").Replace(' ', '_');
             material_config["map_Kn"] = Path.GetFileName(default_map);
             material_config["norm"] = Path.GetFileName(default_map);
             copyNewMat(default_map);
@@ -502,7 +507,7 @@ namespace EditorTool
             material_config["ThICC_NORMAL_FRAME_TIME"] = normalAnimTime.Value;
 
             //Default Emissive Texture
-            default_map = (emissiveMapList.Items.Count != 0 ? emissiveMapList.Items[0].ToString() : "emm_placeholder.png");
+            default_map = (emissiveMapList.Items.Count != 0 ? emissiveMapList.Items[0].ToString() : "emm_placeholder.png").Replace(' ', '_');
             material_config["map_Ke"] = Path.GetFileName(default_map);
             material_config["map_emissive"] = Path.GetFileName(default_map);
             copyNewMat(default_map);
@@ -563,7 +568,7 @@ namespace EditorTool
         {
             if (file_path != "")
             {
-                string copy_to = this_model_folder + Path.GetFileName(file_path);
+                string copy_to = this_model_folder + Path.GetFileName(file_path).Replace(' ', '_');
                 if (!File.Exists(copy_to))
                 {
                     File.Copy(file_path, copy_to);

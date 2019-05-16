@@ -30,7 +30,7 @@ namespace EditorTool
     class UsefulFunctions
     {
         /* CONSTANTS */
-        public int ThICC_FILE_VERSION = 2; //Used to identify file versions to the engine. Allows backwards compatibility with older configurations.
+        public int ThICC_FILE_VERSION = 3; //Used to identify file versions to the engine. Allows backwards compatibility with older configurations.
 
         ///////////////////////////////////////////////
         ///////////////////////////////////////////////

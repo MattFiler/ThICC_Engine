@@ -32,6 +32,21 @@ namespace EditorTool
             InitializeComponent();
         }
 
+        struct AnimationConfigMatType
+        {
+            public List<int> animation_index;
+            public List<List<string>> animation_frames;
+            public List<float> animation_frame_time;
+        }
+
+        enum anim_config_indexes
+        {
+            DIFFUSE,
+            SPECULAR,
+            NORMAL,
+            EMISSIVE
+        }
+
         private void Model_Importer_pt2_Load(object sender, EventArgs e)
         {
             //Parse material data on load
@@ -297,52 +312,50 @@ namespace EditorTool
             //------
 
             //Create animation config
-            List<int> anim_mat_index = new List<int>();
-            List<List<string>> anim_mat_textures = new List<List<string>>();
-            List<float> anim_mat_anim_time = new List<float>();
+            List<AnimationConfigMatType> anim_configs = new List<AnimationConfigMatType>(4);
             for (int i = 0; i < model_material_config.Count + 1; i++)
             {
                 foreach (var this_material_config in model_material_config)
                 {
                     if (model_material_config[this_material_config.Key]["ThICC_INDEX"].Value<int>() == i)
                     {
-                        if (model_material_config[this_material_config.Key]["ThICC_DIFFUSE_ANIMATED"] != null &&
-                            model_material_config[this_material_config.Key]["ThICC_DIFFUSE_ANIMATED"].Value<bool>() == true)
-                        {
-                            anim_mat_index.Add(i);
-                            List<string> these_textures = new List<string>();
-                            foreach (string texture in model_material_config[this_material_config.Key]["ThICC_DIFFUSE_FRAMES"].Value<JArray>())
-                            {
-                                these_textures.Add(texture);
-                            }
-                            anim_mat_textures.Add(these_textures);
-                            anim_mat_anim_time.Add(model_material_config[this_material_config.Key]["ThICC_DIFFUSE_FRAME_TIME"].Value<float>());
-                        }
+                        parseAnimationData(
+                            "DIFFUSE", 
+                            this_material_config.Key, 
+                            anim_configs.ElementAt((int)anim_config_indexes.DIFFUSE),
+                            i);
+                        parseAnimationData(
+                            "SPECULAR",
+                            this_material_config.Key,
+                            anim_configs.ElementAt((int)anim_config_indexes.SPECULAR),
+                            i);
+                        parseAnimationData(
+                            "NORMAL",
+                            this_material_config.Key,
+                            anim_configs.ElementAt((int)anim_config_indexes.NORMAL),
+                            i);
+                        parseAnimationData(
+                            "EMISSIVE",
+                            this_material_config.Key,
+                            anim_configs.ElementAt((int)anim_config_indexes.EMISSIVE),
+                            i);
                         break;
                     }
                 }
             }
 
-            //Output anim config
+            //Output anim config (V3)
             using (BinaryWriter writer = new BinaryWriter(File.Open(importer_common.fileName(importer_file.ANIMATION_CONFIG), FileMode.Create)))
             {
                 addThiccSignature(writer);
-                writer.Write(anim_mat_index.Count);
-                for (int i = 0; i < anim_mat_index.Count; i++)
-                {
-                    writer.Write(anim_mat_index.ElementAt(i));
-                    writer.Write(anim_mat_textures.ElementAt(i).Count);
-                    writer.Write(anim_mat_anim_time.ElementAt(i));
-                    foreach (string texture in anim_mat_textures.ElementAt(i))
-                    {
-                        string updated_texture = Path.GetFileNameWithoutExtension(texture) + ".DDS";
-                        writer.Write(updated_texture.Length);
-                        for (int x = 0; x < updated_texture.Length; x++)
-                        {
-                            writer.Write(updated_texture[x]);
-                        }
-                    }
-                }
+                writer.Write(anim_configs.ElementAt((int)anim_config_indexes.DIFFUSE).animation_index.Count);
+                writer.Write(anim_configs.ElementAt((int)anim_config_indexes.SPECULAR).animation_index.Count);
+                writer.Write(anim_configs.ElementAt((int)anim_config_indexes.NORMAL).animation_index.Count);
+                writer.Write(anim_configs.ElementAt((int)anim_config_indexes.EMISSIVE).animation_index.Count);
+                writeAnimationData(writer, anim_configs.ElementAt((int)anim_config_indexes.DIFFUSE));
+                writeAnimationData(writer, anim_configs.ElementAt((int)anim_config_indexes.SPECULAR));
+                writeAnimationData(writer, anim_configs.ElementAt((int)anim_config_indexes.NORMAL));
+                writeAnimationData(writer, anim_configs.ElementAt((int)anim_config_indexes.EMISSIVE));
             }
 
             //------
@@ -1009,6 +1022,43 @@ namespace EditorTool
             foreach (char character in signature)
             {
                 writer.Write(character); //This verifies the legitimacy of the file.
+            }
+        }
+        
+        /* Parse animation config data for compiling to the ANIMATION.ThICC file */
+        private void parseAnimationData(string mat_type, string mat_config_key, AnimationConfigMatType anim_config, int index)
+        {
+            if (model_material_config[mat_config_key]["ThICC_" + mat_type + "_ANIMATED"] != null &&
+                model_material_config[mat_config_key]["ThICC_" + mat_type + "_ANIMATED"].Value<bool>() == true)
+            {
+                anim_config.animation_index.Add(index);
+                List<string> these_textures = new List<string>();
+                foreach (string texture in model_material_config[mat_config_key]["ThICC_" + mat_type + "_FRAMES"].Value<JArray>())
+                {
+                    these_textures.Add(texture);
+                }
+                anim_config.animation_frames.Add(these_textures);
+                anim_config.animation_frame_time.Add(model_material_config[mat_config_key]["ThICC_" + mat_type + "_FRAME_TIME"].Value<float>());
+            }
+        }
+
+        /* Write parsed animation config */
+        private void writeAnimationData(BinaryWriter writer, AnimationConfigMatType anim_config)
+        {
+            for (int i = 0; i < anim_config.animation_index.Count; i++)
+            {
+                writer.Write(anim_config.animation_index.ElementAt(i));
+                writer.Write(anim_config.animation_frames.ElementAt(i).Count);
+                writer.Write(anim_config.animation_frame_time.ElementAt(i));
+                foreach (string texture in anim_config.animation_frames.ElementAt(i))
+                {
+                    string updated_texture = Path.GetFileNameWithoutExtension(texture) + ".DDS";
+                    writer.Write(updated_texture.Length);
+                    for (int x = 0; x < updated_texture.Length; x++)
+                    {
+                        writer.Write(updated_texture[x]);
+                    }
+                }
             }
         }
     }
