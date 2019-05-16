@@ -34,6 +34,12 @@ namespace EditorTool
 
         struct AnimationConfigMatType
         {
+            public AnimationConfigMatType(List<int> _index, List<List<string>> _frames, List<float> _time)
+            {
+                animation_index = _index;
+                animation_frames = _frames;
+                animation_frame_time = _time;
+            }
             public List<int> animation_index;
             public List<List<string>> animation_frames;
             public List<float> animation_frame_time;
@@ -44,7 +50,9 @@ namespace EditorTool
             DIFFUSE,
             SPECULAR,
             NORMAL,
-            EMISSIVE
+            EMISSIVE,
+
+            COUNT //last
         }
 
         private void Model_Importer_pt2_Load(object sender, EventArgs e)
@@ -312,7 +320,11 @@ namespace EditorTool
             //------
 
             //Create animation config
-            List<AnimationConfigMatType> anim_configs = new List<AnimationConfigMatType>(4);
+            List<AnimationConfigMatType> anim_configs = new List<AnimationConfigMatType>();
+            for (int i = 0; i < (int)anim_config_indexes.COUNT; i++)
+            {
+                anim_configs.Add(new AnimationConfigMatType(new List<int>(), new List<List<string>>(), new List<float>()));
+            }
             for (int i = 0; i < model_material_config.Count + 1; i++)
             {
                 foreach (var this_material_config in model_material_config)
