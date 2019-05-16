@@ -86,17 +86,20 @@ void SDKMeshGO3D::Render()
 						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, radianceTex, Locator::getRD()->m_states->AnisotropicClamp());
 					}
 					/* ANIMATION CONFIG */
-					if (m_material_config.size() != 0 && m_material_config.at(i).is_animated) {
-						MaterialConfig& this_mat = m_material_config.at(i);
-						pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(this_mat.gpu_indexes.at(this_mat.current_anim_index)));
-						if (this_mat.animation_timer > this_mat.animation_time) {
-							this_mat.current_anim_index++;
-							if (this_mat.texture_names.size() == this_mat.current_anim_index) {
-								this_mat.current_anim_index = 0;
+					if (anim_config_version == 2) {
+						//Config version 2 (outdated)
+						if (m_material_config.size() != 0 && m_material_config.at(i).is_animated) {
+							MaterialConfig& this_mat = m_material_config.at(i);
+							pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(this_mat.gpu_indexes.at(this_mat.current_anim_index)));
+							if (this_mat.animation_timer > this_mat.animation_time) {
+								this_mat.current_anim_index++;
+								if (this_mat.texture_names.size() == this_mat.current_anim_index) {
+									this_mat.current_anim_index = 0;
+								}
+								this_mat.animation_timer = 0;
 							}
-							this_mat.animation_timer = 0;
+							m_material_config.at(i).animation_timer += (float)Locator::getGSD()->m_dt;
 						}
-						m_material_config.at(i).animation_timer += (float)Locator::getGSD()->m_dt;
 					}
 					/* MATERIAL OVERRIDE (ALBEDO + EMISSIVE) */
 					if (material_override_index != -1 && !material_override_applied) {
@@ -386,7 +389,7 @@ void SDKMeshGO3D::Load()
 					metal_config.seekg(0);
 					int config_version = 0;
 					metal_config.read(reinterpret_cast<char*>(&config_version), sizeof(int));
-					if (config_version == ThICC_File::ThICC_FILE_VERSION) { //We error out on depreciated configs here, but might be nice to handle some older setups just in case.
+					if (config_version == ThICC_File::ThICC_FILE_VERSION || config_version == 2) {
 						char* read_confirmation_identifier = new char[ThICC_File::ThICC_FILE_IDENTIFIER.length()];
 						metal_config.read(read_confirmation_identifier, ThICC_File::ThICC_FILE_IDENTIFIER.length());
 						std::string this_signature;
@@ -394,6 +397,12 @@ void SDKMeshGO3D::Load()
 						if (ThICC_File::ThICC_FILE_IDENTIFIER == this_signature) {
 							config_is_legit = true;
 						}
+					}
+					if (config_version == 2) {
+						DebugText::print("'" + filename + "' uses metal config version 2 - this will soon be depreciated, please re-export the model!");
+					}
+					else if (config_version != ThICC_File::ThICC_FILE_VERSION) {
+						DebugText::print("'" + filename + "' uses a DEPRECIATED metal config (sub-v2)! Please update it by re-exporting the model.");
 					}
 
 					if (config_is_legit) {
@@ -429,9 +438,9 @@ void SDKMeshGO3D::Load()
 					//Verify our config is legit
 					bool config_is_legit = false;
 					anim_config.seekg(0);
-					int config_version = 0;
-					anim_config.read(reinterpret_cast<char*>(&config_version), sizeof(int));
-					if (config_version == ThICC_File::ThICC_FILE_VERSION) { //We error out on depreciated configs here, but might be nice to handle some older setups just in case.
+					anim_config.read(reinterpret_cast<char*>(&anim_config_version), sizeof(int));
+					/* We currently support V2 and V3, will soon be V3 only! */
+					if (anim_config_version == ThICC_File::ThICC_FILE_VERSION || anim_config_version == 2) { 
 						char* read_confirmation_identifier = new char[ThICC_File::ThICC_FILE_IDENTIFIER.length()];
 						anim_config.read(read_confirmation_identifier, ThICC_File::ThICC_FILE_IDENTIFIER.length());
 						std::string this_signature;
@@ -440,11 +449,25 @@ void SDKMeshGO3D::Load()
 							config_is_legit = true;
 						}
 					}
+					if (anim_config_version == 2) {
+						DebugText::print("'" + filename + "' uses animation config version 2 - this will soon be depreciated, please re-export the model!");
+					}
+					else if (anim_config_version != ThICC_File::ThICC_FILE_VERSION) {
+						DebugText::print("'" + filename + "' uses a DEPRECIATED animation config (sub-v2)! Please update it by re-exporting the model.");
+					}
 
 					if (config_is_legit) {
 						//Get number of materials in config
 						int number_of_materials = 0;
 						anim_config.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
+						if (anim_config_version == ThICC_File::ThICC_FILE_VERSION) { //V3 is the new norm, but wrap it for V2 configs
+							int mat_count_spec = 0;
+							anim_config.read(reinterpret_cast<char*>(&mat_count_spec), sizeof(int));
+							int mat_count_norm = 0;
+							anim_config.read(reinterpret_cast<char*>(&mat_count_norm), sizeof(int));
+							int mat_count_emm = 0;
+							anim_config.read(reinterpret_cast<char*>(&mat_count_emm), sizeof(int));
+						}
 
 						//Update offset
 						resourceDescriptorOffset += m_modelNormal.size() * 4; //materials * 4 (max texture count) - THIS IS A BIG OL HACKY FIX, a way to count actual resources would be nice :)

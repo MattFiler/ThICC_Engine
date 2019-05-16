@@ -65,5 +65,6 @@ protected:
 	bool is_debug_mesh = false;
 	bool m_shouldRender = true;
 	bool m_loaded = false;
+	int anim_config_version = -1;
 };
 
