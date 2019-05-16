@@ -72,6 +72,13 @@ struct ItemBoxConfig {
 	static double respawn_time;
 };
 
+enum MaterialTypes {
+	DIFFUSE, //V2+3
+	SPECULAR, //V3
+	NORMAL, //V3
+	EMISSIVE //V3
+};
+
 // camera type
 
 enum class CameraType : int

@@ -60,7 +60,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "rotaryboard1.png",
       "rotaryboard2.png",
       "rotaryboard3.png",
@@ -86,8 +86,8 @@
       "rotaryboard23.png",
       "rotaryboard24.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.035
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.035
   },
   "E_Fz_BillBodyW1": {
     "newmtl": "E_Fz_BillBodyW1",
@@ -336,11 +336,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_BillBodyW1_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_BillBodyW2": {
     "newmtl": "Fz_BillBodyW2",
@@ -372,11 +372,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_BillBodyW2_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_BillBodyW3": {
     "newmtl": "Fz_BillBodyW3",
@@ -408,11 +408,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_BillBodyW3_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_BillEmmLine": {
     "newmtl": "Fz_BillEmmLine",
@@ -568,11 +568,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_Enkei_BillBody_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_WallAndWindow": {
     "newmtl": "Fz_WallAndWindow",

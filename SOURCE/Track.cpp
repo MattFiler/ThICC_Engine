@@ -226,7 +226,12 @@ void Track::LoadVertexList(std::string _vertex_list)
 
 	//Split triangles up into the grid
 	//Eventually this will be done at build time!
-	SplitTrisIntoGrid();
+	try {
+		SplitTrisIntoGrid();
+	}
+	catch (...) {
+		DebugText::print("An unhandled error occurred while optimising the track's collision data. Fatal!");
+	}
 }
 
 /* Sets up the bounding boxes for each waypoint */

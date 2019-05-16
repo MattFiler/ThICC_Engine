@@ -357,14 +357,19 @@ void ThICC_Engine::Render()
 	m_game_inst.Render2D();
 
 	#ifdef _DEBUG 
-	Locator::getRD()->m_2dSpriteBatch->Begin(Locator::getRD()->m_commandList.Get());
-	//Debug console
-	m_debug_console->Render();
-	//FPS
-	if (m_game_config["enable_fps"]) {
-		debug_text->Render();
+	try {
+		Locator::getRD()->m_2dSpriteBatch->Begin(Locator::getRD()->m_commandList.Get());
+		//Debug console
+		m_debug_console->Render();
+		//FPS
+		if (m_game_config["enable_fps"]) {
+			debug_text->Render();
+		}
+		Locator::getRD()->m_2dSpriteBatch->End();
 	}
-	Locator::getRD()->m_2dSpriteBatch->End();
+	catch (...) {
+		DebugText::print("ThICC_Engine::Render - Failed to render, could be a sprite batch issue: most likely out of memory.");
+	}
 	#endif
 
 	// Show the new frame.

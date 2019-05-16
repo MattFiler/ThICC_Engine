@@ -42,7 +42,7 @@ SDKMeshGO3D::~SDKMeshGO3D()
 void SDKMeshGO3D::Render()
 {
 	if (!m_model) {
-		//DebugText::print("Call to render non-loaded model: " + filename);
+		DebugText::print("Call to render non-loaded model: " + filename);
 		return;
 	}
 	if ((m_shouldRender && !isDebugMesh()) || (GameDebugToggles::show_debug_meshes && isDebugMesh())) {
@@ -86,17 +86,13 @@ void SDKMeshGO3D::Render()
 						pbr->SetIBLTextures(radianceTex, diffuseDesc.MipLevels, radianceTex, Locator::getRD()->m_states->AnisotropicClamp());
 					}
 					/* ANIMATION CONFIG */
-					if (m_material_config.size() != 0 && m_material_config.at(i).is_animated) {
-						MaterialConfig& this_mat = m_material_config.at(i);
-						pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(this_mat.gpu_indexes.at(this_mat.current_anim_index)));
-						if (this_mat.animation_timer > this_mat.animation_time) {
-							this_mat.current_anim_index++;
-							if (this_mat.texture_names.size() == this_mat.current_anim_index) {
-								this_mat.current_anim_index = 0;
-							}
-							this_mat.animation_timer = 0;
+					if (m_material_config.size() != 0) {
+						AnimateMap(m_material_config.at(i).animated_diffuse, pbr); //V2 and V3 support these - when we eventually depreciate V2 this will be cleaner
+						if (anim_config_version == 3) {
+							AnimateMap(m_material_config.at(i).animated_emissive, pbr);
+							AnimateMap(m_material_config.at(i).animated_normal, pbr);
+							AnimateMap(m_material_config.at(i).animated_specular, pbr);
 						}
-						m_material_config.at(i).animation_timer += (float)Locator::getGSD()->m_dt;
 					}
 					/* MATERIAL OVERRIDE (ALBEDO + EMISSIVE) */
 					if (material_override_index != -1 && !material_override_applied) {
@@ -114,10 +110,31 @@ void SDKMeshGO3D::Render()
 
 		//Update effects and draw
 		Model::UpdateEffectMatrices(m_modelNormal, m_world, Locator::getRD()->m_cam->GetView(), Locator::getRD()->m_cam->GetProj());
-		m_model->Draw(Locator::getDD()->m_deviceResources->GetCommandList(), m_modelNormal.cbegin());
+		try {
+			m_model->Draw(Locator::getDD()->m_deviceResources->GetCommandList(), m_modelNormal.cbegin());
+		}
+		catch (...) {
+			DebugText::print("Failed to draw model: '" + filename + "'");
+		}
 
 		//End scene
 		Locator::getDD()->m_hdrScene->EndScene(commandList);
+	}
+}
+
+/* Animate a texture map, V2 only supports diffuse, but V3 supports emissive, specular, and normals also. */
+void SDKMeshGO3D::AnimateMap(AnimatedMap& map, DirectX::PBREffect * pbr)
+{
+	if (map.is_animated) {
+		pbr->SetAlbedoTexture(m_resourceDescriptors->GetGpuHandle(map.gpu_indexes.at(map.current_anim_index)));
+		if (map.animation_timer > map.animation_time) {
+			map.current_anim_index++;
+			if (map.texture_names.size() == map.current_anim_index) {
+				map.current_anim_index = 0;
+			}
+			map.animation_timer = 0;
+		}
+		map.animation_timer += (float)Locator::getGSD()->m_dt;
 	}
 }
 
@@ -128,7 +145,13 @@ void SDKMeshGO3D::AlbedoEmissiveOverride(std::wstring path) {
 	}
 	auto device = Locator::getDD()->m_deviceResources->GetD3DDevice();
 	ResourceUploadBatch resourceUpload(device);
-	resourceUpload.Begin(); 
+	try {
+		resourceUpload.Begin();
+	}
+	catch (...) {
+		DebugText::print("SDKMeshGO3D::AlbedoEmissiveOverride - Failed to begin resource upload, we are probably out of memory. Fatal!");
+		return;
+	}
 	wchar_t override_tex[_MAX_PATH] = {};
 	DX::FindMediaFile(override_tex, _MAX_PATH, path.c_str());
 	DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, override_tex, m_materialOverride.ReleaseAndGetAddressOf()));
@@ -142,8 +165,6 @@ void SDKMeshGO3D::AlbedoEmissiveOverride(std::wstring path) {
 /* Load the model */
 void SDKMeshGO3D::Load()
 {
-	DebugText::print("LOADING MODEL '" + filename + "'!");
-
 	//Our D3D device
 	auto device = Locator::getDD()->m_deviceResources->GetD3DDevice();
 
@@ -152,7 +173,13 @@ void SDKMeshGO3D::Load()
 
 	//Begin the resource upload
 	ResourceUploadBatch resourceUpload(device);
-	resourceUpload.Begin();
+	try {
+		resourceUpload.Begin();
+	}
+	catch (...) {
+		DebugText::print("SDKMeshGO3D::Load - Failed to begin resource upload, we are probably out of memory. Fatal!");
+		return;
+	}
 
 	//Set the sprite batch description (do we really need this?!)
 	{
@@ -160,11 +187,17 @@ void SDKMeshGO3D::Load()
 	}
 
 	//Create our resource descriptor - I'm allocating 1024 spaces for now
-	m_resourceDescriptors = std::make_unique<DescriptorPile>(device,
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
-		1024,
-		0);
+	try {
+		m_resourceDescriptors = std::make_unique<DescriptorPile>(device,
+			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+			D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
+			1024,
+			0);
+	}
+	catch (...) {
+		DebugText::print("SDKMeshGO3D::Load - Failed to allocate 1024 spaces to descriptor pile. Probably out of memory. Fatal!");
+		return;
+	}
 
 	#ifdef _ARCADE
 	//Find env map and load
@@ -247,7 +280,6 @@ void SDKMeshGO3D::Load()
 		DebugText::print("EXCEPTION WHILE LOADING '" + filename + "': " + error);
 		if (error == "Out of memory.") {
 			DebugText::print(" >>>> THIS MODEL SHOULD BE REMOVED FROM THE GAME! IT IS TOO LARGE TO HANDLE! <<<< ");
-			throw std::runtime_error("Cannot continue! Remove model '" + filename + "'!");
 		}
 		m_model.reset();
 		return;
@@ -366,7 +398,7 @@ void SDKMeshGO3D::Load()
 					metal_config.seekg(0);
 					int config_version = 0;
 					metal_config.read(reinterpret_cast<char*>(&config_version), sizeof(int));
-					if (config_version == ThICC_File::ThICC_FILE_VERSION) { //We error out on depreciated configs here, but might be nice to handle some older setups just in case.
+					if (config_version == ThICC_File::ThICC_FILE_VERSION || config_version == 2) {
 						char* read_confirmation_identifier = new char[ThICC_File::ThICC_FILE_IDENTIFIER.length()];
 						metal_config.read(read_confirmation_identifier, ThICC_File::ThICC_FILE_IDENTIFIER.length());
 						std::string this_signature;
@@ -374,6 +406,12 @@ void SDKMeshGO3D::Load()
 						if (ThICC_File::ThICC_FILE_IDENTIFIER == this_signature) {
 							config_is_legit = true;
 						}
+					}
+					if (config_version == 2) {
+						DebugText::print("'" + filename + "' uses metal config version 2 - this will soon be depreciated, please re-export the model!");
+					}
+					else if (config_version != ThICC_File::ThICC_FILE_VERSION) {
+						DebugText::print("'" + filename + "' uses a DEPRECIATED metal config (sub-v2)! Please update it by re-exporting the model.");
 					}
 
 					if (config_is_legit) {
@@ -394,12 +432,12 @@ void SDKMeshGO3D::Load()
 					}
 					else
 					{
-						DebugText::print("MODEL '" + filename + "' USES A DEPRECIATED METAL CONFIGURATION.");
+						DebugText::print("WARNING: MODEL '" + filename + "' USES A DEPRECIATED METAL CONFIGURATION.");
 					}
 				}
 				else
 				{
-					DebugText::print("MODEL '" + filename + "' DOES NOT HAVE A METAL CONFIGURATION.");
+					DebugText::print("WARNING: MODEL '" + filename + "' DOES NOT HAVE A METAL CONFIGURATION.");
 				}
 
 				/* Load animation config */
@@ -409,9 +447,9 @@ void SDKMeshGO3D::Load()
 					//Verify our config is legit
 					bool config_is_legit = false;
 					anim_config.seekg(0);
-					int config_version = 0;
-					anim_config.read(reinterpret_cast<char*>(&config_version), sizeof(int));
-					if (config_version == ThICC_File::ThICC_FILE_VERSION) { //We error out on depreciated configs here, but might be nice to handle some older setups just in case.
+					anim_config.read(reinterpret_cast<char*>(&anim_config_version), sizeof(int));
+					/* We currently support V2 and V3, will soon be V3 only! */
+					if (anim_config_version == ThICC_File::ThICC_FILE_VERSION || anim_config_version == 2) { 
 						char* read_confirmation_identifier = new char[ThICC_File::ThICC_FILE_IDENTIFIER.length()];
 						anim_config.read(read_confirmation_identifier, ThICC_File::ThICC_FILE_IDENTIFIER.length());
 						std::string this_signature;
@@ -420,67 +458,45 @@ void SDKMeshGO3D::Load()
 							config_is_legit = true;
 						}
 					}
+					if (anim_config_version == 2) {
+						DebugText::print("'" + filename + "' uses animation config version 2 - this will soon be depreciated, please re-export the model!");
+					}
+					else if (anim_config_version != ThICC_File::ThICC_FILE_VERSION) {
+						DebugText::print("'" + filename + "' uses a DEPRECIATED animation config (sub-v2)! Please update it by re-exporting the model.");
+					}
 
 					if (config_is_legit) {
 						//Get number of materials in config
-						int number_of_materials = 0;
-						anim_config.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
+						int mat_count_alb = 0;
+						anim_config.read(reinterpret_cast<char*>(&mat_count_alb), sizeof(int));
+						int mat_count_spec = 0;
+						int mat_count_norm = 0;
+						int mat_count_emm = 0;
+						if (anim_config_version == ThICC_File::ThICC_FILE_VERSION) { //V3 is the new norm, but wrap it for V2 configs
+							anim_config.read(reinterpret_cast<char*>(&mat_count_spec), sizeof(int));
+							anim_config.read(reinterpret_cast<char*>(&mat_count_norm), sizeof(int));
+							anim_config.read(reinterpret_cast<char*>(&mat_count_emm), sizeof(int));
+						}
 
 						//Update offset
 						resourceDescriptorOffset += m_modelNormal.size() * 4; //materials * 4 (max texture count) - THIS IS A BIG OL HACKY FIX, a way to count actual resources would be nice :)
 
-						for (int i = 0; i < number_of_materials; i++) {
-							//Get this material's index, and fetch our config object
-							int material_index;
-							anim_config.read(reinterpret_cast<char*>(&material_index), sizeof(int));
-							MaterialConfig& this_mat = m_material_config.at(material_index);
-							this_mat.is_animated = true;
-
-							//Get the number of textures in this animation
-							int num_of_textures;
-							anim_config.read(reinterpret_cast<char*>(&num_of_textures), sizeof(int));
-
-							//Get the animation time
-							anim_config.read(reinterpret_cast<char*>(&this_mat.animation_time), sizeof(float));
-
-							//Get each texture to animate
-							for (int x = 0; x < num_of_textures; x++) {
-								//Fetch texture name
-								int this_tex_len;
-								anim_config.read(reinterpret_cast<char*>(&this_tex_len), sizeof(int));
-								char* this_tex_char = new char[this_tex_len];
-								anim_config.read(this_tex_char, this_tex_len);
-								std::string this_tex;
-								this_tex.append(this_tex_char, this_tex_len);
-								this_mat.texture_names.push_back(this_tex);
-
-								//Convert texture name to wstring
-								std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-								this_tex = dirpath + this_tex;
-								std::wstring this_tex_wstring = converter.from_bytes(this_tex.c_str());
-
-								//Load actual texture by name & store its GPU index
-								Microsoft::WRL::ComPtr<ID3D12Resource> this_tex_d3d12;
-								wchar_t this_tex_wchar[_MAX_PATH] = {};
-								DX::FindMediaFile(this_tex_wchar, _MAX_PATH, this_tex_wstring.c_str());
-								DX::ThrowIfFailed(CreateDDSTextureFromFile(device, resourceUpload, this_tex_wchar, this_tex_d3d12.ReleaseAndGetAddressOf()));
-								CreateShaderResourceView(device, this_tex_d3d12.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
-								this_mat.gpu_indexes.push_back(resourceDescriptorOffset);
-								this_mat.d3d12_textures.push_back(this_tex_d3d12);
-								resourceDescriptorOffset++;
-							}
+						//Load each animated map
+						LoadAnimConfigForMap(MaterialTypes::DIFFUSE, "diffuse", mat_count_alb, anim_config, resourceUpload, dirpath);
+						if (anim_config_version == ThICC_File::ThICC_FILE_VERSION) { //V3 is the new norm, but wrap it for V2 configs
+							LoadAnimConfigForMap(MaterialTypes::SPECULAR, "specular", mat_count_spec, anim_config, resourceUpload, dirpath);
+							LoadAnimConfigForMap(MaterialTypes::NORMAL, "normal", mat_count_norm, anim_config, resourceUpload, dirpath);
+							LoadAnimConfigForMap(MaterialTypes::EMISSIVE, "emissive", mat_count_emm, anim_config, resourceUpload, dirpath);
 						}
-
-						DebugText::print("Model '" + filename + "' has " + std::to_string(number_of_materials) + " animated materials.");
 					}
 					else
 					{
-						DebugText::print("MODEL '" + filename + "' USES A DEPRECIATED ANIMATION CONFIGURATION.");
+						DebugText::print("WARNING: MODEL '" + filename + "' USES A DEPRECIATED ANIMATION CONFIGURATION.");
 					}
 				}
 				else
 				{
-					DebugText::print("MODEL '" + filename + "' DOES NOT HAVE AN ANIMATION CONFIGURATION.");
+					DebugText::print("WARNING: MODEL '" + filename + "' DOES NOT HAVE AN ANIMATION CONFIGURATION.");
 				}
 			}
 			#endif
@@ -492,6 +508,66 @@ void SDKMeshGO3D::Load()
 		uploadResourcesFinished.wait();
 	}
 	m_loaded = true;
+}
+
+/* Loads the animation config for a specified map type */
+void SDKMeshGO3D::LoadAnimConfigForMap(MaterialTypes type, const std::string& debug_name, int number_of_materials, std::ifstream& anim_config, ResourceUploadBatch& resourceUpload, const std::string& dirpath) {
+	for (int i = 0; i < number_of_materials; i++) {
+		//Get this material's index
+		int material_index;
+		anim_config.read(reinterpret_cast<char*>(&material_index), sizeof(int));
+
+		//Get the map we're applying all this to, and register it as animated
+		AnimatedMap* map = nullptr;
+		if (type == MaterialTypes::DIFFUSE) {
+			map = &m_material_config.at(material_index).animated_diffuse;
+		}
+		else if (type == MaterialTypes::SPECULAR) {
+			map = &m_material_config.at(material_index).animated_specular;
+		}
+		else if (type == MaterialTypes::SPECULAR) {
+			map = &m_material_config.at(material_index).animated_emissive;
+		}
+		else {
+			map = &m_material_config.at(material_index).animated_normal;
+		}
+		map->is_animated = true;
+
+		//Get the number of textures in this animation
+		int num_of_textures;
+		anim_config.read(reinterpret_cast<char*>(&num_of_textures), sizeof(int));
+
+		//Get the animation time
+		anim_config.read(reinterpret_cast<char*>(&map->animation_time), sizeof(float));
+
+		//Get each texture to animate
+		for (int x = 0; x < num_of_textures; x++) {
+			//Fetch texture name
+			int this_tex_len;
+			anim_config.read(reinterpret_cast<char*>(&this_tex_len), sizeof(int));
+			char* this_tex_char = new char[this_tex_len];
+			anim_config.read(this_tex_char, this_tex_len);
+			std::string this_tex;
+			this_tex.append(this_tex_char, this_tex_len);
+			map->texture_names.push_back(this_tex);
+
+			//Convert texture name to wstring
+			std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+			this_tex = dirpath + this_tex;
+			std::wstring this_tex_wstring = converter.from_bytes(this_tex.c_str());
+
+			//Load actual texture by name & store its GPU index
+			Microsoft::WRL::ComPtr<ID3D12Resource> this_tex_d3d12;
+			wchar_t this_tex_wchar[_MAX_PATH] = {};
+			DX::FindMediaFile(this_tex_wchar, _MAX_PATH, this_tex_wstring.c_str());
+			DX::ThrowIfFailed(CreateDDSTextureFromFile(Locator::getDD()->m_deviceResources->GetD3DDevice(), resourceUpload, this_tex_wchar, this_tex_d3d12.ReleaseAndGetAddressOf()));
+			CreateShaderResourceView(Locator::getDD()->m_deviceResources->GetD3DDevice(), this_tex_d3d12.Get(), m_resourceDescriptors->GetCpuHandle(resourceDescriptorOffset));
+			map->gpu_indexes.push_back(resourceDescriptorOffset);
+			map->d3d12_textures.push_back(this_tex_d3d12);
+			resourceDescriptorOffset++;
+		}
+	}
+	DebugText::print("Model '" + filename + "' has " + std::to_string(number_of_materials) + " animated " + debug_name + " materials.");
 }
 
 /* Reset all resources */

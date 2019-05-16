@@ -60,11 +60,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "PanelFlame_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "di_TreeA_Leaf": {
     "newmtl": "di_TreeA_Leaf",
@@ -158,7 +158,7 @@
       "6": true,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "glideboard1.png",
       "glideboard2.png",
       "glideboard3.png",
@@ -226,8 +226,8 @@
       "glideboard66.png",
       "glideboard67.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.015
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.015
   },
   "ef_glideboard": {
     "newmtl": "ef_glideboard",
@@ -259,7 +259,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "dashboard1.png",
       "dashboard2.png",
       "dashboard3.png",
@@ -326,8 +326,8 @@
       "dashboard64.png",
       "dashboard65.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.015
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.015
   },
   "mm_Fence": {
     "newmtl": "mm_Fence",
@@ -359,11 +359,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mm_saku_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_Lawn01": {
     "newmtl": "mm_Lawn01",
@@ -395,11 +395,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mm_grass_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_Lawn02": {
     "newmtl": "mm_Lawn02",
@@ -431,11 +431,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mm_grass_Alp.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_PlantA": {
     "newmtl": "mm_PlantA",
@@ -560,11 +560,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mm_StartGrid_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_Tractor": {
     "newmtl": "mm_Tractor",
@@ -1001,11 +1001,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "bd_jumpboard2_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_kanban": {
     "newmtl": "mm_kanban",
@@ -1037,11 +1037,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mm_kanban_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_kanban1": {
     "newmtl": "mm_kanban1",
@@ -1104,11 +1104,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mm_kanbantree_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_redbrick": {
     "newmtl": "mm_redbrick",
@@ -1172,11 +1172,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "wiimm_hm_dirt02_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_rock": {
     "newmtl": "mm_rock",
@@ -1208,11 +1208,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mm_rock_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_startLine": {
     "newmtl": "mm_startLine",
@@ -1244,11 +1244,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mm_StartLine_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_startLine2": {
     "newmtl": "mm_startLine2",
@@ -1280,11 +1280,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mm_StartLine2_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_wall_pole.002": {
     "newmtl": "mm_wall_pole.002",
@@ -1348,11 +1348,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mm_wood3_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "mm_wood05": {
     "newmtl": "mm_wood05",

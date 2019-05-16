@@ -75,6 +75,7 @@ void ThICC_Game::Initialize() {
 		if (!new_map_inf->is_arcade_exclusive) {
 			continue;
 		}
+		attract_state = new_map_inf; //FFS
 		#else
 		if (new_map_inf->is_arcade_exclusive) {
 			attract_state = new_map_inf;
