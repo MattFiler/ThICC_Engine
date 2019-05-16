@@ -171,6 +171,13 @@ namespace EditorTool
             engineConfigs.Show();
         }
 
+        /* Open texture map animator */
+        private void openMapAnimator_Click(object sender, EventArgs e)
+        {
+            Texture_Map_Animator mapAnimator = new Texture_Map_Animator();
+            mapAnimator.Show();
+        }
+
         /* Open VS Project */
         private void openProject_Click(object sender, EventArgs e)
         {

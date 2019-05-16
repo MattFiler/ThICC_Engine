@@ -38,9 +38,12 @@
             this.openEngineConfigs = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.openProject = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.openMapAnimator = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // openGroupManager
@@ -119,7 +122,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.openProject);
-            this.groupBox5.Location = new System.Drawing.Point(11, 248);
+            this.groupBox5.Location = new System.Drawing.Point(11, 310);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(281, 56);
             this.groupBox5.TabIndex = 0;
@@ -136,11 +139,32 @@
             this.openProject.UseVisualStyleBackColor = true;
             this.openProject.Click += new System.EventHandler(this.openProject_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.openMapAnimator);
+            this.groupBox1.Location = new System.Drawing.Point(11, 248);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(281, 56);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Extra Tools";
+            // 
+            // openMapAnimator
+            // 
+            this.openMapAnimator.Location = new System.Drawing.Point(6, 19);
+            this.openMapAnimator.Name = "openMapAnimator";
+            this.openMapAnimator.Size = new System.Drawing.Size(270, 31);
+            this.openMapAnimator.TabIndex = 0;
+            this.openMapAnimator.Text = "Texture Map Animator";
+            this.openMapAnimator.UseVisualStyleBackColor = true;
+            this.openMapAnimator.Click += new System.EventHandler(this.openMapAnimator_Click);
+            // 
             // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(301, 314);
+            this.ClientSize = new System.Drawing.Size(301, 374);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -153,6 +177,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -168,5 +193,7 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button openProject;
         private System.Windows.Forms.Button openEngineConfigs;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button openMapAnimator;
     }
 }
