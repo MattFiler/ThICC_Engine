@@ -139,9 +139,11 @@
             // stepModifier
             // 
             this.stepModifier.Location = new System.Drawing.Point(6, 19);
+            this.stepModifier.Minimum = 1;
             this.stepModifier.Name = "stepModifier";
             this.stepModifier.Size = new System.Drawing.Size(313, 45);
             this.stepModifier.TabIndex = 0;
+            this.stepModifier.Value = 1;
             // 
             // label1
             // 
