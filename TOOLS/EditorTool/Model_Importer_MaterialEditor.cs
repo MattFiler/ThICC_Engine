@@ -169,13 +169,13 @@ namespace EditorTool
             }
             else
             {
-                if (material_config["map_Kn"].Value<string>() != "")
+                if (material_config["map_Ke"].Value<string>() != "")
                 {
-                    emissiveMapList.Items.Add(material_config["map_Kn"].Value<string>());
+                    emissiveMapList.Items.Add(material_config["map_Ke"].Value<string>());
                 }
                 else
                 {
-                    emissiveMapList.Items.Add(material_config["norm"].Value<string>());
+                    emissiveMapList.Items.Add(material_config["map_emissive"].Value<string>());
                 }
             }
             to_remove = new List<object>();
@@ -474,8 +474,8 @@ namespace EditorTool
             material_config["ThICC_DIFFUSE_FRAME_TIME"] = diffuseAnimTime.Value;
 
             //Default Specular Texture
-            string default_map = (specularMapList.Items.Count != 0 ? specularMapList.Items[0].ToString() : "spec_placeholder.png").Replace(' ', '_');
-            material_config["map_Ks"] = Path.GetFileName(default_map);
+            string default_map = (specularMapList.Items.Count != 0 ? specularMapList.Items[0].ToString() : "spec_placeholder.png");
+            material_config["map_Ks"] = Path.GetFileName(default_map).Replace(' ', '_');
             copyNewMat(default_map);
 
             //Specular texture(s) and animation properties (if enabled)
@@ -490,9 +490,9 @@ namespace EditorTool
             material_config["ThICC_SPECULAR_FRAME_TIME"] = specularAnimTime.Value;
 
             //Default Normal Texture
-            default_map = (normalMapList.Items.Count != 0 ? normalMapList.Items[0].ToString() : "norm_placeholder.png").Replace(' ', '_');
-            material_config["map_Kn"] = Path.GetFileName(default_map);
-            material_config["norm"] = Path.GetFileName(default_map);
+            default_map = (normalMapList.Items.Count != 0 ? normalMapList.Items[0].ToString() : "norm_placeholder.png");
+            material_config["map_Kn"] = Path.GetFileName(default_map).Replace(' ', '_');
+            material_config["norm"] = Path.GetFileName(default_map).Replace(' ', '_');
             copyNewMat(default_map);
 
             //Normal texture(s) and animation properties (if enabled)
@@ -507,9 +507,9 @@ namespace EditorTool
             material_config["ThICC_NORMAL_FRAME_TIME"] = normalAnimTime.Value;
 
             //Default Emissive Texture
-            default_map = (emissiveMapList.Items.Count != 0 ? emissiveMapList.Items[0].ToString() : "emm_placeholder.png").Replace(' ', '_');
-            material_config["map_Ke"] = Path.GetFileName(default_map);
-            material_config["map_emissive"] = Path.GetFileName(default_map);
+            default_map = (emissiveMapList.Items.Count != 0 ? emissiveMapList.Items[0].ToString() : "emm_placeholder.png");
+            material_config["map_Ke"] = Path.GetFileName(default_map).Replace(' ', '_');
+            material_config["map_emissive"] = Path.GetFileName(default_map).Replace(' ', '_');
             copyNewMat(default_map);
 
             //Emissive texture(s) and animation properties (if enabled)
