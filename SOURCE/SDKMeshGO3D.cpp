@@ -165,6 +165,8 @@ void SDKMeshGO3D::AlbedoEmissiveOverride(std::wstring path) {
 /* Load the model */
 void SDKMeshGO3D::Load()
 {
+	DebugText::print("Loading model: '" + filename + "'");
+
 	//Our D3D device
 	auto device = Locator::getDD()->m_deviceResources->GetD3DDevice();
 
@@ -410,11 +412,10 @@ void SDKMeshGO3D::Load()
 					if (config_version == 2) {
 						DebugText::print("'" + filename + "' uses metal config version 2 - this will soon be depreciated, please re-export the model!");
 					}
-					else if (config_version != ThICC_File::ThICC_FILE_VERSION) {
+					else if (config_version != ThICC_File::ThICC_FILE_VERSION || !config_is_legit) {
 						DebugText::print("'" + filename + "' uses a DEPRECIATED metal config (sub-v2)! Please update it by re-exporting the model.");
 					}
-
-					if (config_is_legit) {
+					else {
 						//Get number of materials in config
 						int number_of_materials = 0;
 						metal_config.read(reinterpret_cast<char*>(&number_of_materials), sizeof(int));
@@ -430,14 +431,10 @@ void SDKMeshGO3D::Load()
 							m_material_config.push_back(this_mat);
 						}
 					}
-					else
-					{
-						DebugText::print("WARNING: MODEL '" + filename + "' USES A DEPRECIATED METAL CONFIGURATION.");
-					}
 				}
 				else
 				{
-					DebugText::print("WARNING: MODEL '" + filename + "' DOES NOT HAVE A METAL CONFIGURATION.");
+					DebugText::print("'" + filename + "' does NOT have a metal configuration.");
 				}
 
 				/* Load animation config */
@@ -461,11 +458,10 @@ void SDKMeshGO3D::Load()
 					if (anim_config_version == 2) {
 						DebugText::print("'" + filename + "' uses animation config version 2 - this will soon be depreciated, please re-export the model!");
 					}
-					else if (anim_config_version != ThICC_File::ThICC_FILE_VERSION) {
+					else if (anim_config_version != ThICC_File::ThICC_FILE_VERSION || !config_is_legit) {
 						DebugText::print("'" + filename + "' uses a DEPRECIATED animation config (sub-v2)! Please update it by re-exporting the model.");
 					}
-
-					if (config_is_legit) {
+					else {
 						//Get number of materials in config
 						int mat_count_alb = 0;
 						anim_config.read(reinterpret_cast<char*>(&mat_count_alb), sizeof(int));
@@ -479,24 +475,23 @@ void SDKMeshGO3D::Load()
 						}
 
 						//Update offset
-						resourceDescriptorOffset += m_modelNormal.size() * 4; //materials * 4 (max texture count) - THIS IS A BIG OL HACKY FIX, a way to count actual resources would be nice :)
+						resourceDescriptorOffset += m_modelNormal.size() * 4; //materials * 4 (max texture count) - a way to count actual resources would be nice 
 
 						//Load each animated map
-						LoadAnimConfigForMap(MaterialTypes::DIFFUSE, "diffuse", mat_count_alb, anim_config, resourceUpload, dirpath);
+						LoadAnimConfigForMap(MaterialTypes::DIFFUSE, mat_count_alb, anim_config, resourceUpload, dirpath);
 						if (anim_config_version == ThICC_File::ThICC_FILE_VERSION) { //V3 is the new norm, but wrap it for V2 configs
-							LoadAnimConfigForMap(MaterialTypes::SPECULAR, "specular", mat_count_spec, anim_config, resourceUpload, dirpath);
-							LoadAnimConfigForMap(MaterialTypes::NORMAL, "normal", mat_count_norm, anim_config, resourceUpload, dirpath);
-							LoadAnimConfigForMap(MaterialTypes::EMISSIVE, "emissive", mat_count_emm, anim_config, resourceUpload, dirpath);
+							LoadAnimConfigForMap(MaterialTypes::SPECULAR, mat_count_spec, anim_config, resourceUpload, dirpath);
+							LoadAnimConfigForMap(MaterialTypes::NORMAL, mat_count_norm, anim_config, resourceUpload, dirpath);
+							LoadAnimConfigForMap(MaterialTypes::EMISSIVE, mat_count_emm, anim_config, resourceUpload, dirpath);
 						}
-					}
-					else
-					{
-						DebugText::print("WARNING: MODEL '" + filename + "' USES A DEPRECIATED ANIMATION CONFIGURATION.");
+						if (mat_count_alb + mat_count_spec + mat_count_norm + mat_count_emm > 0) {
+							DebugText::print("'" + filename + "' has " + std::to_string(mat_count_alb + mat_count_spec + mat_count_norm + mat_count_emm) + " animated materials");
+						}
 					}
 				}
 				else
 				{
-					DebugText::print("WARNING: MODEL '" + filename + "' DOES NOT HAVE AN ANIMATION CONFIGURATION.");
+					DebugText::print("'" + filename + "' does NOT have an animation configuration.");
 				}
 			}
 			#endif
@@ -511,7 +506,7 @@ void SDKMeshGO3D::Load()
 }
 
 /* Loads the animation config for a specified map type */
-void SDKMeshGO3D::LoadAnimConfigForMap(MaterialTypes type, const std::string& debug_name, int number_of_materials, std::ifstream& anim_config, ResourceUploadBatch& resourceUpload, const std::string& dirpath) {
+void SDKMeshGO3D::LoadAnimConfigForMap(MaterialTypes type, int number_of_materials, std::ifstream& anim_config, ResourceUploadBatch& resourceUpload, const std::string& dirpath) {
 	for (int i = 0; i < number_of_materials; i++) {
 		//Get this material's index
 		int material_index;
@@ -567,7 +562,6 @@ void SDKMeshGO3D::LoadAnimConfigForMap(MaterialTypes type, const std::string& de
 			resourceDescriptorOffset++;
 		}
 	}
-	DebugText::print("Model '" + filename + "' has " + std::to_string(number_of_materials) + " animated " + debug_name + " materials.");
 }
 
 /* Reset all resources */

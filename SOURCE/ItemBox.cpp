@@ -12,7 +12,6 @@ ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel(Locator::getG
 	SetRotation(rotation);
 
 	m_physData.m_additionalScale = 50;
-	DebugText::print("CREATING ITEM BOX AT: (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ", " + std::to_string(position.z) + ")");
 }
 
 void ItemBox::hasCollided(Player* collided_player) {
