@@ -113,27 +113,12 @@ void GameScene::ExpensiveLoad() {
 	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap_start, "FINAL_LAP_START");
 	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap, "FINAL_LAP_LOOP");
 
-	//Position main UI
-	for (int i = 0; i < Locator::getRM()->player_amount; i++)
-	{
-		player[i]->SetItemPos(
-			Vector2(
-				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX * (static_cast<float>(Locator::getRD()->m_window_width) / 720), 
-				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY
-			) / (static_cast<float>(Locator::getRD()->m_window_height) / 720)
-		);
-		player[i]->SetItemScale(0.5);
+	//Load main UI
+	m_game_ui.ExpensiveLoad();
+	//TODO: WILL ALSO WANT TO RE-CALCULATE THIS UI FOR THE PLAYER COUNT
 
-		DebugText::print(std::to_string(static_cast<float>(Locator::getRD()->m_window_height) / 720));
-		
-		float text_pos_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
-		float text_pos_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetRankingText()->GetSize().y;
-		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y) / (static_cast<float>(Locator::getRD()->m_window_height) / 720), false);
-
-		float text_lap_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
-		float text_lap_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetLapText()->GetSize().y;
-		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y) / (static_cast<float>(Locator::getRD()->m_window_height) / 720), false);
-	}
+	m_game_ui.SetCurrentLap(1);
+	m_game_ui.SetPlayerPosition(1);
 
 	//Position countdown
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
@@ -406,6 +391,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 			}
 		}
 	}
+
+	m_game_ui.Update();
 
 	Locator::getAIScheduler()->Update();
 
@@ -785,6 +772,8 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		}
 		break;
 	}
+
+	m_game_ui.Render();
 }
 
 /* Set the player's current waypoint */

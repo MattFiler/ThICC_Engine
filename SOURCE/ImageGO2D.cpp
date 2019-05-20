@@ -25,10 +25,13 @@ void ImageGO2D::Render()
 		InternalSpriteUpdate(new_filepath);
 	}
 
-	//Render
-	Locator::getRD()->m_2dSpriteBatch->Draw(Locator::getRD()->m_2dResourceDescriptors->GetGpuHandle(m_resourceNum),
-		size,
-		m_pos, nullptr, m_colour, m_orientation, m_origin, m_scale);
+	if (is_visible) 
+	{
+		//Render
+		Locator::getRD()->m_2dSpriteBatch->Draw(Locator::getRD()->m_2dResourceDescriptors->GetGpuHandle(m_resourceNum),
+			size,
+			m_pos, nullptr, m_colour, m_orientation, m_origin, m_scale);
+	}
 }
 
 /* Work out centre */

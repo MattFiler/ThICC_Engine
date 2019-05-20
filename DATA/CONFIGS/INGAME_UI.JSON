@@ -1,0 +1,66 @@
+{
+	"ITEM_HOLDER": {
+		"sprite": "INGAME_UI_ITEMHOLDER",
+		"position": [0,0]
+	},
+	"LAP_1": {
+		"sprite": "INGAME_UI_LAP1",
+		"position": [0,0]
+	},
+	"LAP_2": {
+		"sprite": "INGAME_UI_LAP2",
+		"position": [0,0]
+	},
+	"LAP_3": {
+		"sprite": "INGAME_UI_LAP3",
+		"position": [0,0]
+	},
+	"POS_1": {
+		"sprite": "INGAME_UI_POSITION_1",
+		"position": [0,0]
+	},
+	"POS_2": {
+		"sprite": "INGAME_UI_POSITION_2",
+		"position": [0,0]
+	},
+	"POS_3": {
+		"sprite": "INGAME_UI_POSITION_3",
+		"position": [0,0]
+	},
+	"POS_4": {
+		"sprite": "INGAME_UI_POSITION_4",
+		"position": [0,0]
+	},
+	"POS_5": {
+		"sprite": "INGAME_UI_POSITION_5",
+		"position": [0,0]
+	},
+	"POS_6": {
+		"sprite": "INGAME_UI_POSITION_6",
+		"position": [0,0]
+	},
+	"POS_7": {
+		"sprite": "INGAME_UI_POSITION_7",
+		"position": [0,0]
+	},
+	"POS_8": {
+		"sprite": "INGAME_UI_POSITION_8",
+		"position": [0,0]
+	},
+	"POS_9": {
+		"sprite": "INGAME_UI_POSITION_9",
+		"position": [0,0]
+	},
+	"POS_10": {
+		"sprite": "INGAME_UI_POSITION_10",
+		"position": [0,0]
+	},
+	"POS_11": {
+		"sprite": "INGAME_UI_POSITION_11",
+		"position": [0,0]
+	},
+	"POS_12": {
+		"sprite": "INGAME_UI_POSITION_12",
+		"position": [0,0]
+	}
+}

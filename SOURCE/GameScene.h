@@ -12,6 +12,7 @@
 #include "AIScheduler.h"
 #include "MapInfo.h"
 #include "Skybox.h"
+#include "InGameUI.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -62,6 +63,7 @@ private:
 	LocalisationManager m_localiser;
 	KeybindManager m_keybinds;
 	GameFilepaths m_filepath;
+	InGameUI m_game_ui;
 
 	//Item objects
 	Item* CreateItem(ItemType type);
