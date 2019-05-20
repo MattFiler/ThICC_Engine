@@ -27,10 +27,11 @@ public:
 	float GetPan() { return m_pan; }
 
 	void SetLoop(bool _loop);
+	bool GetLoop() { return loop; }
 
 	bool IsPlaying() { return m_sfx->IsInUse(); }
 
-	void Pause();
+	void PauseMusic();
 
 	void SetPause(bool _paused) { paused = _paused; }
 	bool IsPaused() { return paused; }
@@ -38,9 +39,12 @@ public:
 	const std::string& GetTag() { return tag; }
 	void SetTag(const std::string& _tag) { tag = _tag; }
 
+	const std::string& GetFilename() { return filename; }
+
 protected:
 	std::unique_ptr<DirectX::SoundEffect> m_sfx;
 	std::unique_ptr<DirectX::SoundEffectInstance> m_loop;
+	std::unique_ptr<DirectX::SoundEffectInstance> m_inst;
 
 	float m_volume = 1.0f;
 	float m_pitch = 0.0f;

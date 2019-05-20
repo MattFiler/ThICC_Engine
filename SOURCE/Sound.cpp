@@ -19,6 +19,8 @@ Sound::Sound(DirectX::AudioEngine* _audEngine, std::string _filename)
 		DebugText::print("Attempt to load sound '" + _filename + "' FAILED! Is the asset path correct?");
 		DebugText::print(fullpath);
 	}
+	//m_inst = m_sfx->CreateInstance(DirectX::SOUND_EFFECT_INSTANCE_FLAGS::SoundEffectInstance_Use3D);
+	m_inst = m_sfx->CreateInstance();
 }
 
 /* Destroy! */
@@ -32,21 +34,38 @@ void Sound::Play()
 {
 	if (m_sfx)
 	{
+		//if (loop)
+		//{
+		//	if (m_playing)
+		//	{
+		//		m_loop->Stop(true);
+		//	}
+		//	else
+		//	{
+		//		m_loop->Play(true);
+		//	}
+		//	m_playing = !m_playing;
+		//}
+		//else
+		//{
+		//	m_sfx->Play(m_volume, m_pitch, m_pan);
+		//}
+
 		if (loop)
 		{
 			if (m_playing)
 			{
-				m_loop->Stop(true);
+				m_inst->Stop(true);
 			}
 			else
 			{
-				m_loop->Play(true);
+				m_inst->Play(true);
 			}
 			m_playing = !m_playing;
 		}
 		else
 		{
-			m_sfx->Play(m_volume, m_pitch, m_pan);
+			m_inst->Play(false);
 		}
 	}
 	else
@@ -62,8 +81,12 @@ void Sound::Stop()
 	{
 		if (loop)
 		{
-			m_loop->Stop(true);
+			m_inst->Stop(true);
 			m_playing = false;
+		}
+		else
+		{
+			m_inst->Pause();
 		}
 	}
 }
@@ -73,26 +96,30 @@ void Sound::Tick()
 {
 	if (m_loop)
 	{
-		m_loop->SetVolume(m_volume);
-		m_loop->SetPitch(m_pitch);
-		m_loop->SetPan(m_pan);
-		m_loop->Play(m_playing);
+		//m_loop->SetVolume(m_volume);
+		//m_loop->SetPitch(m_pitch);
+		//m_loop->SetPan(m_pan);
+		//m_loop->Play(m_playing);
+		m_inst->SetVolume(m_volume);
+		m_inst->SetPitch(m_pitch);
+		m_inst->SetPan(m_pan);
+		m_inst->Play(m_playing);
 	}
 }
 
 /* Set looping */
 void Sound::SetLoop(bool _loop) {
 	loop = _loop;
-	m_loop = m_sfx->CreateInstance();
+	//m_loop = m_sfx->CreateInstance();
 }
 
-void Sound::Pause()
+void Sound::PauseMusic()
 {
 	if (m_sfx)
 	{
+		m_inst->Pause();
 		if (loop)
 		{
-			m_loop->Pause();
 			m_playing = false;
 		}
 	}

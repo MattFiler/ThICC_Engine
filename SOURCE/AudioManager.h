@@ -25,6 +25,7 @@ public:
 	void StopAll();
 	void Pause(const std::string& _tag);
 	void Pause(size_t i);
+	void PauseAll();
 	bool IsPlaying(size_t i);
 	bool Paused(size_t i);
 	void Resume(const std::string& _tag);
@@ -43,4 +44,5 @@ private:
 
 	// all the sounds
 	std::vector<Sound*> m_Sounds;
+	std::vector<Sound*> m_playingSounds;
 };

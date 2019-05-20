@@ -94,7 +94,21 @@ void AudioManager::Play(const std::string& _tag)
 	{
 		if ((*it)->GetTag() == _tag)
 		{
-			(*it)->Play();
+			if (!(*it)->GetLoop())
+			{
+				Sound* new_sound = new Sound(m_audEngine.get(), (*it)->GetFilename());
+				new_sound->SetLoop((*it)->GetLoop());
+				new_sound->SetVolume((*it)->GetVolume());
+				new_sound->SetPitch((*it)->GetPitch());
+				new_sound->SetPan((*it)->GetPan());
+				new_sound->SetTag((*it)->GetTag());
+				new_sound->Play();
+				m_playingSounds.push_back(new_sound);
+			}
+			else
+			{
+				(*it)->Play();
+			}
 			return;
 		}
 	}
@@ -106,7 +120,24 @@ void AudioManager::Stop(const std::string& _tag)
 	{
 		if ((*it)->GetTag() == _tag)
 		{
-			(*it)->Stop();
+			if (!(*it)->GetLoop())
+			{
+				for (size_t i = 0; i < m_playingSounds.size(); i++)
+				{
+					if (m_playingSounds[i]->GetTag() == _tag)
+					{
+						m_playingSounds[i]->Stop();
+						delete m_playingSounds[i];
+						m_playingSounds[i] = nullptr;
+						m_playingSounds.erase(m_playingSounds.begin() + i);
+						return;
+					}
+				}
+			}
+			else
+			{
+				(*it)->Stop();
+			}
 			return;
 		}
 	}
@@ -116,7 +147,24 @@ void AudioManager::StopAll()
 {
 	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
 	{
-		(*it)->Stop();
+		if (!(*it)->GetLoop())
+		{
+			for (size_t i = 0; i < m_playingSounds.size(); i++)
+			{
+				if (m_playingSounds[i]->GetTag() == (*it)->GetTag())
+				{
+					m_playingSounds[i]->Stop();
+					delete m_playingSounds[i];
+					m_playingSounds[i] = nullptr;
+					m_playingSounds.erase(m_playingSounds.begin() + i);
+				}
+			}
+		}
+		else
+		{
+			(*it)->Stop();
+			(*it)->SetPause(false);
+		}
 	}
 }
 
@@ -126,8 +174,33 @@ void AudioManager::Pause(const std::string& _tag)
 	{
 		if ((*it)->GetTag() == _tag)
 		{
-			(*it)->Pause();
+			(*it)->PauseMusic();
 			return;
+		}
+	}
+}
+
+void AudioManager::PauseAll()
+{
+	for (std::vector<Sound *>::iterator it = m_Sounds.begin(); it != m_Sounds.end(); it++)
+	{
+		if (!(*it)->GetLoop())
+		{
+			for (size_t i = 0; i < m_playingSounds.size(); i++)
+			{
+				if (m_playingSounds[i]->GetTag() == (*it)->GetTag())
+				{
+					m_playingSounds[i]->Stop();
+					delete m_playingSounds[i];
+					m_playingSounds[i] = nullptr;
+					m_playingSounds.erase(m_playingSounds.begin() + i);
+				}
+			}
+		}
+		else
+		{
+			(*it)->PauseMusic();
+			(*it)->SetPause(true);
 		}
 	}
 }
@@ -152,7 +225,7 @@ void AudioManager::Resume(size_t i)
 
 void AudioManager::Pause(size_t i)
 {
-	m_Sounds[i]->Pause();
+	m_Sounds[i]->PauseMusic();
 	m_Sounds[i]->SetPause(true);
 }
 
