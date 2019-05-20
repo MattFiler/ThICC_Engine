@@ -29,10 +29,10 @@
     },
     "ThICC_INDEX": 0,
     "ThICC_METALLIC": false,
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Explosion.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   }
 }

@@ -67,12 +67,21 @@ void ThICC_Game::Initialize() {
 	std::ifstream j(m_filepath.generateFilepath("MAP_CONFIG", m_filepath.CONFIG));
 	map_config << j;
 	index = 0;
+	MapInfo* attract_state = nullptr;
 	for (auto& element : map_config) {
 		//Store map info
 		MapInfo* new_map_inf = new MapInfo(element, index);
 		#ifdef _ARCADE
 		if (!new_map_inf->is_arcade_exclusive) {
 			continue;
+		}
+		attract_state = new_map_inf; //FFS
+		#else
+		if (new_map_inf->is_arcade_exclusive) {
+			attract_state = new_map_inf;
+			#ifndef _DEBUG
+			continue;
+			#endif
 		}
 		#endif
 		m_go_shared.map_instances.push_back(new_map_inf);
@@ -84,6 +93,7 @@ void ThICC_Game::Initialize() {
 	//Create the scenes
 	m_scene_manager.addScene(new MenuScene(), (int)Scenes::MENUSCENE);
 	m_scene_manager.addScene(new LoadingScene(), (int)Scenes::LOADINGSCENE);
+	m_scene_manager.addScene(new GameScene(attract_state), (int)Scenes::ATTRACT_STATE);
 	#ifdef _DEBUG 
 	m_scene_manager.addScene(new DebugScene(), (int)Scenes::DEBUG_LIGHTINGTEST);
 	#endif

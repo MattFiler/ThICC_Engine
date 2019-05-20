@@ -115,13 +115,18 @@ void SceneManager::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  
 	Locator::getRD()->m_commandList->SetDescriptorHeaps(_countof(heaps), heaps);
 
 	//Start sprite batch and call 2D renders
-	Locator::getRD()->m_2dSpriteBatch->Begin(Locator::getRD()->m_commandList.Get());
-	m_curr_scene->Render2D(m_commandList);
-	if (show_loadscreen) { 
-		loadscreen->Render(); 
-		if (!first_load && !switched_scene) {
-			scene_switch = true;
+	try {
+		Locator::getRD()->m_2dSpriteBatch->Begin(Locator::getRD()->m_commandList.Get());
+		m_curr_scene->Render2D(m_commandList);
+		if (show_loadscreen) {
+			loadscreen->Render();
+			if (!first_load && !switched_scene) {
+				scene_switch = true;
+			}
 		}
+		Locator::getRD()->m_2dSpriteBatch->End();
 	}
-	Locator::getRD()->m_2dSpriteBatch->End();
+	catch (...) {
+		DebugText::print("SceneManager::Render2D - Failed to render, could be a sprite batch issue: most likely out of memory.");
+	}
 }

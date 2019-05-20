@@ -56,7 +56,7 @@ public:
 	Track(MapInfo* _track);
 
 	void LoadCollision();
-	void UnloadCollision();
+	void Reset() override;
 
 	Vector3 getSuitableSpawnSpot();
 

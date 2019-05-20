@@ -60,10 +60,10 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "itemkillerjet_alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   }
 }

@@ -60,11 +60,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "udr_Bridge_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "dr_Bridge_NONE": {
     "newmtl": "dr_Bridge_NONE",
@@ -313,11 +313,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "udr_DragonParts1_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "dr_DragonParts2": {
     "newmtl": "dr_DragonParts2",
@@ -349,11 +349,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "udr_DragonParts2_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "dr_DragonParts3": {
     "newmtl": "dr_DragonParts3",
@@ -385,11 +385,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "udr_DragonParts3_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "dr_DragonParts3_OutSide": {
     "newmtl": "dr_DragonParts3_OutSide",
@@ -793,11 +793,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "udr_Glass_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "dr_JugemPicture": {
     "newmtl": "dr_JugemPicture",
@@ -1177,11 +1177,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "udr_RoadSideParts_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "dr_Rock": {
     "newmtl": "dr_Rock",
@@ -1306,11 +1306,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "udr_Saku1_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "dr_Saku2": {
     "newmtl": "dr_Saku2",
@@ -1342,11 +1342,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "udr_Saku2_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "dr_Sebire": {
     "newmtl": "dr_Sebire",
@@ -1378,11 +1378,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "udr_Sebire_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "dr_Sebire_Back": {
     "newmtl": "dr_Sebire_Back",
@@ -1476,11 +1476,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "udr_StartParts_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "dr_StaticShadow": {
     "newmtl": "dr_StaticShadow",
@@ -1884,7 +1884,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "glideboard1.png",
       "glideboard2.png",
       "glideboard3.png",
@@ -1952,8 +1952,8 @@
       "glideboard66.png",
       "glideboard67.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.01
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.01
   },
   "ef_river02_Dragon": {
     "newmtl": "ef_river02_Dragon",
@@ -2016,7 +2016,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "waterfall65.png",
       "waterfall64.png",
       "waterfall63.png",
@@ -2083,7 +2083,7 @@
       "waterfall2.png",
       "waterfall1.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.015
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.015
   }
 }

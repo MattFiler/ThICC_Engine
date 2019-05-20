@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CollisionManager.h"
 #include "AudioManager.h"
+#include "RaceManager.h"
 #include "ItemBox.h"
 #include "Bomb.h"
 #include "Explosion.h"
@@ -71,6 +72,9 @@ void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _ph
 
 void CollisionManager::ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox)
 {
+	if (Locator::getRM()->attract_state)
+		return;
+
 	dynamic_cast<ItemBox*>(_itemBox)->hasCollided(dynamic_cast<Player*>(_player));
 	Locator::getAudio()->Play("ITEMBOX_HIT");
 }

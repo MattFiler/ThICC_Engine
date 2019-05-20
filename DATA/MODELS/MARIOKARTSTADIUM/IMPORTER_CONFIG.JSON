@@ -29,7 +29,7 @@
       "6": false
     },
     "ThICC_INDEX": 3,
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "dashboard1.png",
       "dashboard2.png",
       "dashboard3.png",
@@ -96,8 +96,8 @@
       "dashboard64.png",
       "dashboard65.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.01
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.01
   },
   "ef_glideboard": {
     "newmtl": "ef_glideboard",
@@ -129,7 +129,7 @@
       "5": false,
       "6": true
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "glideboard1.png",
       "glideboard2.png",
       "glideboard3.png",
@@ -197,8 +197,8 @@
       "glideboard66.png",
       "glideboard67.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.01
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.01
   },
   "ef_gravityboard": {
     "newmtl": "ef_gravityboard",
@@ -230,7 +230,7 @@
       "5": true,
       "6": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "glideboard1.png",
       "glideboard2.png",
       "glideboard3.png",
@@ -298,8 +298,8 @@
       "glideboard66.png",
       "glideboard67.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.01
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.01
   },
   "fc_ColorRoad": {
     "newmtl": "fc_ColorRoad",
@@ -1037,7 +1037,7 @@
       "5": false,
       "6": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "MKTV.0.png",
       "mktv.1.png",
       "mktv.2.png",
@@ -1090,8 +1090,8 @@
       "mktv.49.png",
       "mktv.50.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.05
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.05
   },
   "fc_TV_capture": {
     "newmtl": "fc_TV_capture",
@@ -2218,7 +2218,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "dsws_ry_gallery_00_alb.0.png",
       "dsws_ry_gallery_00_alb.1.png",
       "dsws_ry_gallery_00_alb.2.png",
@@ -2229,8 +2229,8 @@
       "dsws_ry_gallery_00_alb.7.png",
       "dsws_ry_gallery_00_alb.8.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.1
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.1
   },
   "mt_GalleryB": {
     "newmtl": "mt_GalleryB",
@@ -2262,7 +2262,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "dsws_ry_gallery_00_alb.8.png",
       "dsws_ry_gallery_00_alb.7.png",
       "dsws_ry_gallery_00_alb.6.png",
@@ -2273,8 +2273,8 @@
       "dsws_ry_gallery_00_alb.1.png",
       "dsws_ry_gallery_00_alb.0.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.1
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.1
   },
   "mt_GalleryC": {
     "newmtl": "mt_GalleryC",
@@ -2306,7 +2306,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "dsws_ry_gallery_00_alb.0.png",
       "dsws_ry_gallery_00_alb.1.png",
       "dsws_ry_gallery_00_alb.2.png",
@@ -2317,7 +2317,7 @@
       "dsws_ry_gallery_00_alb.7.png",
       "dsws_ry_gallery_00_alb.8.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.1
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.1
   }
 }

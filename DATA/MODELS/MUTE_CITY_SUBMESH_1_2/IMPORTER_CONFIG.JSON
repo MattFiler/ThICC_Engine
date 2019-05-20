@@ -345,11 +345,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_Antigravity_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_BFBuilding": {
     "newmtl": "Fz_BFBuilding",
@@ -443,11 +443,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_Battery_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_BigWallBar": {
     "newmtl": "Fz_BigWallBar",
@@ -511,11 +511,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_BldgBLack_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_BldgBLack_Tire": {
     "newmtl": "Fz_BldgBLack_Tire",
@@ -547,11 +547,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_BldgBLack_Gray_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_BldgBodyA": {
     "newmtl": "Fz_BldgBodyA",
@@ -583,11 +583,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_BldgBodyA_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_DartLine": {
     "newmtl": "Fz_DartLine",
@@ -619,11 +619,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_DartLine_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_Enkei_BillBody_Tire": {
     "newmtl": "Fz_Enkei_BillBody_Tire",
@@ -686,11 +686,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_GoalLine_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_GoalTape": {
     "newmtl": "Fz_GoalTape",
@@ -784,11 +784,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_GoalgateFlame_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_Gold": {
     "newmtl": "Fz_Gold",
@@ -882,7 +882,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "screen01.VLpmB.png",
       "screen02.ecskS.png",
       "screen03.4fY78.png",
@@ -948,8 +948,8 @@
       "screen63.YReyM.png",
       "screen64.kYwVB.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.05
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.05
   },
   "Fz_PanelFlame": {
     "newmtl": "Fz_PanelFlame",
@@ -981,11 +981,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_PanelFlame_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_PipeGold": {
     "newmtl": "Fz_PipeGold",
@@ -1113,7 +1113,7 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "energy1.png",
       "energy2.png",
       "energy3.png",
@@ -1142,8 +1142,8 @@
       "energy26.png",
       "energy27.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.02
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.02
   },
   "Fz_RoadJunp": {
     "newmtl": "Fz_RoadJunp",
@@ -1176,11 +1176,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_RoadJunp_Emm.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_RoadLight": {
     "newmtl": "Fz_RoadLight",
@@ -1245,11 +1245,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_RoadMain_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_RoadMainEmm": {
     "newmtl": "Fz_RoadMainEmm",
@@ -1282,11 +1282,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_RoadMainEmm_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_RoadMainMesh": {
     "newmtl": "Fz_RoadMainMesh",
@@ -1319,11 +1319,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_RoadMainMesh_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_RoadPipe": {
     "newmtl": "Fz_RoadPipe",
@@ -1356,11 +1356,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_RoadPipe_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_RoadPipeCap": {
     "newmtl": "Fz_RoadPipeCap",
@@ -1393,11 +1393,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_RoadPipeCap_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_RoadSide": {
     "newmtl": "Fz_RoadSide",
@@ -1494,7 +1494,7 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "arrow1.png",
       "arrow2.png",
       "arrow3.png",
@@ -1516,8 +1516,8 @@
       "arrow19.png",
       "arrow20.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.035
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.035
   },
   "Fz_RoadVectorEmm": {
     "newmtl": "Fz_RoadVectorEmm",
@@ -1550,11 +1550,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_RoadVectorEmm_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_StartGrid": {
     "newmtl": "Fz_StartGrid",
@@ -1586,11 +1586,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_StartGrid_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_WallMain": {
     "newmtl": "Fz_WallMain",
@@ -1623,11 +1623,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "fz_wallmain_alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "Fz_WallPipeCap": {
     "newmtl": "Fz_WallPipeCap",
@@ -1660,11 +1660,11 @@
       "7": false,
       "4": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "Fz_WallPipeCap_Alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "MCTV": {
     "newmtl": "MCTV",
@@ -1696,7 +1696,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mctv.000.png",
       "mctv.001.png",
       "mctv.002.png",
@@ -1800,8 +1800,8 @@
       "mctv.100.png",
       "mctv.101.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.035
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.035
   },
   "MCTV_S": {
     "newmtl": "MCTV_S",
@@ -1833,7 +1833,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "mctv.000.png",
       "mctv.001.png",
       "mctv.002.png",
@@ -1937,8 +1937,8 @@
       "mctv.100.png",
       "mctv.101.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.035
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.035
   },
   "bbm_GoalLine01": {
     "newmtl": "bbm_GoalLine01",
@@ -1970,11 +1970,11 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "dbb_goalline01_alb.png"
     ],
-    "ThICC_ANIMATION_ENABLED": false,
-    "ThICC_ANIMATION_TIME": 0.0
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0
   },
   "ef_dashboard": {
     "newmtl": "ef_dashboard",
@@ -2006,7 +2006,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "dashboard1.png",
       "dashboard2.png",
       "dashboard3.png",
@@ -2073,8 +2073,8 @@
       "dashboard64.png",
       "dashboard65.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.01
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.01
   },
   "ef_dashboard03": {
     "newmtl": "ef_dashboard03",
@@ -2106,7 +2106,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "dashboard1.png",
       "dashboard2.png",
       "dashboard3.png",
@@ -2173,7 +2173,7 @@
       "dashboard64.png",
       "dashboard65.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.01
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.01
   }
 }

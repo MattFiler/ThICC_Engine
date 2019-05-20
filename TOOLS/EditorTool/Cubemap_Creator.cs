@@ -63,6 +63,12 @@ namespace EditorTool
         /* Create the cubemap */
         private void createCubemap_Click(object sender, EventArgs e)
         {
+            if (pathPX.Text == "" || pathNX.Text == "" || pathPY.Text == "" || pathNY.Text == "" || pathPZ.Text == "" || pathNZ.Text == "")
+            {
+                MessageBox.Show("Please complete all fields.", "Can't continue.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             //All faces
             List<string> faces = new List<string>();
             faces.Add(pathPX.Text);

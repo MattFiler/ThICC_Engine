@@ -85,18 +85,30 @@ void GameScene::ExpensiveLoad() {
 		if(!Locator::getRM()->attract_state)
 			player[i]->SetPlayerID(i);
 
+		player[i]->SetLap(1);
 		player[i]->Reload(
 			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i])
 		);
+		if (track->getSpawnRotations().size() > 0) {
+			player[i]->setVelocity(Matrix::CreateWorld(player[i]->GetPos(), track->getSpawnRotations()[0] * -2, Vector3::Up).Forward());
+			player[i]->UpdateWorld();
+			player[i]->SetPos(Vector3(track->getSuitableSpawnSpot().x, track->getSuitableSpawnSpot().y, track->getSuitableSpawnSpot().z) - player[i]->getVelocity() * i * 3);
+		}
 	}
 	for (int i = Locator::getRM()->player_amount; i < m_maxPlayers; i++)
 	{
 		player[i]->SetPlayerID(-1);
+		player[i]->SetLap(1);
 		player[i]->Reload(
 			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[0])
 		);
+		if (track->getSpawnRotations().size() > 0) {
+			player[i]->setVelocity(Matrix::CreateWorld(player[i]->GetPos(), track->getSpawnRotations()[0] * -2, Vector3::Up).Forward());
+			player[i]->UpdateWorld();
+			player[i]->SetPos(Vector3(track->getSuitableSpawnSpot().x, track->getSuitableSpawnSpot().y, track->getSuitableSpawnSpot().z) - player[i]->getVelocity() * i * 3);
+		}
 	}
 
 	Locator::getAudio()->addToSoundsList(map_info->audio_background_start, "TRACK_START");
@@ -189,21 +201,16 @@ void GameScene::ExpensiveUnload() {
 	{
 		(*it)->Reset();
 		if (dynamic_cast<Track*>(*it)) {
-			dynamic_cast<Track*>(*it)->UnloadCollision();
+			dynamic_cast<Track*>(*it)->Reset();
 			suitable_spawn = dynamic_cast<Track*>(*it)->getSuitableSpawnSpot();
 		}
 	}
 
 	//Reset player positions & camera mode
-	//for (int i = 0; i < Locator::getRM()->player_amount; i++) {
-	//	player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
-	//	m_cam[i]->Reset();
-	//	m_cam[i]->SetType(CameraType::FOLLOW);
-	//}
 	for (int i = 0; i < m_maxPlayers; i++) {
-		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		player[i]->SetWaypoint(0);
 		player[i]->SetLap(1);
+		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
 		if (i < 4)
 		{
 			m_cam[i]->Reset();
@@ -220,6 +227,7 @@ void GameScene::ExpensiveUnload() {
 
 	//We'll probably need to reset more stuff here, like race timers, etc
 	timeout = 12.f;
+	finish_timer = 0;
 	state = START;
 	m_playerControls = false;
 	track_music_start = true;
@@ -227,6 +235,7 @@ void GameScene::ExpensiveUnload() {
 	final_lap = false;
 	finished = 0;
 	is_paused = false;
+	race_finished = false;
 
 	//Unload skybox
 	Locator::getRD()->skybox->Reset();
@@ -258,16 +267,16 @@ void GameScene::create2DObjects()
 
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
-		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY)); //PART OF THE GROSS MEMORY LEAK
+		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
 		m_2DObjects.push_back(player[i]->GetItemImg());
 
 		float text_pos_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width - player[i]->GetRankingText()->GetSize().x * 2.f;
 		float text_pos_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetRankingText()->GetSize().y;
-		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y));
+		player[i]->GetRankingText()->SetPos(Vector2(text_pos_x, text_pos_y), false);
 
 		float text_lap_x = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + player[i]->GetLapText()->GetSize().x * 0.25f;
 		float text_lap_y = Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height - player[i]->GetLapText()->GetSize().y;
-		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y));
+		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y), false);
 	}
 
 
@@ -305,11 +314,6 @@ void GameScene::create3DObjects()
 	}
 	#endif
 
-	//DebugText::print("Width: " + std::to_string(Locator::getRD()->m_window_width));
-	//DebugText::print("Height: " + std::to_string(Locator::getRD()->m_window_height));
-
-	Vector3 suitable_spawn = track->getSuitableSpawnSpot();
-
 	// Spawn in the AI
 	for (int i = 0; i < m_maxPlayers; i++) {
 
@@ -320,7 +324,7 @@ void GameScene::create3DObjects()
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[0]),
 			-1, std::bind(&GameScene::CreateItem, this, _1)
 		);
-		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
+		player[i]->SetPos(Vector3(track->getSuitableSpawnSpot().x, track->getSuitableSpawnSpot().y, track->getSuitableSpawnSpot().z - (i * 10)));
 		player[i]->setMass(10);
 		m_3DObjects.push_back(player[i]);
 
@@ -390,20 +394,31 @@ void GameScene::Update(DX::StepTimer const& timer)
 		DebugText::print(std::to_string(Locator::getID()->TEST));
 	}
 
-	int players_finsihed = 0;
-	for (std::vector<GameObject3D *>::iterator it = m_3DObjects.begin(); it != m_3DObjects.end(); it++)
+	if (!Locator::getRM()->attract_state)
 	{
-		if (dynamic_cast<Player*>((*it)))
+		int players_finished = 0;
+		for (size_t i = 0; i < Locator::getRM()->player_amount; ++i)
 		{
-			if (dynamic_cast<Player*>((*it))->GetLap() == 4)
+			if (player[i]->GetLap() == 4)
 			{
-				players_finsihed++;
-				if (players_finsihed == 1)
-				{
-					Locator::getRM()->current_race_number++;
-					m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
-					return;
-				}
+				players_finished++;
+			}
+		}
+
+		if (!race_finished)
+			race_finished = players_finished == Locator::getRM()->player_amount;
+
+
+		if (race_finished)
+		{
+			finish_timer += (float)timer.GetElapsedSeconds();
+
+			if (finish_timer > 10)
+			{
+				Locator::getAudio()->StopAll();
+				Locator::getRM()->attract_state = false;
+				m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
+				return;
 			}
 		}
 	}
@@ -413,7 +428,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 	if (Locator::getRM()->attract_state)
 	{
 		if (m_keybinds.keyReleased("Activate")) {
-			Locator::getAudio()->StopAll();
+			Locator::getRM()->attract_state = false;
 			m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
 			return;
 		}
@@ -422,7 +437,10 @@ void GameScene::Update(DX::StepTimer const& timer)
 	switch (state)
 	{
 	case START:
-		Locator::getAudio()->Play("COURSE_INTRO");
+
+		if (!Locator::getRM()->attract_state)
+			Locator::getAudio()->Play("COURSE_INTRO");
+
 		state = OPENING;
 		break;
 	case OPENING:
@@ -443,7 +461,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
-			Locator::getAudio()->Play("PRE_COUNTDOWN");
+			if (!Locator::getRM()->attract_state)
+				Locator::getAudio()->Play("PRE_COUNTDOWN");
+
 			if (Locator::getRM()->player_amount == 3)
 			{
 				cine_cam->SetType(CameraType::ORBIT);
@@ -470,7 +490,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		if (m_cam[game_config["player_count"]-1]->GetType() == CameraType::FOLLOW)
 		{
-			Locator::getAudio()->Play("COUNTDOWN");
+			if (!Locator::getRM()->attract_state)
+				Locator::getAudio()->Play("COUNTDOWN");
 			state = COUNTDOWN;
 		}
 		break;
@@ -496,7 +517,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			state = PLAY;
 			timeout = 3.5f;
-			Locator::getAudio()->Play("TRACK_START");
+			if(!Locator::getRM()->attract_state)
+				Locator::getAudio()->Play("TRACK_START");
+
 			for (int i = 0; i < m_maxPlayers; ++i)
 			{
 				player[i]->setGamePad(true);
@@ -517,18 +540,20 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 		timeout -= Locator::getGSD()->m_dt;
 
-		if (timeout <= 0 && track_music_start)
+		if (!Locator::getRM()->attract_state)
 		{
-			Locator::getAudio()->Play("TRACK_LOOP");
-			track_music_start = false;
-		}
+			if (timeout <= 0 && track_music_start)
+			{
+				Locator::getAudio()->Play("TRACK_LOOP");
+				track_music_start = false;
+			}
 
-		if (timeout <= 0 && final_lap_start)
-		{
-			Locator::getAudio()->Play("FINAL_LAP_LOOP");
-			final_lap_start = false;
+			if (timeout <= 0 && final_lap_start)
+			{
+				Locator::getAudio()->Play("FINAL_LAP_LOOP");
+				final_lap_start = false;
+			}
 		}
-
 		break;
 	}
 
@@ -539,8 +564,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 
 	if (m_keybinds.keyReleased("Quit"))
 	{
-		Locator::getAudio()->Stop("TRACK_LOOP");
-		Locator::getAudio()->Stop("FINAL_LAP_LOOP");
+		Locator::getAudio()->StopAll();
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
 	if (m_keybinds.keyReleased("toggle orbit cam"))
@@ -606,24 +630,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 			}
 		}
 
-		//Locator::getGarbageCollector()->DeletePointer(m_3DObjects[delIndex]);
 		m_3DObjects.erase(m_3DObjects.begin() + delIndex);
 	}
-
-	/*end = m_physModels.size();
-	delIndex = -1;
-	for (int i = 0; i < end; i++)
-	{
-		if (m_physModels[i]->ShouldDestroy())
-		{
-			delIndex = i;
-		}
-	}
-	if (delIndex != -1)
-	{
-		Locator::getGarbageCollector()->DeletePointer(m_physModels[delIndex]);
-		m_physModels.erase(m_physModels.begin() + delIndex);
-	}*/
 
 	//Toggle debug mesh renders
 	if (m_keybinds.keyReleased("toggle collision debug"))
@@ -831,8 +839,11 @@ void GameScene::SetPlayersWaypoint()
 				}
 				else if (i < Locator::getRM()->player_amount && player[i]->GetLap() == 2 && !final_lap)
 				{
-					Locator::getAudio()->Stop("TRACK_LOOP");
-					Locator::getAudio()->Play("FINAL_LAP_SOUND");
+					if (!Locator::getRM()->attract_state)
+					{
+						Locator::getAudio()->Stop("TRACK_LOOP");
+						Locator::getAudio()->Play("FINAL_LAP_SOUND");
+					}
 					final_lap = true;
 					final_lap_start = true;
 					timeout = 3.8f;
@@ -999,13 +1010,10 @@ Explosion * GameScene::CreateExplosion(ItemType _ownerType)
 	return explosion;
 }
 
-/* Delete item (this is a mixup of old and new stuff - for the record, you just need to call Reset() on models to delete them - none of this threading crap.) */
+/* Delete item */
 void GameScene::DeleteItem(Item * item)
 {
 	item->GetMesh()->Reset();
-	/*
-	std::thread thread(&GameScene::DeleteThread, this, item);
-	thread.detach();*/
 }
 void GameScene::DeleteThread(Item * item)
 {

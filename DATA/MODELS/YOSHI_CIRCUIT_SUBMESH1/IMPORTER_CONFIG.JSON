@@ -91,7 +91,7 @@
       "6": false,
       "7": false
     },
-    "ThICC_ANIMATION": [
+    "ThICC_DIFFUSE_FRAMES": [
       "waterfall65.png",
       "waterfall64.png",
       "waterfall63.png",
@@ -158,8 +158,8 @@
       "waterfall2.png",
       "waterfall1.png"
     ],
-    "ThICC_ANIMATION_ENABLED": true,
-    "ThICC_ANIMATION_TIME": 0.015
+    "ThICC_DIFFUSE_ANIMATED": true,
+    "ThICC_DIFFUSE_FRAME_TIME": 0.015
   },
   "yc_Asphalt_t02": {
     "newmtl": "yc_Asphalt_t02",

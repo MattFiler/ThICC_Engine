@@ -18,6 +18,7 @@ namespace EditorTool
     {
         UsefulFunctions common_functions = new UsefulFunctions();
         List<string> ignored_extensions = new List<string>();
+        int compiled_asset_count = 0;
         public Splash(bool shouldInitialiseGUI = true)
         {
             if (shouldInitialiseGUI)
@@ -58,7 +59,7 @@ namespace EditorTool
             //Fix VS debugging directory config
             fixVS();
 
-            if (!autoCompileAssets(true))
+            if (autoCompileAssets(true) == -1)
             {
                 Cursor.Current = Cursors.Default;
                 MessageBox.Show("An error occured while compiling assets.\nMake sure that the game is closed and no files are open.", "Asset compile failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -66,17 +67,7 @@ namespace EditorTool
             }
 
             Cursor.Current = Cursors.Default;
-            MessageBox.Show("Assets successfully compiled.", "Compiled assets.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        /* Copy All Asssets To Folder */
-        void copyAssets(string output_directory, string path_mod)
-        {
-            if (Directory.Exists(output_directory))
-            {
-                Directory.Delete(output_directory, true);
-            }
-            DirectoryCopy(path_mod + "DATA/", output_directory, true);
+            MessageBox.Show("Finished compiling " + compiled_asset_count + " asset(s).", "Compiled assets.", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         /* Copy a Directory */
@@ -116,20 +107,28 @@ namespace EditorTool
                 if (should_copy)
                 {
                     string temppath = Path.Combine(destDirName, file.Name);
-                    if (Path.GetFileName(Path.GetDirectoryName(temppath)).ToUpper() == "IMAGES" && (
-                        Path.GetExtension(temppath).ToUpper() == ".JPG" ||
-                        Path.GetExtension(temppath).ToUpper() == ".JPEG" ||
-                        Path.GetExtension(temppath).ToUpper() == ".PNG"))
+                    if (File.Exists(temppath))
                     {
-                        //A little manual override to stop original images in the IMAGES folder
-                        continue;
-                    }
-                    if (file.Name == "IMPORTER_CONFIG.JSON") //Check to see we're in MODELS?
-                    {
-                        //Another override to stop importer files getting copied
-                        continue;
+                        if (Path.GetFileName(Path.GetDirectoryName(temppath)).ToUpper() == "IMAGES" && (
+                            Path.GetExtension(temppath).ToUpper() == ".JPG" ||
+                            Path.GetExtension(temppath).ToUpper() == ".JPEG" ||
+                            Path.GetExtension(temppath).ToUpper() == ".PNG"))
+                        {
+                            continue; //A little manual override to stop original images in the IMAGES folder
+                        }
+                        if (file.Name == "IMPORTER_CONFIG.JSON") //Check to see we're in MODELS?
+                        {
+                            continue; //Another override to stop importer files getting copied
+                        }
+                        FileInfo temppathinfo = new FileInfo(temppath);
+                        if (file.LastWriteTime == temppathinfo.LastWriteTime && file.Length == temppathinfo.Length)
+                        {
+                            continue; //If mod time and length are the same, we can be confident the file doesn't need to be copied
+                        }
+                        File.Delete(temppath);
                     }
                     file.CopyTo(temppath, false);
+                    compiled_asset_count++;
                 }
             }
 
@@ -172,6 +171,13 @@ namespace EditorTool
             engineConfigs.Show();
         }
 
+        /* Open texture map animator */
+        private void openMapAnimator_Click(object sender, EventArgs e)
+        {
+            Texture_Map_Animator mapAnimator = new Texture_Map_Animator();
+            mapAnimator.Show();
+        }
+
         /* Open VS Project */
         private void openProject_Click(object sender, EventArgs e)
         {
@@ -180,96 +186,29 @@ namespace EditorTool
         }
 
         /* Compile assets */
-        public bool autoCompileAssets(bool show_notifs, string path_mod = "")
+        public int autoCompileAssets(bool show_notifs, string path_mod = "")
         {
             try
             {
                 //Copy to output folders if needed
-                bool skipped_debug = (buildAssets("BUILDS/Debug", path_mod) == 0);
-                bool skipped_release = (buildAssets("BUILDS/Release", path_mod) == 0);
-                bool skipped_arcade = (buildAssets("BUILDS/Arcade", path_mod) == 0);
-                if (skipped_debug || skipped_release || skipped_arcade)
-                {
-                    //Cache said there was no point copying assets - if we have a GUI, give the user an option to reset it
-                    if (show_notifs)
-                    {
-                        DialogResult cache_override = MessageBox.Show("Cache indicates an asset compile is not necessary.\nIs this correct?", "Should cache reset?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (cache_override != DialogResult.No)
-                        {
-                            return true;
-                        }
-                        Directory.Delete(path_mod + "CACHE", true);
-                        autoCompileAssets(show_notifs, path_mod);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Compiler cache indicates that assets have not changed. Skipping...");
-                    }
-                }
-
-                return true;
+                buildAssets("BUILDS/Debug", path_mod);
+                buildAssets("BUILDS/Release", path_mod);
+                buildAssets("BUILDS/Arcade", path_mod);
+                return compiled_asset_count;
             }
             catch
             {
-                return false;
+                return -1;
             }
         }
 
         /* Build assets for... */
         private int buildAssets(string output, string path_mod)
         {
-            //Create cache directory/file if it doesn't exist
-            if (!Directory.Exists(path_mod + "CACHE") || !File.Exists(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN"))
-            {
-                Directory.CreateDirectory(path_mod + "CACHE");
-                using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN", FileMode.Create)))
-                {
-                    long placeholder = 0;
-                    writer.Write(placeholder);
-                }
-            }
-
             if (Directory.Exists(path_mod + output))
             {
-                if (Directory.Exists(path_mod + output + "/DATA/"))
-                {
-                    //Check to see if we need to copy...
-                    DirectoryInfo existing_data = new DirectoryInfo(path_mod + "DATA/");
-                    FileInfo[] file_array = existing_data.GetFiles("*.*", SearchOption.AllDirectories);
-                    long total_size = 0;
-                    foreach (var file in file_array)
-                    {
-                        bool can_copy = true;
-                        foreach (string ignored_extension in ignored_extensions)
-                        {
-                            if (Path.GetExtension(file.Name) == ignored_extension)
-                            {
-                                can_copy = false;
-                            }
-                        }
-                        if (can_copy)
-                        {
-                            total_size += file.Length;
-                        }
-                    }
-                    long orig_size = 0;
-                    using (BinaryReader reader = new BinaryReader(File.Open(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN", FileMode.Open)))
-                    {
-                        orig_size = reader.ReadInt64();
-                    }
-                    if (orig_size == total_size)
-                    {
-                        return 0;
-                    }
-                    //We do need to copy, save new cache value
-                    using (BinaryWriter writer = new BinaryWriter(File.Open(path_mod + "CACHE/DATA_CACHE_" + output.Split('/')[1].ToUpper() + ".BIN", FileMode.Create)))
-                    {
-                        writer.Write(Convert.ToInt64(total_size));
-                    }
-                }
-
                 //Copy all
-                copyAssets(path_mod + output + "/DATA/", path_mod);
+                DirectoryCopy(path_mod + "DATA/", path_mod + output + "/DATA/", true);
                 CopyToOutput(path_mod, output, "MarioKartLauncher.exe", "Mario Kart Launcher.exe");
                 return 1;
             }
@@ -287,9 +226,17 @@ namespace EditorTool
         {
             if (File.Exists(path_mod + output + "/" + copyto))
             {
+                FileInfo input_file = new FileInfo(path_mod + "DATA/" + input);
+                FileInfo output_file = new FileInfo(path_mod + output + "/" + copyto);
+                if (input_file.LastWriteTime == output_file.LastWriteTime &&
+                    input_file.Length == output_file.Length)
+                {
+                    return; //Don't continue if it exists and is the same!
+                }
                 File.Delete(path_mod + output + "/" + copyto);
             }
             File.Copy(path_mod + "DATA/" + input, path_mod + output + "/" + copyto);
+            compiled_asset_count++;
         }
 
 

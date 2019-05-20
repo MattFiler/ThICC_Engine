@@ -267,6 +267,11 @@ void MenuScene::CreateVehiclesMenu()
 /* Update the scene */
 void MenuScene::Update(DX::StepTimer const& timer)
 {
+	if (menu_start)
+	{
+		Locator::getAudio()->Play("MENU_LOOP");
+		menu_start = false;
+	}
 #ifdef _DEBUG
 	//Hacky implementation to get to the debug scene (temp)
 	if (Locator::getID()->m_keyboardTracker.IsKeyReleased(DirectX::Keyboard::Keys::D))
@@ -277,8 +282,8 @@ void MenuScene::Update(DX::StepTimer const& timer)
 
 #ifdef _ARCADE
 	//Arcade loads straight to an arcade map
-	Locator::getGSD()->character_selected[0] = m_characterHighlightInt[0]; =
-		Locator::getGSD()->vehicle_selected[0] = m_vehicleHighlightInt[0];
+	Locator::getGSD()->character_selected[0] = highlighted_character[0];
+	Locator::getGSD()->vehicle_selected[0] = highlighted_vehicle[0];
 	Locator::getRM()->player_amount = 1;
 	Locator::getRM()->is_cup = false;
 	int index = 0;
@@ -296,12 +301,7 @@ void MenuScene::Update(DX::StepTimer const& timer)
 	if (m_idle_timer > m_idle_timeout) {
 		Locator::getRM()->attract_state = true;
 		Locator::getRM()->player_amount = 1;
-		for (MapInfo* a_map : Locator::getGOS()->map_instances) {
-			if (a_map->name == "Low-Poly Circuit") {
-				m_scene_manager->setCurrentScene(Scenes::GAMESCENE + a_map->scene_index);
-				return;
-			}
-		}
+		m_scene_manager->setCurrentScene(Scenes::ATTRACT_STATE);
 	}
 
 	switch (m_menu_state) {
@@ -541,6 +541,7 @@ void MenuScene::CharacterSelect()
 	{
 		m_idle_timer = 0.0f;
 		m_menu_state = menu_states::VEHICLE_SELECT;
+
 	}
 	//Back to main menu select
 	else if (m_keybinds.keyReleased("Back"))
@@ -584,8 +585,10 @@ void MenuScene::VehicleSelect()
 	}
 
 	//Load selected map with character choices
-	if (m_keybinds.keyReleased("Activate"))
+	if (m_keybinds.keyReleased("Activate") || m_keybinds.keyReleased("Activate", 0))
 	{
+		menu_start = true;
+		Locator::getAudio()->Stop("MENU_LOOP");
 		m_idle_timer = 0.0f;
 		for (size_t i = 0; i < Locator::getRM()->player_amount; i++)
 		{
@@ -698,6 +701,8 @@ void MenuScene::CheckAvailabilty(int player, int& player_sel_number, int added_n
 		player_sel_number = 0;
 	}
 
+	Locator::getGSD()->character_selected[player] = highlighted_character[player];
+	Locator::getGSD()->vehicle_selected[player] = highlighted_vehicle[player];
 }
 
 /* Render the 2D scene */

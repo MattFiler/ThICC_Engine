@@ -19,6 +19,7 @@ enum Scenes
 	MENUSCENE,
 	LOADINGSCENE,
 	DEBUG_LIGHTINGTEST,
+	ATTRACT_STATE,
 	GAMESCENE, // must be second to last as we dynamically extend from this position
 
 	SCENE_COUNT // must always be last!
@@ -69,6 +70,13 @@ enum ItemType
 
 struct ItemBoxConfig {
 	static double respawn_time;
+};
+
+enum MaterialTypes {
+	DIFFUSE, //V2+3
+	SPECULAR, //V3
+	NORMAL, //V3
+	EMISSIVE //V3
 };
 
 // camera type

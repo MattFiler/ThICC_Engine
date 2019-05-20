@@ -532,7 +532,7 @@ void Player::ReleaseItem()
 void Player::setGamePad(bool _state)
 {
 	// If AI
-	if (!m_ai && (m_playerID == -1 || m_lap == 3))
+	if (m_playerID == -1 || (m_lap == 3 && !m_ai))
 	{
 		m_move->SetGamepadActive(false);
 		m_ai = std::make_unique<KartAI>(this, m_move.get());
@@ -704,6 +704,11 @@ Vector3 Player::GetPosHistoryBack()
 
 void Player::Respawn()
 {
+	if (m_matrixHistory.size() == 0) {
+		DebugText::print("Player called a respawn but had zero values to assign to m_endWorld. Fatal!");
+		return;
+	}
+
 	StopGlide();
 	m_move->SetEnabled(false);
 	m_animationMesh->SwitchModelSet("respawn");
