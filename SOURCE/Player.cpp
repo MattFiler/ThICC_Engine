@@ -86,11 +86,15 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModel("lakitu", Locator::getGOS()->common_model_config["referee"]);
 	m_animationMesh->AddModel("glider", Locator::getGOS()->common_model_config["glider"]);
 	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL));
+	m_animationMesh->AddModel("Cloud", Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD));
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
 	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
 	m_animationMesh->AddModelSet("gliding", std::vector < std::string>{"vehicle", "character", "glider"});
 	m_animationMesh->AddModelSet("Bullet Bill", std::vector < std::string>{"Bullet Bill"});
+	m_animationMesh->AddModelSet("Cloud", std::vector < std::string>{"vehicle", "character","Cloud"});
+	m_animationMesh->AddModelSet("Cloud Respawn", std::vector < std::string>{"vehicle", "character", "Cloud", "lakitu"});
+	m_animationMesh->AddModelSet("Cloud Gliding", std::vector < std::string>{"vehicle", "character", "Cloud", "glider"});
 
 	m_animationMesh->SwitchModelSet("default");
 
@@ -107,11 +111,16 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 
 void Player::SetActiveItem(ItemType _item) {
 	if (m_InventoryItem == _item) {
-		active_item = _item;
-		if (m_playerID != -1)
+
+		if (_item != LIGHTNING_CLOUD)
 		{
-			m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
-			m_imgItem->SetPos(m_itemPos);
+			active_item = _item;
+
+			if (m_playerID != -1)
+			{
+				m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
+				m_imgItem->SetPos(m_itemPos);
+			}
 		}
 
 		m_InventoryItem = ItemType::NONE;
@@ -132,12 +141,12 @@ void Player::SetItemInInventory(ItemType _item) {
 
 		if (m_InventoryItem == LIGHTNING_CLOUD && GetLightningCloud())
 		{
-			m_InventoryItem == BANANA;
+			m_InventoryItem = BANANA;
 		}
 
 		if (m_playerID != -1)
 		{
-			m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
+			m_imgItem = Locator::getItemData()->GetItemSprite(m_InventoryItem, m_playerID);
 			m_imgItem->SetPos(m_itemPos);
 		}
 		DebugText::print("PLAYER " + std::to_string(m_playerID) + " HAS ACQUIRED ITEM: " + std::to_string(_item));
@@ -162,6 +171,34 @@ LightningCloud* Player::GetLightningCloud()
 	}
 
 	return nullptr;
+}
+
+void Player::RemoveLightningCloud()
+{
+	for (int i = 0; i < m_floatingItems.size(); ++i)
+	{
+		if (dynamic_cast<LightningCloud*>(m_floatingItems[i]))
+		{
+			m_floatingItems.erase(m_floatingItems.begin() + i);
+			return;
+		}
+	}
+}
+
+void Player::RemoveLightningCloudModel()
+{
+	if (IsGliding())
+	{
+		m_animationMesh->SwitchModelSet("gliding");
+	}
+	else if (IsRespawning())
+	{
+		m_animationMesh->SwitchModelSet("respawn");
+	}
+	else
+	{
+		m_animationMesh->SwitchModelSet("default");
+	}
 }
 
 void Player::Render()
@@ -195,8 +232,6 @@ void Player::Tick()
 		CheckUseItem();
 	}
 	
-	PositionFloatingItems();
-
 	// Debug code to save/load the players game state
 	if (m_keybind.keyReleased("debug save position"))
 	{
@@ -237,16 +272,6 @@ void Player::Tick()
 	m_animationMesh->Update(m_world);
 
 	m_lastFramePos = m_pos;
-}
-
-void Player::PositionFloatingItems()
-{
-	for (int i = 0; i < m_floatingItems.size(); i++)
-	{
-		m_floatingItems[i]->GetMesh()->SetWorld(m_world);
-		m_floatingItems[i]->GetMesh()->AddPos(m_world.Up() * m_floatingItemPosOffset);
-		m_floatingItems[i]->GetMesh()->UpdateWorld();
-	}
 }
 
 void Player::CheckUseItem()
@@ -304,6 +329,7 @@ void Player::TrailItems()
 {
 	if (!m_trailingItems.empty())
 	{
+		DebugText::print("Hit");
 		for (int i = 0; i < m_trailingItems.size(); i++)
 		{
 			if (m_trailingItems[i]->ShouldDestroy())

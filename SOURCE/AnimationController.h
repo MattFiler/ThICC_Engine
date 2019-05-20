@@ -27,6 +27,7 @@ public:
 
 	void AddModelSet(std::string _setName, std::vector<std::string> models);
 	void SwitchModelSet(std::string _setName);
+	std::string GetCurrentSet() { return m_currentSet; }
 
 	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
 

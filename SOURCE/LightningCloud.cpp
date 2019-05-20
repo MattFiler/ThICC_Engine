@@ -4,7 +4,7 @@
 #include "GameStateData.h"
 #include "AudioManager.h"
 
-LightningCloud::LightningCloud() : Item(LIGHTNING_CLOUD)
+LightningCloud::LightningCloud() /*: Item(LIGHTNING_CLOUD)*/
 {
 	m_shouldDespawn = false;
 	m_growthData.m_scaleState = ItemGrowthData::SHRINK;
@@ -14,10 +14,12 @@ LightningCloud::LightningCloud() : Item(LIGHTNING_CLOUD)
 
 void LightningCloud::initCloudData()
 {
+	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
+	m_itemData << i;
 	m_strikeDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["strike_duration"];
 	m_playerMoveSpeed = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_move_speed"];
 	m_playerTurnSpeed = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_turn_speed"];
-	m_playerSpinRev = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["player_spin"]["revolutions"];
+	m_playerSpinRev = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["spin"]["revolutions"];
 	m_playerSpinDuration = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["spin"]["duration"];
 
 	m_growthData.m_scaleMulti = (float)m_itemData["LIGHTNING_CLOUD"]["info"]["shrink"]["size_multiplier"];
@@ -44,9 +46,13 @@ void LightningCloud::Tick()
 					m_player->GetControlledMovement()->ResetTurnSpeed();
 					m_growthData.m_growing = true;
 				}
+				m_player->SetScale(m_player->GetAnimController()->GetScaleOffset());
 
 				if (m_player->GetAnimController()->FinishedScale())
 				{
+					m_player->GetControlledMovement()->ResetMoveSpeed();
+					m_player->GetControlledMovement()->ResetTurnSpeed();
+					m_player->RemoveLightningCloud();
 					m_shouldDestroy = true;
 				}
 				break;
@@ -60,6 +66,7 @@ void LightningCloud::Tick()
 					m_slowed = true;
 				}
 
+				m_growthData.m_sizeChangeTimeElapsed += Locator::getGSD()->m_dt;
 				if (m_growthData.m_sizeChangeTimeElapsed >= m_growthData.m_sizeChangeDuration)
 				{
 					m_growthData.m_scaleState = ItemGrowthData::GROW;
@@ -87,13 +94,28 @@ void LightningCloud::Tick()
 		else
 		{
 			m_strikeTimeElapsed += Locator::getGSD()->m_dt;
+
+			std::string set = m_player->GetAnimController()->GetCurrentSet();
+			if (m_player->IsGliding() && set != "Cloud Gliding")
+			{
+				m_player->GetAnimController()->SwitchModelSet("Cloud Gliding");
+			}
+			else if (m_player->IsRespawning() && set != "Cloud Respawn")
+			{
+				m_player->GetAnimController()->SwitchModelSet("Cloud Respawn");
+			}
+			else if(!m_player->IsGliding() && !m_player->IsRespawning() && m_player->GetAnimController()->GetCurrentSet() != "Cloud")
+			{
+				m_player->GetAnimController()->SwitchModelSet("Cloud");
+			}
+
 			if (m_strikeTimeElapsed >= m_strikeDuration)
 			{
 				m_striked = true;
 				m_growthData.m_growScale = m_player->GetScale();
 				m_growthData.m_shrinkScale = m_growthData.m_growScale * m_growthData.m_scaleMulti;
 				m_growthData.m_sizeChangeDuration -= m_player->GetRanking();
-				m_itemMesh->m_displayedMesh->SetShouldRender(false);
+				m_player->RemoveLightningCloudModel();
 			}
 		}
 	}
@@ -109,4 +131,5 @@ void LightningCloud::Use(Player * player, bool _altUse)
 
 	setItemInUse(player);
 	m_trailingPlayerImmunity = true;
+	
 }

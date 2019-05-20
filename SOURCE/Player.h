@@ -69,6 +69,8 @@ public:
 	ItemType GetItemInInventory() { return m_InventoryItem; };
 	void SetItemInInventory(ItemType _item);
 	LightningCloud* GetLightningCloud();
+	void RemoveLightningCloud();
+	void RemoveLightningCloudModel();
 
 	void CheckUseItem();
 	void TrailItems();
@@ -153,7 +155,6 @@ private:
 
 	std::vector<Item*> m_trailingItems;
 	std::vector<Item*> m_floatingItems; //Items which renders above the player - POW, Blooper, and Lightning Cloud
-	void PositionFloatingItems();
 	bool m_aPressed = true;
 	bool m_multiItem = false;
 	int m_maxItems = 0;
