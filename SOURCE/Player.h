@@ -50,6 +50,7 @@ public:
 	Text2D* GetFinishOrder() { return m_textFinishOrder; }
 	ImageGO2D* GetItemImg() { return m_imgItem; }
 	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
+	void SetItemScale(float _scale) { m_itemScale = _scale; }
 	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
 
 	void ExpensiveLoad() {
@@ -149,6 +150,7 @@ private:
 	ItemType m_InventoryItem = ItemType::NONE;
 	
 	Vector2 m_itemPos = Vector2(0, 0); // temp gpu fix 
+	float m_itemScale = 1;
 	ImageGO2D *m_imgItem = nullptr;
 
 	std::vector<Item*> m_trailingItems;

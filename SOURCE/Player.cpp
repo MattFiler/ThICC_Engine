@@ -112,6 +112,7 @@ void Player::SetActiveItem(ItemType _item) {
 		{
 			m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 			m_imgItem->SetPos(m_itemPos);
+			m_imgItem->SetScale(m_itemScale);
 		}
 
 		m_InventoryItem = ItemType::NONE;
@@ -139,6 +140,7 @@ void Player::SetItemInInventory(ItemType _item) {
 		{
 			m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
 			m_imgItem->SetPos(m_itemPos);
+			m_imgItem->SetScale(m_itemScale);
 		}
 		DebugText::print("PLAYER " + std::to_string(m_playerID) + " HAS ACQUIRED ITEM: " + std::to_string(_item));
 

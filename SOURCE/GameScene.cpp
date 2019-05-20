@@ -107,12 +107,13 @@ void GameScene::ExpensiveLoad() {
 		}
 	}
 
+	//Setup audio
 	Locator::getAudio()->addToSoundsList(map_info->audio_background_start, "TRACK_START");
 	Locator::getAudio()->addToSoundsList(map_info->audio_background, "TRACK_LOOP");
 	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap_start, "FINAL_LAP_START");
 	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap, "FINAL_LAP_LOOP");
 
-
+	//Position main UI
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
 		player[i]->SetItemPos(
@@ -121,6 +122,7 @@ void GameScene::ExpensiveLoad() {
 				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY
 			) / (static_cast<float>(Locator::getRD()->m_window_height) / 720)
 		);
+		player[i]->SetItemScale(0.5);
 
 		DebugText::print(std::to_string(static_cast<float>(Locator::getRD()->m_window_height) / 720));
 		
@@ -133,8 +135,7 @@ void GameScene::ExpensiveLoad() {
 		player[i]->GetLapText()->SetPos(Vector2(text_lap_x, text_lap_y) / (static_cast<float>(Locator::getRD()->m_window_height) / 720), false);
 	}
 
-
-	// player countdown text
+	//Position countdown
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
 		player[i]->GetCountdown()->SetPos(
@@ -245,7 +246,7 @@ void GameScene::ExpensiveUnload() {
 	//Unload skybox
 	Locator::getRD()->skybox->Reset();
 
-	//if (!Locator::getRM()->attract_state)
+	if (!Locator::getRM()->attract_state)
 	{
 		//Unload item pools
 		for (int i = 0; i < m_itemModels.size(); ++i)
