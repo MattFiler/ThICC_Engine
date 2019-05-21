@@ -115,6 +115,7 @@ void GameScene::ExpensiveLoad() {
 
 	//Load main UI
 	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
+		delete m_game_ui[i];
 		m_game_ui[i] = new InGameUI(Vector2(1280,720), Vector2(0,0));
 		m_game_ui[i]->ExpensiveLoad();
 		m_game_ui[i]->SetCurrentLap(1);
@@ -230,7 +231,9 @@ void GameScene::ExpensiveUnload() {
 	race_finished = false;
 
 	//Unload main UI
-	delete[] m_game_ui;
+	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
+		m_game_ui[i]->ExpensiveUnload();
+	}
 
 	//Unload skybox
 	Locator::getRD()->skybox->Reset();
@@ -764,6 +767,8 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		return;
 	}
 
+
+	/* TODO: this needs to be refactored in favour of InGameUI */
 	switch (state)
 	{
 	case COUNTDOWN:
@@ -782,14 +787,14 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 			}
 			else if (!player[i]->GetFinished())
 			{
-				player[i]->GetRankingText()->Render();
-				player[i]->GetLapText()->Render();
 				if(player[i]->GetItemInInventory() != ItemType::NONE)
 					player[i]->GetItemImg()->Render();
 			}
 		}
 		break;
 	}
+	/* ^^^^^^^^^^^^^^^^^ depreciate! */
+
 
 	//Render UI
 	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
