@@ -23,6 +23,7 @@ void ThICC_Game::Initialize() {
 
 	//Set up AI scheduler
 	m_aiScheduler = std::make_unique<AIScheduler>();
+	m_aiScheduler->Enabled(game_config["enable_ai"]);
 	Locator::setupAIScheduler(m_aiScheduler.get());
 
 	//Load all common model names

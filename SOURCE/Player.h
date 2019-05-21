@@ -70,6 +70,10 @@ public:
 	ItemType GetItemInInventory() { return m_InventoryItem; };
 	void SetItemInInventory(ItemType _item);
 	LightningCloud* GetLightningCloud();
+	bool DidUseItem() {
+		return did_use_item;
+		did_use_item = false;
+	}
 
 	void CheckUseItem();
 	void TrailItems();
@@ -137,6 +141,7 @@ private:
 	Vector m_savedGravDir;
 	bool m_finished = false;
 	bool m_invincible = false;
+	bool did_use_item = false;
 
 	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th", "th","th","th","th","th","th","th","th"};
 

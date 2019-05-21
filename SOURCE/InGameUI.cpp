@@ -1,16 +1,19 @@
 #include "pch.h"
 #include "InGameUI.h"
 #include "ImageGO2D.h"
+#include "Player.h"
 #include <fstream>
 
 /* Load config */
-InGameUI::InGameUI()
+InGameUI::InGameUI(Vector2 size, Vector2 offset)
 {
 	//Load UI config
 	std::ifstream i(m_filepath.generateConfigFilepath("INGAME_UI", m_filepath.CONFIG));
 	config << i;
 
-	//TODO: Here we'll also want to take in the current viewport info. Will have an InGameUI instance for each player.
+	//Save size/offset info for splitscreen support
+	ui_size = size;
+	ui_offset = offset;
 }
 
 /* Unload all UI sprites */
@@ -53,42 +56,41 @@ void InGameUI::ExpensiveUnload()
 /* Update current lap (e.g. 1/3, 2/3, 3/3) */
 void InGameUI::SetCurrentLap(int lap)
 {
-	if (lap > lap_ui_sprites.size() + 1) {
+	if (lap > lap_ui_sprites.size()) {
 		DebugText::print("InGameUI: Tried to set lap to " + std::to_string(lap) + ", which is out of the API's scope!");
 		return;
 	}
 
-	delete lap_ui_sprite;
-	lap_ui_sprite = lap_ui_sprites.at(lap + 1);
+	lap_ui_sprite = lap_ui_sprites.at(lap - 1);
 }
 
 /* Update the player position (e.g. 1st, 2nd, 3rd) */
 void InGameUI::SetPlayerPosition(int position)
 {
-	if (position > position_ui_sprites.size() + 1) {
+	if (position > position_ui_sprites.size()) {
 		DebugText::print("InGameUI: Tried to set player's position to " + std::to_string(position) + ", which is out of the API's scope!");
 		return;
 	}
 
-	delete position_ui_sprite;
-	position_ui_sprite = position_ui_sprites.at(position + 1);
+	position_ui_sprite = position_ui_sprites.at(position - 1);
 }
 
 /* Starts the automated item spinner to land on a pre-determined item */
-void InGameUI::ShowItemSpinner()
+void InGameUI::ShowItemSpinner(Player* this_player)
 {
 	if (item_ui_sprite == nullptr) {
 		DebugText::print("InGameUI: Call to show item spinner before the sprite was loaded. Are you calling ExpensiveLoad?");
 		return;
 	}
 
+	//Show spinner
 	item_ui_sprite->IsVisible(true);
 
-	//Start item animation
-	//Land on pre-selected item
+	//The item we'll end on
+	ItemType item_to_give = Locator::getItemData()->GetRandomItem(this_player->GetRanking());
 
-	// ^ to do this we'll need to pre-select an item, render a few in quick succession, then give the pre-selected item to the player
-	//All item sprites are pre-loaded in memory, so this shouldn't be an issue
+	//Give the item once the animation is done
+	this_player->SetItemInInventory(item_to_give);
 }
 
 /* Hides the item spinner (item used) */

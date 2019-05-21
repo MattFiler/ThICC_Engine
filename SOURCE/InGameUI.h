@@ -1,14 +1,17 @@
 #pragma once
 #include "GameFilepaths.h"
+#include "SimpleMath.h"
 #include <json.hpp>
 using json = nlohmann::json;
+using Vector2 = DirectX::SimpleMath::Vector2;
 
 class ImageGO2D;
+class Player;
 
 class InGameUI
 {
 public:
-	InGameUI();
+	InGameUI(Vector2 size, Vector2 offset);
 	~InGameUI();
 
 	void ExpensiveLoad();
@@ -19,7 +22,7 @@ public:
 
 	void SetCurrentLap(int lap);
 	void SetPlayerPosition(int position);
-	void ShowItemSpinner();
+	void ShowItemSpinner(Player* this_player);
 	void HideItemSpinner(); 
 
 	void Render();
@@ -43,5 +46,7 @@ private:
 
 	/* States & info */
 	bool visible = false;
+	Vector2 ui_offset = Vector2(0,0);
+	Vector2 ui_size = Vector2(0, 0);
 };
 

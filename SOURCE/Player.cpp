@@ -113,6 +113,7 @@ void Player::SetActiveItem(ItemType _item) {
 			m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 			m_imgItem->SetPos(m_itemPos);
 			m_imgItem->SetScale(m_itemScale);
+			did_use_item = true;
 		}
 
 		m_InventoryItem = ItemType::NONE;
@@ -123,7 +124,6 @@ void Player::SetActiveItem(ItemType _item) {
 	{
 		//We should never often get here
 		DebugText::print("PLAYER TRIED TO USE AN ITEM THEY DON'T HAVE - THIS SHOULD NEVER BE REQUESTED!");
-		DebugText::print("UNLESS THEY'RE MAKING A TRIPLE ITEM");
 	}
 }
 

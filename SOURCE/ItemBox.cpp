@@ -14,9 +14,8 @@ ItemBox::ItemBox(Vector3& position, Vector3& rotation) : PhysModel(Locator::getG
 	m_physData.m_additionalScale = 50;
 }
 
-void ItemBox::hasCollided(Player* collided_player) {
+void ItemBox::hasCollided() {
 	setVisible(false);
-	collided_player->SetItemInInventory(Locator::getItemData()->GetRandomItem(collided_player->GetRanking()));
 }
 
 void ItemBox::Tick() {

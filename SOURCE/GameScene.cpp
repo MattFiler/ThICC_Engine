@@ -114,11 +114,12 @@ void GameScene::ExpensiveLoad() {
 	Locator::getAudio()->addToSoundsList(map_info->audio_final_lap, "FINAL_LAP_LOOP");
 
 	//Load main UI
-	m_game_ui.ExpensiveLoad();
-	//TODO: WILL ALSO WANT TO RE-CALCULATE THIS UI FOR THE PLAYER COUNT
-
-	m_game_ui.SetCurrentLap(1);
-	m_game_ui.SetPlayerPosition(1);
+	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
+		m_game_ui[i] = new InGameUI(Vector2(1280,720), Vector2(0,0));
+		m_game_ui[i]->ExpensiveLoad();
+		m_game_ui[i]->SetCurrentLap(1);
+		m_game_ui[i]->SetPlayerPosition(1);
+	}
 
 	//Position countdown
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
@@ -227,6 +228,9 @@ void GameScene::ExpensiveUnload() {
 	finished = 0;
 	is_paused = false;
 	race_finished = false;
+
+	//Unload main UI
+	delete[] m_game_ui;
 
 	//Unload skybox
 	Locator::getRD()->skybox->Reset();
@@ -354,15 +358,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 		is_paused = true;
 	}
 
-	if (Locator::getID()->m_keyboardTracker.pressed.N) {
-		Locator::getID()->TEST++;
-		DebugText::print(std::to_string(Locator::getID()->TEST));
-	}
-	if (Locator::getID()->m_keyboardTracker.pressed.B) {
-		Locator::getID()->TEST--;
-		DebugText::print(std::to_string(Locator::getID()->TEST));
-	}
-
 	if (!Locator::getRM()->attract_state)
 	{
 		int players_finished = 0;
@@ -392,7 +387,15 @@ void GameScene::Update(DX::StepTimer const& timer)
 		}
 	}
 
-	m_game_ui.Update();
+	//Update UI
+	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
+		if (player[i]->DidUseItem()) {
+			m_game_ui[i]->HideItemSpinner();
+		}
+		if (m_game_ui[i] != nullptr) {
+			m_game_ui[i]->Update();
+		}
+	}
 
 	Locator::getAIScheduler()->Update();
 
@@ -614,7 +617,22 @@ void GameScene::Update(DX::StepTimer const& timer)
 		GameDebugToggles::render_level = !GameDebugToggles::render_level;
 	}
 
-	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels);
+	//Handle collisions and act on types for gamescene objects
+	for (Collision& this_collision : CollisionManager::CollisionDetection(m_physModels, m_itemModels)) {
+		switch (CollisionManager::CollisionResponse(&this_collision)) {
+			//If we hit an item box, perform the UI animation and give the player their item
+			case PlayerCollisionTypes::HIT_ITEMBOX: {
+				Player* this_player = nullptr;
+				if (dynamic_cast<Player*>(this_collision.m_model1)) {
+					this_player = dynamic_cast<Player*>(this_collision.m_model1);
+				} else {
+					this_player = dynamic_cast<Player*>(this_collision.m_model2);
+				}
+				if (this_player == nullptr) { DebugText::print("Failed to reference player for item box collision."); return; }
+				m_game_ui[this_player->GetPlayerId()]->ShowItemSpinner(this_player);
+			}
+		}
+	}
 
 	UpdateItems();
 }
@@ -773,7 +791,12 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		break;
 	}
 
-	m_game_ui.Render();
+	//Render UI
+	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
+		if (m_game_ui[i] != nullptr) {
+			m_game_ui[i]->Render();
+		}
+	}
 }
 
 /* Set the player's current waypoint */
@@ -822,6 +845,11 @@ void GameScene::SetPlayersWaypoint()
 					timeout = 3.8f;
 				}
 				player[i]->SetLap(player[i]->GetLap() + 1);
+
+				//Update lap UI for non-AI players
+				if (i < Locator::getRM()->player_amount) {
+					m_game_ui[i]->SetCurrentLap(player[i]->GetLap());
+				}
 			}
 		}
 	}
@@ -830,11 +858,18 @@ void GameScene::SetPlayersWaypoint()
 /* Set the player's current position in the race */
 void GameScene::SetPlayerRanking()
 {
-	for (int i = 0; i < m_maxPlayers; i++)
+	//Non-AI players, capture current rank to detect an update
+	for (int i = 0; i < Locator::getRM()->player_amount; i++) 
+	{
+		player_rank_save[i] = player[i]->GetRanking();
+		player[i]->SetRanking(1);
+	}
+	for (int i = Locator::getRM()->player_amount; i < m_maxPlayers; i++)
 	{
 		player[i]->SetRanking(1);
 	}
 
+	//Check for current position
 	for (int i = 0; i < m_maxPlayers; i++)
 	{
 		for (int j = 0; j < m_maxPlayers; j++)
@@ -874,6 +909,14 @@ void GameScene::SetPlayerRanking()
 					}
 				}
 			}
+		}
+	}
+
+	//Update UI if position changed
+	for (int i = 0; i < Locator::getRM()->player_amount; i++)
+	{
+		if (player_rank_save[i] != player[i]->GetRanking()) {
+			m_game_ui[i]->SetPlayerPosition(player[i]->GetRanking());
 		}
 	}
 }
