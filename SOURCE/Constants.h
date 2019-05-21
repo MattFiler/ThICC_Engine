@@ -86,6 +86,14 @@ enum PlayerCollisionTypes {
 	HIT_NOTHING
 };
 
+enum InGameInterfaceState {
+	UI_COURSE_INTRO,
+	UI_COUNTDOWN,
+	UI_RACING,
+	UI_RACE_OVER,
+	UI_HIDDEN
+};
+
 
 // camera type
 

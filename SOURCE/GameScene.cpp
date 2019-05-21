@@ -368,6 +368,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			if (player[i]->GetLap() == 4)
 			{
+				m_game_ui[i]->SetState(InGameInterfaceState::UI_RACE_OVER);
 				players_finished++;
 			}
 		}
@@ -414,6 +415,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 	switch (state)
 	{
 	case START:
+		for (int i = 0; i < Locator::getRM()->player_amount; i++) {
+			m_game_ui[i]->SetState(InGameInterfaceState::UI_COURSE_INTRO);
+		}
 
 		if (!Locator::getRM()->attract_state)
 			Locator::getAudio()->Play("COURSE_INTRO");
@@ -427,7 +431,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 			cine_cam->Tick();
 			if (timeout <= Locator::getGSD()->m_dt + 0.1) {
 				for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
-					m_cam[i]->Tick(); 
+					m_cam[i]->Tick();
+					m_game_ui[i]->SetState(InGameInterfaceState::UI_COURSE_INTRO);
 				}
 			}
 		}
@@ -435,6 +440,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 				m_cam[i]->Tick();
+				m_game_ui[i]->SetState(InGameInterfaceState::UI_COURSE_INTRO);
 			}
 			state = CAM_OPEN;
 			timeout = 2.99999f;
@@ -458,6 +464,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case CAM_OPEN:
 		for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 			m_cam[i]->Tick();
+			m_game_ui[i]->SetState(InGameInterfaceState::UI_COURSE_INTRO);
 		}
 
 		if (Locator::getRM()->player_amount == 3)
@@ -483,6 +490,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 				}
 				player[i]->GetCountdown()->SetText(countdown_time);
 				m_cam[i]->Tick();
+				m_game_ui[i]->SetState(InGameInterfaceState::UI_COUNTDOWN);
 			}
 
 			if (Locator::getRM()->player_amount == 3)
@@ -507,6 +515,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case PLAY:
 		for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 			m_cam[i]->Tick();
+			m_game_ui[i]->SetState(InGameInterfaceState::UI_RACING);
 		}
 
 

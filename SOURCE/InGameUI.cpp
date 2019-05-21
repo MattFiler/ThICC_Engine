@@ -53,6 +53,12 @@ void InGameUI::ExpensiveUnload()
 	}
 }
 
+/* Set the current UI state */
+void InGameUI::SetState(InGameInterfaceState state)
+{
+	current_state = state;
+}
+
 /* Update current lap (e.g. 1/3, 2/3, 3/3) */
 void InGameUI::SetCurrentLap(int lap)
 {
@@ -107,23 +113,59 @@ void InGameUI::HideItemSpinner()
 /* Render the current UI - should ONLY ever be called in a scene's Render2D! */
 void InGameUI::Render()
 {
-	//Render current sprites (if they're set/active)
-	if (lap_ui_sprite != nullptr) {
-		lap_ui_sprite->Render();
-	}
-	if (position_ui_sprite != nullptr) {
-		position_ui_sprite->Render();
-	}
-	if (item_ui_sprite != nullptr) {
-		item_ui_sprite->Render();
-	}
+	switch (current_state) {
+		case InGameInterfaceState::UI_HIDDEN: {
+			return;
+		}
+		case InGameInterfaceState::UI_COURSE_INTRO: {
 
-	//Render current timers
-	//Coming soon(TM)
+			break;
+		}
+		case InGameInterfaceState::UI_COUNTDOWN: {
+
+			break;
+		}
+		case InGameInterfaceState::UI_RACING: {
+			//Render current sprites (if they're set/active)
+			if (lap_ui_sprite != nullptr) { lap_ui_sprite->Render(); }
+			if (position_ui_sprite != nullptr) { position_ui_sprite->Render(); }
+			if (item_ui_sprite != nullptr) { item_ui_sprite->Render(); }
+
+			//Render current timers
+			//Coming soon(TM)
+
+			break;
+		}
+		case InGameInterfaceState::UI_RACE_OVER: {
+
+			break;
+		}
+	}
 }
 
 /* Update the current UI */
 void InGameUI::Update()
 {
-	//We'll wanna update lap/race counters here soon(TM)
+	switch (current_state) {
+		case InGameInterfaceState::UI_HIDDEN: {
+			return;
+		}
+		case InGameInterfaceState::UI_COURSE_INTRO: {
+
+			break;
+		}
+		case InGameInterfaceState::UI_COUNTDOWN: {
+
+			break;
+		}
+		case InGameInterfaceState::UI_RACING: {
+			//We'll wanna update lap/race counters here soon(TM)
+
+			break;
+		}
+		case InGameInterfaceState::UI_RACE_OVER: {
+
+			break;
+		}
+	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "GameFilepaths.h"
 #include "SimpleMath.h"
+#include "Constants.h"
 #include <json.hpp>
 using json = nlohmann::json;
 using Vector2 = DirectX::SimpleMath::Vector2;
@@ -17,8 +18,7 @@ public:
 	void ExpensiveLoad();
 	void ExpensiveUnload();
 
-	void Show() { visible = true; }
-	void Hide() { visible = false; }
+	void SetState(InGameInterfaceState state);
 
 	void SetCurrentLap(int lap);
 	void SetPlayerPosition(int position);
@@ -45,7 +45,7 @@ private:
 	json config;
 
 	/* States & info */
-	bool visible = false;
+	InGameInterfaceState current_state = InGameInterfaceState::UI_HIDDEN;
 	Vector2 ui_offset = Vector2(0,0);
 	Vector2 ui_size = Vector2(0, 0);
 };
