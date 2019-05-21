@@ -352,6 +352,7 @@
     <ClInclude Include="GoldenMushroom.h" />
     <ClInclude Include="GreenShell.h" />
     <ClInclude Include="ImageGO2D.h" />
+    <ClInclude Include="InGameUI.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemAiData.h" />
     <ClInclude Include="ItemBoostData.h" />
@@ -423,6 +424,7 @@
     <ClCompile Include="GoldenMushroom.cpp" />
     <ClCompile Include="GreenShell.cpp" />
     <ClCompile Include="ImageGO2D.cpp" />
+    <ClCompile Include="InGameUI.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="ItemData.cpp" />

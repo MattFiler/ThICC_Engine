@@ -32,7 +32,8 @@
       "gcyc_ArrowBanner_t01_Alb.png"
     ],
     "ThICC_DIFFUSE_ANIMATED": false,
-    "ThICC_DIFFUSE_FRAME_TIME": 0.0
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0,
+    "ThICC_INDEX": 35
   },
   "yc_ArrowBanner_t01_NoTrm": {
     "newmtl": "yc_ArrowBanner_t01_NoTrm",

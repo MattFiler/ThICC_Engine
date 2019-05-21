@@ -11,6 +11,4 @@ struct ThICC_InputData {
 	DirectX::Mouse::ButtonStateTracker m_mouseButtonTracker;
 	DirectX::GamePad::ButtonStateTracker m_gamepadButtonTracker[4];
 	DirectX::Mouse::State m_mouseState;
-
-	int TEST = 0;
 };

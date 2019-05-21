@@ -21,9 +21,8 @@ Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, 
 	m_useGroundTypes = true;
 	SetPhysicsOn(true);
 	m_playerID = _playerID;
-	m_textRanking = new Text2D(std::to_string(m_ranking));
-	//m_textRanking->SetScale(0.1f * Vector2::One);
-	m_textLap = new Text2D(std::to_string(m_lap) + "/3");
+
+	//TODO: Move this all to InGameUI
 	m_textCountdown = new Text2D("3", Text2D::MIDDLE);
 	m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 	m_textFinishOrder = new Text2D("0" + m_orderIndicator[0]);
@@ -109,18 +108,17 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	//Update TrackMagnet here too?
 }
 
-void Player::SetActiveItem(ItemType _item) {
-	if (m_InventoryItem == _item) {
-
+void Player::SetActiveItem(ItemType _item)
+{
+	if (m_InventoryItem == _item) 
+	{
 		if (_item != LIGHTNING_CLOUD)
 		{
 			active_item = _item;
-
-			if (m_playerID != -1)
-			{
-				m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
-				m_imgItem->SetPos(m_itemPos);
-			}
+			m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
+			m_imgItem->SetPos(m_itemPos);
+			m_imgItem->SetScale(m_itemScale);
+			did_use_item = true;
 		}
 
 		m_InventoryItem = ItemType::NONE;
@@ -148,6 +146,7 @@ void Player::SetItemInInventory(ItemType _item) {
 		{
 			m_imgItem = Locator::getItemData()->GetItemSprite(m_InventoryItem, m_playerID);
 			m_imgItem->SetPos(m_itemPos);
+			m_imgItem->SetScale(m_itemScale);
 		}
 		DebugText::print("PLAYER " + std::to_string(m_playerID) + " HAS ACQUIRED ITEM: " + std::to_string(_item));
 
@@ -258,11 +257,9 @@ void Player::Tick()
 		DebugText::print("PLAYER POSITION: (" + std::to_string(m_pos.x) + ", " + std::to_string(m_pos.y) + ", " + std::to_string(m_pos.z) + ")");
 	}
 
-	//Update UI
+	//Update UI (TODO: move to InGameUI)
 	if (!m_finished)
 	{
-		m_textRanking->SetText(std::to_string(m_ranking));
-		m_textLap->SetText(std::to_string(m_lap) + "/3");
 		m_imgItem->Tick();
 	}
 

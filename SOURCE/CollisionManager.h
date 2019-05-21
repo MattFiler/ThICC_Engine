@@ -13,7 +13,8 @@ public:
 	~CollisionManager() = default;
 
 	static void InitConfig();
-	static void CollisionDetectionAndResponse(std::vector<PhysModel*> _physModel, std::vector<Item*> _items);
+	static std::vector<Collision> CollisionDetection(std::vector<PhysModel*> _physModel, std::vector<Item*> _items);
+	static PlayerCollisionTypes CollisionResponse(Collision* this_collision);
 
 private:
 	static std::vector<Collision> CheckPhysModelCollisions(std::vector<PhysModel*> _physModels);

@@ -44,13 +44,16 @@ public:
 	int GetRanking() { return m_ranking; }
 	int GetLap() { return m_lap; }
 	bool GetFinished() { return m_finished; }
-	Text2D* GetRankingText() { return m_textRanking; }
-	Text2D* GetLapText() { return m_textLap; }
+
+	//***
+	//TODO: this should be depreciated in favour of InGameUI eventually
 	Text2D* GetCountdown() { return m_textCountdown; }
 	Text2D* GetFinishOrder() { return m_textFinishOrder; }
 	ImageGO2D* GetItemImg() { return m_imgItem; }
 	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
+	void SetItemScale(float _scale) { m_itemScale = _scale; }
 	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
+	//***
 
 	void ExpensiveLoad() {
 		m_animationMesh->Load();
@@ -71,6 +74,10 @@ public:
 	LightningCloud* GetLightningCloud();
 	void RemoveLightningCloud();
 	void RemoveLightningCloudModel();
+	bool DidUseItem() {
+		return did_use_item;
+		did_use_item = false;
+	}
 
 	void CheckUseItem();
 	void TrailItems();
@@ -131,15 +138,14 @@ private:
 	int m_ranking = 0;
 	int m_waypoint = 0;
 	int m_lap = 1;
-	Text2D *m_textRanking = nullptr;
-	Text2D *m_textLap = nullptr;
-	Text2D *m_textCountdown = nullptr;
-	Text2D *m_textFinishOrder = nullptr;
+	Text2D *m_textCountdown = nullptr; //TODO: move to InGameUI
+	Text2D *m_textFinishOrder = nullptr; //TODO: move to InGameUI (if still used?)
 	Vector m_savedGravDir;
 	bool m_finished = false;
 	bool m_invincible = false;
+	bool did_use_item = false;
 
-	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th", "th","th","th","th","th","th","th","th"};
+	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th", "th","th","th","th","th","th","th","th" }; //TODO: remove when implemented in InGameUI
 
 	// Player items:
 	//	A player can have an ACTIVE item (e.g. holding a banana behind themselves) AND also an INVENTORY item.
@@ -151,7 +157,8 @@ private:
 	ItemType m_InventoryItem = ItemType::NONE;
 	
 	Vector2 m_itemPos = Vector2(0, 0); // temp gpu fix 
-	ImageGO2D *m_imgItem = nullptr;
+	float m_itemScale = 1;
+	ImageGO2D *m_imgItem = nullptr; //TODO: move to InGameUI
 
 	std::vector<Item*> m_trailingItems;
 	std::vector<Item*> m_floatingItems; //Items which renders above the player - POW, Blooper, and Lightning Cloud

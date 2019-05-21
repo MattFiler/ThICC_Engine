@@ -12,6 +12,12 @@ public:
 	void UpdateTrack(Track* _track);
 	void DebugRender();
 
+	void Enabled(bool _enabled) {
+		#ifdef _DEBUG
+		enabled = _enabled;
+		#endif
+	}
+
 	void Update();
 	void AddAI(MoveAI* _ai);
 	void RemoveAI(MoveAI* _ai);
@@ -24,5 +30,6 @@ private:
 	size_t m_currentIndex = 0;
 	std::vector<MoveAI*> m_aiList;
 	Track* m_track = nullptr;
+	bool enabled = true;
 };
 

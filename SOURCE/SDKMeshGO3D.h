@@ -34,7 +34,7 @@ public:
 
 	//Functions for animating per map type
 	void AnimateMap(AnimatedMap& map, DirectX::PBREffect * pbr);
-	void LoadAnimConfigForMap(MaterialTypes type, const std::string& debug_name, int number_of_materials, std::ifstream& anim_config, ResourceUploadBatch& resourceUpload, const std::string& dirpath);
+	void LoadAnimConfigForMap(MaterialTypes type, int number_of_materials, std::ifstream& anim_config, ResourceUploadBatch& resourceUpload, const std::string& dirpath);
 
 protected:
 	//Model resources

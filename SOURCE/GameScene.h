@@ -12,6 +12,7 @@
 #include "AIScheduler.h"
 #include "MapInfo.h"
 #include "Skybox.h"
+#include "InGameUI.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -67,12 +68,15 @@ private:
 	Item* CreateItem(ItemType type);
 	void loadItemDebugCollider(Item* item);
 	Explosion* CreateExplosion(ItemType _ownerType);
-
-	//Game objects (and test crap)
-	Track* track = nullptr;
-	Player* player[12] = { nullptr };
 	std::vector<Item*> m_itemModels;
-	Text2D* countdown_text = nullptr;
+
+	//The scene's track object (including submeshes)
+	Track* track = nullptr;
+
+	//Players and UI
+	Player* player[12] = { nullptr }; //Max of twelve players in-game
+	InGameUI* m_game_ui[4] = { nullptr }; //Max of four players on-screen
+	Text2D* countdown_text = nullptr; //Shared between all players (TODO: MOVE TO InGameUI)
 
 	//Cameras
 	Camera* m_cam[4];
@@ -115,6 +119,7 @@ private:
 	bool race_finished = false;
 	float finish_timer = 0.0f;
 	int m_maxPlayers = 12;
+	int player_rank_save[4];
 
 };
 

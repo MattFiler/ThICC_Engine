@@ -38,10 +38,6 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 
 		Waypoint new_waypoint = Waypoint(top_left, top_right, bottom_left, bottom_right, middle);
 		map_waypoints.push_back(new_waypoint);
-
-		//Calculate debug marker position as the mid-point of top left and bottom right!
-		//DebugMarker* new_marker = new DebugMarker(pos, Vector3(0, 0, 0));
-		//debug_markers.push_back(new_marker);
 	}
 	for (json::iterator it = m_track_data_j["map_cameras"].begin(); it != m_track_data_j["map_cameras"].end(); ++it) {
 		if (it.value()["role"] == "Start") {
@@ -56,10 +52,6 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 			map_intro_cams.at(it.value()["index"] - 1).look_at = (blender_vector.ConvertPosition(Vector3((float)it.value()["pos"][0], (float)it.value()["pos"][1], (float)it.value()["pos"][2])) * m_track_data.scale);
 		}
 	}
-	else
-	{
-		DebugText::print(" >>> This map uses an outdated config! Please re-export for new camera configurations!! <<< ");
-	}
 	for (json::iterator it = m_track_data_j["map_spawnpoints"].begin(); it != m_track_data_j["map_spawnpoints"].end(); ++it) {
 		map_spawnpoints.push_back(blender_vector.ConvertPosition(Vector3(it.value()[0], it.value()[1], it.value()[2]) * m_track_data.scale));
 	}
@@ -67,10 +59,6 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 		for (json::iterator it = m_track_data_j["map_spawn_rotations"].begin(); it != m_track_data_j["map_spawn_rotations"].end(); ++it) {
 			map_spawn_rotations.push_back(blender_vector.ConvertAngle(Vector3((float)it.value()[0], (float)it.value()[1], (float)it.value()[2])));
 		}
-	}
-	else
-	{
-		DebugText::print(" >>> This map uses an outdated config! Please re-export for new spawn rotation configurations!! <<< ");
 	}
 	
 	for (json::iterator it = m_track_data_j["map_itemboxes"].begin(); it != m_track_data_j["map_itemboxes"].end(); ++it) {
@@ -93,10 +81,6 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 
 		Waypoint finish_line = Waypoint(top_left, top_right, bottom_left, bottom_right, middle_bottom);
 		map_finishline.push_back(finish_line);
-
-		//Calculate debug marker position as the mid-point of top left and bottom right!
-		//DebugMarker* new_marker = new DebugMarker(pos, rot);
-		//debug_markers.push_back(new_marker);
 	}
 
 	//Work out the spawn pos from blender definition, or fall back to our origin
@@ -110,7 +94,6 @@ Track::Track(MapInfo* _track) : PhysModel(_track->model)
 
 	//Debug output
 	DebugText::print("Loaded data for track: " + _track->model);
-	//DebugText::print("Suitable spawn spot: (" + std::to_string(m_track_data.spawn_pos.x) + ", " + std::to_string(m_track_data.spawn_pos.y) + ", " + std::to_string(m_track_data.spawn_pos.z) + ")");
 	filename = _track->model;
 }
 
