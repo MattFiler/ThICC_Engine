@@ -1014,6 +1014,13 @@ Item* GameScene::CreateItem(ItemType type)
 		loadItemDebugCollider(bullet);
 		return bullet;
 	}
+	case POW:
+	{
+		Pow* pow = new Pow(GetPlayers());
+		m_itemModels.push_back(pow);
+		loadItemDebugCollider(pow);
+		return pow;
+	}
 	default:
 		return nullptr;
 	}

@@ -19,6 +19,7 @@
 #include "LightningCloud.h"
 #include "RedShell.h"
 #include "BulletBill.h"
+#include "Pow.h"
 #include <functional>
 #include <json.hpp>
 using json = nlohmann::json;

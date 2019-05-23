@@ -18,7 +18,7 @@ void ItemPools::Load()
 	for (int i = 0; i < (int)ItemType::PLACEHOLDER; i++)
 	{
 		ItemType type = (ItemType)i;
-		if (type == NONE || type == BULLET_BILL || type == LIGHTNING_CLOUD) //Bullet Bills Are Part of the player class
+		if (type == NONE || type == BULLET_BILL || type == LIGHTNING_CLOUD || type == POW) //Bullet Bills Are Part of the player class
 		{
 			continue;
 		}

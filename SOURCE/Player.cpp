@@ -86,6 +86,7 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModel("glider", Locator::getGOS()->common_model_config["glider"]);
 	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL));
 	m_animationMesh->AddModel("Cloud", Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD));
+	m_animationMesh->AddModel("POW", Locator::getItemData()->GetItemModelName(POW));
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
 	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
@@ -93,7 +94,13 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModelSet("Bullet Bill", std::vector < std::string>{"Bullet Bill"});
 	m_animationMesh->AddModelSet("Cloud", std::vector < std::string>{"vehicle", "character","Cloud"});
 	m_animationMesh->AddModelSet("Cloud Respawn", std::vector < std::string>{"vehicle", "character", "Cloud", "lakitu"});
-	m_animationMesh->AddModelSet("Cloud Gliding", std::vector < std::string>{"vehicle", "character", "Cloud", "glider"});
+	m_animationMesh->AddModelSet("Cloud Gliding", std::vector < std::string>{"vehicle", "character", "Cloud", "glider"});	
+	m_animationMesh->AddModelSet("POW", std::vector < std::string>{"vehicle", "character","POW"});
+	m_animationMesh->AddModelSet("POW Respawn", std::vector < std::string>{"vehicle", "character", "POW", "lakitu"});
+	m_animationMesh->AddModelSet("POW Gliding", std::vector < std::string>{"vehicle", "character", "POW", "glider"});	
+	m_animationMesh->AddModelSet("Cloud POW", std::vector < std::string>{"vehicle", "character", "Cloud", "POW"});
+	m_animationMesh->AddModelSet("Cloud POW Respawn", std::vector < std::string>{"vehicle", "character","Cloud", "POW", "lakitu"});
+	m_animationMesh->AddModelSet("Cloud POW Gliding", std::vector < std::string>{"vehicle", "character","Cloud", "POW", "glider"});
 
 	m_animationMesh->SwitchModelSet("default");
 
@@ -512,6 +519,13 @@ void Player::SpawnItems(ItemType type)
 		{
 			BulletBill* bullet = static_cast<BulletBill*>(CreateItem(BULLET_BILL));
 			bullet->Use(this, false);
+			break;
+		}
+
+		case POW:
+		{
+			Pow* pow = static_cast<Pow*>(CreateItem(POW));
+			pow->Use(this, false);
 			break;
 		}
 

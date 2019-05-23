@@ -172,6 +172,9 @@
     <ClCompile Include="InGameUI.cpp">
       <Filter>Game\Components\Game Objects\2D</Filter>
     </ClCompile>
+    <ClCompile Include="Pow.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -425,6 +428,9 @@
     </ClInclude>
     <ClInclude Include="InGameUI.h">
       <Filter>Game\Components\Game Objects\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Pow.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

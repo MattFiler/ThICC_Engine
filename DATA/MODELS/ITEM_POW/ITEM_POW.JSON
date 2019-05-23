@@ -1,0 +1,58 @@
+{
+  "asset_name": "ITEM_POW",
+  "asset_type": "Models",
+  "model_type": 1,
+  "visible": true,
+  "start_x": 0.0,
+  "start_y": 1.2,
+  "start_z": 0.0,
+  "modelscale": 0.03,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 10.0,
+  "in_use_in": [],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      10.57311,
+      34.542,
+      9.11862
+    ],
+    "front_top_right": [
+      -10.57689,
+      34.542,
+      9.11862
+    ],
+    "front_bottom_right": [
+      -10.57689,
+      0,
+      9.11862
+    ],
+    "front_bottom_left": [
+      10.57311,
+      0,
+      9.11862
+    ],
+    "back_top_left": [
+      10.57311,
+      34.542,
+      -15.77196
+    ],
+    "back_top_right": [
+      -10.57689,
+      34.542,
+      -15.77196
+    ],
+    "back_bottom_right": [
+      -10.57689,
+      0,
+      -15.77196
+    ],
+    "back_bottom_left": [
+      10.57311,
+      0,
+      -15.77196
+    ]
+  }
+}

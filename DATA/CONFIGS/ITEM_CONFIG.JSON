@@ -430,7 +430,7 @@
   },
   "POW": {
     "ui_sprite": "ITEM_POW",
-    "model": "DEFAULT_ITEM",
+    "model": "ITEM_POW",
     "probabilities": {
       "place_1": 0,
       "place_2": 0,
@@ -446,7 +446,7 @@
       "place_12": 0
     },
     "info": {},
-    "implemented": false
+    "implemented": true
   },
   "LIGHTNING_CLOUD": {
     "ui_sprite": "ITEM_LIGHTNING_CLOUD",
