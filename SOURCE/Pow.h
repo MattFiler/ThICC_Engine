@@ -1,5 +1,7 @@
 #pragma once
 #include "Item.h"
+#include "ItemCollisionData.h"
+
 class Pow : public Item
 {
 public:
@@ -12,5 +14,12 @@ public:
 private:
 	void FindPlayers();
 	std::vector<Player*> m_players;
+	ItemCollisionData m_collisionData;
+
+	float m_warningTimeElapsed = 0;
+	float m_maxWarningTime = 1;
+	float m_heightShift = 0;
+	int m_currentWarning = 0;
+	int m_warningCount = 3;
 };
 

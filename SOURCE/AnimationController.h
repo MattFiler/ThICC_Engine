@@ -24,6 +24,7 @@ public:
 
 	void AddModel(std::string _name, std::string _filepath);
 	void AddModel(std::string _name, SDKMeshGO3D* _model);
+	AnimationModel* GetModelFromSet(std::string name, std::string _modelName);
 
 	void AddModelSet(std::string _setName, std::vector<std::string> models);
 	void SwitchModelSet(std::string _setName);

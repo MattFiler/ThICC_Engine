@@ -25,6 +25,8 @@ public:
 	/* Return item actual sprite reference */
 	ImageGO2D* GetItemSprite(ItemType _item, int _player_id);
 
+	bool CanDrop(ItemType _item);
+
 private:
 	void ProcessConfig(ItemType _item, const std::string& config_name);
 

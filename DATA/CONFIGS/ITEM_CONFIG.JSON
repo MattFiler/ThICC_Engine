@@ -445,7 +445,26 @@
       "place_11": 0,
       "place_12": 0
     },
-    "info": {},
+    "info": {
+		"warning_time": 1.0,
+		"warning_count": 3,
+		"player_collision": {
+        "velocity_multiplier": 0.3,
+        "jump": {
+          "height": 0.0,
+          "duration": 0.0
+        },
+        "flip": {
+          "revolutions": 0.0,
+          "duration": 0.0
+        },
+        "spin": {
+          "revolutions": 2.0,
+          "duration": 0.4
+        },
+        "vertical_pos_offset": 0.0
+      }
+	},
     "implemented": true
   },
   "LIGHTNING_CLOUD": {

@@ -84,6 +84,7 @@ public:
 	void TrailItems();
 	void SpawnItems(ItemType type);
 	void ReleaseItem();
+	void DropItems();
 
 	void Spin(int _revolutions, float _duration) { m_animationMesh->Spin(_revolutions, _duration); };
 	void Flip(int _revolutions, float _duration) { m_animationMesh->Flip(_revolutions, _duration); };
@@ -113,7 +114,6 @@ public:
 	Vector3 GetPosHistoryBack();
 
 	bool IsTrailingItem() { return !m_trailingItems.empty(); };
-
 protected:
 	int m_playerID = 0;
 
@@ -171,6 +171,7 @@ private:
 	Vector3 m_orbitDistance = Vector3::Zero;
 	float m_orbitSpeed = 0;
 	float m_floatingItemPosOffset = 0;
+	bool m_dropItems = false;
 
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;

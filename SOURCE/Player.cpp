@@ -298,7 +298,7 @@ void Player::CheckUseItem()
 			{
 				ReleaseItem();
 			}
-
+			
 			m_aPressed = true;
 		}
 		else
@@ -542,28 +542,52 @@ void Player::SpawnItems(ItemType type)
 
 void Player::ReleaseItem()
 {
-	if (!m_trailingItems.empty())
+	if (!m_dropItems)
 	{
-		m_trailingItems[m_trailingItems.size() - 1]->Use(this, m_keybind.keyHeld("trail items", m_playerID));
-		m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
-
-		if (m_InventoryItem != MUSHROOM_UNLIMITED)
+		if (!m_trailingItems.empty())
 		{
-			m_trailingItems.pop_back();
-		}
-		
-		if (m_trailingItems.empty())
-		{
-			m_multiItem = false;
-			active_item = NONE;
+			m_trailingItems[m_trailingItems.size() - 1]->Use(this, m_keybind.keyHeld("trail items", m_playerID));
+			m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
 
-			if (m_InventoryItem == MUSHROOM_3X)
+			if (m_InventoryItem != MUSHROOM_UNLIMITED)
 			{
-				SetActiveItem(MUSHROOM_3X);
+				m_trailingItems.pop_back();
+			}
+
+			if (m_trailingItems.empty())
+			{
+				m_multiItem = false;
 				active_item = NONE;
+
+				if (m_InventoryItem == MUSHROOM_3X)
+				{
+					SetActiveItem(MUSHROOM_3X);
+					active_item = NONE;
+				}
 			}
 		}
 	}
+	else
+	{
+		for (int i = 0; i < m_trailingItems.size(); i++)
+		{
+			if (m_trailingItems[i]->GetItemMesh())
+			{
+				m_trailingItems[i]->setItemInUse(this);
+				m_trailingItems.erase(m_trailingItems.begin() + i);
+			}
+		}
+		m_dropItems = false;
+	}
+}
+
+void Player::DropItems()
+{
+	if (Locator::getItemData()->CanDrop(m_InventoryItem))
+	{
+		SpawnItems(m_InventoryItem);
+	}
+	m_dropItems = true;
 }
 
 void Player::setGamePad(bool _state)

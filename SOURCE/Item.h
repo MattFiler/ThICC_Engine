@@ -44,6 +44,7 @@ public:
 
 	ItemType GetItemType() { return m_itemType; };
 	ItemMesh* GetItemMesh() { return m_itemMesh; };
+	virtual void setItemInUse(Player* player);
 
 protected:
 	Player* m_player = nullptr;
@@ -72,5 +73,4 @@ protected:
 	std::vector<Item*> m_immuneItems;
 
 	virtual bool ignorePlayerCollisions(Player* player);
-	virtual void setItemInUse(Player* player);
 };

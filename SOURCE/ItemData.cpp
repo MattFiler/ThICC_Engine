@@ -39,12 +39,13 @@ ItemData::ItemData() {
 /* Get a random item based on the player position */
 ItemType ItemData::GetRandomItem(int _position) {
 
-	return POW;
-	float random_out_of_100 = (rand() % 101);
+	float randomOutOf100 = (rand() % /*101*/2);
+
+	return randomOutOf100 == 0 ? BANANA : POW;
 
 	for (int i = 0; i < item_count-1; i++) {
 		ItemType this_item = static_cast<ItemType>(i);
-		if (random_out_of_100 <= GetCumulativeProbability(this_item, _position)) {
+		if (randomOutOf100 <= GetCumulativeProbability(this_item, _position)) {
 			return this_item;
 		}
 	}
@@ -86,6 +87,12 @@ std::string ItemData::GetItemModelName(ItemType _item) {
 /* Return the actual sprite for an item */
 ImageGO2D* ItemData::GetItemSprite(ItemType _item, int _player_id) {
 	return item_sprite_image[static_cast<int>(_item)][_player_id];
+}
+
+bool ItemData::CanDrop(ItemType _item)
+{
+	return _item == GREEN_SHELL || _item == RED_SHELL || _item == BANANA || _item == BOMB || _item == FAKE_BOX || 
+		_item == BANANA || _item == BLUE_SHELL || _item == BANANA_3X || _item == GREEN_SHELL_3X || _item == RED_SHELL_3X;
 }
 
 /* Process the config for an item type, and set the probability array */
