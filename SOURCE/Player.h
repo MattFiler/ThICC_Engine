@@ -67,6 +67,8 @@ public:
 	void setGamePad(bool _state);
 	void SetFinished(bool _finished) { m_finished = _finished; }
 
+	KeybindManager GetKeyBindManager() { return m_keybind; }
+
 	/* Inventory Management */
 	ItemType GetActiveItem() { return active_item; };
 	void SetActiveItem(ItemType _item);
@@ -114,6 +116,9 @@ public:
 	Vector3 GetPosHistoryBack();
 
 	bool IsTrailingItem() { return !m_trailingItems.empty(); };
+	bool CounteredPow() { return m_counteredPow; };
+	void SetCounteredPow(bool _counteredPow) { m_counteredPow = _counteredPow; };
+
 protected:
 	int m_playerID = 0;
 
@@ -172,6 +177,7 @@ private:
 	float m_orbitSpeed = 0;
 	float m_floatingItemPosOffset = 0;
 	bool m_dropItems = false;
+	bool m_counteredPow = false;
 
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;

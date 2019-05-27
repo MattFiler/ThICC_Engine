@@ -559,7 +559,7 @@ void Player::ReleaseItem()
 {
 	if (!m_trailingItems.empty())
 	{
-		m_trailingItems[m_trailingItems.size() - 1]->Use(this, m_keybind.keyHeld("trail items", m_playerID));
+		m_trailingItems[m_trailingItems.size() - 1]->Use(this, m_keybind.keyHeld("item alternate use", m_playerID));
 		m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
 
 		if (m_InventoryItem != MUSHROOM_UNLIMITED)

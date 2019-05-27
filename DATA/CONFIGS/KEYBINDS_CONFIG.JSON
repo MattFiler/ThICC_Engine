@@ -143,14 +143,6 @@
     "Gamepad": "Left Trigger",
     "is_debug": false
   },
-  "TRAIL_ITEMS": {
-    "Keyboard": "E",
-    "Keyboard_Code": 69,
-    "Arcade": "Left Yellow Button",
-    "Arcade_Code": 164,
-    "Gamepad": "Left Shoulder",
-    "is_debug": false
-  },
   "BACK": {
     "Keyboard": "Escape",
     "Keyboard_Code": 27,
@@ -325,6 +317,14 @@
     "Arcade": "DISABLED",
     "Arcade_Code": -1,
     "Gamepad": "D-Pad Right",
+    "is_debug": false
+  },
+  "ITEM_ALTERNATE_USE": {
+    "Keyboard": "E",
+    "Keyboard_Code": 69,
+    "Arcade": "Left Yellow Button",
+    "Arcade_Code": 164,
+    "Gamepad": "Left Shoulder",
     "is_debug": false
   }
 }

@@ -60,6 +60,8 @@ void Pow::Tick()
 					AnimationModel* model = player->GetAnimController()->GetModelFromSet(m_player->GetAnimController()->GetCurrentSet(), "POW");
 					Vector3 scale = model->GetCurrentScale();
 					model->SetCurrentScale(Vector3(scale.x, scale.y - m_heightShift, scale.z));
+
+					player->SetCounteredPow(m_currentWarning == m_warningCount && player->GetKeyBindManager().keyHeld("item alternate use", player->GetPlayerId()));
 				}
 			}
 		}
@@ -67,13 +69,16 @@ void Pow::Tick()
 		{
 			for (Player*& player : m_players)
 			{
-				player->setVelocity(player->getVelocity() * m_collisionData.m_playerVelMulti);
-				player->Jump(m_collisionData.m_jumpHeight, m_collisionData.m_jumpDuration);
-				player->Flip(m_collisionData.m_flipRev, m_collisionData.m_flipDuration);
-				player->Spin(m_collisionData.m_spinRev, m_collisionData.m_spinDuration);
-				player->AddPos(player->GetWorld().Up() * m_collisionData.m_vertPosOffset);
-				player->UpdateWorld();
-				player->DropItems();
+				if (!player->CounteredPow())
+				{
+					player->setVelocity(player->getVelocity() * m_collisionData.m_playerVelMulti);
+					player->Jump(m_collisionData.m_jumpHeight, m_collisionData.m_jumpDuration);
+					player->Flip(m_collisionData.m_flipRev, m_collisionData.m_flipDuration);
+					player->Spin(m_collisionData.m_spinRev, m_collisionData.m_spinDuration);
+					player->AddPos(player->GetWorld().Up() * m_collisionData.m_vertPosOffset);
+					player->UpdateWorld();
+					player->DropItems();
+				}
 
 				player->GetAnimController()->GetModelFromSet(m_player->GetAnimController()->GetCurrentSet(), "POW")->ResetScale();
 
