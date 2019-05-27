@@ -154,7 +154,7 @@ void CollisionManager::LightningCloudCollision(Player * player2, Player * player
 		player1->GetLightningCloud()->SetElapsedStrikeTime(cloud->GetElapsedStrikeTime());
 		player2->RemoveLightningCloud();
 		player2->RemoveLightningCloudModel();
-		cloud->FlagForDestoy();
+		cloud->FlagForDestoy();;
 	}
 }
 
@@ -235,7 +235,7 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 				{
 					if (player->isInvincible())
 					{
-						item1->FlagForDestoy();
+						item1->FlagForDestoy();;
 					}
 					else
 					{
@@ -264,8 +264,8 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 						//Checking for fake item boxes
 						fakeBoxResponse(item1, item2);
 
-						item1->FlagForDestoy();
-						item2->FlagForDestoy();
+						item1->FlagForDestoy();;
+						item2->FlagForDestoy();;
 						break;
 					}
 				}
@@ -283,11 +283,11 @@ bool CollisionManager::bombResponse(Item * item1, Item * item2)
 	if (bomb1)
 	{
 		bomb1->Detonate();
-		item2->FlagForDestoy();
+		item2->FlagForDestoy();;
 	}
 	else if (bomb2)
 	{
-		item1->FlagForDestoy();
+		item1->FlagForDestoy();;
 		bomb2->Detonate();
 	}
 

@@ -57,10 +57,9 @@ void Pow::Tick()
 
 				for (Player*& player : m_players)
 				{
-					SDKMeshGO3D* model = player->GetAnimController()->GetModelFromSet(m_player->GetAnimController()->GetCurrentSet(), "POW")->GetModel();
-					Vector3 scale = model->GetScale();
-					model->SetScale(Vector3(scale.x, scale.y - m_heightShift, scale.z));
-					model->UpdateWorld();
+					AnimationModel* model = player->GetAnimController()->GetModelFromSet(m_player->GetAnimController()->GetCurrentSet(), "POW");
+					Vector3 scale = model->GetCurrentScale();
+					model->SetCurrentScale(Vector3(scale.x, scale.y - m_heightShift, scale.z));
 				}
 			}
 		}
@@ -76,6 +75,8 @@ void Pow::Tick()
 				player->UpdateWorld();
 				player->DropItems();
 
+				player->GetAnimController()->GetModelFromSet(m_player->GetAnimController()->GetCurrentSet(), "POW")->ResetScale();
+
 				std::string set = m_player->GetAnimController()->GetCurrentSet();
 				if (set == "POW Gliding")
 				{
@@ -90,7 +91,7 @@ void Pow::Tick()
 					player->GetAnimController()->SwitchModelSet("default");
 				}
 			}
-			m_shouldDestroy = true;
+			FlagForDestoy();
 		}
 	}
 }

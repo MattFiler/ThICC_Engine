@@ -54,7 +54,7 @@ void BulletBill::Tick()
 				m_player->GetAnimController()->SwitchModelSet("default");
 			}
 
-			FlagForDestoy();
+			FlagForDestoy();;
 		}
 
 	}

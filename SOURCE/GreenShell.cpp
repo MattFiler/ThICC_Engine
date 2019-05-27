@@ -46,7 +46,7 @@ void GreenShell::HitByPlayer(Player* player)
 	player->Spin(m_collisionData.m_spinRev, m_collisionData.m_spinDuration);
 	player->AddPos(player->GetWorld().Up() * m_collisionData.m_vertPosOffset);
 	player->UpdateWorld();
-	m_shouldDestroy = true;
+	FlagForDestoy();
 }
 
 void GreenShell::Use(Player * player, bool _altUse)
@@ -73,7 +73,10 @@ void GreenShell::Tick()
 			m_itemMesh->m_mesh->ResetHasHitWall();
 			m_frameCount = 0;
 		}
-		m_shouldDestroy = m_bounceCount >= m_maxBounceCount;
+		if (m_bounceCount >= m_maxBounceCount)
+		{
+			m_shouldDestroy = true;
+		}
 	}
 	Item::Tick();
 }

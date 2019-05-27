@@ -56,7 +56,7 @@ void Item::Tick()
 			m_elapsedTime += Locator::getGSD()->m_dt;
 			if (m_elapsedTime > m_maxDuration)
 			{
-				m_shouldDestroy = true;
+				FlagForDestoy();
 			}
 		}
 

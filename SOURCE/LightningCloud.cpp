@@ -53,7 +53,7 @@ void LightningCloud::Tick()
 					m_player->GetControlledMovement()->ResetMoveSpeed();
 					m_player->GetControlledMovement()->ResetTurnSpeed();
 					m_player->RemoveLightningCloud();
-					m_shouldDestroy = true;
+					FlagForDestoy();
 				}
 				break;
 
@@ -125,7 +125,7 @@ void LightningCloud::Use(Player * player, bool _altUse)
 {
 	if (player->isInvincible())
 	{
-		m_shouldDestroy = true;
+		FlagForDestoy();
 		return;
 	}
 

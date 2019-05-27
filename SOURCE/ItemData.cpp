@@ -39,10 +39,9 @@ ItemData::ItemData() {
 /* Get a random item based on the player position */
 ItemType ItemData::GetRandomItem(int _position) {
 
-	float randomOutOf100 = (rand() % /*101*/2);
+	return POW;
 
-	return randomOutOf100 == 0 ? BANANA : POW;
-
+	float randomOutOf100 = (rand() % 101);
 	for (int i = 0; i < item_count-1; i++) {
 		ItemType this_item = static_cast<ItemType>(i);
 		if (randomOutOf100 <= GetCumulativeProbability(this_item, _position)) {

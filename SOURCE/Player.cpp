@@ -331,50 +331,65 @@ void Player::CheckUseItem()
 
 void Player::TrailItems()
 {
-	if (!m_trailingItems.empty())
+	if (!m_dropItems)
 	{
-		DebugText::print("Hit");
-		for (int i = 0; i < m_trailingItems.size(); i++)
+		if (!m_trailingItems.empty())
 		{
-			if (m_trailingItems[i]->ShouldDestroy())
-			{
-				m_trailingItems.erase(m_trailingItems.begin() + i);
-				if (m_InventoryItem == MUSHROOM_UNLIMITED) {
-					SetActiveItem(MUSHROOM_UNLIMITED);
-					active_item = NONE;
-				}
-				continue;
-			}
-
-			if (m_trailingItems[i]->GetItemMesh())
+			DebugText::print("Hit");
+			for (int i = 0; i < m_trailingItems.size(); i++)
 			{
 				if (m_trailingItems[i]->ShouldDestroy())
 				{
 					m_trailingItems.erase(m_trailingItems.begin() + i);
+					if (m_InventoryItem == MUSHROOM_UNLIMITED) {
+						SetActiveItem(MUSHROOM_UNLIMITED);
+						active_item = NONE;
+					}
 					continue;
 				}
 
-				//Trails behind the player
-				if (active_item != GREEN_SHELL_3X && active_item != RED_SHELL_3X)
+				if (m_trailingItems[i]->GetItemMesh())
 				{
-					Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
+					if (m_trailingItems[i]->ShouldDestroy())
+					{
+						m_trailingItems.erase(m_trailingItems.begin() + i);
+						continue;
+					}
 
-					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-					m_trailingItems[i]->GetMesh()->AddPos(backward_pos * m_firstTrailingItemOffset + (backward_pos * m_otherTrailingItemOffset * i));
-					m_trailingItems[i]->GetMesh()->UpdateWorld();
+					//Trails behind the player
+					if (active_item != GREEN_SHELL_3X && active_item != RED_SHELL_3X)
+					{
+						Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
+
+						m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+						m_trailingItems[i]->GetMesh()->AddPos(backward_pos * m_firstTrailingItemOffset + (backward_pos * m_otherTrailingItemOffset * i));
+						m_trailingItems[i]->GetMesh()->UpdateWorld();
+					}
+					//Spins around the player
+					else
+					{
+						m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+						m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + m_orbitSpeed * Locator::getGSD()->m_dt);
+						m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f)
+							* m_orbitDistance.x, m_orbitDistance.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_orbitDistance.z }, m_rot));
+					}
 				}
-				//Spins around the player
-				else
-				{
-					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + m_orbitSpeed * Locator::getGSD()->m_dt);
-					m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f) 
-						* m_orbitDistance.x, m_orbitDistance.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_orbitDistance.z }, m_rot));
-				}
+
+				m_trailingItems[i]->setTrailing(true);
 			}
-
-			m_trailingItems[i]->setTrailing(true);
-		}	
+		}
+	}
+	else
+	{
+		for (int i = 0; i < m_trailingItems.size(); i++)
+		{
+			if (m_trailingItems[i]->GetItemMesh())
+			{
+				m_trailingItems[i]->setItemInUse(this);
+				m_trailingItems.erase(m_trailingItems.begin() + i);
+			}
+		}
+		m_dropItems = false;
 	}
 }
 
@@ -542,42 +557,27 @@ void Player::SpawnItems(ItemType type)
 
 void Player::ReleaseItem()
 {
-	if (!m_dropItems)
+	if (!m_trailingItems.empty())
 	{
-		if (!m_trailingItems.empty())
+		m_trailingItems[m_trailingItems.size() - 1]->Use(this, m_keybind.keyHeld("trail items", m_playerID));
+		m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
+
+		if (m_InventoryItem != MUSHROOM_UNLIMITED)
 		{
-			m_trailingItems[m_trailingItems.size() - 1]->Use(this, m_keybind.keyHeld("trail items", m_playerID));
-			m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
+			m_trailingItems.pop_back();
+		}
 
-			if (m_InventoryItem != MUSHROOM_UNLIMITED)
-			{
-				m_trailingItems.pop_back();
-			}
+		if (m_trailingItems.empty())
+		{
+			m_multiItem = false;
+			active_item = NONE;
 
-			if (m_trailingItems.empty())
+			if (m_InventoryItem == MUSHROOM_3X)
 			{
-				m_multiItem = false;
+				SetActiveItem(MUSHROOM_3X);
 				active_item = NONE;
-
-				if (m_InventoryItem == MUSHROOM_3X)
-				{
-					SetActiveItem(MUSHROOM_3X);
-					active_item = NONE;
-				}
 			}
 		}
-	}
-	else
-	{
-		for (int i = 0; i < m_trailingItems.size(); i++)
-		{
-			if (m_trailingItems[i]->GetItemMesh())
-			{
-				m_trailingItems[i]->setItemInUse(this);
-				m_trailingItems.erase(m_trailingItems.begin() + i);
-			}
-		}
-		m_dropItems = false;
 	}
 }
 
