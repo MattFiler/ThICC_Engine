@@ -57,7 +57,7 @@ void Pow::Tick()
 
 				for (Player*& player : m_players)
 				{
-					AnimationModel* model = player->GetAnimController()->GetModelFromSet(m_player->GetAnimController()->GetCurrentSet(), "POW");
+					AnimationModel* model = player->GetAnimController()->GetModelFromSet(player->GetAnimController()->GetCurrentSet(), "POW");
 					Vector3 scale = model->GetCurrentScale();
 					model->SetCurrentScale(Vector3(scale.x, scale.y - m_heightShift, scale.z));
 
@@ -80,9 +80,9 @@ void Pow::Tick()
 					player->DropItems();
 				}
 
-				player->GetAnimController()->GetModelFromSet(m_player->GetAnimController()->GetCurrentSet(), "POW")->ResetScale();
+				player->GetAnimController()->GetModelFromSet(player->GetAnimController()->GetCurrentSet(), "POW")->ResetScale();
 
-				std::string set = m_player->GetAnimController()->GetCurrentSet();
+				std::string set = player->GetAnimController()->GetCurrentSet();
 				if (set == "POW Gliding")
 				{
 					player->GetAnimController()->SwitchModelSet("Gliding");
@@ -91,7 +91,7 @@ void Pow::Tick()
 				{
 					player->GetAnimController()->SwitchModelSet("Respawn");
 				}
-				else if (m_player->GetAnimController()->GetCurrentSet() == "POW")
+				else if (set == "POW")
 				{
 					player->GetAnimController()->SwitchModelSet("default");
 				}
@@ -107,16 +107,20 @@ void Pow::Use(Player * _player, bool _altUse)
 	m_trailingPlayerImmunity = true;
 	m_heightShift = m_player->GetAnimController()->GetModelFromSet("POW", "POW")->GetModel()->GetScale().y / m_warningCount;
 	
-	//FindPlayers();
+	FindPlayers();
 }
 
 void Pow::FindPlayers()
 {
-	for (int i = 0; i < m_players.size(); ++i)
+	for (auto it = m_players.begin(); it != m_players.end();)
 	{
-		if (m_players[i]->GetRanking() >= m_player->GetRanking())
+		if ((*it)->GetRanking() >= m_player->GetRanking())
 		{
-			m_players.erase(m_players.begin() + i);
+			it = m_players.erase(it);
+		}
+		else
+		{
+			++it;
 		}
 	}
 }
