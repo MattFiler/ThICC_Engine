@@ -629,8 +629,8 @@ void GameScene::Update(DX::StepTimer const& timer)
 		GameDebugToggles::render_level = !GameDebugToggles::render_level;
 	}
 
-	//Handle collisions and act on types for gamescene objects
-	for (Collision& this_collision : CollisionManager::CollisionDetection(m_physModels, m_itemModels)) {
+	////Handle collisions and act on types for gamescene objects
+	/*for (Collision& this_collision : CollisionManager::CollisionDetection(m_physModels, m_itemModels)) {
 		switch (CollisionManager::CollisionResponse(&this_collision)) {
 			//If we hit an item box, perform the UI animation and give the player their item
 			case PlayerCollisionTypes::HIT_ITEMBOX: {
@@ -641,11 +641,11 @@ void GameScene::Update(DX::StepTimer const& timer)
 					this_player = dynamic_cast<Player*>(this_collision.m_model2);
 				}
 				if (this_player == nullptr) { DebugText::print("Failed to reference player for item box collision."); return; }
-				m_game_ui[this_player->GetPlayerId()]->ShowItemSpinner(this_player);
+			m_game_ui[this_player->GetPlayerId()]->ShowItemSpinner(this_player);
 			}
 		}
-	}
-
+	}*/
+	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels, m_game_ui);
 	UpdateItems();
 }
 

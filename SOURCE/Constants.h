@@ -79,7 +79,8 @@ enum MaterialTypes {
 	EMISSIVE //V3
 };
 
-enum PlayerCollisionTypes {
+enum PlayerCollisionTypes 
+{
 	HIT_ITEMBOX,
 	HIT_PLAYER,
 	HIT_EXPLOSION,
