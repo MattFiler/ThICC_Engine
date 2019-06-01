@@ -9,6 +9,7 @@ public:
 	~Pow();
 
 	virtual void Tick() override;
+	void RemovePlayer(int _index);
 	virtual void Use(Player* _player, bool _altUse) override;
 	virtual void HitByPlayer(Player* _player) override {};
 private:

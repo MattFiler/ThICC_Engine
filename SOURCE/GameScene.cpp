@@ -72,7 +72,7 @@ void GameScene::ExpensiveLoad() {
 	}
 	else
 	{
-		m_maxPlayers = 3;
+		m_maxPlayers = 1;
 	}
 
 	//Update characters

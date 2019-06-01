@@ -119,6 +119,7 @@ public:
 	bool CounteredPow() { return m_counteredPow; };
 	void SetCounteredPow(bool _counteredPow) { m_counteredPow = _counteredPow; };
 
+	bool HasLightningCloud() { return m_hasLightningCloud; };
 protected:
 	int m_playerID = 0;
 
@@ -178,6 +179,8 @@ private:
 	float m_floatingItemPosOffset = 0;
 	bool m_dropItems = false;
 	bool m_counteredPow = false;
+	bool m_hasLightningCloud = false;
+	bool m_hasPow = false;
 
 	bool m_controlsActive = false;
 	std::unique_ptr<ControlledMovement> m_move = nullptr;

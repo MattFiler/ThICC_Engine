@@ -153,8 +153,7 @@ void CollisionManager::LightningCloudCollision(Player * player2, Player * player
 		player1->SpawnItems(LIGHTNING_CLOUD);
 		player1->GetLightningCloud()->SetElapsedStrikeTime(cloud->GetElapsedStrikeTime());
 		player2->RemoveLightningCloud();
-		player2->RemoveLightningCloudModel();
-		cloud->FlagForDestoy();;
+		cloud->FlagForDestoy();
 	}
 }
 

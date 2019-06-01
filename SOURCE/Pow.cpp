@@ -30,20 +30,30 @@ void Pow::Tick()
 {
 	if (m_itemUsed)
 	{
-		for (Player* player : m_players)
+		for (int i = 0; i < m_players.size(); ++i)
 		{
 			std::string set = m_player->GetAnimController()->GetCurrentSet();
-			if (m_player->IsGliding() && set != "POW Gliding")
+			if (m_players[i]->IsGliding() && set != "POW Gliding")
 			{
-				player->GetAnimController()->SwitchModelSet("POW Gliding");
+				m_players[i]->GetAnimController()->SwitchModelSet("POW Gliding");
+			}		
+			else if (m_players[i]->IsRespawning())
+			{
+				m_players[i]->GetAnimController()->SwitchModelSet("respawn");
+				RemovePlayer(i);
 			}
-			else if (m_player->IsRespawning() && set != "POW Respawn")
+			else if (m_players[i]->isInvincible())
 			{
-				player->GetAnimController()->SwitchModelSet("POW Respawn");
+				m_players[i]->GetAnimController()->SwitchModelSet("default");
+				RemovePlayer(i);
 			}
-			else if (!m_player->IsGliding() && !m_player->IsRespawning() && m_player->GetAnimController()->GetCurrentSet() != "POW")
+			else if (m_players[i]->HasLightningCloud())
 			{
-				player->GetAnimController()->SwitchModelSet("POW");
+				RemovePlayer(i);
+			}
+			else if (!m_players[i]->IsGliding() && m_players[i]->GetAnimController()->GetCurrentSet() != "POW")
+			{
+				m_players[i]->GetAnimController()->SwitchModelSet("POW");
 			}
 		}
 
@@ -99,6 +109,13 @@ void Pow::Tick()
 			FlagForDestoy();
 		}
 	}
+}
+
+void Pow::RemovePlayer(int _index)
+{
+	m_players[_index]->GetAnimController()->GetModelFromSet("POW", "POW")->ResetScale();
+	m_players[_index]->GetAnimController()->GetModelFromSet("POW Gliding", "POW")->ResetScale();
+	m_players.erase(m_players.begin() + _index);
 }
 
 void Pow::Use(Player * _player, bool _altUse)

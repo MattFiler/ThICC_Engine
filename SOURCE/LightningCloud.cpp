@@ -100,11 +100,17 @@ void LightningCloud::Tick()
 			{
 				m_player->GetAnimController()->SwitchModelSet("Cloud Gliding");
 			}
-			else if (m_player->IsRespawning() && set != "Cloud Respawn")
+			else if (m_player->IsRespawning())
 			{
-				m_player->GetAnimController()->SwitchModelSet("Cloud Respawn");
+				m_player->GetAnimController()->SwitchModelSet("respawn");
+				FlagForDestoy();
 			}
-			else if(!m_player->IsGliding() && !m_player->IsRespawning() && m_player->GetAnimController()->GetCurrentSet() != "Cloud")
+			else if (m_player->isInvincible())
+			{
+				m_player->GetAnimController()->SwitchModelSet("default");
+				FlagForDestoy();
+			}
+			else if (!m_player->IsGliding() && m_player->GetAnimController()->GetCurrentSet() != "Cloud")
 			{
 				m_player->GetAnimController()->SwitchModelSet("Cloud");
 			}

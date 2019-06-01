@@ -87,20 +87,18 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL));
 	m_animationMesh->AddModel("Cloud", Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD));
 	m_animationMesh->AddModel("POW", Locator::getItemData()->GetItemModelName(POW));
+	m_animationMesh->AddModel("Lightning", Locator::getItemData()->GetItemModelName(LIGHTNING_BOLT));
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
 	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
 	m_animationMesh->AddModelSet("gliding", std::vector < std::string>{"vehicle", "character", "glider"});
 	m_animationMesh->AddModelSet("Bullet Bill", std::vector < std::string>{"Bullet Bill"});
 	m_animationMesh->AddModelSet("Cloud", std::vector < std::string>{"vehicle", "character","Cloud"});
-	m_animationMesh->AddModelSet("Cloud Respawn", std::vector < std::string>{"vehicle", "character", "Cloud", "lakitu"});
 	m_animationMesh->AddModelSet("Cloud Gliding", std::vector < std::string>{"vehicle", "character", "Cloud", "glider"});	
 	m_animationMesh->AddModelSet("POW", std::vector < std::string>{"vehicle", "character","POW"});
-	m_animationMesh->AddModelSet("POW Respawn", std::vector < std::string>{"vehicle", "character", "POW", "lakitu"});
 	m_animationMesh->AddModelSet("POW Gliding", std::vector < std::string>{"vehicle", "character", "POW", "glider"});	
-	m_animationMesh->AddModelSet("Cloud POW", std::vector < std::string>{"vehicle", "character", "Cloud", "POW"});
-	m_animationMesh->AddModelSet("Cloud POW Respawn", std::vector < std::string>{"vehicle", "character","Cloud", "POW", "lakitu"});
-	m_animationMesh->AddModelSet("Cloud POW Gliding", std::vector < std::string>{"vehicle", "character","Cloud", "POW", "glider"});
+	m_animationMesh->AddModelSet("Lightning", std::vector < std::string>{"vehicle", "character","Lightning"});
+	m_animationMesh->AddModelSet("Lightning", std::vector < std::string>{"vehicle", "character", "POW", "glider"});	
 
 	m_animationMesh->SwitchModelSet("default");
 
@@ -186,6 +184,7 @@ void Player::RemoveLightningCloud()
 		if (dynamic_cast<LightningCloud*>(m_floatingItems[i]))
 		{
 			m_floatingItems.erase(m_floatingItems.begin() + i);
+			RemoveLightningCloudModel();
 			return;
 		}
 	}
@@ -193,6 +192,7 @@ void Player::RemoveLightningCloud()
 
 void Player::RemoveLightningCloudModel()
 {
+	m_hasLightningCloud = false;
 	if (IsGliding())
 	{
 		m_animationMesh->SwitchModelSet("gliding");
@@ -516,6 +516,7 @@ void Player::SpawnItems(ItemType type)
 
 		case LIGHTNING_CLOUD:
 		{
+			m_hasLightningCloud = true;
 			LightningCloud* cloud = static_cast<LightningCloud*>(CreateItem(LIGHTNING_CLOUD));
 			m_floatingItems.push_back(cloud);
 			cloud->Use(this, false);

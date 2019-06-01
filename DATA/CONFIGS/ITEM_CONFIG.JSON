@@ -308,7 +308,7 @@
   },
   "LIGHTNING_BOLT": {
     "ui_sprite": "ITEM_LIGHTNING",
-    "model": "DEFAULT_ITEM",
+    "model": "ITEM_LIGHTNING",
     "probabilities": {
       "place_1": 0,
       "place_2": 0,

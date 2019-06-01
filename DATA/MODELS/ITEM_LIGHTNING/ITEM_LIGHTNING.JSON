@@ -1,0 +1,58 @@
+{
+  "asset_name": "ITEM_LIGHTNING",
+  "asset_type": "Models",
+  "model_type": 1,
+  "visible": true,
+  "start_x": -0.2,
+  "start_y": 0.7,
+  "start_z": 0.0,
+  "modelscale": 5.0,
+  "rot_x": 0.0,
+  "rot_y": 0.0,
+  "rot_z": 0.0,
+  "segment_size": 10.0,
+  "in_use_in": [],
+  "has_box_collider": true,
+  "collision_box": {
+    "front_top_left": [
+      0.25,
+      2.00861,
+      0
+    ],
+    "front_top_right": [
+      -0.25,
+      2.00861,
+      0
+    ],
+    "front_bottom_right": [
+      -0.25,
+      0,
+      0
+    ],
+    "front_bottom_left": [
+      0.25,
+      0,
+      0
+    ],
+    "back_top_left": [
+      0.25,
+      2.00861,
+      0
+    ],
+    "back_top_right": [
+      -0.25,
+      2.00861,
+      0
+    ],
+    "back_bottom_right": [
+      -0.25,
+      0,
+      0
+    ],
+    "back_bottom_left": [
+      0.25,
+      0,
+      0
+    ]
+  }
+}
