@@ -35,8 +35,9 @@ void AnimationController::AddModelSet(std::string _setName, std::vector<std::str
 
 void AnimationController::SwitchModelSet(std::string _setName)
 {
-	if (!m_lockSet)
+	if (!m_lockSet && m_modelSet.count(_setName))
 	{
+		DebugText::print("switching model set to " + _setName);
 		m_currentSet = _setName;
 	}
 }
