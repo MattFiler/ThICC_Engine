@@ -79,6 +79,23 @@ enum MaterialTypes {
 	EMISSIVE //V3
 };
 
+enum PlayerCollisionTypes 
+{
+	HIT_ITEMBOX,
+	HIT_PLAYER,
+	HIT_EXPLOSION,
+	HIT_NOTHING
+};
+
+enum InGameInterfaceState {
+	UI_COURSE_INTRO,
+	UI_COUNTDOWN,
+	UI_RACING,
+	UI_RACE_OVER,
+	UI_HIDDEN
+};
+
+
 // camera type
 
 enum class CameraType : int
@@ -93,7 +110,6 @@ enum class CameraType : int
 	DEBUG_CAM = 6,
 #endif // DEBUG
 };
-
 
 // sound
 // sound catergories

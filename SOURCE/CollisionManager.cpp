@@ -29,76 +29,87 @@ void CollisionManager::InitConfig()
 	m_collisionData.m_vertPosOffset = (float)data["invincibility_collision"]["vertical_pos_offset"];
 }
 
-void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _physModels, std::vector<Item*> _items)
+void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _physModels, std::vector<Item*> _items, InGameUI ** _ui)
 {
 	std::vector<Collision> collisions = CheckPhysModelCollisions(_physModels);
 	CheckResolveItemCollisions(_physModels, _items);
 
-	for (Collision& collision : collisions)
+	for (Collision collision : collisions)
 	{
 		if (dynamic_cast<Player*>(collision.m_model1))
 		{
+			Player* player1 = dynamic_cast<Player*>(collision.m_model1);
 			//Player x Player Collision
 			if (dynamic_cast<Player*>(collision.m_model2))
 			{
-				PlayerCollisions(collision.m_model1, collision.m_model2, collision.m_collisionNormal);
+				Player* player2 = dynamic_cast<Player*>(collision.m_model2);
+				PlayerCollisions(player1, player2, collision.m_collisionNormal);
 			}
 			//Player x Item Box Collision
 			else if (collision.m_model2->isVisible() && dynamic_cast<ItemBox*>(collision.m_model2))
 			{
-				ItemBoxCollision(collision.m_model1, collision.m_model2);
+				ItemBox* itemBox = dynamic_cast<ItemBox*>(collision.m_model2);
+				ItemBoxCollision(player1, itemBox, _ui[player1->GetPlayerId()]);
 			}
 			//Player x Explosion Collision
 			else if (dynamic_cast<Explosion*>(collision.m_model2))
 			{
-				ExplosionCollision(collision.m_model1, collision.m_model2);
+				Explosion* explosion = dynamic_cast<Explosion*>(collision.m_model2);
+				ExplosionCollision(player1, explosion);
 			}
 		}
 		else if (dynamic_cast<Player*>(collision.m_model2))
 		{
+			Player* player = dynamic_cast<Player*>(collision.m_model2);
 			//Item Box x Player Collision
 			if (collision.m_model2->isVisible() && dynamic_cast<ItemBox*>(collision.m_model2))
 			{
-				ItemBoxCollision(collision.m_model2, collision.m_model1);
+				ItemBox* itemBox = dynamic_cast<ItemBox*>(collision.m_model1);
+				ItemBoxCollision(player, itemBox, _ui[player->GetPlayerId()]);
 			}
 			//Explosion x Player Collision
 			else if (dynamic_cast<Explosion*>(collision.m_model1))
 			{
-				ExplosionCollision(collision.m_model2, collision.m_model1);
+				Explosion* explosion = dynamic_cast<Explosion*>(collision.m_model2);
+				ExplosionCollision(player, explosion);
 			}
 		}
 	}
 }
 
-void CollisionManager::ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox)
+void CollisionManager::ItemBoxCollision(Player*& _player, ItemBox*& _itemBox, InGameUI* _ui)
 {
 	if (Locator::getRM()->attract_state)
 		return;
 
-	dynamic_cast<ItemBox*>(_itemBox)->hasCollided(dynamic_cast<Player*>(_player));
+	DebugText::print("Item Box Hit");
+
+	if (_player->GetPlayerId() > -1)
+	{
+		_ui->ShowItemSpinner(_player);
+	}
+
+	_itemBox->hasCollided();
 	Locator::getAudio()->Play("ITEMBOX_HIT");
 }
 
-void CollisionManager::ExplosionCollision(PhysModel *& _player, PhysModel *& _explosion)
+void CollisionManager::ExplosionCollision(Player*& _player, Explosion*& _explosion)
 {
-	if (!dynamic_cast<Player*>(_player)->isInvincible())
+	if (!_player->isInvincible())
 	{
-		dynamic_cast<Explosion*>(_explosion)->HitByPlayer(dynamic_cast<Player*>(_player));
+		_explosion->HitByPlayer(_player);
 	}
 }
 
-void CollisionManager::PlayerCollisions(PhysModel*& _player1, PhysModel*& _player2, Vector3 _collisionNormal)
+void CollisionManager::PlayerCollisions(Player*& _player1, Player*& _player2, Vector3 _collisionNormal)
 {
-	Player* player1 = dynamic_cast<Player*>(_player1);
-	Player* player2 = dynamic_cast<Player*>(_player2);
-
-	if (player1->isInvincible() && !player2->isInvincible())
+	if (_player1->isInvincible() && !_player2->isInvincible())
 	{
-		ApplyInvincibleResponse(player2);
+		ApplyInvincibleResponse(_player2);
 	}
-	else if (player2->isInvincible() && !player1->isInvincible())
+	else if (_player2->isInvincible() && !_player1->isInvincible())
 	{
-		ApplyInvincibleResponse(player1);
+		ApplyInvincibleResponse(_player1);
 	}
 	else
 	{
@@ -120,7 +131,7 @@ void CollisionManager::PlayerCollisions(PhysModel*& _player1, PhysModel*& _playe
 		_player1->setVelocity(_player1->getVelocity() - impulse * (1.0f / _player1->getMass()));
 		_player2->setVelocity(_player2->getVelocity() + impulse * (1.0f / _player2->getMass()));
 
-		LightningCloudCollision(player2, player1);
+		LightningCloudCollision(_player2, _player1);
 	}
 }
 
@@ -141,6 +152,8 @@ void CollisionManager::LightningCloudCollision(Player * player2, Player * player
 	{
 		player1->SpawnItems(LIGHTNING_CLOUD);
 		player1->GetLightningCloud()->SetElapsedStrikeTime(cloud->GetElapsedStrikeTime());
+		player2->RemoveLightningCloud();
+		cloud->FlagForDestoy();
 	}
 }
 
@@ -221,7 +234,7 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 				{
 					if (player->isInvincible())
 					{
-						item1->FlagForDestoy();
+						item1->FlagForDestoy();;
 					}
 					else
 					{
@@ -250,8 +263,8 @@ void CollisionManager::CheckResolveItemCollisions(std::vector<PhysModel*> _physM
 						//Checking for fake item boxes
 						fakeBoxResponse(item1, item2);
 
-						item1->FlagForDestoy();
-						item2->FlagForDestoy();
+						item1->FlagForDestoy();;
+						item2->FlagForDestoy();;
 						break;
 					}
 				}
@@ -269,11 +282,11 @@ bool CollisionManager::bombResponse(Item * item1, Item * item2)
 	if (bomb1)
 	{
 		bomb1->Detonate();
-		item2->FlagForDestoy();
+		item2->FlagForDestoy();;
 	}
 	else if (bomb2)
 	{
-		item1->FlagForDestoy();
+		item1->FlagForDestoy();;
 		bomb2->Detonate();
 	}
 

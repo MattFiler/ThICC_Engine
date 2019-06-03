@@ -15,6 +15,10 @@ public:
 	XMUINT2 GetSize();
 	void SetSize(Vector2 _size);
 
+	void IsVisible(bool visible) {
+		is_visible = visible;
+	}
+
 	void Render();
 
 	void CentreOrigin();
@@ -33,6 +37,8 @@ protected:
 
 	std::string current_filepath = "ITEM_PLACEHOLDER";
 	std::string new_filepath = "ITEM_PLACEHOLDER";
+
+	bool is_visible = true;
 
 	GameFilepaths m_filepath;
 	XMUINT2 size;

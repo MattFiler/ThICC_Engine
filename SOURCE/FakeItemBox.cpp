@@ -57,5 +57,5 @@ void FakeItemBox::HitByPlayer(Player * player)
 	player->Spin(m_collisionData.m_spinRev, m_collisionData.m_spinDuration);
 	player->AddPos(player->GetWorld().Up() * m_collisionData.m_vertPosOffset);
 	player->UpdateWorld();
-	m_shouldDestroy = true;
+	FlagForDestoy();
 }

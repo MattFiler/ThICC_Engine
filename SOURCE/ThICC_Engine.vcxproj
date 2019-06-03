@@ -30,8 +30,8 @@
     <RootNamespace>ThICC_Engine</RootNamespace>
     <ProjectGuid>{8d6aa92b-b106-4a67-9b1e-b93443577920}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <ProjectName>ThICC_Engine</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -352,6 +352,7 @@
     <ClInclude Include="GoldenMushroom.h" />
     <ClInclude Include="GreenShell.h" />
     <ClInclude Include="ImageGO2D.h" />
+    <ClInclude Include="InGameUI.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemAiData.h" />
     <ClInclude Include="ItemBoostData.h" />
@@ -364,6 +365,7 @@
     <ClInclude Include="ItemThrowData.h" />
     <ClInclude Include="KartAI.h" />
     <ClInclude Include="KeybindManager.h" />
+    <ClInclude Include="LightningBolt.h" />
     <ClInclude Include="LightningCloud.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="LocalisationManager.h" />
@@ -376,6 +378,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysModel.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Pow.h" />
     <ClInclude Include="RaceManager.h" />
     <ClInclude Include="ReadData.h" />
     <ClInclude Include="RedShell.h" />
@@ -423,12 +426,14 @@
     <ClCompile Include="GoldenMushroom.cpp" />
     <ClCompile Include="GreenShell.cpp" />
     <ClCompile Include="ImageGO2D.cpp" />
+    <ClCompile Include="InGameUI.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="ItemData.cpp" />
     <ClCompile Include="ItemPools.cpp" />
     <ClCompile Include="KartAI.cpp" />
     <ClCompile Include="KeybindManager.cpp" />
+    <ClCompile Include="LightningBolt.cpp" />
     <ClCompile Include="LightningCloud.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="LocalisationManager.cpp" />
@@ -447,6 +452,7 @@
     </ClCompile>
     <ClCompile Include="PhysModel.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Pow.cpp" />
     <ClCompile Include="RedShell.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="SceneManager.cpp" />

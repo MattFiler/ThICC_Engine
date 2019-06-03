@@ -2,6 +2,7 @@
 #include "Collision.h"
 #include "Player.h"
 #include "Item.h"
+#include "InGameUI.h"
 #include <vector>
 #include <json.hpp>
 using json = nlohmann::json;
@@ -13,7 +14,8 @@ public:
 	~CollisionManager() = default;
 
 	static void InitConfig();
-	static void CollisionDetectionAndResponse(std::vector<PhysModel*> _physModel, std::vector<Item*> _items);
+
+	static void CollisionDetectionAndResponse(std::vector<PhysModel*> _physModels, std::vector<Item*> _items, InGameUI ** _ui);
 
 private:
 	static std::vector<Collision> CheckPhysModelCollisions(std::vector<PhysModel*> _physModels);
@@ -23,11 +25,11 @@ private:
 
 	static bool CheckItemImmunity(Item* _item1, Item* _item2);
 
-	static void PlayerCollisions(PhysModel*& _player1, PhysModel*& _player2, Vector3 _collisionNormal);
+	static void PlayerCollisions(Player*& _player1, Player*& _player2, Vector3 _collisionNormal);
 	static void ApplyInvincibleResponse(Player * player2);
 	static void LightningCloudCollision(Player * player2, Player * player1);
-	static void ItemBoxCollision(PhysModel*& _player, PhysModel*& _itemBox);
-	static void ExplosionCollision(PhysModel*& _player, PhysModel*& _explosion);
+	static void ItemBoxCollision(Player*& _player, ItemBox*& _itemBox, InGameUI* _ui);
+	static void ExplosionCollision(Player*& _player, Explosion*& _explosion);
 
 	static Plane getPlane(Vector3 _corner1, Vector3 _corner2, float height);
 

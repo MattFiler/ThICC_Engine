@@ -169,6 +169,13 @@
     <ClCompile Include="LoadingScene.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="InGameUI.cpp">
+      <Filter>Game\Components\Game Objects\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Pow.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="LightningBolt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -420,6 +427,13 @@
     <ClInclude Include="RaceManager.h">
       <Filter>Engine Backend\Components</Filter>
     </ClInclude>
+    <ClInclude Include="InGameUI.h">
+      <Filter>Game\Components\Game Objects\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Pow.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="LightningBolt.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

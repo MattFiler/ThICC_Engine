@@ -27,6 +27,10 @@ void AIScheduler::DebugRender()
 
 void AIScheduler::Update()
 {
+	if (!enabled) {
+		return;
+	}
+
 	#ifndef _ARCADE
 	m_elapsedTime += Locator::getGSD()->m_dt;
 
