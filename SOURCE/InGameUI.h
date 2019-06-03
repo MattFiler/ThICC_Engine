@@ -7,6 +7,7 @@ using json = nlohmann::json;
 using Vector2 = DirectX::SimpleMath::Vector2;
 
 class ImageGO2D;
+class Text2D;
 class Player;
 
 class InGameUI
@@ -20,6 +21,7 @@ public:
 
 	void SetState(InGameInterfaceState state);
 
+	void SetMapName(const std::string& name);
 	void SetCurrentLap(int lap);
 	void SetPlayerPosition(int position);
 	void ShowItemSpinner(Player* this_player);
@@ -34,9 +36,14 @@ private:
 	std::vector<ImageGO2D*> position_ui_sprites;
 
 	/* Sprites to display (current) */
+	ImageGO2D* intro_ui_sprite = nullptr;
 	ImageGO2D* lap_ui_sprite = nullptr;
 	ImageGO2D* position_ui_sprite = nullptr;
-	ImageGO2D* item_ui_sprite = nullptr; //Never modified, set directly.
+	ImageGO2D* item_ui_sprite = nullptr;
+	ImageGO2D* outro_ui_sprite = nullptr;
+
+	/* Text to display */
+	Text2D* intro_ui_text = nullptr;
 
 	/* Engine functionality */
 	GameFilepaths m_filepath;

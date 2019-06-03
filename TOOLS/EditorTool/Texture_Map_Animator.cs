@@ -52,7 +52,7 @@ namespace EditorTool
                     Graphics texture_map = Graphics.FromImage(this_map);
                     texture_map.DrawImage(texture_to_animate, 0, i - texture_to_animate.Height, texture_to_animate.Width, texture_to_animate.Height);
                     texture_map.DrawImage(texture_to_animate, 0, i, texture_to_animate.Width, texture_to_animate.Height);
-                    this_map.Save(outputFolder.Text + "/" + Path.GetFileNameWithoutExtension(texture.Text) + "_" + i + Path.GetExtension(texture.Text));
+                    this_map.Save(outputFolder.Text + "/" + Path.GetFileNameWithoutExtension(texture.Text) + "_" + i + ".png", System.Drawing.Imaging.ImageFormat.Png);
                     texture_map.Dispose();
                 }
             }

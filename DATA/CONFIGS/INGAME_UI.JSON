@@ -1,4 +1,14 @@
 {
+	"INTRO_OVERLAY": {
+		"sprite": "COURSE INTRO",
+		"position": [0,0],
+		"text_pos": [310, 520]
+	},
+	"OUTRO_OVERLAY": {
+		"sprite": "FINISHED_RACE",
+		"position": [0,0],
+		"text_pos": [84, 227]
+	},
 	"ITEM_HOLDER": {
 		"sprite": "INGAME_UI_ITEMHOLDER",
 		"position": [0,0]
