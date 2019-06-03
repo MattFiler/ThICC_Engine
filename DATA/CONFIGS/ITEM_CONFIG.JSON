@@ -323,8 +323,21 @@
       "place_11": 12.5,
       "place_12": 22.5
     },
-    "info": {},
-    "implemented": false
+    "info": {
+		"player_move_speed": 20,
+      "player_turn_speed": 30,
+      "spin": {
+        "revolutions": 2,
+        "duration": 0.5
+      },
+      "shrink": {
+        "size_multiplier": 0.7,
+        "growth_duration": 0.5,
+        "shrink_duraion": 0.5,
+        "max_shrink_duration": 13
+      }
+	},
+    "implemented": true
   },
   "STAR": {
     "ui_sprite": "ITEM_STAR",

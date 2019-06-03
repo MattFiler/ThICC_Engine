@@ -7,13 +7,23 @@ LightningBolt::LightningBolt(std::vector<Player*> _players) : m_players(_players
 {
 	m_shouldDespawn = false;
 	m_baseGrowthData.m_scaleState = ItemGrowthData::SHRINK;
-	m_baseGrowthData.m_scaleMulti = 0.7;
-	m_baseGrowthData.m_shrinkDuration = 0.5;
-	m_baseGrowthData.m_growthDuration = 0.5;
-	m_playerSpinRev = 2;
-	m_playerSpinDuration = 0.5;
-	m_playerMoveSpeed = 20;
-	m_playerTurnSpeed = 30;
+
+	InitBoltData();
+}
+
+void LightningBolt::InitBoltData()
+{
+	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
+	m_itemData << i;
+	m_playerMoveSpeed = (float)m_itemData["LIGHTNING_BOLT"]["info"]["player_move_speed"];
+	m_playerTurnSpeed = (float)m_itemData["LIGHTNING_BOLT"]["info"]["player_turn_speed"];
+	m_playerSpinRev = (float)m_itemData["LIGHTNING_BOLT"]["info"]["spin"]["revolutions"];
+	m_playerSpinDuration = (float)m_itemData["LIGHTNING_BOLT"]["info"]["spin"]["duration"];
+
+	m_baseGrowthData.m_scaleMulti = (float)m_itemData["LIGHTNING_BOLT"]["info"]["shrink"]["size_multiplier"];
+	m_baseGrowthData.m_growthDuration = (float)m_itemData["LIGHTNING_BOLT"]["info"]["shrink"]["growth_duration"];
+	m_baseGrowthData.m_shrinkDuration = (float)m_itemData["LIGHTNING_BOLT"]["info"]["shrink"]["shrink_duraion"];
+	m_maxSizeChangeDuration = (float)m_itemData["LIGHTNING_BOLT"]["info"]["shrink"]["max_shrink_duration"];
 }
 
 void LightningBolt::Tick()
