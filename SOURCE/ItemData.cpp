@@ -39,10 +39,9 @@ ItemData::ItemData() {
 /* Get a random item based on the player position */
 ItemType ItemData::GetRandomItem(int _position) {
 
+	return LIGHTNING_BOLT;
 
-	float randomOutOf100 = (rand() % 2);
-
-	return randomOutOf100 == 0? POW : LIGHTNING_CLOUD;
+	float randomOutOf100 = (rand() % 101);
 
 	for (int i = 0; i < item_count-1; i++) {
 		ItemType this_item = static_cast<ItemType>(i);

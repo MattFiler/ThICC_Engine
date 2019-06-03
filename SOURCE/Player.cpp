@@ -98,7 +98,7 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModelSet("POW", std::vector < std::string>{"vehicle", "character","POW"});
 	m_animationMesh->AddModelSet("POW Gliding", std::vector < std::string>{"vehicle", "character", "POW", "glider"});	
 	m_animationMesh->AddModelSet("Lightning", std::vector < std::string>{"vehicle", "character","Lightning"});
-	m_animationMesh->AddModelSet("Lightning", std::vector < std::string>{"vehicle", "character", "POW", "glider"});	
+	m_animationMesh->AddModelSet("Lightning Gliding", std::vector < std::string>{"vehicle", "character", "POW", "glider"});	
 
 	m_animationMesh->SwitchModelSet("default");
 
@@ -542,6 +542,13 @@ void Player::SpawnItems(ItemType type)
 		{
 			Pow* pow = static_cast<Pow*>(CreateItem(POW));
 			pow->Use(this, false);
+			break;
+		}
+		
+		case LIGHTNING_BOLT:
+		{
+			LightningBolt* lightning = static_cast<LightningBolt*>(CreateItem(LIGHTNING_BOLT));
+			lightning->Use(this, false);
 			break;
 		}
 

@@ -20,6 +20,7 @@
 #include "RedShell.h"
 #include "BulletBill.h"
 #include "Pow.h"
+#include "LightningBolt.h"
 #include <functional>
 #include <json.hpp>
 using json = nlohmann::json;

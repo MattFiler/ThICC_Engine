@@ -78,6 +78,7 @@ void LightningCloud::Tick()
 				if (!m_growthData.m_shrinking)
 				{
 					m_player->Scale(m_growthData.m_shrinkScale, m_growthData.m_shrinkDuration);
+					m_player->DropItems();
 					m_growthData.m_shrinking = true;
 					Locator::getAudio()->Play("LIGHTNING_SOUND");
 				}

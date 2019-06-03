@@ -1021,6 +1021,13 @@ Item* GameScene::CreateItem(ItemType type)
 		loadItemDebugCollider(pow);
 		return pow;
 	}
+	case LIGHTNING_BOLT:
+	{
+		LightningBolt* lightning = new LightningBolt(GetPlayers());
+		m_itemModels.push_back(lightning);
+		loadItemDebugCollider(lightning);
+		return lightning;
+	}
 	default:
 		return nullptr;
 	}
