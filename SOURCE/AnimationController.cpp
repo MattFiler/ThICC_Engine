@@ -63,6 +63,19 @@ void AnimationController::AddModel(std::string _name, SDKMeshGO3D* _model)
 	m_additionalModels.push_back(std::make_unique<AnimationModel>(_model, _name));
 }
 
+AnimationModel * AnimationController::GetModelFromSet(std::string _setName, std::string _modelName)
+{
+	for (AnimationModel* model : m_modelSet[_setName])
+	{
+		if (model->GetName() == _modelName)
+		{
+			return model;
+		}
+	}
+
+	return nullptr;
+}
+
 void AnimationController::AddModel(std::string _name, std::string _filepath)
 {
 	m_additionalModels.push_back(std::make_unique<AnimationModel>(new SDKMeshGO3D(_filepath), _name));

@@ -64,7 +64,7 @@ void GiantMushroom::Tick()
 
 			if (m_player->GetAnimController()->FinishedScale())
 			{
-				m_shouldDestroy = true;
+				FlagForDestoy();
 			}
 			break;
 		}

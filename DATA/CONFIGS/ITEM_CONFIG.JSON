@@ -132,7 +132,7 @@
           "duration": 0.0
         },
         "spin": {
-          "revolutions": 1.0,
+          "revolutions": 2.0,
           "duration": 0.4
         },
         "vertical_pos_offset": 0.0
@@ -293,11 +293,11 @@
       "place_1": 0,
       "place_2": 0,
       "place_3": 0,
-      "place_4": 0,
-      "place_5": 0,
-      "place_6": 0,
-      "place_7": 0,
-      "place_8": 0,
+      "place_4": 2.5,
+      "place_5": 5,
+      "place_6": 7.5,
+      "place_7": 5,
+      "place_8": 2.5,
       "place_9": 0,
       "place_10": 0,
       "place_11": 0,
@@ -308,7 +308,7 @@
   },
   "LIGHTNING_BOLT": {
     "ui_sprite": "ITEM_LIGHTNING",
-    "model": "DEFAULT_ITEM",
+    "model": "ITEM_LIGHTNING",
     "probabilities": {
       "place_1": 0,
       "place_2": 0,
@@ -318,10 +318,10 @@
       "place_6": 0,
       "place_7": 0,
       "place_8": 0,
-      "place_9": 0,
-      "place_10": 0,
-      "place_11": 0,
-      "place_12": 0
+      "place_9": 2.5,
+      "place_10": 7.5,
+      "place_11": 12.5,
+      "place_12": 22.5
     },
     "info": {},
     "implemented": false
@@ -415,12 +415,12 @@
       "place_1": 0,
       "place_2": 0,
       "place_3": 0,
-      "place_4": 0,
-      "place_5": 0,
-      "place_6": 0,
-      "place_7": 0,
-      "place_8": 0,
-      "place_9": 0,
+      "place_4": 2.5,
+      "place_5": 5,
+      "place_6": 7.5,
+      "place_7": 7.5,
+      "place_8": 5,
+      "place_9": 2.5,
       "place_10": 0,
       "place_11": 0,
       "place_12": 0
@@ -430,23 +430,42 @@
   },
   "POW": {
     "ui_sprite": "ITEM_POW",
-    "model": "DEFAULT_ITEM",
+    "model": "ITEM_POW",
     "probabilities": {
       "place_1": 0,
       "place_2": 0,
       "place_3": 0,
       "place_4": 0,
-      "place_5": 0,
-      "place_6": 0,
-      "place_7": 0,
-      "place_8": 0,
-      "place_9": 0,
+      "place_5": 5,
+      "place_6": 5,
+      "place_7": 7.5,
+      "place_8": 5,
+      "place_9": 2.5,
       "place_10": 0,
       "place_11": 0,
       "place_12": 0
     },
-    "info": {},
-    "implemented": false
+    "info": {
+		"warning_time": 1.0,
+		"warning_count": 3,
+		"player_collision": {
+        "velocity_multiplier": 0.3,
+        "jump": {
+          "height": 0.0,
+          "duration": 0.0
+        },
+        "flip": {
+          "revolutions": 0.0,
+          "duration": 0.0
+        },
+        "spin": {
+          "revolutions": 2.0,
+          "duration": 0.4
+        },
+        "vertical_pos_offset": 0.0
+      }
+	},
+    "implemented": true
   },
   "LIGHTNING_CLOUD": {
     "ui_sprite": "ITEM_LIGHTNING_CLOUD",
@@ -454,11 +473,11 @@
     "probabilities": {
       "place_1": 0,
       "place_2": 0,
-      "place_3": 0,
-      "place_4": 0,
-      "place_5": 0,
-      "place_6": 0,
-      "place_7": 0,
+      "place_3": 5,
+      "place_4": 7.5,
+      "place_5": 7.5,
+      "place_6": 5,
+      "place_7": 2.5,
       "place_8": 0,
       "place_9": 0,
       "place_10": 0,
@@ -474,14 +493,14 @@
         "duration": 0.2
       },
       "shrink": {
-        "size_multiplier": 0.5,
+        "size_multiplier": 0.7,
         "growth_duration": 0.5,
         "shrink_duraion": 0.5,
         "max_shrink_duration": 13
       }
     },
     "pool_size": 30,
-    "implemented": false
+    "implemented": true
   },
   "BULLET_BILL": {
     "ui_sprite": "ITEM_BULLET_BILL",

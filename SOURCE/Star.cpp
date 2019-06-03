@@ -42,7 +42,7 @@ void Star::Tick()
 			//	}
 			//}
 			//Locator::getAudio()->Stop("STAR_SOUND");
-			FlagForDestoy();
+			FlagForDestoy();;
 		}
 	}
 }

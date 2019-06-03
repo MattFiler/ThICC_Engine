@@ -24,7 +24,7 @@ public:
 	virtual void Use(Player* _player, bool _altUse) = 0;
 
 	bool ShouldDestroy() { return m_shouldDestroy; };
-	void FlagForDestoy() { m_shouldDestroy = true; };
+	void FlagForDestoy() {m_shouldDestroy = true;};
 
 	TrackMagnet* GetMesh() { return m_itemMesh->m_mesh.get(); };
 
@@ -44,6 +44,7 @@ public:
 
 	ItemType GetItemType() { return m_itemType; };
 	ItemMesh* GetItemMesh() { return m_itemMesh; };
+	virtual void setItemInUse(Player* player);
 
 protected:
 	Player* m_player = nullptr;
@@ -72,5 +73,4 @@ protected:
 	std::vector<Item*> m_immuneItems;
 
 	virtual bool ignorePlayerCollisions(Player* player);
-	virtual void setItemInUse(Player* player);
 };

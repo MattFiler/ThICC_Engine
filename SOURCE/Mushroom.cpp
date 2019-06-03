@@ -51,7 +51,7 @@ void Mushroom::Tick()
 		if (m_boostData.m_boostTimeElapsed > m_boostData.m_boostDuration)
 		{
 			m_player->UseGroundTypes(true);
-			m_shouldDestroy = true;
+			FlagForDestoy();
 		}
 
 	}

@@ -85,11 +85,20 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModel("lakitu", Locator::getGOS()->common_model_config["referee"]);
 	m_animationMesh->AddModel("glider", Locator::getGOS()->common_model_config["glider"]);
 	m_animationMesh->AddModel("Bullet Bill", Locator::getItemData()->GetItemModelName(BULLET_BILL));
+	m_animationMesh->AddModel("Cloud", Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD));
+	m_animationMesh->AddModel("POW", Locator::getItemData()->GetItemModelName(POW));
+	m_animationMesh->AddModel("Lightning", Locator::getItemData()->GetItemModelName(LIGHTNING_BOLT));
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
 	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
 	m_animationMesh->AddModelSet("gliding", std::vector < std::string>{"vehicle", "character", "glider"});
 	m_animationMesh->AddModelSet("Bullet Bill", std::vector < std::string>{"Bullet Bill"});
+	m_animationMesh->AddModelSet("Cloud", std::vector < std::string>{"vehicle", "character","Cloud"});
+	m_animationMesh->AddModelSet("Cloud Gliding", std::vector < std::string>{"vehicle", "character", "Cloud", "glider"});	
+	m_animationMesh->AddModelSet("POW", std::vector < std::string>{"vehicle", "character","POW"});
+	m_animationMesh->AddModelSet("POW Gliding", std::vector < std::string>{"vehicle", "character", "POW", "glider"});	
+	m_animationMesh->AddModelSet("Lightning", std::vector < std::string>{"vehicle", "character","Lightning"});
+	m_animationMesh->AddModelSet("Lightning Gliding", std::vector < std::string>{"vehicle", "character", "POW", "glider"});	
 
 	m_animationMesh->SwitchModelSet("default");
 
@@ -104,11 +113,13 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	//Update TrackMagnet here too?
 }
 
-void Player::SetActiveItem(ItemType _item) {
-	if (m_InventoryItem == _item) {
-		active_item = _item;
-		if (m_playerID != -1)
+void Player::SetActiveItem(ItemType _item)
+{
+	if (m_InventoryItem == _item) 
+	{
+		if (_item != LIGHTNING_CLOUD)
 		{
+			active_item = _item;
 			m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
 			m_imgItem->SetPos(m_itemPos);
 			m_imgItem->SetScale(m_itemScale);
@@ -123,6 +134,7 @@ void Player::SetActiveItem(ItemType _item) {
 	{
 		//We should never often get here
 		DebugText::print("PLAYER TRIED TO USE AN ITEM THEY DON'T HAVE - THIS SHOULD NEVER BE REQUESTED!");
+		DebugText::print("UNLESS THEY'RE MAKING A TRIPLE ITEM");
 	}
 }
 
@@ -132,12 +144,12 @@ void Player::SetItemInInventory(ItemType _item) {
 
 		if (m_InventoryItem == LIGHTNING_CLOUD && GetLightningCloud())
 		{
-			m_InventoryItem == BANANA;
+			m_InventoryItem = BANANA;
 		}
 
 		if (m_playerID != -1)
 		{
-			m_imgItem = Locator::getItemData()->GetItemSprite(_item, m_playerID);
+			m_imgItem = Locator::getItemData()->GetItemSprite(m_InventoryItem, m_playerID);
 			m_imgItem->SetPos(m_itemPos);
 			m_imgItem->SetScale(m_itemScale);
 		}
@@ -163,6 +175,36 @@ LightningCloud* Player::GetLightningCloud()
 	}
 
 	return nullptr;
+}
+
+void Player::RemoveLightningCloud()
+{
+	for (int i = 0; i < m_floatingItems.size(); ++i)
+	{
+		if (dynamic_cast<LightningCloud*>(m_floatingItems[i]))
+		{
+			m_floatingItems.erase(m_floatingItems.begin() + i);
+			RemoveLightningCloudModel();
+			return;
+		}
+	}
+}
+
+void Player::RemoveLightningCloudModel()
+{
+	m_hasLightningCloud = false;
+	if (IsGliding())
+	{
+		m_animationMesh->SwitchModelSet("gliding");
+	}
+	else if (IsRespawning())
+	{
+		m_animationMesh->SwitchModelSet("respawn");
+	}
+	else
+	{
+		m_animationMesh->SwitchModelSet("default");
+	}
 }
 
 void Player::Render()
@@ -196,8 +238,6 @@ void Player::Tick()
 		CheckUseItem();
 	}
 	
-	PositionFloatingItems();
-
 	// Debug code to save/load the players game state
 	if (m_keybind.keyReleased("debug save position"))
 	{
@@ -238,16 +278,6 @@ void Player::Tick()
 	m_lastFramePos = m_pos;
 }
 
-void Player::PositionFloatingItems()
-{
-	for (int i = 0; i < m_floatingItems.size(); i++)
-	{
-		m_floatingItems[i]->GetMesh()->SetWorld(m_world);
-		m_floatingItems[i]->GetMesh()->AddPos(m_world.Up() * m_floatingItemPosOffset);
-		m_floatingItems[i]->GetMesh()->UpdateWorld();
-	}
-}
-
 void Player::CheckUseItem()
 {
 	if (m_ai)
@@ -268,7 +298,7 @@ void Player::CheckUseItem()
 			{
 				ReleaseItem();
 			}
-
+			
 			m_aPressed = true;
 		}
 		else
@@ -301,49 +331,65 @@ void Player::CheckUseItem()
 
 void Player::TrailItems()
 {
-	if (!m_trailingItems.empty())
+	if (!m_dropItems)
 	{
-		for (int i = 0; i < m_trailingItems.size(); i++)
+		if (!m_trailingItems.empty())
 		{
-			if (m_trailingItems[i]->ShouldDestroy())
-			{
-				m_trailingItems.erase(m_trailingItems.begin() + i);
-				if (m_InventoryItem == MUSHROOM_UNLIMITED) {
-					SetActiveItem(MUSHROOM_UNLIMITED);
-					active_item = NONE;
-				}
-				continue;
-			}
-
-			if (m_trailingItems[i]->GetItemMesh())
+			DebugText::print("Hit");
+			for (int i = 0; i < m_trailingItems.size(); i++)
 			{
 				if (m_trailingItems[i]->ShouldDestroy())
 				{
 					m_trailingItems.erase(m_trailingItems.begin() + i);
+					if (m_InventoryItem == MUSHROOM_UNLIMITED) {
+						SetActiveItem(MUSHROOM_UNLIMITED);
+						active_item = NONE;
+					}
 					continue;
 				}
 
-				//Trails behind the player
-				if (active_item != GREEN_SHELL_3X && active_item != RED_SHELL_3X)
+				if (m_trailingItems[i]->GetItemMesh())
 				{
-					Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
+					if (m_trailingItems[i]->ShouldDestroy())
+					{
+						m_trailingItems.erase(m_trailingItems.begin() + i);
+						continue;
+					}
 
-					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-					m_trailingItems[i]->GetMesh()->AddPos(backward_pos * m_firstTrailingItemOffset + (backward_pos * m_otherTrailingItemOffset * i));
-					m_trailingItems[i]->GetMesh()->UpdateWorld();
+					//Trails behind the player
+					if (active_item != GREEN_SHELL_3X && active_item != RED_SHELL_3X)
+					{
+						Vector3 backward_pos = i > 0 ? m_trailingItems[i - 1]->GetMesh()->GetWorld().Backward() : m_world.Backward();
+
+						m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+						m_trailingItems[i]->GetMesh()->AddPos(backward_pos * m_firstTrailingItemOffset + (backward_pos * m_otherTrailingItemOffset * i));
+						m_trailingItems[i]->GetMesh()->UpdateWorld();
+					}
+					//Spins around the player
+					else
+					{
+						m_trailingItems[i]->GetMesh()->SetWorld(m_world);
+						m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + m_orbitSpeed * Locator::getGSD()->m_dt);
+						m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f)
+							* m_orbitDistance.x, m_orbitDistance.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_orbitDistance.z }, m_rot));
+					}
 				}
-				//Spins around the player
-				else
-				{
-					m_trailingItems[i]->GetMesh()->SetWorld(m_world);
-					m_trailingItems[i]->setSpinAngle(m_trailingItems[i]->getSpinAngle() + m_orbitSpeed * Locator::getGSD()->m_dt);
-					m_trailingItems[i]->GetMesh()->AddPos(Vector3::Transform({ sin(m_trailingItems[i]->getSpinAngle() / 57.2958f) 
-						* m_orbitDistance.x, m_orbitDistance.y, cos(m_trailingItems[i]->getSpinAngle() / 57.2958f) * m_orbitDistance.z }, m_rot));
-				}
+
+				m_trailingItems[i]->setTrailing(true);
 			}
-
-			m_trailingItems[i]->setTrailing(true);
-		}	
+		}
+	}
+	else
+	{
+		for (int i = 0; i < m_trailingItems.size(); i++)
+		{
+			if (m_trailingItems[i]->GetItemMesh())
+			{
+				m_trailingItems[i]->setItemInUse(this);
+				m_trailingItems.erase(m_trailingItems.begin() + i);
+			}
+		}
+		m_dropItems = false;
 	}
 }
 
@@ -470,6 +516,7 @@ void Player::SpawnItems(ItemType type)
 
 		case LIGHTNING_CLOUD:
 		{
+			m_hasLightningCloud = true;
 			LightningCloud* cloud = static_cast<LightningCloud*>(CreateItem(LIGHTNING_CLOUD));
 			m_floatingItems.push_back(cloud);
 			cloud->Use(this, false);
@@ -491,6 +538,20 @@ void Player::SpawnItems(ItemType type)
 			break;
 		}
 
+		case POW:
+		{
+			Pow* pow = static_cast<Pow*>(CreateItem(POW));
+			pow->Use(this, false);
+			break;
+		}
+		
+		case LIGHTNING_BOLT:
+		{
+			LightningBolt* lightning = static_cast<LightningBolt*>(CreateItem(LIGHTNING_BOLT));
+			lightning->Use(this, false);
+			break;
+		}
+
 		default:
 			break;
 	}
@@ -506,14 +567,14 @@ void Player::ReleaseItem()
 {
 	if (!m_trailingItems.empty())
 	{
-		m_trailingItems[m_trailingItems.size() - 1]->Use(this, m_keybind.keyHeld("trail items", m_playerID));
+		m_trailingItems[m_trailingItems.size() - 1]->Use(this, m_keybind.keyHeld("item alternate use", m_playerID));
 		m_trailingItems[m_trailingItems.size() - 1]->setTrailing(false);
 
 		if (m_InventoryItem != MUSHROOM_UNLIMITED)
 		{
 			m_trailingItems.pop_back();
 		}
-		
+
 		if (m_trailingItems.empty())
 		{
 			m_multiItem = false;
@@ -526,6 +587,15 @@ void Player::ReleaseItem()
 			}
 		}
 	}
+}
+
+void Player::DropItems()
+{
+	if (Locator::getItemData()->CanDrop(m_InventoryItem))
+	{
+		SpawnItems(m_InventoryItem);
+	}
+	m_dropItems = true;
 }
 
 void Player::setGamePad(bool _state)
