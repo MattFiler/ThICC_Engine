@@ -120,6 +120,7 @@ void GameScene::ExpensiveLoad() {
 		m_game_ui[i]->ExpensiveLoad();
 		m_game_ui[i]->SetCurrentLap(1);
 		m_game_ui[i]->SetPlayerPosition(1);
+		m_game_ui[i]->SetMapName(map_info->name);
 	}
 
 	//Position countdown
