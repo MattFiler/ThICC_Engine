@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-Explosion::Explosion(ItemType _ownerType) : TrackMagnet("bomb_explosion")
+Explosion::Explosion(ItemType _ownerType) : TrackMagnet(_ownerType == BOMB? "bomb_explosion" : "blue_shell_explosion")
 {
 	InitExplosionData(_ownerType);
 	m_growthData.m_shrinkScale = m_scale;

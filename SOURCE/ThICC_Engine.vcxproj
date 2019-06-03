@@ -319,6 +319,7 @@
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Banana.h" />
     <ClInclude Include="BlenderToDirectX.h" />
+    <ClInclude Include="BlueShell.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="BulletBill.h" />
     <ClInclude Include="CameraData.h" />
@@ -404,6 +405,7 @@
     <ClCompile Include="AnimationModel.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Banana.cpp" />
+    <ClCompile Include="BlueShell.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="BulletBill.cpp" />
     <ClCompile Include="Camera.cpp" />

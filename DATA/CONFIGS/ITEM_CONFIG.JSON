@@ -303,8 +303,11 @@
       "place_11": 0,
       "place_12": 0
     },
-    "info": {},
-    "implemented": false
+    "info": {
+	"lifetime": 300.0,
+    "player_immunity_time": 0.1,
+	},
+    "implemented": true
   },
   "LIGHTNING_BOLT": {
     "ui_sprite": "ITEM_LIGHTNING",
