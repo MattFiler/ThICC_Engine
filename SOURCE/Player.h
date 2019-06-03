@@ -35,7 +35,7 @@ class Player : public TrackMagnet
 public:
 	Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, std::function<Item*(ItemType)> _createItemFunction);
 	void InitPlayerData();
-	~Player();
+	~Player() = default;
 
 	virtual void Tick() override;
 	virtual void Render() override;
@@ -46,13 +46,6 @@ public:
 	int GetRanking() { return m_ranking; }
 	int GetLap() { return m_lap; }
 	bool GetFinished() { return m_finished; }
-
-	//***
-	//TODO: this should be depreciated in favour of InGameUI eventually
-	ImageGO2D* GetItemImg() { return m_imgItem; }
-	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
-	void SetItemScale(float _scale) { m_itemScale = _scale; }
-	//***
 
 	void ExpensiveLoad() {
 		m_animationMesh->Load();
@@ -71,7 +64,7 @@ public:
 	ItemType GetActiveItem() { return active_item; };
 	void SetActiveItem(ItemType _item);
 	ItemType GetItemInInventory() { return m_InventoryItem; };
-	void SetItemInInventory(ItemType _item);
+	bool SetItemInInventory(ItemType _item);
 	LightningCloud* GetLightningCloud();
 	void RemoveLightningCloud();
 	void RemoveLightningCloudModel();
@@ -156,10 +149,6 @@ private:
 	//	When an item is used it should move from inventory to active (or be immediately used, etc - some items differ).
 	ItemType active_item = ItemType::NONE;
 	ItemType m_InventoryItem = ItemType::NONE;
-	
-	Vector2 m_itemPos = Vector2(0, 0); // temp gpu fix 
-	float m_itemScale = 1;
-	ImageGO2D *m_imgItem = nullptr; //TODO: move to InGameUI
 
 	std::vector<Item*> m_trailingItems;
 	std::vector<Item*> m_floatingItems; //Items which renders above the player - POW, Blooper, and Lightning Cloud

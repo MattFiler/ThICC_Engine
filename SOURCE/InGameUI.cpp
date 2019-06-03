@@ -6,11 +6,12 @@
 #include <fstream>
 
 /* Load config */
-InGameUI::InGameUI(Vector2 size, Vector2 offset)
+InGameUI::InGameUI(int id, Vector2 size, Vector2 offset)
 {
 	//Load UI config
 	std::ifstream i(m_filepath.generateConfigFilepath("INGAME_UI", m_filepath.CONFIG));
 	config << i;
+	ui_id = id;
 
 	//Save size/offset info for splitscreen support
 	ui_size = size;
@@ -121,6 +122,12 @@ void InGameUI::SetCountdownFrame(int frame)
 	countdown_size_log = 0.0f;
 }
 
+/* Update current UI item */
+void InGameUI::SetCurrentItem(ItemType item)
+{
+	item_image_sprite = Locator::getItemData()->GetItemSprite(item, ui_id);
+}
+
 /* Update current lap (e.g. 1/3, 2/3, 3/3) */
 void InGameUI::SetCurrentLap(int lap)
 {
@@ -162,7 +169,9 @@ void InGameUI::ShowItemSpinner(Player* this_player)
 	ItemType item_to_give = Locator::getItemData()->GetRandomItem(this_player->GetRanking());
 
 	//Give the item once the animation is done
-	this_player->SetItemInInventory(item_to_give);
+	if (this_player->SetItemInInventory(item_to_give)) {
+		SetCurrentItem(item_to_give);
+	}
 }
 
 /* Hides the item spinner (item used) */
@@ -174,6 +183,7 @@ void InGameUI::HideItemSpinner()
 	}
 
 	item_ui_sprite->IsVisible(false);
+	SetCurrentItem(PLACEHOLDER);
 }
 
 /* Render the current UI - should ONLY ever be called in a scene's Render2D! */
@@ -196,6 +206,7 @@ void InGameUI::Render()
 		case InGameInterfaceState::UI_RACING: {
 			if (lap_ui_sprite != nullptr) { lap_ui_sprite->Render(); }
 			if (position_ui_sprite != nullptr) { position_ui_sprite->Render(); }
+			if (item_image_sprite != nullptr) { item_image_sprite->Render(); }
 			if (item_ui_sprite != nullptr) { item_ui_sprite->Render(); }
 
 			//Render current timers
@@ -224,7 +235,6 @@ void InGameUI::Update()
 		case InGameInterfaceState::UI_COUNTDOWN: {
 			if (countdown_ui_sprite != nullptr) { 
 				countdown_ui_sprite->SetScale(Vector2(1 + (countdown_size_log / 10), 1 + (countdown_size_log / 10)));
-				DebugText::print("Scale: " + std::to_string(countdown_ui_sprite->GetScale().x));
 				countdown_size_log += (float)Locator::getGSD()->m_dt;
 			}
 			break;

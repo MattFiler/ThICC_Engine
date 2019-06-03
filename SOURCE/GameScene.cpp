@@ -116,7 +116,7 @@ void GameScene::ExpensiveLoad() {
 	//Load main UI
 	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
 		delete m_game_ui[i];
-		m_game_ui[i] = new InGameUI(Vector2(1280,720), Vector2(0,0));
+		m_game_ui[i] = new InGameUI(i, Vector2(1280,720), Vector2(0,0));
 		m_game_ui[i]->ExpensiveLoad();
 		m_game_ui[i]->SetCurrentLap(1);
 		m_game_ui[i]->SetPlayerPosition(1);
@@ -253,12 +253,6 @@ void GameScene::ExpensiveUnload() {
 void GameScene::create2DObjects()
 {
 	m_pause_screen = new ImageGO2D("paused");
-
-	for (int i = 0; i < Locator::getRM()->player_amount; i++)
-	{
-		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
-		m_2DObjects.push_back(player[i]->GetItemImg());
-	}
 }
 
 /* Create all 3D objects in the scene. */
@@ -764,24 +758,6 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		m_pause_screen->Render();
 		return;
 	}
-
-
-	/* TODO: this needs to be refactored in favour of InGameUI */
-	switch (state)
-	{
-	case PLAY:
-		for (int i = 0; i < Locator::getRM()->player_amount; i++)
-		{
-			if (!player[i]->GetFinished())
-			{
-				if(player[i]->GetItemInInventory() != ItemType::NONE)
-					player[i]->GetItemImg()->Render();
-			}
-		}
-		break;
-	}
-	/* ^^^^^^^^^^^^^^^^^ depreciate! */
-
 
 	//Render UI
 	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
