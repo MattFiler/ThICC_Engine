@@ -163,7 +163,7 @@ void InGameUI::ShowItemSpinner(Player* this_player)
 	}
 
 	//Show spinner
-	item_ui_sprite->IsVisible(true);
+	item_ui_sprite->SetVisible(true);
 
 	//The item we'll end on
 	ItemType item_to_give = Locator::getItemData()->GetRandomItem(this_player->GetRanking());
@@ -181,8 +181,9 @@ void InGameUI::HideItemSpinner()
 		DebugText::print("InGameUI: Call to hide item spinner before the sprite was loaded. Are you calling ExpensiveLoad?");
 		return;
 	}
+	DebugText::print("InGameUI: Hiding item spinner.");
 
-	item_ui_sprite->IsVisible(false);
+	item_ui_sprite->SetVisible(false);
 	SetCurrentItem(PLACEHOLDER);
 }
 

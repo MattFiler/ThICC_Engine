@@ -69,8 +69,11 @@ public:
 	void RemoveLightningCloud();
 	void RemoveLightningCloudModel();
 	bool DidUseItem() {
-		return did_use_item;
-		did_use_item = false;
+		if (did_use_item) {
+			did_use_item = false;
+			return true;
+		}
+		return false;
 	}
 
 	void CheckUseItem();
