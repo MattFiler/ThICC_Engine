@@ -23,9 +23,7 @@ Player::Player(CharacterInfo* _character, VehicleInfo* _vehicle, int _playerID, 
 	m_playerID = _playerID;
 
 	//TODO: Move this all to InGameUI
-	m_textCountdown = new Text2D("3", Text2D::MIDDLE);
 	m_imgItem = Locator::getItemData()->GetItemSprite(PLACEHOLDER, m_playerID);
-	m_textFinishOrder = new Text2D("0" + m_orderIndicator[0]);
 
 	// Don't render this mesh, render a second one instead
 	m_shouldRender = false;

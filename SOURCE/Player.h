@@ -49,12 +49,9 @@ public:
 
 	//***
 	//TODO: this should be depreciated in favour of InGameUI eventually
-	Text2D* GetCountdown() { return m_textCountdown; }
-	Text2D* GetFinishOrder() { return m_textFinishOrder; }
 	ImageGO2D* GetItemImg() { return m_imgItem; }
 	void SetItemPos(Vector2 _pos) { m_itemPos = _pos; }
 	void SetItemScale(float _scale) { m_itemScale = _scale; }
-	std::vector<std::string> GetOrderIndicator() { return m_orderIndicator; }
 	//***
 
 	void ExpensiveLoad() {
@@ -146,14 +143,10 @@ private:
 	int m_ranking = 0;
 	int m_waypoint = 0;
 	int m_lap = 1;
-	Text2D *m_textCountdown = nullptr; //TODO: move to InGameUI
-	Text2D *m_textFinishOrder = nullptr; //TODO: move to InGameUI (if still used?)
 	Vector m_savedGravDir;
 	bool m_finished = false;
 	bool m_invincible = false;
 	bool did_use_item = false;
-
-	std::vector<std::string> m_orderIndicator{ "st","nd", "rd", "th", "th","th","th","th","th","th","th","th" }; //TODO: remove when implemented in InGameUI
 
 	// Player items:
 	//	A player can have an ACTIVE item (e.g. holding a banana behind themselves) AND also an INVENTORY item.
