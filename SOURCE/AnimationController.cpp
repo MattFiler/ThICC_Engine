@@ -109,7 +109,12 @@ void AnimationController::Update(Matrix _parentWorld)
 		{
 			m_posTimeElapsed = m_timeBetweenPos;
 		}
-		m_posOffset = Vector3::Lerp(m_prevPoint, m_posAnimPoints.front(), m_posTimeElapsed / m_timeBetweenPos);
+
+		if (!m_lockPosOffset)
+		{
+			m_posOffset = Vector3::Lerp(m_prevPoint, m_posAnimPoints.front(), m_posTimeElapsed / m_timeBetweenPos);
+		}
+
 		if (Vector3::Distance(m_posOffset, m_posAnimPoints.front()) < 0.1f)
 		{
 			m_posTimeElapsed = 0;

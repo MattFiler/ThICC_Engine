@@ -33,6 +33,9 @@ public:
 	void SetShouldRender(bool _shouldRender) { m_shouldRender = _shouldRender; };
 
 	Vector3 GetScaleOffset() { return m_scaleOffset; };
+	Vector3 GetPosOffset() { return m_posOffset; };
+	void SetPosOffSet(Vector3 _offset) { m_posOffset = _offset; };
+	void SetLockPosOffSet(bool _lock) { m_lockPosOffset = _lock; };
 
 	void setLockSet(bool _lockSet) { m_lockSet = _lockSet; };
 	bool getLockSet() { return m_lockSet; };
@@ -93,6 +96,7 @@ private:
 
 	bool m_shouldRender = true;
 	bool m_lockSet = false;
+	bool m_lockPosOffset = false;
 
 	GameFilepaths m_filepath;
 

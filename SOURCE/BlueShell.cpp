@@ -11,6 +11,7 @@ BlueShell::BlueShell(std::function<Explosion*(ItemType)> _CreateExplosionFuncito
 	m_itemMesh->m_mesh->SetPhysicsOn(true);
 	m_itemMesh->m_mesh->setDampenWallReflect(false);
 	m_itemMesh->m_mesh->SetMaxSpeed(m_aiData.m_maxSpeed);
+	m_itemMesh->m_displayedMesh->SetLockPosOffSet(true);
 
 	m_move = std::make_unique<ControlledMovement>(m_itemMesh->m_mesh.get(), m_itemMesh->m_displayedMesh.get());
 	m_move->SetMoveSpeed(m_aiData.m_moveSpeed);
@@ -30,15 +31,12 @@ void BlueShell::Tick()
 {
 	if (m_itemUsed)
 	{
-		DebugText::print("Shell X: " + std::to_string(m_itemMesh->m_mesh->GetPos().x) + " Y: " + std::to_string(m_itemMesh->m_mesh->GetPos().y) + " Z: " + std::to_string(m_itemMesh->m_mesh->GetPos().z));
+		Item::Tick();
 
-		SDKMeshGO3D* model  = m_itemMesh->m_displayedMesh->GetModelFromSet(m_itemMesh->m_displayedMesh->GetCurrentSet(), "item")->GetModel();
 		switch (m_moveState)
 		{
 		case UP:
-			model->SetPos(Vector3::Lerp(m_startPos, m_endPos, m_lerpPercent));
-			model->UpdateWorld();
-
+			m_itemMesh->m_displayedMesh->SetPosOffSet(Vector3::Lerp(m_posOffset, m_airHeight * m_itemMesh->m_mesh->GetWorld().Up() + m_velocity, m_lerpPercent));
 			m_lerpPercent += m_lerpSpeed * Locator::getGSD()->m_dt;
 
 			if (m_lerpPercent >= 1)
@@ -51,7 +49,7 @@ void BlueShell::Tick()
 		case ACROSS:
 			m_move->Tick();
 
-			/*if (Vector3::DistanceSquared(m_itemMesh->m_mesh->GetPos(), m_targetPlayer->GetPos()) < m_aiData.m_moveTowardDistSqrd)
+			if (Vector3::DistanceSquared(m_itemMesh->m_mesh->GetPos(), m_targetPlayer->GetPos()) < m_aiData.m_moveTowardDistSqrd)
 			{
 				if (m_ai)
 				{
@@ -60,13 +58,11 @@ void BlueShell::Tick()
 				Vector3 moveTowards = m_targetPlayer->GetPos() - m_itemMesh->m_mesh->GetPos();
 				moveTowards.Normalize();
 				m_itemMesh->m_mesh->setVelocity(moveTowards * m_move->GetMoveSpeed());
-			}*/
+			}
 			break;
 
 		case DOWN:
-			model->SetPos(Vector3::Lerp(m_startPos, m_endPos, m_lerpPercent));
-			model->UpdateWorld();
-
+			m_itemMesh->m_displayedMesh->SetPosOffSet(Vector3::Lerp(m_posOffset, m_airHeight * m_itemMesh->m_mesh->GetWorld().Up() + m_velocity, m_lerpPercent));
 			m_lerpPercent -= m_lerpSpeed * Locator::getGSD()->m_dt;
 
 			if (m_lerpPercent <= 0)
@@ -95,12 +91,15 @@ void BlueShell::Use(Player * _player, bool _altUse)
 
 	m_itemMesh->m_mesh->SetWorld(_player->GetWorld());
 	m_itemMesh->m_mesh->AddPos(_player->GetWorld().Right() * m_usePosOffset);
+	m_itemMesh->m_mesh->AddPos(_player->GetWorld().Up() * m_usePosOffset * 2);
 	m_itemMesh->m_mesh->SetOri(m_player->GetOri());
 	m_itemMesh->m_mesh->UpdateWorld();
 
-	DebugText::print("Player X: " + std::to_string(_player->GetPos().x) + " Y: " + std::to_string(_player->GetPos().y) + " Z: " + std::to_string(_player->GetPos().z));
 	m_itemMesh->m_displayedMesh->GetModelFromSet(m_itemMesh->m_displayedMesh->GetCurrentSet(), "item")->GetModel()->SetOri(m_player->GetOri());
 	m_itemMesh->m_displayedMesh->GetModelFromSet(m_itemMesh->m_displayedMesh->GetCurrentSet(), "item")->GetModel()->UpdateWorld();
+
+	m_posOffset = m_itemMesh->m_displayedMesh->GetPosOffset();
+	m_velocity = m_player->getVelocity() * 0.2f;
 
 	Vector3 normVel = _player->getVelocity();
 	normVel.Normalize();
@@ -110,8 +109,6 @@ void BlueShell::Use(Player * _player, bool _altUse)
 	m_ai->SetAutoUpdateWaypoints(true);
 
 	FindTargetPlayer();
-	m_startPos = m_itemMesh->m_mesh->GetPos();
-	m_endPos = m_startPos + m_lerpHeight * m_itemMesh->m_mesh->GetWorld().Up();
 }
 
 void BlueShell::FindTargetPlayer()

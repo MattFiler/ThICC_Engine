@@ -5,14 +5,14 @@
 #include <iostream>
 #include <fstream>
 
-Explosion::Explosion(ItemType _ownerType) : TrackMagnet(_ownerType == BOMB? "bomb_explosion" : "blue_shell_explosion")
+Explosion::Explosion(ItemType _ownerType) : m_ownerType(_ownerType), TrackMagnet(_ownerType == BOMB? "bomb_explosion" : "blue_shell_explosion")
 {
 	InitExplosionData(_ownerType);
 	m_growthData.m_shrinkScale = m_scale;
 	m_growthData.m_growScale = m_scale * m_growthData.m_scaleMulti;
 
 	SetShouldRender(false);
-	m_displayedMesh = Locator::getItemPools()->GetExplosion();
+	m_displayedMesh = Locator::getItemPools()->GetExplosion(_ownerType);
 }
 
 void Explosion::InitExplosionData(ItemType _ownerType)

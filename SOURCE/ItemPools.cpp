@@ -81,28 +81,41 @@ void ItemPools::AddItemMesh(ItemType _type, ItemMesh* _mesh)
 	m_itemPoolMap[_type].m_itemMeshes.push(_mesh);
 }
 
-AnimationController * ItemPools::GetExplosion()
+AnimationController * ItemPools::GetExplosion(ItemType _type)
 {
 	AnimationController * explosion;
 
-	if (!m_explosions.empty())
+	if (_type == BOMB && !m_bombExplosions.empty())
 	{
-		explosion = m_explosions.front();
-		m_explosions.pop();
+		explosion = m_bombExplosions.front();
+		m_bombExplosions.pop();
+	}
+	else if (_type == BLUE_SHELL && !m_shellExplosions.empty())
+	{
+		explosion = m_shellExplosions.front();
+		m_shellExplosions.pop();
 	}
 	else
 	{
-		explosion = CreateExplosion();
+		explosion = CreateExplosion(_type);
 	}
 
 	return explosion;
 }
 
-void ItemPools::AddExplosion(AnimationController * _explosion)
+void ItemPools::AddExplosion(AnimationController * _explosion, ItemType _type)
 {
 	_explosion->ResetRotation();
 	_explosion->ResetScale();
-	m_explosions.push(_explosion);
+
+	if (_type == BOMB)
+	{
+		m_bombExplosions.push(_explosion);
+	}
+	else if (_type == BLUE_SHELL)
+	{
+		m_shellExplosions.push(_explosion);
+	}
 }
 
 void ItemPools::Reset()
@@ -116,10 +129,16 @@ void ItemPools::Reset()
 		}
 	}
 
-	while(!m_explosions.empty())
+	while(!m_bombExplosions.empty())
 	{
-		delete m_explosions.front();
-		m_explosions.pop();
+		delete m_bombExplosions.front();
+		m_bombExplosions.pop();
+	}
+	
+	while(!m_shellExplosions.empty())
+	{
+		delete m_shellExplosions.front();
+		m_shellExplosions.pop();
 	}
 }
 
@@ -137,19 +156,23 @@ void ItemPools::CreateItemPool(ItemType _type, int _poolSize)
 	{
 		itemPool.m_itemMeshes.push(CreateItemMesh(_type));
 
-		if (_type == BOMB || _type == BLUE_SHELL)
+		if (_type == BOMB)
 		{
-			m_explosions.push(CreateExplosion());
+			m_bombExplosions.push(CreateExplosion(BOMB));
+		}
+		else if (_type == BLUE_SHELL)
+		{
+			m_shellExplosions.push(CreateExplosion(BLUE_SHELL));
 		}
 	}
 
 	m_itemPoolMap.insert(std::pair<ItemType, ItemPool>(_type, itemPool));
 }
 
-AnimationController * ItemPools::CreateExplosion()
+AnimationController * ItemPools::CreateExplosion(ItemType _type)
 {
 	AnimationController* explosion = new AnimationController();
-	explosion->AddModel("Explosion", "bomb_explosion");
+	explosion->AddModel("Explosion", _type == BOMB ? "bomb_explosion" : "blue_shell_explosion");
 	explosion->AddModelSet("default", std::vector<std::string>{"Explosion"});
 	explosion->SwitchModelSet("default");
 	explosion->Load();

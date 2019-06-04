@@ -21,10 +21,12 @@ public:
 	void Explode() { m_explode = true; };
 	void Render() { m_displayedMesh->Render(); }
 
+	ItemType GetOwnerType() { return m_ownerType; }
+
 	AnimationController* GetDisplayedMesh() { return m_displayedMesh; };
 private:
 	bool m_explode = false;
-	
+	ItemType m_ownerType = ItemType::NONE;
 	ItemGrowthData m_growthData;
 	ItemCollisionData m_collisionData;
 

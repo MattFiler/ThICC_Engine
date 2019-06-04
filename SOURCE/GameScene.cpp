@@ -249,7 +249,11 @@ void GameScene::ExpensiveUnload() {
 				Locator::getItemPools()->AddItemMesh(m_itemModels[i]->GetItemType(), m_itemModels[i]->GetItemMesh());
 				if (m_itemModels[i]->GetItemType() == BOMB)
 				{
-					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh());
+					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh(), BOMB);
+				}
+				else if (m_itemModels[i]->GetItemType() == BLUE_SHELL)
+				{
+					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh(), BLUE_SHELL);
 				}
 			}
 
@@ -596,7 +600,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			if (dynamic_cast<Explosion*>(m_3DObjects[i]))
 			{
-				Locator::getItemPools()->AddExplosion(dynamic_cast<Explosion*>(m_3DObjects[i])->GetDisplayedMesh());
+				Locator::getItemPools()->AddExplosion(dynamic_cast<Explosion*>(m_3DObjects[i])->GetDisplayedMesh(), dynamic_cast<Explosion*>(m_3DObjects[i])->GetOwnerType());
 			}
 
 			delIndex = i;
