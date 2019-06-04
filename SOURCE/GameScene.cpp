@@ -72,7 +72,7 @@ void GameScene::ExpensiveLoad() {
 	}
 	else
 	{
-		m_maxPlayers = 3;
+		m_maxPlayers = 2;
 	}
 
 	//Update characters
@@ -1028,6 +1028,14 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(lightning);
 		loadItemDebugCollider(lightning);
 		return lightning;
+	}
+	case BLUE_SHELL:
+	{
+		using namespace std::placeholders;
+		BlueShell* shell = new BlueShell(std::bind(&GameScene::CreateExplosion, this, _1), GetPlayers());
+		m_itemModels.push_back(shell);
+		loadItemDebugCollider(shell);
+		return shell;
 	}
 	default:
 		return nullptr;

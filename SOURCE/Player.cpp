@@ -569,6 +569,13 @@ void Player::SpawnItems(ItemType type)
 			break;
 		}
 
+		case BLUE_SHELL:
+		{
+			BlueShell* shell = static_cast<BlueShell*>(CreateItem(BLUE_SHELL));
+			shell->Use(this, false);
+			break;
+		}
+
 		default:
 			break;
 	}

@@ -441,7 +441,9 @@
     <ClInclude Include="LightningBolt.h">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClInclude>
-    <ClInclude Include="BlueShell.h" />
+    <ClInclude Include="BlueShell.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

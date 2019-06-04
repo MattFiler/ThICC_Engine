@@ -25,7 +25,6 @@ private:
 	
 	float m_usePosOffset = 0;
 	bool m_altUse = false;
-	bool m_hasMoveTowards = false;
 
 	ItemCollisionData m_collisionData;
 	ItemAiData m_aiData;

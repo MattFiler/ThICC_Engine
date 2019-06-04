@@ -118,7 +118,7 @@ private:
 	bool is_paused = false;
 	bool race_finished = false;
 	float finish_timer = 0.0f;
-	int m_maxPlayers = 3;
+	int m_maxPlayers = 2;
 	int player_rank_save[4];
 
 };

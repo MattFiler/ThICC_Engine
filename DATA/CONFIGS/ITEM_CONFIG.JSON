@@ -304,9 +304,37 @@
       "place_12": 0
     },
     "info": {
-	"lifetime": 300.0,
-    "player_immunity_time": 0.1,
+		"lifetime": 300.0,
+		"player_immunity_time": 0.1,
+		"use_pos_offset": 1.0,
+		"max_speed": 90.0,
+		"move_toward_distance_squared": 2500.0,
+		"ai": {
+			"move_speed": 60.0,
+			"turn_speed": 120.0
+		},
+		"explosion": {
+			"size_multiplier": 10.0,
+			"growth_duration": 0.5
+		},
+		"player_collision": {
+		"velocity_multiplier": 0.0,
+		"jump": {
+			"height": 1.0,
+			"duration": 0.7
+		},
+		"flip": {
+			"revolutions": 1.0,
+			"duration": 0.8
+		},
+		"spin": {
+			"revolutions": 1.0,
+			"duration": 0.5
+		},
+		"vertical_pos_offset": 0.0
+		}
 	},
+	"pool_size": 30,
     "implemented": true
   },
   "LIGHTNING_BOLT": {

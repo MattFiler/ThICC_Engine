@@ -9,6 +9,7 @@ class BlueShell : public Item
 {
 public:
 	BlueShell(std::function<Explosion*(ItemType)> _CreateExplosionFunciton, std::vector<Player*> _players);
+	void InitShellData();
 	~BlueShell() = default;
 
 	virtual void Tick() override;
@@ -28,6 +29,11 @@ private:
 	Player* m_targetPlayer = nullptr;
 
 	enum MoveState {UP, ACROSS, DOWN} m_moveState = UP;
-	
+	Vector3 m_startPos = Vector3::Zero;
+	Vector3 m_endPos = Vector3::Zero;
+	float m_lerpHeight = 5;
+	float m_lerpPercent = 0;
+	float m_lerpSpeed = 5;
+	float m_usePosOffset = 0;
 };
 
