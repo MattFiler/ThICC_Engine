@@ -20,8 +20,13 @@ BlueShell::BlueShell(std::function<Explosion*(ItemType)> _CreateExplosionFuncito
 
 void BlueShell::InitShellData()
 {
-	m_aiData.m_maxSpeed = (float)m_itemData["BLUE_SHELL"]["info"]["max_speed"];
 	m_usePosOffset = (float)m_itemData["BLUE_SHELL"]["info"]["use_pos_offset"];
+
+	m_lerpHeight = (float)m_itemData["BLUE_SHELL"]["info"]["lerp"]["height"];
+	m_lerpSpeed = (float)m_itemData["BLUE_SHELL"]["info"]["lerp"]["speed"];
+	m_veloMulti = (float)m_itemData["BLUE_SHELL"]["info"]["lerp"]["velocity_multiplier"];
+
+	m_aiData.m_maxSpeed = (float)m_itemData["BLUE_SHELL"]["info"]["max_speed"];
 	m_aiData.m_moveTowardDistSqrd = (float)m_itemData["BLUE_SHELL"]["info"]["move_toward_distance_squared"];
 	m_aiData.m_moveSpeed = (float)m_itemData["BLUE_SHELL"]["info"]["ai"]["move_speed"];
 	m_aiData.m_turnSpeed = (float)m_itemData["BLUE_SHELL"]["info"]["ai"]["turn_speed"];
@@ -91,7 +96,7 @@ void BlueShell::Use(Player * _player, bool _altUse)
 
 	m_itemMesh->m_mesh->SetWorld(_player->GetWorld());
 	m_itemMesh->m_mesh->AddPos(_player->GetWorld().Right() * m_usePosOffset);
-	m_itemMesh->m_mesh->AddPos(_player->GetWorld().Up() * m_usePosOffset * 2);
+	m_itemMesh->m_mesh->AddPos(_player->GetWorld().Up() * m_usePosOffset);
 	m_itemMesh->m_mesh->SetOri(m_player->GetOri());
 	m_itemMesh->m_mesh->UpdateWorld();
 
@@ -99,7 +104,7 @@ void BlueShell::Use(Player * _player, bool _altUse)
 	m_itemMesh->m_displayedMesh->GetModelFromSet(m_itemMesh->m_displayedMesh->GetCurrentSet(), "item")->GetModel()->UpdateWorld();
 
 	m_posOffset = m_itemMesh->m_displayedMesh->GetPosOffset();
-	m_velocity = m_player->getVelocity() * 0.2f;
+	m_velocity = m_player->getVelocity() * m_veloMulti;
 
 	Vector3 normVel = _player->getVelocity();
 	normVel.Normalize();

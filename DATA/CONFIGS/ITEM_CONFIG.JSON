@@ -306,9 +306,14 @@
     "info": {
       "lifetime": 300.0,
       "player_immunity_time": 0.1,
-      "use_pos_offset": 1.0,
+      "use_pos_offset": 3.0,
       "max_speed": 90.0,
       "move_toward_distance_squared": 2500.0,
+	  "lerp": {
+		"velocity_multiplier": 0.1,
+		"height": 5,
+		"speed": 5
+	  },
       "ai": {
         "move_speed": 60.0,
         "turn_speed": 120.0

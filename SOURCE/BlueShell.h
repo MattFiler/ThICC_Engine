@@ -31,10 +31,11 @@ private:
 	enum MoveState {UP, ACROSS, DOWN} m_moveState = UP;
 	Vector3 m_posOffset = Vector3::Zero;
 	Vector3 m_velocity = Vector3::Zero;
-	float m_airHeight = 5;
-	float m_lerpHeight = 5;
+	float m_veloMulti = 0;
+	float m_airHeight = 0;
+	float m_lerpHeight = 0;
 	float m_lerpPercent = 0;
-	float m_lerpSpeed = 5;
+	float m_lerpSpeed = 0;
 	float m_usePosOffset = 0;
 };
 
