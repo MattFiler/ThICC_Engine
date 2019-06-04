@@ -118,7 +118,10 @@ void AnimationController::Update(Matrix _parentWorld)
 		if (Vector3::Distance(m_posOffset, m_posAnimPoints.front()) < 0.1f)
 		{
 			m_posTimeElapsed = 0;
-			m_posOffset = m_posAnimPoints.front();
+			if (!m_lockPosOffset)
+			{ 
+				m_posOffset = m_posAnimPoints.front();
+			}
 			m_prevPoint = m_posAnimPoints.front();
 			m_posAnimPoints.pop();
 		}

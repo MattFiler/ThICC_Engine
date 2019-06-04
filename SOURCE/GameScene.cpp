@@ -72,7 +72,7 @@ void GameScene::ExpensiveLoad() {
 	}
 	else
 	{
-		m_maxPlayers = 2;
+		m_maxPlayers = 3;
 	}
 
 	//Update characters
@@ -676,6 +676,10 @@ void GameScene::UpdateItems()
 			if (dynamic_cast<RedShell*>(m_itemModels[i]))
 			{
 				dynamic_cast<RedShell*>(m_itemModels[i])->GetAi().reset();
+			}
+			else if (dynamic_cast<BlueShell*>(m_itemModels[i]))
+			{
+				dynamic_cast<BlueShell*>(m_itemModels[i])->GetAi().reset();
 			}
 
 			m_itemModels.erase(m_itemModels.begin() + i);

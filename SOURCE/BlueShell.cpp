@@ -22,7 +22,7 @@ void BlueShell::InitShellData()
 {
 	m_usePosOffset = (float)m_itemData["BLUE_SHELL"]["info"]["use_pos_offset"];
 
-	m_lerpHeight = (float)m_itemData["BLUE_SHELL"]["info"]["lerp"]["height"];
+	m_airHeight = (float)m_itemData["BLUE_SHELL"]["info"]["lerp"]["height"];
 	m_lerpSpeed = (float)m_itemData["BLUE_SHELL"]["info"]["lerp"]["speed"];
 	m_veloMulti = (float)m_itemData["BLUE_SHELL"]["info"]["lerp"]["velocity_multiplier"];
 
@@ -37,6 +37,11 @@ void BlueShell::Tick()
 	if (m_itemUsed)
 	{
 		Item::Tick();
+
+		if (m_targetPlayer->GetRanking() < m_targetRank)
+		{
+			FindTargetPlayer();
+		}
 
 		switch (m_moveState)
 		{
@@ -125,6 +130,7 @@ void BlueShell::FindTargetPlayer()
 			if (player->GetRanking() < m_targetPlayer->GetRanking())
 			{
 				m_targetPlayer = player;
+				m_targetRank = player->GetRanking();
 			}
 		}
 		else
@@ -132,7 +138,5 @@ void BlueShell::FindTargetPlayer()
 			m_targetPlayer = player;
 		}
 	}
-
-	m_players.clear();
 }
 

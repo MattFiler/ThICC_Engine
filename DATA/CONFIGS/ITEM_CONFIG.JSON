@@ -306,11 +306,11 @@
     "info": {
       "lifetime": 300.0,
       "player_immunity_time": 0.1,
-      "use_pos_offset": 3.0,
+      "use_pos_offset": 2.0,
       "max_speed": 90.0,
       "move_toward_distance_squared": 2500.0,
 	  "lerp": {
-		"velocity_multiplier": 0.1,
+		"velocity_multiplier": 0.2,
 		"height": 5,
 		"speed": 5
 	  },
