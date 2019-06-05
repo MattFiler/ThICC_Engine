@@ -76,5 +76,9 @@
 	"POS_12": {
 		"sprite": "INGAME_UI_POSITION_12",
 		"position": [0,0]
+	},
+	"INK": {
+		"sprite": "ink",
+		"position": [0,0]
 	}
 }

@@ -72,7 +72,7 @@ void GameScene::ExpensiveLoad() {
 	}
 	else
 	{
-		m_maxPlayers = 3;
+		m_maxPlayers = 1;
 	}
 
 	//Update characters
@@ -996,6 +996,13 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(shell);
 		loadItemDebugCollider(shell);
 		return shell;
+	}
+	case SQUID:
+	{
+		Blooper* squid = new Blooper(GetPlayers());
+		m_itemModels.push_back(squid);
+		loadItemDebugCollider(squid);
+		return squid;
 	}
 	default:
 		return nullptr;
