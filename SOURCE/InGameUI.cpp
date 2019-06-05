@@ -126,6 +126,8 @@ void InGameUI::SetCountdownFrame(int frame)
 void InGameUI::SetCurrentItem(ItemType item)
 {
 	item_image_sprite = Locator::getItemData()->GetItemSprite(item, ui_id);
+	item_image_sprite->SetPos(Vector2(config["ITEM_HOLDER"]["text_pos"][0], config["ITEM_HOLDER"]["text_pos"][1]));
+	item_image_sprite->SetScale(config["ITEM_HOLDER"]["item_scale"]);
 }
 
 /* Update current lap (e.g. 1/3, 2/3, 3/3) */
