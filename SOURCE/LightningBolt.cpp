@@ -7,13 +7,23 @@ LightningBolt::LightningBolt(std::vector<Player*> _players) : m_players(_players
 {
 	m_shouldDespawn = false;
 	m_baseGrowthData.m_scaleState = ItemGrowthData::SHRINK;
-	m_baseGrowthData.m_scaleMulti = 0.7;
-	m_baseGrowthData.m_shrinkDuration = 0.5;
-	m_baseGrowthData.m_growthDuration = 0.5;
-	m_playerSpinRev = 2;
-	m_playerSpinDuration = 0.5;
-	m_playerMoveSpeed = 20;
-	m_playerTurnSpeed = 30;
+
+	InitBoltData();
+}
+
+void LightningBolt::InitBoltData()
+{
+	std::ifstream i("DATA/CONFIGS/ITEM_CONFIG.JSON");
+	m_itemData << i;
+	m_playerMoveSpeed = (float)m_itemData["LIGHTNING_BOLT"]["info"]["player_move_speed"];
+	m_playerTurnSpeed = (float)m_itemData["LIGHTNING_BOLT"]["info"]["player_turn_speed"];
+	m_playerSpinRev = (float)m_itemData["LIGHTNING_BOLT"]["info"]["spin"]["revolutions"];
+	m_playerSpinDuration = (float)m_itemData["LIGHTNING_BOLT"]["info"]["spin"]["duration"];
+
+	m_baseGrowthData.m_scaleMulti = (float)m_itemData["LIGHTNING_BOLT"]["info"]["shrink"]["size_multiplier"];
+	m_baseGrowthData.m_growthDuration = (float)m_itemData["LIGHTNING_BOLT"]["info"]["shrink"]["growth_duration"];
+	m_baseGrowthData.m_shrinkDuration = (float)m_itemData["LIGHTNING_BOLT"]["info"]["shrink"]["shrink_duraion"];
+	m_maxSizeChangeDuration = (float)m_itemData["LIGHTNING_BOLT"]["info"]["shrink"]["max_shrink_duration"];
 }
 
 void LightningBolt::Tick()
@@ -22,12 +32,16 @@ void LightningBolt::Tick()
 	{
 		for(StrikeData& data : m_strikeDatas)
 		{ 
-			if (data.m_growthData.m_scaleState == ItemGrowthData::GROW && data.m_player->GetAnimController()->FinishedScale())
+			if (m_finishedCount >= m_strikeDatas.size())
+			{
+				FlagForDestoy();
+				break;
+			}
+			else if (data.m_finished)
 			{
 				continue;
 			}
-
-			if (data.m_player->isInvincible() || data.m_player->IsRespawning())
+			else if (data.m_player->isInvincible() || data.m_player->IsRespawning())
 			{
 				data.m_player->GetAnimController()->SwitchModelSet(data.m_player->IsGliding() ? "gliding" : "default");
 				data.m_growthData.m_scaleState = ItemGrowthData::GROW;
@@ -41,15 +55,17 @@ void LightningBolt::Tick()
 					std::string gliding = data.m_player->IsGliding() ? " Gliding" : "";
 					data.m_player->GetAnimController()->SwitchModelSet("Lightning" + gliding);
 					data.m_player->DropItems();
-					/*data.m_player->Spin(m_playerSpinRev, m_playerSpinDuration);
-					data.m_player->Scale(data.m_growthData.m_shrinkScale, data.m_growthData.m_shrinkDuration);*/
+					data.m_player->Spin(m_playerSpinRev, m_playerSpinDuration);
+					data.m_player->Scale(data.m_growthData.m_shrinkScale, data.m_growthData.m_shrinkDuration);
 					data.m_growthData.m_shrinking = true;
 				}
 				data.m_player->SetScale(data.m_player->GetAnimController()->GetScaleOffset());
+				/*data.m_player->GetAnimController()->GetModelFromSet(data.m_player->GetAnimController()->GetCurrentSet(), "Lightning")->GetModel()->SetOri(data.m_lightningRot);
+				data.m_player->GetAnimController()->GetModelFromSet(data.m_player->GetAnimController()->GetCurrentSet(), "Lightning")->GetModel()->UpdateWorld();*/
 
 				if (data.m_player->GetAnimController()->FinishedScale())
 				{
-					//data.m_player->GetAnimController()->SwitchModelSet(data.m_player->IsGliding() ? "gliding" : "default");
+					data.m_player->GetAnimController()->SwitchModelSet(data.m_player->IsGliding() ? "gliding" : "default");
 					data.m_player->GetControlledMovement()->SetMoveSpeed(m_playerMoveSpeed);
 					data.m_player->GetControlledMovement()->SetTurnSpeed(m_playerTurnSpeed);
 					data.m_growthData.m_scaleState = ItemGrowthData::MAINTIAIN;
@@ -67,12 +83,10 @@ void LightningBolt::Tick()
 
 				break;
 			case ItemGrowthData::GROW:
-				if (!data.m_growthData.m_shrinking)
+				if (!data.m_growthData.m_growing)
 				{
-					data.m_player->GetAnimController()->SwitchModelSet("Lightning" + data.m_player->IsGliding() ? " Gliding" : "");
-					data.m_player->Spin(m_playerSpinRev, m_playerSpinDuration);
-					data.m_player->Scale(data.m_growthData.m_shrinkScale, data.m_growthData.m_shrinkDuration);
-					data.m_growthData.m_shrinking = true;
+					data.m_player->Scale(data.m_growthData.m_growScale, data.m_growthData.m_growthDuration);
+					data.m_growthData.m_growing = true;
 				}
 				data.m_player->SetScale(data.m_player->GetAnimController()->GetScaleOffset());
 
@@ -80,9 +94,13 @@ void LightningBolt::Tick()
 				{
 					data.m_player->GetControlledMovement()->ResetMoveSpeed();
 					data.m_player->GetControlledMovement()->ResetTurnSpeed();
+					++m_finishedCount;
+					data.m_finished = true;
 				}
 				break;
 			}
+
+
 		}
 	}
 }
@@ -99,18 +117,19 @@ void LightningBolt::FindPlayers()
 {
 	for (auto it = m_players.begin(); it != m_players.end();)
 	{
-		/*if ((*it)->GetRanking() >= m_player->GetRanking())
+		if ((*it)->GetRanking() >= m_player->GetRanking())
 		{
 			it = m_players.erase(it);
 		}
-		else*/
+		else
 		{
 			StrikeData strikeData = StrikeData();
 			strikeData.m_player = *it;
 			strikeData.m_growthData = m_baseGrowthData;
-			strikeData.m_strikeDuration = m_maxStrikeDuration - (*it)->GetRanking();
+			strikeData.m_growthData.m_sizeChangeDuration = m_maxSizeChangeDuration - (*it)->GetRanking();
 			strikeData.m_growthData.m_growScale = (*it)->GetScale();
 			strikeData.m_growthData.m_shrinkScale = strikeData.m_growthData.m_growScale * strikeData.m_growthData.m_scaleMulti;
+			strikeData.m_lightningRot = (*it)->GetAnimController()->GetModelFromSet("Lightning", "Lightning")->GetModel()->GetOri();
 			m_strikeDatas.push_back(strikeData);
 			++it;
 		}

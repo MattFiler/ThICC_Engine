@@ -72,7 +72,7 @@ void GameScene::ExpensiveLoad() {
 	}
 	else
 	{
-		m_maxPlayers = 1;
+		m_maxPlayers = 3;
 	}
 
 	//Update characters
@@ -239,7 +239,11 @@ void GameScene::ExpensiveUnload() {
 				Locator::getItemPools()->AddItemMesh(m_itemModels[i]->GetItemType(), m_itemModels[i]->GetItemMesh());
 				if (m_itemModels[i]->GetItemType() == BOMB)
 				{
-					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh());
+					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh(), BOMB);
+				}
+				else if (m_itemModels[i]->GetItemType() == BLUE_SHELL)
+				{
+					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh(), BLUE_SHELL);
 				}
 			}
 
@@ -578,7 +582,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			if (dynamic_cast<Explosion*>(m_3DObjects[i]))
 			{
-				Locator::getItemPools()->AddExplosion(dynamic_cast<Explosion*>(m_3DObjects[i])->GetDisplayedMesh());
+				Locator::getItemPools()->AddExplosion(dynamic_cast<Explosion*>(m_3DObjects[i])->GetDisplayedMesh(), dynamic_cast<Explosion*>(m_3DObjects[i])->GetOwnerType());
 			}
 
 			delIndex = i;
@@ -654,6 +658,10 @@ void GameScene::UpdateItems()
 			if (dynamic_cast<RedShell*>(m_itemModels[i]))
 			{
 				dynamic_cast<RedShell*>(m_itemModels[i])->GetAi().reset();
+			}
+			else if (dynamic_cast<BlueShell*>(m_itemModels[i]))
+			{
+				dynamic_cast<BlueShell*>(m_itemModels[i])->GetAi().reset();
 			}
 
 			m_itemModels.erase(m_itemModels.begin() + i);
@@ -980,6 +988,14 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(lightning);
 		loadItemDebugCollider(lightning);
 		return lightning;
+	}
+	case BLUE_SHELL:
+	{
+		using namespace std::placeholders;
+		BlueShell* shell = new BlueShell(std::bind(&GameScene::CreateExplosion, this, _1), GetPlayers());
+		m_itemModels.push_back(shell);
+		loadItemDebugCollider(shell);
+		return shell;
 	}
 	default:
 		return nullptr;

@@ -70,7 +70,7 @@ void CollisionManager::CollisionDetectionAndResponse(std::vector<PhysModel*> _ph
 			//Explosion x Player Collision
 			else if (dynamic_cast<Explosion*>(collision.m_model1))
 			{
-				Explosion* explosion = dynamic_cast<Explosion*>(collision.m_model2);
+				Explosion* explosion = dynamic_cast<Explosion*>(collision.m_model1);
 				ExplosionCollision(player, explosion);
 			}
 		}

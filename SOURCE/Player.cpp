@@ -532,6 +532,30 @@ void Player::SpawnItems(ItemType type)
 			break;
 		}
 
+		case RED_SHELL_3X:
+		{
+			for (int i = 0; i < m_maxItems; i++)
+			{
+				SpawnItems(RED_SHELL);
+			}
+
+			for (int i = 0; i < m_maxItems; i++)
+			{
+				m_trailingItems[i]->addImmuneItems(m_trailingItems);
+				m_trailingItems[i]->setSpinAngle((360 / m_trailingItems.size()) * i);
+			}
+
+			m_multiItem = true;
+			break;
+		}
+
+		case BLUE_SHELL:
+		{
+			BlueShell* shell = static_cast<BlueShell*>(CreateItem(BLUE_SHELL));
+			shell->Use(this, false);
+			break;
+		}
+
 		default:
 			break;
 	}

@@ -7,6 +7,6 @@
   "ui_scale": 1.0,
   "itembox_respawn_time": 4.0,
   "enable_fps": true,
-  "enable_ai": false,
+  "enable_ai": true,
   "font": "NEUEHAASGROTESKDISP PRO BD"
 }
