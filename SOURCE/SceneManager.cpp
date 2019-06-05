@@ -107,8 +107,8 @@ void SceneManager::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  
 void SceneManager::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
 	//Set to 2D viewport
-	m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
+	m_commandList->RSSetViewports(1, &Locator::getRD()->m_fullscreenViewport);
+	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_fullscreenScissorRect);
 
 	//Set to 2D heaps
 	ID3D12DescriptorHeap* heaps[] = { Locator::getRD()->m_2dResourceDescriptors->Heap() };
@@ -116,15 +116,15 @@ void SceneManager::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  
 
 	//Start sprite batch and call 2D renders
 	try {
-		Locator::getRD()->m_2dSpriteBatch->Begin(Locator::getRD()->m_commandList.Get());
+		Locator::getRD()->m_2dSpriteBatchFullscreen->Begin(Locator::getRD()->m_commandList.Get());
 		m_curr_scene->Render2D(m_commandList);
 		if (show_loadscreen) {
-			loadscreen->Render();
+			loadscreen->Render(Locator::getRD()->m_2dSpriteBatchFullscreen.get());
 			if (!first_load && !switched_scene) {
 				scene_switch = true;
 			}
 		}
-		Locator::getRD()->m_2dSpriteBatch->End();
+		Locator::getRD()->m_2dSpriteBatchFullscreen->End();
 	}
 	catch (...) {
 		DebugText::print("SceneManager::Render2D - Failed to render, could be a sprite batch issue: most likely out of memory.");

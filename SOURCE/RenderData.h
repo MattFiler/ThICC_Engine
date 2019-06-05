@@ -42,10 +42,10 @@ struct ThICC_RenderData {
 	UINT m_rtvDescriptorSize;
 
 	//Viewports
-	D3D12_VIEWPORT m_screenViewport;
-	D3D12_RECT m_scissorRect;
-	D3D12_VIEWPORT m_screenViewportSplitscreen[4];
-	D3D12_RECT m_scissorRectSplitscreen[4];
+	D3D12_VIEWPORT m_fullscreenViewport;
+	D3D12_RECT m_fullscreenScissorRect;
+	D3D12_VIEWPORT m_splitscreenViewport[4];
+	D3D12_RECT m_splitscreenScissorRect[4];
 
 	// Direct3D properties.
 	DXGI_FORMAT m_backBufferFormat;
@@ -77,7 +77,8 @@ struct ThICC_RenderData {
 
 	//Shared 2D resources
 	std::unique_ptr<DirectX::DescriptorHeap> m_2dResourceDescriptors = NULL;
-	std::unique_ptr<DirectX::SpriteBatch> m_2dSpriteBatch = NULL;
+	std::unique_ptr<DirectX::SpriteBatch> m_2dSpriteBatchFullscreen = NULL;
+	std::unique_ptr<DirectX::SpriteBatch> m_2dSpriteBatchSplitscreen[4] = { NULL };
 	std::unique_ptr<DirectX::SpriteFont> m_2dFont = NULL;
 	int m_resourceCount = 0;
 

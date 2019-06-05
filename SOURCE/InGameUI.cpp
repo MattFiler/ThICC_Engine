@@ -6,16 +6,12 @@
 #include <fstream>
 
 /* Load config */
-InGameUI::InGameUI(int id, Vector2 size, Vector2 offset)
+InGameUI::InGameUI(int id)
 {
 	//Load UI config
 	std::ifstream i(m_filepath.generateConfigFilepath("INGAME_UI", m_filepath.CONFIG));
 	config << i;
 	ui_id = id;
-
-	//Save size/offset info for splitscreen support
-	ui_size = size;
-	ui_offset = offset;
 }
 
 /* Unload all UI sprites */
@@ -82,9 +78,8 @@ void InGameUI::ExpensiveUnload()
 	outro_ui_sprite->Reset();
 
 	current_state = InGameInterfaceState::UI_HIDDEN;
-	ui_offset = Vector2(0, 0);
-	ui_size = Vector2(0, 0);
 	countdown_size_log = 0.0f;
+	resize_offset = Vector2(0, 0);
 }
 
 /* Set the current UI state */
@@ -119,6 +114,7 @@ void InGameUI::SetCountdownFrame(int frame)
 	DebugText::print("InGameUI: Set countdown frame to " + std::to_string(frame) + ".");
 
 	countdown_ui_sprite = countdown_ui_sprites.at(frame);
+	countdown_ui_sprite->SetPos(-resize_offset);
 	countdown_size_log = 0.0f;
 }
 
@@ -139,6 +135,7 @@ void InGameUI::SetCurrentLap(int lap)
 	}
 
 	lap_ui_sprite = lap_ui_sprites.at(lap - 1);
+	lap_ui_sprite->SetPos(Vector2(0, -resize_offset.y));
 }
 
 /* Update the player position (e.g. 1st, 2nd, 3rd) */
@@ -154,6 +151,7 @@ void InGameUI::SetPlayerPosition(int position)
 	}
 
 	position_ui_sprite = position_ui_sprites.at(position - 1);
+	position_ui_sprite->SetPos(-resize_offset);
 }
 
 /* Starts the automated item spinner to land on a pre-determined item */
@@ -189,28 +187,51 @@ void InGameUI::HideItemSpinner()
 	SetCurrentItem(PLACEHOLDER);
 }
 
-/* Render the current UI - should ONLY ever be called in a scene's Render2D! */
-void InGameUI::Render()
+/* Register the current player count and adapt elements accordingly */
+void InGameUI::RegisterPlayerCount(int count)
 {
+	//We have a hard engine cap of four players, so only need to handle 1-4 here.
+	switch (count) {
+		case 1: 
+			break;
+		case 2: 
+			resize_offset = Vector2(config["OFFSET_2P"][0], config["OFFSET_2P"][1]);
+			break;
+		case 3:
+		case 4:
+			resize_offset = Vector2(config["OFFSET_3P+"][0], config["OFFSET_3P+"][1]);
+			break;
+	}
+}
+
+/* Render the current UI - should ONLY ever be called in a scene's Render2D! */
+void InGameUI::Render(DirectX::SpriteBatch* spritebatch)
+{
+	//We default to nullptr to save passing the default batch every time
+	if (spritebatch == nullptr) {
+		spritebatch = Locator::getRD()->m_2dSpriteBatchFullscreen.get();
+	}
+
+	//Render depending on current state
 	switch (current_state) {
 		case InGameInterfaceState::UI_HIDDEN: {
 			return;
 		}
 		case InGameInterfaceState::UI_COURSE_INTRO: {
 			if (intro_ui_sprite != nullptr) { 
-				intro_ui_sprite->Render();
-				intro_ui_text->Render();
+				intro_ui_sprite->Render(spritebatch);
+				intro_ui_text->Render(spritebatch);
 			}
 			break;
 		}
 		case InGameInterfaceState::UI_COUNTDOWN: {
-			if (countdown_ui_sprite != nullptr) { countdown_ui_sprite->Render(); }
+			if (countdown_ui_sprite != nullptr) { countdown_ui_sprite->Render(spritebatch); }
 		}
 		case InGameInterfaceState::UI_RACING: {
-			if (lap_ui_sprite != nullptr) { lap_ui_sprite->Render(); }
-			if (position_ui_sprite != nullptr) { position_ui_sprite->Render(); }
-			if (item_image_sprite != nullptr) { item_image_sprite->Render(); }
-			if (item_ui_sprite != nullptr) { item_ui_sprite->Render(); }
+			if (lap_ui_sprite != nullptr) { lap_ui_sprite->Render(spritebatch); }
+			if (position_ui_sprite != nullptr) { position_ui_sprite->Render(spritebatch); }
+			if (item_image_sprite != nullptr) { item_image_sprite->Render(spritebatch); }
+			if (item_ui_sprite != nullptr) { item_ui_sprite->Render(spritebatch); }
 
 			//Render current timers
 			//Coming soon(TM)
@@ -218,8 +239,8 @@ void InGameUI::Render()
 			break;
 		}
 		case InGameInterfaceState::UI_RACE_OVER: {
-			if (outro_ui_sprite != nullptr) { outro_ui_sprite->Render(); }
-			if (position_ui_sprite != nullptr) { position_ui_sprite->Render(); }
+			if (outro_ui_sprite != nullptr) { outro_ui_sprite->Render(spritebatch); }
+			if (position_ui_sprite != nullptr) { position_ui_sprite->Render(spritebatch); }
 			break;
 		}
 	}

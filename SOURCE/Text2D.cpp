@@ -25,8 +25,13 @@ void Text2D::SetText(std::string _text)
 }
 
 /* Render text */
-void Text2D::Render()
+void Text2D::Render(DirectX::SpriteBatch* spritebatch)
 {
+	//We default to nullptr to save passing the default batch every time
+	if (spritebatch == nullptr) {
+		spritebatch = Locator::getRD()->m_2dSpriteBatchFullscreen.get();
+	}
+
 	switch (m_originPos) {
 	case TextOrigin::BOTTOM_LEFT:
 		m_origin = Vector2(0, ((Vector2)Locator::getRD()->m_2dFont->MeasureString(m_wText.c_str())).y);
@@ -43,6 +48,6 @@ void Text2D::Render()
 	}
 
 	//Render
-	Locator::getRD()->m_2dFont->DrawString(Locator::getRD()->m_2dSpriteBatch.get(), m_wText.c_str(),
+	Locator::getRD()->m_2dFont->DrawString(spritebatch, m_wText.c_str(),
 		m_pos, m_colour, 0.f, m_origin, m_scale);
 }

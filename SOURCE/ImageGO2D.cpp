@@ -18,8 +18,13 @@ ImageGO2D::~ImageGO2D()
 }
 
 /* Render */
-void ImageGO2D::Render()
+void ImageGO2D::Render(DirectX::SpriteBatch* spritebatch)
 {
+	//We default to nullptr to save passing the default batch every time
+	if (spritebatch == nullptr) {
+		spritebatch = Locator::getRD()->m_2dSpriteBatchFullscreen.get();
+	}
+
 	//If a change is queued, do it before we render
 	if (new_filepath != current_filepath) {
 		InternalSpriteUpdate(new_filepath);
@@ -28,7 +33,7 @@ void ImageGO2D::Render()
 	if (is_visible) 
 	{
 		//Render
-		Locator::getRD()->m_2dSpriteBatch->Draw(Locator::getRD()->m_2dResourceDescriptors->GetGpuHandle(m_resourceNum),
+		spritebatch->Draw(Locator::getRD()->m_2dResourceDescriptors->GetGpuHandle(m_resourceNum),
 			size,
 			m_pos, nullptr, m_colour, m_orientation, m_origin, m_scale);
 	}

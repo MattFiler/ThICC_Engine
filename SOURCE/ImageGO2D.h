@@ -20,7 +20,7 @@ public:
 		is_visible = visible;
 	}
 
-	void Render();
+	void Render(DirectX::SpriteBatch* spritebatch = nullptr);
 
 	void CentreOrigin();
 

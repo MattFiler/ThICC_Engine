@@ -13,7 +13,7 @@ class Player;
 class InGameUI
 {
 public:
-	InGameUI(int id, Vector2 size, Vector2 offset);
+	InGameUI(int id);
 	~InGameUI();
 
 	void ExpensiveLoad();
@@ -31,7 +31,9 @@ public:
 	void ShowItemSpinner(Player* this_player);
 	void HideItemSpinner(); 
 
-	void Render();
+	void RegisterPlayerCount(int count);
+
+	void Render(DirectX::SpriteBatch* spritebatch = nullptr);
 	void Update();
 
 private:
@@ -60,9 +62,8 @@ private:
 
 	/* States & info */
 	InGameInterfaceState current_state = InGameInterfaceState::UI_HIDDEN;
-	Vector2 ui_offset = Vector2(0,0);
-	Vector2 ui_size = Vector2(0, 0);
 	float countdown_size_log = 0.0f;
 	int ui_id = 0;
+	Vector2 resize_offset = Vector2(0, 0);
 };
 

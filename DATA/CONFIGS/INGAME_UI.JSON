@@ -19,6 +19,10 @@
 		"text_pos": [55, 55],
 		"item_scale": 0.6
 	},
+	"SPECIAL_INK_SPLAT": {
+		"sprite": "INK SPLAT",
+		"position": [0,0]
+	},
 	"LAP_1": {
 		"sprite": "INGAME_UI_LAP1",
 		"position": [0,0]
@@ -78,5 +82,8 @@
 	"POS_12": {
 		"sprite": "INGAME_UI_POSITION_12",
 		"position": [0,0]
-	}
+	},
+	
+	"OFFSET_2P": [640,0],
+	"OFFSET_3P+": [640,360]
 }

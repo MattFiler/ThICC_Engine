@@ -32,7 +32,7 @@ public:
 	virtual void CentreOrigin() = 0;
 
 	virtual void Tick() {};
-	virtual void Render() = 0;
+	virtual void Render(DirectX::SpriteBatch* spritebatch = nullptr) = 0;
 
 	virtual void Reset() {};
 

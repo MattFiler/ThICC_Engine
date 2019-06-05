@@ -21,7 +21,7 @@ public:
 	Vector2 GetSize() { return Locator::getRD()->m_2dFont->MeasureString(m_wText.c_str()); }
 	void CentreOrigin() override {};
 
-	void Render();
+	void Render(DirectX::SpriteBatch* spritebatch = nullptr);
 
 protected:
 	std::string m_text;
