@@ -60,7 +60,7 @@ void InGameUI::ExpensiveLoad()
 
 	//Load in UI: course outro (finished)
 	outro_ui_sprite = new ImageGO2D(config["OUTRO_OVERLAY"]["sprite"]);
-	outro_ui_sprite->SetPos(Vector2(config["OUTRO_OVERLAY"]["position"][0], config["OUTRO_OVERLAY"]["position"][1]));
+	outro_ui_sprite->SetPos(Vector2(config["OUTRO_OVERLAY"]["position"][0] - resize_offset.x, config["OUTRO_OVERLAY"]["position"][1]));
 }
 
 /* Unload all UI sprites */
@@ -95,7 +95,7 @@ void InGameUI::SetState(InGameInterfaceState state)
 
 	//If race is over, reposition our position sprite (it's now locked)
 	if (current_state == InGameInterfaceState::UI_RACE_OVER) {
-		position_ui_sprite->SetPos(Vector2(config["OUTRO_OVERLAY"]["text_pos"][0], config["OUTRO_OVERLAY"]["text_pos"][1]));
+		position_ui_sprite->SetPos(Vector2(config["OUTRO_OVERLAY"]["text_pos"][0], config["OUTRO_OVERLAY"]["text_pos"][1]) - resize_offset);
 	}
 }
 
