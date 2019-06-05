@@ -15,7 +15,8 @@ public:
 	XMUINT2 GetSize();
 	void SetSize(Vector2 _size);
 
-	void IsVisible(bool visible) {
+	bool GetVisible() { return is_visible; }
+	void SetVisible(bool visible) {
 		is_visible = visible;
 	}
 

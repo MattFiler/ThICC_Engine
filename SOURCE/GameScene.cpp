@@ -116,26 +116,16 @@ void GameScene::ExpensiveLoad() {
 	//Load main UI
 	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
 		delete m_game_ui[i];
-		m_game_ui[i] = new InGameUI(Vector2(1280,720), Vector2(0,0));
+		m_game_ui[i] = new InGameUI(i, Vector2(1280,720), Vector2(0,0));
 		m_game_ui[i]->ExpensiveLoad();
 		m_game_ui[i]->SetCurrentLap(1);
 		m_game_ui[i]->SetPlayerPosition(1);
 		m_game_ui[i]->SetMapName(map_info->name);
 	}
 
-	//Position countdown
+	//Reset cam FOV
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
-		player[i]->GetCountdown()->SetPos(
-			Vector2(
-				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 ,
-				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2
-			) / (static_cast<float>(Locator::getRD()->m_window_height) / 720), false);
-		player[i]->GetFinishOrder()->SetPos(
-			Vector2(
-				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetFinishOrder()->GetSize().x / 2 ,
-				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height / 2 - player[i]->GetFinishOrder()->GetSize().y / 2
-			) / (static_cast<float>(Locator::getRD()->m_window_height) / 720), false);
 		m_cam[i]->ResetFOV();
 	}
 
@@ -267,12 +257,6 @@ void GameScene::ExpensiveUnload() {
 void GameScene::create2DObjects()
 {
 	m_pause_screen = new ImageGO2D("paused");
-
-	for (int i = 0; i < Locator::getRM()->player_amount; i++)
-	{
-		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
-		m_2DObjects.push_back(player[i]->GetItemImg());
-	}
 }
 
 /* Create all 3D objects in the scene. */
@@ -489,13 +473,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			timeout -= Locator::getGSD()->m_dt;
 			for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
-				std::string countdown_time = std::to_string((int)std::ceil(timeout));
-				if (countdown_time == "0") {
-					countdown_time = "GO!";
-				}
-				player[i]->GetCountdown()->SetText(countdown_time);
 				m_cam[i]->Tick();
 				m_game_ui[i]->SetState(InGameInterfaceState::UI_COUNTDOWN);
+				m_game_ui[i]->SetCountdownFrame((int)std::ceil(timeout));
 			}
 
 			if (Locator::getRM()->player_amount == 3)
@@ -520,7 +500,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case PLAY:
 		for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 			m_cam[i]->Tick();
-			m_game_ui[i]->SetState(InGameInterfaceState::UI_RACING);
+			if (player[i]->GetLap() != 4) {
+				m_game_ui[i]->SetState(InGameInterfaceState::UI_RACING);
+			}
 		}
 
 
@@ -785,35 +767,6 @@ void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		return;
 	}
 
-
-	/* TODO: this needs to be refactored in favour of InGameUI */
-	switch (state)
-	{
-	case COUNTDOWN:
-		//Render countdown in screen centre
-		for (int i = 0; i < Locator::getRM()->player_amount; i++)
-		{
-			player[i]->GetCountdown()->Render();
-		}
-		break;
-	case PLAY:
-		for (int i = 0; i < Locator::getRM()->player_amount; i++)
-		{
-			if (player[i]->GetFinished())
-			{
-				player[i]->GetFinishOrder()->Render();
-			}
-			else if (!player[i]->GetFinished())
-			{
-				if(player[i]->GetItemInInventory() != ItemType::NONE)
-					player[i]->GetItemImg()->Render();
-			}
-		}
-		break;
-	}
-	/* ^^^^^^^^^^^^^^^^^ depreciate! */
-
-
 	//Render UI
 	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
 		if (m_game_ui[i] != nullptr) {
@@ -850,7 +803,6 @@ void GameScene::SetPlayersWaypoint()
 				if (player[i]->GetLap() == 3)
 				{
 					player[i]->SetFinished(true);
-					player[i]->GetFinishOrder()->SetText(std::to_string(player[i]->GetRanking()) + player[i]->GetOrderIndicator()[player[i]->GetRanking() - 1]);
 					if(i < Locator::getRM()->player_amount)
 						m_cam[i]->SetType(CameraType::ORBIT);
 					player[i]->setGamePad(false);

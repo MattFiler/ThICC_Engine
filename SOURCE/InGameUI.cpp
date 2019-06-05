@@ -6,11 +6,12 @@
 #include <fstream>
 
 /* Load config */
-InGameUI::InGameUI(Vector2 size, Vector2 offset)
+InGameUI::InGameUI(int id, Vector2 size, Vector2 offset)
 {
 	//Load UI config
 	std::ifstream i(m_filepath.generateConfigFilepath("INGAME_UI", m_filepath.CONFIG));
 	config << i;
+	ui_id = id;
 
 	//Save size/offset info for splitscreen support
 	ui_size = size;
@@ -31,6 +32,16 @@ void InGameUI::ExpensiveLoad()
 	intro_ui_sprite->SetPos(Vector2(config["INTRO_OVERLAY"]["position"][0], config["INTRO_OVERLAY"]["position"][1]));
 	intro_ui_text = new Text2D("Placeholder");
 	intro_ui_text->SetPos(Vector2(config["INTRO_OVERLAY"]["text_pos"][0], config["INTRO_OVERLAY"]["text_pos"][1])); 
+
+	//Load in UI: countdown frames (and set to default)
+	for (int i = 0; i < 4; i++) {
+		ImageGO2D* countdown_sprite = new ImageGO2D(config["COUNTDOWN_FRAMES"]["sprites"][i]);
+		countdown_sprite->SetPos(Vector2(
+			config["COUNTDOWN_FRAMES"]["position"][0] + (Locator::getRD()->m_window_width / 2.f), 
+			config["COUNTDOWN_FRAMES"]["position"][1] + (Locator::getRD()->m_window_height / 2.f)), false);
+		countdown_sprite->CentreOrigin();
+		countdown_ui_sprites.push_back(countdown_sprite);
+	}
 
 	//Load in UI: lap count
 	for (int i = 0; i < 3; i++) {
@@ -68,11 +79,23 @@ void InGameUI::ExpensiveUnload()
 	if (item_ui_sprite != nullptr) {
 		item_ui_sprite->Reset();
 	}
+	outro_ui_sprite->Reset();
+
+	current_state = InGameInterfaceState::UI_HIDDEN;
+	ui_offset = Vector2(0, 0);
+	ui_size = Vector2(0, 0);
+	countdown_size_log = 0.0f;
 }
 
 /* Set the current UI state */
 void InGameUI::SetState(InGameInterfaceState state)
 {
+	if (current_state == state) {
+		return;
+	}
+	DebugText::print("InGameUI: Set state to " + std::to_string((int)state) + ".");
+
+	//Set state
 	current_state = state;
 
 	//If race is over, reposition our position sprite (it's now locked)
@@ -85,6 +108,24 @@ void InGameUI::SetState(InGameInterfaceState state)
 void InGameUI::SetMapName(const std::string & name)
 {
 	intro_ui_text->SetText(name);
+}
+
+/* Progress to the next countdown frame */
+void InGameUI::SetCountdownFrame(int frame)
+{
+	if (frame == countdown_ui_sprites.size() || countdown_ui_sprite == countdown_ui_sprites.at(frame)) {
+		return;
+	}
+	DebugText::print("InGameUI: Set countdown frame to " + std::to_string(frame) + ".");
+
+	countdown_ui_sprite = countdown_ui_sprites.at(frame);
+	countdown_size_log = 0.0f;
+}
+
+/* Update current UI item */
+void InGameUI::SetCurrentItem(ItemType item)
+{
+	item_image_sprite = Locator::getItemData()->GetItemSprite(item, ui_id);
 }
 
 /* Update current lap (e.g. 1/3, 2/3, 3/3) */
@@ -122,13 +163,15 @@ void InGameUI::ShowItemSpinner(Player* this_player)
 	}
 
 	//Show spinner
-	item_ui_sprite->IsVisible(true);
+	item_ui_sprite->SetVisible(true);
 
 	//The item we'll end on
 	ItemType item_to_give = Locator::getItemData()->GetRandomItem(this_player->GetRanking());
 
 	//Give the item once the animation is done
-	this_player->SetItemInInventory(item_to_give);
+	if (this_player->SetItemInInventory(item_to_give)) {
+		SetCurrentItem(item_to_give);
+	}
 }
 
 /* Hides the item spinner (item used) */
@@ -138,8 +181,10 @@ void InGameUI::HideItemSpinner()
 		DebugText::print("InGameUI: Call to hide item spinner before the sprite was loaded. Are you calling ExpensiveLoad?");
 		return;
 	}
+	DebugText::print("InGameUI: Hiding item spinner.");
 
-	item_ui_sprite->IsVisible(false);
+	item_ui_sprite->SetVisible(false);
+	SetCurrentItem(PLACEHOLDER);
 }
 
 /* Render the current UI - should ONLY ever be called in a scene's Render2D! */
@@ -157,14 +202,12 @@ void InGameUI::Render()
 			break;
 		}
 		case InGameInterfaceState::UI_COUNTDOWN: {
-			//Render countdown
-
-			//Fall through to normal UI
+			if (countdown_ui_sprite != nullptr) { countdown_ui_sprite->Render(); }
 		}
 		case InGameInterfaceState::UI_RACING: {
-			//Render current sprites (if they're set/active)
 			if (lap_ui_sprite != nullptr) { lap_ui_sprite->Render(); }
 			if (position_ui_sprite != nullptr) { position_ui_sprite->Render(); }
+			if (item_image_sprite != nullptr) { item_image_sprite->Render(); }
 			if (item_ui_sprite != nullptr) { item_ui_sprite->Render(); }
 
 			//Render current timers
@@ -188,20 +231,20 @@ void InGameUI::Update()
 			return;
 		}
 		case InGameInterfaceState::UI_COURSE_INTRO: {
-
 			break;
 		}
 		case InGameInterfaceState::UI_COUNTDOWN: {
-
+			if (countdown_ui_sprite != nullptr) { 
+				countdown_ui_sprite->SetScale(Vector2(1 + (countdown_size_log / 10), 1 + (countdown_size_log / 10)));
+				countdown_size_log += (float)Locator::getGSD()->m_dt;
+			}
 			break;
 		}
 		case InGameInterfaceState::UI_RACING: {
 			//We'll wanna update lap/race counters here soon(TM)
-
 			break;
 		}
 		case InGameInterfaceState::UI_RACE_OVER: {
-
 			break;
 		}
 	}
