@@ -62,6 +62,11 @@ void InGameUI::ExpensiveLoad()
 	item_ui_sprite->SetPos(Vector2(config["ITEM_HOLDER"]["position"][0], config["ITEM_HOLDER"]["position"][1]));
 	HideItemSpinner();
 
+	ImageGO2D* ink_sprite = new ImageGO2D(config["INK"]["sprite"]);
+	ink_sprite->SetPos(Vector2(
+		config["INK"]["position"][0] + (Locator::getRD()->m_window_width / 2.f),
+		config["INK"]["position"][1] + (Locator::getRD()->m_window_height / 2.f)), false);
+
 	//Load in UI: course outro (finished)
 	outro_ui_sprite = new ImageGO2D(config["OUTRO_OVERLAY"]["sprite"]);
 	outro_ui_sprite->SetPos(Vector2(config["OUTRO_OVERLAY"]["position"][0], config["OUTRO_OVERLAY"]["position"][1]));

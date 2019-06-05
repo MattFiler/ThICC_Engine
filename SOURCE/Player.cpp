@@ -77,8 +77,8 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModel("Cloud", Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD));
 	m_animationMesh->AddModel("POW", Locator::getItemData()->GetItemModelName(POW));
 	m_animationMesh->AddModel("Lightning", Locator::getItemData()->GetItemModelName(LIGHTNING_BOLT));
+	m_animationMesh->AddModel("Blooper", Locator::getItemData()->GetItemModelName(SQUID));
 
-	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
 	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
 	m_animationMesh->AddModelSet("gliding", std::vector < std::string>{"vehicle", "character", "glider"});
 	m_animationMesh->AddModelSet("Bullet Bill", std::vector < std::string>{"Bullet Bill"});
