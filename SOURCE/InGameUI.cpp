@@ -114,7 +114,6 @@ void InGameUI::SetCountdownFrame(int frame)
 	DebugText::print("InGameUI: Set countdown frame to " + std::to_string(frame) + ".");
 
 	countdown_ui_sprite = countdown_ui_sprites.at(frame);
-	countdown_ui_sprite->SetPos(-resize_offset);
 	countdown_size_log = 0.0f;
 }
 
@@ -225,7 +224,10 @@ void InGameUI::Render(DirectX::SpriteBatch* spritebatch)
 			break;
 		}
 		case InGameInterfaceState::UI_COUNTDOWN: {
-			if (countdown_ui_sprite != nullptr) { countdown_ui_sprite->Render(spritebatch); }
+			//Countdown overrides to fullscreen viewport, so only render once
+			if (ui_id == 0) {
+				if (countdown_ui_sprite != nullptr) { countdown_ui_sprite->Render(Locator::getRD()->m_2dSpriteBatchFullscreen.get()); }
+			}
 		}
 		case InGameInterfaceState::UI_RACING: {
 			if (lap_ui_sprite != nullptr) { lap_ui_sprite->Render(spritebatch); }
