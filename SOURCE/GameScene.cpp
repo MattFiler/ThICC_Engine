@@ -199,6 +199,9 @@ void GameScene::ExpensiveLoad() {
 		Locator::getCD()->points.push_back(camera_pos);
 		Locator::getCD()->look_points.push_back(camera.look_at != Vector3(0, 0, 0) ? camera.look_at : Vector3(1, 1, 1));
 	}
+
+	m_physModels.clear();
+	pushBackObjects();
 }
 
 /* Unpopulate the expensive things. */
