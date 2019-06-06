@@ -31,6 +31,8 @@ public:
 	void ShowItemSpinner(Player* this_player);
 	void HideItemSpinner(); 
 
+	void InkSplatVisible(bool visible);
+
 	void RegisterPlayerCount(int count);
 
 	void Render(DirectX::SpriteBatch* spritebatch = nullptr);

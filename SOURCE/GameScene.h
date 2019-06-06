@@ -85,7 +85,7 @@ private:
 	//Random data stores
 	json game_config;
 	json track_config;
-	MapInfo* map_info;
+	MapInfo* map_info = nullptr;
 	ItemPools* m_itemPools = nullptr;
 
 	//Referenced stuff

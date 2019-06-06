@@ -58,6 +58,11 @@ void InGameUI::ExpensiveLoad()
 	item_ui_sprite->SetPos(Vector2(config["ITEM_HOLDER"]["position"][0], config["ITEM_HOLDER"]["position"][1]));
 	HideItemSpinner();
 
+	//Load in UI: ink splat
+	ink_ui_sprite = new ImageGO2D(config["SPECIAL_INK_SPLAT"]["sprite"]);
+	ink_ui_sprite->SetPos(Vector2(config["SPECIAL_INK_SPLAT"]["position"][0], config["SPECIAL_INK_SPLAT"]["position"][1]));
+	ink_ui_sprite->SetVisible(false);
+
 	//Load in UI: course outro (finished)
 	outro_ui_sprite = new ImageGO2D(config["OUTRO_OVERLAY"]["sprite"]);
 	outro_ui_sprite->SetPos(Vector2(config["OUTRO_OVERLAY"]["position"][0] - resize_offset.x, config["OUTRO_OVERLAY"]["position"][1]));
@@ -186,6 +191,12 @@ void InGameUI::HideItemSpinner()
 	SetCurrentItem(PLACEHOLDER);
 }
 
+/* Show/hide ink splat */
+void InGameUI::InkSplatVisible(bool visible)
+{
+	ink_ui_sprite->SetVisible(visible);
+}
+
 /* Register the current player count and adapt elements accordingly */
 void InGameUI::RegisterPlayerCount(int count)
 {
@@ -234,6 +245,8 @@ void InGameUI::Render(DirectX::SpriteBatch* spritebatch)
 			if (position_ui_sprite != nullptr) { position_ui_sprite->Render(spritebatch); }
 			if (item_image_sprite != nullptr) { item_image_sprite->Render(spritebatch); }
 			if (item_ui_sprite != nullptr) { item_ui_sprite->Render(spritebatch); }
+
+			if (ink_ui_sprite != nullptr) { ink_ui_sprite->Render(spritebatch); }
 
 			//Render current timers
 			//Coming soon(TM)
