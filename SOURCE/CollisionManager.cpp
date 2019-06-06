@@ -90,7 +90,9 @@ void CollisionManager::ItemBoxCollision(Player*& _player, ItemBox*& _itemBox, In
 	}
 
 	_itemBox->hasCollided();
-	Locator::getAudio()->Play("ITEMBOX_HIT");
+	if (_player->GetPlayerId() != -1) {
+		Locator::getAudio()->Play("ITEMBOX_HIT");
+	}
 }
 
 void CollisionManager::ExplosionCollision(Player*& _player, Explosion*& _explosion)
