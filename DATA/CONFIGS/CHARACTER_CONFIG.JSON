@@ -19,7 +19,7 @@
   },
   "WALUIGI": {
     "friendly_name": "CHARACTER_WALUIGI",
-    "menu_sprite": "CHARACTER_WALUIGI",
+    "menu_sprite": "WALUIGI PICTURE",
     "model": "CHARACTER_WALUIGI",
     "audio": "WALUIGI MENU"
   },

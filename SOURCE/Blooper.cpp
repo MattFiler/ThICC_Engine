@@ -151,9 +151,9 @@ void Blooper::Tick()
 void Blooper::SwitchModelSet(Player* _player)
 {
 	std::string set = _player->GetAnimController()->GetCurrentSet();
-	if (_player->IsGliding() && set != "Blooper gliding")
+	if (_player->IsGliding() && set != "Blooper Gliding")
 	{
-		_player->GetAnimController()->SwitchModelSet("Blooper gliding");
+		_player->GetAnimController()->SwitchModelSet("Blooper Gliding");
 	}
 	else if (set != "Blooper")
 	{
