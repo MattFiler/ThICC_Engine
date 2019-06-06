@@ -22,6 +22,7 @@
 #include "Pow.h"
 #include "LightningBolt.h"
 #include "BlueShell.h"
+#include "Blooper.h"
 #include <functional>
 #include <json.hpp>
 using json = nlohmann::json;

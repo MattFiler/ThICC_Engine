@@ -181,6 +181,9 @@
     <ClCompile Include="BlueShell.cpp">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Blooper.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -442,6 +445,9 @@
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClInclude>
     <ClInclude Include="BlueShell.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Blooper.h">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClInclude>
   </ItemGroup>

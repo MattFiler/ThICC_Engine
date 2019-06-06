@@ -79,23 +79,23 @@ private:
 	Text2D* countdown_text = nullptr; //Shared between all players (TODO: MOVE TO InGameUI)
 
 	//Cameras
-	Camera* m_cam[4];
-	Camera*	cine_cam;
+	Camera* m_cam[4] = { nullptr, nullptr, nullptr, nullptr };
+	Camera*	cine_cam = nullptr;
 
 	//Random data stores
 	json game_config;
 	json track_config;
-	MapInfo* map_info;
+	MapInfo* map_info = nullptr;
 	ItemPools* m_itemPools = nullptr;
 
 	//Referenced stuff
-	RenderData* m_RD;
+	RenderData* m_RD = nullptr;
 
 	//Pause screen
 	ImageGO2D* m_pause_screen = nullptr;
 
 	//Our scene manager instance
-	SceneManager* m_scene_manager;
+	SceneManager* m_scene_manager = nullptr;
 
 	//Timing
 	float timeout = 12.f;
@@ -118,7 +118,7 @@ private:
 	bool is_paused = false;
 	bool race_finished = false;
 	float finish_timer = 0.0f;
-	int m_maxPlayers = 3;
+	int m_maxPlayers = 12;
 	int player_rank_save[4];
 
 };

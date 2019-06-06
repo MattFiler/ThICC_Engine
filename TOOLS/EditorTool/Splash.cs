@@ -210,6 +210,7 @@ namespace EditorTool
                 //Copy all
                 DirectoryCopy(path_mod + "DATA/", path_mod + output + "/DATA/", true);
                 CopyToOutput(path_mod, output, "MarioKartLauncher.exe", "Mario Kart Launcher.exe");
+                CopyToOutput(path_mod, output, "DEMO.exe", "DEMO.exe");
                 return 1;
             }
             return -1;

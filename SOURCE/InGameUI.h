@@ -31,6 +31,8 @@ public:
 	void ShowItemSpinner(Player* this_player);
 	void HideItemSpinner(); 
 
+	void InkSplatVisible(bool visible);
+
 	void RegisterPlayerCount(int count);
 
 	void Render(DirectX::SpriteBatch* spritebatch = nullptr);
@@ -50,6 +52,7 @@ private:
 	ImageGO2D* item_ui_sprite = nullptr;
 	ImageGO2D* item_image_sprite = nullptr;
 	ImageGO2D* outro_ui_sprite = nullptr;
+	ImageGO2D* ink_ui_sprite = nullptr;
 
 	/* Text to display */
 	Text2D* intro_ui_text = nullptr;

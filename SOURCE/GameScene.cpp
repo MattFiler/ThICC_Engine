@@ -33,15 +33,21 @@ GameScene::~GameScene()
 {
 	m_2DObjects.clear();
 	m_3DObjects.clear();
-	delete cine_cam;
-	cine_cam = nullptr;
+	if (cine_cam != nullptr) {
+		delete cine_cam;
+		cine_cam = nullptr;
+	}
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
-		delete m_cam[i];
-		m_cam[i] = nullptr;
+		if (m_cam[i] != nullptr) {
+			delete m_cam[i];
+			m_cam[i] = nullptr;
+		}
 	}
-	delete m_itemPools;
-	m_itemPools = nullptr;
+	if (m_itemPools != nullptr) {
+		delete m_itemPools;
+		m_itemPools = nullptr;
+	}
 }
 
 /* Load inexpensive things and create the objects for expensive things we will populate when required */
@@ -50,6 +56,8 @@ bool GameScene::Load()
 	//Read in game config
 	std::ifstream i(m_filepath.generateFilepath("GAME_CORE", m_filepath.CONFIG));
 	game_config << i;
+
+	cine_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), nullptr, CameraType::CINEMATIC);
 
 	create3DObjects();
 	create2DObjects();
@@ -66,44 +74,61 @@ void GameScene::ExpensiveLoad() {
 	Locator::getRD()->current_cubemap_irradiance = map_info->cubemap_irradiance;
 	Locator::getRD()->current_cubemap_skybox = map_info->cubemap_skybox;
 
+	//Create players and follow cams
+	for (int i = 0; i < m_maxPlayers; i++) {
+
+		//Create a player and position on track
+		using std::placeholders::_1;
+		player[i] = new Player(
+			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
+			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[0]),
+			-1, std::bind(&GameScene::CreateItem, this, _1)
+		);
+		player[i]->SetPos(Vector3(track->getSuitableSpawnSpot().x, track->getSuitableSpawnSpot().y, track->getSuitableSpawnSpot().z - (i * 10)));
+		player[i]->setMass(10);
+		m_3DObjects.push_back(player[i]);
+
+		if (i < 4)
+		{
+			m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::FOLLOW);
+			m_cam[i]->setAngle(180.0f);
+		}
+	}
+
+	//Cinematic cam
+	cine_cam->SetType(CameraType::CINEMATIC);
+
+	//Set player count
 	if (Locator::getRM()->attract_state)
 	{
 		m_maxPlayers = 1;
 	}
 	else
 	{
-		m_maxPlayers = 3;
+		m_maxPlayers = 12;
 	}
 
 	//Update characters
-	for (int i = 0; i < Locator::getRM()->player_amount; i++)
+	for (int i = 0; i < m_maxPlayers; i++)
 	{
 		if(!Locator::getRM()->attract_state)
 			player[i]->SetPlayerID(i);
 
-		player[i]->SetLap(1);
-		player[i]->Reload(
-			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
-			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i])
-		);
-		if (track->getSpawnRotations().size() > 0) {
-			player[i]->setVelocity(Matrix::CreateWorld(player[i]->GetPos(), track->getSpawnRotations()[0] * -2, Vector3::Up).Forward());
-			player[i]->UpdateWorld();
-			player[i]->SetPos(Vector3(track->getSuitableSpawnSpot().x, track->getSuitableSpawnSpot().y, track->getSuitableSpawnSpot().z) - player[i]->getVelocity() * i * 3);
+		if (i >= Locator::getRM()->player_amount) {
+			player[i]->SetPlayerID(-1);
 		}
-	}
-	for (int i = Locator::getRM()->player_amount; i < m_maxPlayers; i++)
-	{
-		player[i]->SetPlayerID(-1);
+
 		player[i]->SetLap(1);
 		player[i]->Reload(
-			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
-			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[0])
+			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[(i >= Locator::getRM()->player_amount) ? 0 : i]),
+			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[(i >= Locator::getRM()->player_amount) ? 0 : i])
 		);
 		if (track->getSpawnRotations().size() > 0) {
-			player[i]->setVelocity(Matrix::CreateWorld(player[i]->GetPos(), track->getSpawnRotations()[0] * -2, Vector3::Up).Forward());
+			player[i]->SetRotationInDegrees(Vector3(0, 0, 0));
 			player[i]->UpdateWorld();
+			player[i]->setVelocity(Matrix::CreateWorld(player[i]->GetPos(), track->getSpawnRotations()[0] * -2, Vector3::Up).Forward());
 			player[i]->SetPos(Vector3(track->getSuitableSpawnSpot().x, track->getSuitableSpawnSpot().y, track->getSuitableSpawnSpot().z) - player[i]->getVelocity() * i * 3);
+			player[i]->UpdateWorld();
 		}
 	}
 
@@ -165,7 +190,6 @@ void GameScene::ExpensiveLoad() {
 	//Load skybox
 	Locator::getRD()->skybox->Load();
 
-
 	for (auto& camera : track->getIntroCams())
 	{
 		std::vector<Vector3> camera_pos;
@@ -175,6 +199,9 @@ void GameScene::ExpensiveLoad() {
 		Locator::getCD()->points.push_back(camera_pos);
 		Locator::getCD()->look_points.push_back(camera.look_at != Vector3(0, 0, 0) ? camera.look_at : Vector3(1, 1, 1));
 	}
+
+	m_physModels.clear();
+	pushBackObjects();
 }
 
 /* Unpopulate the expensive things. */
@@ -191,18 +218,7 @@ void GameScene::ExpensiveUnload() {
 		}
 	}
 
-	//Reset player positions & camera mode
-	for (int i = 0; i < m_maxPlayers; i++) {
-		player[i]->SetWaypoint(0);
-		player[i]->SetLap(1);
-		player[i]->SetPos(Vector3(suitable_spawn.x, suitable_spawn.y, suitable_spawn.z - (i * 10)));
-		if (i < 4)
-		{
-			m_cam[i]->Reset();
-			m_cam[i]->SetType(CameraType::FOLLOW);
-		}
-	}
-
+	//Reset cinematic cam
 	cine_cam->Reset();
 	cine_cam->SetType(CameraType::CINEMATIC);
 
@@ -252,6 +268,14 @@ void GameScene::ExpensiveUnload() {
 		m_itemModels.clear();
 		Locator::getItemPools()->Reset();
 	}
+
+	//Delete players and cameras
+	for (int i = 0; i < m_3DObjects.size(); i++) {
+		if (dynamic_cast<Player*>(m_3DObjects.at(i))) {
+			m_3DObjects.erase(m_3DObjects.begin() + i);
+			i = 0;
+		}
+	}
 }
 
 /* Create all 2D objects for the scene */
@@ -279,31 +303,6 @@ void GameScene::create3DObjects()
 		m_3DObjects.push_back(this_debug_marker);
 	}
 	#endif
-
-	// Spawn in the AI
-	for (int i = 0; i < m_maxPlayers; i++) {
-
-		//Create a player and position on track
-		using std::placeholders::_1;
-		player[i] = new Player(
-			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
-			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[0]),
-			-1, std::bind(&GameScene::CreateItem, this, _1)
-		);
-		player[i]->SetPos(Vector3(track->getSuitableSpawnSpot().x, track->getSuitableSpawnSpot().y, track->getSuitableSpawnSpot().z - (i * 10)));
-		player[i]->setMass(10);
-		m_3DObjects.push_back(player[i]);
-
-		if (i < 4)
-		{
-			m_cam[i] = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), player[i], CameraType::FOLLOW);
-			m_cam[i]->setAngle(180.0f);
-		}
-	}
-
-	//Cinematic cam
-	cine_cam = new Camera(Locator::getRD()->m_window_width, Locator::getRD()->m_window_height, Vector3(0.0f, 3.0f, 10.0f), nullptr, CameraType::CINEMATIC);
-	cine_cam->SetType(CameraType::CINEMATIC);
 }
 
 /* Push objects back to their associated arrays */
@@ -1015,6 +1014,13 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(shell);
 		loadItemDebugCollider(shell);
 		return shell;
+	}
+	case SQUID:
+	{
+		Blooper* squid = new Blooper(GetPlayers());
+		m_itemModels.push_back(squid);
+		loadItemDebugCollider(squid);
+		return squid;
 	}
 	default:
 		return nullptr;

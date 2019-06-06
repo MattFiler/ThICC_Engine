@@ -28,6 +28,7 @@ void AnimationModel::SetWorld(Matrix _newWorld)
 {
 	m_model->SetWorld(_newWorld);
 	m_model->AddPos(Vector3::Transform(m_offset * m_scaleOffset, m_model->GetOri()));
+	m_model->AddPos(m_posOffset);
 	m_model->SetScale(m_model->GetScale() * m_currentScale);
 	m_model->SetRotation(m_model->GetRotation() + m_originalRotation);
 	m_model->UpdateWorld();
