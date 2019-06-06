@@ -1,0 +1,13 @@
+{
+  "asset_name": "WALUIGI PICTURE",
+  "asset_type": "Images",
+  "visible": true,
+  "is_2d": true,
+  "res_x": 360,
+  "res_y": 360,
+  "x_pos": 0,
+  "y_pos": 0,
+  "in_use_in": [
+    "Character"
+  ]
+}
