@@ -66,44 +66,37 @@ void GameScene::ExpensiveLoad() {
 	Locator::getRD()->current_cubemap_irradiance = map_info->cubemap_irradiance;
 	Locator::getRD()->current_cubemap_skybox = map_info->cubemap_skybox;
 
+	//Set player count
 	if (Locator::getRM()->attract_state)
 	{
 		m_maxPlayers = 1;
 	}
 	else
 	{
-		m_maxPlayers = 3;
+		m_maxPlayers = 12;
 	}
 
 	//Update characters
-	for (int i = 0; i < Locator::getRM()->player_amount; i++)
+	for (int i = 0; i < m_maxPlayers; i++)
 	{
 		if(!Locator::getRM()->attract_state)
 			player[i]->SetPlayerID(i);
 
-		player[i]->SetLap(1);
+		if (i > Locator::getRM()->player_amount) {
+			player[i]->SetPlayerID(-1);
+		}
+
+		player[i]->SetLap(4);
 		player[i]->Reload(
 			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[i]),
 			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[i])
 		);
 		if (track->getSpawnRotations().size() > 0) {
-			player[i]->setVelocity(Matrix::CreateWorld(player[i]->GetPos(), track->getSpawnRotations()[0] * -2, Vector3::Up).Forward());
+			player[i]->SetRotationInDegrees(Vector3(0, 0, 0));
 			player[i]->UpdateWorld();
-			player[i]->SetPos(Vector3(track->getSuitableSpawnSpot().x, track->getSuitableSpawnSpot().y, track->getSuitableSpawnSpot().z) - player[i]->getVelocity() * i * 3);
-		}
-	}
-	for (int i = Locator::getRM()->player_amount; i < m_maxPlayers; i++)
-	{
-		player[i]->SetPlayerID(-1);
-		player[i]->SetLap(1);
-		player[i]->Reload(
-			Locator::getGOS()->character_instances.at(Locator::getGSD()->character_selected[0]),
-			Locator::getGOS()->vehicle_instances.at(Locator::getGSD()->vehicle_selected[0])
-		);
-		if (track->getSpawnRotations().size() > 0) {
 			player[i]->setVelocity(Matrix::CreateWorld(player[i]->GetPos(), track->getSpawnRotations()[0] * -2, Vector3::Up).Forward());
-			player[i]->UpdateWorld();
 			player[i]->SetPos(Vector3(track->getSuitableSpawnSpot().x, track->getSuitableSpawnSpot().y, track->getSuitableSpawnSpot().z) - player[i]->getVelocity() * i * 3);
+			player[i]->UpdateWorld();
 		}
 	}
 
