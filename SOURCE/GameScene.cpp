@@ -72,7 +72,7 @@ void GameScene::ExpensiveLoad() {
 	}
 	else
 	{
-		m_maxPlayers = 1;
+		m_maxPlayers = 3;
 	}
 
 	//Update characters
@@ -116,26 +116,17 @@ void GameScene::ExpensiveLoad() {
 	//Load main UI
 	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
 		delete m_game_ui[i];
-		m_game_ui[i] = new InGameUI(Vector2(1280,720), Vector2(0,0));
+		m_game_ui[i] = new InGameUI(i);
+		m_game_ui[i]->RegisterPlayerCount(Locator::getRM()->player_amount);
 		m_game_ui[i]->ExpensiveLoad();
 		m_game_ui[i]->SetCurrentLap(1);
 		m_game_ui[i]->SetPlayerPosition(1);
 		m_game_ui[i]->SetMapName(map_info->name);
 	}
 
-	//Position countdown
+	//Reset cam FOV
 	for (int i = 0; i < Locator::getRM()->player_amount; i++)
 	{
-		player[i]->GetCountdown()->SetPos(
-			Vector2(
-				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetCountdown()->GetSize().x / 2 ,
-				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height / 2 - player[i]->GetCountdown()->GetSize().y / 2
-			) / (static_cast<float>(Locator::getRD()->m_window_height) / 720), false);
-		player[i]->GetFinishOrder()->SetPos(
-			Vector2(
-				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX + Locator::getRD()->m_screenViewportSplitscreen[i].Width / 2 - player[i]->GetFinishOrder()->GetSize().x / 2 ,
-				Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY + Locator::getRD()->m_screenViewportSplitscreen[i].Height / 2 - player[i]->GetFinishOrder()->GetSize().y / 2
-			) / (static_cast<float>(Locator::getRD()->m_window_height) / 720), false);
 		m_cam[i]->ResetFOV();
 	}
 
@@ -249,7 +240,11 @@ void GameScene::ExpensiveUnload() {
 				Locator::getItemPools()->AddItemMesh(m_itemModels[i]->GetItemType(), m_itemModels[i]->GetItemMesh());
 				if (m_itemModels[i]->GetItemType() == BOMB)
 				{
-					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh());
+					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh(), BOMB);
+				}
+				else if (m_itemModels[i]->GetItemType() == BLUE_SHELL)
+				{
+					Locator::getItemPools()->AddExplosion(dynamic_cast<Bomb*>(m_itemModels[i])->GetExplosion()->GetDisplayedMesh(), BLUE_SHELL);
 				}
 			}
 
@@ -263,12 +258,6 @@ void GameScene::ExpensiveUnload() {
 void GameScene::create2DObjects()
 {
 	m_pause_screen = new ImageGO2D("paused");
-
-	for (int i = 0; i < Locator::getRM()->player_amount; i++)
-	{
-		player[i]->SetItemPos(Vector2(Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftX, Locator::getRD()->m_screenViewportSplitscreen[i].TopLeftY));
-		m_2DObjects.push_back(player[i]->GetItemImg());
-	}
 }
 
 /* Create all 3D objects in the scene. */
@@ -485,13 +474,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			timeout -= Locator::getGSD()->m_dt;
 			for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
-				std::string countdown_time = std::to_string((int)std::ceil(timeout));
-				if (countdown_time == "0") {
-					countdown_time = "GO!";
-				}
-				player[i]->GetCountdown()->SetText(countdown_time);
 				m_cam[i]->Tick();
 				m_game_ui[i]->SetState(InGameInterfaceState::UI_COUNTDOWN);
+				m_game_ui[i]->SetCountdownFrame((int)std::ceil(timeout));
 			}
 
 			if (Locator::getRM()->player_amount == 3)
@@ -516,7 +501,9 @@ void GameScene::Update(DX::StepTimer const& timer)
 	case PLAY:
 		for (int i = 0; i < Locator::getRM()->player_amount; ++i) {
 			m_cam[i]->Tick();
-			m_game_ui[i]->SetState(InGameInterfaceState::UI_RACING);
+			if (player[i]->GetLap() != 4) {
+				m_game_ui[i]->SetState(InGameInterfaceState::UI_RACING);
+			}
 		}
 
 
@@ -554,6 +541,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		Locator::getAudio()->StopAll();
 		m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 	}
+#ifdef _DEBUG
 	if (m_keybinds.keyReleased("toggle orbit cam"))
 	{
 		m_cam[0]->SetType(CameraType::INDEPENDENT);
@@ -562,7 +550,6 @@ void GameScene::Update(DX::StepTimer const& timer)
 	{
 		m_cam[0]->SetType(CameraType::FOLLOW);
 	}
-#ifdef _DEBUG
 	if (m_keybinds.keyReleased("toggle debug cam"))
 	{
 		if (m_cam[0]->GetType() == CameraType::DEBUG_CAM) {
@@ -596,7 +583,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		{
 			if (dynamic_cast<Explosion*>(m_3DObjects[i]))
 			{
-				Locator::getItemPools()->AddExplosion(dynamic_cast<Explosion*>(m_3DObjects[i])->GetDisplayedMesh());
+				Locator::getItemPools()->AddExplosion(dynamic_cast<Explosion*>(m_3DObjects[i])->GetDisplayedMesh(), dynamic_cast<Explosion*>(m_3DObjects[i])->GetOwnerType());
 			}
 
 			delIndex = i;
@@ -630,22 +617,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 		GameDebugToggles::render_level = !GameDebugToggles::render_level;
 	}
 
-	////Handle collisions and act on types for gamescene objects
-	/*for (Collision& this_collision : CollisionManager::CollisionDetection(m_physModels, m_itemModels)) {
-		switch (CollisionManager::CollisionResponse(&this_collision)) {
-			//If we hit an item box, perform the UI animation and give the player their item
-			case PlayerCollisionTypes::HIT_ITEMBOX: {
-				Player* this_player = nullptr;
-				if (dynamic_cast<Player*>(this_collision.m_model1)) {
-					this_player = dynamic_cast<Player*>(this_collision.m_model1);
-				} else {
-					this_player = dynamic_cast<Player*>(this_collision.m_model2);
-				}
-				if (this_player == nullptr) { DebugText::print("Failed to reference player for item box collision."); return; }
-			m_game_ui[this_player->GetPlayerId()]->ShowItemSpinner(this_player);
-			}
-		}
-	}*/
+	//Collision handler
 	CollisionManager::CollisionDetectionAndResponse(m_physModels, m_itemModels, m_game_ui);
 	UpdateItems();
 }
@@ -673,6 +645,10 @@ void GameScene::UpdateItems()
 			{
 				dynamic_cast<RedShell*>(m_itemModels[i])->GetAi().reset();
 			}
+			else if (dynamic_cast<BlueShell*>(m_itemModels[i]))
+			{
+				dynamic_cast<BlueShell*>(m_itemModels[i])->GetAi().reset();
+			}
 
 			m_itemModels.erase(m_itemModels.begin() + i);
 		}
@@ -687,8 +663,8 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 	{
 	case OPENING:
 		//Configure viewport
-		m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-		m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
+		m_commandList->RSSetViewports(1, &Locator::getRD()->m_fullscreenViewport);
+		m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_fullscreenScissorRect);
 		Locator::getRD()->m_cam = cine_cam;
 
 		render3DObjects();
@@ -700,8 +676,8 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 		for (int i = 0; i < Locator::getRM()->player_amount; ++i)
 		{
 			//Configure viewports
-			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[i]);
-			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[i]);
+			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_splitscreenScissorRect[i]);
+			m_commandList->RSSetViewports(1, &Locator::getRD()->m_splitscreenViewport[i]);
 			Locator::getRD()->m_cam = m_cam[i];
 
 			render3DObjects();
@@ -709,16 +685,16 @@ void GameScene::Render3D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_c
 
 		if (Locator::getRM()->player_amount == 3)
 		{
-			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRectSplitscreen[3]);
-			m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewportSplitscreen[3]);
+			m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_splitscreenScissorRect[3]);
+			m_commandList->RSSetViewports(1, &Locator::getRD()->m_splitscreenViewport[3]);
 			Locator::getRD()->m_cam = cine_cam;
 			render3DObjects();
 		}
 
 		break;
 	}
-	m_commandList->RSSetViewports(1, &Locator::getRD()->m_screenViewport);
-	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_scissorRect);
+	m_commandList->RSSetViewports(1, &Locator::getRD()->m_fullscreenViewport);
+	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_fullscreenScissorRect);
 }
 
 void GameScene::render3DObjects()
@@ -767,51 +743,55 @@ void GameScene::render3DObjects()
 /* Render the 2D scene */
 void GameScene::Render2D(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>&  m_commandList)
 {
+	//Render no UI if in attract state
 	if (Locator::getRM()->attract_state)
 	{
 		return;
 	}
 
+	//If paused, render pause overlay to fullscreen viewport
 	if (is_paused) {
 		m_pause_screen->Render();
 		return;
 	}
 
-
-	/* TODO: this needs to be refactored in favour of InGameUI */
 	switch (state)
 	{
-	case COUNTDOWN:
-		//Render countdown in screen centre
-		for (int i = 0; i < Locator::getRM()->player_amount; i++)
-		{
-			player[i]->GetCountdown()->Render();
-		}
-		break;
-	case PLAY:
-		for (int i = 0; i < Locator::getRM()->player_amount; i++)
-		{
-			if (player[i]->GetFinished())
-			{
-				player[i]->GetFinishOrder()->Render();
+		case OPENING:
+			//Render to fullscreen viewport
+			if (m_game_ui[0] != nullptr) {
+				m_game_ui[0]->Render();
 			}
-			else if (!player[i]->GetFinished())
+			break;
+		case CAM_OPEN:
+		case COUNTDOWN:
+		case PLAY:
+			//Render UI to the correct viewport for every active player
+			for (int i = 0; i < Locator::getRM()->player_amount; ++i)
 			{
-				if(player[i]->GetItemInInventory() != ItemType::NONE)
-					player[i]->GetItemImg()->Render();
+				//Start correct batch
+				Locator::getRD()->m_2dSpriteBatchSplitscreen[i]->Begin(Locator::getRD()->m_commandList.Get());
+
+				//Change to requested viewport
+				m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_splitscreenScissorRect[i]);
+				m_commandList->RSSetViewports(1, &Locator::getRD()->m_splitscreenViewport[i]);
+				Locator::getRD()->m_2dSpriteBatchSplitscreen[i]->SetViewport(Locator::getRD()->m_splitscreenViewport[i]);
+
+				//Render to active viewport
+				if (m_game_ui[i] != nullptr) {
+					m_game_ui[i]->Render(Locator::getRD()->m_2dSpriteBatchSplitscreen[i].get());
+				}
+
+				//End batch
+				Locator::getRD()->m_2dSpriteBatchSplitscreen[i]->End();
 			}
-		}
-		break;
-	}
-	/* ^^^^^^^^^^^^^^^^^ depreciate! */
 
-
-	//Render UI
-	for (int i = 0; i < Locator::getRM()->player_amount; i++) {
-		if (m_game_ui[i] != nullptr) {
-			m_game_ui[i]->Render();
-		}
+			break;
 	}
+
+	//Sanity: set viewport back to fullscreen (default)
+	m_commandList->RSSetViewports(1, &Locator::getRD()->m_fullscreenViewport);
+	m_commandList->RSSetScissorRects(1, &Locator::getRD()->m_fullscreenScissorRect);
 }
 
 /* Set the player's current waypoint */
@@ -842,7 +822,6 @@ void GameScene::SetPlayersWaypoint()
 				if (player[i]->GetLap() == 3)
 				{
 					player[i]->SetFinished(true);
-					player[i]->GetFinishOrder()->SetText(std::to_string(player[i]->GetRanking()) + player[i]->GetOrderIndicator()[player[i]->GetRanking() - 1]);
 					if(i < Locator::getRM()->player_amount)
 						m_cam[i]->SetType(CameraType::ORBIT);
 					player[i]->setGamePad(false);
@@ -1028,6 +1007,14 @@ Item* GameScene::CreateItem(ItemType type)
 		m_itemModels.push_back(lightning);
 		loadItemDebugCollider(lightning);
 		return lightning;
+	}
+	case BLUE_SHELL:
+	{
+		using namespace std::placeholders;
+		BlueShell* shell = new BlueShell(std::bind(&GameScene::CreateExplosion, this, _1), GetPlayers());
+		m_itemModels.push_back(shell);
+		loadItemDebugCollider(shell);
+		return shell;
 	}
 	default:
 		return nullptr;

@@ -62,7 +62,7 @@ void Bomb::Detonate()
 	m_explosion = CreateExplosion(BOMB);
 	m_explosion->SetWorld(m_itemMesh->m_mesh->GetWorld());
 	m_explosion->Explode();
-	FlagForDestoy();;
+	FlagForDestoy();
 }
 
 void Bomb::HitByPlayer(Player * player)

@@ -55,7 +55,6 @@ void RedShell::Tick()
 				Vector3 moveTowards = m_targetPlayer->GetPos() - m_itemMesh->m_mesh->GetPos();
 				moveTowards.Normalize();
 				m_itemMesh->m_mesh->setVelocity(moveTowards * m_move->GetMoveSpeed());
-				m_hasMoveTowards = true;
 			}
 		}
 

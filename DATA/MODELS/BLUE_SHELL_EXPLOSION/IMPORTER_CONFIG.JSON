@@ -1,0 +1,49 @@
+{
+  "Material.001": {
+    "newmtl": "Material.001",
+    "Ns": "0.000000",
+    "Ka": "0.000000 0.000000 0.000000",
+    "Kd": "0.000000 0.000000 0.000000",
+    "Ks": "0.000000 0.000000 0.000000",
+    "Ke": "0.000000 0.000000 0.000000",
+    "Ni": "1.000000",
+    "d": "0.000000",
+    "illum": "2",
+    "map_Kd": "Explosion.png",
+    "Tr": "0.300000",
+    "map_Ks": "ItemTogezoBomb_Spm.png",
+    "map_Kn": "norm_placeholder.png",
+    "norm": "norm_placeholder.png",
+    "map_Ke": "emm_placeholder.png",
+    "map_emissive": "emm_placeholder.png",
+    "map_RMA": "rma_placeholder.png",
+    "map_occlusionRoughnessMetallic": "rma_placeholder.png",
+    "ThICC_INDEX": 0,
+    "ThICC_METALLIC": false,
+    "ThICC_COLLISION": {
+      "0": false,
+      "1": false,
+      "2": false,
+      "3": false,
+      "5": false,
+      "6": false,
+      "7": false
+    },
+    "ThICC_DIFFUSE_ANIMATED": false,
+    "ThICC_DIFFUSE_FRAMES": [
+      "Explosion.png"
+    ],
+    "ThICC_DIFFUSE_FRAME_TIME": 0.0,
+    "ThICC_SPECULAR_ANIMATED": false,
+    "ThICC_SPECULAR_FRAMES": [
+      "ItemTogezoBomb_Spm.png"
+    ],
+    "ThICC_SPECULAR_FRAME_TIME": 0.0,
+    "ThICC_NORMAL_ANIMATED": false,
+    "ThICC_NORMAL_FRAMES": [],
+    "ThICC_NORMAL_FRAME_TIME": 0.0,
+    "ThICC_EMISSIVE_ANIMATED": false,
+    "ThICC_EMISSIVE_FRAMES": [],
+    "ThICC_EMISSIVE_FRAME_TIME": 0.0
+  }
+}

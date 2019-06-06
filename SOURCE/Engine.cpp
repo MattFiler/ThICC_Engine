@@ -147,14 +147,14 @@ void ThICC_Engine::Initialize(HWND window, int width, int height)
 void ThICC_Engine::SetupSplitscreenViewports() {
 	int player_count = Locator::getRM()->player_amount;
 	for (int i = 0; i < (player_count < 3 ? player_count : 4); i++) {
-		*&Locator::getRD()->m_screenViewportSplitscreen[i] = {
+		*&Locator::getRD()->m_splitscreenViewport[i] = {
 			(float)(Locator::getRD()->m_window_width * SetViewportX(i)),
 			(float)(Locator::getRD()->m_window_height * SetViewportY(i)),
 			(float)(Locator::getRD()->m_window_width * SetViewportWidth(i)),
 			(float)(Locator::getRD()->m_window_height * SetViewportHeight(i)),
 			D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
 		};
-		*&Locator::getRD()->m_scissorRectSplitscreen[i] = {
+		*&Locator::getRD()->m_splitscreenScissorRect[i] = {
 			(int)(Locator::getRD()->m_window_width * SetRectX(i)),
 			(int)(Locator::getRD()->m_window_height * SetRectY(i)),
 			(int)(Locator::getRD()->m_window_width * SetRectWidth(i)),
@@ -358,14 +358,14 @@ void ThICC_Engine::Render()
 
 	#ifdef _DEBUG 
 	try {
-		Locator::getRD()->m_2dSpriteBatch->Begin(Locator::getRD()->m_commandList.Get());
+		Locator::getRD()->m_2dSpriteBatchFullscreen->Begin(Locator::getRD()->m_commandList.Get());
 		//Debug console
 		m_debug_console->Render();
 		//FPS
 		if (m_game_config["enable_fps"]) {
 			debug_text->Render();
 		}
-		Locator::getRD()->m_2dSpriteBatch->End();
+		Locator::getRD()->m_2dSpriteBatchFullscreen->End();
 	}
 	catch (...) {
 		DebugText::print("ThICC_Engine::Render - Failed to render, could be a sprite batch issue: most likely out of memory.");
@@ -500,7 +500,10 @@ void ThICC_Engine::OnDeviceLost()
 
 	Locator::getRD()->m_2dFont.reset();
 	Locator::getRD()->m_2dResourceDescriptors.reset();
-	Locator::getRD()->m_2dSpriteBatch.reset();
+	Locator::getRD()->m_2dSpriteBatchFullscreen.reset();
+	for (int i = 0; i < 4; i++) {
+		Locator::getRD()->m_2dSpriteBatchSplitscreen[i].reset();
+	}
 
 	m_toneMapACESFilmic.reset();
 
@@ -529,10 +532,14 @@ void ThICC_Engine::SetDefaultFont(std::string _default_font)
 
 	RenderTargetState rtState(m_device_data.m_deviceResources->GetBackBufferFormat(), DXGI_FORMAT_UNKNOWN);
 
-	//Create sprite batch
+	//Create sprite batches
 	SpriteBatchPipelineStateDescription pd(rtState, &Locator::getRD()->m_states->NonPremultiplied);
-	Locator::getRD()->m_2dSpriteBatch = std::make_unique<SpriteBatch>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, pd);
-	Locator::getRD()->m_2dSpriteBatch->SetViewport(Locator::getRD()->m_screenViewport);
+	for (int i = 0; i < 4; i++) {
+		Locator::getRD()->m_2dSpriteBatchSplitscreen[i] = std::make_unique<SpriteBatch>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, pd);
+		Locator::getRD()->m_2dSpriteBatchSplitscreen[i]->SetViewport(Locator::getRD()->m_splitscreenViewport[i]);
+	}
+	Locator::getRD()->m_2dSpriteBatchFullscreen = std::make_unique<SpriteBatch>(Locator::getRD()->m_d3dDevice.Get(), resourceUpload, pd);
+	Locator::getRD()->m_2dSpriteBatchFullscreen->SetViewport(Locator::getRD()->m_fullscreenViewport);
 
 	//Get font name
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;

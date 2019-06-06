@@ -35,8 +35,9 @@ void AnimationController::AddModelSet(std::string _setName, std::vector<std::str
 
 void AnimationController::SwitchModelSet(std::string _setName)
 {
-	if (!m_lockSet)
+	if (!m_lockSet && m_modelSet.count(_setName))
 	{
+		DebugText::print("switching model set to " + _setName);
 		m_currentSet = _setName;
 	}
 }
@@ -108,11 +109,19 @@ void AnimationController::Update(Matrix _parentWorld)
 		{
 			m_posTimeElapsed = m_timeBetweenPos;
 		}
-		m_posOffset = Vector3::Lerp(m_prevPoint, m_posAnimPoints.front(), m_posTimeElapsed / m_timeBetweenPos);
+
+		if (!m_lockPosOffset)
+		{
+			m_posOffset = Vector3::Lerp(m_prevPoint, m_posAnimPoints.front(), m_posTimeElapsed / m_timeBetweenPos);
+		}
+
 		if (Vector3::Distance(m_posOffset, m_posAnimPoints.front()) < 0.1f)
 		{
 			m_posTimeElapsed = 0;
-			m_posOffset = m_posAnimPoints.front();
+			if (!m_lockPosOffset)
+			{ 
+				m_posOffset = m_posAnimPoints.front();
+			}
 			m_prevPoint = m_posAnimPoints.front();
 			m_posAnimPoints.pop();
 		}

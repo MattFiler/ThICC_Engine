@@ -53,8 +53,8 @@ namespace DX
         ID3D12GraphicsCommandList*  GetCommandList() const          { return m_rd.m_commandList.Get(); }
         DXGI_FORMAT                 GetBackBufferFormat() const     { return m_rd.m_backBufferFormat; }
         DXGI_FORMAT                 GetDepthBufferFormat() const    { return m_rd.m_depthBufferFormat; }
-        D3D12_VIEWPORT              GetScreenViewport() const       { return m_rd.m_screenViewport; }
-        D3D12_RECT                  GetScissorRect() const          { return m_rd.m_scissorRect; }
+        D3D12_VIEWPORT              GetScreenViewport() const       { return m_rd.m_fullscreenViewport; }
+        D3D12_RECT                  GetScissorRect() const          { return m_rd.m_fullscreenScissorRect; }
         UINT                        GetCurrentFrameIndex() const    { return m_rd.m_backBufferIndex; }
         UINT                        GetBackBufferCount() const      { return m_rd.m_backBufferCount; }
         DXGI_COLOR_SPACE_TYPE       GetColorSpace() const           { return m_rd.m_colorSpace; }

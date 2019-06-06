@@ -175,7 +175,12 @@
     <ClCompile Include="Pow.cpp">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClCompile>
-    <ClCompile Include="LightningBolt.cpp" />
+    <ClCompile Include="LightningBolt.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="BlueShell.cpp">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -433,7 +438,12 @@
     <ClInclude Include="Pow.h">
       <Filter>Game\Components\Game Objects\3D\Items</Filter>
     </ClInclude>
-    <ClInclude Include="LightningBolt.h" />
+    <ClInclude Include="LightningBolt.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="BlueShell.h">
+      <Filter>Game\Components\Game Objects\3D\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

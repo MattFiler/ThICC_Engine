@@ -36,8 +36,8 @@ DeviceResources::DeviceResources(
 	m_rd.m_backBufferIndex = 0;
 	//m_render_data.m_fenceValues = {};
 	m_rd.m_rtvDescriptorSize = 0;
-	m_rd.m_screenViewport = {};
-	m_rd.m_scissorRect = {};
+	m_rd.m_fullscreenViewport = {};
+	m_rd.m_fullscreenScissorRect = {};
 	m_rd.m_backBufferFormat = backBufferFormat;
 	m_rd.m_depthBufferFormat = depthBufferFormat;
 	m_rd.m_backBufferCount = backBufferCount;
@@ -403,15 +403,15 @@ void DeviceResources::CreateWindowSizeDependentResources()
     }
 
     // Set the 3D rendering viewport and scissor rectangle to target the entire window.
-    m_rd.m_screenViewport.TopLeftX = m_rd.m_screenViewport.TopLeftY = 0.f;
-    m_rd.m_screenViewport.Width = static_cast<float>(backBufferWidth);
-    m_rd.m_screenViewport.Height = static_cast<float>(backBufferHeight);
-    m_rd.m_screenViewport.MinDepth = D3D12_MIN_DEPTH;
-    m_rd.m_screenViewport.MaxDepth = D3D12_MAX_DEPTH;
+    m_rd.m_fullscreenViewport.TopLeftX = m_rd.m_fullscreenViewport.TopLeftY = 0.f;
+    m_rd.m_fullscreenViewport.Width = static_cast<float>(backBufferWidth);
+    m_rd.m_fullscreenViewport.Height = static_cast<float>(backBufferHeight);
+    m_rd.m_fullscreenViewport.MinDepth = D3D12_MIN_DEPTH;
+    m_rd.m_fullscreenViewport.MaxDepth = D3D12_MAX_DEPTH;
 
-    m_rd.m_scissorRect.left = m_rd.m_scissorRect.top = 0;
-    m_rd.m_scissorRect.right = backBufferWidth;
-    m_rd.m_scissorRect.bottom = backBufferHeight;
+    m_rd.m_fullscreenScissorRect.left = m_rd.m_fullscreenScissorRect.top = 0;
+    m_rd.m_fullscreenScissorRect.right = backBufferWidth;
+    m_rd.m_fullscreenScissorRect.bottom = backBufferHeight;
 }
 
 // This method is called when the Win32 window is created (or re-created).
