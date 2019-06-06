@@ -79,8 +79,8 @@ private:
 	Text2D* countdown_text = nullptr; //Shared between all players (TODO: MOVE TO InGameUI)
 
 	//Cameras
-	Camera* m_cam[4];
-	Camera*	cine_cam;
+	Camera* m_cam[4] = { nullptr, nullptr, nullptr, nullptr };
+	Camera*	cine_cam = nullptr;
 
 	//Random data stores
 	json game_config;
@@ -89,13 +89,13 @@ private:
 	ItemPools* m_itemPools = nullptr;
 
 	//Referenced stuff
-	RenderData* m_RD;
+	RenderData* m_RD = nullptr;
 
 	//Pause screen
 	ImageGO2D* m_pause_screen = nullptr;
 
 	//Our scene manager instance
-	SceneManager* m_scene_manager;
+	SceneManager* m_scene_manager = nullptr;
 
 	//Timing
 	float timeout = 12.f;
