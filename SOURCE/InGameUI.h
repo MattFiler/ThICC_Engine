@@ -50,6 +50,7 @@ private:
 	ImageGO2D* item_ui_sprite = nullptr;
 	ImageGO2D* item_image_sprite = nullptr;
 	ImageGO2D* outro_ui_sprite = nullptr;
+	ImageGO2D* ink_ui_sprite = nullptr;
 
 	/* Text to display */
 	Text2D* intro_ui_text = nullptr;

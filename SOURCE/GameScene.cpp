@@ -1016,6 +1016,13 @@ Item* GameScene::CreateItem(ItemType type)
 		loadItemDebugCollider(shell);
 		return shell;
 	}
+	case SQUID:
+	{
+		Blooper* squid = new Blooper(GetPlayers());
+		m_itemModels.push_back(squid);
+		loadItemDebugCollider(squid);
+		return squid;
+	}
 	default:
 		return nullptr;
 	}

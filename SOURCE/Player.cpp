@@ -77,6 +77,7 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModel("Cloud", Locator::getItemData()->GetItemModelName(LIGHTNING_CLOUD));
 	m_animationMesh->AddModel("POW", Locator::getItemData()->GetItemModelName(POW));
 	m_animationMesh->AddModel("Lightning", Locator::getItemData()->GetItemModelName(LIGHTNING_BOLT));
+	m_animationMesh->AddModel("Blooper", Locator::getItemData()->GetItemModelName(SQUID));
 
 	m_animationMesh->AddModelSet("default", std::vector < std::string>{"vehicle", "character"});
 	m_animationMesh->AddModelSet("respawn", std::vector < std::string>{"vehicle", "character", "lakitu"});
@@ -87,7 +88,9 @@ void Player::Reload(CharacterInfo* _character, VehicleInfo* _vehicle) {
 	m_animationMesh->AddModelSet("POW", std::vector < std::string>{"vehicle", "character","POW"});
 	m_animationMesh->AddModelSet("POW Gliding", std::vector < std::string>{"vehicle", "character", "POW", "glider"});	
 	m_animationMesh->AddModelSet("Lightning", std::vector < std::string>{"vehicle", "character","Lightning"});
-	m_animationMesh->AddModelSet("Lightning Gliding", std::vector < std::string>{"vehicle", "character", "POW", "glider"});	
+	m_animationMesh->AddModelSet("Lightning Gliding", std::vector < std::string>{"vehicle", "character", "Lightning", "glider"});		
+	m_animationMesh->AddModelSet("Blooper", std::vector < std::string>{"vehicle", "character","Blooper"});
+	m_animationMesh->AddModelSet("Blooper Gliding", std::vector < std::string>{"vehicle", "character", "Blooper", "glider"});	
 
 	m_animationMesh->SwitchModelSet("default");
 
@@ -553,6 +556,13 @@ void Player::SpawnItems(ItemType type)
 		{
 			BlueShell* shell = static_cast<BlueShell*>(CreateItem(BLUE_SHELL));
 			shell->Use(this, false);
+			break;
+		}
+		
+		case SQUID:
+		{
+			Blooper* squid = static_cast<Blooper*>(CreateItem(SQUID));
+			squid->Use(this, false);
 			break;
 		}
 

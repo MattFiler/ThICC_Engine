@@ -12,9 +12,9 @@ public:
 	virtual void Use(Player* _player, bool _altUse) override;
 	virtual void HitByPlayer(Player* _player) override {};
 	
-	void FindPlayers();
 
 private:
+	void FindPlayers();
 
 	struct StrikeData
 	{
