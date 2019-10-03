@@ -39,7 +39,7 @@ Our engine featured:
  - AI systems
  - Blender integration
  - Image-based lighting
- - Mesh collision & AABB collision
+ - Mesh collision & OBB collision
  - Optimised build target
  - Scene management
  - Audio system
@@ -56,7 +56,7 @@ This project was put together by:
 
  - [Toby Jones](https://github.com/Halichoerus) (mesh collision, AI, generalist systems, mapping)
  - [Matt Filer](https://github.com/MattFiler) (toolkit/pipeline, model loader, UI, scene manager, input)
- - [Evan Diamond](https://github.com/EvanDiamond101) (AABB collision, bespoke in-game items, generalist systems)
+ - [Evan Diamond](https://github.com/EvanDiamond101) (OBB collision, bespoke in-game items, generalist systems)
  - [Lewis Bond](https://github.com/lbondi7) (sounds, cameras, generalist systems)
  
  ## Final mentions
