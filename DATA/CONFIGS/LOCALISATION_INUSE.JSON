@@ -66,9 +66,7 @@
     ]
   },
   "MAP_MEADOWS": {
-    "in_use_in": [
-      "Map"
-    ]
+    "in_use_in": []
   },
   "MAP_SUBWAY": {
     "in_use_in": []
