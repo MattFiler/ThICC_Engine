@@ -20,9 +20,22 @@ void LoadingScene::Update(DX::StepTimer const & timer)
 	{
 		time = 0.0f;
 		if (Locator::getRM()->is_cup)
-			m_scene_manager->setCurrentScene(Scenes::GAMESCENE + Locator::getRM()->GetMaps()[Locator::getRM()->current_race_number]);
+		{
+			if (Locator::getRM()->GetMaps().size() == Locator::getRM()->current_race_number)
+			{
+				//Return to menu
+				Locator::getRM()->Reset();
+				m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
+			}
+			else 
+			{
+				//Advance to next map in cup
+				m_scene_manager->setCurrentScene(Scenes::GAMESCENE + Locator::getRM()->GetMaps()[Locator::getRM()->current_race_number]);
+			}
+		}
 		else
 		{
+			//Return to menu
 			Locator::getRM()->Reset();
 			m_scene_manager->setCurrentScene(Scenes::MENUSCENE);
 		}

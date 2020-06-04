@@ -374,6 +374,7 @@ void GameScene::Update(DX::StepTimer const& timer)
 			{
 				Locator::getAudio()->StopAll();
 				Locator::getRM()->attract_state = false;
+				Locator::getRM()->current_race_number++;
 				m_scene_manager->setCurrentScene(Scenes::LOADINGSCENE);
 				return;
 			}
