@@ -327,7 +327,7 @@ void ThICC_Engine::Update(DX::StepTimer const& timer)
 void ThICC_Engine::Render()
 {
 	// Don't try to render anything before the first Update.
-	if (m_timer.GetFrameCount() == 0)
+	if (m_timer.GetFrameCount() == 0 || didDeviceDisconnect)
 	{
 		return;
 	}
@@ -354,6 +354,7 @@ void ThICC_Engine::Render()
 	m_toneMapACESFilmic->Process(commandList);
 
 	// Render the game 2D elements
+	if (didDeviceDisconnect) return;
 	m_game_inst.Render2D();
 
 	#ifdef _DEBUG 
@@ -495,6 +496,11 @@ void ThICC_Engine::CreateWindowSizeDependentResources()
 /* When we lose our device, reset everything. */
 void ThICC_Engine::OnDeviceLost()
 {
+	//We fail so often when trying to restore the device, alert the user.
+	if (!didShowDisconnectNotice) MessageBox(NULL, (LPCWSTR)L"DX12 device removed, attempting to restore!\nApplication will likely terminate.", (LPCWSTR)L"Notice", MB_ICONERROR | MB_OK );
+	didDeviceDisconnect = true;
+	didShowDisconnectNotice = true;
+
 	Locator::getRD()->m_fxFactoryPBR.reset();
 	Locator::getRD()->m_states.reset();
 
@@ -506,8 +512,6 @@ void ThICC_Engine::OnDeviceLost()
 	}
 
 	m_toneMapACESFilmic.reset();
-
-	Locator::getRD()->m_2dResourceDescriptors.reset();
 	m_renderDescriptors.reset();
 
 	m_device_data.m_hdrScene->ReleaseDevice();
@@ -518,9 +522,20 @@ void ThICC_Engine::OnDeviceLost()
 /* If the device comes back, create everything again! */
 void ThICC_Engine::OnDeviceRestored()
 {
-	CreateDeviceDependentResources();
+	Locator::getRD()->m_d3dDevice = m_device_data.m_deviceResources->GetD3DDevice();
 
+	CreateDeviceDependentResources();
 	CreateWindowSizeDependentResources();
+
+	SetDefaultFont(m_game_config["font"]);
+	SetupSplitscreenViewports();
+
+	Locator::getRD()->m_2dResourceDescriptors = std::make_unique<DescriptorHeap>(Locator::getRD()->m_d3dDevice.Get(),
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
+		1024);
+
+	didDeviceDisconnect = false;
 }
 
 /* Set the default font */

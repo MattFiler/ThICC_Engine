@@ -114,6 +114,8 @@ private:
 	std::unique_ptr<DirectX::DescriptorHeap> m_renderDescriptors; //This needs looking into - does this ever get used anymore ?!?!?
 
 	int tonemapIndex = -1;
+	bool didDeviceDisconnect = false;
+	bool didShowDisconnectNotice = false;
 
 	//Our tonemap
 	std::unique_ptr<DirectX::ToneMapPostProcess> m_toneMapACESFilmic;
