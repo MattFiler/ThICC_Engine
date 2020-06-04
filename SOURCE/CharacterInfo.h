@@ -13,9 +13,9 @@ struct CharacterInfo : public AssetComp {
 		LocalisationManager m_localiser;
 
 		name = m_localiser.getString(_element["friendly_name"]);
-		model = _element["model"];
+		model = _element["model"].get<std::string>();
 		preview_sprite = new ImageGO2D(_element["menu_sprite"]);
-		audio = _element["audio"];
+		audio = _element["audio"].get<std::string>();
 	};
 
 	ImageGO2D* preview_sprite = nullptr;

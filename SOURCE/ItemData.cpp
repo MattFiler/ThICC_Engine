@@ -121,8 +121,8 @@ void ItemData::ProcessConfig(ItemType _item, const std::string& config_name) {
 	int item_id = static_cast<int>(_item);
 	for (int i = 0; i < 12; i++) {
 		item_probability[item_id][i] = temp_config_default["probabilities"]["place_" + std::to_string(i + 1)];
-		item_sprite[item_id] = temp_config_default["ui_sprite"];
-		item_model[item_id] = temp_config_default["model"];
+		item_sprite[item_id] = temp_config_default["ui_sprite"].get<std::string>();
+		item_model[item_id] = temp_config_default["model"].get<std::string>();
 	}
 
 	//Set item sprites

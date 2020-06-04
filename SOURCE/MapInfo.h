@@ -19,8 +19,8 @@ struct MapInfo : public AssetComp {
 		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 
 		name = m_localiser.getString(_element["friendly_name"]);
-		model = _element["model"];
-		decoration_model = _element["decoration_model"];
+		model = _element["model"].get<std::string>();
+		decoration_model = _element["decoration_model"].get<std::string>();
 		preview_sprite = new ImageGO2D(_element["menu_sprite"]);
 		scene_index = _index;
 
@@ -39,10 +39,10 @@ struct MapInfo : public AssetComp {
 		std::string cubemap_skybox_str = m_filepaths.generateFilepath(_element["skybox"], m_filepaths.IMAGE);
 		cubemap_skybox = converter.from_bytes(cubemap_skybox_str.c_str());
 
-		audio_background_start = _element["audio"]["background_start"];
-		audio_background = _element["audio"]["background"];
-		audio_final_lap_start = _element["audio"]["final_lap_start"];
-		audio_final_lap = _element["audio"]["final_lap"];
+		audio_background_start = _element["audio"]["background_start"].get<std::string>();
+		audio_background = _element["audio"]["background"].get<std::string>();
+		audio_final_lap_start = _element["audio"]["final_lap_start"].get<std::string>();
+		audio_final_lap = _element["audio"]["final_lap"].get<std::string>();
 	};
 
 	ImageGO2D* preview_sprite = nullptr;

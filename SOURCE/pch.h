@@ -8,6 +8,7 @@
 //--------------------------------------------------------------------------------------
 
 #pragma once
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 
 // Use the C++ standard templated min/max
 #define NOMINMAX
